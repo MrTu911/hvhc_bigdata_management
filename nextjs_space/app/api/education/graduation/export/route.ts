@@ -14,6 +14,7 @@ import { requireFunction } from '@/lib/rbac/middleware';
 import { EDUCATION } from '@/lib/rbac/function-codes';
 import { logAudit } from '@/lib/audit';
 import ExcelJS from 'exceljs';
+import { exportSingle } from '@/lib/services/export-engine-service';
 
 export const dynamic = 'force-dynamic';
 
@@ -129,9 +130,63 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // PDF / other formats → giao M18 (TODO khi M18 hoàn thiện)
+    // PDF → delegate to M18 Export Engine
+    // Requires a ReportTemplate with code='GRADUATION_LIST_PDF', category='EDUCATION', outputFormats includes 'PDF'
+    if (format === 'PDF') {
+      const template = await prisma.reportTemplate.findFirst({
+        where: { code: 'GRADUATION_LIST_PDF', isActive: true, isLatest: true },
+        select: { id: true, code: true },
+      });
+
+      if (!template) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: 'Chưa có template PDF graduation trong M18. ' +
+              'Vào Quản lý mẫu biểu → tạo template với code=GRADUATION_LIST_PDF, category=EDUCATION, format=PDF rồi thử lại.',
+          },
+          { status: 422 }
+        );
+      }
+
+      // M18 exportSingle works per-entity; for batch we export the first audit id and note the limitation.
+      // Full batch PDF is a future enhancement when M18 supports batch PDF rendering.
+      const firstId = auditIds[0];
+      const exportResult = await exportSingle({
+        templateId: template.id,
+        entityId: firstId,
+        entityType: 'student',
+        outputFormat: 'PDF',
+        requestedBy: user!.id,
+        callerType: 'M10_GRADUATION_EXPORT',
+      });
+
+      await logAudit({
+        userId: user!.id,
+        functionCode: EDUCATION.EXPORT_GRADUATION,
+        action: 'EXPORT',
+        resourceType: 'GRADUATION_AUDIT',
+        resourceId: firstId,
+        newValue: { count: auditIds.length, format, jobId: exportResult.jobId },
+        result: 'SUCCESS',
+        ipAddress: req.headers.get('x-forwarded-for') || 'unknown',
+      });
+
+      return NextResponse.json({
+        success: true,
+        data: {
+          jobId: exportResult.jobId,
+          downloadUrl: exportResult.downloadUrl,
+          expiresIn: exportResult.expiresIn,
+          note: auditIds.length > 1
+            ? `PDF batch chưa hỗ trợ đầy đủ – đã xuất bản ghi đầu tiên (${auditIds.length} bản ghi yêu cầu). Dùng XLSX để xuất toàn bộ.`
+            : undefined,
+        },
+      });
+    }
+
     return NextResponse.json(
-      { success: false, error: `Format '${format}' chưa hỗ trợ. Dùng XLSX hoặc chờ M18 integration.` },
+      { success: false, error: `Format '${format}' không được hỗ trợ. Dùng XLSX hoặc PDF.` },
       { status: 422 }
     );
   } catch (error: any) {

@@ -104,6 +104,8 @@ import {
   Package,
   ShieldBan,
   Target,
+  ShieldCheck,
+  Swords,
 } from 'lucide-react';
 
 import {
@@ -617,16 +619,31 @@ export const MENU_CONFIG: MenuGroup[] = [
     ],
   },
 
-  // ========== 8. GIÁO DỤC & ĐÀO TẠO ==========
+  // ========== 8a. TỔNG QUAN ĐÀO TẠO ==========
   {
-    title: 'nav.educationModule',
+    title: 'nav.educationOverviewGroup',
     items: [
-      // -- Giảng viên & Học viên --
+      {
+        name: 'nav.educationOverview',
+        href: '/dashboard/education',
+        icon: BookMarked,
+        gradient: 'from-blue-600 to-indigo-700',
+        badge: '📊',
+        functions: [EDUCATION.VIEW_PROGRAM],
+      },
+    ],
+  },
+
+  // ========== 8b. QUẢN LÝ GIẢNG VIÊN ==========
+  {
+    title: 'nav.facultyManagementGroup',
+    items: [
       {
         name: 'nav.facultyOverview',
         href: '/dashboard/faculty',
-        icon: GraduationCap,
-        gradient: 'from-violet-500 to-purple-600',
+        icon: Users,
+        gradient: 'from-violet-600 to-purple-700',
+        badge: '👨‍🏫',
         functions: [FACULTY.VIEW],
       },
       {
@@ -652,77 +669,55 @@ export const MENU_CONFIG: MenuGroup[] = [
         functions: [FACULTY.UPDATE],
       },
       {
-        name: 'nav.studentList',
-        href: '/dashboard/student/list',
-        icon: GraduationCap,
-        gradient: 'from-indigo-500 to-purple-600',
-        functions: [STUDENT.VIEW],
-      },
-      {
-        name: 'nav.studentStats',
-        href: '/dashboard/student/stats',
-        icon: PieChart,
-        gradient: 'from-blue-500 to-indigo-600',
-        functions: [STUDENT.VIEW],
-      },
-      {
-        name: 'nav.studentAnalytics',
-        href: '/dashboard/student/analytics',
-        icon: TrendingUp,
-        gradient: 'from-cyan-500 to-blue-600',
-        functions: [STUDENT.VIEW, DATA.VIEW],
-      },
-      {
         name: 'nav.studentGuidance',
         href: '/dashboard/faculty/my-students',
-        icon: Users,
+        icon: GraduationCap,
         gradient: 'from-cyan-500 to-blue-600',
-        functions: [FACULTY.VIEW, STUDENT.VIEW],
+        functions: [FACULTY.VIEW],
       },
-      // -- M10: Học viên --
+      {
+        name: 'nav.teachingStats',
+        href: '/dashboard/faculty/teaching-analytics',
+        icon: BarChart3,
+        gradient: 'from-teal-500 to-cyan-600',
+        functions: [EDUCATION.VIEW_TERM, FACULTY.VIEW],
+      },
+      {
+        name: 'nav.educationTeachingAssignment',
+        href: '/dashboard/education/teaching-assignment',
+        icon: ClipboardCheck,
+        gradient: 'from-emerald-500 to-teal-600',
+        functions: [EDUCATION.VIEW_TERM, FACULTY.VIEW],
+      },
+    ],
+  },
+
+  // ========== 8c. QUẢN LÝ NGƯỜI HỌC ==========
+  {
+    title: 'nav.studentManagementGroup',
+    items: [
+      {
+        name: 'nav.militaryStudents',
+        href: '/dashboard/education/military-students',
+        icon: ShieldCheck,
+        gradient: 'from-green-700 to-emerald-700',
+        badge: '🎖️',
+        functions: [EDUCATION.VIEW_STUDENT],
+      },
+      {
+        name: 'nav.civilStudents',
+        href: '/dashboard/education/civil-students',
+        icon: GraduationCap,
+        gradient: 'from-blue-600 to-sky-600',
+        badge: '🎓',
+        functions: [EDUCATION.VIEW_STUDENT],
+      },
       {
         name: 'nav.educationStudents',
         href: '/dashboard/education/students',
-        icon: GraduationCap,
+        icon: Users,
         gradient: 'from-sky-500 to-blue-600',
         functions: [EDUCATION.VIEW_STUDENT],
-      },
-      // -- Chương trình & Thời khóa biểu --
-      {
-        name: 'nav.educationOverview',
-        href: '/dashboard/education',
-        icon: BookMarked,
-        gradient: 'from-blue-500 to-indigo-600',
-        badge: '📚',
-        functions: [EDUCATION.VIEW_PROGRAM],
-      },
-      {
-        name: 'nav.educationPrograms',
-        href: '/dashboard/education/programs',
-        icon: LibraryBig,
-        gradient: 'from-indigo-500 to-purple-600',
-        functions: [EDUCATION.VIEW_PROGRAM],
-      },
-      {
-        name: 'nav.educationPlanning',
-        href: '/dashboard/education/planning',
-        icon: CalendarDays,
-        gradient: 'from-violet-500 to-purple-600',
-        functions: [EDUCATION.VIEW_CURRICULUM],
-      },
-      {
-        name: 'nav.educationCourseSections',
-        href: '/dashboard/education/course-sections',
-        icon: CalendarSearch,
-        gradient: 'from-amber-500 to-orange-600',
-        functions: [EDUCATION.VIEW_CLASS_SECTION],
-      },
-      {
-        name: 'nav.educationAttendance',
-        href: '/dashboard/education/attendance',
-        icon: CalendarCheck,
-        gradient: 'from-green-500 to-emerald-600',
-        functions: [EDUCATION.VIEW_ATTENDANCE],
       },
       {
         name: 'nav.educationGrades',
@@ -740,6 +735,49 @@ export const MENU_CONFIG: MenuGroup[] = [
         functions: [EDUCATION.VIEW_WARNING],
       },
       {
+        name: 'nav.educationConduct',
+        href: '/dashboard/education/conduct',
+        icon: ShieldCheck,
+        gradient: 'from-teal-500 to-emerald-600',
+        functions: [EDUCATION.VIEW_CONDUCT],
+      },
+      {
+        name: 'nav.educationAttendance',
+        href: '/dashboard/education/attendance',
+        icon: CalendarCheck,
+        gradient: 'from-green-500 to-emerald-600',
+        functions: [EDUCATION.VIEW_ATTENDANCE],
+      },
+      {
+        name: 'nav.educationThesis',
+        href: '/dashboard/education/thesis',
+        icon: BookOpen,
+        gradient: 'from-violet-500 to-purple-600',
+        functions: [EDUCATION.VIEW_STUDENT],
+      },
+      {
+        name: 'nav.educationGraduation',
+        href: '/dashboard/education/graduation',
+        icon: BadgeCheck,
+        gradient: 'from-purple-600 to-indigo-700',
+        badge: '🎓',
+        functions: [EDUCATION.VIEW_GRADUATION],
+      },
+    ],
+  },
+
+  // ========== 8d. CHƯƠNG TRÌNH & VẬN HÀNH ==========
+  {
+    title: 'nav.educationProgramGroup',
+    items: [
+      {
+        name: 'nav.educationPrograms',
+        href: '/dashboard/education/programs',
+        icon: LibraryBig,
+        gradient: 'from-indigo-500 to-purple-600',
+        functions: [EDUCATION.VIEW_PROGRAM],
+      },
+      {
         name: 'nav.educationCurriculum',
         href: '/dashboard/education/curriculum',
         icon: Layers,
@@ -754,25 +792,25 @@ export const MENU_CONFIG: MenuGroup[] = [
         functions: [EDUCATION.VIEW_PROGRAM],
       },
       {
+        name: 'nav.educationPlanning',
+        href: '/dashboard/education/planning',
+        icon: CalendarDays,
+        gradient: 'from-violet-500 to-purple-600',
+        functions: [EDUCATION.VIEW_CURRICULUM],
+      },
+      {
+        name: 'nav.educationCourseSections',
+        href: '/dashboard/education/course-sections',
+        icon: CalendarSearch,
+        gradient: 'from-amber-500 to-orange-600',
+        functions: [EDUCATION.VIEW_CLASS_SECTION],
+      },
+      {
         name: 'nav.educationSchedule',
         href: '/dashboard/education/schedule',
         icon: CalendarDays,
         gradient: 'from-green-500 to-emerald-600',
         functions: [EDUCATION.VIEW_TERM],
-      },
-      {
-        name: 'nav.educationTeachingAssignment',
-        href: '/dashboard/education/teaching-assignment',
-        icon: ClipboardCheck,
-        gradient: 'from-emerald-500 to-teal-600',
-        functions: [EDUCATION.VIEW_TERM, FACULTY.VIEW],
-      },
-      {
-        name: 'nav.teachingStats',
-        href: '/dashboard/faculty/teaching-analytics',
-        icon: BarChart3,
-        gradient: 'from-teal-500 to-cyan-600',
-        functions: [EDUCATION.VIEW_TERM, FACULTY.VIEW],
       },
       {
         name: 'nav.educationCoefficients',
@@ -781,7 +819,6 @@ export const MENU_CONFIG: MenuGroup[] = [
         gradient: 'from-cyan-500 to-blue-600',
         functions: [EDUCATION.MANAGE_TERM],
       },
-      // -- Phòng học & Thi cử --
       {
         name: 'nav.educationRooms',
         href: '/dashboard/education/rooms',
@@ -796,7 +833,6 @@ export const MENU_CONFIG: MenuGroup[] = [
         gradient: 'from-orange-500 to-amber-600',
         functions: [EDUCATION.VIEW_TERM, EXAM.VIEW_EXAM_PLAN],
       },
-      // -- Học liệu & PTN --
       {
         name: 'nav.educationQuestionBank',
         href: '/dashboard/education/question-bank',

@@ -10,17 +10,13 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from '@/components/ui/table';
-import {
-  Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle,
-} from '@/components/ui/dialog';
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
@@ -28,9 +24,13 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
 import {
   GraduationCap, Search, ChevronLeft, ChevronRight,
-  PlayCircle, Download, AlertTriangle, CheckCircle2, XCircle,
-  Shield, RefreshCw,
+  PlayCircle, Download, AlertTriangle, CheckCircle2, XCircle, RefreshCw,
 } from 'lucide-react';
+import {
+  ConditionDot,
+  GraduationRunEngineDialog,
+  type GraduationAuditResult,
+} from '@/components/education/graduation/graduation-audit-panel';
 
 // ============= CONSTANTS =============
 
@@ -54,21 +54,11 @@ const FAILURE_REASON_LABELS: Record<string, string> = {
 
 interface FailureReason { code: string; message: string }
 
-interface AuditItem {
-  id: string;
-  hocVienId: string;
-  auditDate: string;
-  totalCreditsEarned: number | null;
-  gpa: number | null;
-  conductEligible: boolean;
-  thesisEligible: boolean;
-  languageEligible: boolean;
-  graduationEligible: boolean;
-  failureReasonsJson: FailureReason[] | null;
-  status: string;
+// Extends the shared GraduationAuditResult with extra list-view fields
+interface AuditItem extends GraduationAuditResult {
   decisionNo: string | null;
   notes: string | null;
-  hocVien: { id: string; maHocVien: string; hoTen: string; lop: string | null; khoaHoc: string | null };
+  hocVien: GraduationAuditResult['hocVien'] & { lop: string | null; khoaHoc: string | null };
   diplomaRecord: { id: string; diplomaNo: string | null; diplomaType: string; graduationDate: string | null } | null;
 }
 
@@ -87,13 +77,7 @@ export default function GraduationPage() {
   const [search, setSearch]                 = useState('');
 
   // Run engine dialog
-  const [runDialogOpen, setRunDialogOpen]     = useState(false);
-  const [runHocVienId, setRunHocVienId]       = useState('');
-  const [runHocVienSearch, setRunHocVienSearch] = useState('');
-  const [runStudents, setRunStudents]           = useState<{ id: string; maHocVien: string; hoTen: string }[]>([]);
-  const [runNotes, setRunNotes]                 = useState('');
-  const [running, setRunning]                   = useState(false);
-  const [lastRunResult, setLastRunResult]       = useState<AuditItem | null>(null);
+  const [runDialogOpen, setRunDialogOpen] = useState(false);
 
   // Selection for export
   const [selected, setSelected] = useState<Set<string>>(new Set());
@@ -121,55 +105,6 @@ export default function GraduationPage() {
 
   useEffect(() => { fetchItems(); }, [fetchItems]);
 
-  const searchStudents = async (q: string) => {
-    if (!q || q.length < 2) { setRunStudents([]); return; }
-    try {
-      const res = await fetch(`/api/education/students?search=${encodeURIComponent(q)}&limit=15`);
-      if (res.ok) {
-        const data = await res.json();
-        setRunStudents(data.data || []);
-      }
-    } catch { /* silent */ }
-  };
-
-  // ── Run engine ────────────────────────────────────────────────────────────
-
-  const handleRunEngine = async () => {
-    if (!runHocVienId) { toast.error('Chọn học viên trước khi chạy engine'); return; }
-
-    const confirmed = window.confirm(
-      '⚠️ Xác nhận chạy Graduation Rule Engine?\n\n' +
-      'Kết quả sẽ được ghi vào hệ thống và ảnh hưởng đến quyết định cấp văn bằng.\n' +
-      'Chỉ chạy khi dữ liệu học viên đã đầy đủ và chính xác.'
-    );
-    if (!confirmed) return;
-
-    try {
-      setRunning(true);
-      const res = await fetch('/api/education/graduation/audit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ hocVienId: runHocVienId, notes: runNotes || null }),
-      });
-      const data = await res.json();
-      if (res.ok && data.success) {
-        setLastRunResult(data.data);
-        toast.success('Đã chạy xét tốt nghiệp');
-        fetchItems();
-      } else {
-        toast.error(data.error || 'Lỗi chạy engine');
-      }
-    } catch { toast.error('Lỗi kết nối'); }
-    finally   { setRunning(false); }
-  };
-
-  const resetRunDialog = () => {
-    setRunHocVienId('');
-    setRunHocVienSearch('');
-    setRunStudents([]);
-    setRunNotes('');
-    setLastRunResult(null);
-  };
 
   // ── Export ────────────────────────────────────────────────────────────────
 
@@ -235,7 +170,7 @@ export default function GraduationPage() {
             {exporting ? <RefreshCw className="h-4 w-4 mr-2 animate-spin" /> : <Download className="h-4 w-4 mr-2" />}
             Xuất XLSX {selected.size > 0 ? `(${selected.size})` : ''}
           </Button>
-          <Button onClick={() => { resetRunDialog(); setRunDialogOpen(true); }}>
+          <Button onClick={() => setRunDialogOpen(true)}>
             <PlayCircle className="h-4 w-4 mr-2" /> Chạy xét TN
           </Button>
         </div>
@@ -418,95 +353,12 @@ export default function GraduationPage() {
         </div>
       )}
 
-      {/* Run Engine Dialog */}
-      <Dialog open={runDialogOpen} onOpenChange={open => { setRunDialogOpen(open); if (!open) resetRunDialog(); }}>
-        <DialogContent className="max-w-lg">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <Shield className="h-5 w-5 text-amber-500" /> Chạy Graduation Rule Engine
-            </DialogTitle>
-          </DialogHeader>
-
-          <div className="grid gap-4 py-4">
-            <div className="p-3 rounded-md border border-amber-200 bg-amber-50 text-sm text-amber-800">
-              Kết quả sẽ được lưu vĩnh viễn. Đảm bảo dữ liệu học viên đã hoàn chỉnh trước khi chạy.
-            </div>
-
-            <div className="space-y-2">
-              <Label>Tìm học viên *</Label>
-              <Input
-                placeholder="Nhập tên hoặc mã học viên..."
-                value={runHocVienSearch}
-                onChange={e => { setRunHocVienSearch(e.target.value); searchStudents(e.target.value); }}
-              />
-              {runStudents.length > 0 && (
-                <Select value={runHocVienId} onValueChange={v => setRunHocVienId(v)}>
-                  <SelectTrigger><SelectValue placeholder="Chọn học viên" /></SelectTrigger>
-                  <SelectContent>
-                    {runStudents.map(s => (
-                      <SelectItem key={s.id} value={s.id}>{s.maHocVien} – {s.hoTen}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )}
-              {runHocVienId && (
-                <p className="text-xs text-green-600">✓ Đã chọn: {runStudents.find(s => s.id === runHocVienId)?.hoTen ?? runHocVienId}</p>
-              )}
-            </div>
-
-            <div className="space-y-2">
-              <Label>Ghi chú (tuỳ chọn)</Label>
-              <Input value={runNotes} onChange={e => setRunNotes(e.target.value)} placeholder="VD: Xét đợt tháng 6/2026" />
-            </div>
-
-            {/* Engine result preview */}
-            {lastRunResult && (
-              <div className={`p-3 rounded-md border text-sm ${
-                lastRunResult.graduationEligible
-                  ? 'border-green-200 bg-green-50 text-green-800'
-                  : 'border-red-200 bg-red-50 text-red-800'
-              }`}>
-                <div className="font-medium mb-1">
-                  {lastRunResult.graduationEligible ? '✓ Đủ điều kiện tốt nghiệp' : '✗ Chưa đủ điều kiện'}
-                </div>
-                <div className="text-xs space-y-0.5">
-                  <div>GPA: {lastRunResult.gpa?.toFixed(2)} · Tín chỉ: {lastRunResult.totalCreditsEarned}</div>
-                  {((lastRunResult.failureReasonsJson ?? []) as FailureReason[]).map((r, i) => (
-                    <div key={i}>• {FAILURE_REASON_LABELS[r.code] ?? r.message}</div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setRunDialogOpen(false)}>Đóng</Button>
-            <Button
-              onClick={handleRunEngine}
-              disabled={running || !runHocVienId}
-              className="bg-amber-600 hover:bg-amber-700"
-            >
-              {running ? <RefreshCw className="h-4 w-4 mr-2 animate-spin" /> : <PlayCircle className="h-4 w-4 mr-2" />}
-              {running ? 'Đang chạy...' : 'Xác nhận & Chạy Engine'}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      {/* Run Engine Dialog – extracted to reusable panel component */}
+      <GraduationRunEngineDialog
+        open={runDialogOpen}
+        onClose={() => setRunDialogOpen(false)}
+        onComplete={() => fetchItems()}
+      />
     </div>
-  );
-}
-
-// ── Helper component ──────────────────────────────────────────────────────────
-
-function ConditionDot({ ok, label }: { ok: boolean; label: string }) {
-  return (
-    <span
-      title={`${label}: ${ok ? 'Đạt' : 'Chưa đạt'}`}
-      className={`inline-flex items-center gap-1 text-xs px-1.5 py-0.5 rounded-full
-        ${ok ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}
-    >
-      {ok ? <CheckCircle2 className="h-3 w-3" /> : <XCircle className="h-3 w-3" />}
-      {label}
-    </span>
   );
 }

@@ -326,7 +326,7 @@ Sau khi xong:
 - nêu UX flow chính
 
 6. PROMPT REVIEW TOÀN BỘ M10
-/review-m09
+/review-m10
 
 Hãy review toàn bộ phần code M10 hiện có so với:
 - docs/design/system-overview.md

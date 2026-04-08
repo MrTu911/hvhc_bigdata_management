@@ -24,6 +24,8 @@ export async function GET(req: NextRequest) {
     const khoaHoc      = searchParams.get('khoaHoc');
     const nganh        = searchParams.get('nganh');
     const studyMode    = searchParams.get('studyMode');
+    // 'military' = khoaQuanLy NOT NULL; 'civil' = khoaQuanLy IS NULL; null = no filter
+    const studentType  = searchParams.get('studentType');
     const page         = Math.max(1, parseInt(searchParams.get('page') || '1'));
     const limit        = Math.min(100, parseInt(searchParams.get('limit') || '20'));
 
@@ -43,6 +45,10 @@ export async function GET(req: NextRequest) {
     if (khoaHoc) where.khoaHoc = khoaHoc;
     if (nganh) where.nganh = nganh;
     if (studyMode) where.studyMode = studyMode;
+    // studentType: 'military' → has khoaQuanLy (military unit structure)
+    //              'civil'    → no khoaQuanLy
+    if (studentType === 'military') where.khoaQuanLy = { not: null };
+    else if (studentType === 'civil') where.khoaQuanLy = null;
 
     // Scope SELF: giảng viên chỉ xem học viên mình cố vấn (giangVienHuongDanId)
     // Scope UNIT/DEPARTMENT/ACADEMY: không lọc thêm (function-code guard đã đủ)
