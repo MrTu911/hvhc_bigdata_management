@@ -1,0 +1,224 @@
+
+import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
+import { prisma } from '@/lib/db';
+import { AuditAction } from '@prisma/client';
+
+export async function POST(request: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const body = await request.json();
+    const { type, name, startDate, endDate } = body;
+
+    if (!type || !name || !startDate || !endDate) {
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    }
+
+    // Generate report data based on type
+    let reportData: any = {};
+
+    switch (type) {
+      case 'system_usage':
+        reportData = await generateSystemUsageReport(startDate, endDate);
+        break;
+      case 'data_quality':
+        reportData = await generateDataQualityReport(startDate, endDate);
+        break;
+      case 'user_activity':
+        reportData = await generateUserActivityReport(startDate, endDate);
+        break;
+      case 'ml_performance':
+        reportData = await generateMLPerformanceReport(startDate, endDate);
+        break;
+      case 'security_audit':
+        reportData = await generateSecurityAuditReport(startDate, endDate);
+        break;
+      default:
+        return NextResponse.json({ error: 'Invalid report type' }, { status: 400 });
+    }
+
+    // Save report to database
+    const report = await prisma.report.create({
+      data: {
+        name,
+        type,
+        startDate: new Date(startDate),
+        endDate: new Date(endDate),
+        data: reportData,
+        createdBy: session.user.id,
+      },
+    });
+
+    return NextResponse.json({ report: { id: report.id, name: report.name } });
+  } catch (error) {
+    console.error('Error generating report:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}
+
+async function generateSystemUsageReport(startDate: string, endDate: string) {
+  const datasets = await prisma.dataset.count({
+    where: {
+      createdAt: { gte: new Date(startDate), lte: new Date(endDate) },
+    },
+  });
+
+  const queries = await prisma.dataQuery.count({
+    where: {
+      submittedAt: { gte: new Date(startDate), lte: new Date(endDate) },
+    },
+  });
+
+  const users = await prisma.user.count({
+    where: {
+      createdAt: { gte: new Date(startDate), lte: new Date(endDate) },
+    },
+  });
+
+  return {
+    summary: {
+      totalDatasets: datasets,
+      totalQueries: queries,
+      newUsers: users,
+    },
+    period: { startDate, endDate },
+  };
+}
+
+async function generateDataQualityReport(startDate: string, endDate: string) {
+  const datasets = await prisma.dataset.findMany({
+    where: {
+      createdAt: { gte: new Date(startDate), lte: new Date(endDate) },
+    },
+    select: {
+      name: true,
+      fileSize: true,
+      type: true,
+      createdAt: true,
+    },
+  });
+
+  return {
+    summary: {
+      totalDatasets: datasets.length,
+      totalSize: datasets.reduce((sum, d) => sum + (d.fileSize || 0), 0),
+    },
+    datasets: datasets.map((d) => ({
+      name: d.name,
+      size: d.fileSize,
+      format: d.type,
+      uploadDate: d.createdAt,
+    })),
+    period: { startDate, endDate },
+  };
+}
+
+async function generateUserActivityReport(startDate: string, endDate: string) {
+  const auditLogs = await prisma.auditLog.groupBy({
+    by: ['userId'],
+    where: {
+      timestamp: { gte: new Date(startDate), lte: new Date(endDate) },
+      userId: { not: null },
+    },
+    _count: { id: true },
+  });
+
+  const userIds = auditLogs.map((l) => l.userId).filter((id): id is string => id !== null);
+  const users = await prisma.user.findMany({
+    where: { id: { in: userIds } },
+    select: { id: true, name: true, email: true },
+  });
+
+  return {
+    summary: {
+      activeUsers: auditLogs.length,
+      totalActions: auditLogs.reduce((sum, l) => sum + l._count.id, 0),
+    },
+    userActivity: auditLogs.map((log) => {
+      const user = users.find((u) => u.id === log.userId);
+      return {
+        user: user?.name || user?.email || 'Unknown',
+        actions: log._count.id,
+      };
+    }),
+    period: { startDate, endDate },
+  };
+}
+
+async function generateMLPerformanceReport(startDate: string, endDate: string) {
+  const models = await prisma.mLModel.findMany({
+    where: {
+      createdAt: { gte: new Date(startDate), lte: new Date(endDate) },
+    },
+    select: {
+      name: true,
+      modelType: true,
+      accuracy: true,
+      precision: true,
+      recall: true,
+      f1Score: true,
+      status: true,
+      createdAt: true,
+    },
+  });
+
+  const avgAccuracy = models.length > 0 
+    ? models.reduce((sum, m) => sum + (m.accuracy || 0), 0) / models.length 
+    : 0;
+
+  return {
+    summary: {
+      totalModels: models.length,
+      averageAccuracy: avgAccuracy,
+    },
+    models: models.map((m) => ({
+      name: m.name,
+      type: m.modelType,
+      accuracy: m.accuracy || 0,
+      precision: m.precision || 0,
+      recall: m.recall || 0,
+      f1Score: m.f1Score || 0,
+      status: m.status,
+      createdDate: m.createdAt,
+    })),
+    period: { startDate, endDate },
+  };
+}
+
+async function generateSecurityAuditReport(startDate: string, endDate: string) {
+  const auditLogs = await prisma.auditLog.findMany({
+    where: {
+      timestamp: { gte: new Date(startDate), lte: new Date(endDate) },
+    },
+    include: {
+      user: { select: { name: true, email: true } },
+    },
+    orderBy: { timestamp: 'desc' },
+    take: 100,
+  });
+
+  // Filter for failed actions using enum values
+  const failedActions: AuditAction[] = [AuditAction.FAILED_LOGIN, AuditAction.UNAUTHORIZED_ACCESS, AuditAction.DATA_BREACH_ATTEMPT];
+  const failedAttempts = auditLogs.filter((log) => failedActions.includes(log.action));
+
+  return {
+    summary: {
+      totalAuditEvents: auditLogs.length,
+      failedAttempts: failedAttempts.length,
+      suspiciousActivity: auditLogs.filter((log) => log.severity === 'CRITICAL' || log.severity === 'HIGH').length,
+    },
+    recentEvents: auditLogs.slice(0, 20).map((log) => ({
+      timestamp: log.timestamp,
+      user: log.user?.name || log.user?.email || 'System',
+      action: log.action,
+      resource: log.resource,
+      status: log.success ? 'success' : 'failed',
+    })),
+    period: { startDate, endDate },
+  };
+}

@@ -1,0 +1,80 @@
+
+/**
+ * Permission Check API
+ * POST /api/permissions/check - Check if user has permission
+ */
+
+import { NextRequest, NextResponse } from 'next/server';
+import { requireAuth } from '@/lib/middleware/auth-guard';
+import { hasPermission, hasModulePermission, getPermissionScope } from '@/lib/permissions';
+import { PermissionModule, PermissionAction } from '@prisma/client';
+
+export async function POST(req: NextRequest) {
+  try {
+    const currentUser = await requireAuth();
+    const body = await req.json();
+
+    const { userId, permissionCode, module, action } = body;
+
+    // Can only check own permissions unless admin
+    const targetUserId = userId || currentUser.userId;
+    if (targetUserId !== currentUser.userId) {
+      const isAllowed = await hasPermission(currentUser.userId, 'users:view:all');
+      if (!isAllowed) {
+        return NextResponse.json(
+          { success: false, error: 'Forbidden' },
+          { status: 403 }
+        );
+      }
+    }
+
+    let result;
+
+    if (permissionCode) {
+      result = await hasPermission(targetUserId, permissionCode);
+    } else if (module && action) {
+      result = await hasModulePermission(
+        targetUserId,
+        module as PermissionModule,
+        action as PermissionAction
+      );
+      
+      // Also get scope
+      const scope = await getPermissionScope(
+        targetUserId,
+        module as PermissionModule,
+        action as PermissionAction
+      );
+      
+      return NextResponse.json({
+        success: true,
+        data: {
+          hasPermission: result,
+          scope,
+        },
+      });
+    } else {
+      return NextResponse.json(
+        { success: false, error: 'Either permissionCode or module+action required' },
+        { status: 400 }
+      );
+    }
+
+    return NextResponse.json({
+      success: true,
+      data: { hasPermission: result },
+    });
+  } catch (error) {
+    if (error instanceof Error && error.message === 'Unauthorized') {
+      return NextResponse.json(
+        { success: false, error: 'Authentication required' },
+        { status: 401 }
+      );
+    }
+
+    return NextResponse.json(
+      { success: false, error: 'Failed to check permission' },
+      { status: 500 }
+    );
+  }
+}

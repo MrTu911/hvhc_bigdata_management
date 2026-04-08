@@ -1,0 +1,147 @@
+
+/**
+ * Role Permissions Matrix Component
+ * Displays permission matrix for all roles
+ */
+
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import { UserRole, PermissionModule } from '@prisma/client';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Check, X, Circle } from 'lucide-react';
+import { RoleDisplayNames, ModuleDisplayNames } from '@/lib/permissions';
+import { useAllPermissions } from '@/hooks/use-permissions';
+
+const roles: UserRole[] = [
+  'QUAN_TRI_HE_THONG',
+  'CHI_HUY_HOC_VIEN',
+  'CHI_HUY_KHOA_PHONG',
+  'CHU_NHIEM_BO_MON',
+  'GIANG_VIEN',
+  'NGHIEN_CUU_VIEN',
+  'HOC_VIEN_SINH_VIEN',
+  'KY_THUAT_VIEN',
+];
+
+export function RolePermissionsMatrix() {
+  const { permissions, loading } = useAllPermissions(true);
+  const [rolePermissions, setRolePermissions] = useState<Record<UserRole, any[]>>({} as any);
+
+  useEffect(() => {
+    if (permissions) {
+      // Fetch permissions for each role
+      const fetchRolePermissions = async () => {
+        const results: Record<UserRole, any[]> = {} as any;
+
+        for (const role of roles) {
+          const response = await fetch(`/api/permissions/roles/${role}`);
+          const result = await response.json();
+          if (result.success) {
+            results[role] = result.data;
+          }
+        }
+
+        setRolePermissions(results);
+      };
+
+      fetchRolePermissions();
+    }
+  }, [permissions]);
+
+  if (loading) {
+    return (
+      <div className="space-y-2">
+        <Skeleton className="h-12 w-full" />
+        <Skeleton className="h-12 w-full" />
+        <Skeleton className="h-12 w-full" />
+      </div>
+    );
+  }
+
+  if (!permissions) {
+    return <div>No permissions data available</div>;
+  }
+
+  const modules = Object.keys(permissions) as PermissionModule[];
+
+  const hasModulePermission = (role: UserRole, module: PermissionModule): 'all' | 'some' | 'none' => {
+    const rolePerms = rolePermissions[role] || [];
+    const modulePerms = permissions[module] || [];
+
+    if (modulePerms.length === 0) return 'none';
+
+    const hasCount = modulePerms.filter((perm: any) =>
+      rolePerms.some((rp: any) => rp.code === perm.code)
+    ).length;
+
+    if (hasCount === 0) return 'none';
+    if (hasCount === modulePerms.length) return 'all';
+    return 'some';
+  };
+
+  return (
+    <div className="rounded-md border overflow-auto">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[200px] font-bold">Module</TableHead>
+            {roles.map((role) => (
+              <TableHead key={role} className="text-center min-w-[120px]">
+                <div className="font-semibold text-xs">{RoleDisplayNames[role]}</div>
+              </TableHead>
+            ))}
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {modules.map((module) => (
+            <TableRow key={module}>
+              <TableCell className="font-medium">
+                <div className="flex flex-col">
+                  <span>{ModuleDisplayNames[module]}</span>
+                  <span className="text-xs text-muted-foreground">{module}</span>
+                </div>
+              </TableCell>
+              {roles.map((role) => {
+                const status = hasModulePermission(role, module);
+                return (
+                  <TableCell key={`${role}-${module}`} className="text-center">
+                    {status === 'all' && (
+                      <Check className="h-5 w-5 text-green-500 mx-auto" />
+                    )}
+                    {status === 'some' && (
+                      <Circle className="h-5 w-5 text-yellow-500 mx-auto fill-current" />
+                    )}
+                    {status === 'none' && (
+                      <X className="h-5 w-5 text-red-400 mx-auto" />
+                    )}
+                  </TableCell>
+                );
+              })}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+
+      {/* Legend */}
+      <div className="p-4 border-t bg-muted/30">
+        <div className="flex items-center gap-6 text-sm">
+          <div className="flex items-center gap-2">
+            <Check className="h-4 w-4 text-green-500" />
+            <span>Toàn quyền</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Circle className="h-4 w-4 text-yellow-500 fill-current" />
+            <span>Một số quyền</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <X className="h-4 w-4 text-red-400" />
+            <span>Không có quyền</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

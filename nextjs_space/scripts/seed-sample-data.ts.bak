@@ -1,0 +1,578 @@
+
+/**
+ * Script tạo dữ liệu mẫu cho hệ thống BigData HVHC
+ * Mỗi loại dữ liệu sẽ có 1000 bản ghi
+ */
+
+import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcryptjs';
+
+const prisma = new PrismaClient();
+
+const BATCH_SIZE = 100; // Tạo dữ liệu theo batch để tránh timeout
+
+// Dữ liệu mẫu cho các loại quân nhân
+const RANKS = ['Thiếu tá', 'Trung tá', 'Đại tá', 'Đại úy', 'Thượng úy', 'Trung úy', 'Thiếu úy', 'Hạ sĩ', 'Trung sĩ', 'Thượng sĩ'];
+const DEPARTMENTS = ['Khoa Hậu cần', 'Khoa Quân sự', 'Khoa Chính trị', 'Khoa Kỹ thuật', 'Khoa Cơ bản', 'Phòng Đào tạo', 'Phòng KHCN', 'Phòng Chính trị'];
+const UNITS = ['Đơn vị 1', 'Đơn vị 2', 'Đơn vị 3', 'Đơn vị 4', 'Đơn vị 5'];
+
+// Service Types
+const SERVICE_TYPES = ['POSTGRESQL', 'MINIO', 'AIRFLOW', 'CLICKHOUSE', 'PROMETHEUS', 'SUPERSET', 'KAFKA', 'HADOOP', 'SPARK', 'GRAFANA'];
+const SERVICE_STATUSES = ['HEALTHY', 'DEGRADED', 'DOWN', 'UNKNOWN'];
+
+// File Types
+const FILE_TYPES = ['RESEARCH_PAPER', 'DATASET', 'MODEL', 'REPORT', 'PRESENTATION', 'OTHER'];
+const CLASSIFICATION_LEVELS = ['PUBLIC', 'INTERNAL', 'CONFIDENTIAL', 'SECRET'];
+
+// Query Types
+const QUERY_TYPES = ['POSTGRESQL', 'CLICKHOUSE', 'HADOOP', 'SPARK', 'CUSTOM'];
+
+// Model Types
+const MODEL_TYPES = ['CLASSIFICATION', 'REGRESSION', 'CLUSTERING', 'NEURAL_NETWORK', 'DEEP_LEARNING', 'NLP', 'COMPUTER_VISION', 'TIME_SERIES'];
+const MODEL_FRAMEWORKS = ['TENSORFLOW', 'PYTORCH', 'KERAS', 'SCIKIT_LEARN', 'XGBOOST', 'LIGHTGBM'];
+
+function randomFromArray<T>(arr: T[]): T {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function randomInt(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function randomFloat(min: number, max: number): number {
+  return Math.random() * (max - min) + min;
+}
+
+function randomDate(start: Date, end: Date): Date {
+  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+}
+
+async function seedUsers() {
+  console.log('🌱 Seeding 1000 users...');
+  
+  const password = await bcrypt.hash('Password123!', 10);
+  const roles = Object.keys({
+    QUAN_TRI_HE_THONG: 1,
+    CHI_HUY_HOC_VIEN: 1,
+    CHI_HUY_KHOA_PHONG: 1,
+    CHU_NHIEM_BO_MON: 1,
+    GIANG_VIEN: 1,
+    NGHIEN_CUU_VIEN: 1,
+    HOC_VIEN_SINH_VIEN: 1,
+    KY_THUAT_VIEN: 1,
+  });
+
+  const users = [];
+  for (let i = 1; i <= 1000; i++) {
+    users.push({
+      email: `user${i}@hvhc.edu.vn`,
+      name: `Người dùng ${i}`,
+      password,
+      role: randomFromArray(roles) as any,
+      status: randomFromArray(['ACTIVE', 'INACTIVE', 'SUSPENDED']) as any,
+      militaryId: `MIL${String(i).padStart(6, '0')}`,
+      rank: randomFromArray(RANKS),
+      department: randomFromArray(DEPARTMENTS),
+      unit: randomFromArray(UNITS),
+      phone: `+84${randomInt(900000000, 999999999)}`,
+      dateOfBirth: randomDate(new Date('1980-01-01'), new Date('2005-12-31')),
+      gender: randomFromArray(['Nam', 'Nữ']),
+      address: `Địa chỉ ${i}, Hà Nội, Việt Nam`,
+      lastLoginAt: randomDate(new Date('2024-01-01'), new Date()),
+    });
+
+    if (users.length >= BATCH_SIZE) {
+      await prisma.user.createMany({ data: users, skipDuplicates: true });
+      users.length = 0;
+    }
+  }
+
+  if (users.length > 0) {
+    await prisma.user.createMany({ data: users, skipDuplicates: true });
+  }
+
+  console.log('✅ Users seeded successfully');
+}
+
+async function seedDepartments() {
+  console.log('🌱 Seeding departments...');
+  
+  const departments = [];
+  for (let i = 1; i <= 100; i++) {
+    departments.push({
+      code: `DEPT${String(i).padStart(3, '0')}`,
+      name: `Đơn vị ${i}`,
+      shortName: `ĐV${i}`,
+      fullName: `Đơn vị Hậu cần số ${i}`,
+      level: randomInt(1, 5),
+      description: `Mô tả đơn vị ${i}`,
+      address: `Địa chỉ đơn vị ${i}`,
+      phone: `024${randomInt(30000000, 39999999)}`,
+      email: `dept${i}@hvhc.edu.vn`,
+      latitude: 21.0278 + (Math.random() - 0.5) * 0.1,
+      longitude: 105.8342 + (Math.random() - 0.5) * 0.1,
+      sortOrder: i,
+      isActive: Math.random() > 0.1,
+    });
+  }
+
+  await prisma.department.createMany({ data: departments, skipDuplicates: true });
+  console.log('✅ Departments seeded successfully');
+}
+
+async function seedBigDataServices() {
+  console.log('🌱 Seeding 1000 BigData services...');
+  
+  const services = [];
+  for (let i = 1; i <= 1000; i++) {
+    const serviceType = randomFromArray(SERVICE_TYPES);
+    services.push({
+      name: `${serviceType}-${i}`,
+      type: serviceType as any,
+      status: randomFromArray(SERVICE_STATUSES) as any,
+      host: `server${i}.hvhc.local`,
+      port: randomInt(3000, 9999),
+      url: `http://server${i}.hvhc.local:${randomInt(3000, 9999)}`,
+      username: `admin${i}`,
+      password: 'encrypted_password',
+      lastChecked: randomDate(new Date('2024-01-01'), new Date()),
+      uptime: randomFloat(90, 100),
+      version: `${randomInt(1, 5)}.${randomInt(0, 9)}.${randomInt(0, 20)}`,
+      description: `Dịch vụ ${serviceType} số ${i}`,
+      isActive: Math.random() > 0.1,
+    });
+
+    if (services.length >= BATCH_SIZE) {
+      await prisma.bigDataService.createMany({ data: services, skipDuplicates: true });
+      services.length = 0;
+    }
+  }
+
+  if (services.length > 0) {
+    await prisma.bigDataService.createMany({ data: services, skipDuplicates: true });
+  }
+
+  console.log('✅ BigData services seeded successfully');
+}
+
+async function seedServiceMetrics() {
+  console.log('🌱 Seeding 1000 service metrics...');
+  
+  const services = await prisma.bigDataService.findMany({ take: 100 });
+  const metrics = [];
+
+  for (let i = 1; i <= 1000; i++) {
+    const service = randomFromArray(services);
+    metrics.push({
+      serviceId: service.id,
+      metricName: randomFromArray(['cpu_usage', 'memory_usage', 'disk_usage', 'network_io', 'request_rate']),
+      metricValue: randomFloat(0, 100),
+      unit: randomFromArray(['%', 'MB/s', 'requests/s']),
+      cpuUsage: randomFloat(10, 90),
+      memoryUsage: randomFloat(20, 80),
+      diskUsage: randomFloat(30, 70),
+      networkIn: randomFloat(0, 1000),
+      networkOut: randomFloat(0, 1000),
+      timestamp: randomDate(new Date('2024-01-01'), new Date()),
+    });
+
+    if (metrics.length >= BATCH_SIZE) {
+      await prisma.serviceMetric.createMany({ data: metrics });
+      metrics.length = 0;
+    }
+  }
+
+  if (metrics.length > 0) {
+    await prisma.serviceMetric.createMany({ data: metrics });
+  }
+
+  console.log('✅ Service metrics seeded successfully');
+}
+
+async function seedServiceAlerts() {
+  console.log('🌱 Seeding 1000 service alerts...');
+  
+  const services = await prisma.bigDataService.findMany({ take: 100 });
+  const alerts = [];
+
+  for (let i = 1; i <= 1000; i++) {
+    const service = randomFromArray(services);
+    const severity = randomFromArray(['INFO', 'WARNING', 'ERROR', 'CRITICAL']);
+    alerts.push({
+      serviceId: service.id,
+      title: `Cảnh báo ${i}: ${service.name}`,
+      message: `Chi tiết cảnh báo số ${i} cho dịch vụ ${service.name}`,
+      severity: severity as any,
+      status: randomFromArray(['ACTIVE', 'ACKNOWLEDGED', 'RESOLVED']) as any,
+      triggeredAt: randomDate(new Date('2024-01-01'), new Date()),
+      metadata: { alertId: i, sourceSystem: 'Prometheus' },
+    });
+
+    if (alerts.length >= BATCH_SIZE) {
+      await prisma.serviceAlert.createMany({ data: alerts });
+      alerts.length = 0;
+    }
+  }
+
+  if (alerts.length > 0) {
+    await prisma.serviceAlert.createMany({ data: alerts });
+  }
+
+  console.log('✅ Service alerts seeded successfully');
+}
+
+async function seedSystemLogs() {
+  console.log('🌱 Seeding 1000 system logs...');
+  
+  const users = await prisma.user.findMany({ take: 100 });
+  const logs = [];
+
+  const actions = [
+    'user_login', 'user_logout', 'file_upload', 'file_download', 
+    'query_execute', 'service_start', 'service_stop', 'config_update'
+  ];
+
+  for (let i = 1; i <= 1000; i++) {
+    const user = randomFromArray(users);
+    logs.push({
+      userId: Math.random() > 0.2 ? user.id : null,
+      level: randomFromArray(['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']) as any,
+      category: randomFromArray(['AUTH', 'USER_MANAGEMENT', 'SERVICE_MONITORING', 'DATA_PROCESSING', 'SYSTEM', 'SECURITY']) as any,
+      action: randomFromArray(actions),
+      description: `Log entry ${i}: ${randomFromArray(actions)}`,
+      metadata: { logId: i, source: 'System' },
+      ipAddress: `192.168.${randomInt(0, 255)}.${randomInt(1, 254)}`,
+      userAgent: 'Mozilla/5.0',
+      createdAt: randomDate(new Date('2024-01-01'), new Date()),
+    });
+
+    if (logs.length >= BATCH_SIZE) {
+      await prisma.systemLog.createMany({ data: logs });
+      logs.length = 0;
+    }
+  }
+
+  if (logs.length > 0) {
+    await prisma.systemLog.createMany({ data: logs });
+  }
+
+  console.log('✅ System logs seeded successfully');
+}
+
+async function seedResearchFiles() {
+  console.log('🌱 Seeding 1000 research files...');
+  
+  const users = await prisma.user.findMany({ take: 100 });
+  const files = [];
+
+  for (let i = 1; i <= 1000; i++) {
+    const user = randomFromArray(users);
+    const fileType = randomFromArray(FILE_TYPES);
+    files.push({
+      fileName: `file_${i}_${Date.now()}.pdf`,
+      originalName: `Tài liệu nghiên cứu ${i}.pdf`,
+      fileSize: randomInt(1024, 10485760), // 1KB to 10MB
+      fileType: fileType as any,
+      mimeType: 'application/pdf',
+      bucketName: 'research-files',
+      objectKey: `research/${Date.now()}/file_${i}.pdf`,
+      fileUrl: `https://minio.hvhc.local/research-files/file_${i}.pdf`,
+      uploadedBy: user.id,
+      department: randomFromArray(DEPARTMENTS),
+      researchArea: randomFromArray(['AI/ML', 'Big Data', 'Logistics', 'Security', 'IoT']),
+      tags: [randomFromArray(['research', 'training', 'analysis', 'report'])],
+      classification: randomFromArray(CLASSIFICATION_LEVELS) as any,
+      digitalSignature: `SHA256_${i}`,
+      checksum: `MD5_${i}`,
+      version: randomInt(1, 5),
+      isLatest: Math.random() > 0.3,
+      status: randomFromArray(['UPLOADING', 'PROCESSING', 'COMPLETED', 'FAILED']) as any,
+      title: `Nghiên cứu ${i}`,
+      description: `Mô tả chi tiết cho nghiên cứu số ${i}`,
+      keywords: [randomFromArray(['AI', 'ML', 'Data', 'Analysis'])],
+      downloadCount: randomInt(0, 500),
+      viewCount: randomInt(0, 1000),
+      uploadedAt: randomDate(new Date('2024-01-01'), new Date()),
+    });
+
+    if (files.length >= BATCH_SIZE) {
+      await prisma.researchFile.createMany({ data: files });
+      files.length = 0;
+    }
+  }
+
+  if (files.length > 0) {
+    await prisma.researchFile.createMany({ data: files });
+  }
+
+  console.log('✅ Research files seeded successfully');
+}
+
+async function seedDataQueries() {
+  console.log('🌱 Seeding 1000 data queries...');
+  
+  const users = await prisma.user.findMany({ take: 100 });
+  const queries = [];
+
+  for (let i = 1; i <= 1000; i++) {
+    const user = randomFromArray(users);
+    const queryType = randomFromArray(QUERY_TYPES);
+    const status = randomFromArray(['PENDING', 'RUNNING', 'COMPLETED', 'FAILED', 'CANCELLED']);
+    const submittedAt = randomDate(new Date('2024-01-01'), new Date());
+    
+    queries.push({
+      queryText: `SELECT * FROM table_${i} WHERE id > ${randomInt(1, 1000)} LIMIT 100`,
+      queryType: queryType as any,
+      executedBy: user.id,
+      department: randomFromArray(DEPARTMENTS),
+      status: status as any,
+      executionTime: status === 'COMPLETED' ? randomFloat(100, 5000) : null,
+      rowsReturned: status === 'COMPLETED' ? randomInt(0, 10000) : null,
+      dataSize: status === 'COMPLETED' ? randomFloat(0.1, 100) : null,
+      resultUrl: status === 'COMPLETED' ? `https://minio.hvhc.local/query-results/query_${i}.json` : null,
+      errorMessage: status === 'FAILED' ? `Error executing query ${i}` : null,
+      parameters: { limit: 100, offset: 0 },
+      submittedAt,
+      startedAt: ['RUNNING', 'COMPLETED', 'FAILED'].includes(status) ? new Date(submittedAt.getTime() + 1000) : null,
+      completedAt: ['COMPLETED', 'FAILED'].includes(status) ? new Date(submittedAt.getTime() + randomInt(2000, 60000)) : null,
+    });
+
+    if (queries.length >= BATCH_SIZE) {
+      await prisma.dataQuery.createMany({ data: queries });
+      queries.length = 0;
+    }
+  }
+
+  if (queries.length > 0) {
+    await prisma.dataQuery.createMany({ data: queries });
+  }
+
+  console.log('✅ Data queries seeded successfully');
+}
+
+async function seedMLModels() {
+  console.log('🌱 Seeding 1000 ML models...');
+  
+  const users = await prisma.user.findMany({ take: 100 });
+  const models = [];
+
+  for (let i = 1; i <= 1000; i++) {
+    const user = randomFromArray(users);
+    const modelType = randomFromArray(MODEL_TYPES);
+    const framework = randomFromArray(MODEL_FRAMEWORKS);
+    const status = randomFromArray(['DRAFT', 'TRAINING', 'TRAINED', 'VALIDATING', 'DEPLOYED', 'DEPRECATED', 'FAILED']);
+    
+    models.push({
+      name: `Model ${i}: ${modelType}`,
+      description: `Mô hình ${modelType} số ${i} sử dụng ${framework}`,
+      modelType: modelType as any,
+      framework: framework as any,
+      ownerId: user.id,
+      department: randomFromArray(DEPARTMENTS),
+      researchArea: randomFromArray(['AI/ML', 'Computer Vision', 'NLP', 'Time Series']),
+      classification: randomFromArray(CLASSIFICATION_LEVELS) as any,
+      trainingDatasetId: `dataset_${i}`,
+      version: `${randomInt(1, 3)}.${randomInt(0, 9)}.${randomInt(0, 20)}`,
+      isLatest: Math.random() > 0.3,
+      bucketName: 'ml-models',
+      modelPath: `models/model_${i}.pt`,
+      configPath: `models/model_${i}_config.json`,
+      hyperparameters: {
+        learningRate: randomFloat(0.0001, 0.01),
+        batchSize: randomInt(16, 128),
+        epochs: randomInt(10, 100),
+      },
+      trainingConfig: {
+        optimizer: 'Adam',
+        loss: 'CrossEntropy',
+      },
+      accuracy: ['TRAINED', 'DEPLOYED'].includes(status) ? randomFloat(0.7, 0.99) : null,
+      precision: ['TRAINED', 'DEPLOYED'].includes(status) ? randomFloat(0.7, 0.99) : null,
+      recall: ['TRAINED', 'DEPLOYED'].includes(status) ? randomFloat(0.7, 0.99) : null,
+      f1Score: ['TRAINED', 'DEPLOYED'].includes(status) ? randomFloat(0.7, 0.99) : null,
+      loss: ['TRAINED', 'DEPLOYED'].includes(status) ? randomFloat(0.01, 0.5) : null,
+      status: status as any,
+      trainingStartedAt: ['TRAINING', 'TRAINED', 'DEPLOYED'].includes(status) ? randomDate(new Date('2024-01-01'), new Date()) : null,
+      trainingCompletedAt: ['TRAINED', 'DEPLOYED'].includes(status) ? randomDate(new Date('2024-01-01'), new Date()) : null,
+      trainingDuration: ['TRAINED', 'DEPLOYED'].includes(status) ? randomFloat(60, 7200) : null,
+      deployedAt: status === 'DEPLOYED' ? randomDate(new Date('2024-01-01'), new Date()) : null,
+      deploymentUrl: status === 'DEPLOYED' ? `http://ml-api.hvhc.local/models/${i}` : null,
+      predictionCount: randomInt(0, 10000),
+      tags: [randomFromArray(['production', 'experimental', 'research', 'demo'])],
+      metadata: { experiment: `exp_${i}` },
+    });
+
+    if (models.length >= BATCH_SIZE) {
+      await prisma.mLModel.createMany({ data: models });
+      models.length = 0;
+    }
+  }
+
+  if (models.length > 0) {
+    await prisma.mLModel.createMany({ data: models });
+  }
+
+  console.log('✅ ML models seeded successfully');
+}
+
+async function seedDatasets() {
+  console.log('🌱 Seeding 1000 datasets...');
+  
+  const users = await prisma.user.findMany({ take: 100 });
+  const datasets = [];
+
+  const datasetTypes = ['CSV', 'JSON', 'PARQUET', 'AVRO', 'XML', 'TEXT'];
+
+  for (let i = 1; i <= 1000; i++) {
+    const user = randomFromArray(users);
+    const type = randomFromArray(datasetTypes);
+    
+    datasets.push({
+      name: `Dataset ${i}`,
+      description: `Tập dữ liệu mẫu số ${i}`,
+      type: type as any,
+      status: randomFromArray(['UPLOADED', 'PROCESSING', 'READY', 'FAILED', 'ARCHIVED']) as any,
+      bucketName: 'datasets',
+      filePath: `datasets/${Date.now()}/dataset_${i}.${type.toLowerCase()}`,
+      fileSize: randomInt(1048576, 1073741824), // 1MB to 1GB
+      rowCount: randomInt(1000, 1000000),
+      columnCount: randomInt(5, 100),
+      uploadedBy: user.id,
+      department: randomFromArray(DEPARTMENTS),
+      classification: randomFromArray(CLASSIFICATION_LEVELS) as any,
+      schema: {
+        columns: Array.from({ length: randomInt(5, 20) }, (_, idx) => ({
+          name: `column_${idx + 1}`,
+          type: randomFromArray(['string', 'integer', 'float', 'boolean', 'date']),
+        })),
+      },
+      tags: [randomFromArray(['training', 'validation', 'test', 'production'])],
+      metadata: { source: `source_${i}` },
+      lastAccessedAt: randomDate(new Date('2024-01-01'), new Date()),
+    });
+
+    if (datasets.length >= BATCH_SIZE) {
+      await prisma.dataset.createMany({ data: datasets });
+      datasets.length = 0;
+    }
+  }
+
+  if (datasets.length > 0) {
+    await prisma.dataset.createMany({ data: datasets });
+  }
+
+  console.log('✅ Datasets seeded successfully');
+}
+
+async function seedAuditLogs() {
+  console.log('🌱 Seeding 1000 audit logs...');
+  
+  const users = await prisma.user.findMany({ take: 100 });
+  const logs = [];
+
+  const actions = [
+    'LOGIN', 'LOGOUT', 'CREATE', 'READ', 'UPDATE', 'DELETE', 
+    'UPLOAD', 'DOWNLOAD', 'EXPORT', 'SHARE', 'PERMISSION_CHANGE',
+    'CONFIG_CHANGE', 'FAILED_LOGIN', 'UNAUTHORIZED_ACCESS'
+  ];
+
+  for (let i = 1; i <= 1000; i++) {
+    const user = randomFromArray(users);
+    const action = randomFromArray(actions);
+    const success = Math.random() > 0.1;
+    
+    logs.push({
+      userId: Math.random() > 0.1 ? user.id : null,
+      action: action as any,
+      resource: randomFromArray(['User', 'File', 'Query', 'Model', 'Dataset', 'Service']),
+      resourceId: `resource_${i}`,
+      ipAddress: `192.168.${randomInt(0, 255)}.${randomInt(1, 254)}`,
+      userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+      location: randomFromArray(['Hà Nội', 'TP. Hồ Chí Minh', 'Đà Nẵng']),
+      success,
+      errorMessage: !success ? `Error: Unauthorized access attempt ${i}` : null,
+      severity: randomFromArray(['LOW', 'MEDIUM', 'HIGH', 'CRITICAL']) as any,
+      details: { auditId: i, timestamp: Date.now() },
+      timestamp: randomDate(new Date('2024-01-01'), new Date()),
+    });
+
+    if (logs.length >= BATCH_SIZE) {
+      await prisma.auditLog.createMany({ data: logs });
+      logs.length = 0;
+    }
+  }
+
+  if (logs.length > 0) {
+    await prisma.auditLog.createMany({ data: logs });
+  }
+
+  console.log('✅ Audit logs seeded successfully');
+}
+
+async function seedAirflowDags() {
+  console.log('🌱 Seeding Airflow DAGs...');
+  
+  const dags = [];
+  for (let i = 1; i <= 100; i++) {
+    dags.push({
+      dagId: `dag_${i}`,
+      dagName: `DAG ${i}: Data Processing`,
+      description: `DAG xử lý dữ liệu số ${i}`,
+      status: randomFromArray(['SUCCESS', 'FAILED', 'RUNNING', 'QUEUED', 'PAUSED']) as any,
+      isPaused: Math.random() > 0.7,
+      lastRunTime: randomDate(new Date('2024-01-01'), new Date()),
+      nextRunTime: randomDate(new Date(), new Date('2025-12-31')),
+      successCount: randomInt(0, 1000),
+      failedCount: randomInt(0, 50),
+    });
+  }
+
+  await prisma.airflowDag.createMany({ data: dags, skipDuplicates: true });
+  console.log('✅ Airflow DAGs seeded successfully');
+}
+
+async function main() {
+  console.log('🚀 Bắt đầu tạo dữ liệu mẫu cho hệ thống HVHC BigData...\n');
+
+  try {
+    await seedUsers();
+    await seedDepartments();
+    await seedBigDataServices();
+    await seedServiceMetrics();
+    await seedServiceAlerts();
+    await seedSystemLogs();
+    await seedResearchFiles();
+    await seedDataQueries();
+    await seedMLModels();
+    await seedDatasets();
+    await seedAuditLogs();
+    await seedAirflowDags();
+
+    console.log('\n✅ Hoàn thành! Tất cả dữ liệu mẫu đã được tạo thành công.');
+    console.log('📊 Tổng quan:');
+    console.log('   - 1000 users');
+    console.log('   - 100 departments');
+    console.log('   - 1000 BigData services');
+    console.log('   - 1000 service metrics');
+    console.log('   - 1000 service alerts');
+    console.log('   - 1000 system logs');
+    console.log('   - 1000 research files');
+    console.log('   - 1000 data queries');
+    console.log('   - 1000 ML models');
+    console.log('   - 1000 datasets');
+    console.log('   - 1000 audit logs');
+    console.log('   - 100 Airflow DAGs');
+  } catch (error) {
+    console.error('❌ Lỗi khi tạo dữ liệu mẫu:', error);
+    throw error;
+  }
+}
+
+main()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });

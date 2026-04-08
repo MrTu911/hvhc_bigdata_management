@@ -1,0 +1,2576 @@
+[
+  {
+    "name": "Đỗ Quang Hạnh",
+    "rank": "Trung úy",
+    "position": "Trợ lý",
+    "unit": "Ban CNTT, Văn phòng",
+    "unit_code": "VP",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Vũ Tuấn Minh",
+    "rank": "Trung úy",
+    "position": "Giảng viên",
+    "unit": "BM. Hậu cần chiến đấu, Khoa Chỉ huy hậu cần",
+    "unit_code": "K1",
+    "role": "GIANG_VIEN",
+    "personnel_type": "GIANG_VIEN"
+  },
+  {
+    "name": "Hoàng Đức Anh",
+    "rank": "Trung úy",
+    "position": "Giảng viên",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "GIANG_VIEN",
+    "personnel_type": "GIANG_VIEN"
+  },
+  {
+    "name": "Hoàng Kim",
+    "rank": "Trung úy",
+    "position": "Giảng viên",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "GIANG_VIEN",
+    "personnel_type": "GIANG_VIEN"
+  },
+  {
+    "name": "Trịnh Trần Đức",
+    "rank": "Trung úy",
+    "position": "Giảng viên",
+    "unit": "BM. Chỉ huy tham mưu, Khoa Chỉ huy hậu cần",
+    "unit_code": "K1",
+    "role": "GIANG_VIEN",
+    "personnel_type": "GIANG_VIEN"
+  },
+  {
+    "name": "Lê Quốc An",
+    "rank": "Trung úy",
+    "position": "Giảng viên",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "GIANG_VIEN",
+    "personnel_type": "GIANG_VIEN"
+  },
+  {
+    "name": "Trần Đình Thành Đạt",
+    "rank": "Trung úy",
+    "position": "Giảng viên",
+    "unit": "BM. Kỹ thuật, Khoa Quân nhu",
+    "unit_code": "K2",
+    "role": "GIANG_VIEN",
+    "personnel_type": "GIANG_VIEN"
+  },
+  {
+    "name": "Ngô Minh Đức",
+    "rank": "Trung úy",
+    "position": "Giảng viên",
+    "unit": "BM. Bảo đảm, Khoa Quân nhu",
+    "unit_code": "K2",
+    "role": "GIANG_VIEN",
+    "personnel_type": "GIANG_VIEN"
+  },
+  {
+    "name": "Nguyễn Vũ Thành Hưng",
+    "rank": "Trung úy",
+    "position": "Giảng viên",
+    "unit": "BM. Thương phẩm, Khoa Quân nhu",
+    "unit_code": "K2",
+    "role": "GIANG_VIEN",
+    "personnel_type": "GIANG_VIEN"
+  },
+  {
+    "name": "Nguyễn Hoàng Vịnh",
+    "rank": "Trung úy",
+    "position": "Giảng viên",
+    "unit": "BM. Chỉ huy vận tải, Khoa Vận tải",
+    "unit_code": "K3",
+    "role": "GIANG_VIEN",
+    "personnel_type": "GIANG_VIEN"
+  },
+  {
+    "name": "Nguyễn Thành Long",
+    "rank": "Trung úy",
+    "position": "Giảng viên",
+    "unit": "BM. Bảo đảm, Khoa Xăng dầu",
+    "unit_code": "K4",
+    "role": "GIANG_VIEN",
+    "personnel_type": "GIANG_VIEN"
+  },
+  {
+    "name": "Hoàng Nghĩa Lâm",
+    "rank": "Trung úy",
+    "position": "Giảng viên",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "GIANG_VIEN",
+    "personnel_type": "GIANG_VIEN"
+  },
+  {
+    "name": "Mai Thùy Linh",
+    "rank": "Trung úy",
+    "position": "Giảng viên",
+    "unit": "BM. Kinh tế, Khoa Tài chính",
+    "unit_code": "K5",
+    "role": "GIANG_VIEN",
+    "personnel_type": "GIANG_VIEN"
+  },
+  {
+    "name": "Phạm Quang Huy",
+    "rank": "Trung úy",
+    "position": "Giảng viên",
+    "unit": "BM. Huấn luyện thể lực, Khoa Quân sự",
+    "unit_code": "K6",
+    "role": "GIANG_VIEN",
+    "personnel_type": "GIANG_VIEN"
+  },
+  {
+    "name": "Nguyễn Thị Thanh Nhàn",
+    "rank": "Trung úy",
+    "position": "Giảng viên",
+    "unit": "BM. Tin học, Khoa Khoa học cơ bản",
+    "unit_code": "K7",
+    "role": "GIANG_VIEN",
+    "personnel_type": "GIANG_VIEN"
+  },
+  {
+    "name": "Nguyễn Việt Trung",
+    "rank": "Trung úy",
+    "position": "Giảng viên",
+    "unit": "BM. Anh văn, Khoa Ngoại ngữ",
+    "unit_code": "K8",
+    "role": "GIANG_VIEN",
+    "personnel_type": "GIANG_VIEN"
+  },
+  {
+    "name": "Nguyễn Tiến Đạt",
+    "rank": "Thiếu úy",
+    "position": "Giảng viên",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "GIANG_VIEN",
+    "personnel_type": "GIANG_VIEN"
+  },
+  {
+    "name": "Vũ Trọng Tấn",
+    "rank": "Trung úy",
+    "position": "Trung đội trưởng",
+    "unit": "Đại đội 1, Tiểu đoàn 1",
+    "unit_code": "TD1",
+    "role": "GIANG_VIEN",
+    "personnel_type": "HOC_VIEN_QUAN_SU"
+  },
+  {
+    "name": "Nguyễn Văn Công",
+    "rank": "Thiếu úy",
+    "position": "Trung đội trưởng",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "GIANG_VIEN",
+    "personnel_type": "HOC_VIEN_QUAN_SU"
+  },
+  {
+    "name": "Hoàng Tiến Tài",
+    "rank": "Trung úy",
+    "position": "Trung đội trưởng",
+    "unit": "Đại đội 2, Tiểu đoàn 1",
+    "unit_code": "TD1",
+    "role": "GIANG_VIEN",
+    "personnel_type": "HOC_VIEN_QUAN_SU"
+  },
+  {
+    "name": "Nguyễn Ngọc Anh",
+    "rank": "Trung úy",
+    "position": "Trung đội trưởng",
+    "unit": "Đại đội 2, Tiểu đoàn 1",
+    "unit_code": "TD1",
+    "role": "GIANG_VIEN",
+    "personnel_type": "HOC_VIEN_QUAN_SU"
+  },
+  {
+    "name": "Lê Xuân Quang",
+    "rank": "Trung úy",
+    "position": "Trợ lý CT",
+    "unit": "Tiểu đoàn 2",
+    "unit_code": "TD2",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Nguyễn Phụng Hưởng",
+    "rank": "Trung úy",
+    "position": "Chính trị viên phó",
+    "unit": "Đại đội 13, Tiểu đoàn 4",
+    "unit_code": "TD4",
+    "role": "GIANG_VIEN",
+    "personnel_type": "HOC_VIEN_QUAN_SU"
+  },
+  {
+    "name": "Trịnh Bá Tuấn Anh",
+    "rank": "CCQP",
+    "position": "Giảng viên",
+    "unit": "BM. Kinh tế, Khoa Tài chính",
+    "unit_code": "K5",
+    "role": "GIANG_VIEN",
+    "personnel_type": "GIANG_VIEN"
+  },
+  {
+    "name": "Đỗ Thị Trang",
+    "rank": "CCQP",
+    "position": "Giảng viên",
+    "unit": "BM. Toán, Khoa Khoa học cơ bản",
+    "unit_code": "K7",
+    "role": "GIANG_VIEN",
+    "personnel_type": "GIANG_VIEN"
+  },
+  {
+    "name": "Bùi Thị Như Quỳnh",
+    "rank": "Trung úy CN",
+    "position": "NV Hành chính",
+    "unit": "Ban Hành chính, Văn phòng",
+    "unit_code": "VP",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Trần Thu Hằng",
+    "rank": "Trung úy CN",
+    "position": "NV Hành chính",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Nguyễn Thị Liên",
+    "rank": "Trung úy CN",
+    "position": "NV Hành chính",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Nguyễn Tấn Dũng",
+    "rank": "Trung úy CN",
+    "position": "NV CNTT",
+    "unit": "Ban CNTT, Văn phòng",
+    "unit_code": "VP",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Chu Bách Tùng",
+    "rank": "Trung úy CN",
+    "position": "NV Thống kê",
+    "unit": "Viện Nghiên cứu KHHCQS",
+    "unit_code": "VIEN1",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Đặng Thanh Long",
+    "rank": "Thiếu úy CN",
+    "position": "NV Nấu ăn",
+    "unit": "Hệ ĐT chỉ huy Tham mưu",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Nguyễn Tiến Đạt",
+    "rank": "Trung úy CN",
+    "position": "NV Nấu ăn",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Nguyễn Chí Công",
+    "rank": "Trung úy CN",
+    "position": "NV Nấu ăn",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Lê Thành Công",
+    "rank": "Trung úy CN",
+    "position": "NV Nấu ăn",
+    "unit": "Hệ Quốc tế",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Phan Tùng Sơn",
+    "rank": "Trung tướng",
+    "position": "Giám đốc",
+    "unit": "Ban Giám đốc",
+    "unit_code": "BGD",
+    "role": "CHI_HUY_HOC_VIEN",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Dương Đức Thiện",
+    "rank": "Trung tướng",
+    "position": "Chính ủy",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_HOC_VIEN",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Lê Thành Long",
+    "rank": "Thiếu tướng",
+    "position": "Phó Chính ủy",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_HOC_VIEN",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Văn Kiên",
+    "rank": "Thiếu tướng",
+    "position": "Phó Giám đốc",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_HOC_VIEN",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Quang Dũng",
+    "rank": "Thiếu tướng",
+    "position": "Phó Giám đốc",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_HOC_VIEN",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Vũ Hồng Hà",
+    "rank": "Đại tá",
+    "position": "Phó Giám đốc",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_HOC_VIEN",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Vũ Nhật Văn",
+    "rank": "Đại tá",
+    "position": "Trưởng phòng",
+    "unit": "Phòng Đào tạo",
+    "unit_code": "B1",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Văn Phong",
+    "rank": "Thượng tá",
+    "position": "P.Trưởng phòng",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Vũ Quang Hòa",
+    "rank": "Đại tá",
+    "position": "P.Trưởng phòng",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Tạ Văn Thức",
+    "rank": "Thượng tá",
+    "position": "Trưởng ban",
+    "unit": "Ban Bảo đảm vật chất huấn luyện",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Văn Dũng",
+    "rank": "Đại tá",
+    "position": "P.Trưởng ban",
+    "unit": "Ban Kế hoạch",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Thanh Bình",
+    "rank": "Thượng tá",
+    "position": "Trưởng ban",
+    "unit": "Ban Bản đồ",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Tiến Lâm",
+    "rank": "Trung tá",
+    "position": "Chỉ huy trưởng",
+    "unit": "Trung tâm Sản xuất & Thực hành huấn luyện",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Phạm Hoàng Tuyên",
+    "rank": "Thượng úy",
+    "position": "Trợ lý tuyển sinh",
+    "unit": "Ban Kế hoạch",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Nguyễn Ngọc Sơn",
+    "rank": "Đại tá",
+    "position": "Trưởng phòng",
+    "unit": "Phòng Khoa học quân sự",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Đỗ Duy Thắng",
+    "rank": "Đại tá",
+    "position": "P.Trưởng phòng",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Đặng Chính Nghĩa",
+    "rank": "Đại tá",
+    "position": "P.Trưởng phòng",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Lê Quang Vịnh",
+    "rank": "Thượng tá",
+    "position": "Trưởng ban",
+    "unit": "Ban Quản lý khoa học QS",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Trần Văn Huấn",
+    "rank": "Đại tá",
+    "position": "Trưởng ban",
+    "unit": "Ban Thông tin - Biên tập xuất bản",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Lê Việt Cường",
+    "rank": "Đại tá",
+    "position": "P. Chủ nhiệm Chính trị",
+    "unit": "Phòng Chính trị",
+    "unit_code": "B3",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Đỗ Đức Tùng",
+    "rank": "Đại tá",
+    "position": "P. Chủ nhiệm Chính trị",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Ngọc Hải",
+    "rank": "Đại tá",
+    "position": "PCN UBKT",
+    "unit": "Phòng Chính trị",
+    "unit_code": "B3",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Hoàng Đình Huân",
+    "rank": "Đại tá",
+    "position": "Trưởng ban",
+    "unit": "Ban Công tác quần chúng",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Bùi Văn Dinh",
+    "rank": "Thượng tá",
+    "position": "Trưởng ban",
+    "unit": "Ban Tuyên huấn",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Chử Anh Tuấn",
+    "rank": "Trung tá",
+    "position": "Trưởng ban",
+    "unit": "Ban Cán bộ",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Trần Hùng Cường",
+    "rank": "Thượng tá",
+    "position": "Trưởng ban",
+    "unit": "Ban Tổ chức",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Vũ Ba Duy",
+    "rank": "Trung tá",
+    "position": "Trưởng ban",
+    "unit": "Ban Kế hoạch tổng hợp",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Bùi Huy Hoàng",
+    "rank": "Thượng tá",
+    "position": "UVCT UBKT",
+    "unit": "Phòng Chính trị",
+    "unit_code": "B3",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Nguyễn Văn Cao",
+    "rank": "Trung tá",
+    "position": "Trợ lý Chính sách",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Đỗ Đức Dương",
+    "rank": "Thượng úy",
+    "position": "Trợ lý",
+    "unit": "Ban Cán bộ",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Tô Văn Tiệp",
+    "rank": "Trung tá",
+    "position": "Trợ lý",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Lê Đình Quân",
+    "rank": "Thượng tá",
+    "position": "Trưởng phòng",
+    "unit": "Phòng Hậu cần - Kỹ thuật",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Vũ Văn Tiến",
+    "rank": "Đại tá",
+    "position": "P. Trưởng phòng",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Đặng Hiếu Minh",
+    "rank": "Trung tá",
+    "position": "P. Trưởng phòng",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Đỗ Văn Duy",
+    "rank": "Thiếu tá",
+    "position": "Trưởng ban",
+    "unit": "Ban Tham mưu kế hoạch",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Văn Bằng",
+    "rank": "Thiếu tá",
+    "position": "Trưởng ban",
+    "unit": "Ban Quân nhu",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Bùi văn Đôn",
+    "rank": "Trung tá",
+    "position": "Trưởng ban",
+    "unit": "Ban Xăng dầu",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Trần Thị Kim Thoa",
+    "rank": "Đại tá",
+    "position": "Trưởng ban",
+    "unit": "Ban Quân y",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Hoàng Minh Tứ",
+    "rank": "Thiếu tá",
+    "position": "Q. Trưởng ban",
+    "unit": "Ban Quân khí",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Mạnh Thắng",
+    "rank": "Trung tá",
+    "position": "Trưởng ban",
+    "unit": "Ban Doanh trại",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Dương Anh Văn",
+    "rank": "Trung tá",
+    "position": "Trưởng ban",
+    "unit": "Ban Xe - Máy",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Vũ Xuân Giang",
+    "rank": "Trung tá",
+    "position": "Bệnh xá trưởng",
+    "unit": "Bệnh xá",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Nguyễn Văn Dũng",
+    "rank": "Trung tá",
+    "position": "Trợ lý",
+    "unit": "Ban Doanh trại",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Cao Văn Cương",
+    "rank": "Thiếu tá",
+    "position": "Trợ lý",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Đỗ Đình Chiến",
+    "rank": "Trung tá",
+    "position": "Trợ lý",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Nguyễn Trần Tiến",
+    "rank": "Đại úy",
+    "position": "Trợ lý",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Đoàn Nam Giang",
+    "rank": "Đại úy",
+    "position": "Trợ lý",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Dương Văn Minh",
+    "rank": "Thiếu tá",
+    "position": "Trợ lý",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Trần Văn Đức",
+    "rank": "Đại úy",
+    "position": "Trợ lý",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Hà Phương Trung",
+    "rank": "Trung tá QNCN",
+    "position": "Trợ lý",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Nguyễn Chiến Thắng",
+    "rank": "Thiếu tá",
+    "position": "Trợ lý",
+    "unit": "Ban Quân nhu",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Nguyễn Văn Hưng",
+    "rank": "Trung tá",
+    "position": "Trợ lý",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Vũ Đức Thắng",
+    "rank": "Thiếu tá",
+    "position": "Trợ lý",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Đỗ Quang Cơ",
+    "rank": "Thiếu tá",
+    "position": "Trợ lý",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Đoàn Nam Hà",
+    "rank": "Thiếu tá",
+    "position": "Trợ lý",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Chu Văn Phùng",
+    "rank": "Thiếu tá",
+    "position": "Trợ lý",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Nguyễn Công Phúc",
+    "rank": "Đại úy",
+    "position": "Trợ lý",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Lê Minh Tưởng",
+    "rank": "Đại úy",
+    "position": "Trợ lý",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Phạm Đình Văn",
+    "rank": "Thượng úy",
+    "position": "Trợ lý",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Phạm Anh Dũng",
+    "rank": "Trung úy",
+    "position": "Trợ lý",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Trần Ngọc Quỳnh",
+    "rank": "Thiếu tá",
+    "position": "Trợ lý",
+    "unit": "Ban Xăng dầu",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Đỗ Việt Tân",
+    "rank": "Thiếu tá",
+    "position": "Trợ lý",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Lê Văn Chung",
+    "rank": "Thượng úy",
+    "position": "Trợ lý",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Nguyễn Thanh Long",
+    "rank": "Thượng úy",
+    "position": "Trợ lý",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Nguyễn Thành Trung",
+    "rank": "Đại tá",
+    "position": "Chánh Văn phòng",
+    "unit": "Văn phòng",
+    "unit_code": "VP",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Nguyễn Xuân Trường",
+    "rank": "Đại tá",
+    "position": "P. Chánh Văn phòng",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Phan Kim Toàn",
+    "rank": "Đại tá",
+    "position": "P. Chánh Văn phòng",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Bùi Văn Tiến",
+    "rank": "Đại tá",
+    "position": "P. Chánh Văn phòng",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Nguyễn Anh Đức",
+    "rank": "Đại tá",
+    "position": "Trưởng ban",
+    "unit": "Ban Quân lực",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Đỗ Mạnh Hùng",
+    "rank": "Thượng tá",
+    "position": "Trưởng ban",
+    "unit": "Ban Tổng hợp kế hoạch",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Phạm Văn Dũng",
+    "rank": "Thượng tá",
+    "position": "Trưởng ban",
+    "unit": "Ban Thông tin",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Đình Dũng",
+    "rank": "Thượng tá",
+    "position": "Trưởng ban",
+    "unit": "Ban Công nghệ thông tin",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Bùi Thanh Tuấn",
+    "rank": "Trung tá",
+    "position": "P.Trưởng ban",
+    "unit": "Ban Tác huấn",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Đức Thuận",
+    "rank": "Trung tá CN",
+    "position": "Trưởng ban",
+    "unit": "Ban Hành chính",
+    "unit_code": "BAN1",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Quách Ngọc Thụy",
+    "rank": "Thượng tá",
+    "position": "Trưởng ban",
+    "unit": "Ban Văn thư, lưu trữ",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Đào Văn Tùng",
+    "rank": "Trung tá",
+    "position": "Trợ lý",
+    "unit": "Ban Quân lực",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Vũ Văn Tùng",
+    "rank": "Đại tá",
+    "position": "Trưởng phòng",
+    "unit": "Phòng Sau đại học",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Hoàng Đại Nam",
+    "rank": "Đại tá",
+    "position": "P. Trưởng phòng",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Thanh Sơn",
+    "rank": "Thiếu tá",
+    "position": "Trợ lý QL cao học",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Lê Viết Long",
+    "rank": "Trung tá",
+    "position": "Trưởng ban",
+    "unit": "Ban Tài chính",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Lê Văn Khải",
+    "rank": "Đại úy",
+    "position": "Trợ lý",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Nguyễn Phan Anh Vũ",
+    "rank": "Thượng úy",
+    "position": "Trợ lý",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Nguyễn Thị Mai Dương",
+    "rank": "Thượng úy",
+    "position": "Trợ lý",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Hoàng Thị Thanh Hương",
+    "rank": "Thượng úy",
+    "position": "Trợ lý",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Phạm Hoàng Hà",
+    "rank": "Trung úy",
+    "position": "Trợ lý",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Phạm Thu Trang",
+    "rank": "Thượng tá CN",
+    "position": "Trợ lý",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Hoàng Thế Hưng",
+    "rank": "Đại tá",
+    "position": "Viện trưởng",
+    "unit": "Viện Nghiên cứu KHHCQS",
+    "unit_code": "VIEN1",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Nguyễn Thế Vui",
+    "rank": "Đại tá",
+    "position": "P. Viện trưởng",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Bùi Hướng Tâm",
+    "rank": "Thượng tá",
+    "position": "Trưởng ban",
+    "unit": "Ban Kế hoạch tổng hợp",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Bùi Thị Thanh",
+    "rank": "Trung tá",
+    "position": "Trưởng ban",
+    "unit": "Ban Khoa học Kỹ thuật Hậu cần",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Đức Tú",
+    "rank": "Trung tá",
+    "position": "Trưởng ban",
+    "unit": "Ban Khoa học Hậu cần quân sự",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Quốc Hoài",
+    "rank": "Đại tá",
+    "position": "PhóTBT, Phụ trách TBT",
+    "unit": "Tạp chí NCKH - HCQS",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Đinh Văn Đông",
+    "rank": "Thượng tá",
+    "position": "Trưởng ban",
+    "unit": "Ban Khảo thí",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Hà Trung Sơn",
+    "rank": "Đại tá",
+    "position": "P. Trưởng ban",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Vũ Quốc Huy",
+    "rank": "Đại tá",
+    "position": "PT. Chủ nhiệm khoa",
+    "unit": "Khoa Chỉ huy Hậu cần",
+    "unit_code": "K1",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Vũ Văn Bân",
+    "rank": "Đại tá",
+    "position": "P. Chủ nhiệm khoa",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Lưu Đức Nhật",
+    "rank": "Đại tá",
+    "position": "Q.Chủ nhiệm bộ môn",
+    "unit": "BM. Hậu cần chiến đấu",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Phạm Văn Nhẫn",
+    "rank": "Trung tá",
+    "position": "Q.Chủ nhiệm bộ môn",
+    "unit": "BM. Quân y",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Hà Thanh Nam",
+    "rank": "Đại tá",
+    "position": "Chủ nhiệm bộ môn",
+    "unit": "BM. Hậu cần quân sự ĐP",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Hoàng Kim Hiệu",
+    "rank": "Thượng tá",
+    "position": "Chủ nhiệm bộ môn",
+    "unit": "BM. Chỉ huy tham mưu",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Ngọc Dương",
+    "rank": "Thượng tá",
+    "position": "P. Chủ nhiệm bộ môn",
+    "unit": "BM. Hậu cần chiến đấu",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Công Phúc",
+    "rank": "Đại tá",
+    "position": "Chủ nhiệm khoa",
+    "unit": "Khoa Quân nhu",
+    "unit_code": "K2",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Thế Phương",
+    "rank": "Đại tá",
+    "position": "P. Chủ nhiệm khoa",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Đỗ Thanh Hải",
+    "rank": "Thượng tá",
+    "position": "Chủ nhiệm bộ môn",
+    "unit": "BM. Sản xuất",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Phí Thị Thanh Mai",
+    "rank": "Trung tá",
+    "position": "Chủ nhiệm bộ môn",
+    "unit": "BM. Thương phẩm",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Phạm Hồng Sơn",
+    "rank": "Đại tá",
+    "position": "Chủ nhiệm bộ môn",
+    "unit": "BM. Bảo đảm",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Lưu Quang Toản",
+    "rank": "Đại tá",
+    "position": "P. Chủ nhiệm bộ môn",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Vũ Thị Thu Hằng",
+    "rank": "Thiếu tá",
+    "position": "P. Chủ nhiệm bộ môn",
+    "unit": "BM. Thương phẩm",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Phạm Văn Hưng",
+    "rank": "Trung tá",
+    "position": "P.Chủ nhiệm bộ môn",
+    "unit": "BM. Bảo đảm",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Trần Thanh Nam",
+    "rank": "Đại tá",
+    "position": "Chủ nhiệm khoa",
+    "unit": "Khoa Vận tải",
+    "unit_code": "K3",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nhữ Công Khải",
+    "rank": "Thượng tá",
+    "position": "P. Chủ nhiệm khoa",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Vũ Quang Huy",
+    "rank": "Đại tá",
+    "position": "Q. Chủ nhiệm bộ môn",
+    "unit": "BM. Kỹ thuật",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Huy Thụ",
+    "rank": "Thượng tá",
+    "position": "Chủ nhiệm bộ môn",
+    "unit": "BM. Tổ chức vận tải",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Đỗ Thanh Tùng",
+    "rank": "Thượng tá",
+    "position": "Chủ nhiệm bộ môn",
+    "unit": "BM. Chỉ huy vận tải",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Trần Văn Thuyết",
+    "rank": "Thượng tá",
+    "position": "P.Chủ nhiệm Bộ môn",
+    "unit": "BM. Kỹ thuật",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Vũ Ngọc Điệp",
+    "rank": "Đại tá",
+    "position": "Chủ nhiệm khoa",
+    "unit": "Khoa Xăng dầu",
+    "unit_code": "K4",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Anh Dũng",
+    "rank": "Đại tá",
+    "position": "P.Chủ nhiệm Khoa",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Vũ Văn Thống",
+    "rank": "Đại tá",
+    "position": "Q.Chủ nhiệm bộ môn",
+    "unit": "BM. Sử dụng",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Trần Văn Linh",
+    "rank": "Trung tá",
+    "position": "PT. Chủ nhiệm bộ môn",
+    "unit": "BM. Bảo đảm",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Lê Ngọc Anh",
+    "rank": "Trung tá",
+    "position": "PT. Chủ nhiệm bộ môn",
+    "unit": "BM. Phương tiện kỹ thuât",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Vũ Ninh",
+    "rank": "Trung tá",
+    "position": "P. Chủ nhiệm bộ môn",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Lê Xuân Đàm",
+    "rank": "Đại tá",
+    "position": "Chủ nhiệm khoa",
+    "unit": "Khoa Doanh trại",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Hoàng Việt",
+    "rank": "Thượng tá",
+    "position": "P.Chủ nhiệm khoa",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Chu Thị Hải Ninh",
+    "rank": "Thượng tá",
+    "position": "P.Chủ nhiệm khoa",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Vũ Thanh Hải",
+    "rank": "Thượng tá",
+    "position": "PT. Chủ nhiệm bộ môn",
+    "unit": "BM. Bảo đảm",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Phạm Văn Hoàn",
+    "rank": "Trung tá",
+    "position": "Q. Chủ nhiệm bộ môn",
+    "unit": "BM. Công nghệ & Quản lý xây dựng",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Phạm Tri Thức",
+    "rank": "Trung tá",
+    "position": "Q.Chủ nhiệm bộ môn",
+    "unit": "BM. Kỹ thuật xây dựng",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Vũ Đức Việt",
+    "rank": "Thượng tá",
+    "position": "P. Chủ nhiệm bộ môn",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Anh Tuấn",
+    "rank": "Thượng tá",
+    "position": "Chủ nhiệm khoa",
+    "unit": "Khoa Tài chính",
+    "unit_code": "K5",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Bùi Thanh Huyền",
+    "rank": "Thượng tá",
+    "position": "P.Chủ nhiệm khoa",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Phạm Thị Tuyết Nhung",
+    "rank": "Thượng tá",
+    "position": "Q.Chủ nhiệm bộ môn",
+    "unit": "BM. Thống kê",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Đinh Công Cường",
+    "rank": "Đại tá",
+    "position": "Chủ nhiệm bộ môn",
+    "unit": "BM. Tài chính",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Đỗ Thị Thanh Hương",
+    "rank": "Thượng tá",
+    "position": "Chủ nhiệm bộ môn",
+    "unit": "BM. Kế toán",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Đức Thịnh",
+    "rank": "Trung tá",
+    "position": "Chủ nhiệm bộ môn",
+    "unit": "BM. Lý luận tài chính",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Đồng Thị Phương Nga",
+    "rank": "Trung tá",
+    "position": "Chủ nhiệm bộ môn",
+    "unit": "BM. Kinh tế",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Trịnh Trung Kiên",
+    "rank": "Đại tá",
+    "position": "P. Chủ nhiệm bộ môn",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Ngô Khánh Thiện",
+    "rank": "Đại tá",
+    "position": "PT. Chủ nhiệm khoa",
+    "unit": "Khoa Quân sự",
+    "unit_code": "K6",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Phạm Văn Hải",
+    "rank": "Đại tá",
+    "position": "P. Chủ nhiệm khoa",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Hà Đức Tuấn",
+    "rank": "Đại tá",
+    "position": "P. Chủ nhiệm khoa",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Hữu Sơn",
+    "rank": "Đại tá",
+    "position": "Chủ nhiệm bộ môn",
+    "unit": "BM. Quân chủng - Binh chủng",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Chử Minh Tư",
+    "rank": "Đại tá",
+    "position": "Q. Chủ nhiệm bộ môn",
+    "unit": "BM. Đường lối LSQS - NTCD",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Mạnh Quân",
+    "rank": "Đại tá",
+    "position": "Chủ nhiệm bộ môn",
+    "unit": "BM. Quân sự chung",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Văn Thà",
+    "rank": "Đại tá",
+    "position": "Chủ nhiệm bộ môn",
+    "unit": "BM. Quân sự địa phương",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Văn Thịnh",
+    "rank": "Thượng tá",
+    "position": "Chủ nhiệm bộ môn",
+    "unit": "BM. Huấn luyện thể lực",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Vũ Huy Tráng",
+    "rank": "Đại tá",
+    "position": "Chủ nhiệm bộ môn",
+    "unit": "BM. Chiến thuật",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Hoàng Văn Khoa",
+    "rank": "Thượng tá",
+    "position": "P.Chủ nhiệm bộ môn",
+    "unit": "BM. Quân sự chung",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Đức Hạnh",
+    "rank": "Đại tá",
+    "position": "P. Chủ nhiệm bộ môn",
+    "unit": "BM. Quân chủng - Binh chủng",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Phạm Ngọc Nhân",
+    "rank": "Thượng tá",
+    "position": "Chủ nhiệm khoa",
+    "unit": "Khoa Lý luận Mác - Lênin, Tư tưởng HCM",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Văn Ký",
+    "rank": "Đại tá",
+    "position": "P. Chủ nhiệm khoa",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Việt Hà",
+    "rank": "Đại tá",
+    "position": "Chủ nhiệm bộ môn",
+    "unit": "BM. Triết học",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Phạm Hữu Hùng",
+    "rank": "Thượng tá",
+    "position": "Chủ nhiệm bộ môn",
+    "unit": "BM. Kinh tế chính trị",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Tuấn Lê",
+    "rank": "Thượng tá",
+    "position": "PT. Chủ nhiệm bộ môn",
+    "unit": "BM. Tư tưởng HCM",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Vũ Hồng Hà",
+    "rank": "Thượng tá",
+    "position": "P.Chủ nhiệm bộ môn",
+    "unit": "BM. Triết học",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Tống Quang Tập",
+    "rank": "Thượng tá",
+    "position": "P.Chủ nhiệm bộ môn",
+    "unit": "BM. Chủ nghĩa xã hội KH",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Văn Lân",
+    "rank": "Đại tá",
+    "position": "P.Chủ nhiệm bộ môn",
+    "unit": "BM. Kinh tế chính trị",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Bùi Nam Hưng",
+    "rank": "Đại tá",
+    "position": "Chủ nhiệm khoa",
+    "unit": "Khoa CTĐ-CTCT",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Đoàn Quyết Thắng",
+    "rank": "Đại tá",
+    "position": "P.Chủ nhiệm khoa",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Hữu Hoạt",
+    "rank": "Đại tá",
+    "position": "Chủ nhiệm bộ môn",
+    "unit": "BM. Lịch sử ĐCSVN",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Lê Việt Thắng",
+    "rank": "Đại tá",
+    "position": "Chủ nhiệm bộ môn",
+    "unit": "BM. CTĐ, CTCT",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Đồng Thái Quang",
+    "rank": "Thượng tá",
+    "position": "Chủ nhiệm bộ môn",
+    "unit": "BM. Nhà nước & Pháp luật",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Bùi Đức Tuấn",
+    "rank": "Đại tá",
+    "position": "Chủ nhiệm bộ môn",
+    "unit": "BM. Tâm lý giáo dục",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Vũ Văn Long",
+    "rank": "Đại tá",
+    "position": "P. Chủ nhiệm bộ môn",
+    "unit": "BM. Tâm lý giáo dục",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Lương Tiến Lực",
+    "rank": "Đại tá",
+    "position": "P. Chủ nhiệm bộ môn",
+    "unit": "BM. CTĐ, CTCT",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Vương Bình",
+    "rank": "Đại tá",
+    "position": "P.Chủ nhiệm bộ môn",
+    "unit": "BM. Lịch sử ĐCSVN",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Lê Khả Hòa",
+    "rank": "Trung tá",
+    "position": "PT. Chủ nhiệm khoa",
+    "unit": "Khoa Khoa học cơ bản",
+    "unit_code": "K7",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Sơn Nam",
+    "rank": "Đại tá",
+    "position": "P.Chủ nhiệm khoa",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Phạm Văn Tăng",
+    "rank": "Đại tá",
+    "position": "Chủ nhiệm bộ môn",
+    "unit": "BM. Lý",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Hữu Tú",
+    "rank": "Trung tá",
+    "position": "Chủ nhiệm bộ môn",
+    "unit": "BM. Kỹ thuật cơ sở",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Thị Thu Giang",
+    "rank": "Đại tá",
+    "position": "Chủ nhiệm bộ môn",
+    "unit": "BM. Văn hoá",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Văn Trung",
+    "rank": "Đại tá",
+    "position": "Chủ nhiệm bộ môn",
+    "unit": "BM. Tin học",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Trần Thị Vân Anh",
+    "rank": "Đại tá",
+    "position": "Chủ nhiệm bộ môn",
+    "unit": "BM. Toán",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Thị Bích Hường",
+    "rank": "Trung tá",
+    "position": "Chủ nhiệm bộ môn",
+    "unit": "BM. Hoá",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Văn Thành",
+    "rank": "Thượng tá",
+    "position": "P. Chủ nhiệm bộ môn",
+    "unit": "BM. Kỹ thuật cơ sở",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Thành Trung",
+    "rank": "Thượng tá",
+    "position": "P. Chủ nhiệm bộ môn",
+    "unit": "BM. Toán",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Cao Thị Lan Hương",
+    "rank": "Đại tá",
+    "position": "Chủ nhiệm khoa",
+    "unit": "Khoa Ngoại ngữ",
+    "unit_code": "K8",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Thị Bích Diệp",
+    "rank": "Thượng tá",
+    "position": "P.Chủ nhiệm khoa",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Lê Thị Hoa",
+    "rank": "Trung tá",
+    "position": "Chủ nhiệm bộ môn",
+    "unit": "BM. Trung văn",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Trần Trung Phong",
+    "rank": "Trung tá",
+    "position": "Chủ nhiệm bộ môn",
+    "unit": "BM. Anh văn",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Hoàng Thị Thu Hà",
+    "rank": "Thiếu tá",
+    "position": "P. Chủ nhiệm bộ môn",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Thanh Lam",
+    "rank": "Đại tá",
+    "position": "Chủ nhiệm khoa",
+    "unit": "Khoa Hậu cần chiến dịch",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Đồng Văn Thưởng",
+    "rank": "Đại tá",
+    "position": "P.Chủ nhiệm khoa",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Đỗ Xuân Long",
+    "rank": "Đại tá",
+    "position": "Chủ nhiệm bộ môn",
+    "unit": "BM. Hậu cần chiến dịch",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Bùi Văn Mạnh",
+    "rank": "Đại tá",
+    "position": "Chủ nhiệm bộ môn",
+    "unit": "BM. Hậu cần chung",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Tống Hữu Phương",
+    "rank": "Đại tá",
+    "position": "Chủ nhiệm bộ môn",
+    "unit": "BM. Hậu cần Binh chủng - Quân chủng",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Nguyễn Hữu Toán",
+    "rank": "Đại tá",
+    "position": "P.Chủ nhiệm bộ môn",
+    "unit": "BM. Hậu cần chung",
+    "unit_code": "HVHC",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "personnel_type": "CAN_BO_CHI_HUY"
+  },
+  {
+    "name": "Bùi Văn Hải",
+    "rank": "Đại tá",
+    "position": "Hệ trưởng",
+    "unit": "Hệ đào tạo SĐH",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Đào Văn Duy",
+    "rank": "Đại tá",
+    "position": "Chính trị viên",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "GIANG_VIEN",
+    "personnel_type": "HOC_VIEN_QUAN_SU"
+  },
+  {
+    "name": "Đỗ Ngọc Oanh",
+    "rank": "Đại tá",
+    "position": "Phó Hệ trưởng",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Nguyễn Hải Định",
+    "rank": "Đại tá",
+    "position": "Hệ trưởng",
+    "unit": "Hệ Chỉ huy Tham mưu",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Nguyễn Huy Hiệp",
+    "rank": "Đại tá",
+    "position": "Chính trị viên",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "GIANG_VIEN",
+    "personnel_type": "HOC_VIEN_QUAN_SU"
+  },
+  {
+    "name": "Vũ Quang Hải",
+    "rank": "Thượng tá",
+    "position": "Phó Hệ trưởng",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Trần Xuân Đoạt",
+    "rank": "Đại tá",
+    "position": "Hệ trưởng",
+    "unit": "Hệ ĐT Chuyên ngành",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Nguyễn Trọng Bằng",
+    "rank": "Thượng tá",
+    "position": "Chính trị viên",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "GIANG_VIEN",
+    "personnel_type": "HOC_VIEN_QUAN_SU"
+  },
+  {
+    "name": "Vũ Thanh Quang",
+    "rank": "Đại tá",
+    "position": "P.Hệ trưởng",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Tô Minh Thanh",
+    "rank": "Đại tá",
+    "position": "Hệ trưởng",
+    "unit": "Hệ Quốc tế",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Lại Thị Lý",
+    "rank": "Đại tá",
+    "position": "Chính trị viên",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "GIANG_VIEN",
+    "personnel_type": "HOC_VIEN_QUAN_SU"
+  },
+  {
+    "name": "Nguyễn Văn Thuật",
+    "rank": "Đại tá",
+    "position": "Phó Hệ trưởng",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Phạm Hồng Giang",
+    "rank": "Thượng tá",
+    "position": "Lớp trưởng",
+    "unit": "Hệ Quốc tế",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Lương Quang Nhạ",
+    "rank": "Thiếu tá",
+    "position": "Lớp trưởng",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Vũ Thành Long",
+    "rank": "Đại úy",
+    "position": "Lớp trưở ng",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Dư Thanh Lâm",
+    "rank": "Thiếu tá",
+    "position": "Tiểu đoàn trưởng",
+    "unit": "Tiểu đoàn 1",
+    "unit_code": "TD1",
+    "role": "GIANG_VIEN",
+    "personnel_type": "HOC_VIEN_QUAN_SU"
+  },
+  {
+    "name": "Mai Công Tuấn",
+    "rank": "Trung tá",
+    "position": "Chính trị viên",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "GIANG_VIEN",
+    "personnel_type": "HOC_VIEN_QUAN_SU"
+  },
+  {
+    "name": "Lại Văn Thăng",
+    "rank": "Thiếu tá",
+    "position": "Tiểu đoàn trưởng",
+    "unit": "Tiểu đoàn 2",
+    "unit_code": "TD2",
+    "role": "GIANG_VIEN",
+    "personnel_type": "HOC_VIEN_QUAN_SU"
+  },
+  {
+    "name": "Hà Văn Nguyện",
+    "rank": "Trung tá",
+    "position": "Chính trị viên",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "GIANG_VIEN",
+    "personnel_type": "HOC_VIEN_QUAN_SU"
+  },
+  {
+    "name": "Lã Phú Hưng",
+    "rank": "Trung tá",
+    "position": "Tiểu đoàn trưởng",
+    "unit": "Tiểu đoàn 3",
+    "unit_code": "TD3",
+    "role": "GIANG_VIEN",
+    "personnel_type": "HOC_VIEN_QUAN_SU"
+  },
+  {
+    "name": "Nguyễn Đức Kiên",
+    "rank": "Thượng tá",
+    "position": "Chính trị viên",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "GIANG_VIEN",
+    "personnel_type": "HOC_VIEN_QUAN_SU"
+  },
+  {
+    "name": "Nguyễn Văn Mừng",
+    "rank": "Thượng tá",
+    "position": "Tiểu đoàn trưởng",
+    "unit": "Tiểu đoàn 4",
+    "unit_code": "TD4",
+    "role": "GIANG_VIEN",
+    "personnel_type": "HOC_VIEN_QUAN_SU"
+  },
+  {
+    "name": "Lê Minh Đức",
+    "rank": "Thượng tá",
+    "position": "Chính trị viên",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "GIANG_VIEN",
+    "personnel_type": "HOC_VIEN_QUAN_SU"
+  },
+  {
+    "name": "Nguyễn Thị Thu Hằng",
+    "rank": "Trung tá CN",
+    "position": "NV Thống kê",
+    "unit": "Ban Quân nhu, Phòng Hậu cần - Kỹ thuật",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Bùi Thanh Thùy",
+    "rank": "Thiếu tá CN",
+    "position": "NV Kế toán",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Phạm Thị Dung",
+    "rank": "Trung tá CN",
+    "position": "Thủ kho",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Lê Thị Thanh Huyền",
+    "rank": "Trung tá CN",
+    "position": "Thủ kho",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Nguyễn Hà Ninh",
+    "rank": "Thượng úy CN",
+    "position": "NV Thống kê",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Vũ Thị Thanh Hà",
+    "rank": "Thiếu tá CN",
+    "position": "Thủ kho",
+    "unit": "Ban Xăng dầu, Phòng Hậu cần - Kỹ thuật",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Phạm Văn Tuấn",
+    "rank": "Đại úy CN",
+    "position": "Thủ kho",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Nguyễn Ngọc Hạ",
+    "rank": "Trung tá CN",
+    "position": "NV Thống kê",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Đoàn Thị Mừng",
+    "rank": "Thượng tá CN",
+    "position": "NV Kế toán",
+    "unit": "Ban Doanh trại, Phòng Hậu cần - Kỹ thuật",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Lê Thị Thanh Chang",
+    "rank": "Trung tá CN",
+    "position": "Thủ kho",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Nguyễn Thị Thúy",
+    "rank": "Trung tá CN",
+    "position": "Thủ kho",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Nguyễn Thị Huệ",
+    "rank": "Trung tá CN",
+    "position": "NV Thống kê",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Nguyễn Thị Thanh Xuân",
+    "rank": "Thượng tá CN",
+    "position": "NV Tài chính",
+    "unit": "Ban Tài chính",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Nguyễn Thị Hồng Nương",
+    "rank": "Thượng tá CN",
+    "position": "NV Tài chính",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Trần Thị Hải Yến",
+    "rank": "Thượng tá CN",
+    "position": "NV Tài chính",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Vũ Thị Thanh Thơm",
+    "rank": "Trung tá CN",
+    "position": "NV Tài chính",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Nguyễn Thị Thúy Dịu",
+    "rank": "Đại úy CN",
+    "position": "NV Tài chính",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Phạm Thị Thùy Dương",
+    "rank": "Thượng tá CN",
+    "position": "Thủ quỹ",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Trần Bích Ngọc",
+    "rank": "Thượng úy CN",
+    "position": "NV Tài chính",
+    "unit": "Ban KHTH, Viện Nghiên cứu KHHCQS",
+    "unit_code": "VIEN1",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Vũ Quang Hưng",
+    "rank": "Trung tá",
+    "position": "Trợ lý",
+    "unit": "Ban Tổ chức, Phòng Chính trị",
+    "unit_code": "B3",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Nguyễn Xuân Bách",
+    "rank": "Thiếu tá",
+    "position": "Trợ lý",
+    "unit": "Ban Tuyên huấn, Phòng Chính trị",
+    "unit_code": "B3",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Nguyễn Văn Phong",
+    "rank": "Thiếu tá",
+    "position": "Trợ lý",
+    "unit": "Ban Quân khí, Phòng Hậu cần - Kỹ thuật",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Nguyễn Tuấn Thích",
+    "rank": "Đại úy",
+    "position": "Trợ lý",
+    "unit": "Ban Tham mưu kế hoạch, Phòng Hậu cần - Kỹ thuật",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Nguyễn Văn Thịnh",
+    "rank": "Thiếu tá",
+    "position": "Trợ lý",
+    "unit": "Ban Tác huấn, Văn phòng",
+    "unit_code": "VP",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Đỗ Văn Sơn",
+    "rank": "Thượng úy",
+    "position": "Trợ lý",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Hoàng Chí Hiển",
+    "rank": "Thượng tá",
+    "position": "Trợ lý",
+    "unit": "Ban Khảo thí & ĐBCLGDĐT",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Chu Hoàng Nga",
+    "rank": "Thượng tá",
+    "position": "Giảng viên",
+    "unit": "BM. Sản xuất, Khoa Quân nhu",
+    "unit_code": "K2",
+    "role": "GIANG_VIEN",
+    "personnel_type": "GIANG_VIEN"
+  },
+  {
+    "name": "Vũ Văn Trang",
+    "rank": "Thiếu tá",
+    "position": "Giảng viên",
+    "unit": "BM. Bảo đảm, Khoa Quân nhu",
+    "unit_code": "K2",
+    "role": "GIANG_VIEN",
+    "personnel_type": "GIANG_VIEN"
+  },
+  {
+    "name": "Nguyễn Thị Thanh Hoa",
+    "rank": "Thiếu tá",
+    "position": "Giảng viên",
+    "unit": "BM. Thương phẩm, Khoa Quân nhu",
+    "unit_code": "K2",
+    "role": "GIANG_VIEN",
+    "personnel_type": "GIANG_VIEN"
+  },
+  {
+    "name": "Trần Văn Bắc",
+    "rank": "Trung tá",
+    "position": "Giảng viên",
+    "unit": "BM. Chỉ huy vận tải, Khoa Vận tải",
+    "unit_code": "K3",
+    "role": "GIANG_VIEN",
+    "personnel_type": "GIANG_VIEN"
+  },
+  {
+    "name": "Bùi Hồng Quân",
+    "rank": "Trung tá",
+    "position": "Giảng viên",
+    "unit": "BM. Phương tiện kỹ thuật, Khoa Xăng dầu",
+    "unit_code": "K4",
+    "role": "GIANG_VIEN",
+    "personnel_type": "GIANG_VIEN"
+  },
+  {
+    "name": "Ngô Huyền Trâm",
+    "rank": "Thiếu tá",
+    "position": "Giảng viên",
+    "unit": "BM. Kỹ thuật xây dựng, Khoa Doanh trại",
+    "unit_code": "HVHC",
+    "role": "GIANG_VIEN",
+    "personnel_type": "GIANG_VIEN"
+  },
+  {
+    "name": "Nguyễn Thị Minh Huệ",
+    "rank": "Thượng tá",
+    "position": "Giảng viên",
+    "unit": "BM. Kinh tế, Khoa Tài chính",
+    "unit_code": "K5",
+    "role": "GIANG_VIEN",
+    "personnel_type": "GIANG_VIEN"
+  },
+  {
+    "name": "Ngô Văn Tùng",
+    "rank": "Thượng úy",
+    "position": "Giảng viên",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "GIANG_VIEN",
+    "personnel_type": "GIANG_VIEN"
+  },
+  {
+    "name": "Nguyễn Văn Dũng",
+    "rank": "Thượng úy",
+    "position": "Giảng viên",
+    "unit": "BM. Kinh tế, Khoa Tài chính",
+    "unit_code": "K5",
+    "role": "GIANG_VIEN",
+    "personnel_type": "GIANG_VIEN"
+  },
+  {
+    "name": "Nguyễn Văn Hùng",
+    "rank": "Trung tá",
+    "position": "Giảng viên",
+    "unit": "BM. Quân sự chung, Khoa Quân sự",
+    "unit_code": "K6",
+    "role": "GIANG_VIEN",
+    "personnel_type": "GIANG_VIEN"
+  },
+  {
+    "name": "Phạm Thanh Tuấn",
+    "rank": "Thiếu tá",
+    "position": "Giảng viên",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "GIANG_VIEN",
+    "personnel_type": "GIANG_VIEN"
+  },
+  {
+    "name": "Nguyễn Quốc Tuấn",
+    "rank": "Đại úy",
+    "position": "Giảng viên",
+    "unit": "“",
+    "unit_code": "HVHC",
+    "role": "GIANG_VIEN",
+    "personnel_type": "GIANG_VIEN"
+  },
+  {
+    "name": "Trần Thị Mai Phương",
+    "rank": "Đại úy",
+    "position": "Giảng viên",
+    "unit": "BM. Lịch sử ĐCSVN, Khoa CTĐ, CTCT",
+    "unit_code": "HVHC",
+    "role": "GIANG_VIEN",
+    "personnel_type": "GIANG_VIEN"
+  },
+  {
+    "name": "Phùng Quang Nguyên",
+    "rank": "Thiếu tá",
+    "position": "Giảng viên",
+    "unit": "BM. Tin, Khoa Khoa học cơ bản",
+    "unit_code": "K7",
+    "role": "GIANG_VIEN",
+    "personnel_type": "GIANG_VIEN"
+  },
+  {
+    "name": "Bùi Quang Thúc",
+    "rank": "Thiếu tá",
+    "position": "Nghiên cứu sinh",
+    "unit": "HCQS K33, Hệ Đào tạo sau đại học",
+    "unit_code": "HVHC",
+    "role": "NGHIEN_CUU_VIEN",
+    "personnel_type": "NGHIEN_CUU_VIEN"
+  },
+  {
+    "name": "Vũ Thị Thương",
+    "rank": "Đại úy CN",
+    "position": "Nhân viên",
+    "unit": "Ban Bảo đảm vật chất HL, Phòng Đào tạo",
+    "unit_code": "B1",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Đồng Minh Ngọc",
+    "rank": "Thiếu tá CN",
+    "position": "Nhân viên",
+    "unit": "BM. Phương tiện kỹ thuật, Khoa Xây dựng",
+    "unit_code": "HVHC",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  },
+  {
+    "name": "Nguyễn Hữu Đồng",
+    "rank": "Thiếu tá CN",
+    "position": "Nhân viên hướng dẫn thực hành",
+    "unit": "BM. Kỹ thuật, Khoa Vận tải",
+    "unit_code": "K3",
+    "role": "KY_THUAT_VIEN",
+    "personnel_type": "CONG_NHAN_VIEN"
+  }
+]

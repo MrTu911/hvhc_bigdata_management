@@ -1,0 +1,220 @@
+import 'dotenv/config';
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
+
+// Định nghĩa quyền cho từng chức vụ
+const POSITION_PERMISSIONS: Record<string, string[]> = {
+  'GIAM_DOC': [
+    // Full access to dashboards
+    'VIEW_DASHBOARD', 'VIEW_DASHBOARD_COMMAND', 'VIEW_DASHBOARD_ADMIN',
+    // Personnel
+    'VIEW_PERSONNEL', 'VIEW_PERSONNEL_DETAIL', 'VIEW_PERSONNEL_SENSITIVE', 'APPROVE_PERSONNEL', 'EXPORT_PERSONNEL',
+    // Training
+    'VIEW_TRAINING', 'VIEW_COURSE', 'VIEW_GRADE', 'APPROVE_GRADE',
+    // Education
+    'VIEW_PROGRAM', 'APPROVE_PROGRAM', 'VIEW_CURRICULUM', 'VIEW_TERM', 'VIEW_CLASS_SECTION', 'VIEW_SCHEDULE', 'VIEW_ATTENDANCE', 'VIEW_ENROLLMENT',
+    // Research
+    'VIEW_RESEARCH', 'APPROVE_RESEARCH', 'EVALUATE_RESEARCH',
+    // Party
+    'VIEW_PARTY', 'APPROVE_PARTY', 'MANAGE_PARTY_MEETING',
+    // Policy
+    'VIEW_POLICY', 'APPROVE_POLICY',
+    // Insurance
+    'VIEW_INSURANCE', 'APPROVE_INSURANCE_CLAIM',
+    // Awards
+    'VIEW_AWARD', 'APPROVE_AWARD', 'VIEW_DISCIPLINE',
+    // Student & Faculty
+    'VIEW_STUDENT', 'VIEW_FACULTY',
+    // Data
+    'VIEW_DATA', 'EXPORT_DATA',
+    // System
+    'VIEW_AUDIT_LOG', 'VIEW_SYSTEM_HEALTH',
+  ],
+  'PHO_GIAM_DOC': [
+    'VIEW_DASHBOARD', 'VIEW_DASHBOARD_COMMAND',
+    'VIEW_PERSONNEL', 'VIEW_PERSONNEL_DETAIL', 'EXPORT_PERSONNEL',
+    'VIEW_TRAINING', 'VIEW_COURSE', 'VIEW_GRADE',
+    'VIEW_PROGRAM', 'VIEW_CURRICULUM', 'VIEW_TERM', 'VIEW_CLASS_SECTION',
+    'VIEW_RESEARCH', 'REVIEW_RESEARCH',
+    'VIEW_PARTY',
+    'VIEW_POLICY', 'REVIEW_POLICY',
+    'VIEW_INSURANCE',
+    'VIEW_AWARD', 'VIEW_DISCIPLINE',
+    'VIEW_STUDENT', 'VIEW_FACULTY',
+    'VIEW_DATA', 'EXPORT_DATA',
+  ],
+  'CHINH_UY': [
+    'VIEW_DASHBOARD', 'VIEW_DASHBOARD_COMMAND',
+    'VIEW_PERSONNEL', 'VIEW_PERSONNEL_DETAIL', 'APPROVE_PERSONNEL',
+    'VIEW_TRAINING', 'VIEW_COURSE',
+    'VIEW_PARTY', 'APPROVE_PARTY', 'MANAGE_PARTY_MEETING', 'CREATE_PARTY', 'UPDATE_PARTY',
+    'VIEW_POLICY', 'APPROVE_POLICY', 'REVIEW_POLICY',
+    'VIEW_AWARD', 'APPROVE_AWARD', 'VIEW_DISCIPLINE', 'CREATE_DISCIPLINE',
+    'VIEW_STUDENT', 'VIEW_FACULTY',
+    'VIEW_DATA',
+  ],
+  'TRUONG_KHOA': [
+    'VIEW_DASHBOARD', 'VIEW_DASHBOARD_COMMAND', 'VIEW_DASHBOARD_FACULTY',
+    'VIEW_PERSONNEL', 'VIEW_PERSONNEL_DETAIL', 'EXPORT_PERSONNEL',
+    'VIEW_TRAINING', 'VIEW_COURSE', 'CREATE_COURSE', 'UPDATE_COURSE', 'VIEW_GRADE', 'APPROVE_GRADE',
+    'VIEW_PROGRAM', 'VIEW_CURRICULUM', 'VIEW_TERM', 'VIEW_CLASS_SECTION', 'CREATE_CLASS_SECTION', 'UPDATE_CLASS_SECTION',
+    'VIEW_SCHEDULE', 'CREATE_SCHEDULE', 'UPDATE_SCHEDULE',
+    'VIEW_RESEARCH', 'CREATE_RESEARCH', 'UPDATE_RESEARCH', 'REVIEW_RESEARCH',
+    'VIEW_PARTY',
+    'VIEW_AWARD', 'CREATE_AWARD',
+    'VIEW_STUDENT', 'UPDATE_STUDENT', 'VIEW_FACULTY', 'UPDATE_FACULTY',
+    'VIEW_DATA', 'EXPORT_DATA',
+  ],
+  'PHO_TRUONG_KHOA': [
+    'VIEW_DASHBOARD', 'VIEW_DASHBOARD_FACULTY',
+    'VIEW_PERSONNEL', 'VIEW_PERSONNEL_DETAIL',
+    'VIEW_TRAINING', 'VIEW_COURSE', 'CREATE_COURSE', 'UPDATE_COURSE', 'VIEW_GRADE', 'SUBMIT_GRADE',
+    'VIEW_PROGRAM', 'VIEW_CURRICULUM', 'VIEW_TERM', 'VIEW_CLASS_SECTION', 'CREATE_CLASS_SECTION',
+    'VIEW_SCHEDULE', 'CREATE_SCHEDULE',
+    'VIEW_RESEARCH', 'CREATE_RESEARCH', 'UPDATE_RESEARCH',
+    'VIEW_PARTY',
+    'VIEW_AWARD', 'CREATE_AWARD',
+    'VIEW_STUDENT', 'VIEW_FACULTY',
+    'VIEW_DATA',
+  ],
+  'TRUONG_PHONG': [
+    'VIEW_DASHBOARD', 'VIEW_DASHBOARD_COMMAND',
+    'VIEW_PERSONNEL', 'VIEW_PERSONNEL_DETAIL', 'UPDATE_PERSONNEL', 'EXPORT_PERSONNEL',
+    'VIEW_TRAINING', 'VIEW_COURSE',
+    'VIEW_POLICY', 'CREATE_POLICY', 'UPDATE_POLICY', 'REVIEW_POLICY',
+    'VIEW_INSURANCE', 'CREATE_INSURANCE', 'UPDATE_INSURANCE',
+    'VIEW_AWARD', 'CREATE_AWARD',
+    'VIEW_DATA', 'EXPORT_DATA',
+  ],
+  'PHO_TRUONG_PHONG': [
+    'VIEW_DASHBOARD',
+    'VIEW_PERSONNEL', 'VIEW_PERSONNEL_DETAIL', 'UPDATE_PERSONNEL',
+    'VIEW_TRAINING', 'VIEW_COURSE',
+    'VIEW_POLICY', 'CREATE_POLICY_REQUEST',
+    'VIEW_INSURANCE', 'CREATE_INSURANCE',
+    'VIEW_AWARD',
+    'VIEW_DATA',
+  ],
+  'VIEN_TRUONG': [
+    'VIEW_DASHBOARD', 'VIEW_DASHBOARD_COMMAND',
+    'VIEW_PERSONNEL', 'VIEW_PERSONNEL_DETAIL',
+    'VIEW_RESEARCH', 'APPROVE_RESEARCH', 'EVALUATE_RESEARCH', 'CREATE_RESEARCH', 'UPDATE_RESEARCH',
+    'VIEW_FACULTY',
+    'VIEW_DATA', 'EXPORT_DATA',
+  ],
+  'PHO_VIEN_TRUONG': [
+    'VIEW_DASHBOARD', 'VIEW_DASHBOARD_COMMAND',
+    'VIEW_PERSONNEL', 'VIEW_PERSONNEL_DETAIL',
+    'VIEW_RESEARCH', 'REVIEW_RESEARCH', 'CREATE_RESEARCH', 'UPDATE_RESEARCH',
+    'VIEW_FACULTY',
+    'VIEW_DATA',
+  ],
+  'CHU_NHIEM_BO_MON': [
+    'VIEW_DASHBOARD', 'VIEW_DASHBOARD_FACULTY',
+    'VIEW_PERSONNEL', 'VIEW_PERSONNEL_DETAIL',
+    'VIEW_TRAINING', 'VIEW_COURSE', 'CREATE_COURSE', 'UPDATE_COURSE', 'VIEW_GRADE', 'CREATE_GRADE_DRAFT', 'SUBMIT_GRADE',
+    'VIEW_CURRICULUM', 'VIEW_TERM', 'VIEW_CLASS_SECTION', 'CREATE_CLASS_SECTION',
+    'VIEW_SCHEDULE', 'CREATE_SCHEDULE', 'UPDATE_SCHEDULE',
+    'VIEW_QUESTION_BANK', 'CREATE_QUESTION_BANK', 'VIEW_QUESTION', 'CREATE_QUESTION', 'REVIEW_QUESTION',
+    'VIEW_LEARNING_MATERIAL', 'CREATE_LEARNING_MATERIAL', 'APPROVE_LEARNING_MATERIAL',
+    'VIEW_RESEARCH', 'CREATE_RESEARCH',
+    'VIEW_STUDENT', 'VIEW_FACULTY',
+    'VIEW_DATA',
+  ],
+  'TRO_LY': [
+    'VIEW_DASHBOARD',
+    'VIEW_PERSONNEL', 'VIEW_PERSONNEL_DETAIL',
+    'VIEW_TRAINING', 'VIEW_COURSE',
+    'VIEW_SCHEDULE',
+    'VIEW_DATA',
+  ],
+  'GIANG_VIEN': [
+    'VIEW_DASHBOARD', 'VIEW_DASHBOARD_FACULTY',
+    'VIEW_PERSONNEL', 'VIEW_PERSONNEL_DETAIL',
+    'VIEW_TRAINING', 'VIEW_COURSE', 'VIEW_GRADE', 'CREATE_GRADE_DRAFT',
+    'VIEW_CURRICULUM', 'VIEW_CLASS_SECTION',
+    'VIEW_SCHEDULE',
+    'VIEW_QUESTION_BANK', 'VIEW_QUESTION', 'CREATE_QUESTION',
+    'VIEW_LEARNING_MATERIAL', 'CREATE_LEARNING_MATERIAL', 'UPLOAD_LEARNING_MATERIAL',
+    'VIEW_RESEARCH', 'CREATE_RESEARCH', 'SUBMIT_RESEARCH',
+    'VIEW_STUDENT', 'VIEW_FACULTY',
+    'VIEW_DATA',
+  ],
+  'GIANG_VIEN_CHINH': [
+    'VIEW_DASHBOARD', 'VIEW_DASHBOARD_FACULTY',
+    'VIEW_PERSONNEL', 'VIEW_PERSONNEL_DETAIL',
+    'VIEW_TRAINING', 'VIEW_COURSE', 'CREATE_COURSE', 'VIEW_GRADE', 'CREATE_GRADE_DRAFT', 'SUBMIT_GRADE',
+    'VIEW_CURRICULUM', 'VIEW_CLASS_SECTION', 'CREATE_CLASS_SECTION',
+    'VIEW_SCHEDULE', 'CREATE_SCHEDULE',
+    'VIEW_QUESTION_BANK', 'CREATE_QUESTION_BANK', 'VIEW_QUESTION', 'CREATE_QUESTION', 'UPDATE_QUESTION', 'REVIEW_QUESTION',
+    'VIEW_LEARNING_MATERIAL', 'CREATE_LEARNING_MATERIAL', 'UPDATE_LEARNING_MATERIAL', 'UPLOAD_LEARNING_MATERIAL',
+    'VIEW_RESEARCH', 'CREATE_RESEARCH', 'UPDATE_RESEARCH', 'SUBMIT_RESEARCH',
+    'VIEW_STUDENT', 'VIEW_FACULTY', 'UPDATE_FACULTY',
+    'VIEW_DATA', 'EXPORT_DATA',
+  ],
+  'QUAN_TRI_HE_THONG': [
+    // Full system permissions
+    'VIEW_DASHBOARD', 'VIEW_DASHBOARD_COMMAND', 'VIEW_DASHBOARD_ADMIN', 'VIEW_DASHBOARD_FACULTY', 'VIEW_DASHBOARD_STUDENT',
+    'MANAGE_USERS', 'MANAGE_UNITS', 'MANAGE_RBAC', 'VIEW_AUDIT_LOG', 'MANAGE_AI_CONFIG', 'MANAGE_BACKUP', 'VIEW_SYSTEM_HEALTH',
+    'VIEW_PERSONNEL', 'VIEW_PERSONNEL_DETAIL', 'VIEW_PERSONNEL_SENSITIVE', 'CREATE_PERSONNEL', 'UPDATE_PERSONNEL', 'DELETE_PERSONNEL', 'EXPORT_PERSONNEL', 'IMPORT_PERSONNEL',
+    'VIEW_DATA', 'CREATE_DATA', 'UPDATE_DATA', 'DELETE_DATA', 'EXPORT_DATA', 'IMPORT_DATA', 'QUERY_DATA',
+  ],
+};
+
+async function main() {
+  console.log('Bắt đầu cập nhật RBAC...\n');
+  
+  // Get all functions
+  const allFunctions = await prisma.function.findMany();
+  const functionMap = new Map(allFunctions.map(f => [f.code, f.id]));
+  
+  console.log(`Tổng số functions: ${allFunctions.length}`);
+  
+  for (const [positionCode, permissions] of Object.entries(POSITION_PERMISSIONS)) {
+    const position = await prisma.position.findFirst({
+      where: { code: positionCode }
+    });
+    
+    if (!position) {
+      console.log(`❌ Position ${positionCode} không tồn tại`);
+      continue;
+    }
+    
+    // Get current functions
+    const currentFunctions = await prisma.positionFunction.findMany({
+      where: { positionId: position.id }
+    });
+    
+    const currentFunctionIds = new Set(currentFunctions.map(pf => pf.functionId));
+    
+    // Add missing functions
+    let added = 0;
+    for (const code of permissions) {
+      const functionId = functionMap.get(code);
+      if (functionId && !currentFunctionIds.has(functionId)) {
+        await prisma.positionFunction.create({
+          data: {
+            positionId: position.id,
+            functionId: functionId
+          }
+        });
+        added++;
+      }
+    }
+    
+    const newCount = currentFunctions.length + added;
+    console.log(`✅ ${position.name}: ${currentFunctions.length} → ${newCount} functions (+${added})`);
+  }
+  
+  console.log('\n=== Kết quả cuối cùng ===');
+  const finalPositions = await prisma.position.findMany({
+    include: { _count: { select: { functions: true } } },
+    orderBy: { name: 'asc' }
+  });
+  
+  finalPositions.forEach(p => {
+    console.log(`${p.name} (${p.code}): ${p._count.functions} functions`);
+  });
+}
+
+main().catch(console.error).finally(() => prisma.$disconnect());

@@ -1,0 +1,115 @@
+
+/**
+ * Permissions Management Page
+ * Admin-only page to view and manage permissions
+ */
+
+'use client';
+
+import React, { useState } from 'react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Shield, Users, Key, AlertCircle } from 'lucide-react';
+import { PermissionGuard } from '@/components/auth/permission-guard';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { RolePermissionsMatrix } from '@/components/permissions/role-permissions-matrix';
+import { UserPermissionsManager } from '@/components/permissions/user-permissions-manager';
+import { PermissionsList } from '@/components/permissions/permissions-list';
+
+export default function PermissionsPage() {
+  const [activeTab, setActiveTab] = useState('roles');
+
+  return (
+    <PermissionGuard
+      permission="users:manage:all"
+      fallback={
+        <div className="container mx-auto py-8">
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>
+              Bạn không có quyền truy cập trang này. Vui lòng liên hệ quản trị viên.
+            </AlertDescription>
+          </Alert>
+        </div>
+      }
+    >
+      <div className="container mx-auto py-8 space-y-6">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold flex items-center gap-2">
+              <Shield className="h-8 w-8 text-primary" />
+              Quản lý Phân quyền
+            </h1>
+            <p className="text-muted-foreground mt-2">
+              Quản lý quyền truy cập và phân quyền cho người dùng trong hệ thống
+            </p>
+          </div>
+        </div>
+
+        {/* Tabs */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+          <TabsList className="grid w-full grid-cols-3 max-w-md">
+            <TabsTrigger value="roles" className="flex items-center gap-2">
+              <Users className="h-4 w-4" />
+              Vai trò
+            </TabsTrigger>
+            <TabsTrigger value="users" className="flex items-center gap-2">
+              <Key className="h-4 w-4" />
+              Người dùng
+            </TabsTrigger>
+            <TabsTrigger value="permissions" className="flex items-center gap-2">
+              <Shield className="h-4 w-4" />
+              Quyền hạn
+            </TabsTrigger>
+          </TabsList>
+
+          {/* Role Permissions Tab */}
+          <TabsContent value="roles">
+            <Card>
+              <CardHeader>
+                <CardTitle>Ma trận Phân quyền theo Vai trò</CardTitle>
+                <CardDescription>
+                  Xem và quản lý quyền hạn cho từng vai trò trong hệ thống
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <RolePermissionsMatrix />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* User Permissions Tab */}
+          <TabsContent value="users">
+            <Card>
+              <CardHeader>
+                <CardTitle>Quản lý Quyền Người dùng</CardTitle>
+                <CardDescription>
+                  Cấp hoặc thu hồi quyền đặc biệt cho người dùng cụ thể
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <UserPermissionsManager />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* All Permissions Tab */}
+          <TabsContent value="permissions">
+            <Card>
+              <CardHeader>
+                <CardTitle>Danh sách Quyền hạn</CardTitle>
+                <CardDescription>
+                  Tất cả các quyền hạn có sẵn trong hệ thống
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <PermissionsList />
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </PermissionGuard>
+  );
+}

@@ -1,0 +1,176 @@
+{
+  "project_name": "hvhc_bigdata",
+  "project_type": "fullstack_nextjs_prisma_modular_monolith",
+  "primary_language": "typescript",
+  "frameworks": [
+    "nextjs",
+    "react",
+    "prisma",
+    "postgresql"
+  ],
+  "working_conventions": {
+    "must_read_first": [
+      ".claude/CLAUDE.md",
+      "docs/design/system-overview.md",
+      "docs/design/system-module-map.md",
+      "docs/design/system-integration-map.md"
+    ],
+    "must_follow_rules_from": [
+      ".claude/rules/code-style.md",
+      ".claude/rules/architecture.md",
+      ".claude/rules/api-design.md",
+      ".claude/rules/database-schema.md",
+      ".claude/rules/frontend-ui.md",
+      ".claude/rules/testing.md",
+      ".claude/rules/security.md",
+      ".claude/rules/migration-refactor.md",
+      ".claude/rules/logging-observability.md",
+      ".claude/rules/delivery-format.md"
+    ],
+    "available_skills": [
+      ".claude/skills/analyze-module/SKILL.md",
+      ".claude/skills/implement-from-design/SKILL.md",
+      ".claude/skills/design-api/SKILL.md",
+      ".claude/skills/design-database/SKILL.md",
+      ".claude/skills/build-ui-module/SKILL.md",
+      ".claude/skills/review-code/SKILL.md",
+      ".claude/skills/debug-production-issue/SKILL.md",
+      ".claude/skills/refactor-safely/SKILL.md",
+      ".claude/skills/write-tests/SKILL.md",
+      ".claude/skills/integrate-module/SKILL.md",
+      ".claude/skills/migrate-legacy-code/SKILL.md",
+      ".claude/skills/security-hardening/SKILL.md"
+    ]
+  },
+  "important_paths": {
+    "system_docs": [
+      "docs/design/system-overview.md",
+      "docs/design/system-module-map.md",
+      "docs/design/system-integration-map.md"
+    ],
+    "module_design_docs": [
+      "docs/design/module-*.md"
+    ],
+    "module_prompts": [
+      "docs/prompts/*.md"
+    ],
+    "backend_api": [
+      "app/api/**/*.ts"
+    ],
+    "frontend_pages": [
+      "app/**/*.tsx"
+    ],
+    "components": [
+      "components/**/*.tsx"
+    ],
+    "hooks": [
+      "hooks/**/*.ts",
+      "hooks/**/*.tsx"
+    ],
+    "services": [
+      "lib/services/**/*.ts"
+    ],
+    "repositories": [
+      "lib/repositories/**/*.ts"
+    ],
+    "validators": [
+      "lib/validators/**/*.ts"
+    ],
+    "integrations": [
+      "lib/integrations/**/*.ts"
+    ],
+    "auth_security": [
+      "lib/auth/**/*.ts",
+      "lib/security/**/*.ts",
+      "middleware.ts"
+    ],
+    "database": [
+      "prisma/schema.prisma",
+      "prisma/**/*.ts"
+    ]
+  },
+  "architecture_preferences": {
+    "api_routes_should_be_thin": true,
+    "business_logic_in_service_layer": true,
+    "database_access_in_repository_layer": true,
+    "prefer_reuse_over_rewrite": true,
+    "prefer_extend_existing_models": true,
+    "avoid_duplicate_source_of_truth": true,
+    "prefer_migration_safe_changes": true,
+    "prefer_module_integration_over_local_workarounds": true
+  },
+  "module_dependencies": {
+    "security_auth_source": "M01",
+    "personnel_master_source": "M02",
+    "workflow_source": "M13",
+    "template_export_source": "M18",
+    "master_data_source": "M19"
+  },
+  "coding_constraints": {
+    "do_not_create_new_model_if_existing_model_can_be_extended": true,
+    "do_not_put_business_logic_in_route": true,
+    "do_not_put_heavy_business_logic_in_ui": true,
+    "do_not_hardcode_master_data_if_available_in_M19": true,
+    "do_not_bypass_M01_for_auth_scope_audit": true,
+    "do_not_drop_legacy_fields_without_migration_plan": true,
+    "do_not_create_parallel_user_or_personnel_source": true
+  },
+  "delivery_expectations": {
+    "before_coding": [
+      "summarize_module_goal",
+      "identify_dependencies",
+      "map_to_existing_codebase",
+      "list_files_to_create_or_modify",
+      "propose_phase_plan"
+    ],
+    "after_coding": [
+      "list_created_files",
+      "list_modified_files",
+      "summarize_changes",
+      "state_assumptions",
+      "state_remaining_work",
+      "propose_next_step"
+    ],
+    "for_reviews": [
+      "identify_critical_issues",
+      "identify_architecture_issues",
+      "identify_data_model_issues",
+      "identify_security_risks",
+      "identify_production_risks",
+      "propose_fix_order"
+    ]
+  },
+  "testing_expectations": {
+    "require_validation_tests": true,
+    "require_permission_scope_tests": true,
+    "require_business_rule_tests": true,
+    "require_regression_tests_for_fixed_bugs": true
+  },
+  "security_expectations": {
+    "require_backend_permission_checks": true,
+    "require_scope_enforcement": true,
+    "require_audit_for_sensitive_operations": true,
+    "forbid_hardcoded_secrets": true,
+    "require_rate_limit_on_auth_routes": true
+  },
+  "preferred_workflow": [
+    "read_system_docs",
+    "read_module_docs",
+    "analyze_module",
+    "map_existing_code",
+    "design_or_extend_schema",
+    "implement_services",
+    "implement_api",
+    "implement_ui",
+    "review_against_design",
+    "add_tests_or_regression_checks"
+  ],
+  "ignore_or_low_priority_paths": [
+    "node_modules/**",
+    ".next/**",
+    "dist/**",
+    "build/**",
+    "coverage/**",
+    "*.log"
+  ]
+}

@@ -1,0 +1,48 @@
+
+/**
+ * User Permissions API Routes
+ * GET /api/permissions/user/[userId] - Get user's permissions
+ */
+
+import { NextRequest, NextResponse } from 'next/server';
+import { requireAuth, requirePermission } from '@/lib/middleware/auth-guard';
+import { getUserPermissions } from '@/lib/permissions';
+
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { userId: string } }
+) {
+  try {
+    const currentUser = await requireAuth();
+    const targetUserId = params.userId;
+
+    // Users can view their own permissions
+    // Or need specific permission to view others
+    if (currentUser.userId !== targetUserId) {
+      await requirePermission('users:view:all');
+    }
+
+    const permissions = await getUserPermissions(targetUserId);
+    return NextResponse.json({ success: true, data: permissions });
+  } catch (error) {
+    if (error instanceof Error) {
+      if (error.message === 'Unauthorized') {
+        return NextResponse.json(
+          { success: false, error: 'Authentication required' },
+          { status: 401 }
+        );
+      }
+      if (error.message.startsWith('Forbidden')) {
+        return NextResponse.json(
+          { success: false, error: error.message },
+          { status: 403 }
+        );
+      }
+    }
+
+    return NextResponse.json(
+      { success: false, error: 'Failed to fetch user permissions' },
+      { status: 500 }
+    );
+  }
+}

@@ -1,0 +1,38 @@
+
+/**
+ * Permissions API Routes
+ * GET /api/permissions - Get all permissions
+ */
+
+import { NextRequest, NextResponse } from 'next/server';
+import { requireAuth } from '@/lib/middleware/auth-guard';
+import { getAllPermissions, getPermissionsByModule } from '@/lib/permissions';
+
+export async function GET(req: NextRequest) {
+  try {
+    await requireAuth();
+
+    const { searchParams } = new URL(req.url);
+    const groupByModule = searchParams.get('groupByModule') === 'true';
+
+    if (groupByModule) {
+      const permissions = await getPermissionsByModule();
+      return NextResponse.json({ success: true, data: permissions });
+    }
+
+    const permissions = await getAllPermissions();
+    return NextResponse.json({ success: true, data: permissions });
+  } catch (error) {
+    if (error instanceof Error && error.message === 'Unauthorized') {
+      return NextResponse.json(
+        { success: false, error: 'Authentication required' },
+        { status: 401 }
+      );
+    }
+
+    return NextResponse.json(
+      { success: false, error: 'Failed to fetch permissions' },
+      { status: 500 }
+    );
+  }
+}

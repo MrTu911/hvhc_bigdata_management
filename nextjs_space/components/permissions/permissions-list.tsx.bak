@@ -1,0 +1,93 @@
+
+/**
+ * Permissions List Component
+ * Displays all available permissions grouped by module
+ */
+
+'use client';
+
+import React from 'react';
+import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { useAllPermissions } from '@/hooks/use-permissions';
+import {
+  ModuleDisplayNames,
+  ActionDisplayNames,
+  ScopeDisplayNames,
+} from '@/lib/permissions';
+import { PermissionModule } from '@prisma/client';
+
+export function PermissionsList() {
+  const { permissions, loading } = useAllPermissions(true);
+
+  if (loading) {
+    return (
+      <div className="space-y-2">
+        <Skeleton className="h-16 w-full" />
+        <Skeleton className="h-16 w-full" />
+        <Skeleton className="h-16 w-full" />
+      </div>
+    );
+  }
+
+  if (!permissions) {
+    return <div>No permissions available</div>;
+  }
+
+  const modules = Object.keys(permissions) as PermissionModule[];
+
+  return (
+    <Accordion type="multiple" className="w-full">
+      {modules.map((module) => {
+        const modulePerms = permissions[module] || [];
+        return (
+          <AccordionItem key={module} value={module}>
+            <AccordionTrigger className="hover:no-underline">
+              <div className="flex items-center justify-between w-full pr-4">
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold">{ModuleDisplayNames[module]}</span>
+                  <Badge variant="secondary">{modulePerms.length} quyền</Badge>
+                </div>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent>
+              <div className="space-y-2 pl-4">
+                {modulePerms.map((perm: any) => (
+                  <div
+                    key={perm.id}
+                    className="p-3 rounded-lg border bg-card hover:bg-accent/50 transition-colors"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="font-medium">{perm.name}</span>
+                          <Badge variant="outline" className="text-xs">
+                            {perm.code}
+                          </Badge>
+                        </div>
+                        {perm.description && (
+                          <p className="text-sm text-muted-foreground">
+                            {perm.description}
+                          </p>
+                        )}
+                      </div>
+                      <div className="flex gap-2">
+                        <Badge variant="secondary">
+                          {ActionDisplayNames[perm.action as keyof typeof ActionDisplayNames] || perm.action}
+                        </Badge>
+                        <Badge variant="outline">
+                          {ScopeDisplayNames[perm.scope as keyof typeof ScopeDisplayNames] || perm.scope}
+                        </Badge>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        );
+      })}
+    </Accordion>
+  );
+}

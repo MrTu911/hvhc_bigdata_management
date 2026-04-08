@@ -1,0 +1,235 @@
+
+'use client';
+
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { 
+  Shield, 
+  Users, 
+  Lock, 
+  CheckCircle, 
+  XCircle,
+  Info,
+  AlertTriangle,
+} from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import { usePermissions } from '@/hooks/use-permissions';
+import { Permission, ROLE_PERMISSIONS } from '@/lib/permissions';
+
+export default function PermissionsPage() {
+  const { data: session } = useSession() || {};
+  const { permissions, userRole } = usePermissions();
+  
+  const allRoles = ['ADMIN', 'GIANG_VIEN', 'NGHIEN_CUU_VIEN', 'HOC_VIEN'];
+  
+  const permissionCategories = {
+    'Quản lý người dùng': [
+      Permission.USER_VIEW,
+      Permission.USER_CREATE,
+      Permission.USER_UPDATE,
+      Permission.USER_DELETE,
+    ],
+    'Quản lý dữ liệu': [
+      Permission.DATA_VIEW,
+      Permission.DATA_UPLOAD,
+      Permission.DATA_QUERY,
+      Permission.DATA_EXPORT,
+      Permission.DATA_DELETE,
+    ],
+    'Machine Learning': [
+      Permission.ML_VIEW,
+      Permission.ML_CREATE,
+      Permission.ML_TRAIN,
+      Permission.ML_DEPLOY,
+      Permission.ML_DELETE,
+    ],
+    'Dịch vụ & Hạ tầng': [
+      Permission.SERVICE_VIEW,
+      Permission.SERVICE_MANAGE,
+      Permission.SERVICE_RESTART,
+    ],
+    'Báo cáo & Phân tích': [
+      Permission.REPORT_VIEW,
+      Permission.REPORT_CREATE,
+      Permission.REPORT_EXPORT,
+    ],
+    'Bảo mật & Kiểm toán': [
+      Permission.AUDIT_VIEW,
+      Permission.AUDIT_EXPORT,
+      Permission.SECURITY_MANAGE,
+    ],
+    'Cấu hình hệ thống': [
+      Permission.CONFIG_VIEW,
+      Permission.CONFIG_MANAGE,
+    ],
+    'Quản lý đơn vị': [
+      Permission.DEPT_VIEW,
+      Permission.DEPT_MANAGE,
+    ],
+  };
+  
+  const getRoleDisplayName = (role: string) => {
+    const names: Record<string, string> = {
+      ADMIN: 'Quản trị viên',
+      GIANG_VIEN: 'Giảng viên',
+      NGHIEN_CUU_VIEN: 'Nghiên cứu viên',
+      HOC_VIEN: 'Học viên',
+    };
+    return names[role] || role;
+  };
+  
+  const getPermissionDisplayName = (permission: Permission) => {
+    const names: Record<Permission, string> = {
+      [Permission.USER_VIEW]: 'Xem người dùng',
+      [Permission.USER_CREATE]: 'Tạo người dùng',
+      [Permission.USER_UPDATE]: 'Cập nhật người dùng',
+      [Permission.USER_DELETE]: 'Xóa người dùng',
+      [Permission.DATA_VIEW]: 'Xem dữ liệu',
+      [Permission.DATA_UPLOAD]: 'Tải lên dữ liệu',
+      [Permission.DATA_QUERY]: 'Truy vấn dữ liệu',
+      [Permission.DATA_EXPORT]: 'Xuất dữ liệu',
+      [Permission.DATA_DELETE]: 'Xóa dữ liệu',
+      [Permission.ML_VIEW]: 'Xem mô hình ML',
+      [Permission.ML_CREATE]: 'Tạo mô hình ML',
+      [Permission.ML_TRAIN]: 'Huấn luyện mô hình',
+      [Permission.ML_DEPLOY]: 'Triển khai mô hình',
+      [Permission.ML_DELETE]: 'Xóa mô hình',
+      [Permission.SERVICE_VIEW]: 'Xem dịch vụ',
+      [Permission.SERVICE_MANAGE]: 'Quản lý dịch vụ',
+      [Permission.SERVICE_RESTART]: 'Khởi động lại dịch vụ',
+      [Permission.REPORT_VIEW]: 'Xem báo cáo',
+      [Permission.REPORT_CREATE]: 'Tạo báo cáo',
+      [Permission.REPORT_EXPORT]: 'Xuất báo cáo',
+      [Permission.AUDIT_VIEW]: 'Xem nhật ký kiểm toán',
+      [Permission.AUDIT_EXPORT]: 'Xuất nhật ký kiểm toán',
+      [Permission.SECURITY_MANAGE]: 'Quản lý bảo mật',
+      [Permission.CONFIG_VIEW]: 'Xem cấu hình',
+      [Permission.CONFIG_MANAGE]: 'Quản lý cấu hình',
+      [Permission.DEPT_VIEW]: 'Xem đơn vị',
+      [Permission.DEPT_MANAGE]: 'Quản lý đơn vị',
+    };
+    return names[permission] || permission;
+  };
+  
+  return (
+    <div className="p-6 space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold">Quản lý phân quyền</h1>
+          <p className="text-muted-foreground mt-2">
+            Xem và quản lý quyền truy cập theo vai trò quân đội
+          </p>
+        </div>
+        <Badge variant="outline" className="text-lg px-4 py-2">
+          <Shield className="w-4 h-4 mr-2" />
+          {getRoleDisplayName(userRole)}
+        </Badge>
+      </div>
+      
+      <Tabs defaultValue="my-permissions" className="space-y-6">
+        <TabsList>
+          <TabsTrigger value="my-permissions">
+            <Lock className="w-4 h-4 mr-2" />
+            Quyền của tôi
+          </TabsTrigger>
+          <TabsTrigger value="role-matrix">
+            <Users className="w-4 h-4 mr-2" />
+            Ma trận phân quyền
+          </TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="my-permissions" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Quyền hiện tại của bạn</CardTitle>
+              <CardDescription>
+                Các quyền bạn có với vai trò {getRoleDisplayName(userRole)}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {Object.entries(permissionCategories).map(([category, perms]) => (
+                <div key={category}>
+                  <h3 className="font-semibold mb-3 flex items-center">
+                    <Info className="w-4 h-4 mr-2 text-primary" />
+                    {category}
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 ml-6">
+                    {perms.map((perm) => {
+                      const hasAccess = permissions.includes(perm);
+                      return (
+                        <div
+                          key={perm}
+                          className={`flex items-center justify-between p-3 rounded-lg border ${
+                            hasAccess
+                              ? 'bg-green-50 border-green-200 dark:bg-green-900/10 dark:border-green-800'
+                              : 'bg-gray-50 border-gray-200 dark:bg-gray-800/50 dark:border-gray-700'
+                          }`}
+                        >
+                          <span className="text-sm">{getPermissionDisplayName(perm)}</span>
+                          {hasAccess ? (
+                            <CheckCircle className="w-5 h-5 text-green-600" />
+                          ) : (
+                            <XCircle className="w-5 h-5 text-gray-400" />
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        </TabsContent>
+        
+        <TabsContent value="role-matrix" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Ma trận phân quyền theo vai trò</CardTitle>
+              <CardDescription>
+                Tổng quan quyền truy cập cho từng vai trò trong hệ thống
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                {allRoles.map((role) => {
+                  const rolePerms = ROLE_PERMISSIONS[role] || [];
+                  return (
+                    <div key={role} className="border rounded-lg p-4">
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-lg font-semibold flex items-center">
+                          <Users className="w-5 h-5 mr-2" />
+                          {getRoleDisplayName(role)}
+                        </h3>
+                        <Badge variant="secondary">
+                          {rolePerms.length} quyền
+                        </Badge>
+                      </div>
+                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                        {Object.values(Permission).map((perm) => {
+                          const hasAccess = rolePerms.includes(perm);
+                          if (!hasAccess) return null;
+                          return (
+                            <div
+                              key={perm}
+                              className="text-xs px-2 py-1 bg-primary/10 text-primary rounded flex items-center"
+                            >
+                              <CheckCircle className="w-3 h-3 mr-1" />
+                              {getPermissionDisplayName(perm)}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+}

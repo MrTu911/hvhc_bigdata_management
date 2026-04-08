@@ -1,0 +1,1489 @@
+  ▲ Next.js 14.2.28
+  - Environments: .env
+  - Experiments (use with caution):
+    · outputFileTracingRoot
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Skipping linting
+   Checking validity of types ...
+   Collecting page data ...
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+⚠️ AI Service in offline mode
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+   Generating static pages (0/203) ...
+Error fetching audit logs: n [Error]: Dynamic server usage: Route /api/admin/rbac/audit-logs couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at p (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/admin/rbac/audit-logs/route.js:1:1585)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/admin/rbac/audit-logs couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Error fetching AI logs: n [Error]: Dynamic server usage: Route /api/ai/monitor/logs couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/ai/monitor/logs/route.js:1:1293)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/ai/monitor/logs couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching AI stats: n [Error]: Dynamic server usage: Route /api/ai/monitor/stats couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/ai/monitor/stats/route.js:1:1293)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/ai/monitor/stats couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+GET reports error: n [Error]: Dynamic server usage: Route /api/ai/reports couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at c (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/ai/reports/route.js:1:1304)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/ai/reports couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Course recommendation error: n [Error]: Dynamic server usage: Route /api/ai/recommend/courses couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at m (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/ai/recommend/courses/route.js:1:2228)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/ai/recommend/courses couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching suspicious activities: n [Error]: Dynamic server usage: Route /api/audit/suspicious couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at c (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/audit/suspicious/route.js:1:1306)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/audit/suspicious couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Error fetching chart data: n [Error]: Dynamic server usage: Route /api/analytics/charts couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/analytics/charts/route.js:1:1311)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/analytics/charts couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching audit logs: n [Error]: Dynamic server usage: Route /api/audit/file-access couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at c (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/audit/file-access/route.js:1:1306)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/audit/file-access couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Analytics summary error: n [Error]: Dynamic server usage: Route /api/analytics/summary couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at p (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/analytics/summary/route.js:1:1315)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/analytics/summary couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Error fetching research stats: n [Error]: Dynamic server usage: Route /api/command/research-stats couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at c (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/command/research-stats/route.js:1:1304)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/command/research-stats couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching user data: n [Error]: Dynamic server usage: Route /api/auth/me couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/auth/me/route.js:1:1295)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/auth/me couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Failed to fetch login audit statistics: n [Error]: Dynamic server usage: Route /api/auth/audit/stats couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at c (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/auth/audit/stats/route.js:1:1306)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/auth/audit/stats couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Error fetching executive summary: n [Error]: Dynamic server usage: Route /api/command/executive-summary couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/command/executive-summary/route.js:1:1306)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/command/executive-summary couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Error fetching training stats: n [Error]: Dynamic server usage: Route /api/command/training-stats couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at c (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/command/training-stats/route.js:1:1306)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/command/training-stats couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching system performance: n [Error]: Dynamic server usage: Route /api/command/system-performance couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at c (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/command/system-performance/route.js:1:1306)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/command/system-performance couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Error fetching instructors: n [Error]: Dynamic server usage: Route /api/dashboard/department-head/instructors couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at c (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/dashboard/department-head/instructors/route.js:1:1294)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/dashboard/department-head/instructors couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error generating report: n [Error]: Dynamic server usage: Route /api/dashboard/department-head/reports couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/dashboard/department-head/reports/route.js:1:1295)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/dashboard/department-head/reports couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching courses: n [Error]: Dynamic server usage: Route /api/dashboard/department-head/courses couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/dashboard/department-head/courses/route.js:1:1294)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/dashboard/department-head/courses couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching department head overview: n [Error]: Dynamic server usage: Route /api/dashboard/department-head/overview couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/dashboard/department-head/overview/route.js:1:1293)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/dashboard/department-head/overview couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching statistics: n [Error]: Dynamic server usage: Route /api/dashboard/department-head/statistics couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/dashboard/department-head/statistics/route.js:1:1294)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/dashboard/department-head/statistics couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching classes: n [Error]: Dynamic server usage: Route /api/dashboard/faculty/classes couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at c (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/dashboard/faculty/classes/route.js:1:1304)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/dashboard/faculty/classes couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching research: n [Error]: Dynamic server usage: Route /api/dashboard/department-head/research couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/dashboard/department-head/research/route.js:1:1294)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/dashboard/department-head/research couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching performance data: n [Error]: Dynamic server usage: Route /api/dashboard/faculty/performance couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/dashboard/faculty/performance/route.js:1:1306)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/dashboard/faculty/performance couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching instructors: n [Error]: Dynamic server usage: Route /api/dashboard/faculty/instructors couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at c (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/dashboard/faculty/instructors/route.js:1:1306)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/dashboard/faculty/instructors couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching faculty stats: n [Error]: Dynamic server usage: Route /api/dashboard/faculty/stats couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at c (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/dashboard/faculty/stats/route.js:1:1306)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/dashboard/faculty/stats couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching feedback: n [Error]: Dynamic server usage: Route /api/dashboard/instructor/feedback couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/dashboard/instructor/feedback/route.js:1:1237)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/dashboard/instructor/feedback couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+   Generating static pages (50/203) 
+Error fetching research data: n [Error]: Dynamic server usage: Route /api/dashboard/faculty/research couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at c (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/dashboard/faculty/research/route.js:1:1306)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/dashboard/faculty/research couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching performance data: n [Error]: Dynamic server usage: Route /api/dashboard/instructor/performance couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at p (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/dashboard/instructor/performance/route.js:1:1237)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/dashboard/instructor/performance couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching instructor stats: n [Error]: Dynamic server usage: Route /api/dashboard/instructor/stats couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at c (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/dashboard/instructor/stats/route.js:1:1295)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/dashboard/instructor/stats couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching real-time KPIs: n [Error]: Dynamic server usage: Route /api/dashboard/kpis/realtime couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/dashboard/kpis/realtime/route.js:1:1293)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/dashboard/kpis/realtime couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+List datasets error: n [Error]: Dynamic server usage: Route /api/data/list couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/data/list/route.js:1:1957)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/data/list couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching students: n [Error]: Dynamic server usage: Route /api/dashboard/instructor/students couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/dashboard/instructor/students/route.js:1:1295)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/dashboard/instructor/students couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching departments: n [Error]: Dynamic server usage: Route /api/departments couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at c (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/departments/route.js:1:1306)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/departments couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching ETL logs: n [Error]: Dynamic server usage: Route /api/etl/logs couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/etl/logs/route.js:1:1311)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/etl/logs couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Error exporting faculty list: n [Error]: Dynamic server usage: Route /api/faculty/export couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at p (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/faculty/export/route.js:1:1327)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/faculty/export couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching faculty list: n [Error]: Dynamic server usage: Route /api/faculty/list couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at c (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/faculty/list/route.js:1:1306)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/faculty/list couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching my students: n [Error]: Dynamic server usage: Route /api/faculty/my-students couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at c (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/faculty/my-students/route.js:1:1306)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/faculty/my-students couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching faculty stats: n [Error]: Dynamic server usage: Route /api/faculty/stats couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/faculty/stats/route.js:1:1303)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/faculty/stats couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error calculating EIS: n [Error]: Dynamic server usage: Route /api/faculty/eis couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at m (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/faculty/eis/route.js:1:2366)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/faculty/eis couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching teaching stats: n [Error]: Dynamic server usage: Route /api/faculty/teaching-stats couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/faculty/teaching-stats/route.js:1:1306)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/faculty/teaching-stats couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error proxying to ML Engine: n [Error]: Dynamic server usage: Route /api/ml-engine/models couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at c (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/ml-engine/models/route.js:1:1352)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/ml-engine/models couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching retention policies: n [Error]: Dynamic server usage: Route /api/governance/retention couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at p (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/governance/retention/route.js:1:2774)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/governance/retention couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching ETL log stats: n [Error]: Dynamic server usage: Route /api/etl/logs/stats couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/etl/logs/stats/route.js:1:1306)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/etl/logs/stats couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Realtime metrics error: n [Error]: Dynamic server usage: Route /api/monitoring/realtime couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at c (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/monitoring/realtime/route.js:1:1339)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/monitoring/realtime couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+System stats error: n [Error]: Dynamic server usage: Route /api/monitoring/stats couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at c (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/monitoring/stats/route.js:1:1304)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/monitoring/stats couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Notification history error: n [Error]: Dynamic server usage: Route /api/notifications/history couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at m (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/notifications/history/route.js:18:136)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/notifications/history couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+   Generating static pages (101/203) 
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+⚠️ AI Service in offline mode
+Get security policy error: n [Error]: Dynamic server usage: Route /api/security/policy couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at p (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/security/policy/route.js:5:839)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/security/policy couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error exporting students: n [Error]: Dynamic server usage: Route /api/student/export couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at c (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/student/export/route.js:1:1317)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/student/export couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Performance analysis error: n [Error]: Dynamic server usage: Route /api/student/performance-analysis couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at c (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/student/performance-analysis/route.js:1:1305)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/student/performance-analysis couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error fetching student stats: n [Error]: Dynamic server usage: Route /api/student/stats couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at c (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/student/stats/route.js:1:1306)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/student/stats couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Metrics collection error: PrismaClientKnownRequestError: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Raw query failed. Code: `42703`. Message: `column "created_at" does not exist`
+    at zn.handleRequestError (/opt/hostedapp/node/root/app/node_modules/.prisma/client/runtime/library.js:124:7459)
+    at zn.handleAndLogRequestError (/opt/hostedapp/node/root/app/node_modules/.prisma/client/runtime/library.js:124:6784)
+    at zn.request (/opt/hostedapp/node/root/app/node_modules/.prisma/client/runtime/library.js:124:6491)
+    at async l (/opt/hostedapp/node/root/app/node_modules/.prisma/client/runtime/library.js:133:9778)
+    at async u (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/metrics/route.js:1:585)
+    at async /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38411
+    at async e_.execute (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:27880)
+    at async e_.handle (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:39943)
+    at async exportAppRoute (/opt/hostedapp/node/root/app/node_modules/next/dist/export/routes/app-route.js:77:26)
+    at async exportPageImpl (/opt/hostedapp/node/root/app/node_modules/next/dist/export/worker.js:175:20) {
+  code: 'P2010',
+  meta: { code: '42703', message: 'column "created_at" does not exist' },
+  clientVersion: '6.7.0'
+}
+Error fetching health history: B [Error]: Dynamic server usage: Route /api/system/health/history couldn't be rendered statically because it used `request.url`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at V (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:21778)
+    at Object.get (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:29465)
+    at h (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/system/health/history/route.js:1:604)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:122:103 {
+  description: "Route /api/system/health/history couldn't be rendered statically because it used `request.url`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error checking system health: B [Error]: Dynamic server usage: Route /api/system/health couldn't be rendered statically because it used `request.url`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at V (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:21778)
+    at Object.get (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:29465)
+    at h (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/system/health/route.js:1:604)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:122:103 {
+  description: "Route /api/system/health couldn't be rendered statically because it used `request.url`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+GET /api/training/registration/my error: n [Error]: Dynamic server usage: Route /api/training/registration/my couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at c (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/training/registration/my/route.js:1:1304)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/training/registration/my couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Get preferences error: n [Error]: Dynamic server usage: Route /api/user/preferences couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at c (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/user/preferences/route.js:1:1314)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/user/preferences couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Error in NLP sentiment analysis: n [Error]: Dynamic server usage: Route /api/nlp/feedback-sentiment couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error
+    at l (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/4372.js:1:37216)
+    at d (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:33172)
+    at s (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/chunks/7978.js:25:20519)
+    at h (/home/ubuntu/hvhc_bigdata_management/nextjs_space/.build/server/app/api/nlp/feedback-sentiment/route.js:1:1585)
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/compiled/next-server/app-route.runtime.prod.js:6:38417
+    at /opt/hostedapp/node/root/app/node_modules/next/dist/server/lib/trace/tracer.js:140:36
+    at NoopContextManager.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:7062)
+    at ContextAPI.with (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:518)
+    at NoopTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18093)
+    at ProxyTracer.startActiveSpan (/opt/hostedapp/node/root/app/node_modules/next/dist/compiled/@opentelemetry/api/index.js:1:18854) {
+  description: "Route /api/nlp/feedback-sentiment couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error",
+  digest: 'DYNAMIC_SERVER_USAGE'
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+   Generating static pages (152/203) 
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+ ✓ Generating static pages (203/203)
+Redis Client Error: Error: connect ECONNREFUSED 127.0.0.1:6379
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1634:16)
+    at TCPConnectWrap.callbackTrampoline (node:internal/async_hooks:130:17) {
+  errno: -111,
+  code: 'ECONNREFUSED',
+  syscall: 'connect',
+  address: '127.0.0.1',
+  port: 6379
+}
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                     Size     First Load JS
+┌ ○ /                                           16.8 kB         132 kB
+├ ○ /_not-found                                 880 B          88.5 kB
+├ ○ /admin/ai-settings                          14 kB           149 kB
+├ ƒ /api/admin/ai-config                        0 B                0 B
+├ ƒ /api/admin/ai-config/test                   0 B                0 B
+├ ƒ /api/admin/rbac/audit-logs                  0 B                0 B
+├ ƒ /api/admin/rbac/users                       0 B                0 B
+├ ƒ /api/admin/rbac/users/reset-password        0 B                0 B
+├ ƒ /api/admin/rbac/users/toggle-status         0 B                0 B
+├ ƒ /api/admin/units                            0 B                0 B
+├ ƒ /api/ai/chat                                0 B                0 B
+├ ƒ /api/ai/early-warnings                      0 B                0 B
+├ ƒ /api/ai/insights                            0 B                0 B
+├ ƒ /api/ai/insights/faculty                    0 B                0 B
+├ ƒ /api/ai/insights/student                    0 B                0 B
+├ ƒ /api/ai/monitor/logs                        0 B                0 B
+├ ƒ /api/ai/monitor/stats                       0 B                0 B
+├ ƒ /api/ai/nlp/analyze-feedback                0 B                0 B
+├ ƒ /api/ai/predict-risk                        0 B                0 B
+├ ƒ /api/ai/predict/at-risk-students            0 B                0 B
+├ ƒ /api/ai/recommend/courses                   0 B                0 B
+├ ƒ /api/ai/recommendations                     0 B                0 B
+├ ƒ /api/ai/reports                             0 B                0 B
+├ ƒ /api/ai/reports/generate                    0 B                0 B
+├ ƒ /api/ai/sentiment                           0 B                0 B
+├ ƒ /api/ai/sentiment/analyze-batch             0 B                0 B
+├ ƒ /api/ai/student-trends                      0 B                0 B
+├ ƒ /api/ai/summary                             0 B                0 B
+├ ƒ /api/alerts                                 0 B                0 B
+├ ƒ /api/analytics/charts                       0 B                0 B
+├ ƒ /api/analytics/summary                      0 B                0 B
+├ ƒ /api/audit/file-access                      0 B                0 B
+├ ƒ /api/audit/suspicious                       0 B                0 B
+├ ƒ /api/auth/[...nextauth]                     0 B                0 B
+├ ƒ /api/auth/audit                             0 B                0 B
+├ ƒ /api/auth/audit/stats                       0 B                0 B
+├ ƒ /api/auth/login                             0 B                0 B
+├ ƒ /api/auth/me                                0 B                0 B
+├ ƒ /api/auth/register                          0 B                0 B
+├ ƒ /api/command/executive-summary              0 B                0 B
+├ ƒ /api/command/research-stats                 0 B                0 B
+├ ƒ /api/command/system-performance             0 B                0 B
+├ ƒ /api/command/training-stats                 0 B                0 B
+├ ƒ /api/dashboard/admin/audit                  0 B                0 B
+├ ƒ /api/dashboard/admin/overview               0 B                0 B
+├ ƒ /api/dashboard/admin/services               0 B                0 B
+├ ƒ /api/dashboard/admin/system-stats           0 B                0 B
+├ ƒ /api/dashboard/admin/users                  0 B                0 B
+├ ƒ /api/dashboard/department-head/courses      0 B                0 B
+├ ƒ /api/dashboard/department-head/instructors  0 B                0 B
+├ ƒ /api/dashboard/department-head/overview     0 B                0 B
+├ ƒ /api/dashboard/department-head/reports      0 B                0 B
+├ ƒ /api/dashboard/department-head/research     0 B                0 B
+├ ƒ /api/dashboard/department-head/statistics   0 B                0 B
+├ ƒ /api/dashboard/faculty/classes              0 B                0 B
+├ ƒ /api/dashboard/faculty/instructors          0 B                0 B
+├ ƒ /api/dashboard/faculty/performance          0 B                0 B
+├ ƒ /api/dashboard/faculty/research             0 B                0 B
+├ ƒ /api/dashboard/faculty/stats                0 B                0 B
+├ ƒ /api/dashboard/instructor/alerts            0 B                0 B
+├ ƒ /api/dashboard/instructor/feedback          0 B                0 B
+├ ƒ /api/dashboard/instructor/performance       0 B                0 B
+├ ƒ /api/dashboard/instructor/stats             0 B                0 B
+├ ƒ /api/dashboard/instructor/students          0 B                0 B
+├ ƒ /api/dashboard/kpis/realtime                0 B                0 B
+├ ƒ /api/dashboard/stats                        0 B                0 B
+├ ƒ /api/dashboard/student/assignments          0 B                0 B
+├ ƒ /api/dashboard/student/courses              0 B                0 B
+├ ƒ /api/dashboard/student/materials            0 B                0 B
+├ ƒ /api/dashboard/student/overview             0 B                0 B
+├ ƒ /api/dashboard/student/schedule             0 B                0 B
+├ ƒ /api/data/clean                             0 B                0 B
+├ ƒ /api/data/clean/[id]                        0 B                0 B
+├ ƒ /api/data/list                              0 B                0 B
+├ ƒ /api/data/preview                           0 B                0 B
+├ ƒ /api/data/preview/[id]                      0 B                0 B
+├ ƒ /api/data/process                           0 B                0 B
+├ ƒ /api/data/query                             0 B                0 B
+├ ƒ /api/data/statistics                        0 B                0 B
+├ ƒ /api/data/stats/[id]                        0 B                0 B
+├ ƒ /api/data/upload                            0 B                0 B
+├ ƒ /api/data/versions/[id]                     0 B                0 B
+├ ƒ /api/data/versions/compare                  0 B                0 B
+├ ƒ /api/demo/predict-logistics                 0 B                0 B
+├ ƒ /api/demo/predict-training                  0 B                0 B
+├ ƒ /api/departments                            0 B                0 B
+├ ƒ /api/etl/logs                               0 B                0 B
+├ ƒ /api/etl/logs/stats                         0 B                0 B
+├ ƒ /api/etl/retry                              0 B                0 B
+├ ƒ /api/etl/scheduler                          0 B                0 B
+├ ƒ /api/etl/workflows                          0 B                0 B
+├ ƒ /api/etl/workflows/[id]                     0 B                0 B
+├ ƒ /api/etl/workflows/[id]/execute             0 B                0 B
+├ ƒ /api/etl/workflows/[id]/history             0 B                0 B
+├ ƒ /api/faculty/eis                            0 B                0 B
+├ ƒ /api/faculty/eis-history                    0 B                0 B
+├ ƒ /api/faculty/export                         0 B                0 B
+├ ƒ /api/faculty/import                         0 B                0 B
+├ ƒ /api/faculty/list                           0 B                0 B
+├ ƒ /api/faculty/my-students                    0 B                0 B
+├ ƒ /api/faculty/profile                        0 B                0 B
+├ ƒ /api/faculty/research                       0 B                0 B
+├ ƒ /api/faculty/stats                          0 B                0 B
+├ ƒ /api/faculty/subjects                       0 B                0 B
+├ ƒ /api/faculty/teaching-stats                 0 B                0 B
+├ ƒ /api/files/delete/[id]                      0 B                0 B
+├ ƒ /api/files/download/[id]                    0 B                0 B
+├ ƒ /api/files/upload                           0 B                0 B
+├ ƒ /api/governance/retention                   0 B                0 B
+├ ƒ /api/logs                                   0 B                0 B
+├ ƒ /api/metrics                                0 B                0 B
+├ ƒ /api/ml-engine/health                       0 B                0 B
+├ ƒ /api/ml-engine/models                       0 B                0 B
+├ ƒ /api/ml-engine/predict                      0 B                0 B
+├ ƒ /api/ml-engine/train                        0 B                0 B
+├ ƒ /api/ml/auto-training                       0 B                0 B
+├ ƒ /api/ml/experiments                         0 B                0 B
+├ ƒ /api/ml/experiments/[id]                    0 B                0 B
+├ ƒ /api/ml/experiments/[id]/metrics            0 B                0 B
+├ ƒ /api/ml/experiments/compare                 0 B                0 B
+├ ƒ /api/ml/metrics                             0 B                0 B
+├ ƒ /api/ml/models                              0 B                0 B
+├ ƒ /api/ml/models/[id]                         0 B                0 B
+├ ƒ /api/ml/models/[id]/versions                0 B                0 B
+├ ƒ /api/ml/models/[id]/versions/[versionId]    0 B                0 B
+├ ƒ /api/ml/registry                            0 B                0 B
+├ ƒ /api/ml/tracking                            0 B                0 B
+├ ƒ /api/ml/tracking/[runId]/complete           0 B                0 B
+├ ƒ /api/ml/tracking/[runId]/metrics            0 B                0 B
+├ ƒ /api/ml/training                            0 B                0 B
+├ ƒ /api/ml/workflows                           0 B                0 B
+├ ƒ /api/ml/workflows/[id]                      0 B                0 B
+├ ƒ /api/ml/workflows/[id]/execute              0 B                0 B
+├ ƒ /api/monitoring/alerts                      0 B                0 B
+├ ƒ /api/monitoring/metrics                     0 B                0 B
+├ ƒ /api/monitoring/realtime                    0 B                0 B
+├ ƒ /api/monitoring/services                    0 B                0 B
+├ ƒ /api/monitoring/stats                       0 B                0 B
+├ ƒ /api/nlp/feedback-sentiment                 0 B                0 B
+├ ƒ /api/notifications/history                  0 B                0 B
+├ ƒ /api/realtime/metrics                       0 B                0 B
+├ ƒ /api/scientific-profile                     0 B                0 B
+├ ƒ /api/scientific-profile/awards              0 B                0 B
+├ ƒ /api/scientific-profile/education           0 B                0 B
+├ ƒ /api/scientific-profile/publications        0 B                0 B
+├ ƒ /api/scientific-profile/research            0 B                0 B
+├ ƒ /api/scientific-profile/work-experience     0 B                0 B
+├ ƒ /api/security/policy                        0 B                0 B
+├ ƒ /api/services                               0 B                0 B
+├ ƒ /api/services/health                        0 B                0 B
+├ ƒ /api/signup                                 0 B                0 B
+├ ƒ /api/student                                0 B                0 B
+├ ƒ /api/student/[id]                           0 B                0 B
+├ ƒ /api/student/export                         0 B                0 B
+├ ƒ /api/student/he-so                          0 B                0 B
+├ ƒ /api/student/performance-analysis           0 B                0 B
+├ ƒ /api/student/results                        0 B                0 B
+├ ƒ /api/student/stats                          0 B                0 B
+├ ƒ /api/system/health                          0 B                0 B
+├ ƒ /api/system/health/history                  0 B                0 B
+├ ƒ /api/system/metrics                         0 B                0 B
+├ ƒ /api/theme                                  0 B                0 B
+├ ƒ /api/theme/apply                            0 B                0 B
+├ ƒ /api/theme/branding                         0 B                0 B
+├ ƒ /api/theme/settings                         0 B                0 B
+├ ƒ /api/theme/upload                           0 B                0 B
+├ ƒ /api/training/courses                       0 B                0 B
+├ ƒ /api/training/exams                         0 B                0 B
+├ ƒ /api/training/grades                        0 B                0 B
+├ ƒ /api/training/registration                  0 B                0 B
+├ ƒ /api/training/registration/my               0 B                0 B
+├ ƒ /api/training/rooms                         0 B                0 B
+├ ƒ /api/units/hierarchy                        0 B                0 B
+├ ƒ /api/user/preferences                       0 B                0 B
+├ ƒ /api/users                                  0 B                0 B
+├ ƒ /api/users/[id]                             0 B                0 B
+├ ƒ /api/users/stats                            0 B                0 B
+├ ƒ /dashboard                                  13.5 kB         240 kB
+├ ƒ /dashboard/admin                            9.36 kB         109 kB
+├ ƒ /dashboard/admin/he-so-mon-hoc              12.5 kB         152 kB
+├ ƒ /dashboard/admin/rbac                       8.71 kB         143 kB
+├ ƒ /dashboard/admin/units                      7.72 kB         137 kB
+├ ƒ /dashboard/admin/users                      9.21 kB         149 kB
+├ ƒ /dashboard/ai-advisor                       5.76 kB         105 kB
+├ ƒ /dashboard/ai-monitor                       12.4 kB         266 kB
+├ ƒ /dashboard/ai-training                      8.08 kB         133 kB
+├ ƒ /dashboard/alerts                           6.02 kB         106 kB
+├ ƒ /dashboard/analytics                        9.66 kB         135 kB
+├ ƒ /dashboard/analytics/advanced               4.22 kB         139 kB
+├ ƒ /dashboard/command                          4.73 kB         231 kB
+├ ƒ /dashboard/data/manage                      6.75 kB         141 kB
+├ ƒ /dashboard/data/query                       10.7 kB         136 kB
+├ ƒ /dashboard/data/upload                      10.4 kB         130 kB
+├ ƒ /dashboard/datalake                         6.09 kB         126 kB
+├ ○ /dashboard/department-head                  9.86 kB         221 kB
+├ ƒ /dashboard/etl/automation                   5.88 kB         144 kB
+├ ƒ /dashboard/faculty                          13.1 kB         238 kB
+├ ƒ /dashboard/faculty/analytics                9.64 kB         235 kB
+├ ƒ /dashboard/faculty/import                   8.92 kB         113 kB
+├ ƒ /dashboard/faculty/list                     12.5 kB         280 kB
+├ ƒ /dashboard/faculty/my-students              10.2 kB         486 kB
+├ ƒ /dashboard/faculty/profile                  5.51 kB         274 kB
+├ ƒ /dashboard/faculty/research                 9.84 kB         149 kB
+├ ƒ /dashboard/faculty/scientific-profile       17.4 kB         167 kB
+├ ƒ /dashboard/faculty/subjects                 9.36 kB         149 kB
+├ ƒ /dashboard/faculty/teaching-analytics       11 kB           498 kB
+├ ƒ /dashboard/files                            6.49 kB         127 kB
+├ ƒ /dashboard/governance/compliance            4.38 kB        99.2 kB
+├ ƒ /dashboard/governance/lineage               56.4 kB         182 kB
+├ ƒ /dashboard/governance/retention             2.83 kB        97.6 kB
+├ ƒ /dashboard/human-resources                  13.1 kB         249 kB
+├ ƒ /dashboard/instructor                       10.7 kB         234 kB
+├ ○ /dashboard/instructor/early-warning         7.84 kB         147 kB
+├ ○ /dashboard/instructor/feedback-analysis     14.5 kB         274 kB
+├ ƒ /dashboard/kpis/realtime                    11.5 kB         225 kB
+├ ƒ /dashboard/logs                             5.91 kB         106 kB
+├ ƒ /dashboard/ml/experiments                   3.05 kB         154 kB
+├ ƒ /dashboard/ml/models                        5.99 kB         149 kB
+├ ƒ /dashboard/ml/tracking                      5.51 kB         243 kB
+├ ƒ /dashboard/ml/training                      5.97 kB         101 kB
+├ ƒ /dashboard/ml/versions                      5.58 kB         149 kB
+├ ƒ /dashboard/ml/workflows                     5.23 kB         152 kB
+├ ƒ /dashboard/monitoring                       4.57 kB        99.4 kB
+├ ƒ /dashboard/monitoring/realtime              5.97 kB         231 kB
+├ ƒ /dashboard/notifications/history            5.6 kB          126 kB
+├ ƒ /dashboard/realtime                         75 kB           170 kB
+├ ƒ /dashboard/reports                          8.23 kB         148 kB
+├ ƒ /dashboard/research                         6.27 kB         106 kB
+├ ƒ /dashboard/security/audit                   5.05 kB         139 kB
+├ ƒ /dashboard/security/login-audit             6.52 kB         131 kB
+├ ƒ /dashboard/security/policy                  7.64 kB         106 kB
+├ ƒ /dashboard/services                         7.48 kB         108 kB
+├ ƒ /dashboard/settings                         4.55 kB        99.3 kB
+├ ○ /dashboard/settings/appearance              9.51 kB         109 kB
+├ ƒ /dashboard/student                          9.57 kB         109 kB
+├ ƒ /dashboard/student/[id]                     6.71 kB         423 kB
+├ ƒ /dashboard/student/analytics                4.2 kB          226 kB
+├ ƒ /dashboard/student/list                     7.91 kB         147 kB
+├ ƒ /dashboard/student/stats                    5.64 kB         226 kB
+├ ƒ /dashboard/system/health                    5.94 kB         217 kB
+├ ƒ /dashboard/training                         6.57 kB         106 kB
+├ ƒ /dashboard/users                            9.27 kB         139 kB
+├ ƒ /data/edit/[id]                             9.69 kB         118 kB
+├ ○ /data/preview                               6.88 kB         107 kB
+├ ƒ /data/preview/[id]                          6.09 kB         115 kB
+├ ○ /login                                      7.65 kB         112 kB
+└ ○ /settings/appearance                        5.8 kB          105 kB
++ First Load JS shared by all                   87.6 kB
+  ├ chunks/7156-5bca630b1aa97ace.js             31.8 kB
+  ├ chunks/ceb5afef-34a140ea6d19ec64.js         53.6 kB
+  └ other shared chunks (total)                 2.16 kB
+
+
+ƒ Middleware                                    48.2 kB
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

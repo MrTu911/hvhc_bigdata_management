@@ -1,0 +1,83 @@
+
+/**
+ * Permission Override API
+ * POST /api/permissions/override - Grant or revoke permission override
+ */
+
+import { NextRequest, NextResponse } from 'next/server';
+import { requirePermission } from '@/lib/middleware/auth-guard';
+import { grantPermissionOverride, revokePermissionOverride } from '@/lib/permissions';
+
+export async function POST(req: NextRequest) {
+  try {
+    const currentUser = await requirePermission('users:manage:all');
+    const body = await req.json();
+
+    const { userId, permissionCode, action, reason, expiresAt } = body;
+
+    if (!userId || !permissionCode || !action) {
+      return NextResponse.json(
+        { success: false, error: 'userId, permissionCode, and action are required' },
+        { status: 400 }
+      );
+    }
+
+    if (action === 'grant') {
+      await grantPermissionOverride(
+        userId,
+        permissionCode,
+        currentUser.userId,
+        reason,
+        expiresAt ? new Date(expiresAt) : undefined
+      );
+
+      return NextResponse.json({
+        success: true,
+        message: 'Permission granted successfully',
+      });
+    } else if (action === 'revoke') {
+      await revokePermissionOverride(
+        userId,
+        permissionCode,
+        currentUser.userId,
+        reason
+      );
+
+      return NextResponse.json({
+        success: true,
+        message: 'Permission revoked successfully',
+      });
+    } else {
+      return NextResponse.json(
+        { success: false, error: 'Action must be "grant" or "revoke"' },
+        { status: 400 }
+      );
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      if (error.message === 'Unauthorized') {
+        return NextResponse.json(
+          { success: false, error: 'Authentication required' },
+          { status: 401 }
+        );
+      }
+      if (error.message.startsWith('Forbidden')) {
+        return NextResponse.json(
+          { success: false, error: 'Insufficient permissions' },
+          { status: 403 }
+        );
+      }
+      if (error.message === 'Permission not found') {
+        return NextResponse.json(
+          { success: false, error: 'Invalid permission code' },
+          { status: 404 }
+        );
+      }
+    }
+
+    return NextResponse.json(
+      { success: false, error: 'Failed to update permission override' },
+      { status: 500 }
+    );
+  }
+}

@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HVHC Big Data - Báo cáo Sáng kiến v19.0</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        apple: { bg: '#f5f5f7', text: '#1d1d1f', gray: '#86868b', blue: '#007aff', navy: '#001d3d', navyDark: '#001529', card: '#ffffff' },
+                        gold: { 500: '#eab308', 600: '#d97706' },
+                        emerald: { 500: '#10b981', 600: '#059669' },
+                    },
+                    boxShadow: {
+                        'apple': '0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
+                        'apple-lg': '0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { overflow-x: hidden; transition: background-color 0.3s, color 0.3s; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .dark ::-webkit-scrollbar-thumb { background: #475569; }
+
+        /* Sidebar Styling (Always Dark Apple Navy) */
+        .sidebar-item { transition: all 0.3s ease; color: #a1b0c0; border-radius: 12px; margin: 0 16px; padding: 12px 16px; font-weight: 600; font-size: 0.9rem; }
+        .sidebar-item:hover:not(.active) { color: #ffffff; background: rgba(255,255,255,0.08); }
+        .sidebar-item.active { background: #007aff; color: white; box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3); }
+        .sidebar-sub { padding-left: 48px; font-size: 0.8rem; padding-top: 8px; padding-bottom: 8px; color: #86868b; font-weight: 500; }
+        .sidebar-sub:hover { color: #e0f2fe; }
+
+        /* Cover Page */
+        .cover-page {
+            background: linear-gradient(rgba(0, 21, 41, 0.85), rgba(0, 29, 61, 0.95)), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=2072');
+            background-size: cover; background-position: center; min-height: 100vh;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: white; padding: 20px;
+        }
+        
+        .pulse-ring { position: relative; }
+        .pulse-ring::after { content: ''; position: absolute; width: 100%; height: 100%; top: 0; left: 0; border: 2px solid rgba(0, 122, 255, 0.6); border-radius: 50%; animation: ring-anim 2.5s infinite; }
+        @keyframes ring-anim { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
+
+        /* Content Styling */
+        .bento-card { transition: transform 0.3s ease, box-shadow 0.3s ease; border-radius: 24px; padding: 2rem; }
+        .bento-card:hover { transform: translateY(-4px); }
+        
+        .playing-indicator { animation: pulseBg 1.5s infinite; }
+        @keyframes pulseBg { 0% { background-color: #007aff; } 50% { background-color: #005bb5; } 100% { background-color: #007aff; } }
+
+        /* Glass Header */
+        .glass-header { backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+
+        /* Tables */
+        table.hvhc-table th { text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.05em; padding: 1.2rem; text-align: left; }
+        table.hvhc-table td { padding: 1.2rem; font-size: 0.95rem; line-height: 1.5; }
+        
+        /* Markdown Chat */
+        .chat-bubble { max-width: 85%; border-radius: 18px; padding: 16px 20px; margin-bottom: 12px; font-size: 0.95rem; line-height: 1.6; }
+        .chat-user { background: #007aff; color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+        .chat-ai { align-self: flex-start; border-bottom-left-radius: 4px; }
+
+        /* Fix line heights for readability */
+        p { line-height: 1.8; margin-bottom: 1rem; }
+    </style>
+</head>
+<body class="flex flex-col md:flex-row h-screen font-sans bg-apple-bg text-apple-text dark:bg-slate-900 dark:text-slate-200">
+
+    <!-- API KEY MODAL -->
+    <div id="api-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/60 backdrop-blur-sm hidden transition-opacity duration-300 opacity-0">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl p-8 max-w-md w-full mx-4 transform scale-95 transition-transform duration-300" id="api-modal-content">
+            <div class="flex items-center space-x-4 mb-6">
+                <div class="w-12 h-12 bg-blue-50 dark:bg-blue-900/30 text-apple-blue rounded-full flex items-center justify-center text-xl"><i class="fas fa-key"></i></div>
+                <div>
+                    <h3 class="text-xl font-bold text-slate-800 dark:text-white">Cấu hình API AI</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-widest mt-1">Gemini 2.5 Flash</p>
+                </div>
+            </div>
+            <p class="text-sm text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">Nhập mã API Key để kích hoạt Trợ lý ảo và Giọng đọc AI. Mã được mã hóa cục bộ.</p>
+            <div class="space-y-4">
+                <input type="password" id="api-key-input" placeholder="AIzaSy..." class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-apple-blue dark:text-white transition-all">
+                <div class="flex justify-end space-x-3 pt-4 border-t border-slate-100 dark:border-slate-700">
+                    <button id="btn-close-modal" class="px-5 py-2.5 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700">Đóng</button>
+                    <button id="btn-save-key" class="px-5 py-2.5 rounded-xl text-sm font-bold bg-apple-blue text-white shadow-md hover:bg-blue-600">Lưu cấu hình</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SIDEBAR MENU (APPLE NAVY) -->
+    <aside id="main-sidebar" class="hidden md:flex w-[320px] lg:w-[360px] bg-apple-navyDark text-slate-300 flex-shrink-0 flex flex-col z-50 transition-all shadow-2xl border-r border-white/5">
+        <div class="p-8 pb-6 flex items-center justify-between border-b border-white/10 bg-apple-navy">
+            <div class="flex items-center space-x-4">
+                <div class="w-14 h-14 bg-white/10 rounded-[1.2rem] flex items-center justify-center border border-white/20 shadow-inner">
+                    <img src="https://upload.wikimedia.org/wikipedia/vi/2/22/Hoc_vien_Hau_can_Logo.png" alt="HVHC" class="w-10 h-10 object-contain">
+                </div>
+                <div>
+                    <h1 class="text-xl font-black text-white leading-tight tracking-tight">HVHC DATA</h1>
+                    <p class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest mt-1 flex items-center"><span class="w-2 h-2 rounded-full bg-emerald-500 mr-2 animate-pulse"></span> AI Connected</p>
+                </div>
+            </div>
+            <!-- Theme Toggle -->
+            <button id="theme-toggle" class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 text-slate-300 transition-colors flex items-center justify-center">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+        
+        <nav class="flex-1 overflow-y-auto py-6 space-y-1 custom-scrollbar">
+            
+            <a href="#sec-1" class="sidebar-item flex items-center transition-all active" data-target="sec-1">
+                <i class="fas fa-flag w-6 text-center mr-3 text-apple-blue"></i> I. Bối cảnh & Cấp thiết
+            </a>
+            <div class="sidebar-sub">
+                <a href="#sec-1-1" class="block hover:text-white mb-2">1.1. Thực trạng "Ốc đảo dữ liệu"</a>
+                <a href="#sec-1-2" class="block hover:text-white">1.2. Mục tiêu Chuyển đổi số</a>
+            </div>
+            
+            <div class="my-4 border-t border-white/5"></div>
+            
+            <a href="#sec-2" class="sidebar-item flex items-center transition-all" data-target="sec-2">
+                <i class="fas fa-server w-6 text-center mr-3 text-apple-blue"></i> II. Hạ tầng Lõi (Core)
+            </a>
+            <div class="sidebar-sub">
+                <a href="#sec-2-1" class="block hover:text-white mb-2">2.1. Kiến trúc Big Data 4 lớp</a>
+                <a href="#sec-2-2" class="block hover:text-white mb-2">2.2. 5 Module Nền tảng</a>
+                <a href="#sec-2-3" class="block hover:text-white">2.3. Bảo mật RBAC 4 cấp độ</a>
+            </div>
+
+            <div class="my-4 border-t border-white/5"></div>
+
+            <a href="#sec-3" class="sidebar-item flex items-center transition-all" data-target="sec-3">
+                <i class="fas fa-network-wired w-6 text-center mr-3 text-apple-blue"></i> III. 17 CSDL Nghiệp vụ
+            </a>
+            <div class="sidebar-sub">
+                <a href="#sec-3-1" class="block hover:text-white mb-2">3.1. Hệ sinh thái Chuyên ngành</a>
+                <a href="#sec-3-2" class="block hover:text-white">3.2. Chân dung Cán bộ 360°</a>
+            </div>
+
+            <div class="my-4 border-t border-white/5"></div>
+
+            <a href="#sec-4" class="sidebar-item flex items-center transition-all" data-target="sec-4">
+                <i class="fas fa-microchip w-6 text-center mr-3 text-emerald-400"></i> IV. Chuyên đề & AI Lab
+            </a>
+            <div class="sidebar-sub">
+                <a href="#sec-4-1" class="block hover:text-white mb-2">4.1. Đào tạo (M10) & NCKH (M09)</a>
+                <a href="#sec-4-2" class="block hover:text-white mb-2">4.2. Trí tuệ Chỉ huy Dashboard</a>
+                <a href="#sec-4-3" class="block text-emerald-400 font-bold hover:text-emerald-300">4.3. Live AI Demo</a>
+            </div>
+
+            <div class="my-4 border-t border-white/5"></div>
+
+            <a href="#sec-5" class="sidebar-item flex items-center transition-all" data-target="sec-5">
+                <i class="fas fa-chart-line w-6 text-center mr-3 text-apple-blue"></i> V. Hiệu quả & Lộ trình
+            </a>
+            <div class="sidebar-sub">
+                <a href="#sec-5-1" class="block hover:text-white mb-2">5.1. Hiệu quả Kinh tế (ROI)</a>
+                <a href="#sec-5-2" class="block hover:text-white">5.2. Lộ trình Triển khai 3 GĐ</a>
+            </div>
+
+        </nav>
+
+        <div class="p-6 border-t border-white/5 bg-apple-navy">
+            <div class="flex items-center justify-between mb-5 px-2">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-sm text-apple-blue"><i class="fas fa-user-tie"></i></div>
+                    <div>
+                        <p class="text-sm font-bold text-white">TS. Nguyễn Đức Tú</p>
+                        <p class="text-[10px] text-slate-400 uppercase tracking-widest mt-0.5">Chủ nhiệm đề tài</p>
+                    </div>
+                </div>
+                <button id="btn-open-settings" class="w-8 h-8 rounded-full bg-white/5 text-slate-400 hover:text-white hover:bg-white/20 transition-all flex items-center justify-center" title="Cấu hình AI">
+                    <i class="fas fa-cog"></i>
+                </button>
+            </div>
+            <button id="btn-tts-global" class="w-full bg-apple-blue hover:bg-blue-600 text-white text-xs font-bold py-4 rounded-2xl transition-all flex items-center justify-center space-x-3 shadow-lg shadow-blue-500/30">
+                <i class="fas fa-play-circle text-xl"></i>
+                <span id="tts-btn-text" class="tracking-wide">THUYẾT MINH TOÀN VĂN</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 overflow-y-auto relative scroll-smooth" id="scroll-content">
+
+        <!-- TRANG BÌA -->
+        <section id="cover-page" class="cover-page">
+            <div class="cover-border animate-in fade-in duration-1000">
+                <p class="text-xl md:text-2xl font-bold uppercase tracking-[0.3em] mb-4 text-slate-300 drop-shadow-md">BỘ QUỐC PHÒNG</p>
+                <p class="text-3xl md:text-5xl font-black uppercase tracking-[0.4em] mb-12 text-white drop-shadow-lg">HỌC VIỆN HẬU CẦN</p>
+                
+                <div class="flex justify-center mb-12">
+                    <div class="w-32 h-32 md:w-40 md:h-40 bg-white/10 rounded-[2.5rem] flex items-center justify-center border border-white/20 shadow-2xl pulse-ring backdrop-blur-xl">
+                        <img src="https://upload.wikimedia.org/wikipedia/vi/2/22/Hoc_vien_Hau_can_Logo.png" alt="Logo HVHC" class="w-20 h-20 md:w-28 md:h-28 object-contain">
+                    </div>
+                </div>
+
+                <div class="bg-white/10 px-8 py-10 md:px-14 md:py-14 rounded-[3rem] shadow-2xl mb-12 inline-block max-w-5xl border border-white/20 backdrop-blur-xl">
+                    <h1 class="text-2xl md:text-3xl font-bold mb-6 text-gold-500 tracking-[0.2em] uppercase drop-shadow-md">
+                        THUYẾT MINH SÁNG KIẾN
+                    </h1>
+                    <h2 class="text-3xl md:text-5xl font-black uppercase leading-tight tracking-tight text-white drop-shadow-lg">
+                        Xây dựng cơ sở dữ liệu lớn phục vụ huấn luyện và nghiên cứu Khoa học tại Học viện Hậu cần
+                    </h2>
+                </div>
+
+                <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 text-left mt-8 border-t border-white/20 pt-10">
+                    <div class="bg-black/20 p-6 rounded-2xl backdrop-blur-sm border border-white/10">
+                        <p class="text-xs font-bold text-apple-blue uppercase tracking-widest mb-2">Đơn vị chủ trì:</p>
+                        <p class="text-lg font-bold uppercase text-white">Viện NCKH Hậu cần Quân sự</p>
+                    </div>
+                    <div class="bg-black/20 p-6 rounded-2xl backdrop-blur-sm border border-white/10">
+                        <p class="text-xs font-bold text-apple-blue uppercase tracking-widest mb-2">Chủ nhiệm sáng kiến:</p>
+                        <p class="text-xl font-bold text-white">Trung tá, TS. Nguyễn Đức Tú</p>
+                    </div>
+                </div>
+
+                <p class="mt-20 text-sm font-bold tracking-[0.6em] text-slate-400 uppercase">Hà Nội, Năm 2026</p>
+            </div>
+            
+            <a href="#sec-1" class="mt-12 flex flex-col items-center space-y-3 opacity-80 hover:opacity-100 hover:text-apple-blue transition-all text-white group">
+                <span class="text-xs font-bold uppercase tracking-widest group-hover:text-apple-blue">Tiến vào Báo cáo</span>
+                <i class="fas fa-chevron-down text-2xl animate-bounce mt-1"></i>
+            </a>
+        </section>
+
+        <!-- STICKY HEADER -->
+        <header id="sticky-header" class="sticky top-0 z-40 glass-header bg-white/80 dark:bg-slate-900/80 px-8 py-4 flex justify-between items-center hidden shadow-sm border-b border-slate-200 dark:border-slate-800">
+            <div class="flex items-center space-x-4">
+                <img src="https://upload.wikimedia.org/wikipedia/vi/2/22/Hoc_vien_Hau_can_Logo.png" alt="Logo HVHC" class="w-10 h-10 object-contain">
+                <h2 id="header-section-title" class="text-sm font-bold text-slate-800 dark:text-white uppercase tracking-widest">I. Bối cảnh & Cấp thiết</h2>
+            </div>
+            <button id="btn-ai-advisor" class="bg-apple-navy text-white px-5 py-2.5 rounded-xl text-xs font-bold shadow-lg hover:bg-apple-blue transition-all flex items-center">
+                <i class="fas fa-robot mr-2 text-white text-base"></i> HỎI ĐÁP AI
+            </button>
+        </header>
+
+        <!-- CONTENT SECTIONS -->
+        <div class="p-8 md:p-14 max-w-[1400px] mx-auto space-y-32 pb-64">
+
+            <!-- PHẦN I: TỔNG QUAN -->
+            <section id="sec-1" class="scroll-mt-24 space-y-16">
+                <div class="border-l-8 border-apple-blue pl-6">
+                    <span class="text-apple-blue font-bold uppercase tracking-[0.2em] text-xs">Phần I</span>
+                    <h3 class="text-4xl md:text-5xl font-black text-slate-900 dark:text-white mt-2 tracking-tight">Bối Cảnh Chiến Lược & Sự Cần Thiết</h3>
+                </div>
+
+                <div id="sec-1-1" class="space-y-6">
+                    <h4 class="text-2xl font-bold text-slate-800 dark:text-slate-100 flex items-center"><span class="w-8 h-8 rounded-lg bg-apple-blue text-white flex items-center justify-center mr-4 text-sm">1.1</span> Thực trạng "Ốc đảo dữ liệu"</h4>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-stretch">
+                        <div class="text-lg text-slate-600 dark:text-slate-400 font-medium">
+                            <p>Thực hiện <strong>Nghị quyết số 3488-NQ/QUTW</strong> của Quân ủy Trung ương, việc phát triển dữ liệu lớn (Big Data) và trí tuệ nhân tạo (AI) đã trở thành động lực cốt lõi để xây dựng Quân đội tinh, gọn, mạnh.</p>
+                            <p>Tuy nhiên, tại Học viện Hậu cần, dữ liệu huấn luyện và NCKH đang bị <strong>phân tán rời rạc</strong>. Các Khoa, Ban quản lý cục bộ qua Excel, Word. Hệ quả là tra cứu chéo mất hàng giờ, dễ sai sót và hoàn toàn thiếu "nhiên liệu sạch" để triển khai các hệ thống AI điều hành.</p>
+                        </div>
+                        <div class="bento-card bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 shadow-apple flex flex-col justify-center items-center text-center p-8">
+                            <div class="w-20 h-20 bg-rose-50 dark:bg-rose-900/30 text-rose-500 rounded-[1.5rem] flex items-center justify-center text-3xl mb-6"><i class="fas fa-exclamation-triangle"></i></div>
+                            <h5 class="font-bold text-slate-800 dark:text-white text-xl mb-3">Điểm nghẽn hiện tại</h5>
+                            <p class="text-slate-500 dark:text-slate-400 text-base">Dữ liệu chia cắt 17 phòng ban.<br>Tổng hợp báo cáo thủ công mất 3-5 ngày.<br>Nguy cơ mất an toàn thông tin cao.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="sec-1-2" class="space-y-6">
+                    <h4 class="text-2xl font-bold text-slate-800 dark:text-slate-100 flex items-center"><span class="w-8 h-8 rounded-lg bg-apple-blue text-white flex items-center justify-center mr-4 text-sm">1.2</span> Mục tiêu Chuyển đổi số</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="bento-card bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 shadow-sm p-8 border-t-4 border-t-apple-blue">
+                            <i class="fas fa-database text-3xl text-apple-blue mb-6 block"></i>
+                            <h5 class="font-bold text-slate-800 dark:text-white text-xl mb-3">Giải pháp HVHC BigData</h5>
+                            <p class="text-slate-600 dark:text-slate-400 text-base leading-relaxed">Thiết kế 88 Use Cases liên thông 17 Module. Tạo ra Hồ dữ liệu (Data Lake) tập trung, giảm thời gian tra cứu từ 60 phút xuống dưới 5 giây.</p>
+                        </div>
+                        <div class="bento-card bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 shadow-sm p-8 border-t-4 border-t-emerald-500">
+                            <i class="fas fa-building-columns text-3xl text-emerald-500 mb-6 block"></i>
+                            <h5 class="font-bold text-slate-800 dark:text-white text-xl mb-3">Mục tiêu Chiến lược</h5>
+                            <p class="text-slate-600 dark:text-slate-400 text-base leading-relaxed">Hoàn thiện mô hình "Nhà trường thông minh". Cung cấp dữ liệu Real-time hỗ trợ Ban Giám đốc ra quyết định điều hành (Data-driven Command).</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PHẦN II: HẠ TẦNG NỀN TẢNG (CORE) -->
+            <section id="sec-2" class="scroll-mt-24 space-y-16">
+                <div class="border-l-8 border-apple-blue pl-6">
+                    <span class="text-apple-blue font-bold uppercase tracking-[0.2em] text-xs">Phần II</span>
+                    <h3 class="text-4xl md:text-5xl font-black text-slate-900 dark:text-white mt-2 tracking-tight">Hạ Tầng Cơ Sở Dữ Liệu Lõi (Core)</h3>
+                </div>
+                
+                <div id="sec-2-1" class="space-y-6">
+                    <h4 class="text-2xl font-bold text-slate-800 dark:text-slate-100 flex items-center"><span class="w-8 h-8 rounded-lg bg-apple-blue text-white flex items-center justify-center mr-4 text-sm">2.1</span> Kiến trúc Big Data 4 Lớp</h4>
+                    <p class="text-lg text-slate-600 dark:text-slate-400 font-medium">Sáng kiến ứng dụng Kiến trúc Dữ liệu Lớn 4 Lớp (Layered Architecture) đảm bảo khả năng mở rộng hàng Petabyte:</p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 text-center"><i class="fas fa-download text-2xl text-slate-400 mb-3 block"></i><h5 class="font-bold dark:text-white">1. Thu thập</h5><p class="text-xs text-slate-500 mt-2">Đa phương thức</p></div>
+                        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 text-center"><i class="fas fa-server text-2xl text-apple-blue mb-3 block"></i><h5 class="font-bold dark:text-white">2. Lưu trữ</h5><p class="text-xs text-slate-500 mt-2">MinIO & PostgreSQL</p></div>
+                        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 text-center"><i class="fas fa-cogs text-2xl text-emerald-500 mb-3 block"></i><h5 class="font-bold dark:text-white">3. Xử lý</h5><p class="text-xs text-slate-500 mt-2">ETL Apache Airflow</p></div>
+                        <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 text-center"><i class="fas fa-laptop-code text-2xl text-gold-500 mb-3 block"></i><h5 class="font-bold dark:text-white">4. Phục vụ</h5><p class="text-xs text-slate-500 mt-2">305 API Endpoints</p></div>
+                    </div>
+                </div>
+
+                <div id="sec-2-2" class="space-y-6">
+                    <h4 class="text-2xl font-bold text-slate-800 dark:text-slate-100 flex items-center"><span class="w-8 h-8 rounded-lg bg-apple-blue text-white flex items-center justify-center mr-4 text-sm">2.2</span> 5 Module Nền tảng (Hệ điều hành dữ liệu)</h4>
+                    <p class="text-lg text-slate-600 dark:text-slate-400 font-medium">Áp dụng triết lý <em>"Xây dựng hạ tầng trước, nghiệp vụ sau"</em>, 5 module lõi cung cấp chuẩn an ninh, định danh và báo cáo cho toàn bộ các phân hệ nghiệp vụ.</p>
+                    <div class="bento-card overflow-hidden flex flex-col md:flex-row h-[550px] bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 shadow-apple">
+                        <div class="w-full md:w-1/3 bg-slate-50 dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 p-4 overflow-y-auto custom-scrollbar" id="core-module-list"></div>
+                        <div class="w-full md:w-2/3 p-8 md:p-12 relative flex flex-col justify-center overflow-y-auto custom-scrollbar" id="core-module-detail"></div>
+                    </div>
+                </div>
+
+                <div id="sec-2-3" class="space-y-6">
+                    <h4 class="text-2xl font-bold text-slate-800 dark:text-slate-100 flex items-center"><span class="w-8 h-8 rounded-lg bg-apple-blue text-white flex items-center justify-center mr-4 text-sm">2.3</span> Đột phá Bảo mật: Function-based RBAC</h4>
+                    <div class="bg-apple-navy rounded-3xl p-10 text-white shadow-xl grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+                        <div>
+                            <p class="text-lg text-slate-300 leading-relaxed mb-6">Thay vì phân quyền theo Role cứng nhắc, hệ thống phân quyền động dựa trên 88+ mã chức năng kết hợp <strong>Kiểm soát phạm vi (Scope) 4 cấp độ</strong>. Đảm bảo Chỉ huy Khoa chỉ được xuất dữ liệu của Khoa mình.</p>
+                            <ul class="space-y-3 font-medium">
+                                <li><i class="fas fa-lock text-emerald-400 mr-3"></i> Xác thực đa yếu tố MFA/OTP chuẩn quân sự.</li>
+                                <li><i class="fas fa-history text-emerald-400 mr-3"></i> Audit Trail lưu vết vĩnh viễn mọi hành vi truy cập.</li>
+                            </ul>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-white/10 p-4 rounded-xl text-center border border-white/20"><p class="font-bold text-sm">INDIVIDUAL</p><p class="text-[10px] text-slate-400 mt-1">Cá nhân</p></div>
+                            <div class="bg-white/10 p-4 rounded-xl text-center border border-white/20"><p class="font-bold text-sm">UNIT</p><p class="text-[10px] text-slate-400 mt-1">Khoa/Ban</p></div>
+                            <div class="bg-white/10 p-4 rounded-xl text-center border border-white/20"><p class="font-bold text-sm">DEPARTMENT</p><p class="text-[10px] text-slate-400 mt-1">Phòng/Hệ</p></div>
+                            <div class="bg-white/10 p-4 rounded-xl text-center border border-white/20"><p class="font-bold text-sm">ACADEMY</p><p class="text-[10px] text-slate-400 mt-1">Toàn Học viện</p></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PHẦN III: CSDL NGHIỆP VỤ -->
+            <section id="sec-3" class="scroll-mt-24 space-y-16">
+                <div class="border-l-8 border-apple-blue pl-6">
+                    <span class="text-apple-blue font-bold uppercase tracking-[0.2em] text-xs">Phần III</span>
+                    <h3 class="text-4xl md:text-5xl font-black text-slate-900 dark:text-white mt-2 tracking-tight">Hệ Sinh Thái 17 CSDL Nghiệp Vụ</h3>
+                </div>
+
+                <div id="sec-3-1" class="space-y-6">
+                    <h4 class="text-2xl font-bold text-slate-800 dark:text-slate-100 flex items-center"><span class="w-8 h-8 rounded-lg bg-apple-blue text-white flex items-center justify-center mr-4 text-sm">3.1</span> Tổng quan các Phân hệ Chuyên ngành</h4>
+                    <p class="text-lg text-slate-600 dark:text-slate-400 font-medium">Dựa trên nền tảng Core, các CSDL được "may đo" theo yêu cầu của từng cơ quan (Đào tạo, NCKH, Đảng, Chính sách). Toàn bộ dữ liệu đều hội tụ về một trục.</p>
+                    <div class="bento-card overflow-hidden flex flex-col md:flex-row h-[550px] bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 shadow-apple">
+                        <div class="w-full md:w-1/3 bg-slate-50 dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 p-4 overflow-y-auto custom-scrollbar" id="biz-module-list"></div>
+                        <div class="w-full md:w-2/3 p-8 md:p-12 relative flex flex-col justify-start overflow-y-auto custom-scrollbar" id="biz-module-detail"></div>
+                    </div>
+                </div>
+
+                <div id="sec-3-2" class="space-y-6">
+                    <h4 class="text-2xl font-bold text-slate-800 dark:text-slate-100 flex items-center"><span class="w-8 h-8 rounded-lg bg-apple-blue text-white flex items-center justify-center mr-4 text-sm">3.2</span> Tính năng Độc đáo: Quản lý Cán bộ 360°</h4>
+                    <div class="bg-gradient-to-r from-blue-600 to-apple-blue rounded-[2.5rem] p-10 md:p-14 text-white shadow-xl flex flex-col md:flex-row items-center gap-12 relative overflow-hidden">
+                        <i class="fas fa-street-view absolute -right-10 -bottom-10 text-[18rem] opacity-10"></i>
+                        <div class="flex-1 relative z-10">
+                            <h5 class="text-3xl font-black mb-6 leading-tight">Chân Dung Sĩ Quan <br>Toàn Diện 360°</h5>
+                            <p class="text-lg text-blue-50 font-medium leading-relaxed">
+                                Hồ sơ gốc (M02) tự động "hút" kết quả từ: Đảng phí (M03), Khen thưởng (M05), Tải giảng (M07), Đề tài NCKH (M09). <strong>Một click để thấy toàn bộ năng lực của sĩ quan mà không cần gọi điện hỏi từng phòng ban.</strong>
+                            </p>
+                        </div>
+                        <div class="flex flex-col gap-4 relative z-10 w-full md:w-64">
+                            <div class="bg-white/20 p-5 rounded-2xl text-center backdrop-blur-md border border-white/20 shadow-lg">
+                                <i class="fas fa-link text-3xl mb-2 text-white"></i><p class="font-bold">100% Liên thông</p>
+                            </div>
+                            <div class="bg-white/20 p-5 rounded-2xl text-center backdrop-blur-md border border-white/20 shadow-lg">
+                                <i class="fas fa-bolt text-3xl mb-2 text-emerald-400"></i><p class="font-bold">Real-time Sync</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PHẦN IV: CHUYÊN ĐỀ & AI -->
+            <section id="sec-4" class="scroll-mt-24 space-y-16">
+                <div class="border-l-8 border-emerald-500 pl-6">
+                    <span class="text-emerald-600 font-bold uppercase tracking-[0.2em] text-xs">Phần IV</span>
+                    <h3 class="text-4xl md:text-5xl font-black text-slate-900 dark:text-white mt-2 tracking-tight">Chuyên Đề Huấn Luyện, NCKH & AI</h3>
+                </div>
+
+                <div id="sec-4-1" class="space-y-6">
+                    <h4 class="text-2xl font-bold text-slate-800 dark:text-slate-100 flex items-center"><span class="w-8 h-8 rounded-lg bg-emerald-500 text-white flex items-center justify-center mr-4 text-sm">4.1</span> Phân tích chuyên sâu Đào tạo (M10) & NCKH (M09)</h4>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div class="bento-card bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 shadow-sm p-8 border-t-4 border-t-emerald-500 hover:shadow-lg">
+                            <div class="flex items-center space-x-4 mb-6">
+                                <div class="w-12 h-12 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 rounded-xl flex items-center justify-center text-2xl"><i class="fas fa-graduation-cap"></i></div>
+                                <div><h5 class="text-xl font-bold dark:text-white">Đào tạo (M10)</h5><p class="text-xs text-slate-500">12 Use Cases - Rule Engine</p></div>
+                            </div>
+                            <ul class="space-y-4 text-slate-600 dark:text-slate-400 text-sm font-medium">
+                                <li class="flex"><i class="fas fa-check text-emerald-500 mt-1 mr-3 text-lg"></i> <strong>Academic Warning:</strong> Ứng dụng Machine Learning phân tích lịch sử điểm để dự báo nguy cơ tụt hậu GPA, xếp loại cảnh báo từ giữa kỳ.</li>
+                                <li class="flex"><i class="fas fa-check text-emerald-500 mt-1 mr-3 text-lg"></i> <strong>Conflict & Rule Engine:</strong> Phát hiện 100% xung đột phòng học. Tự động duyệt danh sách tốt nghiệp đối chiếu chuẩn đầu ra.</li>
+                            </ul>
+                        </div>
+
+                        <div class="bento-card bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 shadow-sm p-8 border-t-4 border-t-gold-500 hover:shadow-lg">
+                            <div class="flex items-center space-x-4 mb-6">
+                                <div class="w-12 h-12 bg-gold-50 dark:bg-gold-900/30 text-gold-600 rounded-xl flex items-center justify-center text-2xl"><i class="fas fa-flask"></i></div>
+                                <div><h5 class="text-xl font-bold dark:text-white">NCKH (M09)</h5><p class="text-xs text-slate-500">78+ Đề tài - Quản trị tri thức</p></div>
+                            </div>
+                            <ul class="space-y-4 text-slate-600 dark:text-slate-400 text-sm font-medium">
+                                <li class="flex"><i class="fas fa-check text-gold-500 mt-1 mr-3 text-lg"></i> <strong>Similarity AI (NLP):</strong> Chống lãng phí ngân sách. AI phân tích ngữ nghĩa Semantic Search, phát hiện trùng lặp ý tưởng >90%.</li>
+                                <li class="flex"><i class="fas fa-check text-gold-500 mt-1 mr-3 text-lg"></i> <strong>Scientist CV:</strong> Hồ sơ nhà khoa học điện tử tự động cập nhật thành tích và tính toán chỉ số H-index hàng quý.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="sec-4-2" class="space-y-6 mt-12">
+                    <h4 class="text-2xl font-bold text-slate-800 dark:text-slate-100 flex items-center"><span class="w-8 h-8 rounded-lg bg-emerald-500 text-white flex items-center justify-center mr-4 text-sm">4.2</span> Trí tuệ Chỉ huy Dashboard</h4>
+                    <div class="bento-card bg-white dark:bg-slate-800 p-10 flex flex-col lg:flex-row items-center gap-10 border border-slate-200 dark:border-slate-700 shadow-sm">
+                        <div class="flex-1 space-y-6">
+                            <h5 class="text-2xl font-black text-slate-800 dark:text-white">Dashboard Điều Hành (M11)</h5>
+                            <p class="text-lg text-slate-600 dark:text-slate-400">Cung cấp <strong>41 Widgets trực quan</strong> cho Ban Giám đốc. Ứng dụng kỹ thuật Truy vấn Song song (Parallel Query) & Redis Cache giúp biểu đồ cập nhật <strong>tự động mỗi 30 giây</strong> không độ trễ.</p>
+                            <p class="text-slate-500 text-sm font-bold uppercase tracking-widest"><i class="fas fa-mobile-screen mr-2 text-apple-blue"></i> Tích hợp AI Advisor (M15) tra cứu bằng Tiếng Việt.</p>
+                        </div>
+                        <div class="w-full lg:w-[400px] h-[250px] rounded-2xl overflow-hidden shadow-inner border border-slate-200 dark:border-slate-700">
+                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80" alt="Dashboard" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LIVE AI LAB -->
+                <div id="sec-4-3" class="mt-16">
+                    <div class="bg-gradient-to-br from-slate-900 to-military-900 text-white rounded-[3rem] p-10 md:p-14 shadow-2xl relative overflow-hidden border border-slate-700">
+                        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/20 rounded-full blur-[100px]"></div>
+                        <div class="relative z-10">
+                            <div class="flex items-center space-x-6 mb-10">
+                                <div class="w-20 h-20 bg-white/10 rounded-3xl flex items-center justify-center text-4xl shadow-inner border border-white/20 backdrop-blur-md"><i class="fas fa-microchip text-emerald-400"></i></div>
+                                <div>
+                                    <h4 class="text-3xl md:text-4xl font-black mb-2 tracking-tight uppercase">Live AI Testing Lab</h4>
+                                    <p class="text-slate-300 font-medium text-sm md:text-base">Trung tâm mô phỏng thuật toán AI Gemini API tích hợp trong Sáng kiến Học viện Hậu cần.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex flex-wrap gap-3 mb-8 border-b border-white/20 pb-6">
+                                <button id="tab-ai-m09" class="px-6 py-3 rounded-full bg-emerald-500 text-white font-bold text-sm transition-all shadow-lg shadow-emerald-500/40">✨ M09: Kiểm tra Tính mới Đề tài</button>
+                                <button id="tab-ai-m10" class="px-6 py-3 rounded-full bg-white/10 text-slate-300 font-bold text-sm hover:bg-white/20 transition-all border border-white/10">✨ M10: Phân tích Học tập</button>
+                                <button id="tab-ai-m17" class="px-6 py-3 rounded-full bg-white/10 text-slate-300 font-bold text-sm hover:bg-white/20 transition-all border border-white/10">✨ M17: Dự báo Bảo trì</button>
+                            </div>
+
+                            <div class="space-y-6 bg-black/30 p-8 rounded-3xl border border-white/10 backdrop-blur-sm">
+                                <label id="ai-lab-label" class="block text-sm font-bold text-emerald-400 uppercase tracking-[0.2em]">Nhập Tóm tắt Đề tài Nghiên cứu:</label>
+                                <textarea id="ai-lab-input" rows="3" class="w-full bg-white/5 border border-white/20 rounded-2xl p-5 text-white placeholder-slate-400 focus:outline-none focus:border-emerald-400 transition-colors font-medium resize-none text-base md:text-lg" placeholder="Ví dụ: Nghiên cứu ứng dụng công nghệ Blockchain và AI trong quản lý kho đạn dược tại Học viện Hậu cần..."></textarea>
+                                
+                                <button id="btn-run-ai-lab" class="bg-apple-blue hover:bg-blue-600 text-white font-bold py-4 px-10 rounded-2xl transition-all shadow-xl shadow-blue-500/30 flex items-center tracking-widest text-sm uppercase">
+                                    <i class="fas fa-bolt mr-3 text-gold-400"></i> Phân tích Dữ liệu bằng AI
+                                </button>
+                            </div>
+
+                            <div id="ai-lab-output-container" class="mt-8 bg-white/10 rounded-[2rem] p-8 md:p-10 border border-white/20 hidden backdrop-blur-xl animate-in zoom-in-95 duration-300">
+                                <div id="ai-lab-loading" class="hidden flex flex-col items-center justify-center space-y-4 py-8">
+                                    <i class="fas fa-atom fa-spin text-5xl text-emerald-400"></i>
+                                    <p class="text-emerald-400 font-bold tracking-widest uppercase text-xs">AI Đang truy xuất Data Lake & Phân tích...</p>
+                                </div>
+                                <div id="ai-lab-result" class="prose-custom text-slate-100 leading-relaxed text-[16px]"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- PHẦN V: HIỆU QUẢ & LỘ TRÌNH -->
+            <section id="sec-5" class="scroll-mt-24 space-y-16">
+                <div class="border-l-8 border-gold-500 pl-6">
+                    <span class="text-gold-600 font-bold uppercase tracking-[0.2em] text-xs">Phần V</span>
+                    <h3 class="text-4xl md:text-5xl font-black text-slate-900 dark:text-white mt-2 tracking-tight">Tối Ưu Kinh Tế & Lộ Trình Triển Khai</h3>
+                </div>
+
+                <div id="sec-5-1" class="space-y-6">
+                    <h4 class="text-2xl font-bold text-slate-800 dark:text-slate-100 flex items-center"><span class="w-8 h-8 rounded-lg bg-gold-500 text-white flex items-center justify-center mr-4 text-sm">5.1</span> Phân tích Chi phí - Lợi ích (CBA)</h4>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-stretch">
+                        <!-- Dự toán -->
+                        <div class="bg-slate-900 dark:bg-slate-950 p-10 md:p-12 rounded-[2.5rem] text-white shadow-xl relative overflow-hidden flex flex-col justify-between">
+                            <div class="flex items-center space-x-5 mb-8 border-b border-white/10 pb-6">
+                                <div class="w-14 h-14 bg-white/10 rounded-2xl flex items-center justify-center text-2xl"><i class="fas fa-file-invoice-dollar text-gold-400"></i></div>
+                                <h5 class="text-2xl font-bold uppercase tracking-wider">Dự toán Đầu tư</h5>
+                            </div>
+                            <div class="space-y-6 flex-1">
+                                <div class="flex justify-between items-center bg-white/5 p-5 rounded-2xl border border-white/5">
+                                    <div><p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Phát triển phần mềm</p><p class="text-sm text-slate-300">2,8tr x 539 ngày công</p></div>
+                                    <p class="text-3xl font-black text-white">1,521 <span class="text-base font-normal opacity-50">Tr</span></p>
+                                </div>
+                                <div class="flex justify-between items-center bg-white/5 p-5 rounded-2xl border border-white/5">
+                                    <div><p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Dự phòng phí (40%)</p><p class="text-sm text-slate-300">Biến đổi & hạ tầng</p></div>
+                                    <p class="text-3xl font-black text-white">609 <span class="text-base font-normal opacity-50">Tr</span></p>
+                                </div>
+                            </div>
+                            <div class="pt-8 border-t border-white/10 mt-8 text-center">
+                                <p class="text-[10px] font-bold text-white/50 uppercase tracking-[0.3em] mb-2">TỔNG QUYẾT TOÁN DỰ KIẾN</p>
+                                <p class="text-6xl font-black text-gold-400 leading-none">2,130</p>
+                            </div>
+                        </div>
+
+                        <!-- Hiệu quả -->
+                        <div class="bento-card bg-white dark:bg-slate-800 p-10 md:p-12 border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col justify-center space-y-8">
+                            <h5 class="font-black text-slate-800 dark:text-white text-2xl uppercase tracking-wider flex items-center border-b border-slate-100 dark:border-slate-700 pb-4"><i class="fas fa-chart-line text-emerald-500 mr-4 text-3xl"></i> Hiệu quả Tài chính (ROI)</h5>
+                            <div class="grid grid-cols-2 gap-6">
+                                <div class="p-6 bg-emerald-50 dark:bg-emerald-900/20 rounded-3xl border border-emerald-100 dark:border-emerald-800">
+                                    <p class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest mb-2">Tiết kiệm NSNN</p>
+                                    <p class="text-4xl font-black text-emerald-600 dark:text-emerald-400">739 <span class="text-base font-bold">Tr/năm</span></p>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-3 font-medium">Tối ưu giờ công hành chính và VPP.</p>
+                                </div>
+                                <div class="p-6 bg-blue-50 dark:bg-blue-900/20 rounded-3xl border border-blue-100 dark:border-blue-800">
+                                    <p class="text-[10px] font-bold text-apple-blue dark:text-blue-400 uppercase tracking-widest mb-2">Hoàn vốn dự án</p>
+                                    <p class="text-4xl font-black text-apple-blue dark:text-blue-400">5.7 <span class="text-base font-bold">Tháng</span></p>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-3 font-medium">ROI 108%. NPV 5 năm 3.89 tỷ đồng.</p>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 text-center">Phân bổ 539 Ngày công Core Modules</p>
+                                <div class="chart-container" style="height: 140px;"><canvas id="budgetChart"></canvas></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Bảng So sánh -->
+                    <div class="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden mt-8">
+                        <div class="overflow-x-auto">
+                            <table class="hvhc-table w-full min-w-[700px] text-slate-800 dark:text-slate-200">
+                                <thead>
+                                    <tr>
+                                        <th class="w-1/3 bg-slate-50 dark:bg-slate-900 dark:border-slate-700">Chỉ tiêu / Nghiệp vụ</th>
+                                        <th class="w-1/3 bg-rose-50/50 dark:bg-rose-900/20 text-rose-700 dark:text-rose-400 border-b-4 border-rose-500">Trước sáng kiến</th>
+                                        <th class="w-1/3 bg-emerald-50/50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 border-b-4 border-emerald-500">Sau sáng kiến (Big Data)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="dark:border-slate-700 dark:hover:bg-slate-700/50">
+                                        <td class="font-bold">Tra cứu hồ sơ 360°</td>
+                                        <td class="font-medium"><i class="fas fa-times-circle mr-2 opacity-50"></i> ~60 phút</td>
+                                        <td class="font-bold"><i class="fas fa-check-circle mr-2 opacity-70"></i> Dưới 5 giây</td>
+                                    </tr>
+                                    <tr class="dark:border-slate-700 dark:hover:bg-slate-700/50">
+                                        <td class="font-bold">Phát hiện trùng đề tài NCKH</td>
+                                        <td class="font-medium"><i class="fas fa-times-circle mr-2 opacity-50"></i> ~20% (Trí nhớ)</td>
+                                        <td class="font-bold"><i class="fas fa-check-circle mr-2 opacity-70"></i> >90% (NLP AI)</td>
+                                    </tr>
+                                    <tr class="dark:border-slate-700 dark:hover:bg-slate-700/50">
+                                        <td class="font-bold">Xuất báo cáo định kỳ (22 Mẫu)</td>
+                                        <td class="font-medium"><i class="fas fa-times-circle mr-2 opacity-50"></i> 3 - 5 ngày</td>
+                                        <td class="font-bold"><i class="fas fa-check-circle mr-2 opacity-70"></i> Batch Export < 3 phút</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="sec-5-2" class="space-y-6 mt-16">
+                    <h4 class="text-2xl font-bold text-slate-800 dark:text-slate-100 flex items-center"><span class="w-8 h-8 rounded-lg bg-gold-500 text-white flex items-center justify-center mr-4 text-sm">5.2</span> Khả năng Ứng dụng & Lộ trình Triển khai</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="bg-white dark:bg-slate-800 p-8 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm text-center hover:-translate-y-2 transition-transform">
+                            <div class="w-14 h-14 bg-apple-blue text-white rounded-full flex items-center justify-center text-xl font-black mx-auto mb-4">1</div>
+                            <h5 class="text-lg font-bold text-slate-800 dark:text-white mb-2">Thí điểm & Core (2026)</h5>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Triển khai 5 Module Nền tảng (M01-M19) và CSDL Đào tạo, NCKH.</p>
+                            <span class="inline-block px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-[10px] font-bold rounded-full">Kinh phí: ~600 Tr</span>
+                        </div>
+                        <div class="bg-white dark:bg-slate-800 p-8 rounded-3xl border border-emerald-500 shadow-md text-center hover:-translate-y-2 transition-transform scale-105">
+                            <div class="w-14 h-14 bg-emerald-500 text-white rounded-full flex items-center justify-center text-xl font-black mx-auto mb-4">2</div>
+                            <h5 class="text-lg font-bold text-slate-800 dark:text-white mb-2">Triển khai Toàn diện</h5>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Mở rộng 17 Module CSDL. Kiến nghị nâng cấp thành <strong>Dự án đầu tư CNTT chính thức</strong>.</p>
+                            <span class="inline-block px-3 py-1 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold rounded-full">Dự án cấp Học viện</span>
+                        </div>
+                        <div class="bg-white dark:bg-slate-800 p-8 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm text-center hover:-translate-y-2 transition-transform opacity-90">
+                            <div class="w-14 h-14 bg-slate-300 dark:bg-slate-600 text-white rounded-full flex items-center justify-center text-xl font-black mx-auto mb-4">3</div>
+                            <h5 class="text-lg font-bold text-slate-800 dark:text-white mb-2">Nhân rộng (2028+)</h5>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Chia sẻ mã nguồn nhân rộng CSDL dùng chung Toàn quân, nâng cấp AI.</p>
+                            <span class="inline-block px-3 py-1 bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300 text-[10px] font-bold rounded-full">CĐS Quốc phòng</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="pt-10 pb-10 text-center border-t border-slate-200 dark:border-slate-800">
+                 <p class="text-sm font-bold tracking-[0.5em] text-slate-400 uppercase mb-2">Học viện Hậu cần - Năm 2026</p>
+                 <p class="text-xs text-slate-500 font-medium">Báo cáo Sáng kiến: Xây dựng CSDL lớn phục vụ huấn luyện và NCKH</p>
+            </footer>
+
+        </div>
+    </main>
+
+    <!-- AI CHATBOT INTERFACE -->
+    <div id="ai-chat-window" class="fixed bottom-24 right-8 w-[400px] bg-white dark:bg-slate-800 rounded-3xl shadow-apple-xl border border-slate-200 dark:border-slate-700 flex flex-col hidden z-[60] overflow-hidden transition-all duration-300">
+        <div class="bg-apple-navy p-5 text-white flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center text-lg"><i class="fas fa-robot text-apple-blue"></i></div>
+                <div><p class="text-sm font-bold uppercase tracking-wider">Cố vấn AI</p><p class="text-[9px] text-slate-300 uppercase tracking-widest mt-0.5">Dữ liệu nội bộ</p></div>
+            </div>
+            <button id="close-chat" class="text-slate-400 hover:text-white transition-colors w-8 h-8 rounded-full hover:bg-white/10"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="chat-messages" class="flex-1 overflow-y-auto p-6 flex flex-col bg-slate-50 dark:bg-slate-900 space-y-4 min-h-[350px] max-h-[500px] custom-scrollbar">
+            <div class="chat-bubble chat-ai font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 shadow-sm text-sm">
+                <p><strong>Xin chào Thủ trưởng!</strong> Tôi đã được cấp quyền truy cập toàn bộ hồ sơ thiết kế và dự toán Sáng kiến. Thủ trưởng cần tôi phản biện nội dung nào để bảo vệ dự án ạ?</p>
+            </div>
+        </div>
+        <div id="chat-loading" class="px-6 py-2 hidden"><p class="text-[10px] text-apple-blue font-bold uppercase tracking-widest animate-pulse"><i class="fas fa-spinner fa-spin mr-1"></i> AI đang phân tích...</p></div>
+        
+        <div id="chat-quick-actions" class="px-5 py-2 flex gap-2 overflow-x-auto custom-scrollbar bg-white dark:bg-slate-800 border-t border-slate-100 dark:border-slate-700">
+            <button class="quick-action-btn whitespace-nowrap bg-blue-50 dark:bg-blue-900/30 text-apple-blue dark:text-blue-400 border border-blue-200 dark:border-blue-800 px-3 py-1.5 rounded-full text-xs font-bold hover:bg-apple-blue hover:text-white transition-colors">Tính mới M09</button>
+            <button class="quick-action-btn whitespace-nowrap bg-blue-50 dark:bg-blue-900/30 text-apple-blue dark:text-blue-400 border border-blue-200 dark:border-blue-800 px-3 py-1.5 rounded-full text-xs font-bold hover:bg-apple-blue hover:text-white transition-colors">Bảo mật M01</button>
+            <button class="quick-action-btn whitespace-nowrap bg-blue-50 dark:bg-blue-900/30 text-apple-blue dark:text-blue-400 border border-blue-200 dark:border-blue-800 px-3 py-1.5 rounded-full text-xs font-bold hover:bg-apple-blue hover:text-white transition-colors">Dự toán</button>
+        </div>
+
+        <div class="p-4 bg-white dark:bg-slate-800 flex space-x-2">
+            <input type="text" id="chat-input" placeholder="Hỏi AI..." class="flex-1 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-full px-4 py-2.5 text-sm outline-none focus:border-apple-blue dark:text-white font-medium text-slate-800">
+            <button id="send-chat" class="w-10 h-10 bg-apple-blue text-white rounded-full flex items-center justify-center shadow hover:bg-blue-600 transition-colors"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <!-- AI TRIGGER -->
+    <button id="trigger-chat" class="fixed bottom-8 right-8 w-14 h-14 bg-apple-navy text-white rounded-full shadow-apple-xl z-[60] flex items-center justify-center text-2xl hover:scale-105 active:scale-95 transition-all border border-white/10">
+        <i class="fas fa-comment-dots"></i>
+    </button>
+
+    <script>
+        // --- DATA & CONFIG ---
+        let apiKey = localStorage.getItem('gemini_api_key_hvhc') || "";
+        const model = "gemini-2.5-flash-preview-09-2025";
+        const ttsModel = "gemini-2.5-flash-preview-tts";
+
+        // Dark Mode Logic
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        themeToggle.onclick = () => {
+            html.classList.toggle('dark');
+            const isDark = html.classList.contains('dark');
+            themeToggle.innerHTML = isDark ? '<i class="fas fa-sun text-gold-400"></i>' : '<i class="fas fa-moon"></i>';
+        };
+
+        // API Key Modal
+        function openApiModal() {
+            const modal = document.getElementById('api-modal');
+            const modalContent = document.getElementById('api-modal-content');
+            document.getElementById('api-key-input').value = apiKey;
+            modal.classList.remove('hidden');
+            setTimeout(() => { modal.classList.remove('opacity-0'); modalContent.classList.remove('scale-95'); }, 10);
+        }
+        function closeApiModal() {
+            const modal = document.getElementById('api-modal');
+            const modalContent = document.getElementById('api-modal-content');
+            modal.classList.add('opacity-0'); modalContent.classList.add('scale-95');
+            setTimeout(() => { modal.classList.add('hidden'); }, 300);
+        }
+        document.getElementById('btn-open-settings').addEventListener('click', openApiModal);
+        document.getElementById('btn-close-modal').addEventListener('click', closeApiModal);
+        document.getElementById('btn-save-key').addEventListener('click', () => {
+            apiKey = document.getElementById('api-key-input').value.trim();
+            localStorage.setItem('gemini_api_key_hvhc', apiKey);
+            closeApiModal();
+            alert("Đã lưu Cấu hình API Key thành công!");
+        });
+
+        // Module Data
+        const coreModulesData = [
+            { id: "M01", icon: "fa-shield-halved", title: "Bảo mật & RBAC", color: "slate-800", desc: "Gatekeeper của hệ thống. Chuyển đổi mô hình phân quyền sang Function-based RBAC 4 cấp độ.", feats: ["Xác thực MFA/OTP chuẩn quân sự", "Audit Trail vĩnh viễn", "Kiểm soát Scope tuyệt đối"] },
+            { id: "M02", icon: "fa-id-card", title: "Định danh Cán bộ", color: "blue-600", desc: "Identity Provider duy nhất. Số hóa hồ sơ 2A-LLDV của BQP cho 100% sĩ quan Học viện.", feats: ["Dữ liệu gốc cho 16 module còn lại", "Tra cứu full-text đa chiều", "Cảnh báo thăng hàm tự động"] },
+            { id: "M13", icon: "fa-project-diagram", title: "Workflow Engine", color: "emerald-600", desc: "Số hóa luồng phê duyệt văn bản nhiều cấp bằng kỹ thuật State Machine.", feats: ["Tích hợp chữ ký số PKI", "Thiết kế luồng linh hoạt", "Real-time Notifications"] },
+            { id: "M18", icon: "fa-file-invoice", title: "Template Engine", color: "amber-500", desc: "Đảm bảo Single Source of Truth cho báo cáo. Render tự động 22 mẫu BQP.", feats: ["Xuất Batch 500 hồ sơ < 3ph", "Hỗ trợ định dạng DOCX, PDF, XLSX"] },
+            { id: "M19", icon: "fa-sitemap", title: "Master Data (MDM)", color: "rose-500", desc: "Xương sống ngôn ngữ dữ liệu. Thống nhất 68 bảng danh mục chuẩn Học viện và BQP.", feats: ["Đồng bộ API Cục Quân lực", "Dữ liệu duy nhất (No Duplicate)", "Cache Redis siêu tốc"] }
+        ];
+
+        const bizModulesData = [
+            { id: "M10", icon: "fa-graduation-cap", title: "Huấn luyện Đào tạo", color: "emerald-600", desc: "Quản trị vòng đời người học & CTĐT. Quản lý 12 Use Cases phức tạp thay thế phần mềm LAN cũ.", feats: ["Academic Warning (Dự báo GPA)", "Graduation Rule Engine", "Conflict Detection xếp lịch"] },
+            { id: "M09", icon: "fa-flask", title: "Nghiên cứu Khoa học", color: "gold-600", desc: "Quản trị tri thức số. Quản lý 78+ đề tài và Hồ sơ Nhà khoa học điện tử (Scientist CV).", feats: ["Similarity AI chống trùng >90%", "Tự động tính H-index", "Đồng bộ >98% với Cục KHQS"] },
+            { id: "M03", icon: "fa-flag", title: "Công tác Đảng", color: "rose-600", desc: "Số hóa hồ sơ đảng viên và quy trình sinh hoạt chi bộ số.", feats: ["Quản lý 251+ đảng viên", "Thu đảng phí tự động", "Nhắc lịch kết nạp số"] },
+            { id: "M17", icon: "fa-truck-ramp-box", title: "Hậu cần 4.0", color: "blue-500", desc: "Quản lý vật tư, trang bị HCKT. Bước đầu ứng dụng công nghệ dự báo AI vào Hậu cần quân sự.", feats: ["Kiểm kê mã vạch/QR", "Bảo trì dự báo (Predictive AI)"] }
+        ];
+
+        function renderModuleExplorer(data, listId, detailId) {
+            const listEl = document.getElementById(listId);
+            const detailEl = document.getElementById(detailId);
+            listEl.innerHTML = "";
+            data.forEach(function(mod) {
+                const btn = document.createElement("button");
+                const colorPrefix = mod.color.split("-")[0];
+                btn.className = "module-btn w-full text-left px-5 py-4 rounded-xl text-sm transition-all flex items-center dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300 font-bold hover:border-apple-blue mb-2";
+                btn.innerHTML = "<i class='fas " + mod.icon + " w-8 text-center mr-2 text-" + mod.color + " text-lg'></i> <span class='truncate uppercase'>" + mod.id + ": " + mod.title + "</span>";
+                btn.onclick = function() {
+                    Array.from(listEl.children).forEach(function(b) { b.classList.remove("active"); });
+                    btn.classList.add("active");
+                    let featsHtml = "";
+                    mod.feats.forEach(function(f) { featsHtml += "<li class='flex items-start text-sm text-slate-700 dark:text-slate-300 font-medium'><i class='fas fa-check-circle text-" + colorPrefix + "-500 mt-1 mr-3'></i> <span>" + f + "</span></li>"; });
+                    detailEl.innerHTML = "<div class='animate-in fade-in slide-in-from-right-8 duration-500 h-full flex flex-col'><div class='flex items-center space-x-5 mb-6'><div class='w-16 h-16 rounded-2xl bg-" + colorPrefix + "-50 dark:bg-" + colorPrefix + "-900/30 text-" + mod.color + " flex items-center justify-center text-3xl border border-" + colorPrefix + "-100 dark:border-" + colorPrefix + "-800'><i class='fas " + mod.icon + "'></i></div><div><h4 class='text-xl font-black text-slate-800 dark:text-white uppercase tracking-tight mb-1'>" + mod.title + "</h4><span class='inline-block px-2 py-0.5 bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300 rounded text-[10px] font-bold uppercase tracking-widest border border-slate-200 dark:border-slate-600'>Phân hệ " + mod.id + "</span></div></div><p class='text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-6 font-medium italic border-l-4 border-" + colorPrefix + "-500 pl-4 bg-slate-50 dark:bg-slate-800/50 py-3 rounded-r-lg'>\"" + mod.desc + "\"</p><div class='flex-1'><p class='text-xs font-black text-slate-800 dark:text-white uppercase tracking-widest mb-4 border-b border-slate-100 dark:border-slate-700 pb-2'>Tính năng kỹ thuật</p><ul class='space-y-4'>" + featsHtml + "</ul></div></div>";
+                };
+                listEl.appendChild(btn);
+            });
+            if(listEl.firstChild) listEl.firstChild.click();
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            renderModuleExplorer(coreModulesData, "core-module-list", "core-module-detail");
+            renderModuleExplorer(bizModulesData, "biz-module-list", "biz-module-detail");
+
+            Chart.defaults.font.family = "'Inter', sans-serif";
+            Chart.defaults.color = "#86868b";
+
+            const ctxBudget = document.getElementById("budgetChart");
+            if(ctxBudget) {
+                new Chart(ctxBudget, { type: "bar", data: { labels: ["M01", "M02", "M18", "M19", "M10", "M09", "AI Core"], datasets: [{ label: "Ngày công", data: [61, 37, 66, 52, 53, 26, 48], backgroundColor: "#007aff", borderRadius: 6 }] }, options: { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false }, ticks: { font: { size: 10, weight: "bold" } } } } } });
+            }
+
+            const scrollContent = document.getElementById("scroll-content");
+            const navItems = document.querySelectorAll(".sidebar-item");
+            const stickyHeader = document.getElementById("sticky-header");
+
+            scrollContent.onscroll = function() {
+                if (scrollContent.scrollTop > 600) stickyHeader.classList.remove("hidden");
+                else stickyHeader.classList.add("hidden");
+                
+                let current = "";
+                document.querySelectorAll("section").forEach(function(sec) { if (scrollContent.scrollTop >= sec.offsetTop - 250) current = sec.id; });
+                navItems.forEach(function(item) { item.classList.toggle("active", item.dataset.target === current); });
+            };
+
+            // AI Chatbot
+            const chatWindow = document.getElementById("ai-chat-window");
+            const chatInput = document.getElementById("chat-input");
+            const chatMessages = document.getElementById("chat-messages");
+
+            document.getElementById('trigger-chat').onclick = () => chatWindow.classList.toggle("hidden");
+            document.getElementById('close-chat').onclick = () => chatWindow.classList.add("hidden");
+
+            const handleChat = async function(presetMsg = null) {
+                const msg = presetMsg || chatInput.value.trim();
+                if(!msg) return;
+                chatInput.value = "";
+                const uDiv = document.createElement("div"); uDiv.className = "chat-bubble chat-user text-sm"; uDiv.innerText = msg; chatMessages.appendChild(uDiv);
+                document.getElementById("chat-loading").classList.remove("hidden"); chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                const sys = "Bạn là AI bảo vệ sáng kiến 'Big Data HVHC'. Ngân sách: 2.13 tỷ. ROI 108%. Tiết kiệm 739tr/năm. Hoàn vốn 5.7 tháng. Nổi bật: M10(Cảnh báo học tập GPA), M09(AI NLP chống trùng đề tài >90%). Trả lời siêu ngắn gọn, chuyên nghiệp quân sự, format markdown dễ nhìn.";
+                
+                if (!apiKey) {
+                    document.getElementById("chat-loading").classList.add("hidden");
+                    openApiModal();
+                    return;
+                }
+
+                try {
+                    const url = "https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent?key=" + apiKey;
+                    const res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({contents: [{ parts: [{ text: msg }] }], systemInstruction: { parts: [{ text: sys }] }}) });
+                    const data = await res.json();
+                    let replyText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Lỗi xử lý AI.";
+                    
+                    // Simple Markdown parser
+                    replyText = replyText.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>").replace(/\n/g, "<br>").replace(/^- (.*)$/gm, "<li>$1</li>");
+                    
+                    document.getElementById("chat-loading").classList.add("hidden");
+                    const aDiv = document.createElement("div"); aDiv.className = "chat-bubble chat-ai bg-white dark:bg-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-700 text-sm shadow-sm"; aDiv.innerHTML = replyText; chatMessages.appendChild(aDiv);
+                } catch (e) {
+                    document.getElementById("chat-loading").classList.add("hidden");
+                    const eDiv = document.createElement("div"); eDiv.className = "chat-bubble chat-ai bg-rose-50 text-rose-600 text-sm"; eDiv.innerText = "Lỗi kết nối AI. Kiểm tra API Key."; chatMessages.appendChild(eDiv);
+                }
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            };
+
+            document.getElementById("send-chat").onclick = () => handleChat();
+            chatInput.onkeypress = e => { if(e.key === "Enter") handleChat(); };
+            document.querySelectorAll('.quick-action-btn').forEach(btn => { btn.onclick = function() { handleChat(this.innerText); } });
+
+            // AI Lab
+            const aiLabPrompts = {
+                "m09": { label: "Tóm tắt Đề tài:", ph: "Nghiên cứu ứng dụng Blockchain...", sys: "AI đánh giá tính mới đề tài NCKH (M09). Dưới 100 chữ." },
+                "m10": { label: "Dữ liệu Học tập:", ph: "Học viên A, GPA 2.2...", sys: "AI Cảnh báo Học thuật (M10). Đánh giá rủi ro. Dưới 100 chữ." },
+            };
+            let currentLabTab = "m09";
+            ["m09", "m10"].forEach(tab => {
+                const el = document.getElementById(`tab-ai-${tab}`);
+                if(el) {
+                    el.onclick = function() {
+                        currentLabTab = tab;
+                        ["m09", "m10"].forEach(t => document.getElementById(`tab-ai-${t}`).className = "px-6 py-3 rounded-xl bg-white/5 text-slate-400 font-bold text-sm border border-white/10");
+                        this.className = "px-6 py-3 rounded-xl bg-apple-blue text-white font-bold text-sm shadow-lg shadow-blue-500/40";
+                        document.getElementById("ai-lab-label").innerText = aiLabPrompts[tab].label;
+                        document.getElementById("ai-lab-input").placeholder = aiLabPrompts[tab].ph;
+                        document.getElementById("ai-lab-output-container").classList.add("hidden");
+                    };
+                }
+            });
+
+            const btnRunAiLab = document.getElementById("btn-run-ai-lab");
+            if(btnRunAiLab) {
+                btnRunAiLab.onclick = async function() {
+                    const query = document.getElementById("ai-lab-input").value.trim();
+                    if(!query) return;
+                    if(!apiKey) { openApiModal(); return; }
+                    document.getElementById("ai-lab-output-container").classList.remove("hidden");
+                    document.getElementById("ai-lab-loading").classList.remove("hidden");
+                    document.getElementById("ai-lab-result").innerHTML = "";
+                    
+                    try {
+                        const url = "https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent?key=" + apiKey;
+                        const res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({contents: [{ parts: [{ text: query }] }], systemInstruction: { parts: [{ text: aiLabPrompts[currentLabTab].sys }] }}) });
+                        const data = await res.json();
+                        let replyText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Lỗi xử lý.";
+                        replyText = replyText.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>").replace(/\n/g, "<br>");
+                        document.getElementById("ai-lab-loading").classList.add("hidden");
+                        document.getElementById("ai-lab-result").innerHTML = `<p>${replyText}</p>`;
+                    } catch (e) {
+                         document.getElementById("ai-lab-loading").classList.add("hidden");
+                         document.getElementById("ai-lab-result").innerHTML = "Lỗi kết nối API.";
+                    }
+                };
+            }
+
+            // TTS Auto-Presentation (Expanded Script)
+            let isPlaying = false;
+            let currentAudio = null;
+            const steps = [
+                { target: "sec-1", text: "Kính thưa Thủ trưởng và toàn thể Hội đồng. Tôi là Trung tá Nguyễn Đức Tú. Hôm nay, tôi xin báo cáo sáng kiến 'Xây dựng cơ sở dữ liệu lớn phục vụ huấn luyện và nghiên cứu khoa học'. Sáng kiến giải quyết triệt để tình trạng phân tán dữ liệu tại 17 phòng ban, xóa bỏ các ốc đảo dữ liệu gây lãng phí nguồn lực tri thức của Học viện." },
+                { target: "sec-2", text: "Về kiến trúc hạ tầng, chúng tôi tuân thủ triết lý 'Xây dựng hạ tầng trước, nghiệp vụ sau' thông qua 5 phân hệ lõi. Nổi bật là cơ chế bảo mật phân quyền động 4 cấp độ, đảm bảo an toàn tuyệt đối. Cùng với đó là Kho dữ liệu lưu trữ hỗn hợp quy mô lớn, cho khả năng mở rộng hàng Petabyte." },
+                { target: "sec-3", text: "Từ nền móng vững chắc đó, hệ sinh thái 17 phân hệ nghiệp vụ ra đời. Điểm nhấn đột phá là tính năng 'Quản lý cán bộ ba trăm sáu mươi độ', cho phép người chỉ huy nắm bắt tức thời toàn bộ hồ sơ sĩ quan liên thông từ đào tạo, đảng phí đến nghiên cứu khoa học mà không cần tổng hợp thủ công." },
+                { target: "sec-4", text: "Sáng kiến ứng dụng sâu rộng Trí tuệ nhân tạo. Phân hệ Đào tạo M mười sử dụng AI dự báo rủi ro học tập của học viên để cảnh báo sớm. Phân hệ Nghiên cứu khoa học M không chín ứng dụng Xử lý ngôn ngữ tự nhiên phát hiện chính xác trên 90 phần trăm các đề tài trùng lặp, chống thất thoát ngân sách đầu tư." },
+                { target: "sec-5", text: "Về hiệu quả kinh tế, với dự toán 2 phẩy 13 tỷ đồng, hệ thống giúp Học viện tiết kiệm 739 triệu đồng mỗi năm. Chỉ số sinh lời ROI đạt 108 phần trăm, thời gian hoàn vốn chỉ trong 5 phẩy 7 tháng. Giá trị hiện tại ròng NPV 5 năm đạt 3 phẩy 8 tỷ đồng. Kính đề nghị Hội đồng xem xét, phê duyệt lộ trình triển khai thành dự án. Xin trân trọng cảm ơn." }
+            ];
+            
+            document.getElementById("btn-tts-global").onclick = async function() {
+                const btn = document.getElementById("btn-tts-global");
+                if (!apiKey) { openApiModal(); return; }
+
+                if(isPlaying) { 
+                    isPlaying = false; 
+                    if(currentAudio) currentAudio.pause(); 
+                    btn.innerHTML = "<i class='fas fa-play-circle text-xl'></i><span id='tts-btn-text' class='tracking-wide'>THUYẾT MINH TOÀN VĂN</span>";
+                    return; 
+                }
+                
+                isPlaying = true;
+                for (let i = 0; i < steps.length; i++) {
+                    if (!isPlaying) break;
+                    document.getElementById(steps[i].target).scrollIntoView({ behavior: "smooth", block: "start" });
+                    document.getElementById("tts-btn-text").innerText = `ĐANG PHÁT ${i+1}/${steps.length} (DỪNG)`;
+                    
+                    try {
+                        const url = `https://generativelanguage.googleapis.com/v1beta/models/${ttsModel}:generateContent?key=${apiKey}`;
+                        const payload = { contents: [{ parts: [{ text: "Đọc dõng dạc, tự tin, tốc độ vừa phải giọng nam: " + steps[i].text }] }], generationConfig: { responseModalities: ["AUDIO"], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Puck" } } } } };
+                        const res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+                        if(!res.ok) throw new Error("TTS Fail");
+                        const data = await res.json();
+                        const pcmData = data.candidates[0].content.parts[0].inlineData.data;
+                        const pcmBuffer = Uint8Array.from(atob(pcmData), c => c.charCodeAt(0));
+                        const wavHeader = new ArrayBuffer(44); const view = new DataView(wavHeader);
+                        const writeS = (v, o, s) => { for(let j=0; j<s.length; j++) v.setUint8(o+j, s.charCodeAt(j)); };
+                        writeS(view, 0, "RIFF"); view.setUint32(4, 36 + pcmBuffer.length, true); writeS(view, 8, "WAVE");
+                        writeS(view, 12, "fmt "); view.setUint32(16, 16, true); view.setUint16(20, 1, true); view.setUint16(22, 1, true);
+                        view.setUint32(24, 24000, true); view.setUint32(28, 48000, true); view.setUint16(32, 2, true); view.setUint16(34, 16, true);
+                        writeS(view, 36, "data"); view.setUint32(40, pcmBuffer.length, true);
+                        currentAudio = new Audio(URL.createObjectURL(new Blob([wavHeader, pcmBuffer], { type: "audio/wav" })));
+                        await new Promise((resolve) => { currentAudio.onended = resolve; currentAudio.play(); });
+                    } catch (e) { 
+                        alert("Lỗi tải giọng đọc AI. Vui lòng kiểm tra API Key.");
+                        break; 
+                    }
+                    if (isPlaying && i < steps.length - 1) await new Promise(r => setTimeout(r, 1500));
+                }
+                isPlaying = false; 
+                btn.innerHTML = "<i class='fas fa-play-circle text-xl'></i><span id='tts-btn-text' class='tracking-wide'>THUYẾT MINH TOÀN VĂN</span>";
+            };
+        });
+    </script>
+</body>
+</html>

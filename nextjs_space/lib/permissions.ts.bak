@@ -1,0 +1,435 @@
+
+/**
+ * Permission System Utilities
+ * HVHC BigData Management System
+ */
+
+import { UserRole, PermissionModule, PermissionAction, PermissionScope } from '@prisma/client';
+import prisma from './db';
+
+// Permission types
+export interface Permission {
+  id: string;
+  code: string;
+  name: string;
+  description?: string;
+  module: PermissionModule;
+  action: PermissionAction;
+  scope: PermissionScope;
+  isActive: boolean;
+}
+
+export interface UserPermissions {
+  role: UserRole;
+  permissions: Permission[];
+  overrides: {
+    granted: Permission[];
+    revoked: string[]; // permission codes
+  };
+}
+
+/**
+ * Get all permissions for a specific role
+ */
+export async function getRolePermissions(role: UserRole): Promise<Permission[]> {
+  const rolePermissions = await prisma.rolePermission.findMany({
+    where: { role },
+    include: {
+      permission: true,
+    },
+  });
+
+  return rolePermissions
+    .filter(rp => rp.permission.isActive)
+    .map(rp => rp.permission as any as Permission);
+}
+
+/**
+ * Get user's complete permission set (role + overrides)
+ */
+export async function getUserPermissions(userId: string): Promise<UserPermissions> {
+  // Get user with role
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { role: true },
+  });
+
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  // Get role-based permissions
+  const rolePermissions = await getRolePermissions(user.role);
+
+  // Get user-specific overrides
+  const overrides = await prisma.userPermissionOverride.findMany({
+    where: {
+      userId,
+      OR: [
+        { expiresAt: null },
+        { expiresAt: { gt: new Date() } },
+      ],
+    },
+    include: {
+      permission: true,
+    },
+  });
+
+  const granted = overrides
+    .filter(o => o.isGranted && o.permission.isActive)
+    .map(o => o.permission as any as Permission);
+
+  const revoked = overrides
+    .filter(o => !o.isGranted)
+    .map(o => o.permission.code);
+
+  return {
+    role: user.role,
+    permissions: rolePermissions,
+    overrides: {
+      granted,
+      revoked,
+    },
+  };
+}
+
+/**
+ * Check if user has a specific permission
+ */
+export async function hasPermission(
+  userId: string,
+  permissionCode: string
+): Promise<boolean> {
+  const userPerms = await getUserPermissions(userId);
+
+  // Check if permission is revoked
+  if (userPerms.overrides.revoked.includes(permissionCode)) {
+    return false;
+  }
+
+  // Check if permission is granted via override
+  if (userPerms.overrides.granted.some(p => p.code === permissionCode)) {
+    return true;
+  }
+
+  // Check role-based permissions
+  return userPerms.permissions.some(p => p.code === permissionCode);
+}
+
+/**
+ * Check if user has permission with specific module and action
+ */
+export async function hasModulePermission(
+  userId: string,
+  module: PermissionModule,
+  action: PermissionAction,
+  scope?: PermissionScope
+): Promise<boolean> {
+  const userPerms = await getUserPermissions(userId);
+
+  // Get all active permissions (role + overrides - revoked)
+  const allPermissions = [
+    ...userPerms.permissions,
+    ...userPerms.overrides.granted,
+  ].filter(p => !userPerms.overrides.revoked.includes(p.code));
+
+  // Check for matching permission
+  return allPermissions.some(p => {
+    const moduleMatch = p.module === module;
+    const actionMatch = p.action === action;
+    const scopeMatch = scope ? p.scope === scope : true;
+
+    return moduleMatch && actionMatch && scopeMatch;
+  });
+}
+
+/**
+ * Get the highest scope level for a module/action combination
+ */
+export async function getPermissionScope(
+  userId: string,
+  module: PermissionModule,
+  action: PermissionAction
+): Promise<PermissionScope | null> {
+  const userPerms = await getUserPermissions(userId);
+
+  const allPermissions = [
+    ...userPerms.permissions,
+    ...userPerms.overrides.granted,
+  ].filter(p => !userPerms.overrides.revoked.includes(p.code));
+
+  const matchingPerms = allPermissions.filter(
+    p => p.module === module && p.action === action
+  );
+
+  if (matchingPerms.length === 0) {
+    return null;
+  }
+
+  // Scope hierarchy: ALL > DEPARTMENT > OWN
+  if (matchingPerms.some(p => p.scope === 'ALL')) {
+    return 'ALL';
+  }
+  if (matchingPerms.some(p => p.scope === 'DEPARTMENT')) {
+    return 'DEPARTMENT';
+  }
+  return 'OWN';
+}
+
+/**
+ * Check if user can access resource based on scope
+ */
+export async function canAccessResource(
+  userId: string,
+  module: PermissionModule,
+  action: PermissionAction,
+  resource: {
+    ownerId?: string;
+    department?: string;
+  }
+): Promise<boolean> {
+  const scope = await getPermissionScope(userId, module, action);
+
+  if (!scope) {
+    return false;
+  }
+
+  if (scope === 'ALL') {
+    return true;
+  }
+
+  if (scope === 'DEPARTMENT' && resource.department) {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { department: true },
+    });
+    return user?.department === resource.department;
+  }
+
+  if (scope === 'OWN' && resource.ownerId) {
+    return userId === resource.ownerId;
+  }
+
+  return false;
+}
+
+/**
+ * Check if user is admin (System Administrator)
+ */
+export async function isAdmin(userId: string): Promise<boolean> {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { role: true },
+  });
+
+  return user?.role === 'QUAN_TRI_HE_THONG';
+}
+
+/**
+ * Check if user has any of the specified roles
+ */
+export async function hasRole(userId: string, roles: UserRole[]): Promise<boolean> {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { role: true },
+  });
+
+  return user ? roles.includes(user.role) : false;
+}
+
+/**
+ * Grant permission override to user
+ */
+export async function grantPermissionOverride(
+  userId: string,
+  permissionCode: string,
+  grantedBy: string,
+  reason?: string,
+  expiresAt?: Date
+): Promise<void> {
+  const permission = await prisma.permission.findUnique({
+    where: { code: permissionCode },
+  });
+
+  if (!permission) {
+    throw new Error('Permission not found');
+  }
+
+  await prisma.userPermissionOverride.upsert({
+    where: {
+      userId_permissionId: {
+        userId,
+        permissionId: permission.id,
+      },
+    },
+    create: {
+      userId,
+      permissionId: permission.id,
+      isGranted: true,
+      grantedBy,
+      reason,
+      expiresAt,
+    },
+    update: {
+      isGranted: true,
+      grantedBy,
+      reason,
+      expiresAt,
+      updatedAt: new Date(),
+    },
+  });
+
+  // Log the action
+  await prisma.auditLog.create({
+    data: {
+      userId: grantedBy,
+      action: 'PERMISSION_CHANGE',
+      resource: 'USER_PERMISSION',
+      resourceId: userId,
+      details: {
+        action: 'GRANT',
+        permission: permissionCode,
+        reason,
+        expiresAt,
+      },
+      severity: 'MEDIUM',
+    },
+  });
+}
+
+/**
+ * Revoke permission override from user
+ */
+export async function revokePermissionOverride(
+  userId: string,
+  permissionCode: string,
+  revokedBy: string,
+  reason?: string
+): Promise<void> {
+  const permission = await prisma.permission.findUnique({
+    where: { code: permissionCode },
+  });
+
+  if (!permission) {
+    throw new Error('Permission not found');
+  }
+
+  await prisma.userPermissionOverride.upsert({
+    where: {
+      userId_permissionId: {
+        userId,
+        permissionId: permission.id,
+      },
+    },
+    create: {
+      userId,
+      permissionId: permission.id,
+      isGranted: false,
+      grantedBy: revokedBy,
+      reason,
+    },
+    update: {
+      isGranted: false,
+      grantedBy: revokedBy,
+      reason,
+      updatedAt: new Date(),
+    },
+  });
+
+  // Log the action
+  await prisma.auditLog.create({
+    data: {
+      userId: revokedBy,
+      action: 'PERMISSION_CHANGE',
+      resource: 'USER_PERMISSION',
+      resourceId: userId,
+      details: {
+        action: 'REVOKE',
+        permission: permissionCode,
+        reason,
+      },
+      severity: 'MEDIUM',
+    },
+  });
+}
+
+/**
+ * Get all available permissions
+ */
+export async function getAllPermissions(): Promise<Permission[]> {
+  return await prisma.permission.findMany({
+    where: { isActive: true },
+    orderBy: [{ module: 'asc' }, { sortOrder: 'asc' }],
+  }) as any as Permission[];
+}
+
+/**
+ * Get permissions grouped by module
+ */
+export async function getPermissionsByModule(): Promise<Record<PermissionModule, Permission[]>> {
+  const permissions = await getAllPermissions();
+
+  return permissions.reduce((acc, perm) => {
+    if (!acc[perm.module]) {
+      acc[perm.module] = [];
+    }
+    acc[perm.module].push(perm);
+    return acc;
+  }, {} as Record<PermissionModule, Permission[]>);
+}
+
+/**
+ * Role display names in Vietnamese
+ */
+export const RoleDisplayNames: Record<UserRole, string> = {
+  QUAN_TRI_HE_THONG: 'Quản trị Hệ thống',
+  CHI_HUY_HOC_VIEN: 'Chỉ huy Học viện',
+  CHI_HUY_KHOA_PHONG: 'Chỉ huy Khoa/Phòng',
+  CHU_NHIEM_BO_MON: 'Chủ nhiệm Bộ môn',
+  GIANG_VIEN: 'Giảng viên',
+  NGHIEN_CUU_VIEN: 'Nghiên cứu viên',
+  HOC_VIEN_SINH_VIEN: 'Học viên/Sinh viên',
+  KY_THUAT_VIEN: 'Kỹ thuật viên',
+};
+
+/**
+ * Module display names in Vietnamese
+ */
+export const ModuleDisplayNames: Record<PermissionModule, string> = {
+  DASHBOARD: 'Bảng điều khiển',
+  USER_MANAGEMENT: 'Quản lý Người dùng',
+  DATA_LAKE: 'Hồ Dữ liệu',
+  ML_TRAINING: 'Huấn luyện ML',
+  RESEARCH: 'Nghiên cứu',
+  ANALYTICS: 'Phân tích',
+  REPORTS: 'Báo cáo',
+  SYSTEM_CONFIG: 'Cấu hình Hệ thống',
+  AUDIT_LOGS: 'Nhật ký Kiểm toán',
+  FILES: 'Tệp tin',
+  DATASETS: 'Bộ dữ liệu',
+  TRAINING: 'Đào tạo',
+  GOVERNANCE: 'Quản trị',
+};
+
+/**
+ * Action display names in Vietnamese
+ */
+export const ActionDisplayNames: Record<PermissionAction, string> = {
+  VIEW: 'Xem',
+  CREATE: 'Tạo',
+  EDIT: 'Sửa',
+  DELETE: 'Xóa',
+  EXPORT: 'Xuất',
+  APPROVE: 'Phê duyệt',
+  MANAGE: 'Quản lý',
+  EXECUTE: 'Thực thi',
+};
+
+/**
+ * Scope display names in Vietnamese
+ */
+export const ScopeDisplayNames: Record<PermissionScope, string> = {
+  ALL: 'Toàn bộ',
+  DEPARTMENT: 'Đơn vị',
+  OWN: 'Cá nhân',
+};

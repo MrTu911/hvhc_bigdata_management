@@ -1,0 +1,213 @@
+
+/**
+ * Authentication & Authorization Guards
+ * HVHC BigData Management System
+ */
+
+import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
+import { hasPermission, hasRole, isAdmin } from '@/lib/permissions';
+import { UserRole, PermissionModule, PermissionAction } from '@prisma/client';
+
+/**
+ * Verify user is authenticated
+ */
+export async function requireAuth(): Promise<{
+  userId: string;
+  email: string;
+  role: UserRole;
+}> {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user?.id) {
+    throw new Error('Unauthorized');
+  }
+
+  return {
+    userId: session.user.id,
+    email: session.user.email,
+    role: session.user.role as UserRole,
+  };
+}
+
+/**
+ * Require specific permission
+ */
+export async function requirePermission(permissionCode: string): Promise<{
+  userId: string;
+  email: string;
+  role: UserRole;
+}> {
+  const user = await requireAuth();
+
+  const allowed = await hasPermission(user.userId, permissionCode);
+
+  if (!allowed) {
+    throw new Error('Forbidden: Insufficient permissions');
+  }
+
+  return user;
+}
+
+/**
+ * Require module permission
+ */
+export async function requireModulePermission(
+  module: PermissionModule,
+  action: PermissionAction
+): Promise<{
+  userId: string;
+  email: string;
+  role: UserRole;
+}> {
+  const user = await requireAuth();
+
+  const permissionCode = `${module.toLowerCase()}:${action.toLowerCase()}`;
+  const allowed = await hasPermission(user.userId, permissionCode);
+
+  if (!allowed) {
+    throw new Error(`Forbidden: Missing ${module}:${action} permission`);
+  }
+
+  return user;
+}
+
+/**
+ * Require specific role(s)
+ */
+export async function requireRole(roles: UserRole[]): Promise<{
+  userId: string;
+  email: string;
+  role: UserRole;
+}> {
+  const user = await requireAuth();
+
+  const allowed = await hasRole(user.userId, roles);
+
+  if (!allowed) {
+    throw new Error('Forbidden: Insufficient role');
+  }
+
+  return user;
+}
+
+/**
+ * Require admin role
+ */
+export async function requireAdmin(): Promise<{
+  userId: string;
+  email: string;
+  role: UserRole;
+}> {
+  const user = await requireAuth();
+
+  const allowed = await isAdmin(user.userId);
+
+  if (!allowed) {
+    throw new Error('Forbidden: Admin access required');
+  }
+
+  return user;
+}
+
+/**
+ * API Route wrapper with permission check
+ */
+export function withPermission(
+  permissionCode: string,
+  handler: (req: NextRequest, context: any) => Promise<NextResponse>
+) {
+  return async (req: NextRequest, context: any) => {
+    try {
+      await requirePermission(permissionCode);
+      return await handler(req, context);
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.message === 'Unauthorized') {
+          return NextResponse.json(
+            { error: 'Authentication required' },
+            { status: 401 }
+          );
+        }
+        if (error.message.startsWith('Forbidden')) {
+          return NextResponse.json(
+            { error: error.message },
+            { status: 403 }
+          );
+        }
+      }
+      return NextResponse.json(
+        { error: 'Internal server error' },
+        { status: 500 }
+      );
+    }
+  };
+}
+
+/**
+ * API Route wrapper with role check
+ */
+export function withRole(
+  roles: UserRole[],
+  handler: (req: NextRequest, context: any) => Promise<NextResponse>
+) {
+  return async (req: NextRequest, context: any) => {
+    try {
+      await requireRole(roles);
+      return await handler(req, context);
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.message === 'Unauthorized') {
+          return NextResponse.json(
+            { error: 'Authentication required' },
+            { status: 401 }
+          );
+        }
+        if (error.message.startsWith('Forbidden')) {
+          return NextResponse.json(
+            { error: error.message },
+            { status: 403 }
+          );
+        }
+      }
+      return NextResponse.json(
+        { error: 'Internal server error' },
+        { status: 500 }
+      );
+    }
+  };
+}
+
+/**
+ * API Route wrapper with admin check
+ */
+export function withAdmin(
+  handler: (req: NextRequest, context: any) => Promise<NextResponse>
+) {
+  return async (req: NextRequest, context: any) => {
+    try {
+      await requireAdmin();
+      return await handler(req, context);
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.message === 'Unauthorized') {
+          return NextResponse.json(
+            { error: 'Authentication required' },
+            { status: 401 }
+          );
+        }
+        if (error.message.startsWith('Forbidden')) {
+          return NextResponse.json(
+            { error: 'Admin access required' },
+            { status: 403 }
+          );
+        }
+      }
+      return NextResponse.json(
+        { error: 'Internal server error' },
+        { status: 500 }
+      );
+    }
+  };
+}
