@@ -1,7 +1,7 @@
 /**
  * M10 – UC-60: Graduation Rule Engine
- * GET  /api/education/graduation/audit          – danh sách kết quả xét tốt nghiệp
- * POST /api/education/graduation/audit          – chạy xét tốt nghiệp cho một học viên
+ * GET  /api/education/graduation/audit  – danh sách kết quả xét tốt nghiệp
+ * POST /api/education/graduation/audit  – chạy xét tốt nghiệp cho một học viên
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -9,91 +9,9 @@ import { prisma } from '@/lib/db';
 import { requireFunction } from '@/lib/rbac/middleware';
 import { EDUCATION } from '@/lib/rbac/function-codes';
 import { logAudit } from '@/lib/audit';
+import { runGraduationEngine } from '@/lib/services/education/graduation-engine.service';
 
 export const dynamic = 'force-dynamic';
-
-// ─── Graduation Rule Engine ────────────────────────────────────────────────────
-async function runGraduationEngine(hocVienId: string) {
-  const hocVien = await prisma.hocVien.findFirst({
-    where: { id: hocVienId, deletedAt: null },
-    select: {
-      id: true, maHocVien: true, hoTen: true,
-      diemTrungBinh: true,
-      tinChiTichLuy: true,
-      tongTinChi: true,
-      currentProgramVersion: {
-        select: { totalCredits: true },
-      },
-    },
-  });
-
-  if (!hocVien) return null;
-
-  const requiredCredits = hocVien.currentProgramVersion?.totalCredits ?? hocVien.tongTinChi ?? 120;
-  const totalCreditsEarned = hocVien.tinChiTichLuy ?? 0;
-  const gpa = hocVien.diemTrungBinh ?? 0;
-
-  // Kiểm tra rèn luyện (phải có ít nhất 1 kỳ rèn luyện đạt)
-  const lastConduct = await prisma.studentConductRecord.findFirst({
-    where: { hocVienId },
-    orderBy: [{ academicYear: 'desc' }, { semesterCode: 'desc' }],
-    select: { conductScore: true },
-  });
-  const conductEligible = lastConduct ? lastConduct.conductScore >= 50 : false;
-
-  // Kiểm tra khóa luận (nếu có, phải DEFENDED)
-  const thesis = await prisma.thesisProject.findFirst({
-    where: { hocVienId },
-    select: { status: true, defenseScore: true },
-  });
-  const thesisEligible = !thesis || thesis.status === 'DEFENDED';
-
-  // Ngoại ngữ – placeholder (cần tích hợp ForeignLanguageCert từ M02)
-  const languageEligible = true; // TODO: kiểm tra ForeignLanguageCert khi integrate M02
-
-  // Tổng hợp điều kiện
-  const failureReasons: { code: string; message: string }[] = [];
-
-  if (totalCreditsEarned < requiredCredits) {
-    failureReasons.push({
-      code: 'INSUFFICIENT_CREDITS',
-      message: `Tín chỉ tích lũy ${totalCreditsEarned} < yêu cầu ${requiredCredits}`,
-    });
-  }
-  if (gpa < 2.0) {
-    failureReasons.push({
-      code: 'LOW_GPA',
-      message: `GPA ${gpa.toFixed(2)} < 2.0`,
-    });
-  }
-  if (!conductEligible) {
-    failureReasons.push({
-      code: 'CONDUCT_INELIGIBLE',
-      message: 'Điểm rèn luyện chưa đạt (< 50)',
-    });
-  }
-  if (!thesisEligible) {
-    failureReasons.push({
-      code: 'THESIS_NOT_DEFENDED',
-      message: 'Khóa luận / luận văn chưa bảo vệ',
-    });
-  }
-
-  const graduationEligible =
-    failureReasons.length === 0 && conductEligible && thesisEligible && languageEligible;
-
-  return {
-    hocVienId,
-    gpa,
-    totalCreditsEarned,
-    conductEligible,
-    thesisEligible,
-    languageEligible,
-    graduationEligible,
-    failureReasonsJson: failureReasons.length > 0 ? failureReasons : null,
-  };
-}
-// ──────────────────────────────────────────────────────────────────────────────
 
 export async function GET(req: NextRequest) {
   try {
@@ -160,17 +78,17 @@ export async function POST(req: NextRequest) {
     const audit = await prisma.graduationAudit.create({
       data: {
         hocVienId,
-        auditDate:           new Date(),
-        totalCreditsEarned:  engineResult.totalCreditsEarned,
-        gpa:                 engineResult.gpa,
-        conductEligible:     engineResult.conductEligible,
-        thesisEligible:      engineResult.thesisEligible,
-        languageEligible:    engineResult.languageEligible,
-        graduationEligible:  engineResult.graduationEligible,
-        failureReasonsJson:  engineResult.failureReasonsJson,
-        status:              engineResult.graduationEligible ? 'ELIGIBLE' : 'INELIGIBLE',
-        notes:               notes || null,
-        createdBy:           user!.id,
+        auditDate:          new Date(),
+        totalCreditsEarned: engineResult.totalCreditsEarned,
+        gpa:                engineResult.gpa,
+        conductEligible:    engineResult.conductEligible,
+        thesisEligible:     engineResult.thesisEligible,
+        languageEligible:   engineResult.languageEligible,
+        graduationEligible: engineResult.graduationEligible,
+        failureReasonsJson: engineResult.failureReasonsJson,
+        status:             engineResult.graduationEligible ? 'ELIGIBLE' : 'INELIGIBLE',
+        notes:              notes || null,
+        createdBy:          user!.id,
       },
     });
 

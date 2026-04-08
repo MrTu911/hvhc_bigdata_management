@@ -13,6 +13,7 @@
 
 import { PrismaClient } from '@prisma/client';
 import 'dotenv/config';
+import { MIN_GPA_FOR_GRADUATION, MIN_CONDUCT_SCORE_FOR_GRADUATION } from '../../lib/constants/graduation-rules';
 
 const prisma = new PrismaClient();
 
@@ -360,8 +361,8 @@ async function main() {
       requiredCredits = pv?.totalCredits || 120;
     }
 
-    const gpaEligible = gpa >= 5.0;  // 10-point scale, threshold 5.0
-    const conductEligible = conductScore >= 50;
+    const gpaEligible = gpa >= MIN_GPA_FOR_GRADUATION;
+    const conductEligible = conductScore >= MIN_CONDUCT_SCORE_FOR_GRADUATION;
     const thesisEligible = true;     // already DEFENDED
 
     const failureReasons: string[] = [];

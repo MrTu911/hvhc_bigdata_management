@@ -1,11 +1,9 @@
 /**
- * M10 – UC-56: Cập nhật điểm học phần
+ * M10 – UC-56: Chi tiết & cập nhật điểm học phần
+ * GET   /api/education/grades/[id]
  * PATCH /api/education/grades/[id]
  *
  * [id] = ClassEnrollment.id
- *
- * CRITICAL: Mọi sửa điểm PHẢI ghi ScoreHistory trong cùng transaction.
- * Không được bypass rule này.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -13,6 +11,11 @@ import { prisma } from '@/lib/db';
 import { requireFunction } from '@/lib/rbac/middleware';
 import { EDUCATION } from '@/lib/rbac/function-codes';
 import { logAudit } from '@/lib/audit';
+import {
+  validateScorePayload,
+  updateGradeWithHistory,
+  type ScorePayload,
+} from '@/lib/services/education/grade.service';
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -55,98 +58,29 @@ export async function PATCH(req: NextRequest, { params }: Params) {
     const { user } = auth;
 
     const { id } = await params;
-
-    const existing = await prisma.classEnrollment.findUnique({ where: { id } });
-    if (!existing) {
-      return NextResponse.json({ success: false, error: 'Không tìm thấy enrollment' }, { status: 404 });
-    }
-
-    // Không cho phép sửa điểm đã FINALIZED
-    if (existing.gradeStatus === 'FINALIZED') {
-      return NextResponse.json(
-        { success: false, error: 'Không thể sửa điểm đã FINALIZED' },
-        { status: 400 }
-      );
-    }
-
     const body = await req.json();
-    const {
-      attendanceScore,
-      assignmentScore,
-      midtermScore,
-      finalScore,
-      totalScore,
-      passFlag,
-      letterGrade,
-      gradeStatus,
-      notes,
-      reason, // lý do sửa (bắt buộc khi gradeStatus hiện tại đã GRADED)
-    } = body;
-
-    // Validate điểm không âm
-    const scoreFields = { attendanceScore, assignmentScore, midtermScore, finalScore, totalScore };
-    for (const [field, val] of Object.entries(scoreFields)) {
-      if (val !== undefined && val !== null && (typeof val !== 'number' || val < 0)) {
-        return NextResponse.json(
-          { success: false, error: `${field} phải là số >= 0` },
-          { status: 400 }
-        );
-      }
-    }
-
-    // Build update data (only provided fields)
-    const updateData: Record<string, any> = {};
-    if (attendanceScore !== undefined) updateData.attendanceScore = attendanceScore;
-    if (assignmentScore  !== undefined) updateData.assignmentScore  = assignmentScore;
-    if (midtermScore     !== undefined) updateData.midtermScore     = midtermScore;
-    if (finalScore       !== undefined) updateData.finalScore       = finalScore;
-    if (totalScore       !== undefined) updateData.totalScore       = totalScore;
-    if (passFlag         !== undefined) updateData.passFlag         = passFlag;
-    if (letterGrade      !== undefined) updateData.letterGrade      = letterGrade;
-    if (gradeStatus      !== undefined) updateData.gradeStatus      = gradeStatus;
-    if (notes            !== undefined) updateData.notes            = notes;
-
-    if (Object.keys(updateData).length === 0) {
-      return NextResponse.json({ success: false, error: 'Không có field nào được cập nhật' }, { status: 400 });
-    }
-
-    // Snapshot old values (chỉ score fields)
-    const oldValues = {
-      attendanceScore: existing.attendanceScore,
-      assignmentScore: existing.assignmentScore,
-      midtermScore:    existing.midtermScore,
-      finalScore:      existing.finalScore,
-      totalScore:      existing.totalScore,
-      passFlag:        existing.passFlag,
-      letterGrade:     existing.letterGrade,
-      gradeStatus:     existing.gradeStatus,
+    const payload: ScorePayload = {
+      attendanceScore: body.attendanceScore,
+      assignmentScore: body.assignmentScore,
+      midtermScore:    body.midtermScore,
+      finalScore:      body.finalScore,
+      totalScore:      body.totalScore,
+      passFlag:        body.passFlag,
+      letterGrade:     body.letterGrade,
+      gradeStatus:     body.gradeStatus,
+      notes:           body.notes,
+      reason:          body.reason,
     };
-    const newValues = { ...oldValues, ...updateData };
 
-    // Gradedby/gradedAt tự động khi có điểm
-    const hasScoreChange = [attendanceScore, assignmentScore, midtermScore, finalScore, totalScore]
-      .some(v => v !== undefined);
-    if (hasScoreChange) {
-      updateData.gradedBy = user!.id;
-      updateData.gradedAt = new Date();
-      if (!gradeStatus || gradeStatus === 'PENDING') {
-        updateData.gradeStatus = 'GRADED';
-      }
+    const validationError = validateScorePayload(payload);
+    if (validationError) {
+      return NextResponse.json({ success: false, error: validationError }, { status: 400 });
     }
 
-    // Transaction: update enrollment + ghi ScoreHistory (MANDATORY)
-    const [updated] = await prisma.$transaction([
-      prisma.classEnrollment.update({ where: { id }, data: updateData }),
-      prisma.scoreHistory.create({
-        data: {
-          enrollmentId: id,
-          changedBy: user!.id,
-          oldValues,
-          newValues,
-          reason: reason ?? null,
-        },
-      }),
-    ]);
+    const result = await updateGradeWithHistory(id, payload, user!.id);
+    if (!result.success) {
+      return NextResponse.json({ success: false, error: result.error }, { status: result.status });
+    }
 
     await logAudit({
       userId: user!.id,
@@ -154,13 +88,12 @@ export async function PATCH(req: NextRequest, { params }: Params) {
       action: 'UPDATE',
       resourceType: 'CLASS_ENROLLMENT_GRADE',
       resourceId: id,
-      oldValue: oldValues,
-      newValue: newValues,
+      newValue: { gradeStatus: result.data.gradeStatus },
       result: 'SUCCESS',
       ipAddress: req.headers.get('x-forwarded-for') || 'unknown',
     });
 
-    return NextResponse.json({ success: true, data: updated });
+    return NextResponse.json({ success: true, data: result.data });
   } catch (error: any) {
     console.error('PATCH /api/education/grades/[id] error:', error);
     return NextResponse.json({ success: false, error: 'Failed to update grade' }, { status: 500 });

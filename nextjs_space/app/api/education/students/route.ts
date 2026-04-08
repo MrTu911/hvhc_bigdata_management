@@ -9,11 +9,13 @@ import { prisma } from '@/lib/db';
 import { requireFunction } from '@/lib/rbac/middleware';
 import { EDUCATION } from '@/lib/rbac/function-codes';
 import { logAudit } from '@/lib/audit';
+import { getItemByCode } from '@/lib/master-data-cache';
 
 export async function GET(req: NextRequest) {
   try {
     const auth = await requireFunction(req, EDUCATION.VIEW_STUDENT);
     if (!auth.allowed) return auth.response!;
+    const { user, authResult } = auth;
 
     const { searchParams } = new URL(req.url);
     const search       = searchParams.get('search') || '';
@@ -41,6 +43,20 @@ export async function GET(req: NextRequest) {
     if (khoaHoc) where.khoaHoc = khoaHoc;
     if (nganh) where.nganh = nganh;
     if (studyMode) where.studyMode = studyMode;
+
+    // Scope SELF: giảng viên chỉ xem học viên mình cố vấn (giangVienHuongDanId)
+    // Scope UNIT/DEPARTMENT/ACADEMY: không lọc thêm (function-code guard đã đủ)
+    const scope = authResult?.scope ?? 'SELF';
+    if (scope === 'SELF' && user) {
+      const facultyProfile = await prisma.facultyProfile.findUnique({
+        where: { userId: user.id },
+        select: { id: true },
+      });
+      if (facultyProfile) {
+        where.giangVienHuongDanId = facultyProfile.id;
+      }
+      // Không có FacultyProfile (cán bộ phi giảng viên): không lọc thêm
+    }
 
     const [data, total] = await Promise.all([
       prisma.hocVien.findMany({
@@ -110,6 +126,21 @@ export async function POST(req: NextRequest) {
         { success: false, error: 'maHocVien và hoTen là bắt buộc' },
         { status: 400 }
       );
+    }
+
+    // Validate studyMode theo M19 lookup MD_STUDY_MODE
+    if (studyMode) {
+      const validItem = await getItemByCode('MD_STUDY_MODE', studyMode);
+      if (!validItem) {
+        const validItems = await import('@/lib/master-data-cache').then(m =>
+          m.getItemsByCategory('MD_STUDY_MODE', true)
+        );
+        const validCodes = validItems.map((i: any) => i.code).join(', ');
+        return NextResponse.json(
+          { success: false, error: `studyMode '${studyMode}' không hợp lệ. Giá trị cho phép: ${validCodes}` },
+          { status: 400 }
+        );
+      }
     }
 
     const existing = await prisma.hocVien.findUnique({ where: { maHocVien } });

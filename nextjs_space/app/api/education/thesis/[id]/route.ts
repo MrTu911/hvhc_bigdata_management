@@ -9,6 +9,7 @@ import { prisma } from '@/lib/db';
 import { requireFunction } from '@/lib/rbac/middleware';
 import { EDUCATION } from '@/lib/rbac/function-codes';
 import { logAudit } from '@/lib/audit';
+import { THESIS_STATUS_TRANSITIONS } from '@/lib/constants/graduation-rules';
 
 type Params = { params: { id: string } };
 
@@ -56,6 +57,20 @@ export async function PATCH(req: NextRequest, { params }: Params) {
       'status', 'abstractText', 'keywords',
       'notes', 'repositoryFileUrl',
     ] as const;
+
+    // Validate one-way status transition
+    if ('status' in body && body.status !== existing.status) {
+      const allowedNext = THESIS_STATUS_TRANSITIONS[existing.status] ?? [];
+      if (!allowedNext.includes(body.status)) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: `Không thể chuyển trạng thái từ ${existing.status} sang ${body.status}. Cho phép: ${allowedNext.join(', ') || 'không có'}`,
+          },
+          { status: 422 }
+        );
+      }
+    }
 
     const data: Record<string, any> = {};
     for (const field of allowedFields) {

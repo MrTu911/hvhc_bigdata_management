@@ -1,0 +1,603 @@
+/**
+ * M10 – UC-59: Quản lý khóa luận / luận văn / đồ án
+ * /dashboard/education/thesis
+ */
+
+'use client';
+
+import { useState, useEffect, useCallback } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
+import { Textarea } from '@/components/ui/textarea';
+import {
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
+} from '@/components/ui/table';
+import {
+  Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle,
+} from '@/components/ui/dialog';
+import {
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem,
+  DropdownMenuSeparator, DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from '@/components/ui/select';
+import { toast } from 'sonner';
+import {
+  Plus, Search, MoreHorizontal, FileText, ChevronLeft, ChevronRight,
+  BookOpen, GraduationCap, Archive, PlayCircle, CheckCircle2,
+} from 'lucide-react';
+
+// ============= CONSTANTS =============
+
+const THESIS_TYPE_LABELS: Record<string, string> = {
+  khoa_luan: 'Khóa luận TN',
+  luan_van:  'Luận văn ThS',
+  luan_an:   'Luận án TS',
+  do_an:     'Đồ án',
+};
+
+const STATUS_CONFIG: Record<string, { label: string; className: string; icon: React.ReactNode }> = {
+  DRAFT:       { label: 'Nháp',        className: 'bg-gray-100 text-gray-700',   icon: <FileText   className="h-3 w-3" /> },
+  IN_PROGRESS: { label: 'Đang thực hiện', className: 'bg-blue-100 text-blue-700',  icon: <PlayCircle className="h-3 w-3" /> },
+  DEFENDED:    { label: 'Đã bảo vệ',   className: 'bg-green-100 text-green-700', icon: <CheckCircle2 className="h-3 w-3" /> },
+  ARCHIVED:    { label: 'Lưu trữ',     className: 'bg-purple-100 text-purple-700', icon: <Archive   className="h-3 w-3" /> },
+};
+
+const STATUS_TRANSITIONS: Record<string, string[]> = {
+  DRAFT:       ['IN_PROGRESS'],
+  IN_PROGRESS: ['DEFENDED'],
+  DEFENDED:    ['ARCHIVED'],
+  ARCHIVED:    [],
+};
+
+// ============= TYPES =============
+
+interface ThesisItem {
+  id: string;
+  hocVienId: string;
+  thesisType: string;
+  title: string;
+  titleEn: string | null;
+  advisorId: string | null;
+  reviewerId: string | null;
+  defenseDate: string | null;
+  defenseScore: number | null;
+  status: string;
+  abstractText: string | null;
+  keywords: string | null;
+  notes: string | null;
+  repositoryFileUrl: string | null;
+  createdAt: string;
+  hocVien: { id: string; maHocVien: string; hoTen: string; lop: string | null };
+  advisor:  { id: string; user: { name: string } } | null;
+  reviewer: { id: string; user: { name: string } } | null;
+}
+
+interface Faculty {
+  id: string;
+  user: { name: string };
+}
+
+interface HocVienOption {
+  id: string;
+  maHocVien: string;
+  hoTen: string;
+}
+
+const EMPTY_FORM = {
+  hocVienId: '',
+  thesisType: 'khoa_luan',
+  title: '',
+  titleEn: '',
+  advisorId: '',
+  reviewerId: '',
+  defenseDate: '',
+  defenseScore: '',
+  abstractText: '',
+  keywords: '',
+  notes: '',
+  repositoryFileUrl: '',
+};
+
+// ============= PAGE =============
+
+export default function ThesisPage() {
+  const [items, setItems]         = useState<ThesisItem[]>([]);
+  const [loading, setLoading]     = useState(true);
+  const [total, setTotal]         = useState(0);
+  const [page, setPage]           = useState(1);
+  const limit = 20;
+
+  // Filters
+  const [search, setSearch]           = useState('');
+  const [filterStatus, setFilterStatus] = useState('');
+  const [filterType, setFilterType]   = useState('');
+
+  // Dialog
+  const [dialogOpen, setDialogOpen]     = useState(false);
+  const [editingItem, setEditingItem]   = useState<ThesisItem | null>(null);
+  const [form, setForm]                 = useState({ ...EMPTY_FORM });
+  const [submitting, setSubmitting]     = useState(false);
+
+  // Supporting data
+  const [faculty, setFaculty]               = useState<Faculty[]>([]);
+  const [students, setStudents]             = useState<HocVienOption[]>([]);
+
+  // ── Data fetching ─────────────────────────────────────────────────────────
+
+  const fetchItems = useCallback(async () => {
+    try {
+      setLoading(true);
+      const params = new URLSearchParams({ page: String(page), limit: String(limit) });
+      if (filterStatus) params.set('status', filterStatus);
+      if (filterType)   params.set('thesisType', filterType);
+
+      const res = await fetch(`/api/education/thesis?${params}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.success) {
+          setItems(data.data);
+          setTotal(data.meta.total);
+        }
+      }
+    } catch {
+      toast.error('Không thể tải danh sách khóa luận');
+    } finally {
+      setLoading(false);
+    }
+  }, [page, filterStatus, filterType]);
+
+  const fetchFaculty = async () => {
+    try {
+      const res = await fetch('/api/faculty/list');
+      if (res.ok) {
+        const data = await res.json();
+        setFaculty(data.data || data);
+      }
+    } catch { /* silent */ }
+  };
+
+  const fetchStudents = async (q: string) => {
+    if (!q || q.length < 2) return;
+    try {
+      const res = await fetch(`/api/education/students?search=${encodeURIComponent(q)}&limit=20`);
+      if (res.ok) {
+        const data = await res.json();
+        setStudents(data.data || []);
+      }
+    } catch { /* silent */ }
+  };
+
+  useEffect(() => { fetchItems(); }, [fetchItems]);
+  useEffect(() => { fetchFaculty(); }, []);
+
+  // ── Form helpers ──────────────────────────────────────────────────────────
+
+  const openCreate = () => {
+    setEditingItem(null);
+    setForm({ ...EMPTY_FORM });
+    setDialogOpen(true);
+  };
+
+  const openEdit = (item: ThesisItem) => {
+    setEditingItem(item);
+    setForm({
+      hocVienId:        item.hocVienId,
+      thesisType:       item.thesisType,
+      title:            item.title,
+      titleEn:          item.titleEn ?? '',
+      advisorId:        item.advisorId ?? '',
+      reviewerId:       item.reviewerId ?? '',
+      defenseDate:      item.defenseDate ? item.defenseDate.slice(0, 10) : '',
+      defenseScore:     item.defenseScore != null ? String(item.defenseScore) : '',
+      abstractText:     item.abstractText ?? '',
+      keywords:         item.keywords ?? '',
+      notes:            item.notes ?? '',
+      repositoryFileUrl: item.repositoryFileUrl ?? '',
+    });
+    setDialogOpen(true);
+  };
+
+  const handleSubmit = async () => {
+    if (!form.hocVienId || !form.title) {
+      toast.error('Học viên và tiêu đề là bắt buộc');
+      return;
+    }
+    try {
+      setSubmitting(true);
+      const payload: Record<string, any> = {
+        hocVienId:        form.hocVienId,
+        thesisType:       form.thesisType,
+        title:            form.title,
+        titleEn:          form.titleEn || null,
+        advisorId:        form.advisorId  || null,
+        reviewerId:       form.reviewerId || null,
+        defenseDate:      form.defenseDate || null,
+        defenseScore:     form.defenseScore !== '' ? parseFloat(form.defenseScore) : null,
+        abstractText:     form.abstractText || null,
+        keywords:         form.keywords || null,
+        notes:            form.notes || null,
+        repositoryFileUrl: form.repositoryFileUrl || null,
+      };
+
+      const url    = editingItem ? `/api/education/thesis/${editingItem.id}` : '/api/education/thesis';
+      const method = editingItem ? 'PATCH' : 'POST';
+
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        toast.success(editingItem ? 'Cập nhật thành công' : 'Tạo khóa luận thành công');
+        setDialogOpen(false);
+        fetchItems();
+      } else {
+        toast.error(data.error || 'Lỗi lưu dữ liệu');
+      }
+    } catch {
+      toast.error('Lỗi kết nối');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleStatusChange = async (id: string, nextStatus: string) => {
+    try {
+      const res = await fetch(`/api/education/thesis/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: nextStatus }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        toast.success(`Chuyển sang "${STATUS_CONFIG[nextStatus]?.label}"`);
+        fetchItems();
+      } else {
+        toast.error(data.error || 'Lỗi cập nhật trạng thái');
+      }
+    } catch {
+      toast.error('Lỗi kết nối');
+    }
+  };
+
+  // ── Render ────────────────────────────────────────────────────────────────
+
+  const totalPages = Math.ceil(total / limit);
+  const filteredItems = search
+    ? items.filter(i =>
+        i.title.toLowerCase().includes(search.toLowerCase()) ||
+        i.hocVien.hoTen.toLowerCase().includes(search.toLowerCase()) ||
+        i.hocVien.maHocVien.toLowerCase().includes(search.toLowerCase())
+      )
+    : items;
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold">Khóa luận / Luận văn / Đồ án</h1>
+          <p className="text-muted-foreground">Quản lý vòng đời đề tài và kết quả bảo vệ</p>
+        </div>
+        <Button onClick={openCreate}>
+          <Plus className="h-4 w-4 mr-2" /> Thêm đề tài
+        </Button>
+      </div>
+
+      {/* Summary badges */}
+      <div className="flex flex-wrap gap-3">
+        {Object.entries(STATUS_CONFIG).map(([key, cfg]) => {
+          const count = items.filter(i => i.status === key).length;
+          return (
+            <button
+              key={key}
+              onClick={() => setFilterStatus(filterStatus === key ? '' : key)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium border transition-all
+                ${filterStatus === key ? 'ring-2 ring-offset-1 ring-primary' : ''}
+                ${cfg.className}`}
+            >
+              {cfg.icon} {cfg.label} <span className="ml-1 font-bold">{count}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Filters */}
+      <Card>
+        <CardContent className="p-4">
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                className="pl-10"
+                placeholder="Tìm theo tên học viên, mã HV, tiêu đề..."
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+              />
+            </div>
+            <Select value={filterType || '__ALL__'} onValueChange={v => { setFilterType(v === '__ALL__' ? '' : v); setPage(1); }}>
+              <SelectTrigger className="w-[180px]"><SelectValue placeholder="Loại đề tài" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="__ALL__">Tất cả loại</SelectItem>
+                {Object.entries(THESIS_TYPE_LABELS).map(([val, lbl]) => (
+                  <SelectItem key={val} value={val}>{lbl}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select value={filterStatus || '__ALL__'} onValueChange={v => { setFilterStatus(v === '__ALL__' ? '' : v); setPage(1); }}>
+              <SelectTrigger className="w-[180px]"><SelectValue placeholder="Trạng thái" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="__ALL__">Tất cả trạng thái</SelectItem>
+                {Object.entries(STATUS_CONFIG).map(([val, cfg]) => (
+                  <SelectItem key={val} value={val}>{cfg.label}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Table */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-base">
+            <BookOpen className="h-4 w-4" />
+            {total} đề tài {filterStatus ? `(${STATUS_CONFIG[filterStatus]?.label})` : ''}
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-0">
+          {loading ? (
+            <div className="h-40 flex items-center justify-center text-muted-foreground">Đang tải...</div>
+          ) : filteredItems.length === 0 ? (
+            <div className="h-40 flex flex-col items-center justify-center gap-2 text-muted-foreground">
+              <GraduationCap className="h-8 w-8 opacity-30" />
+              <span>Chưa có đề tài nào</span>
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Học viên</TableHead>
+                  <TableHead>Tiêu đề đề tài</TableHead>
+                  <TableHead>Loại</TableHead>
+                  <TableHead>GVHD</TableHead>
+                  <TableHead>Ngày bảo vệ</TableHead>
+                  <TableHead>Điểm</TableHead>
+                  <TableHead>Trạng thái</TableHead>
+                  <TableHead />
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredItems.map(item => {
+                  const cfg = STATUS_CONFIG[item.status];
+                  const nextStatuses = STATUS_TRANSITIONS[item.status] ?? [];
+                  return (
+                    <TableRow key={item.id}>
+                      <TableCell>
+                        <div className="font-medium text-sm">{item.hocVien.hoTen}</div>
+                        <div className="text-xs text-muted-foreground">{item.hocVien.maHocVien} · {item.hocVien.lop ?? '—'}</div>
+                      </TableCell>
+                      <TableCell className="max-w-xs">
+                        <div className="font-medium text-sm line-clamp-2">{item.title}</div>
+                        {item.titleEn && (
+                          <div className="text-xs text-muted-foreground italic line-clamp-1">{item.titleEn}</div>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <span className="text-sm">{THESIS_TYPE_LABELS[item.thesisType] ?? item.thesisType}</span>
+                      </TableCell>
+                      <TableCell className="text-sm">
+                        {item.advisor?.user.name ?? <span className="text-muted-foreground">—</span>}
+                      </TableCell>
+                      <TableCell className="text-sm text-muted-foreground">
+                        {item.defenseDate
+                          ? new Date(item.defenseDate).toLocaleDateString('vi-VN')
+                          : '—'}
+                      </TableCell>
+                      <TableCell>
+                        {item.defenseScore != null ? (
+                          <span className={`font-semibold ${item.defenseScore >= 5 ? 'text-green-600' : 'text-red-600'}`}>
+                            {item.defenseScore.toFixed(1)}
+                          </span>
+                        ) : <span className="text-muted-foreground">—</span>}
+                      </TableCell>
+                      <TableCell>
+                        <Badge className={`${cfg?.className} flex items-center gap-1 w-fit`}>
+                          {cfg?.icon} {cfg?.label ?? item.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem onClick={() => openEdit(item)}>
+                              Chỉnh sửa
+                            </DropdownMenuItem>
+                            {nextStatuses.length > 0 && (
+                              <>
+                                <DropdownMenuSeparator />
+                                {nextStatuses.map(ns => (
+                                  <DropdownMenuItem
+                                    key={ns}
+                                    onClick={() => handleStatusChange(item.id, ns)}
+                                    className={ns === 'DEFENDED' ? 'text-green-600' : ns === 'ARCHIVED' ? 'text-purple-600' : 'text-blue-600'}
+                                  >
+                                    {STATUS_CONFIG[ns]?.icon}
+                                    <span className="ml-2">Chuyển: {STATUS_CONFIG[ns]?.label}</span>
+                                  </DropdownMenuItem>
+                                ))}
+                              </>
+                            )}
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between text-sm text-muted-foreground">
+          <span>Trang {page} / {totalPages} ({total} đề tài)</span>
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage(p => p - 1)}>
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button variant="outline" size="sm" disabled={page >= totalPages} onClick={() => setPage(p => p + 1)}>
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Create / Edit Dialog */}
+      <Dialog open={dialogOpen} onOpenChange={open => { setDialogOpen(open); }}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>{editingItem ? 'Cập nhật đề tài' : 'Thêm đề tài mới'}</DialogTitle>
+          </DialogHeader>
+
+          <div className="grid gap-4 py-4">
+            {/* Học viên */}
+            {!editingItem && (
+              <div className="space-y-2">
+                <Label>Tìm học viên *</Label>
+                <Input
+                  placeholder="Nhập tên hoặc mã học viên..."
+                  onChange={e => fetchStudents(e.target.value)}
+                />
+                {students.length > 0 && (
+                  <Select value={form.hocVienId} onValueChange={v => setForm({ ...form, hocVienId: v })}>
+                    <SelectTrigger><SelectValue placeholder="Chọn học viên" /></SelectTrigger>
+                    <SelectContent>
+                      {students.map(s => (
+                        <SelectItem key={s.id} value={s.id}>
+                          {s.maHocVien} – {s.hoTen}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              </div>
+            )}
+
+            {/* Loại + Tiêu đề */}
+            <div className="grid grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <Label>Loại đề tài *</Label>
+                <Select value={form.thesisType} onValueChange={v => setForm({ ...form, thesisType: v })}>
+                  <SelectTrigger><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {Object.entries(THESIS_TYPE_LABELS).map(([val, lbl]) => (
+                      <SelectItem key={val} value={val}>{lbl}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="col-span-2 space-y-2">
+                <Label>Tiêu đề (tiếng Việt) *</Label>
+                <Input value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} placeholder="Tên đề tài..." />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Tiêu đề (tiếng Anh)</Label>
+              <Input value={form.titleEn} onChange={e => setForm({ ...form, titleEn: e.target.value })} placeholder="English title..." />
+            </div>
+
+            {/* GVHD + Phản biện */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>Giảng viên hướng dẫn</Label>
+                <Select value={form.advisorId || '__NONE__'} onValueChange={v => setForm({ ...form, advisorId: v === '__NONE__' ? '' : v })}>
+                  <SelectTrigger><SelectValue placeholder="Chọn GVHD" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="__NONE__">— Chưa phân công —</SelectItem>
+                    {faculty.map(f => (
+                      <SelectItem key={f.id} value={f.id}>{f.user?.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label>Phản biện</Label>
+                <Select value={form.reviewerId || '__NONE__'} onValueChange={v => setForm({ ...form, reviewerId: v === '__NONE__' ? '' : v })}>
+                  <SelectTrigger><SelectValue placeholder="Chọn phản biện" /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="__NONE__">— Chưa phân công —</SelectItem>
+                    {faculty.map(f => (
+                      <SelectItem key={f.id} value={f.id}>{f.user?.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            {/* Ngày bảo vệ + Điểm */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>Ngày bảo vệ</Label>
+                <Input type="date" value={form.defenseDate} onChange={e => setForm({ ...form, defenseDate: e.target.value })} />
+              </div>
+              <div className="space-y-2">
+                <Label>Điểm bảo vệ (0–10)</Label>
+                <Input
+                  type="number" min={0} max={10} step={0.1}
+                  value={form.defenseScore}
+                  onChange={e => setForm({ ...form, defenseScore: e.target.value })}
+                  placeholder="VD: 8.5"
+                />
+              </div>
+            </div>
+
+            {/* Keywords */}
+            <div className="space-y-2">
+              <Label>Từ khóa</Label>
+              <Input value={form.keywords} onChange={e => setForm({ ...form, keywords: e.target.value })} placeholder="từ khóa 1, từ khóa 2..." />
+            </div>
+
+            {/* Abstract */}
+            <div className="space-y-2">
+              <Label>Tóm tắt</Label>
+              <Textarea value={form.abstractText} onChange={e => setForm({ ...form, abstractText: e.target.value })} rows={3} placeholder="Mô tả nội dung đề tài..." />
+            </div>
+
+            {/* File URL */}
+            <div className="space-y-2">
+              <Label>URL file lưu trữ (MinIO)</Label>
+              <Input value={form.repositoryFileUrl} onChange={e => setForm({ ...form, repositoryFileUrl: e.target.value })} placeholder="https://..." />
+            </div>
+
+            {/* Notes */}
+            <div className="space-y-2">
+              <Label>Ghi chú</Label>
+              <Textarea value={form.notes} onChange={e => setForm({ ...form, notes: e.target.value })} rows={2} />
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDialogOpen(false)}>Hủy</Button>
+            <Button onClick={handleSubmit} disabled={submitting}>
+              {submitting ? 'Đang lưu...' : editingItem ? 'Cập nhật' : 'Tạo đề tài'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}

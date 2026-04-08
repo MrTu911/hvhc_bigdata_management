@@ -9,6 +9,7 @@ import { prisma } from '@/lib/db';
 import { requireFunction } from '@/lib/rbac/middleware';
 import { EDUCATION } from '@/lib/rbac/function-codes';
 import { logAudit } from '@/lib/audit';
+import { getItemByCode, getItemsByCategory } from '@/lib/master-data-cache';
 
 type Params = { params: { id: string } };
 
@@ -92,6 +93,19 @@ export async function PATCH(req: NextRequest, { params }: Params) {
 
     if (Object.keys(data).length === 0) {
       return NextResponse.json({ success: false, error: 'Không có field nào được cập nhật' }, { status: 400 });
+    }
+
+    // Validate studyMode theo M19 lookup MD_STUDY_MODE
+    if ('studyMode' in body && body.studyMode) {
+      const validItem = await getItemByCode('MD_STUDY_MODE', body.studyMode);
+      if (!validItem) {
+        const validItems = await getItemsByCategory('MD_STUDY_MODE', true);
+        const validCodes = validItems.map((i: any) => i.code).join(', ');
+        return NextResponse.json(
+          { success: false, error: `studyMode '${body.studyMode}' không hợp lệ. Giá trị cho phép: ${validCodes}` },
+          { status: 400 }
+        );
+      }
     }
 
     const updated = await prisma.hocVien.update({ where: { id }, data });

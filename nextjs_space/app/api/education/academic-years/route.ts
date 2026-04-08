@@ -5,7 +5,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { requireFunction } from '@/lib/rbac/middleware';
-import { EDUCATION, SYSTEM } from '@/lib/rbac/function-codes';
+import { EDUCATION } from '@/lib/rbac/function-codes';
 import { logAudit } from '@/lib/audit';
 
 export async function GET(req: NextRequest) {
@@ -137,9 +137,9 @@ export async function PUT(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
-    const auth = await requireFunction(req, SYSTEM.MANAGE_UNITS);
+    const auth = await requireFunction(req, EDUCATION.MANAGE_TERM);
     if (!auth.allowed) return auth.response!;
-    
+
     const { user } = auth;
     const { searchParams } = new URL(req.url);
     const id = searchParams.get('id');
@@ -154,7 +154,7 @@ export async function DELETE(req: NextRequest) {
 
     await logAudit({
       userId: user!.id,
-      functionCode: SYSTEM.MANAGE_UNITS,
+      functionCode: EDUCATION.MANAGE_TERM,
       action: 'DELETE',
       resourceType: 'ACADEMIC_YEAR',
       resourceId: id,

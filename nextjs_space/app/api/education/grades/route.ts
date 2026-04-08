@@ -3,6 +3,10 @@
  * GET /api/education/grades?classSectionId=&hocVienId=&termId=&gradeStatus=
  *
  * Mapping: GradeRecord (design) → ClassEnrollment (codebase)
+ *
+ * Scope:
+ * - SELF  → giảng viên chỉ thấy điểm lớp mình phụ trách (ClassSection.facultyId)
+ * - UNIT/DEPARTMENT/ACADEMY → thấy tất cả (đã được function-code guard)
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -14,6 +18,7 @@ export async function GET(req: NextRequest) {
   try {
     const auth = await requireFunction(req, EDUCATION.VIEW_GRADE);
     if (!auth.allowed) return auth.response!;
+    const { user, authResult } = auth;
 
     const { searchParams } = new URL(req.url);
     const classSectionId = searchParams.get('classSectionId');
@@ -33,6 +38,24 @@ export async function GET(req: NextRequest) {
     if (hocVienId)      where.hocVienId = hocVienId;
     if (gradeStatus)    where.gradeStatus = gradeStatus;
     if (termId)         where.classSection = { termId };
+
+    // Scope SELF: giảng viên chỉ xem điểm lớp học phần mình phụ trách
+    const scope = authResult?.scope ?? 'SELF';
+    if (scope === 'SELF' && user) {
+      const facultyProfile = await prisma.facultyProfile.findUnique({
+        where: { userId: user.id },
+        select: { id: true },
+      });
+      if (facultyProfile) {
+        // Lấy danh sách lớp học phần do giảng viên này phụ trách
+        where.classSection = {
+          ...(where.classSection || {}),
+          facultyId: facultyProfile.id,
+        };
+      }
+      // Nếu user không phải giảng viên (không có FacultyProfile) nhưng scope là SELF
+      // → không lọc thêm (có thể là cán bộ đào tạo xem điểm học viên mình quản lý)
+    }
 
     const enrollments = await prisma.classEnrollment.findMany({
       where,

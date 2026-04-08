@@ -84,6 +84,7 @@ export const EDUCATION = {
   VIEW_CONDUCT: 'VIEW_CONDUCT',           // Xem điểm rèn luyện
   MANAGE_CONDUCT: 'MANAGE_CONDUCT',       // Quản lý điểm rèn luyện
   // Điểm và kết quả học phần (M10 – UC-56)
+  VIEW_GRADE: 'VIEW_GRADE',               // Xem điểm học phần
   MANAGE_GRADE: 'MANAGE_GRADE',           // Nhập / sửa điểm (giảng viên)
   APPROVE_GRADE: 'APPROVE_GRADE',         // Duyệt điểm (Phòng đào tạo)
   // Cảnh báo học vụ (M10 – UC-57)
@@ -282,6 +283,11 @@ export const STUDENT = {
   UPDATE: 'UPDATE_STUDENT',         // Cập nhật
   DELETE: 'DELETE_STUDENT',         // Xóa
   EXPORT: 'EXPORT_STUDENT',         // Xuất danh sách
+  // M07 – GPA & academic status
+  GPA_VIEW: 'VIEW_STUDENT_GPA',           // Xem GPA tích lũy và lịch sử GPA theo kỳ
+  GPA_MANAGE: 'MANAGE_STUDENT_GPA',       // Trigger rebuild GPA batch, ghi StudentGpaHistory + AcademicWarning
+  CONDUCT_VIEW: 'VIEW_STUDENT_CONDUCT',   // Xem điểm rèn luyện học viên
+  DASHBOARD_VIEW: 'VIEW_STUDENT_DASHBOARD', // Xem dashboard học viên tổng hợp
 } as const;
 
 // ===== MODULE: FACULTY (GIẢNG VIÊN) =====
@@ -303,6 +309,9 @@ export const FACULTY = {
   EIS_MANAGE: 'MANAGE_FACULTY_EIS', // Trigger tính EIS (batch/single), ghi FacultyEISScore
   // M07 – Hồ sơ 360°
   PROFILE360_VIEW: 'VIEW_FACULTY_PROFILE360', // Xem hồ sơ 360° tổng hợp
+  // M07 – Tải giảng
+  WORKLOAD_VIEW: 'VIEW_FACULTY_WORKLOAD',     // Xem snapshot tải giảng và cảnh báo quá tải
+  WORKLOAD_MANAGE: 'MANAGE_FACULTY_WORKLOAD', // Trigger rebuild workload snapshot batch/single
 } as const;
 
 // ===== MODULE: DATA (DỮ LIỆU) =====

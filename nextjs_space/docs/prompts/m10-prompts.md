@@ -11,7 +11,11 @@
 - docs/design/system-module-map.md
 - docs/design/system-integration-map.md
 - docs/design/module-m10-overview.md
-
+- docs/design/module-m10-overview.md
+- docs/design/module-m10-student-lifecycle.md
+- docs/design/module-m10-program-curriculum-planning.md
+- docs/design/module-m10-course-grading-warning.md
+- docs/design/module-m10-thesis-graduation-dashboard.md
 Chưa code.
 
 Hãy tóm tắt:
@@ -210,6 +214,7 @@ Sau khi xong:
 - liệt kê models
 - nêu relation với CourseSection/StudentProfile
 - nêu index cần có
+
 4.3. Phase 2 grade APIs + history
 Đọc docs/design/module-m10-course-grading-warning.md.
 
@@ -263,7 +268,7 @@ Hãy:
 4. Chỉ ra vì sao graduation engine là phần rủi ro cao nhất
 5. Chia phase triển khai
 5.2. Phase 1 schema
-/m09-phase1-schema
+/m10-phase1-schema
 
 Đọc docs/design/module-m10-thesis-graduation-dashboard.md.
 
@@ -283,6 +288,9 @@ Sau khi xong:
 - liệt kê models
 - nêu index cần có
 - nêu trường nào cần unique
+
+
+
 5.3. Phase 2 APIs + engine
 Đọc docs/design/module-m10-thesis-graduation-dashboard.md.
 
@@ -316,6 +324,7 @@ Yêu cầu:
 Sau khi xong:
 - liệt kê file UI
 - nêu UX flow chính
+
 6. PROMPT REVIEW TOÀN BỘ M10
 /review-m09
 
