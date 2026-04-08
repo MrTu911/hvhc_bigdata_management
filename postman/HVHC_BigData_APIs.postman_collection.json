@@ -1,0 +1,962 @@
+
+{
+  "info": {
+    "name": "HVHC BigData Management APIs",
+    "description": "Bộ test API hoàn chỉnh cho Hệ thống Quản lý BigData - Học viện Hậu cần\n\n**Hướng dẫn sử dụng:**\n1. Import collection này vào Postman\n2. Import Environment tương ứng (Development/Production)\n3. Chạy test theo thứ tự: Authentication → Data Management → Analytics\n4. JWT token sẽ tự động được lưu sau khi login\n\n**Kiến trúc hệ thống:**\n- Backend: Next.js API Routes\n- Database: PostgreSQL (Prisma ORM)\n- Storage: MinIO\n- Analytics: ClickHouse",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "hvhc-bigdata"
+  },
+  "item": [
+    {
+      "name": "1. Authentication",
+      "item": [
+        {
+          "name": "Register New User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has success flag\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.success).to.eql(true);",
+                  "});",
+                  "",
+                  "pm.test(\"User data is returned\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.data).to.have.property('id');",
+                  "    pm.expect(jsonData.data).to.have.property('email');",
+                  "    pm.expect(jsonData.data).to.have.property('role');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{test_email}}\",\n  \"password\": \"{{test_password}}\",\n  \"confirmPassword\": \"{{test_password}}\",\n  \"name\": \"Nguyễn Văn Test\",\n  \"role\": \"GIANG_VIEN\",\n  \"department\": \"Khoa Công nghệ Thông tin\",\n  \"militaryId\": \"QS-2025-001\",\n  \"rank\": \"Thiếu tá\",\n  \"phone\": \"0912345678\",\n  \"unit\": \"Học viện Hậu cần\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "register"]
+            },
+            "description": "Đăng ký người dùng mới.\n\n**Validation rules:**\n- Email phải hợp lệ và chưa tồn tại\n- Password tối thiểu 8 ký tự\n- militaryId phải unique\n- Role: ADMIN, GIANG_VIEN, HOC_VIEN, NGHIEN_CUU_VIEN"
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"JWT token is returned\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.data).to.have.property('token');",
+                  "    ",
+                  "    // Lưu token vào environment",
+                  "    pm.environment.set(\"jwt_token\", jsonData.data.token);",
+                  "});",
+                  "",
+                  "pm.test(\"User data is returned\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.data.user).to.have.property('email');",
+                  "    pm.expect(jsonData.data.user).to.have.property('role');",
+                  "    ",
+                  "    // Lưu user info",
+                  "    pm.environment.set(\"current_user_id\", jsonData.data.user.id);",
+                  "    pm.environment.set(\"current_user_role\", jsonData.data.user.role);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{test_email}}\",\n  \"password\": \"{{test_password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Đăng nhập và nhận JWT token.\n\n**Response:**\n- JWT token (expires in 7 days)\n- User profile (không có password)\n\n**Token được lưu tự động vào environment variable `jwt_token`**"
+          },
+          "response": []
+        },
+        {
+          "name": "Check Auth Status",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"User is authenticated\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.success).to.eql(true);",
+                  "    pm.expect(jsonData.data).to.have.property('user');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "Kiểm tra trạng thái xác thực của token hiện tại.\n\n**Requires:** Bearer token trong Authorization header"
+          },
+          "response": []
+        }
+      ],
+      "description": "Các endpoint liên quan đến Authentication & Authorization"
+    },
+    {
+      "name": "2. Data Management",
+      "item": [
+        {
+          "name": "Upload Research File",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"File uploaded successfully\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.success).to.eql(true);",
+                  "    pm.expect(jsonData.data).to.have.property('id');",
+                  "    ",
+                  "    // Lưu file ID để test download sau",
+                  "    pm.environment.set(\"last_uploaded_file_id\", jsonData.data.id);",
+                  "});",
+                  "",
+                  "pm.test(\"File metadata is correct\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.data).to.have.property('fileName');",
+                  "    pm.expect(jsonData.data).to.have.property('fileSize');",
+                  "    pm.expect(jsonData.data).to.have.property('uploadedAt');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": []
+                },
+                {
+                  "key": "fileType",
+                  "value": "RESEARCH_PAPER",
+                  "type": "text"
+                },
+                {
+                  "key": "title",
+                  "value": "Nghiên cứu ứng dụng AI trong quản lý BigData",
+                  "type": "text"
+                },
+                {
+                  "key": "description",
+                  "value": "Đề tài nghiên cứu về việc áp dụng Machine Learning vào phân tích dữ liệu lớn",
+                  "type": "text"
+                },
+                {
+                  "key": "department",
+                  "value": "Khoa Công nghệ Thông tin",
+                  "type": "text"
+                },
+                {
+                  "key": "researchArea",
+                  "value": "Artificial Intelligence",
+                  "type": "text"
+                },
+                {
+                  "key": "tags",
+                  "value": "AI,BigData,Machine Learning",
+                  "type": "text"
+                },
+                {
+                  "key": "keywords",
+                  "value": "deep learning,neural networks,data analytics",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/data/upload",
+              "host": ["{{base_url}}"],
+              "path": ["api", "data", "upload"]
+            },
+            "description": "Upload file nghiên cứu lên MinIO storage.\n\n**File types:**\n- RESEARCH_PAPER: Bài báo khoa học\n- DATASET: Tập dữ liệu\n- MODEL: ML/AI models\n- REPORT: Báo cáo\n- PRESENTATION: Slide thuyết trình\n- OTHER: Khác\n\n**Limits:**\n- Max file size: 500MB\n- Supported formats: PDF, CSV, JSON, XLSX, etc.\n\n**Storage:**\n- Files stored in MinIO bucket `research-files`\n- Path format: `research/{userId}/{timestamp}_{filename}`"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Uploaded Files",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Files list is returned\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.data).to.have.property('files');",
+                  "    pm.expect(jsonData.data).to.have.property('pagination');",
+                  "});",
+                  "",
+                  "pm.test(\"Pagination is correct\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.data.pagination).to.have.property('page');",
+                  "    pm.expect(jsonData.data.pagination).to.have.property('limit');",
+                  "    pm.expect(jsonData.data.pagination).to.have.property('total');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/data/upload?page=1&limit=20&fileType=RESEARCH_PAPER",
+              "host": ["{{base_url}}"],
+              "path": ["api", "data", "upload"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "fileType",
+                  "value": "RESEARCH_PAPER"
+                },
+                {
+                  "key": "department",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "uploadedBy",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Lấy danh sách files đã upload.\n\n**Query parameters:**\n- `page`: Trang hiện tại (default: 1)\n- `limit`: Số files mỗi trang (default: 20)\n- `fileType`: Lọc theo loại file\n- `department`: Lọc theo khoa/phòng\n- `uploadedBy`: Lọc theo user ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Execute Query - PostgreSQL",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Query executed successfully\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.success).to.eql(true);",
+                  "    pm.expect(jsonData.data).to.have.property('queryId');",
+                  "    pm.expect(jsonData.data).to.have.property('rows');",
+                  "});",
+                  "",
+                  "pm.test(\"Performance metrics returned\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.data).to.have.property('executionTime');",
+                  "    pm.expect(jsonData.data).to.have.property('rowCount');",
+                  "    pm.expect(jsonData.data).to.have.property('dataSize');",
+                  "    ",
+                  "    // Lưu query ID",
+                  "    pm.environment.set(\"last_query_id\", jsonData.data.queryId);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"queryText\": \"SELECT id, name, email, role, department FROM \\\"User\\\" WHERE status = 'ACTIVE' LIMIT 10\",\n  \"queryType\": \"POSTGRESQL\",\n  \"department\": \"Khoa Công nghệ Thông tin\",\n  \"parameters\": {}\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/data/query",
+              "host": ["{{base_url}}"],
+              "path": ["api", "data", "query"]
+            },
+            "description": "Thực thi query trên PostgreSQL.\n\n**Security:**\n- Chỉ cho phép SELECT queries\n- Không cho phép DROP, DELETE, UPDATE, ALTER\n- Query timeout: 30 seconds\n\n**Performance:**\n- Execution time được đo và lưu lại\n- Data size estimate (MB)\n- Row count tracking"
+          },
+          "response": []
+        },
+        {
+          "name": "Execute Query - ClickHouse",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Query executed on ClickHouse\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.success).to.eql(true);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"queryText\": \"SELECT event_date, COUNT(*) as total FROM events WHERE event_date >= today() - 7 GROUP BY event_date ORDER BY event_date DESC\",\n  \"queryType\": \"CLICKHOUSE\",\n  \"department\": \"Khoa Công nghệ Thông tin\",\n  \"parameters\": {\n    \"database\": \"analytics\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/data/query",
+              "host": ["{{base_url}}"],
+              "path": ["api", "data", "query"]
+            },
+            "description": "Thực thi query trên ClickHouse analytics database.\n\n**Use cases:**\n- Time-series analytics\n- Log analysis\n- Real-time reporting\n- Large dataset aggregations"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Query History",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Query history is returned\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.data).to.have.property('queries');",
+                  "    pm.expect(jsonData.data).to.have.property('pagination');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/data/query?page=1&limit=20&status=COMPLETED",
+              "host": ["{{base_url}}"],
+              "path": ["api", "data", "query"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "status",
+                  "value": "COMPLETED"
+                },
+                {
+                  "key": "queryType",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Lấy lịch sử queries của user hiện tại.\n\n**Filter options:**\n- `status`: RUNNING, COMPLETED, FAILED\n- `queryType`: POSTGRESQL, CLICKHOUSE, HADOOP, SPARK"
+          },
+          "response": []
+        }
+      ],
+      "description": "Các endpoint quản lý dữ liệu: upload, query, download"
+    },
+    {
+      "name": "3. Analytics & Dashboard",
+      "item": [
+        {
+          "name": "Get Dashboard Summary",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Summary data is complete\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.data).to.have.property('users');",
+                  "    pm.expect(jsonData.data).to.have.property('services');",
+                  "    pm.expect(jsonData.data).to.have.property('data');",
+                  "    pm.expect(jsonData.data).to.have.property('performance');",
+                  "    pm.expect(jsonData.data).to.have.property('alerts');",
+                  "});",
+                  "",
+                  "pm.test(\"User stats are correct\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.data.users).to.have.property('total');",
+                  "    pm.expect(jsonData.data.users).to.have.property('active');",
+                  "    pm.expect(jsonData.data.users).to.have.property('new');",
+                  "});",
+                  "",
+                  "pm.test(\"Service stats are correct\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.data.services).to.have.property('total');",
+                  "    pm.expect(jsonData.data.services).to.have.property('healthy');",
+                  "});",
+                  "",
+                  "pm.test(\"Performance metrics are present\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.data.performance).to.have.property('avgCpuUsage');",
+                  "    pm.expect(jsonData.data.performance).to.have.property('avgMemoryUsage');",
+                  "    pm.expect(jsonData.data.performance).to.have.property('avgDiskUsage');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/analytics/summary?period=today",
+              "host": ["{{base_url}}"],
+              "path": ["api", "analytics", "summary"],
+              "query": [
+                {
+                  "key": "period",
+                  "value": "today",
+                  "description": "today | week | month"
+                }
+              ]
+            },
+            "description": "Lấy tổng hợp thống kê cho dashboard.\n\n**Metrics included:**\n- **Users:** total, active, new registrations\n- **Services:** total, status distribution (healthy/degraded/down)\n- **Data:** files count, queries count, storage usage\n- **Performance:** CPU, Memory, Disk usage averages\n- **Alerts:** active alerts count\n- **Recent activities:** latest uploads & queries\n\n**Period options:**\n- `today`: Từ 00:00 hôm nay\n- `week`: 7 ngày gần nhất\n- `month`: 30 ngày gần nhất"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Dashboard Stats (Legacy)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/dashboard/stats",
+              "host": ["{{base_url}}"],
+              "path": ["api", "dashboard", "stats"]
+            },
+            "description": "Legacy endpoint - sử dụng /api/analytics/summary thay thế"
+          },
+          "response": []
+        }
+      ],
+      "description": "Analytics endpoints cho dashboard metrics"
+    },
+    {
+      "name": "4. User Management",
+      "item": [
+        {
+          "name": "Get All Users",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Users list returned\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test(\"User data structure is correct\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.length > 0) {",
+                  "        pm.expect(jsonData[0]).to.have.property('id');",
+                  "        pm.expect(jsonData[0]).to.have.property('email');",
+                  "        pm.expect(jsonData[0]).to.have.property('role');",
+                  "        pm.expect(jsonData[0]).to.not.have.property('password');",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users"]
+            },
+            "description": "Lấy danh sách tất cả users.\n\n**Note:** Password không được trả về trong response"
+          },
+          "response": []
+        },
+        {
+          "name": "Get User by ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"User data is returned\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('id');",
+                  "    pm.expect(jsonData).to.have.property('email');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users/{{current_user_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "{{current_user_id}}"]
+            },
+            "description": "Lấy thông tin chi tiết một user theo ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Nguyễn Văn Updated\",\n  \"phone\": \"0987654321\",\n  \"department\": \"Khoa Kỹ thuật\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/users/{{current_user_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "{{current_user_id}}"]
+            },
+            "description": "Cập nhật thông tin user"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/users/{{user_id_to_delete}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "users", "{{user_id_to_delete}}"]
+            },
+            "description": "Xóa user (soft delete - set status = INACTIVE)"
+          },
+          "response": []
+        }
+      ],
+      "description": "Quản lý người dùng"
+    },
+    {
+      "name": "5. Services Management",
+      "item": [
+        {
+          "name": "Get All Services",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/services",
+              "host": ["{{base_url}}"],
+              "path": ["api", "services"]
+            },
+            "description": "Lấy danh sách tất cả BigData services:\n- PostgreSQL\n- MinIO\n- ClickHouse\n- Hadoop\n- Spark"
+          },
+          "response": []
+        },
+        {
+          "name": "Check Service Health",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Health check data returned\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('status');",
+                  "    pm.expect(jsonData).to.have.property('services');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/services/health",
+              "host": ["{{base_url}}"],
+              "path": ["api", "services", "health"]
+            },
+            "description": "Health check endpoint - không cần authentication.\n\n**Returns:**\n- Overall system status\n- Individual service status\n- Response times\n- Error states"
+          },
+          "response": []
+        }
+      ],
+      "description": "Quản lý và giám sát các BigData services"
+    },
+    {
+      "name": "6. Logs & Alerts",
+      "item": [
+        {
+          "name": "Get System Logs",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/logs?level=INFO&category=AUTH&limit=50",
+              "host": ["{{base_url}}"],
+              "path": ["api", "logs"],
+              "query": [
+                {
+                  "key": "level",
+                  "value": "INFO",
+                  "description": "DEBUG | INFO | WARNING | ERROR | CRITICAL"
+                },
+                {
+                  "key": "category",
+                  "value": "AUTH",
+                  "description": "AUTH | DATA_PROCESSING | SYSTEM | SECURITY"
+                },
+                {
+                  "key": "limit",
+                  "value": "50"
+                }
+              ]
+            },
+            "description": "Lấy system logs với các bộ lọc.\n\n**Log levels:**\n- DEBUG: Chi tiết debug\n- INFO: Thông tin thông thường\n- WARNING: Cảnh báo\n- ERROR: Lỗi\n- CRITICAL: Lỗi nghiêm trọng\n\n**Categories:**\n- AUTH: Authentication/Authorization\n- DATA_PROCESSING: File upload, queries\n- SYSTEM: System operations\n- SECURITY: Security events"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Active Alerts",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/alerts?status=ACTIVE&severity=HIGH",
+              "host": ["{{base_url}}"],
+              "path": ["api", "alerts"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "ACTIVE"
+                },
+                {
+                  "key": "severity",
+                  "value": "HIGH",
+                  "description": "LOW | MEDIUM | HIGH | CRITICAL"
+                }
+              ]
+            },
+            "description": "Lấy danh sách alerts.\n\n**Alert types:**\n- Service downtime\n- High resource usage (CPU/Memory/Disk)\n- Failed queries\n- Security incidents\n\n**Severity levels:**\n- LOW: Thông tin\n- MEDIUM: Cần chú ý\n- HIGH: Ưu tiên cao\n- CRITICAL: Khẩn cấp"
+          },
+          "response": []
+        }
+      ],
+      "description": "System logs và alerts"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{jwt_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Pre-request script: có thể thêm logging, validation, etc.",
+          "console.log('Request to:', pm.request.url.toString());"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Global test script",
+          "pm.test(\"Response time is less than 5000ms\", function () {",
+          "    pm.expect(pm.response.responseTime).to.be.below(5000);",
+          "});"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+id,code,name,description,positionScope,level,isActive,createdAt,updatedAt
+cmlta35oc0000wa1zsjeskm3p,GIAM_DOC,Giám đốc Học viện,Người đứng đầu Học viện,ACADEMY,1,t,2026-02-19 09:48:21.757,2026-02-19 09:48:21.757
+cmlta35og0001wa1zjbj698c8,PHO_GIAM_DOC,Phó Giám đốc Học viện,Phó giám đốc phụ trách mảng,ACADEMY,2,t,2026-02-19 09:48:21.76,2026-02-19 09:48:21.76
+cmlta35oi0002wa1zyku27i2u,CHINH_UY,Chính ủy Học viện,Chính ủy Học viện,ACADEMY,2,t,2026-02-19 09:48:21.762,2026-02-19 09:48:21.762
+cmlta35ok0003wa1zy8tlm7vq,TRUONG_KHOA,Trưởng Khoa,Trưởng khoa chuyên môn,DEPARTMENT,3,t,2026-02-19 09:48:21.765,2026-02-19 09:48:21.765
+cmlta35on0004wa1ztcqzo0nn,PHO_TRUONG_KHOA,Phó Trưởng Khoa,Phó trưởng khoa,DEPARTMENT,4,t,2026-02-19 09:48:21.767,2026-02-19 09:48:21.767
+cmlta35op0005wa1zuc78pvzp,TRUONG_PHONG,Trưởng Phòng,Trưởng phòng ban,DEPARTMENT,3,t,2026-02-19 09:48:21.77,2026-02-19 09:48:21.77
+cmlta35or0006wa1z77zacj6w,PHO_TRUONG_PHONG,Phó Trưởng Phòng,Phó trưởng phòng ban,DEPARTMENT,4,t,2026-02-19 09:48:21.772,2026-02-19 09:48:21.772
+cmlta35ot0007wa1zjfz8aj3x,CHU_NHIEM_BO_MON,Chủ nhiệm Bộ môn,Chủ nhiệm bộ môn,UNIT,5,t,2026-02-19 09:48:21.774,2026-02-19 09:48:21.774
+cmlta35ow0008wa1zlnsxwge6,PHO_CHU_NHIEM_BM,Phó Chủ nhiệm Bộ môn,Phó chủ nhiệm bộ môn,UNIT,6,t,2026-02-19 09:48:21.776,2026-02-19 09:48:21.776
+cmlta35ox0009wa1zte2qw3eh,GIANG_VIEN_CHINH,Giảng viên chính,Giảng viên chính,SELF,7,t,2026-02-19 09:48:21.778,2026-02-19 09:48:21.778
+cmlta35oz000awa1zttmgwfiq,GIANG_VIEN,Giảng viên,Giảng viên,SELF,8,t,2026-02-19 09:48:21.78,2026-02-19 09:48:21.78
+cmlta35p2000bwa1zw1j25lzr,TRO_GIANG,Trợ giảng,Trợ giảng,SELF,9,t,2026-02-19 09:48:21.782,2026-02-19 09:48:21.782
+cmlta35p4000cwa1zzip4la9c,NGHIEN_CUU_VIEN,Nghiên cứu viên,Nghiên cứu viên,SELF,8,t,2026-02-19 09:48:21.784,2026-02-19 09:48:21.784
+cmlta35p6000dwa1z1319ti7r,CHUYEN_VIEN,Chuyên viên,Chuyên viên hành chính,UNIT,7,t,2026-02-19 09:48:21.786,2026-02-19 09:48:21.786
+cmlta35p8000ewa1zcaa2qvjl,CAN_BO_THU_VIEN,Cán bộ Thư viện,Cán bộ thư viện,UNIT,8,t,2026-02-19 09:48:21.789,2026-02-19 09:48:21.789
+cmlta35pa000fwa1zh0apkjcg,CAN_BO_TAI_CHINH,Cán bộ Tài chính,Cán bộ tài chính,UNIT,8,t,2026-02-19 09:48:21.791,2026-02-19 09:48:21.791
+cmlta35pc000gwa1zrqnbcnyj,CAN_BO_TO_CHUC,Cán bộ Tổ chức,Cán bộ tổ chức cán bộ,UNIT,8,t,2026-02-19 09:48:21.793,2026-02-19 09:48:21.793
+cmlta35pf000hwa1z07ndgbeo,CAN_BO_DANG,Cán bộ Đảng,Cán bộ công tác Đảng,UNIT,8,t,2026-02-19 09:48:21.795,2026-02-19 09:48:21.795
+cmlta35ph000iwa1zj2hu1yuk,QUAN_TRI_HE_THONG,Quản trị hệ thống,Quản trị viên CNTT,ACADEMY,3,t,2026-02-19 09:48:21.797,2026-02-19 09:48:21.797
+cmlta35pj000jwa1zaeykg606,KY_THUAT_VIEN,Kỹ thuật viên,Kỹ thuật viên CNTT,ACADEMY,7,t,2026-02-19 09:48:21.799,2026-02-19 09:48:21.799
+cmlta35pl000kwa1ztxe4byt8,HOC_VIEN_QUAN_SU,Học viên quân sự,Học viên đào tạo sĩ quan,SELF,10,t,2026-02-19 09:48:21.802,2026-02-19 09:48:21.802
+cmlta35pn000lwa1z8ahpo5ip,SINH_VIEN_DAN_SU,Sinh viên dân sự,Sinh viên đào tạo dân sự,SELF,10,t,2026-02-19 09:48:21.804,2026-02-19 09:48:21.804
+cmlta35pp000mwa1zm0ag6oic,HOC_VIEN_CAO_HOC,Học viên cao học,Học viên cao học/NCS,SELF,10,t,2026-02-19 09:48:21.806,2026-02-19 09:48:21.806
+cmlue99980020lb08wu3i19h0,TRO_LY,Trợ lý Ban Kế Hoạch,Trợ lý của Viện nghiên cứu,SELF,0,t,2026-02-20 04:32:50.972,2026-02-20 04:32:50.972
+cmluijgya0000p708rxz3x2rt,VIEN_TRUONG,Viện trưởng,Chỉ huy Viện nghiên cứu,UNIT,0,t,2026-02-20 06:32:45.97,2026-02-20 06:32:45.97
+cmluik5wi0003p708y252obr9,PHO_VIEN_TRUONG,Phó Viện trưởng,Chỉ huy Viện nghiên cứu,UNIT,0,t,2026-02-20 06:33:18.306,2026-02-20 06:33:18.306

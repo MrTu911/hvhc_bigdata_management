@@ -1,0 +1,62 @@
+# Flask Web Framework
+Flask==3.0.0
+flask-cors==4.0.0
+flask-restful==0.3.10
+
+# Database
+psycopg2-binary==2.9.9
+SQLAlchemy==2.0.23
+alembic==1.13.0
+
+# Redis
+redis==5.0.1
+
+# ML/AI Core
+tensorflow==2.14.0
+torch==2.1.0
+torchvision==0.16.0
+torchaudio==2.1.0
+scikit-learn==1.3.2
+numpy==1.24.3
+pandas==2.1.3
+
+# NLP
+transformers==4.35.2
+sentencepiece==0.1.99
+tokenizers==0.15.0
+datasets==2.15.0
+accelerate==0.24.1
+
+# Visualization
+matplotlib==3.8.2
+seaborn==0.13.0
+plotly==5.18.0
+
+# Utilities
+python-dotenv==1.0.0
+requests==2.31.0
+pyyaml==6.0.1
+joblib==1.3.2
+tqdm==4.66.1
+
+# API Documentation
+flasgger==0.9.7.1
+
+# Monitoring
+prometheus-client==0.19.0
+
+# Testing
+pytest==7.4.3
+pytest-cov==4.1.0
+
+# Celery for task queue
+celery==5.3.4
+
+# Vietnamese NLP
+underthesea==6.7.0
+vietnamese-stopwords==0.1.0
+
+# Additional utilities
+pillow==10.1.0
+scipy==1.11.4
+openpyxl==3.1.2

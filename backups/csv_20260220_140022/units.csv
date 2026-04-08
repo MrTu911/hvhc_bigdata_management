@@ -1,0 +1,157 @@
+id,name,code,type,level,parentId,commanderId,description,active,createdAt,updatedAt,path
+cmjjumzc7001btsi2gdphyz7h,Bộ môn Hậu cần chiến đấu,BM_K1_1,BOMON,3,cmjjumzbf000htsi2ysxlz1mm,,,f,2025-12-24 10:06:32.551,2026-02-20 05:58:40.761,/HVHC/K1/BM_K1_1
+cmjjumzbf000htsi2ysxlz1mm,Khoa Chỉ huy hậu cần,K1,KHOA,2,cmjjumzap0001tsi2duq5956e,,Khoa Chỉ huy hậu cần,f,2025-12-24 10:06:32.523,2026-02-20 05:58:40.713,/HVHC/K1
+cmjjumzby0011tsi2emx6euo5,Viện Nghiên cứu KHHCQS,VIEN1,BAN,2,cmjjumzap0001tsi2duq5956e,,Viện Nghiên cứu Khoa học Hậu cần Quân sự,f,2025-12-24 10:06:32.542,2026-02-20 05:58:40.715,/HVHC/VIEN1
+cmjjumzb40009tsi2ft5yc2qm,Phòng Chính trị,B3,PHONG,2,cmjjumzap0001tsi2duq5956e,,Phòng Chính trị,f,2025-12-24 10:06:32.513,2026-02-20 05:58:40.693,/HVHC/B3
+cmjjumzba000dtsi2k3cvqx1h,Văn phòng,B5,PHONG,2,cmjjumzap0001tsi2duq5956e,,Văn phòng,f,2025-12-24 10:06:32.518,2026-02-20 05:58:40.704,/HVHC/B5
+cmjjumzbj000ltsi216getk3s,Khoa Vận tải,K3,KHOA,2,cmjjumzap0001tsi2duq5956e,,Khoa Vận tải quân sự,f,2025-12-24 10:06:32.527,2026-02-20 05:58:40.707,/HVHC/K3
+cmjjumzcc001htsi2dne7elng,Bộ môn Bảo đảm,BM_K2_2,BOMON,3,cmjjumzbh000jtsi21iap2kce,,,f,2025-12-24 10:06:32.557,2026-02-20 05:58:40.769,/HVHC/K2/BM_K2_2
+cmjjumzce001jtsi2u2znotds,Bộ môn Thương phẩm,BM_K2_3,BOMON,3,cmjjumzbh000jtsi21iap2kce,,,f,2025-12-24 10:06:32.558,2026-02-20 05:58:40.772,/HVHC/K2/BM_K2_3
+cmjjumzbw000ztsi2in881vfs,Ban CNTT,BAN2,BAN,2,cmjjumzbd000ftsi2f0xdpnnd,,Ban Công nghệ thông tin,f,2025-12-24 10:06:32.54,2026-02-20 05:58:40.72,/HVHC/VP/BAN2
+cmjjumzcg001ltsi2voxmzirs,Bộ môn Chỉ huy vận tải,BM_K3_1,BOMON,3,cmjjumzbj000ltsi216getk3s,,,f,2025-12-24 10:06:32.56,2026-02-20 05:58:40.774,/HVHC/K3/BM_K3_1
+cmjjumzci001ntsi25usijbbn,Bộ môn Bảo đảm,BM_K4_1,BOMON,3,cmjjumzbl000ntsi2wns1kriu,,,f,2025-12-24 10:06:32.562,2026-02-20 05:58:40.776,/HVHC/K4/BM_K4_1
+cmjjumzcj001ptsi22fk16q1n,Bộ môn Kinh tế,BM_K5_1,BOMON,3,cmjjumzbm000ptsi2wiu0uq4y,,,f,2025-12-24 10:06:32.564,2026-02-20 05:58:40.779,/HVHC/K5/BM_K5_1
+cmjjumzb00005tsi2so3puiyf,Phòng Đào tạo,B1,PHONG,2,cmjjumzap0001tsi2duq5956e,,Phòng Đào tạo và quản lý đào tạo,f,2025-12-24 10:06:32.508,2026-02-20 05:58:40.709,/HVHC/B1
+cmjjumzcl001rtsi2y0jyuqav,Bộ môn Huấn luyện thể lực,BM_K6_1,BOMON,3,cmjjumzbo000rtsi2ialufxp3,,,f,2025-12-24 10:06:32.565,2026-02-20 05:58:40.781,/HVHC/K6/BM_K6_1
+cmjjumzbt000xtsi2llo506lv,Ban Hành chính,BAN1,BAN,2,cmjjumzbd000ftsi2f0xdpnnd,,Ban Hành chính - Văn phòng,f,2025-12-24 10:06:32.538,2026-02-20 05:58:40.717,/HVHC/VP/BAN1
+cmjjumzcn001ttsi2v6tr8p2x,Bộ môn Toán,BM_K7_1,BOMON,3,cmjjumzbq000ttsi2xsodpuh7,,,f,2025-12-24 10:06:32.567,2026-02-20 05:58:40.784,/HVHC/K7/BM_K7_1
+cmjjumzc10015tsi2uy0kzk4q,Tiểu đoàn 2,TD2,TIEUDOAN,2,cmjjumzap0001tsi2duq5956e,,Tiểu đoàn học viên 2,f,2025-12-24 10:06:32.546,2026-02-20 05:58:40.722,/HVHC/TD2
+cmjjumzco001vtsi2pz0y45pa,Bộ môn Tin học,BM_K7_2,BOMON,3,cmjjumzbq000ttsi2xsodpuh7,,,f,2025-12-24 10:06:32.569,2026-02-20 05:58:40.786,/HVHC/K7/BM_K7_2
+cmjjumzax0003tsi2yx3yi7tm,Ban Giám đốc,BGD,BAN,2,cmjjumzap0001tsi2duq5956e,,Ban Giám đốc học viện,f,2025-12-24 10:06:32.505,2026-02-20 05:58:40.696,/HVHC/BGD
+cmjjumzcq001xtsi2yl3qurst,Bộ môn Anh văn,BM_K8_1,BOMON,3,cmjjumzbs000vtsi2mzykuz68,,,f,2025-12-24 10:06:32.571,2026-02-20 05:58:40.789,/HVHC/K8/BM_K8_1
+cmjjumzbq000ttsi2xsodpuh7,Khoa Khoa học cơ bản,K7,KHOA,2,cmjjumzap0001tsi2duq5956e,,Khoa Khoa học cơ bản,f,2025-12-24 10:06:32.534,2026-02-20 05:58:40.698,/HVHC/K7
+cmjjumzcs001ztsi2h94pcvb7,Đại đội 1 - Tiểu đoàn 1,DD_TD1_1,DAIDOI,3,cmjjumzc00013tsi240ylxppz,,,f,2025-12-24 10:06:32.572,2026-02-20 05:58:40.791,/HVHC/TD1/DD_TD1_1
+cmjjumzcu0021tsi2uueb6om3,Đại đội 2 - Tiểu đoàn 1,DD_TD1_2,DAIDOI,3,cmjjumzc00013tsi240ylxppz,,,f,2025-12-24 10:06:32.574,2026-02-20 05:58:40.794,/HVHC/TD1/DD_TD1_2
+cmjjumzbl000ntsi2wns1kriu,Khoa Xăng dầu,K4,KHOA,2,cmjjumzap0001tsi2duq5956e,,Khoa Xăng dầu quân sự,f,2025-12-24 10:06:32.529,2026-02-20 05:58:40.711,/HVHC/K4
+cmjjumzcv0023tsi20ln6gs2d,Đại đội 1 - Tiểu đoàn 2,DD_TD2_1,DAIDOI,3,cmjjumzc10015tsi2uy0kzk4q,,,f,2025-12-24 10:06:32.576,2026-02-20 05:58:40.796,/HVHC/TD2/DD_TD2_1
+cmjjumzcx0025tsi2o23s2n3j,Đại đội 2 - Tiểu đoàn 2,DD_TD2_2,DAIDOI,3,cmjjumzc10015tsi2uy0kzk4q,,,f,2025-12-24 10:06:32.578,2026-02-20 05:58:40.798,/HVHC/TD2/DD_TD2_2
+cmjjumzcz0027tsi274oalygj,Đại đội 13 - Tiểu đoàn 4,DD_TD4_13,DAIDOI,3,cmjjumzc50019tsi212h0e2qq,,,f,2025-12-24 10:06:32.58,2026-02-20 05:58:40.801,/HVHC/TD4/DD_TD4_13
+cmjjumzap0001tsi2duq5956e,Học viện Hậu cần,HVHC,HVHC,1,,,Học viện Hậu cần - Bộ Quốc phòng,f,2025-12-24 10:06:32.498,2026-02-20 05:58:40.678,/HVHC
+cmjjumzc00013tsi240ylxppz,Tiểu đoàn 1,TD1,TIEUDOAN,2,cmjjumzap0001tsi2duq5956e,,Tiểu đoàn học viên 1,f,2025-12-24 10:06:32.544,2026-02-20 05:58:40.724,/HVHC/TD1
+cmjjumzb7000btsi2fwy7wd9c,Phòng Chính trị,B4,PHONG,2,cmjjumzap0001tsi2duq5956e,,Phòng Chính trị,f,2025-12-24 10:06:32.515,2026-02-20 05:58:40.739,/HVHC/B4
+cmjjumzc50019tsi212h0e2qq,Tiểu đoàn 4,TD4,TIEUDOAN,2,cmjjumzap0001tsi2duq5956e,,Tiểu đoàn học viên 4,f,2025-12-24 10:06:32.549,2026-02-20 05:58:40.741,/HVHC/TD4
+cmjjumzbs000vtsi2mzykuz68,Khoa Ngoại ngữ,K8,KHOA,2,cmjjumzap0001tsi2duq5956e,,Khoa Ngoại ngữ,f,2025-12-24 10:06:32.536,2026-02-20 05:58:40.745,/HVHC/K8
+cmjjumzc9001dtsi28tcps3bk,Bộ môn Chỉ huy tham mưu,BM_K1_2,BOMON,3,cmjjumzbf000htsi2ysxlz1mm,,,f,2025-12-24 10:06:32.553,2026-02-20 05:58:40.764,/HVHC/K1/BM_K1_2
+cmjjumzcb001ftsi2utdbj0ef,Bộ môn Kỹ thuật,BM_K2_1,BOMON,3,cmjjumzbh000jtsi21iap2kce,,,f,2025-12-24 10:06:32.555,2026-02-20 05:58:40.767,/HVHC/K2/BM_K2_1
+cmjjumzbh000jtsi21iap2kce,Khoa Quân nhu,K2,KHOA,2,cmjjumzap0001tsi2duq5956e,,Khoa Quân nhu,f,2025-12-24 10:06:32.525,2026-02-20 05:58:40.7,/HVHC/K2
+cmjjumzbd000ftsi2f0xdpnnd,Văn phòng,VP,PHONG,2,cmjjumzap0001tsi2duq5956e,,Văn phòng học viện,f,2025-12-24 10:06:32.521,2026-02-20 05:58:40.684,/HVHC/VP
+cmjjumzbm000ptsi2wiu0uq4y,Khoa Tài chính,K5,KHOA,2,cmjjumzap0001tsi2duq5956e,,Khoa Tài chính quân sự,f,2025-12-24 10:06:32.531,2026-02-20 05:58:40.686,/HVHC/K5
+cmjjumzb20007tsi2g1dct5fq,Phòng KHQS,B2,PHONG,2,cmjjumzap0001tsi2duq5956e,,Phòng Khoa học quân sự,f,2025-12-24 10:06:32.51,2026-02-20 05:58:40.689,/HVHC/B2
+cmjjumzbo000rtsi2ialufxp3,Khoa Quân sự,K6,KHOA,2,cmjjumzap0001tsi2duq5956e,,Khoa Quân sự chung,f,2025-12-24 10:06:32.533,2026-02-20 05:58:40.691,/HVHC/K6
+cmkkzlsb20009qf08xdzjo0o4,Tổng cục Chính Trị,BQP_TCCT,Tổng cục,2,cmkkyqp5b0001ru085kv8b551,,,f,2026-01-19 09:53:03.374,2026-02-20 05:58:40.73,/BQP/BQP_TCCT
+cmkkzmhzq000dqf08r9kdshfk,Tổng cục 2,BQP_TC2,Tổng cục,2,cmkkyqp5b0001ru085kv8b551,,,f,2026-01-19 09:53:36.663,2026-02-20 05:58:40.732,/BQP/BQP_TC2
+cmkkzl6ge0005qf084yx9m1ur,Bộ Tổng Tham Mưu,BQP_BTTM,Bộ tổng TM,2,cmkkyqp5b0001ru085kv8b551,,,f,2026-01-19 09:52:35.055,2026-02-20 05:58:40.735,/BQP/BQP_BTTM
+cmkkzk89s0001qf08pwgnquki,Học viện Hậu cần,BQP_HVHC,Học viện,2,cmkkyqp5b0001ru085kv8b551,cmgd39s0f0006w1u9qki47uta,,t,2026-01-19 09:51:50.753,2026-02-20 05:58:40.743,/BQP/BQP_HVHC
+cmkkyqp5b0001ru085kv8b551,Bộ Quốc Phòng,BQP,BQP,1,,,,t,2026-01-19 09:28:52.943,2026-02-20 05:58:40.681,/BQP
+cmkkzna15000hqf08oktrfs67,Tổng cục HC-KT,BQP_TCHCKT,Tổng cục,2,cmkkyqp5b0001ru085kv8b551,,,f,2026-01-19 09:54:13.001,2026-02-20 05:58:40.728,/BQP/BQP_TCHCKT
+cmkl051xy003jqf08xow3y0nq,Hệ Quốc tế,BQP_HVHC_H4,Hệ,3,cmkkzk89s0001qf08pwgnquki,,,t,2026-01-19 10:08:02.326,2026-02-20 05:58:40.748,/BQP/BQP_HVHC/BQP_HVHC_H4
+cmkl05ghl003nqf08m97o3jkv,Tiểu đoàn 1,BQP_HVHC_d1,Tiểu đoàn,3,cmkkzk89s0001qf08pwgnquki,,,t,2026-01-19 10:08:21.177,2026-02-20 05:58:40.751,/BQP/BQP_HVHC/BQP_HVHC_d1
+cmkl07egn0043qf08yvn2e2fg,Ban Khảo thí và bảo đảm chất lượng GDDT,BQP_HVHC_B14,Ban trực thuộc,3,cmkkzk89s0001qf08pwgnquki,,,t,2026-01-19 10:09:51.863,2026-02-20 05:58:40.756,/BQP/BQP_HVHC/BQP_HVHC_B14
+cmkkznuno000lqf08y64hljar,Phòng Đào tạo,BQP_HVHC_B1,Phòng,3,cmkkzk89s0001qf08pwgnquki,,,t,2026-01-19 09:54:39.732,2026-02-20 05:58:40.803,/BQP/BQP_HVHC/BQP_HVHC_B1
+cmkkzoajd000pqf08f1w56xfe,Phòng Khoa học Quân sự,BQP_HVHC_B2,Phòng,3,cmkkzk89s0001qf08pwgnquki,,,t,2026-01-19 09:55:00.313,2026-02-20 05:58:40.806,/BQP/BQP_HVHC/BQP_HVHC_B2
+cmkkzpbr1000xqf08qztvaeml,Phòng Hậu cần - Kỹ thuật,BQP_HVHC_B4,Phòng,3,cmkkzk89s0001qf08pwgnquki,,,t,2026-01-19 09:55:48.541,2026-02-20 05:58:40.811,/BQP/BQP_HVHC/BQP_HVHC_B4
+cmkkzq6rp0015qf08auxm97bl,Phòng Sau đại học,BQP_HVHC_B7,Phòng,3,cmkkzk89s0001qf08pwgnquki,,,t,2026-01-19 09:56:28.742,2026-02-20 05:58:40.813,/BQP/BQP_HVHC/BQP_HVHC_B7
+cmkkzqva60019qf08pu7epbfk,Ban Tài chính,BQP_HVHC_B9,Ban trực thuộc,3,cmkkzk89s0001qf08pwgnquki,,,t,2026-01-19 09:57:00.511,2026-02-20 05:58:40.815,/BQP/BQP_HVHC/BQP_HVHC_B9
+cmkl01ba3002pqf08ldft8l3v,Khoa CTĐ - CTCT,BQP_HVHC_K9,Khoa,3,cmkkzk89s0001qf08pwgnquki,,,t,2026-01-19 10:05:07.804,2026-02-20 05:58:40.82,/BQP/BQP_HVHC/BQP_HVHC_K9
+cmkl01q5s002tqf088dzk3h1g,Khoa Khoa học cơ bản,BQP_HVHC_K10,Khoa,3,cmkkzk89s0001qf08pwgnquki,,,t,2026-01-19 10:05:27.088,2026-02-20 05:58:40.822,/BQP/BQP_HVHC/BQP_HVHC_K10
+cmkl022j2002xqf08gzcpwznf,Khoa Ngoại ngữ,BQP_HVHC_K11,Khoa,3,cmkkzk89s0001qf08pwgnquki,,,t,2026-01-19 10:05:43.118,2026-02-20 05:58:40.825,/BQP/BQP_HVHC/BQP_HVHC_K11
+cmkl02jri0031qf08wghzx8cr,Khoa Hậu cần chiến dịch,BQP_HVHC_K14,Khoa,3,cmkkzk89s0001qf08pwgnquki,,,t,2026-01-19 10:06:05.454,2026-02-20 05:58:40.827,/BQP/BQP_HVHC/BQP_HVHC_K14
+cmkl037xt0035qf08rumxvg7a,Hệ Đào tạo Sau đại học,BQP_HVHC_H1,Hệ,3,cmkkzk89s0001qf08pwgnquki,,,t,2026-01-19 10:06:36.786,2026-02-20 05:58:40.829,/BQP/BQP_HVHC/BQP_HVHC_H1
+cmkm20lxq000ppj089s11byuc,Bộ môn Hậu cần chung,BQP_HVHC_K14_HCC,Bộ môn,4,cmkl02jri0031qf08wghzx8cr,,,t,2026-01-20 03:48:20.366,2026-02-20 05:58:40.997,/BQP/BQP_HVHC/BQP_HVHC_K14/BQP_HVHC_K14_HCC
+cmkl7fpgh0001p308l65xfy0v,Ban CNTT,BQP_HVHC_B5_CNTT,Ban,4,cmkkzpu8i0011qf089vdxgajn,,,t,2026-01-19 13:32:16.673,2026-02-20 05:58:41.015,/BQP/BQP_HVHC/BQP_HVHC_B5/BQP_HVHC_B5_CNTT
+cmkkzte9c001lqf08ew61rf2l,Ban Khoa học HCQS,BQP_HVHC_B12_BanKHHC,Ban,4,cmkkzrlar001dqf087ltgjecj,,,t,2026-01-19 09:58:58.417,2026-02-20 05:58:41.018,/BQP/BQP_HVHC/BQP_HVHC_B12/BQP_HVHC_B12_BanKHHC
+cmkm2871u0015pj0853ar9x4z,Ban Hành chính,BQP_HVHC_B5_HCVP,Ban,4,cmkkzpu8i0011qf089vdxgajn,,,t,2026-01-20 03:54:14.322,2026-02-20 05:58:41.049,/BQP/BQP_HVHC/BQP_HVHC_B5/BQP_HVHC_B5_HCVP
+cmkm2cm9t001npj08wx8at3r4,Ban Bảo đảm vật chất huấn luyện,BQP_HVHC_B1_BVC,Ban,4,cmkkznuno000lqf08y64hljar,,,t,2026-01-20 03:57:40.673,2026-02-20 05:58:41.052,/BQP/BQP_HVHC/BQP_HVHC_B1/BQP_HVHC_B1_BVC
+cmkm2d68x001rpj08ixf8if2m,Ban Kế hoạch,BQP_HVHC_B1_BKH,Ban,4,cmkkznuno000lqf08y64hljar,,,t,2026-01-20 03:58:06.561,2026-02-20 05:58:41.055,/BQP/BQP_HVHC/BQP_HVHC_B1/BQP_HVHC_B1_BKH
+cmkm2dmcn001vpj08ausqi3as,Ban Bản đồ,BQP_HVHC_B1_BBĐ,Ban,4,cmkkznuno000lqf08y64hljar,,,t,2026-01-20 03:58:27.431,2026-02-20 05:58:41.058,/BQP/BQP_HVHC/BQP_HVHC_B1/BQP_HVHC_B1_BBĐ
+cmkm2hyu00025pj08go68ezzd,Bộ môn Quân y,BQP_HVHC_K1_QY,Bộ môn,4,cmkkzy759001tqf086htbkg9i,,Bộ môn Quân y,t,2026-01-20 04:01:50.233,2026-02-20 05:58:41.063,/BQP/BQP_HVHC/BQP_HVHC_K1/BQP_HVHC_K1_QY
+cmkm2il5m0029pj08zksusvaw,Bộ môn Hậu cần quân sự địa phương,BQP_HVHC_K1_HCQSDP,Bộ môn,4,cmkkzy759001tqf086htbkg9i,,,t,2026-01-20 04:02:19.162,2026-02-20 05:58:41.066,/BQP/BQP_HVHC/BQP_HVHC_K1/BQP_HVHC_K1_HCQSDP
+cmkkzwdjd001pqf08ww0wltvn,Ban Giám đốc,BQP_HVHC_BGĐ,HVHC,3,cmkkzk89s0001qf08pwgnquki,,,t,2026-01-19 10:01:17.45,2026-02-20 05:58:40.836,/BQP/BQP_HVHC/BQP_HVHC_BGĐ
+cmkkzywrs0021qf08zgyfgstb,Khoa Vận tải,BQP_HVHC_K3,Khoa,3,cmkkzk89s0001qf08pwgnquki,,,t,2026-01-19 10:03:15.689,2026-02-20 05:58:40.841,/BQP/BQP_HVHC/BQP_HVHC_K3
+cmjjumzc30017tsi23061llw5,Tiểu đoàn 3,TD3,TIEUDOAN,2,cmjjumzap0001tsi2duq5956e,,Tiểu đoàn học viên 3,f,2025-12-24 10:06:32.548,2026-02-20 05:58:40.737,/HVHC/TD3
+cmkmcai0k00bvrx08boybmjga,Tổng cục Chính trị,TCCT,Tổng cục,2,cmkkyqp5b0001ru085kv8b551,,,f,2026-01-20 08:35:58.005,2026-02-20 05:58:40.726,/BQP/TCCT
+cmkm2u97h003fpj0889arp0s8,Bộ môn Sản xuất,BQP_HVHC_K2_BMSX,Bộ môn,4,cmkkzyk1p001xqf08fifvhlmx,,,t,2026-01-20 04:11:23.549,2026-02-20 05:58:40.888,/BQP/BQP_HVHC/BQP_HVHC_K2/BQP_HVHC_K2_BMSX
+cmkm2utf8003jpj08grzmehii,Bộ môn Thương phẩm,BQP_HVHC_K2_BMTP,Bộ môn,4,cmkkzyk1p001xqf08fifvhlmx,,,t,2026-01-20 04:11:49.748,2026-02-20 05:58:40.891,/BQP/BQP_HVHC/BQP_HVHC_K2/BQP_HVHC_K2_BMTP
+cmkm2vpwy003npj0868jbg0mz,Bộ môn Bảo đảm,BQP_HVHC_K2_BMBĐ,Bộ môn,4,cmkkzyk1p001xqf08fifvhlmx,,,t,2026-01-20 04:12:31.858,2026-02-20 05:58:40.894,/BQP/BQP_HVHC/BQP_HVHC_K2/BQP_HVHC_K2_BMBĐ
+cmkm2zvkp0043pj08sdht3ktd,Bộ môn Kỹ thuật,BQP_HVHC_K2_BMKT,Bộ môn,4,cmkkzyk1p001xqf08fifvhlmx,,,t,2026-01-20 04:15:45.817,2026-02-20 05:58:40.896,/BQP/BQP_HVHC/BQP_HVHC_K2/BQP_HVHC_K2_BMKT
+cmkm8ivla0005rx086yi3oz7s,Bộ môn Tổ chức vận tải,BQP_HVHC_K3_TCVT,Bộ môn,4,cmkkzywrs0021qf08zgyfgstb,,,t,2026-01-20 06:50:30.382,2026-02-20 05:58:40.902,/BQP/BQP_HVHC/BQP_HVHC_K3/BQP_HVHC_K3_TCVT
+cmkm8jfii0009rx086ur6s031,Bộ môn Chỉ huy Vận Tải,BQP_HVHC_K3_CHVT,Bộ môn,4,cmkkzywrs0021qf08zgyfgstb,,,t,2026-01-20 06:50:56.202,2026-02-20 05:58:40.904,/BQP/BQP_HVHC/BQP_HVHC_K3/BQP_HVHC_K3_CHVT
+cmkm8qlf9000xrx08z7efkymu,Bộ môn Sử dụng,BQP_HVHC_K4_BMSD,Bộ môn,4,cmkkzzbvv0025qf08ye94idk4,,,t,2026-01-20 06:56:30.453,2026-02-20 05:58:40.907,/BQP/BQP_HVHC/BQP_HVHC_K4/BQP_HVHC_K4_BMSD
+cmkm8s5ke0015rx08cjuacmba,Bộ môn Phương tiện kỹ thuật,BQP_HVHC_K4_BMPTKT,Bộ môn,4,cmkkzzbvv0025qf08ye94idk4,,,t,2026-01-20 06:57:43.215,2026-02-20 05:58:40.913,/BQP/BQP_HVHC/BQP_HVHC_K4/BQP_HVHC_K4_BMPTKT
+cmkm8symy0019rx08vjw2xt2b,Bộ môn Bảo đảm,BQP_HVHC_K5_BMBĐ,Bộ môn,4,cmkkzzpoo0029qf088ub0wy2f,,,t,2026-01-20 06:58:20.89,2026-02-20 05:58:40.915,/BQP/BQP_HVHC/BQP_HVHC_K5/BQP_HVHC_K5_BMBĐ
+cmkm8tqeq001drx085c5esfaa,Bộ môn Công nghệ và Quản lý xây dựng,BQP_HVHC_K5_CNQLXD,Bộ môn,4,cmkkzzpoo0029qf088ub0wy2f,,,t,2026-01-20 06:58:56.883,2026-02-20 05:58:40.918,/BQP/BQP_HVHC/BQP_HVHC_K5/BQP_HVHC_K5_CNQLXD
+cmkm91j4q0025rx08xvu52sox,Bộ môn Thống kê,BQP_HVHC_K6_BMTK,Bộ môn,4,cmkl002lk002dqf08l15td777,,,t,2026-01-20 07:05:00.699,2026-02-20 05:58:40.923,/BQP/BQP_HVHC/BQP_HVHC_K6/BQP_HVHC_K6_BMTK
+cmkm920gb0029rx08mqlq4isw,Bộ môn Tài chính,BQP_HVHC_K6_BMTC,Bộ môn,4,cmkl002lk002dqf08l15td777,,,t,2026-01-20 07:05:23.147,2026-02-20 05:58:40.927,/BQP/BQP_HVHC/BQP_HVHC_K6/BQP_HVHC_K6_BMTC
+cmkm92fj5002drx089f18c8l8,Bộ môn Kế toán,BQP_HVHC_K6_BMKT,Bộ môn,4,cmkl002lk002dqf08l15td777,,,t,2026-01-20 07:05:42.689,2026-02-20 05:58:40.93,/BQP/BQP_HVHC/BQP_HVHC_K6/BQP_HVHC_K6_BMKT
+cmkm942le002hrx08rtixbvms,Bộ môn Lý luận tài chính,BQP_HVHC_K6_BMLLTC,Bộ môn,4,cmkl002lk002dqf08l15td777,,,t,2026-01-20 07:06:59.234,2026-02-20 05:58:40.933,/BQP/BQP_HVHC/BQP_HVHC_K6/BQP_HVHC_K6_BMLLTC
+cmkm9q3ip003vrx085t63iugc,Bộ môn Quân chủng - Binh chủng,BQP_HVHC_K7_BMQCBC,Bộ môn,4,cmkl00dxx002hqf08xklzcd1m,,,t,2026-01-20 07:24:06.866,2026-02-20 05:58:40.938,/BQP/BQP_HVHC/BQP_HVHC_K7/BQP_HVHC_K7_BMQCBC
+cmkm9qvh6003zrx08265dt1lg,Bộ môn Quân sự chung,BQP_HVHC_K7_QSC,Bộ môn,4,cmkl00dxx002hqf08xklzcd1m,,,t,2026-01-20 07:24:43.098,2026-02-20 05:58:40.941,/BQP/BQP_HVHC/BQP_HVHC_K7/BQP_HVHC_K7_QSC
+cmkm9sqwu0047rx08qqp0lmk5,Bộ môn Quân sự địa phương,BQP_HVHC_K7_QSĐP,Bộ môn,4,cmkl00dxx002hqf08xklzcd1m,,,t,2026-01-20 07:26:10.494,2026-02-20 05:58:40.948,/BQP/BQP_HVHC/BQP_HVHC_K7/BQP_HVHC_K7_QSĐP
+cmkm9t9kp004brx08mfevs5lj,Bộ môn Chiến thuật,BQP_HVHC_K7_ChT,Bộ môn,4,cmkl00dxx002hqf08xklzcd1m,,,t,2026-01-20 07:26:34.682,2026-02-20 05:58:40.95,/BQP/BQP_HVHC/BQP_HVHC_K7/BQP_HVHC_K7_ChT
+cmkm9twcy004frx087ayouwmo,Bộ môn Huấn luyện thể lực,BQP_HVHC_K7_BMHLTL,Bộ môn,4,cmkl00dxx002hqf08xklzcd1m,,,t,2026-01-20 07:27:04.21,2026-02-20 05:58:40.953,/BQP/BQP_HVHC/BQP_HVHC_K7/BQP_HVHC_K7_BMHLTL
+cmkma90ww005vrx08bnrqedsx,Bộ môn Triết học,BQP_HVHC_K8_BMTH,Bộ môn,4,cmkl00xwf002lqf08a38xbg35,,,t,2026-01-20 07:38:49.953,2026-02-20 05:58:40.956,/BQP/BQP_HVHC/BQP_HVHC_K8/BQP_HVHC_K8_BMTH
+cmkmaa5dc0063rx08jult7ew3,Bộ môn Tư tưởng Hồ Chí Minh,BQP_HVHC_K8_TTHCM,Bộ môn,4,cmkl00xwf002lqf08a38xbg35,,,t,2026-01-20 07:39:42.384,2026-02-20 05:58:40.962,/BQP/BQP_HVHC/BQP_HVHC_K8/BQP_HVHC_K8_TTHCM
+cmkmaey4g0067rx08k8ba5gkv,Bộ môn Chủ nghĩa XHKH,BQP_HVHC_K8_BMCHXHKH,Bộ môn,4,cmkl00xwf002lqf08a38xbg35,,,t,2026-01-20 07:43:26.273,2026-02-20 05:58:40.964,/BQP/BQP_HVHC/BQP_HVHC_K8/BQP_HVHC_K8_BMCHXHKH
+cmkmafvq6006brx08iad3zf0f,Bộ môn Lịch sử ĐCSVN,BQP_HVHC_K9_BMLSĐ,Bộ môn,4,cmkl01ba3002pqf08ldft8l3v,,,t,2026-01-20 07:44:09.822,2026-02-20 05:58:40.967,/BQP/BQP_HVHC/BQP_HVHC_K9/BQP_HVHC_K9_BMLSĐ
+cmkmaiavg006frx08wwt8v1ob,Bộ môn CTĐ - CTCT,BQP_HVHC_K9_CTĐ_CTCT,Bộ môn,4,cmkl01ba3002pqf08ldft8l3v,,,t,2026-01-20 07:46:02.765,2026-02-20 05:58:40.97,/BQP/BQP_HVHC/BQP_HVHC_K9/BQP_HVHC_K9_CTĐ_CTCT
+cmkmajkwy006nrx08ygib371t,Bộ môn Nhà nước và pháp luật,BQP_HVHC_K9_BMNNPL,Bộ môn,4,cmkl01ba3002pqf08ldft8l3v,,,t,2026-01-20 07:47:02.434,2026-02-20 05:58:40.975,/BQP/BQP_HVHC/BQP_HVHC_K9/BQP_HVHC_K9_BMNNPL
+cmkmakhg8006rrx08ieswio6q,Bộ môn Lý,BQP_HVHC_K10_BMLy,Bộ môn,4,cmkl01q5s002tqf088dzk3h1g,,,t,2026-01-20 07:47:44.6,2026-02-20 05:58:40.978,/BQP/BQP_HVHC/BQP_HVHC_K10/BQP_HVHC_K10_BMLy
+cmkmalddv006vrx08un41trvy,Bộ môn Kỹ thuật cơ sở,BQP_HVHC_K10_BMKTCS,Bộ môn,4,cmkl01q5s002tqf088dzk3h1g,,,t,2026-01-20 07:48:25.987,2026-02-20 05:58:40.98,/BQP/BQP_HVHC/BQP_HVHC_K10/BQP_HVHC_K10_BMKTCS
+cmkmamacm0073rx08oo4ndrw9,Bộ môn Tin học,BQP_HVHC_K10_BMTin,Bộ môn,4,cmkl01q5s002tqf088dzk3h1g,,,t,2026-01-20 07:49:08.71,2026-02-20 05:58:40.986,/BQP/BQP_HVHC/BQP_HVHC_K10/BQP_HVHC_K10_BMTin
+cmkmams5v0077rx08rib95tda,Bộ môn Hoá,BQP_HVHC_K10_BMHoa,Bộ môn,4,cmkl01q5s002tqf088dzk3h1g,,,t,2026-01-20 07:49:31.795,2026-02-20 05:58:40.989,/BQP/BQP_HVHC/BQP_HVHC_K10/BQP_HVHC_K10_BMHoa
+cmkmap0qx007brx08dgthelft,Bộ môn Trung văn,BQP_HVHC_K11_BMTrung,Bộ môn,4,cmkl022j2002xqf08gzcpwznf,,,t,2026-01-20 07:51:16.233,2026-02-20 05:58:40.992,/BQP/BQP_HVHC/BQP_HVHC_K11/BQP_HVHC_K11_BMTrung
+cmkmbi5cr0095rx08pacw2aar,Ban Tổng hợp - Kế hoạch,BQP_HVHC_B5_THKH,Ban,4,cmkkzpu8i0011qf089vdxgajn,,,t,2026-01-20 08:13:55.227,2026-02-20 05:58:41,/BQP/BQP_HVHC/BQP_HVHC_B5/BQP_HVHC_B5_THKH
+cmkmbyb5s00ahrx08tpx2dc9r,Ban Quân lực,BQP_HVHC_B5_QL,Ban,4,cmkkzpu8i0011qf089vdxgajn,,,t,2026-01-20 08:26:29.248,2026-02-20 05:58:41.003,/BQP/BQP_HVHC/BQP_HVHC_B5/BQP_HVHC_B5_QL
+cmkmbyrub00alrx08qraln8h2,Ban Thông tin,BQP_HVHC_B5_TT,Ban,4,cmkkzpu8i0011qf089vdxgajn,,,t,2026-01-20 08:26:50.867,2026-02-20 05:58:41.006,/BQP/BQP_HVHC/BQP_HVHC_B5/BQP_HVHC_B5_TT
+cmkmbzpfj00atrx08z6thca7s,"Ban Văn thư, lưu trữ",BQP_HVHC_B5_VTLT,Ban,4,cmkkzpu8i0011qf089vdxgajn,,,t,2026-01-20 08:27:34.399,2026-02-20 05:58:41.012,/BQP/BQP_HVHC/BQP_HVHC_B5/BQP_HVHC_B5_VTLT
+cmkmchibv00cdrx08ejyexim7,Đại đội 1,BQP_HVHC_d1_c1,Đại đội,4,cmkl05ghl003nqf08m97o3jkv,,,t,2026-01-20 08:41:25.004,2026-02-20 05:58:41.023,/BQP/BQP_HVHC/BQP_HVHC_d1/BQP_HVHC_d1_c1
+cmkmc9cao00brrx086zgrcwb5,Bộ Tổng tham mưu,BTTM,Bộ,2,cmkkyqp5b0001ru085kv8b551,,,f,2026-01-20 08:35:03.936,2026-02-20 05:58:40.702,/BQP/BTTM
+cmkl06nuc003zqf085yvdmb4w,Tiểu đoàn 4,BQP_HVHC_d4,Tiểu đoàn,3,cmkkzk89s0001qf08pwgnquki,,,t,2026-01-19 10:09:17.365,2026-02-20 05:58:40.753,/BQP/BQP_HVHC/BQP_HVHC_d4
+cmkkzonnl000tqf08gi8q6wk3,Phòng Chính trị,BQP_HVHC_3,Phòng,3,cmkkzk89s0001qf08pwgnquki,,,t,2026-01-19 09:55:17.313,2026-02-20 05:58:40.808,/BQP/BQP_HVHC/BQP_HVHC_3
+cmkkzs204001hqf082sfi3gjx,Tạp chí nghiên cứu khoa học HCQS,BQP_HVHC_B13,Phòng,3,cmkkzk89s0001qf08pwgnquki,,,t,2026-01-19 09:57:55.877,2026-02-20 05:58:40.818,/BQP/BQP_HVHC/BQP_HVHC_B13
+cmkl04kmg003fqf08qnlrvlo6,Hệ Đào tạo Chuyên ngành,BQP_HVHC_H3,Hệ,3,cmkkzk89s0001qf08pwgnquki,,,t,2026-01-19 10:07:39.88,2026-02-20 05:58:40.832,/BQP/BQP_HVHC/BQP_HVHC_H3
+cmkm25yeh000tpj085rw0z6ui,Hậu cần Chiến đấu,BQP_HVHC_K1_HCCD,Bộ môn,4,cmkkzy759001tqf086htbkg9i,,,t,2026-01-20 03:52:29.801,2026-02-20 05:58:40.866,/BQP/BQP_HVHC/BQP_HVHC_K1/BQP_HVHC_K1_HCCD
+cmkmcn5it00dprx08zuo7sd2f,Đại đội 12,BQP_HVHC_d4_c12,Đại đội,4,cmkl06nuc003zqf085yvdmb4w,,,t,2026-01-20 08:45:48.342,2026-02-20 05:58:40.869,/BQP/BQP_HVHC/BQP_HVHC_d4/BQP_HVHC_d4_c12
+cmkmco0em00dtrx08pkrb5b9n,Lớp Nghiên cứu sinh,BQP_HVHC_H1_NCS,Lớp,4,cmkl037xt0035qf08rumxvg7a,,,t,2026-01-20 08:46:28.366,2026-02-20 05:58:40.872,/BQP/BQP_HVHC/BQP_HVHC_H1/BQP_HVHC_H1_NCS
+cmkmcogjj00dxrx088042thpx,Lớp Cao học,BQP_HVHC_H1_CH,Lớp,4,cmkl037xt0035qf08rumxvg7a,,,t,2026-01-20 08:46:49.28,2026-02-20 05:58:40.875,/BQP/BQP_HVHC/BQP_HVHC_H1/BQP_HVHC_H1_CH
+cmkmcpcuc00e1rx081sryv6g8,Lớp B155A,BQP_HVHC_H1_DTNa,Lớp,4,cmkl037xt0035qf08rumxvg7a,,,t,2026-01-20 08:47:31.141,2026-02-20 05:58:40.877,/BQP/BQP_HVHC/BQP_HVHC_H1/BQP_HVHC_H1_DTNa
+cmkmcpw9h00e5rx08s9ck50z5,Lớp B155B,BQP_HVHC_H1_DTNb,Lớp,4,cmkl037xt0035qf08rumxvg7a,,,t,2026-01-20 08:47:56.309,2026-02-20 05:58:40.88,/BQP/BQP_HVHC/BQP_HVHC_H1/BQP_HVHC_H1_DTNb
+cmkmcqdei00e9rx08vscuwgyu,Lớp B155 C,BQP_HVHC_H1_DTNc,Lớp,4,cmkl037xt0035qf08rumxvg7a,,,t,2026-01-20 08:48:18.523,2026-02-20 05:58:40.883,/BQP/BQP_HVHC/BQP_HVHC_H1/BQP_HVHC_H1_DTNc
+cmkm2jrvp002dpj08n4sqeu91,Trung tâm sản xuất và thực hành huấn luyện,BQP_HVHC_B1_TTSX,Ban,4,cmkkznuno000lqf08y64hljar,,,t,2026-01-20 04:03:14.534,2026-02-20 05:58:40.886,/BQP/BQP_HVHC/BQP_HVHC_B1/BQP_HVHC_B1_TTSX
+cmkm8i5fj0001rx080x7a0ifv,Bộ môn Kỹ thuật,BQP_HVHC_K3_BMKT,Bộ môn,4,cmkkzywrs0021qf08zgyfgstb,,,t,2026-01-20 06:49:56.479,2026-02-20 05:58:40.899,/BQP/BQP_HVHC/BQP_HVHC_K3/BQP_HVHC_K3_BMKT
+cmkm8rlmi0011rx08q5u7gj7s,Bộ môn Bảo đảm Xăng dầu,BQP_HVHC_K4_BMBĐ,Bộ môn,4,cmkkzzbvv0025qf08ye94idk4,,,t,2026-01-20 06:57:17.37,2026-02-20 05:58:40.91,/BQP/BQP_HVHC/BQP_HVHC_K4/BQP_HVHC_K4_BMBĐ
+cmkm8u9w1001hrx08gfuf2290,Bộ môn Kỹ thuật xây dựng,BQP_HVHC_K5_KTXD,Bộ môn,4,cmkkzzpoo0029qf088ub0wy2f,,,t,2026-01-20 06:59:22.13,2026-02-20 05:58:40.921,/BQP/BQP_HVHC/BQP_HVHC_K5/BQP_HVHC_K5_KTXD
+cmkm94n8p002lrx08hhvak2ix,Bộ môn Kinh tế,BQP_HVHC_K6_BMKTe,Bộ môn,4,cmkl002lk002dqf08l15td777,,,t,2026-01-20 07:07:25.994,2026-02-20 05:58:40.936,/BQP/BQP_HVHC/BQP_HVHC_K6/BQP_HVHC_K6_BMKTe
+cmkm9s6ta0043rx08ivehzfsf,Bộ môn Đường lối QS - Nghệ thuật CD,BQP_HVHC_K7_DLQSNTCD,Bộ môn,4,cmkl00dxx002hqf08xklzcd1m,,,t,2026-01-20 07:25:44.446,2026-02-20 05:58:40.945,/BQP/BQP_HVHC/BQP_HVHC_K7/BQP_HVHC_K7_DLQSNTCD
+cmkma9l2f005zrx08k6otmjnu,Bộ môn Kinh tế chính trị,BQP_HVHC_K8_KTCT,Bộ môn,4,cmkl00xwf002lqf08a38xbg35,,,t,2026-01-20 07:39:16.071,2026-02-20 05:58:40.959,/BQP/BQP_HVHC/BQP_HVHC_K8/BQP_HVHC_K8_KTCT
+cmkmais9b006jrx08p9v1wa1a,Bộ môn Tâm lý giáo dục,BQP_HVHC_K9_BMTLGD,Bộ môn,4,cmkl01ba3002pqf08ldft8l3v,,,t,2026-01-20 07:46:25.295,2026-02-20 05:58:40.972,/BQP/BQP_HVHC/BQP_HVHC_K9/BQP_HVHC_K9_BMTLGD
+cmkmaluj4006zrx08zrcdx8wi,Bộ môn Văn hoá,BQP_HVHC_K10_BMVan,Bộ môn,4,cmkl01q5s002tqf088dzk3h1g,,,t,2026-01-20 07:48:48.208,2026-02-20 05:58:40.983,/BQP/BQP_HVHC/BQP_HVHC_K10/BQP_HVHC_K10_BMVan
+cmkmaplq5007frx08nzhxz4ci,Bộ môn Anh văn,BQP_HVHC_K11_BMAnh,Bộ môn,4,cmkl022j2002xqf08gzcpwznf,,,t,2026-01-20 07:51:43.422,2026-02-20 05:58:40.994,/BQP/BQP_HVHC/BQP_HVHC_K11/BQP_HVHC_K11_BMAnh
+cmkmbz6p400aprx088v5xikn1,Ban Tác huấn,BQP_HVHC_B5_TH,Ban,4,cmkkzpu8i0011qf089vdxgajn,,,t,2026-01-20 08:27:10.12,2026-02-20 05:58:41.009,/BQP/BQP_HVHC/BQP_HVHC_B5/BQP_HVHC_B5_TH
+cmkmcgtfq00c7rx081m4dg7r8,Lớp S1,BQP_HVHC_d1_S1,Lớp,4,cmkl05ghl003nqf08m97o3jkv,,,f,2026-01-20 08:40:52.742,2026-02-20 05:58:41.02,/BQP/BQP_HVHC/BQP_HVHC_d1/BQP_HVHC_d1_S1
+cmkmcmk7s00dlrx08ztoxpjrz,Đại đội 11,BQP_HVHC_d4_c11,Đại đội,4,cmkl06nuc003zqf085yvdmb4w,,,t,2026-01-20 08:45:20.729,2026-02-20 05:58:41.026,/BQP/BQP_HVHC/BQP_HVHC_d4/BQP_HVHC_d4_c11
+cmkmcivv400clrx08a4cwv2rx,Đại đội 4,BQP_HVHC_d2_c4,Đại đội,4,cmkl05wdl003rqf08wo2acppo,,,t,2026-01-20 08:42:29.2,2026-02-20 05:58:41.029,/BQP/BQP_HVHC/BQP_HVHC_d2/BQP_HVHC_d2_c4
+cmkmcjfog00cprx08we99gyv9,Đại đội 2,BQP_HVHC_d1_c2,Đại đội,4,cmkl05ghl003nqf08m97o3jkv,,,t,2026-01-20 08:42:54.88,2026-02-20 05:58:41.031,/BQP/BQP_HVHC/BQP_HVHC_d1/BQP_HVHC_d1_c2
+cmkmcjqzl00ctrx08f2r4xvxi,Đại đội 3,BQP_HVHC_d1_c3,Đại đội,4,cmkl05ghl003nqf08m97o3jkv,,,t,2026-01-20 08:43:09.537,2026-02-20 05:58:41.034,/BQP/BQP_HVHC/BQP_HVHC_d1/BQP_HVHC_d1_c3
+cmkmckme800d1rx0829y4ed1m,Đại đội 6,BQP_HVHC_d2_c6,Đại đội,4,cmkl05wdl003rqf08wo2acppo,,,t,2026-01-20 08:43:50.24,2026-02-20 05:58:41.04,/BQP/BQP_HVHC/BQP_HVHC_d2/BQP_HVHC_d2_c6
+cmkmcl0i800d5rx08td5x3lmd,Đại đội 7,BQP_HVHC_d3_c7,Đại đội,4,cmkl067qo003vqf0816x8gbwg,,,t,2026-01-20 08:44:08.529,2026-02-20 05:58:41.043,/BQP/BQP_HVHC/BQP_HVHC_d3/BQP_HVHC_d3_c7
+cmkmclebf00d9rx08q55csawu,Đại đội 8,BQP_HVHC_d3_c8,Đại đội,4,cmkl067qo003vqf0816x8gbwg,,,t,2026-01-20 08:44:26.427,2026-02-20 05:58:41.072,/BQP/BQP_HVHC/BQP_HVHC_d3/BQP_HVHC_d3_c8
+cmkmcm72s00dhrx08i6qndrce,Đại đội 10,BQP_HVHC_d4_c10,Đại đội,4,cmkl06nuc003zqf085yvdmb4w,,,t,2026-01-20 08:45:03.701,2026-02-20 05:58:41.077,/BQP/BQP_HVHC/BQP_HVHC_d4/BQP_HVHC_d4_c10
+cmkmci2vn00chrx084f63uud0,Lớp S1,BQP_HVHC_d1_c1_LS1,Lớp,5,cmkmchibv00cdrx08ejyexim7,,,t,2026-01-20 08:41:51.636,2026-02-20 05:58:41.081,/BQP/BQP_HVHC/BQP_HVHC_d1/BQP_HVHC_d1_c1/BQP_HVHC_d1_c1_LS1
+cmkkzrlar001dqf087ltgjecj,Viện nghiên cứu Khoa học HCQS,BQP_HVHC_B12,Viện,3,cmkkzk89s0001qf08pwgnquki,,,t,2026-01-19 09:57:34.227,2026-02-20 05:58:40.858,/BQP/BQP_HVHC/BQP_HVHC_B12
+cmkmckalt00cxrx08vtykvnk9,Đại đội 5,BQP_HVHC_d2_c5,Đại đội,4,cmkl05wdl003rqf08wo2acppo,,,t,2026-01-20 08:43:34.962,2026-02-20 05:58:41.037,/BQP/BQP_HVHC/BQP_HVHC_d2/BQP_HVHC_d2_c5
+cmkm27a4o0011pj08xfka9rud,Ban Kế hoạch tổng hợp,BQP_HVHC_B12_BKH,Ban,4,cmkkzrlar001dqf087ltgjecj,,,t,2026-01-20 03:53:31.657,2026-02-20 05:58:41.046,/BQP/BQP_HVHC/BQP_HVHC_B12/BQP_HVHC_B12_BKH
+cmkm2h8ie0021pj08a1t3nk44,Bộ môn CHTM,BQP_HVHC_K1_CHTM,Bộ môn,4,cmkkzy759001tqf086htbkg9i,,Chỉ huy Tham mưu,t,2026-01-20 04:01:16.118,2026-02-20 05:58:41.06,/BQP/BQP_HVHC/BQP_HVHC_K1/BQP_HVHC_K1_CHTM
+cmkm26t6e000xpj08dbsjm04r,Ban Khoa học Kỹ thuật HCQS,BQP_HVHC_B12_BKTHC,Ban,4,cmkkzrlar001dqf087ltgjecj,,,t,2026-01-20 03:53:09.686,2026-02-20 05:58:41.069,/BQP/BQP_HVHC/BQP_HVHC_B12/BQP_HVHC_B12_BKTHC
+cmkmclsfs00ddrx08y8in9h5v,Đại đội 9,BQP_HVHC_d3_c9,Đại đội,4,cmkl067qo003vqf0816x8gbwg,,,t,2026-01-20 08:44:44.729,2026-02-20 05:58:41.075,/BQP/BQP_HVHC/BQP_HVHC_d3/BQP_HVHC_d3_c9
+cmkkzzpoo0029qf088ub0wy2f,Khoa Doanh Trại,BQP_HVHC_K5,Khoa,3,cmkkzk89s0001qf08pwgnquki,,,t,2026-01-19 10:03:53.161,2026-02-20 05:58:40.861,/BQP/BQP_HVHC/BQP_HVHC_K5
+cmkkzy759001tqf086htbkg9i,Khoa Chỉ huy hậu cần,BQP_HVHC_K1,Khoa,3,cmkkzk89s0001qf08pwgnquki,,,t,2026-01-19 10:02:42.477,2026-02-20 05:58:40.839,/BQP/BQP_HVHC/BQP_HVHC_K1
+cmkkzyk1p001xqf08fifvhlmx,Khoa Quân nhu,BQP_HVHC_K2,Khoa,3,cmkkzk89s0001qf08pwgnquki,,,t,2026-01-19 10:02:59.197,2026-02-20 05:58:40.759,/BQP/BQP_HVHC/BQP_HVHC_K2
+cmkkzzbvv0025qf08ye94idk4,Khoa Xăng Dầu,BQP_HVHC_K4,Khoa,3,cmkkzk89s0001qf08pwgnquki,,,t,2026-01-19 10:03:35.275,2026-02-20 05:58:40.844,/BQP/BQP_HVHC/BQP_HVHC_K4
+cmkl002lk002dqf08l15td777,Khoa Tài Chính,BQP_HVHC_K6,Khoa,3,cmkkzk89s0001qf08pwgnquki,,,t,2026-01-19 10:04:09.897,2026-02-20 05:58:40.846,/BQP/BQP_HVHC/BQP_HVHC_K6
+cmkl00dxx002hqf08xklzcd1m,Khoa Quân sự,BQP_HVHC_K7,Khoa,3,cmkkzk89s0001qf08pwgnquki,,,t,2026-01-19 10:04:24.598,2026-02-20 05:58:40.848,/BQP/BQP_HVHC/BQP_HVHC_K7
+cmkl00xwf002lqf08a38xbg35,Khoa Lý luận Mác Lênin - Tư tưởng HCM,BQP_HVHC_K8,Khoa,3,cmkkzk89s0001qf08pwgnquki,,,t,2026-01-19 10:04:50.464,2026-02-20 05:58:40.851,/BQP/BQP_HVHC/BQP_HVHC_K8
+cmkl03tqi0039qf083cqntf9e,Hệ Đào tạo chỉ huy tham mưu,BQP_HVHC_H2,Hệ,3,cmkkzk89s0001qf08pwgnquki,,,t,2026-01-19 10:07:05.034,2026-02-20 05:58:40.853,/BQP/BQP_HVHC/BQP_HVHC_H2
+cmkl05wdl003rqf08wo2acppo,Tiểu đoàn 2,BQP_HVHC_d2,Tiểu đoàn,3,cmkkzk89s0001qf08pwgnquki,,,t,2026-01-19 10:08:41.77,2026-02-20 05:58:40.856,/BQP/BQP_HVHC/BQP_HVHC_d2
+cmkl067qo003vqf0816x8gbwg,Tiểu đoàn 3,BQP_HVHC_d3,Tiểu đoàn,3,cmkkzk89s0001qf08pwgnquki,,,t,2026-01-19 10:08:56.496,2026-02-20 05:58:40.863,/BQP/BQP_HVHC/BQP_HVHC_d3
+cmkkzpu8i0011qf089vdxgajn,Văn phòng,BQP_HVHC_B5,Phòng,3,cmkkzk89s0001qf08pwgnquki,,,t,2026-01-19 09:56:12.499,2026-02-20 05:58:40.834,/BQP/BQP_HVHC/BQP_HVHC_B5

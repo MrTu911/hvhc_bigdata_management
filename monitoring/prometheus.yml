@@ -1,0 +1,51 @@
+
+# Prometheus Configuration
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - "alert_rules.yml"
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: []
+
+scrape_configs:
+  # HVHC API Metrics
+  - job_name: 'hvhc-api'
+    static_configs:
+      - targets: ['hvhc_api:3000']
+    metrics_path: '/api/metrics'
+    scrape_interval: 30s
+
+  # System Metrics
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node_exporter:9100']
+    scrape_interval: 15s
+
+  # PostgreSQL Metrics
+  - job_name: 'postgres-exporter'
+    static_configs:
+      - targets: ['postgres_exporter:9187']
+    scrape_interval: 30s
+
+  # Redis Metrics
+  - job_name: 'redis-exporter'
+    static_configs:
+      - targets: ['redis_exporter:9121']
+    scrape_interval: 30s
+
+  # ML Engine Metrics
+  - job_name: 'ml-engine'
+    static_configs:
+      - targets: ['ml_engine:8000']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+
+  # Prometheus Self-Monitoring
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']

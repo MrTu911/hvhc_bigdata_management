@@ -1,0 +1,121 @@
+version: '3.8'
+
+#######################################################
+# HVHC BigData - Docker Compose Configuration
+# Triển khai ứng dụng với Docker
+#######################################################
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: hvhc-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: hvhc_admin
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-MatKhauManh@2025}
+      POSTGRES_DB: hvhc_bigdata
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hvhc_admin -d hvhc_bigdata"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - hvhc-network
+
+  # Redis Cache (Optional)
+  redis:
+    image: redis:7-alpine
+    container_name: hvhc-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - hvhc-network
+
+  # Next.js Application
+  app:
+    build:
+      context: ../.. # Points to nextjs_space
+      dockerfile: scripts/deployment/Dockerfile
+    container_name: hvhc-app
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://hvhc_admin:${DB_PASSWORD:-MatKhauManh@2025}@postgres:5432/hvhc_bigdata?schema=public
+      - REDIS_URL=redis://redis:6379
+      - NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost:3000}
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET:-change-this-secret}
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - hvhc-network
+
+  # Nginx Reverse Proxy (Optional - for production)
+  nginx:
+    image: nginx:alpine
+    container_name: hvhc-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - app
+    networks:
+      - hvhc-network
+    profiles:
+      - production
+
+  # PgAdmin (Optional - for database management)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: hvhc-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@hvhc.edu.vn
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin123}
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - hvhc-network
+    profiles:
+      - dev
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  hvhc-network:
+    driver: bridge

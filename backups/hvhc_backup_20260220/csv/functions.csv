@@ -1,0 +1,72 @@
+id,code,name,description,module,actionType,isActive,isCritical,createdAt,updatedAt
+cmlta35ps000nwa1zgjkca2wb,VIEW_PERSONNEL,Xem hồ sơ cán bộ,,personnel,VIEW,t,f,2026-02-19 09:48:21.809,2026-02-19 09:48:21.809
+cmlta35pv000owa1zo60v8u2j,VIEW_PERSONNEL_SENSITIVE,Xem thông tin nhạy cảm,,personnel,VIEW,t,t,2026-02-19 09:48:21.811,2026-02-19 09:48:21.811
+cmlta35px000pwa1zonxvr17d,CREATE_PERSONNEL,Tạo hồ sơ cán bộ,,personnel,CREATE,t,f,2026-02-19 09:48:21.813,2026-02-19 09:48:21.813
+cmlta35pz000qwa1z9kidhmhp,UPDATE_PERSONNEL,Cập nhật hồ sơ,,personnel,UPDATE,t,f,2026-02-19 09:48:21.815,2026-02-19 09:48:21.815
+cmlta35q1000rwa1zg50nuqp4,DELETE_PERSONNEL,Xóa hồ sơ cán bộ,,personnel,DELETE,t,t,2026-02-19 09:48:21.817,2026-02-19 09:48:21.817
+cmlta35q3000swa1zv42ds6f8,APPROVE_PERSONNEL,Phê duyệt hồ sơ,,personnel,APPROVE,t,t,2026-02-19 09:48:21.819,2026-02-19 09:48:21.819
+cmlta35q5000twa1zxzv8c0e7,EXPORT_PERSONNEL,Xuất dữ liệu cán bộ,,personnel,EXPORT,t,t,2026-02-19 09:48:21.821,2026-02-19 09:48:21.821
+cmlta35q7000uwa1zv3zda77s,IMPORT_PERSONNEL,Nhập dữ liệu cán bộ,,personnel,IMPORT,t,t,2026-02-19 09:48:21.823,2026-02-19 09:48:21.823
+cmlta35q9000vwa1zs3551eo0,VIEW_CAREER_HISTORY,Xem quá trình công tác,,personnel,VIEW,t,f,2026-02-19 09:48:21.825,2026-02-19 09:48:21.825
+cmlta35qb000wwa1zovkwicd9,UPDATE_CAREER_HISTORY,Cập nhật quá trình CT,,personnel,UPDATE,t,f,2026-02-19 09:48:21.827,2026-02-19 09:48:21.827
+cmlta35qd000xwa1zaahdr98u,VIEW_TRAINING,Xem thông tin đào tạo,,training,VIEW,t,f,2026-02-19 09:48:21.829,2026-02-19 09:48:21.829
+cmlta35qf000ywa1z0www5bke,VIEW_COURSE,Xem môn học,,training,VIEW,t,f,2026-02-19 09:48:21.831,2026-02-19 09:48:21.831
+cmlta35qh000zwa1zowvahgr1,CREATE_COURSE,Tạo môn học,,training,CREATE,t,f,2026-02-19 09:48:21.833,2026-02-19 09:48:21.833
+cmlta35qj0010wa1zm9y0wwbx,UPDATE_COURSE,Cập nhật môn học,,training,UPDATE,t,f,2026-02-19 09:48:21.835,2026-02-19 09:48:21.835
+cmlta35ql0011wa1z1akleyut,DELETE_COURSE,Xóa môn học,,training,DELETE,t,t,2026-02-19 09:48:21.837,2026-02-19 09:48:21.837
+cmlta35qn0012wa1zwkjek9nl,REGISTER_COURSE,Đăng ký môn học,,training,CREATE,t,f,2026-02-19 09:48:21.84,2026-02-19 09:48:21.84
+cmlta35qp0013wa1znd22mxzn,VIEW_GRADE,Xem điểm học tập,,training,VIEW,t,f,2026-02-19 09:48:21.842,2026-02-19 09:48:21.842
+cmlta35qr0014wa1zsjfx1tfg,CREATE_GRADE_DRAFT,Nhập điểm (nháp),,training,CREATE,t,f,2026-02-19 09:48:21.844,2026-02-19 09:48:21.844
+cmlta35qt0015wa1zs4n3d869,SUBMIT_GRADE,Trình duyệt điểm,,training,SUBMIT,t,f,2026-02-19 09:48:21.846,2026-02-19 09:48:21.846
+cmlta35qv0016wa1z8ra3ll22,APPROVE_GRADE,Phê duyệt điểm,,training,APPROVE,t,t,2026-02-19 09:48:21.848,2026-02-19 09:48:21.848
+cmlta35qx0017wa1zc6wem2bz,REJECT_GRADE,Từ chối điểm,,training,REJECT,t,t,2026-02-19 09:48:21.849,2026-02-19 09:48:21.849
+cmlta35r00018wa1zg9nqrhef,EXPORT_GRADE,Xuất bảng điểm,,training,EXPORT,t,f,2026-02-19 09:48:21.852,2026-02-19 09:48:21.852
+cmlta35r20019wa1zgtrurvr1,VIEW_STUDENT,Xem thông tin học viên,,training,VIEW,t,f,2026-02-19 09:48:21.854,2026-02-19 09:48:21.854
+cmlta35r4001awa1zv48xs6or,CREATE_STUDENT,Tạo hồ sơ học viên,,training,CREATE,t,f,2026-02-19 09:48:21.856,2026-02-19 09:48:21.856
+cmlta35r6001bwa1zgbnqn9io,UPDATE_STUDENT,Cập nhật hồ sơ HV,,training,UPDATE,t,f,2026-02-19 09:48:21.858,2026-02-19 09:48:21.858
+cmlta35r8001cwa1z9j1zk7gq,DELETE_STUDENT,Xóa hồ sơ học viên,,training,DELETE,t,t,2026-02-19 09:48:21.861,2026-02-19 09:48:21.861
+cmlta35ra001dwa1zjrc6t5ys,VIEW_RESEARCH,Xem đề tài NCKH,,research,VIEW,t,f,2026-02-19 09:48:21.862,2026-02-19 09:48:21.862
+cmlta35rc001ewa1zhn1rl3fe,CREATE_RESEARCH,Tạo đề tài NCKH,,research,CREATE,t,f,2026-02-19 09:48:21.865,2026-02-19 09:48:21.865
+cmlta35re001fwa1z0z6cq11i,UPDATE_RESEARCH,Cập nhật đề tài,,research,UPDATE,t,f,2026-02-19 09:48:21.867,2026-02-19 09:48:21.867
+cmlta35rg001gwa1znttb312x,DELETE_RESEARCH,Xóa đề tài NCKH,,research,DELETE,t,t,2026-02-19 09:48:21.869,2026-02-19 09:48:21.869
+cmlta35rj001hwa1zj4i6nisx,SUBMIT_RESEARCH,Trình duyệt đề tài,,research,SUBMIT,t,f,2026-02-19 09:48:21.871,2026-02-19 09:48:21.871
+cmlta35rl001iwa1zv5gxt1oi,APPROVE_RESEARCH,Phê duyệt đề tài,,research,APPROVE,t,t,2026-02-19 09:48:21.873,2026-02-19 09:48:21.873
+cmlta35rn001jwa1zt5v26zm8,REJECT_RESEARCH,Từ chối đề tài,,research,REJECT,t,t,2026-02-19 09:48:21.875,2026-02-19 09:48:21.875
+cmlta35rq001kwa1z3znfrieh,VIEW_PUBLICATION,Xem công bố khoa học,,research,VIEW,t,f,2026-02-19 09:48:21.878,2026-02-19 09:48:21.878
+cmlta35rs001lwa1z85vqit8h,CREATE_PUBLICATION,Tạo công bố khoa học,,research,CREATE,t,f,2026-02-19 09:48:21.88,2026-02-19 09:48:21.88
+cmlta35rt001mwa1zexgpngos,UPDATE_PUBLICATION,Cập nhật công bố,,research,UPDATE,t,f,2026-02-19 09:48:21.882,2026-02-19 09:48:21.882
+cmlta35rv001nwa1zqs24xb0o,VIEW_PARTY_MEMBER,Xem hồ sơ Đảng viên,,party,VIEW,t,f,2026-02-19 09:48:21.884,2026-02-19 09:48:21.884
+cmlta35rx001owa1zbriyayzz,VIEW_PARTY_SENSITIVE,Xem thông tin ĐV nhạy cảm,,party,VIEW,t,t,2026-02-19 09:48:21.886,2026-02-19 09:48:21.886
+cmlta35rz001pwa1zykh2owj4,CREATE_PARTY_MEMBER,Tạo hồ sơ Đảng viên,,party,CREATE,t,f,2026-02-19 09:48:21.888,2026-02-19 09:48:21.888
+cmlta35s1001qwa1zv2uy29vk,UPDATE_PARTY_MEMBER,Cập nhật hồ sơ ĐV,,party,UPDATE,t,f,2026-02-19 09:48:21.89,2026-02-19 09:48:21.89
+cmlta35s3001rwa1zdpp4i3pk,DELETE_PARTY_MEMBER,Xóa hồ sơ Đảng viên,,party,DELETE,t,t,2026-02-19 09:48:21.892,2026-02-19 09:48:21.892
+cmlta35s5001swa1zucdm7wjd,APPROVE_PARTY_MEMBER,Phê duyệt hồ sơ ĐV,,party,APPROVE,t,t,2026-02-19 09:48:21.894,2026-02-19 09:48:21.894
+cmlta35s7001twa1zb1qp101o,VIEW_PARTY_ACTIVITY,Xem sinh hoạt Đảng,,party,VIEW,t,f,2026-02-19 09:48:21.896,2026-02-19 09:48:21.896
+cmlta35s9001uwa1z71wssj54,CREATE_PARTY_ACTIVITY,Tạo sinh hoạt Đảng,,party,CREATE,t,f,2026-02-19 09:48:21.898,2026-02-19 09:48:21.898
+cmlta35sc001vwa1znnbc8bhe,VIEW_POLICY,Xem chính sách,,policy,VIEW,t,f,2026-02-19 09:48:21.9,2026-02-19 09:48:21.9
+cmlta35se001wwa1zc1xehat7,CREATE_POLICY_REQUEST,Tạo yêu cầu chính sách,,policy,CREATE,t,f,2026-02-19 09:48:21.902,2026-02-19 09:48:21.902
+cmlta35sg001xwa1zv7t4mnlh,UPDATE_POLICY_REQUEST,Cập nhật yêu cầu,,policy,UPDATE,t,f,2026-02-19 09:48:21.904,2026-02-19 09:48:21.904
+cmlta35si001ywa1zqvq1ibqa,SUBMIT_POLICY_REQUEST,Trình duyệt yêu cầu,,policy,SUBMIT,t,f,2026-02-19 09:48:21.906,2026-02-19 09:48:21.906
+cmlta35sk001zwa1zf6kzpi6z,APPROVE_POLICY,Phê duyệt chính sách,,policy,APPROVE,t,t,2026-02-19 09:48:21.908,2026-02-19 09:48:21.908
+cmlta35sm0020wa1z7ucsy9y8,REJECT_POLICY,Từ chối chính sách,,policy,REJECT,t,t,2026-02-19 09:48:21.91,2026-02-19 09:48:21.91
+cmlta35so0021wa1zs6abe2dh,VIEW_INSURANCE,Xem thông tin bảo hiểm,,insurance,VIEW,t,f,2026-02-19 09:48:21.913,2026-02-19 09:48:21.913
+cmlta35sq0022wa1zcks3ln83,VIEW_INSURANCE_SENSITIVE,Xem số sổ BHXH/BHYT,,insurance,VIEW,t,t,2026-02-19 09:48:21.915,2026-02-19 09:48:21.915
+cmlta35ss0023wa1zmgc33bfn,UPDATE_INSURANCE,Cập nhật bảo hiểm,,insurance,UPDATE,t,f,2026-02-19 09:48:21.917,2026-02-19 09:48:21.917
+cmlta35sv0024wa1zzz5koc9c,APPROVE_INSURANCE,Phê duyệt bảo hiểm,,insurance,APPROVE,t,t,2026-02-19 09:48:21.919,2026-02-19 09:48:21.919
+cmlta35sx0025wa1z61310u95,EXPORT_INSURANCE,Xuất dữ liệu bảo hiểm,,insurance,EXPORT,t,t,2026-02-19 09:48:21.921,2026-02-19 09:48:21.921
+cmlta35sy0026wa1zshxs20k2,VIEW_AWARD,Xem khen thưởng,,awards,VIEW,t,f,2026-02-19 09:48:21.923,2026-02-19 09:48:21.923
+cmlta35t10027wa1zw4tncv5p,CREATE_AWARD,Đề xuất khen thưởng,,awards,CREATE,t,f,2026-02-19 09:48:21.926,2026-02-19 09:48:21.926
+cmlta35t30028wa1zxyekkr07,UPDATE_AWARD,Cập nhật khen thưởng,,awards,UPDATE,t,f,2026-02-19 09:48:21.928,2026-02-19 09:48:21.928
+cmlta35t50029wa1z5ifdgw4h,APPROVE_AWARD,Phê duyệt khen thưởng,,awards,APPROVE,t,t,2026-02-19 09:48:21.93,2026-02-19 09:48:21.93
+cmlta35t8002awa1zucfurba6,VIEW_DISCIPLINE,Xem kỷ luật,,awards,VIEW,t,f,2026-02-19 09:48:21.932,2026-02-19 09:48:21.932
+cmlta35ta002bwa1zmpy6wu6r,CREATE_DISCIPLINE,Tạo quyết định kỷ luật,,awards,CREATE,t,t,2026-02-19 09:48:21.934,2026-02-19 09:48:21.934
+cmlta35tc002cwa1zitz9ud3n,APPROVE_DISCIPLINE,Phê duyệt kỷ luật,,awards,APPROVE,t,t,2026-02-19 09:48:21.936,2026-02-19 09:48:21.936
+cmlta35te002dwa1z8447ymgh,MANAGE_USERS,Quản lý người dùng,,system,UPDATE,t,t,2026-02-19 09:48:21.939,2026-02-19 09:48:21.939
+cmlta35tg002ewa1zo2roe0xo,MANAGE_UNITS,Quản lý đơn vị,,system,UPDATE,t,t,2026-02-19 09:48:21.94,2026-02-19 09:48:21.94
+cmlta35ti002fwa1zpaycrk0p,MANAGE_RBAC,Quản lý phân quyền,,system,UPDATE,t,t,2026-02-19 09:48:21.942,2026-02-19 09:48:21.942
+cmlta35tk002gwa1zx7it645o,VIEW_AUDIT_LOG,Xem nhật ký hệ thống,,system,VIEW,t,t,2026-02-19 09:48:21.945,2026-02-19 09:48:21.945
+cmlta35tm002hwa1z2uatawh8,VIEW_DASHBOARD,Xem Dashboard,,system,VIEW,t,f,2026-02-19 09:48:21.947,2026-02-19 09:48:21.947
+cmlta35to002iwa1zfzijarvc,VIEW_DASHBOARD_COMMAND,Xem Dashboard Chỉ huy,,system,VIEW,t,f,2026-02-19 09:48:21.949,2026-02-19 09:48:21.949
+cmlta35tq002jwa1ztwnw3up5,MANAGE_AI_CONFIG,Cấu hình AI,,system,UPDATE,t,t,2026-02-19 09:48:21.951,2026-02-19 09:48:21.951
+cmlta35ts002kwa1z63yee0bo,MANAGE_BACKUP,Quản lý sao lưu,,system,UPDATE,t,t,2026-02-19 09:48:21.952,2026-02-19 09:48:21.952
+cmlta35tu002lwa1zplm75mpr,VIEW_SYSTEM_HEALTH,Xem trạng thái hệ thống,,system,VIEW,t,f,2026-02-19 09:48:21.954,2026-02-19 09:48:21.954

@@ -1,0 +1,2878 @@
+generator client {
+  provider      = "prisma-client-js"
+  output        = "/home/ubuntu/hvhc_bigdata_management/nextjs_space/node_modules/.prisma/client"
+  binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+model User {
+  id                     String                  @id @default(cuid())
+  email                  String                  @unique
+  emailVerified          DateTime?
+  name                   String
+  password               String
+  role                   UserRole                @default(HOC_VIEN)
+  status                 UserStatus              @default(ACTIVE)
+  militaryId             String?                 @unique
+  rank                   String?
+  department             String?
+  unit                   String?
+  avatar                 String?
+  phone                  String?
+  dateOfBirth            DateTime?
+  gender                 String?
+  address                String?
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+  lastLoginAt            DateTime?
+  employeeId             String?                 @unique
+  endDate                DateTime?
+  personnelType          PersonnelCategory?
+  position               String?
+  startDate              DateTime?
+  unitId                 String?
+  educationLevel         String?
+  joinDate               DateTime?
+  placeOfOrigin          String?
+  specialization         String?
+  workStatus             WorkStatus              @default(ACTIVE)
+  birthPlace             String?
+  bloodType              BloodType?
+  citizenId              String?
+  dischargeDate          DateTime?
+  enlistmentDate         DateTime?
+  ethnicity              String?
+  managementLevel        ManagementLevel?
+  militaryIdNumber       String?
+  officerIdCard          String?
+  permanentAddress       String?
+  religion               String?
+  temporaryAddress       String?
+  personnelId            String?                 @unique
+  managementCategory     ManagementCategory?
+  partyJoinDate          DateTime?
+  partyPosition          String?
+  accounts               Account[]
+  awardsRecords          AwardsRecord[]
+  educationHistory       EducationHistory[]
+  facultyProfile         FacultyProfile?
+  insuranceInfo          InsuranceInfo?
+  medicalRecords         MedicalRecord[]
+  partyMember            PartyMember?
+  personnelAIAnalyses    PersonnelAIAnalysis[]
+  personnelAttachments   PersonnelAttachment[]
+  policyRecords          PolicyRecord[]
+  policyRequests         PolicyRequest[]         @relation("PolicyRequester")
+  scientificProfile      ScientificProfile?
+  scientificPublications ScientificPublication[]
+  scientificResearch     ScientificResearch[]
+  sessions               Session[]
+  studentProfile         StudentProfile?
+  logs                   SystemLog[]
+  commandedUnits         Unit[]                  @relation("UnitCommander")
+  activities             UserActivity[]
+  grantedPermissions     UserPermissionGrant[]   @relation("GrantedPermissions")
+  permissionGrants       UserPermissionGrant[]   @relation("UserPermissions")
+  userPositions          UserPosition[]          @relation("UserRBACPositions")
+  personnelProfile       Personnel?              @relation("PersonnelAccount", fields: [personnelId], references: [id])
+  unitRelation           Unit?                   @relation(fields: [unitId], references: [id])
+  workExperience         WorkExperience[]
+
+  @@index([email])
+  @@index([role])
+  @@index([militaryId])
+  @@index([employeeId])
+  @@index([personnelType])
+  @@index([unitId])
+  @@index([lastLoginAt])
+  @@index([status])
+  @@index([workStatus])
+  @@index([personnelId])
+  @@map("users")
+}
+
+model FacultyProfile {
+  id                   String            @id @default(cuid())
+  userId               String            @unique
+  departmentId         String?
+  academicRank         String?
+  academicDegree       String?
+  specialization       String?
+  teachingSubjects     Json?
+  researchInterests    String?
+  researchProjects     Int               @default(0)
+  publications         Int               @default(0)
+  citations            Int               @default(0)
+  teachingExperience   Int               @default(0)
+  industryExperience   Int               @default(0)
+  biography            String?
+  achievements         Json?
+  certifications       Json?
+  linkedinUrl          String?
+  googleScholarUrl     String?
+  researchGateUrl      String?
+  orcidId              String?
+  isActive             Boolean           @default(true)
+  isPublic             Boolean           @default(false)
+  createdAt            DateTime          @default(now())
+  updatedAt            DateTime          @updatedAt
+  unitId               String?
+  researchProjectsList ResearchProject[]
+  teachingSubjectsList TeachingSubject[]
+  courses              Course[]
+  examsInvigilated     Exam[]
+  unit                 Unit?             @relation("FacultyProfileUnit", fields: [unitId], references: [id])
+  user                 User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  hocVienHuongDan      HocVien[]
+
+  @@index([userId])
+  @@index([departmentId])
+  @@index([unitId])
+  @@index([academicRank])
+  @@index([academicDegree])
+  @@map("faculty_profiles")
+}
+
+model Department {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  name        String
+  shortName   String?
+  fullName    String?
+  parentId    String?
+  level       Int
+  description String?
+  address     String?
+  phone       String?
+  email       String?
+  latitude    Float?
+  longitude   Float?
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([code])
+  @@index([parentId])
+  @@map("departments")
+}
+
+model BigDataService {
+  id          String          @id @default(cuid())
+  name        String
+  type        ServiceType
+  status      ServiceStatus   @default(UNKNOWN)
+  host        String
+  port        Int
+  url         String?
+  username    String?
+  password    String?
+  lastChecked DateTime?
+  uptime      Float?          @default(0)
+  version     String?
+  description String?
+  isActive    Boolean         @default(true)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  alerts      ServiceAlert[]
+  metrics     ServiceMetric[]
+
+  @@index([type])
+  @@index([status])
+  @@map("bigdata_services")
+}
+
+model ServiceMetric {
+  id          String         @id @default(cuid())
+  serviceId   String
+  metricName  String
+  metricValue Float
+  unit        String?
+  cpuUsage    Float?
+  memoryUsage Float?
+  diskUsage   Float?
+  networkIn   Float?
+  networkOut  Float?
+  timestamp   DateTime       @default(now())
+  service     BigDataService @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@index([serviceId])
+  @@index([metricName])
+  @@index([timestamp])
+  @@map("service_metrics")
+}
+
+model ServiceAlert {
+  id             String         @id @default(cuid())
+  serviceId      String
+  title          String
+  message        String
+  severity       AlertSeverity
+  status         AlertStatus    @default(ACTIVE)
+  triggeredAt    DateTime       @default(now())
+  acknowledgedAt DateTime?
+  acknowledgedBy String?
+  resolvedAt     DateTime?
+  resolvedBy     String?
+  metadata       Json?
+  service        BigDataService @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@index([serviceId])
+  @@index([status])
+  @@index([severity])
+  @@map("service_alerts")
+}
+
+model AirflowDag {
+  id           String    @id @default(cuid())
+  dagId        String    @unique
+  dagName      String
+  description  String?
+  status       DagStatus
+  isPaused     Boolean   @default(false)
+  lastRunTime  DateTime?
+  nextRunTime  DateTime?
+  successCount Int       @default(0)
+  failedCount  Int       @default(0)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  runs         DagRun[]
+
+  @@index([dagId])
+  @@index([status])
+  @@map("airflow_dags")
+}
+
+model DagRun {
+  id        String     @id @default(cuid())
+  dagId     String
+  runId     String     @unique
+  status    DagStatus
+  startDate DateTime
+  endDate   DateTime?
+  duration  Float?
+  logUrl    String?
+  metadata  Json?
+  dag       AirflowDag @relation(fields: [dagId], references: [id], onDelete: Cascade)
+
+  @@index([dagId])
+  @@index([status])
+  @@index([startDate])
+  @@map("dag_runs")
+}
+
+model SystemLog {
+  id          String      @id @default(cuid())
+  userId      String?
+  level       LogLevel
+  category    LogCategory
+  action      String
+  description String
+  metadata    Json?
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime    @default(now())
+  user        User?       @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([level])
+  @@index([category])
+  @@index([createdAt])
+  @@map("system_logs")
+}
+
+model UserActivity {
+  id        String   @id @default(cuid())
+  userId    String
+  action    String
+  resource  String?
+  details   String?
+  ipAddress String?
+  userAgent String?
+  timestamp DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([timestamp])
+  @@map("user_activities")
+}
+
+model SystemConfig {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  value       String
+  category    String
+  description String?
+  isEditable  Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([key])
+  @@index([category])
+  @@map("system_configs")
+}
+
+model ResearchFile {
+  id               String              @id @default(cuid())
+  fileName         String
+  originalName     String
+  fileSize         Int
+  fileType         FileType
+  mimeType         String
+  bucketName       String
+  objectKey        String
+  fileUrl          String?
+  uploadedBy       String
+  department       String?
+  researchArea     String?
+  tags             String[]
+  status           FileStatus          @default(UPLOADING)
+  title            String?
+  description      String?
+  keywords         String[]
+  downloadCount    Int                 @default(0)
+  viewCount        Int                 @default(0)
+  uploadedAt       DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  checksum         String?
+  classification   ClassificationLevel @default(INTERNAL)
+  digitalSignature String?
+  isLatest         Boolean             @default(true)
+  parentId         String?
+  version          Int                 @default(1)
+  accessLogs       FileAccessLog[]
+
+  @@index([uploadedBy])
+  @@index([fileType])
+  @@index([department])
+  @@index([status])
+  @@index([classification])
+  @@index([parentId])
+  @@index([uploadedAt])
+  @@map("research_files")
+}
+
+model FileAccessLog {
+  id           String       @id @default(cuid())
+  fileId       String
+  userId       String
+  action       AccessAction
+  ipAddress    String?
+  userAgent    String?
+  location     String?
+  success      Boolean      @default(true)
+  errorMessage String?
+  metadata     Json?
+  timestamp    DateTime     @default(now())
+  file         ResearchFile @relation(fields: [fileId], references: [id], onDelete: Cascade)
+
+  @@index([fileId])
+  @@index([userId])
+  @@index([action])
+  @@index([timestamp])
+  @@map("file_access_logs")
+}
+
+model DataQuery {
+  id            String      @id @default(cuid())
+  queryText     String
+  queryType     QueryType
+  executedBy    String
+  department    String?
+  status        QueryStatus @default(PENDING)
+  executionTime Float?
+  rowsReturned  Int?
+  dataSize      Float?
+  resultUrl     String?
+  errorMessage  String?
+  parameters    Json?
+  submittedAt   DateTime    @default(now())
+  startedAt     DateTime?
+  completedAt   DateTime?
+
+  @@index([executedBy])
+  @@index([queryType])
+  @@index([status])
+  @@index([submittedAt])
+  @@map("data_queries")
+}
+
+model AnalyticsSummary {
+  id              String   @id @default(cuid())
+  summaryType     String
+  summaryDate     DateTime
+  totalUsers      Int
+  activeUsers     Int
+  newUsers        Int
+  totalServices   Int
+  healthyServices Int
+  downServices    Int
+  totalFiles      Int
+  totalQueries    Int
+  totalStorage    Float
+  dataUploaded    Float
+  queriesExecuted Int
+  avgQueryTime    Float
+  avgCpuUsage     Float
+  avgMemoryUsage  Float
+  avgDiskUsage    Float
+  metadata        Json?
+  createdAt       DateTime @default(now())
+
+  @@unique([summaryType, summaryDate])
+  @@index([summaryType])
+  @@index([summaryDate])
+  @@map("analytics_summaries")
+}
+
+model MLModel {
+  id                  String              @id @default(cuid())
+  name                String
+  description         String?
+  modelType           ModelType
+  framework           ModelFramework
+  ownerId             String
+  department          String?
+  researchArea        String?
+  classification      ClassificationLevel @default(INTERNAL)
+  trainingDatasetId   String?
+  validationDatasetId String?
+  version             String              @default("1.0.0")
+  parentId            String?
+  isLatest            Boolean             @default(true)
+  bucketName          String?
+  modelPath           String?
+  configPath          String?
+  hyperparameters     Json?
+  trainingConfig      Json?
+  accuracy            Float?
+  precision           Float?
+  recall              Float?
+  f1Score             Float?
+  loss                Float?
+  customMetrics       Json?
+  status              ModelStatus         @default(DRAFT)
+  trainingStartedAt   DateTime?
+  trainingCompletedAt DateTime?
+  trainingDuration    Float?
+  deployedAt          DateTime?
+  deploymentUrl       String?
+  predictionCount     Int                 @default(0)
+  tags                String[]
+  metadata            Json?
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+  predictions         ModelPrediction[]
+  trainingJobs        TrainingJob[]
+
+  @@index([ownerId])
+  @@index([modelType])
+  @@index([framework])
+  @@index([status])
+  @@index([classification])
+  @@index([createdAt])
+  @@map("ml_models")
+}
+
+model TrainingJob {
+  id                String    @id @default(cuid())
+  modelId           String
+  jobName           String
+  jobType           String    @default("training")
+  config            Json?
+  hyperparameters   Json?
+  trainingDataset   String?
+  validationDataset String?
+  testDataset       String?
+  status            JobStatus @default(QUEUED)
+  gpuAllocated      Int?
+  cpuAllocated      Int?
+  memoryAllocated   Float?
+  progress          Float     @default(0)
+  currentEpoch      Int?
+  totalEpochs       Int?
+  startedAt         DateTime?
+  completedAt       DateTime?
+  duration          Float?
+  finalMetrics      Json?
+  logPath           String?
+  errorMessage      String?
+  errorStack        String?
+  retryCount        Int       @default(0)
+  maxRetries        Int       @default(3)
+  metadata          Json?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  model             MLModel   @relation(fields: [modelId], references: [id], onDelete: Cascade)
+
+  @@index([modelId])
+  @@index([status])
+  @@index([startedAt])
+  @@map("training_jobs")
+}
+
+model ModelPrediction {
+  id            String   @id @default(cuid())
+  modelId       String
+  userId        String?
+  inputData     Json
+  outputData    Json
+  inferenceTime Float
+  feedback      String?
+  isCorrect     Boolean?
+  timestamp     DateTime @default(now())
+  model         MLModel  @relation(fields: [modelId], references: [id], onDelete: Cascade)
+
+  @@index([modelId])
+  @@index([userId])
+  @@index([timestamp])
+  @@map("model_predictions")
+}
+
+model DataPipeline {
+  id               String         @id @default(cuid())
+  name             String
+  description      String?
+  pipelineType     String
+  inputDataset     String
+  outputDataset    String?
+  steps            Json
+  parameters       Json?
+  status           PipelineStatus @default(PENDING)
+  startedAt        DateTime?
+  completedAt      DateTime?
+  duration         Float?
+  recordsProcessed Int?
+  errorCount       Int?
+  logPath          String?
+  errorMessage     String?
+  createdBy        String
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  @@index([status])
+  @@index([createdBy])
+  @@index([createdAt])
+  @@map("data_pipelines")
+}
+
+model experiment_artifacts {
+  id            String    @id @db.VarChar(255)
+  experiment_id String    @db.VarChar(255)
+  artifact_name String    @db.VarChar(255)
+  artifact_type String?   @db.VarChar(50)
+  artifact_path String?
+  file_size     BigInt?
+  created_at    DateTime? @default(now()) @db.Timestamp(6)
+
+  @@index([experiment_id], map: "idx_artifacts_experiment")
+}
+
+model experiment_metrics {
+  id            String    @id @db.VarChar(255)
+  experiment_id String    @db.VarChar(255)
+  metric_name   String    @db.VarChar(255)
+  metric_value  Float
+  step          Int?      @default(0)
+  epoch         Int?      @default(0)
+  timestamp     DateTime? @default(now()) @db.Timestamp(6)
+
+  @@index([experiment_id], map: "idx_metrics_experiment")
+  @@index([metric_name], map: "idx_metrics_name")
+}
+
+model ml_experiments {
+  id          String    @id @db.VarChar(255)
+  name        String    @db.VarChar(255)
+  description String?
+  model_id    String?   @db.VarChar(255)
+  parameters  Json?     @default("{}")
+  tags        Json?     @default("[]")
+  status      String?   @default("pending") @db.VarChar(50)
+  results     Json?     @default("{}")
+  start_time  DateTime? @db.Timestamp(6)
+  end_time    DateTime? @db.Timestamp(6)
+  created_by  String?   @db.VarChar(255)
+  created_at  DateTime? @default(now()) @db.Timestamp(6)
+  updated_at  DateTime? @default(now()) @db.Timestamp(6)
+
+  @@index([created_at], map: "idx_experiments_created")
+  @@index([model_id], map: "idx_experiments_model")
+  @@index([status], map: "idx_experiments_status")
+}
+
+model ml_workflows {
+  id          String    @id @db.VarChar(255)
+  name        String    @db.VarChar(255)
+  description String?
+  model_id    String?   @db.VarChar(255)
+  steps       Json?     @default("[]")
+  schedule    Json?     @default("{}")
+  parameters  Json?     @default("{}")
+  status      String?   @default("draft") @db.VarChar(50)
+  created_by  String?   @db.VarChar(255)
+  created_at  DateTime? @default(now()) @db.Timestamp(6)
+  updated_at  DateTime? @default(now()) @db.Timestamp(6)
+
+  @@index([model_id], map: "idx_workflows_model")
+  @@index([status], map: "idx_workflows_status")
+}
+
+model model_versions {
+  id             String    @id @db.VarChar(255)
+  model_id       String    @db.VarChar(255)
+  version_number Int
+  description    String?
+  experiment_id  String?   @db.VarChar(255)
+  metrics        Json?     @default("{}")
+  artifact_path  String?
+  tags           Json?     @default("[]")
+  stage          String?   @default("development") @db.VarChar(50)
+  status         String?   @default("draft") @db.VarChar(50)
+  notes          String?
+  created_by     String?   @db.VarChar(255)
+  created_at     DateTime? @default(now()) @db.Timestamp(6)
+  updated_at     DateTime? @default(now()) @db.Timestamp(6)
+
+  @@unique([model_id, version_number])
+  @@index([created_at], map: "idx_versions_created")
+  @@index([model_id], map: "idx_versions_model")
+  @@index([stage], map: "idx_versions_stage")
+}
+
+model workflow_executions {
+  id           String    @id @db.VarChar(255)
+  workflow_id  String    @db.VarChar(255)
+  status       String?   @default("pending") @db.VarChar(50)
+  parameters   Json?     @default("{}")
+  current_step Int?      @default(0)
+  progress     Int?      @default(0)
+  results      Json?     @default("{}")
+  error        String?
+  started_at   DateTime? @db.Timestamp(6)
+  completed_at DateTime? @db.Timestamp(6)
+  started_by   String?   @db.VarChar(255)
+
+  @@index([status], map: "idx_executions_status")
+  @@index([workflow_id], map: "idx_executions_workflow")
+}
+
+model Unit {
+  id               String              @id @default(cuid())
+  name             String
+  code             String              @unique
+  type             String
+  level            Int
+  parentId         String?
+  commanderId      String?
+  description      String?
+  active           Boolean             @default(true)
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  path             String?
+  facultyProfiles  FacultyProfile[]    @relation("FacultyProfileUnit")
+  personnelMembers Personnel[]         @relation("PersonnelUnit")
+  positionAliases  UnitPositionAlias[] @relation("UnitPositionAliases")
+  commander        User?               @relation("UnitCommander", fields: [commanderId], references: [id])
+  parent           Unit?               @relation("UnitHierarchy", fields: [parentId], references: [id])
+  children         Unit[]              @relation("UnitHierarchy")
+  userPositions    UserPosition[]      @relation("UserPositionUnit")
+  users            User[]
+
+  @@index([code])
+  @@index([type])
+  @@index([parentId])
+  @@index([commanderId])
+  @@index([path])
+  @@map("units")
+}
+
+model PersonnelAttachment {
+  id          String         @id @default(cuid())
+  userId      String
+  fileName    String
+  fileUrl     String
+  fileSize    Int?
+  fileType    AttachmentType
+  mimeType    String?
+  description String?
+  uploadedAt  DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  isPublic    Boolean        @default(false)
+  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([fileType])
+  @@map("personnel_attachments")
+}
+
+model TeachingSubject {
+  id           String         @id @default(cuid())
+  facultyId    String
+  subjectName  String
+  subjectCode  String?
+  credits      Int            @default(0)
+  semester     String?
+  academicYear String?
+  department   String?
+  description  String?
+  syllabus     String?
+  studentCount Int            @default(0)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  faculty      FacultyProfile @relation(fields: [facultyId], references: [id], onDelete: Cascade)
+
+  @@index([facultyId])
+  @@index([academicYear])
+}
+
+model ResearchProject {
+  id             String                 @id @default(cuid())
+  facultyId      String
+  projectName    String
+  projectCode    String?
+  field          String?
+  level          String?
+  fundingAmount  Float                  @default(0)
+  startYear      String?
+  endYear        String?
+  status         String                 @default("Đang thực hiện")
+  description    String?
+  outcomes       String?
+  publications   Int                    @default(0)
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime               @updatedAt
+  approvedAt     DateTime?
+  approvedBy     String?
+  approverNote   String?
+  completedAt    DateTime?
+  completedBy    String?
+  rejectReason   String?
+  reviewedAt     DateTime?
+  reviewedBy     String?
+  reviewerNote   String?
+  submittedAt    DateTime?
+  submittedBy    String?
+  workflowStatus ResearchWorkflowStatus @default(DRAFT)
+  faculty        FacultyProfile         @relation(fields: [facultyId], references: [id], onDelete: Cascade)
+
+  @@index([facultyId])
+  @@index([status])
+  @@index([level])
+  @@index([workflowStatus])
+}
+
+model HocVien {
+  id                  String          @id @default(cuid())
+  maHocVien           String          @unique
+  hoTen               String
+  ngaySinh            DateTime?
+  gioiTinh            String?
+  lop                 String?
+  khoaHoc             String?
+  nganh               String?
+  giangVienHuongDanId String?
+  email               String?
+  dienThoai           String?
+  diaChi              String?
+  diemTrungBinh       Float           @default(0)
+  trangThai           String          @default("Đang học")
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
+  giangVienHuongDan   FacultyProfile? @relation(fields: [giangVienHuongDanId], references: [id])
+  ketQuaHocTap        KetQuaHocTap[]
+  registrations       Registration[]
+
+  @@index([maHocVien])
+  @@index([lop])
+  @@index([khoaHoc])
+  @@index([nganh])
+  @@index([giangVienHuongDanId])
+  @@map("hoc_vien")
+}
+
+model KetQuaHocTap {
+  id             String              @id @default(cuid())
+  hocVienId      String
+  monHoc         String
+  maMon          String?
+  diem           Float?
+  diemQuaTrinh   Float?
+  diemThi        Float?
+  hocKy          String?
+  namHoc         String?
+  ketQua         String?
+  xepLoai        String?
+  nhanXet        String?
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+  diemBaiTap     Float?
+  diemChuyenCan  Float?
+  diemGiuaKy     Float?
+  diemTongKet    Float?
+  giangVienId    String?
+  heSoMonHocId   String?
+  soTinChi       Int                 @default(3)
+  approvedAt     DateTime?
+  approvedBy     String?
+  rejectReason   String?
+  submittedAt    DateTime?
+  submittedBy    String?
+  workflowStatus GradeWorkflowStatus @default(DRAFT)
+  heSoMonHoc     HeSoMonHoc?         @relation(fields: [heSoMonHocId], references: [id])
+  hocVien        HocVien             @relation(fields: [hocVienId], references: [id], onDelete: Cascade)
+
+  @@index([hocVienId])
+  @@index([maMon])
+  @@index([hocKy])
+  @@index([namHoc])
+  @@index([giangVienId])
+  @@index([namHoc, hocKy])
+  @@index([diemTongKet])
+  @@index([workflowStatus])
+  @@map("ket_qua_hoc_tap")
+}
+
+model HeSoMonHoc {
+  id            String         @id @default(cuid())
+  maMon         String         @unique
+  tenMon        String
+  heSoChuyenCan Float          @default(0.1)
+  heSoGiuaKy    Float          @default(0.2)
+  heSoBaiTap    Float          @default(0.2)
+  heSoThi       Float          @default(0.5)
+  soTinChi      Int            @default(3)
+  loaiMon       String?
+  khoa          String?
+  moTa          String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  ketQuaHocTap  KetQuaHocTap[]
+
+  @@index([maMon])
+  @@index([khoa])
+  @@map("he_so_mon_hoc")
+}
+
+model AIInsight {
+  id          String    @id @default(cuid())
+  type        String
+  targetType  String
+  targetId    String
+  data        Json
+  confidence  Float?
+  generatedAt DateTime  @default(now())
+  validUntil  DateTime?
+  createdBy   String?
+
+  @@index([targetType, targetId])
+  @@index([type, generatedAt])
+  @@index([validUntil])
+  @@map("ai_insights")
+}
+
+model SentimentAnalysis {
+  id         String   @id @default(cuid())
+  feedbackId String?
+  text       String
+  sentiment  String
+  confidence Float
+  keywords   Json
+  summary    String?
+  analyzedAt DateTime @default(now())
+
+  @@index([sentiment])
+  @@index([analyzedAt])
+  @@index([feedbackId])
+  @@map("sentiment_analyses")
+}
+
+model MonthlyReport {
+  id          String   @id @default(cuid())
+  reportType  String
+  targetId    String?
+  month       Int
+  year        Int
+  pdfPath     String?
+  excelPath   String?
+  summary     Json
+  generatedAt DateTime @default(now())
+  generatedBy String?
+
+  @@unique([reportType, targetId, year, month])
+  @@index([year, month])
+  @@index([reportType])
+  @@map("monthly_reports")
+}
+
+model AIApiLog {
+  id           String   @id @default(cuid())
+  provider     String
+  endpoint     String
+  method       String
+  requestData  Json?
+  responseData Json?
+  statusCode   Int?
+  responseTime Int?
+  success      Boolean  @default(false)
+  errorMessage String?
+  userId       String?
+  createdAt    DateTime @default(now())
+
+  @@index([provider, createdAt])
+  @@index([success])
+  @@index([userId])
+  @@map("ai_api_logs")
+}
+
+model ModelRegistry {
+  id             String   @id @default(cuid())
+  modelType      String
+  modelVersion   String   @default("1.0.0")
+  inputData      Json
+  predictionData Json
+  actualData     Json?
+  confidence     Float?
+  accuracy       Float?
+  feedbackScore  Int?
+  feedbackText   String?
+  targetId       String
+  targetType     String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([modelType, targetId])
+  @@index([createdAt])
+  @@map("model_registry")
+}
+
+model AIConfiguration {
+  id               String    @id @default(cuid())
+  provider         String    @default("abacus")
+  apiKeyHash       String?
+  baseUrl          String?
+  model            String    @default("gpt-4-turbo-preview")
+  temperature      Float     @default(0.7)
+  maxTokens        Int       @default(2000)
+  isActive         Boolean   @default(true)
+  offlineMode      Boolean   @default(false)
+  lastTokenRefresh DateTime?
+  tokenExpiresAt   DateTime?
+  metadata         Json?
+  updatedAt        DateTime  @updatedAt
+  updatedBy        String?
+
+  @@map("ai_configurations")
+}
+
+model EducationHistory {
+  id              String         @id @default(cuid())
+  userId          String
+  level           EducationLevel
+  trainingSystem  String?
+  major           String?
+  institution     String
+  startDate       DateTime?
+  endDate         DateTime?
+  thesisTitle     String?
+  supervisor      String?
+  certificateCode String?
+  certificateDate DateTime?
+  notes           String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([level])
+  @@map("education_history")
+}
+
+model WorkExperience {
+  id           String    @id @default(cuid())
+  userId       String
+  organization String
+  position     String
+  startDate    DateTime
+  endDate      DateTime?
+  description  String?
+  sortOrder    Int       @default(0)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([startDate])
+  @@map("work_experience")
+}
+
+model ScientificPublication {
+  id          String          @id @default(cuid())
+  userId      String
+  type        PublicationType
+  title       String
+  year        Int
+  role        PublicationRole
+  publisher   String?
+  issueNumber String?
+  pageNumbers String?
+  targetUsers String?
+  coAuthors   String?
+  notes       String?
+  sortOrder   Int             @default(0)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([type])
+  @@index([year])
+  @@map("scientific_publications")
+}
+
+model ScientificResearch {
+  id          String       @id @default(cuid())
+  userId      String
+  title       String
+  year        Int
+  role        ResearchRole
+  level       String
+  type        String
+  institution String?
+  result      String?
+  notes       String?
+  sortOrder   Int          @default(0)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([year])
+  @@index([level])
+  @@map("scientific_research")
+}
+
+model AwardsRecord {
+  id          String    @id @default(cuid())
+  userId      String
+  type        AwardType
+  category    String
+  description String
+  year        Int
+  awardedBy   String?
+  notes       String?
+  sortOrder   Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([type])
+  @@index([year])
+  @@map("awards_records")
+}
+
+model ScientificProfile {
+  id           String    @id @default(cuid())
+  userId       String    @unique
+  summary      String?
+  pdfPath      String?
+  lastExported DateTime?
+  isPublic     Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("scientific_profiles")
+}
+
+model Course {
+  id              String          @id @default(cuid())
+  code            String          @unique
+  name            String
+  credits         Int             @default(3)
+  departmentId    String?
+  facultyId       String?
+  semester        String
+  year            Int
+  roomId          String?
+  maxStudents     Int             @default(50)
+  currentStudents Int             @default(0)
+  description     String?
+  syllabus        String?
+  isActive        Boolean         @default(true)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  faculty         FacultyProfile? @relation(fields: [facultyId], references: [id])
+  room            Room?           @relation(fields: [roomId], references: [id])
+  exams           Exam[]
+  registrations   Registration[]
+
+  @@index([code])
+  @@index([facultyId])
+  @@index([semester, year])
+  @@index([departmentId])
+  @@map("courses")
+}
+
+model Room {
+  id        String   @id @default(cuid())
+  code      String   @unique
+  name      String
+  building  String?
+  floor     Int?
+  capacity  Int      @default(50)
+  roomType  RoomType @default(THEORY)
+  equipment String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  courses   Course[]
+  exams     Exam[]
+
+  @@index([code])
+  @@index([building])
+  @@index([roomType])
+  @@map("rooms")
+}
+
+model Registration {
+  id             String             @id @default(cuid())
+  hocVienId      String
+  courseId       String
+  status         RegistrationStatus @default(PENDING)
+  priority       Int                @default(1)
+  registeredAt   DateTime           @default(now())
+  approvedAt     DateTime?
+  approvedBy     String?
+  rejectedReason String?
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  gradeRecords   GradeRecord?
+  course         Course             @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  hocVien        HocVien            @relation(fields: [hocVienId], references: [id], onDelete: Cascade)
+
+  @@unique([hocVienId, courseId])
+  @@index([hocVienId])
+  @@index([courseId])
+  @@index([status])
+  @@index([registeredAt])
+  @@map("registrations")
+}
+
+model Exam {
+  id            String          @id @default(cuid())
+  courseId      String
+  examType      ExamType        @default(FINAL)
+  examDate      DateTime
+  duration      Int             @default(90)
+  roomId        String?
+  invigilatorId String?
+  maxStudents   Int             @default(50)
+  instructions  String?
+  isPublished   Boolean         @default(false)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  course        Course          @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  invigilator   FacultyProfile? @relation(fields: [invigilatorId], references: [id])
+  room          Room?           @relation(fields: [roomId], references: [id])
+
+  @@index([courseId])
+  @@index([examDate])
+  @@index([roomId])
+  @@index([invigilatorId])
+  @@map("exams")
+}
+
+model GradeRecord {
+  id              String       @id @default(cuid())
+  registrationId  String       @unique
+  midtermScore    Float?
+  finalScore      Float?
+  assignmentScore Float?
+  attendanceScore Float?
+  totalScore      Float?
+  letterGrade     String?
+  status          GradeStatus  @default(PENDING)
+  gradedBy        String?
+  gradedAt        DateTime?
+  notes           String?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  registration    Registration @relation(fields: [registrationId], references: [id], onDelete: Cascade)
+
+  @@index([status])
+  @@index([letterGrade])
+  @@index([gradedAt])
+  @@map("grade_records")
+}
+
+model ExternalApiKey {
+  id            String           @id @default(cuid())
+  name          String
+  description   String?
+  keyHash       String           @unique
+  keyPrefix     String
+  permissions   String[]
+  ipWhitelist   String[]
+  rateLimit     Int              @default(100)
+  dailyLimit    Int              @default(10000)
+  status        ApiKeyStatus     @default(ACTIVE)
+  expiresAt     DateTime?
+  lastUsedAt    DateTime?
+  totalRequests Int              @default(0)
+  createdById   String
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  accessLogs    ExternalApiLog[]
+
+  @@index([keyPrefix])
+  @@index([status])
+  @@map("external_api_keys")
+}
+
+model ExternalApiLog {
+  id           String         @id @default(cuid())
+  apiKeyId     String
+  endpoint     String
+  method       String
+  statusCode   Int
+  responseTime Int
+  requestBody  String?
+  responseSize Int?
+  ipAddress    String
+  userAgent    String?
+  errorMessage String?
+  createdAt    DateTime       @default(now())
+  apiKey       ExternalApiKey @relation(fields: [apiKeyId], references: [id], onDelete: Cascade)
+
+  @@index([apiKeyId])
+  @@index([createdAt])
+  @@index([endpoint])
+  @@map("external_api_logs")
+}
+
+model InfrastructureConfig {
+  id              String          @id @default(cuid())
+  configType      InfraConfigType
+  name            String
+  description     String?
+  isEnabled       Boolean         @default(false)
+  connectionUrl   String
+  protocol        String?
+  port            Int?
+  username        String?
+  passwordHash    String?
+  sshKeyPath      String?
+  basePath        String?
+  gpuCount        Int?
+  gpuType         String?
+  memoryGB        Int?
+  storageGB       Int?
+  syncEnabled     Boolean         @default(false)
+  syncInterval    Int?
+  syncDirection   SyncDirection?
+  lastSyncAt      DateTime?
+  lastSyncStatus  String?
+  lastHealthCheck DateTime?
+  healthStatus    HealthStatus    @default(UNKNOWN)
+  healthMessage   String?
+  createdById     String
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  syncLogs        SyncLog[]
+
+  @@index([configType])
+  @@index([isEnabled])
+  @@map("infrastructure_configs")
+}
+
+model SyncLog {
+  id               String               @id @default(cuid())
+  configId         String
+  syncType         String
+  direction        SyncDirection
+  status           SyncStatus
+  filesUploaded    Int                  @default(0)
+  filesDownloaded  Int                  @default(0)
+  bytesTransferred BigInt               @default(0)
+  duration         Int
+  errorMessage     String?
+  createdAt        DateTime             @default(now())
+  config           InfrastructureConfig @relation(fields: [configId], references: [id], onDelete: Cascade)
+
+  @@index([configId])
+  @@index([createdAt])
+  @@map("sync_logs")
+}
+
+model AuditLog {
+  id             String   @id @default(cuid())
+  actorUserId    String
+  actorRole      UserRole
+  actorIp        String?
+  actorUserAgent String?
+  action         String
+  resourceType   String
+  resourceId     String?
+  beforeData     Json?
+  afterData      Json?
+  changedFields  String[]
+  requestId      String
+  endpoint       String?
+  httpMethod     String?
+  success        Boolean  @default(true)
+  errorMessage   String?
+  duration       Int?
+  metadata       Json?
+  createdAt      DateTime @default(now())
+
+  @@index([actorUserId])
+  @@index([resourceType, resourceId])
+  @@index([action])
+  @@index([requestId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+model CareerHistory {
+  id                  String          @id @default(cuid())
+  userId              String
+  eventType           CareerEventType
+  eventDate           DateTime
+  effectiveDate       DateTime?
+  oldPosition         String?
+  newPosition         String?
+  oldRank             String?
+  newRank             String?
+  oldUnit             String?
+  newUnit             String?
+  trainingName        String?
+  trainingInstitution String?
+  trainingResult      String?
+  certificateNumber   String?
+  decisionNumber      String?
+  decisionDate        DateTime?
+  signerName          String?
+  signerPosition      String?
+  attachmentUrl       String?
+  notes               String?
+  deletedAt           DateTime?
+  deletedBy           String?
+  deletionReason      String?
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
+  createdById         String?
+
+  @@index([userId])
+  @@index([eventType])
+  @@index([eventDate])
+  @@index([deletedAt])
+  @@map("career_histories")
+}
+
+model PartyMember {
+  id                 String            @id @default(cuid())
+  userId             String            @unique
+  partyCardNumber    String?
+  joinDate           DateTime?
+  officialDate       DateTime?
+  partyCell          String?
+  partyCommittee     String?
+  recommender1       String?
+  recommender2       String?
+  status             PartyMemberStatus @default(ACTIVE)
+  statusChangeDate   DateTime?
+  statusChangeReason String?
+  deletedAt          DateTime?
+  deletedBy          String?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  activities         PartyActivity[]
+  user               User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([status])
+  @@index([deletedAt])
+  @@map("party_members")
+}
+
+model PartyActivity {
+  id              String            @id @default(cuid())
+  partyMemberId   String
+  activityType    PartyActivityType
+  activityDate    DateTime
+  description     String
+  location        String?
+  result          String?
+  evaluationYear  Int?
+  evaluationGrade String?
+  evaluationNotes String?
+  attachmentUrl   String?
+  deletedAt       DateTime?
+  createdAt       DateTime          @default(now())
+  partyMember     PartyMember       @relation(fields: [partyMemberId], references: [id])
+
+  @@index([partyMemberId])
+  @@index([activityType])
+  @@index([activityDate])
+  @@index([deletedAt])
+  @@map("party_activities")
+}
+
+model PolicyRecord {
+  id             String              @id @default(cuid())
+  userId         String
+  recordType     PolicyRecordType
+  level          PolicyLevel
+  title          String
+  reason         String
+  decisionNumber String?
+  decisionDate   DateTime?
+  effectiveDate  DateTime?
+  expiryDate     DateTime?
+  signerName     String?
+  signerPosition String?
+  issuingUnit    String?
+  attachmentUrl  String?
+  status         PolicyRecordStatus  @default(ACTIVE)
+  voidedAt       DateTime?
+  voidedBy       String?
+  voidReason     String?
+  deletedAt      DateTime?
+  deletedBy      String?
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+  approvedAt     DateTime?
+  approvedBy     String?
+  approverNote   String?
+  proposedAt     DateTime?
+  proposedBy     String?
+  rejectReason   String?
+  reviewedAt     DateTime?
+  reviewedBy     String?
+  reviewerNote   String?
+  workflowStatus AwardWorkflowStatus @default(PROPOSED)
+  user           User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([recordType])
+  @@index([status])
+  @@index([workflowStatus])
+  @@index([deletedAt])
+  @@map("policy_records")
+}
+
+model InsuranceInfo {
+  id                       String               @id @default(cuid())
+  userId                   String               @unique
+  insuranceNumber          String?
+  insuranceStartDate       DateTime?
+  insuranceEndDate         DateTime?
+  healthInsuranceNumber    String?
+  healthInsuranceStartDate DateTime?
+  healthInsuranceEndDate   DateTime?
+  healthInsuranceHospital  String?
+  beneficiaryName          String?
+  beneficiaryRelation      String?
+  beneficiaryPhone         String?
+  notes                    String?
+  deletedAt                DateTime?
+  deletedBy                String?
+  createdAt                DateTime             @default(now())
+  updatedAt                DateTime             @updatedAt
+  dependents               InsuranceDependent[]
+  histories                InsuranceHistory[]
+  user                     User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([deletedAt])
+  @@map("insurance_infos")
+}
+
+model MedicalRecord {
+  id              String            @id @default(cuid())
+  userId          String
+  recordType      MedicalRecordType
+  recordDate      DateTime
+  bloodType       String?
+  height          Float?
+  weight          Float?
+  bloodPressure   String?
+  healthGrade     String?
+  diagnosis       String?
+  treatment       String?
+  hospital        String?
+  doctorName      String?
+  result          String?
+  recommendations String?
+  followUpDate    DateTime?
+  attachmentUrl   String?
+  deletedAt       DateTime?
+  createdAt       DateTime          @default(now())
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([recordType])
+  @@index([recordDate])
+  @@index([deletedAt])
+  @@map("medical_records")
+}
+
+model StudentProfile {
+  id                  String        @id @default(cuid())
+  userId              String        @unique
+  maHocVien           String?       @unique
+  lop                 String?
+  khoaHoc             String?
+  nganh               String?
+  heDaoTao            String?
+  khoaQuanLy          String?
+  trungDoi            String?
+  daiDoi              String?
+  diemTrungBinh       Float         @default(0)
+  xepLoaiHocLuc       String?
+  tongTinChi          Int           @default(0)
+  tinChiTichLuy       Int           @default(0)
+  giangVienHuongDanId String?
+  trangThai           StudentStatus @default(DANG_HOC)
+  ngayNhapHoc         DateTime?
+  ngayTotNghiep       DateTime?
+  lyDoNghiHoc         String?
+  deletedAt           DateTime?
+  deletedBy           String?
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+  user                User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([maHocVien])
+  @@index([lop])
+  @@index([khoaHoc])
+  @@index([trangThai])
+  @@index([deletedAt])
+  @@map("student_profiles")
+}
+
+model FamilyRelation {
+  id           String             @id @default(cuid())
+  userId       String
+  relation     FamilyRelationType
+  fullName     String
+  dateOfBirth  DateTime?
+  citizenId    String?
+  phoneNumber  String?
+  occupation   String?
+  workplace    String?
+  address      String?
+  isDeceased   Boolean            @default(false)
+  deceasedDate DateTime?
+  notes        String?
+  deletedAt    DateTime?
+  deletedBy    String?
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+
+  @@index([userId])
+  @@index([relation])
+  @@index([deletedAt])
+  @@map("family_relations")
+}
+
+model AIUsageLog {
+  id            String   @id @default(cuid())
+  userId        String
+  promptVersion String
+  model         String
+  inputTokens   Int
+  outputTokens  Int
+  inputHash     String
+  success       Boolean  @default(true)
+  errorMessage  String?
+  estimatedCost Float
+  createdAt     DateTime @default(now())
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("ai_usage_logs")
+}
+
+model UserPermissionGrant {
+  id              String                         @id @default(cuid())
+  userId          String
+  permission      PermissionType
+  scopeType       PermissionScopeType
+  unitId          String?
+  expiresAt       DateTime?
+  reason          String?
+  grantedById     String
+  grantedAt       DateTime                       @default(now())
+  isRevoked       Boolean                        @default(false)
+  revokedAt       DateTime?
+  revokedById     String?
+  revokedReason   String?
+  createdAt       DateTime                       @default(now())
+  updatedAt       DateTime                       @updatedAt
+  personnelGrants UserPermissionGrantPersonnel[]
+  grantedBy       User                           @relation("GrantedPermissions", fields: [grantedById], references: [id])
+  user            User                           @relation("UserPermissions", fields: [userId], references: [id])
+
+  @@unique([userId, permission, scopeType, unitId])
+  @@index([userId])
+  @@index([permission])
+  @@index([scopeType])
+  @@index([expiresAt])
+  @@index([isRevoked])
+  @@map("user_permission_grants")
+}
+
+model UserPermissionGrantPersonnel {
+  id          String              @id @default(cuid())
+  grantId     String
+  personnelId String
+  createdAt   DateTime            @default(now())
+  grant       UserPermissionGrant @relation(fields: [grantId], references: [id], onDelete: Cascade)
+
+  @@unique([grantId, personnelId])
+  @@index([grantId])
+  @@index([personnelId])
+  @@map("user_permission_grant_personnel")
+}
+
+model PersonnelAIAnalysis {
+  id              String         @id @default(cuid())
+  userId          String
+  analysisType    AIAnalysisType
+  score           Float
+  riskLevel       RiskLevel      @default(LOW)
+  confidence      Float
+  factors         Json?
+  recommendations Json?
+  insights        Json?
+  predictedValue  Float?
+  predictedDate   DateTime?
+  modelVersion    String         @default("v1.0")
+  dataRange       String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([analysisType])
+  @@index([riskLevel])
+  @@index([createdAt])
+  @@map("personnel_ai_analyses")
+}
+
+model Personnel {
+  id                      String             @id @default(cuid())
+  personnelCode           String             @unique
+  fullName                String
+  dateOfBirth             DateTime?
+  gender                  String?
+  placeOfOrigin           String?
+  birthPlace              String?
+  ethnicity               String?
+  religion                String?
+  category                PersonnelCategory?
+  managingOrgan           ManagingOrgan?
+  managingOrganAssignedBy String?
+  managingOrganAssignedAt DateTime?
+  managingOrganReason     String?
+  unitId                  String?
+  status                  PersonnelStatus    @default(DANG_CONG_TAC)
+  militaryIdNumber        String?            @unique
+  militaryRank            String?
+  position                String?
+  enlistmentDate          DateTime?
+  dischargeDate           DateTime?
+  studentIdNumber         String?            @unique
+  employeeIdNumber        String?            @unique
+  educationLevel          String?
+  specialization          String?
+  version                 Int                @default(1)
+  deletedAt               DateTime?
+  deletedBy               String?
+  createdAt               DateTime           @default(now())
+  updatedAt               DateTime           @updatedAt
+  officerCareer           OfficerCareer?     @relation("OfficerCareerLink")
+  unit                    Unit?              @relation("PersonnelUnit", fields: [unitId], references: [id])
+  events                  PersonnelEvent[]
+  sensitiveIdentity       SensitiveIdentity?
+  soldierProfile          SoldierProfile?    @relation("SoldierProfileLink")
+  account                 User?              @relation("PersonnelAccount")
+
+  @@index([personnelCode])
+  @@index([category])
+  @@index([managingOrgan])
+  @@index([unitId])
+  @@index([status])
+  @@index([militaryIdNumber])
+  @@index([studentIdNumber])
+  @@index([employeeIdNumber])
+  @@index([fullName])
+  @@map("personnel")
+}
+
+model SensitiveIdentity {
+  id                    String    @id @default(cuid())
+  personnelId           String    @unique
+  citizenIdEncrypted    String?
+  officerIdEncrypted    String?
+  insuranceNumEncrypted String?
+  healthInsNumEncrypted String?
+  partyCardNumEncrypted String?
+  bankAccountEncrypted  String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  personnel             Personnel @relation(fields: [personnelId], references: [id], onDelete: Cascade)
+
+  @@map("sensitive_identities")
+}
+
+model PersonnelEvent {
+  id          String             @id @default(cuid())
+  personnelId String
+  eventType   PersonnelEventType
+  eventDate   DateTime           @default(now())
+  payload     Json?
+  summary     String?
+  createdBy   String?
+  createdAt   DateTime           @default(now())
+  personnel   Personnel          @relation(fields: [personnelId], references: [id], onDelete: Cascade)
+
+  @@index([personnelId])
+  @@index([eventType])
+  @@index([eventDate])
+  @@map("personnel_events")
+}
+
+model Position {
+  id            String              @id @default(cuid())
+  code          String              @unique
+  name          String
+  description   String?
+  positionScope PositionScope       @default(UNIT)
+  level         Int                 @default(0)
+  isActive      Boolean             @default(true)
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  functions     PositionFunction[]
+  unitAliases   UnitPositionAlias[]
+  userPositions UserPosition[]
+
+  @@index([code])
+  @@index([positionScope])
+  @@map("positions")
+}
+
+model Function {
+  id          String             @id @default(cuid())
+  code        String             @unique
+  name        String
+  description String?
+  module      String
+  actionType  ActionType         @default(VIEW)
+  isActive    Boolean            @default(true)
+  isCritical  Boolean            @default(false)
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+  positions   PositionFunction[]
+
+  @@index([code])
+  @@index([module])
+  @@index([actionType])
+  @@map("functions")
+}
+
+model PositionFunction {
+  id         String        @id @default(cuid())
+  positionId String
+  functionId String
+  scope      FunctionScope @default(SELF)
+  conditions Json?
+  isActive   Boolean       @default(true)
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+  function   Function      @relation(fields: [functionId], references: [id], onDelete: Cascade)
+  position   Position      @relation(fields: [positionId], references: [id], onDelete: Cascade)
+
+  @@unique([positionId, functionId])
+  @@index([positionId])
+  @@index([functionId])
+  @@index([scope])
+  @@map("position_functions")
+}
+
+model UserPosition {
+  id             String    @id @default(cuid())
+  userId         String
+  positionId     String
+  unitId         String?
+  startDate      DateTime  @default(now())
+  endDate        DateTime?
+  isPrimary      Boolean   @default(false)
+  appointmentDoc String?
+  notes          String?
+  isActive       Boolean   @default(true)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  position       Position  @relation(fields: [positionId], references: [id], onDelete: Cascade)
+  unit           Unit?     @relation("UserPositionUnit", fields: [unitId], references: [id])
+  user           User      @relation("UserRBACPositions", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([positionId])
+  @@index([unitId])
+  @@index([startDate, endDate])
+  @@index([isPrimary])
+  @@map("user_positions")
+}
+
+model UnitPositionAlias {
+  id          String   @id @default(cuid())
+  unitId      String
+  positionId  String
+  displayName String
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  position    Position @relation(fields: [positionId], references: [id], onDelete: Cascade)
+  unit        Unit     @relation("UnitPositionAliases", fields: [unitId], references: [id], onDelete: Cascade)
+
+  @@unique([unitId, positionId])
+  @@index([unitId])
+  @@index([positionId])
+  @@map("unit_position_aliases")
+}
+
+model PermissionConflict {
+  id            String           @id @default(cuid())
+  functionCodeA String
+  functionCodeB String
+  description   String?
+  severity      ConflictSeverity @default(BLOCK)
+  isActive      Boolean          @default(true)
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  @@unique([functionCodeA, functionCodeB])
+  @@index([functionCodeA])
+  @@index([functionCodeB])
+  @@map("permission_conflicts")
+}
+
+model PolicyCategory {
+  id               String           @id @default(cuid())
+  code             String           @unique
+  name             String
+  description      String?
+  parentId         String?
+  requiresApproval Boolean          @default(true)
+  approvalLevels   Int              @default(1)
+  isActive         Boolean          @default(true)
+  sortOrder        Int              @default(0)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  parent           PolicyCategory?  @relation("PolicyCategoryHierarchy", fields: [parentId], references: [id])
+  children         PolicyCategory[] @relation("PolicyCategoryHierarchy")
+  requests         PolicyRequest[]
+
+  @@index([code])
+  @@index([parentId])
+  @@index([isActive])
+  @@map("policy_categories")
+}
+
+model PolicyRequest {
+  id              String              @id @default(cuid())
+  requestNumber   String              @unique
+  requesterId     String
+  categoryId      String
+  title           String
+  description     String
+  reason          String?
+  requestedAmount Decimal?            @db.Decimal(15, 2)
+  approvedAmount  Decimal?            @db.Decimal(15, 2)
+  currency        String              @default("VND")
+  effectiveDate   DateTime?
+  expiryDate      DateTime?
+  status          PolicyRequestStatus @default(DRAFT)
+  currentLevel    Int                 @default(0)
+  submittedAt     DateTime?
+  submittedBy     String?
+  reviewedAt      DateTime?
+  reviewedBy      String?
+  reviewerNote    String?
+  approvedAt      DateTime?
+  approvedBy      String?
+  approverNote    String?
+  rejectedAt      DateTime?
+  rejectedBy      String?
+  rejectReason    String?
+  deletedAt       DateTime?
+  deletedBy       String?
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+  attachments     PolicyAttachment[]
+  category        PolicyCategory      @relation(fields: [categoryId], references: [id])
+  requester       User                @relation("PolicyRequester", fields: [requesterId], references: [id])
+  workflowLogs    PolicyWorkflowLog[]
+
+  @@index([requestNumber])
+  @@index([requesterId])
+  @@index([categoryId])
+  @@index([status])
+  @@index([createdAt])
+  @@index([deletedAt])
+  @@map("policy_requests")
+}
+
+model PolicyAttachment {
+  id               String        @id @default(cuid())
+  requestId        String
+  fileName         String
+  fileType         String
+  fileSize         Int
+  cloudStoragePath String
+  isPublic         Boolean       @default(false)
+  description      String?
+  uploadedBy       String?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  request          PolicyRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+
+  @@index([requestId])
+  @@map("policy_attachments")
+}
+
+model PolicyWorkflowLog {
+  id            String               @id @default(cuid())
+  requestId     String
+  action        PolicyWorkflowAction
+  fromStatus    PolicyRequestStatus?
+  toStatus      PolicyRequestStatus
+  performedBy   String
+  performerName String?
+  performerRole String?
+  note          String?
+  ipAddress     String?
+  userAgent     String?
+  createdAt     DateTime             @default(now())
+  request       PolicyRequest        @relation(fields: [requestId], references: [id], onDelete: Cascade)
+
+  @@index([requestId])
+  @@index([action])
+  @@index([performedBy])
+  @@index([createdAt])
+  @@map("policy_workflow_logs")
+}
+
+model InsuranceHistory {
+  id              String                   @id @default(cuid())
+  insuranceInfoId String
+  transactionType InsuranceTransactionType
+  periodMonth     Int
+  periodYear      Int
+  baseSalary      Decimal?                 @db.Decimal(15, 2)
+  amount          Decimal                  @db.Decimal(15, 2)
+  employeeShare   Decimal?                 @db.Decimal(15, 2)
+  employerShare   Decimal?                 @db.Decimal(15, 2)
+  benefitType     InsuranceBenefitType?
+  benefitReason   String?
+  benefitPeriod   Int?
+  documentNumber  String?
+  documentDate    DateTime?
+  notes           String?
+  deletedAt       DateTime?
+  deletedBy       String?
+  createdAt       DateTime                 @default(now())
+  updatedAt       DateTime                 @updatedAt
+  insuranceInfo   InsuranceInfo            @relation(fields: [insuranceInfoId], references: [id], onDelete: Cascade)
+
+  @@index([insuranceInfoId])
+  @@index([transactionType])
+  @@index([periodYear, periodMonth])
+  @@index([deletedAt])
+  @@map("insurance_histories")
+}
+
+model InsuranceDependent {
+  id                       String                @id @default(cuid())
+  insuranceInfoId          String
+  fullName                 String
+  relationship             DependentRelationship
+  dateOfBirth              DateTime?
+  gender                   String?
+  citizenId                String?
+  healthInsuranceNumber    String?
+  healthInsuranceStartDate DateTime?
+  healthInsuranceEndDate   DateTime?
+  healthInsuranceHospital  String?
+  status                   DependentStatus       @default(ACTIVE)
+  statusReason             String?
+  documentNumber           String?
+  documentDate             DateTime?
+  notes                    String?
+  deletedAt                DateTime?
+  deletedBy                String?
+  createdAt                DateTime              @default(now())
+  updatedAt                DateTime              @updatedAt
+  insuranceInfo            InsuranceInfo         @relation(fields: [insuranceInfoId], references: [id], onDelete: Cascade)
+
+  @@index([insuranceInfoId])
+  @@index([relationship])
+  @@index([status])
+  @@index([deletedAt])
+  @@map("insurance_dependents")
+}
+
+model OfficerCareer {
+  id                   String             @id @default(cuid())
+  personnelId          String             @unique
+  officerIdNumber      String?            @unique
+  currentRank          OfficerRank?
+  currentPosition      String?
+  commissionedDate     DateTime?
+  lastEvaluationDate   DateTime?
+  lastEvaluationResult String?
+  evaluationHistory    Json?
+  commandHistory       Json?
+  trainingHistory      Json?
+  awardHistory         Json?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+  createdBy            String?
+  updatedBy            String?
+  personnel            Personnel          @relation("OfficerCareerLink", fields: [personnelId], references: [id], onDelete: Cascade)
+  promotions           OfficerPromotion[]
+
+  @@index([personnelId])
+  @@index([currentRank])
+  @@index([officerIdNumber])
+  @@map("officer_careers")
+}
+
+model OfficerPromotion {
+  id               String        @id @default(cuid())
+  officerCareerId  String
+  promotionType    PromotionType
+  effectiveDate    DateTime
+  decisionNumber   String?
+  decisionDate     DateTime?
+  previousRank     OfficerRank?
+  newRank          OfficerRank?
+  previousPosition String?
+  newPosition      String?
+  previousUnitId   String?
+  newUnitId        String?
+  reason           String?
+  notes            String?
+  attachments      Json?
+  createdAt        DateTime      @default(now())
+  createdBy        String?
+  officerCareer    OfficerCareer @relation(fields: [officerCareerId], references: [id], onDelete: Cascade)
+
+  @@index([officerCareerId])
+  @@index([effectiveDate])
+  @@index([promotionType])
+  @@map("officer_promotions")
+}
+
+model SoldierProfile {
+  id                    String                 @id @default(cuid())
+  personnelId           String                 @unique
+  soldierIdNumber       String?                @unique
+  soldierCategory       SoldierCategory?
+  currentRank           SoldierRank?
+  serviceType           SoldierServiceType?
+  enlistmentDate        DateTime?
+  expectedDischargeDate DateTime?
+  actualDischargeDate   DateTime?
+  contractEndDate       DateTime?
+  skillCertificates     Json?
+  trainingCourses       Json?
+  specialSkills         String?
+  healthCategory        String?
+  lastHealthCheckDate   DateTime?
+  healthNotes           String?
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  createdBy             String?
+  updatedBy             String?
+  personnel             Personnel              @relation("SoldierProfileLink", fields: [personnelId], references: [id], onDelete: Cascade)
+  serviceRecords        SoldierServiceRecord[]
+
+  @@index([personnelId])
+  @@index([soldierCategory])
+  @@index([soldierIdNumber])
+  @@index([serviceType])
+  @@map("soldier_profiles")
+}
+
+model SoldierServiceRecord {
+  id               String         @id @default(cuid())
+  soldierProfileId String
+  eventType        String
+  eventDate        DateTime
+  decisionNumber   String?
+  previousRank     SoldierRank?
+  newRank          SoldierRank?
+  previousUnit     String?
+  newUnit          String?
+  description      String?
+  notes            String?
+  createdAt        DateTime       @default(now())
+  createdBy        String?
+  soldierProfile   SoldierProfile @relation(fields: [soldierProfileId], references: [id], onDelete: Cascade)
+
+  @@index([soldierProfileId])
+  @@index([eventDate])
+  @@index([eventType])
+  @@map("soldier_service_records")
+}
+
+enum AttachmentType {
+  SO_YEU_LY_LICH
+  ANH_THE
+  QUYET_DINH_BO_NHIEM
+  BANG_CAP
+  HO_SO_KHAC
+}
+
+enum ResearchWorkflowStatus {
+  DRAFT
+  SUBMITTED
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+  IN_PROGRESS
+  PENDING_REVIEW
+  COMPLETED
+  CANCELLED
+}
+
+enum GradeWorkflowStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+  REJECTED
+}
+
+enum UserRole {
+  ADMIN
+  GIANG_VIEN
+  HOC_VIEN
+  NGHIEN_CUU_VIEN
+  QUAN_TRI_HE_THONG
+  CHI_HUY_HOC_VIEN
+  CHI_HUY_KHOA_PHONG
+  CHU_NHIEM_BO_MON
+  HOC_VIEN_SINH_VIEN
+  KY_THUAT_VIEN
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+enum PersonnelCategory {
+  CAN_BO_CHI_HUY
+  GIANG_VIEN
+  NGHIEN_CUU_VIEN
+  CONG_NHAN_VIEN
+  HOC_VIEN_QUAN_SU
+  SINH_VIEN_DAN_SU
+}
+
+enum WorkStatus {
+  ACTIVE
+  TRANSFERRED
+  RETIRED
+  SUSPENDED
+  RESIGNED
+}
+
+enum BloodType {
+  A_POSITIVE
+  A_NEGATIVE
+  B_POSITIVE
+  B_NEGATIVE
+  AB_POSITIVE
+  AB_NEGATIVE
+  O_POSITIVE
+  O_NEGATIVE
+}
+
+enum ManagementLevel {
+  TRUNG_UONG
+  QUAN_CHUNG
+  HOC_VIEN
+  DON_VI
+}
+
+enum ManagementCategory {
+  CAN_BO
+  QUAN_LUC
+}
+
+enum PermissionModule {
+  DASHBOARD
+  USER_MANAGEMENT
+  DATA_LAKE
+  ML_TRAINING
+  RESEARCH
+  ANALYTICS
+  REPORTS
+  SYSTEM_CONFIG
+  AUDIT_LOGS
+  FILES
+  DATASETS
+  TRAINING
+  GOVERNANCE
+}
+
+enum PermissionAction {
+  VIEW
+  CREATE
+  EDIT
+  DELETE
+  EXPORT
+  APPROVE
+  MANAGE
+  EXECUTE
+}
+
+enum PermissionScope {
+  ALL
+  DEPARTMENT
+  OWN
+}
+
+enum ServiceType {
+  POSTGRESQL
+  MINIO
+  AIRFLOW
+  CLICKHOUSE
+  PROMETHEUS
+  SUPERSET
+  KAFKA
+  HADOOP
+  SPARK
+  GRAFANA
+  ZOOKEEPER
+}
+
+enum ServiceStatus {
+  HEALTHY
+  DEGRADED
+  DOWN
+  UNKNOWN
+}
+
+enum AlertSeverity {
+  INFO
+  WARNING
+  ERROR
+  CRITICAL
+}
+
+enum AlertStatus {
+  ACTIVE
+  ACKNOWLEDGED
+  RESOLVED
+}
+
+enum DagStatus {
+  SUCCESS
+  FAILED
+  RUNNING
+  QUEUED
+  PAUSED
+}
+
+enum LogLevel {
+  DEBUG
+  INFO
+  WARNING
+  ERROR
+  CRITICAL
+}
+
+enum LogCategory {
+  AUTH
+  USER_MANAGEMENT
+  SERVICE_MONITORING
+  DATA_PROCESSING
+  SYSTEM
+  SECURITY
+  TRAINING
+}
+
+enum FileType {
+  RESEARCH_PAPER
+  DATASET
+  MODEL
+  REPORT
+  PRESENTATION
+  OTHER
+}
+
+enum FileStatus {
+  UPLOADING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum ClassificationLevel {
+  PUBLIC
+  INTERNAL
+  CONFIDENTIAL
+  SECRET
+  TOP_SECRET
+}
+
+enum AccessAction {
+  VIEW
+  DOWNLOAD
+  EDIT
+  DELETE
+  SHARE
+}
+
+enum QueryStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum QueryType {
+  POSTGRESQL
+  CLICKHOUSE
+  HADOOP
+  SPARK
+  CUSTOM
+}
+
+enum ModelType {
+  CLASSIFICATION
+  REGRESSION
+  CLUSTERING
+  NEURAL_NETWORK
+  DEEP_LEARNING
+  NLP
+  COMPUTER_VISION
+  TIME_SERIES
+  REINFORCEMENT_LEARNING
+  OTHER
+}
+
+enum ModelStatus {
+  DRAFT
+  TRAINING
+  TRAINED
+  VALIDATING
+  DEPLOYED
+  DEPRECATED
+  FAILED
+}
+
+enum ModelFramework {
+  TENSORFLOW
+  PYTORCH
+  KERAS
+  SCIKIT_LEARN
+  XGBOOST
+  LIGHTGBM
+  CATBOOST
+  HUGGINGFACE
+  OTHER
+}
+
+enum JobStatus {
+  QUEUED
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum PipelineStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+}
+
+enum DatasetType {
+  CSV
+  JSON
+  PARQUET
+  AVRO
+  XML
+  TEXT
+  BINARY
+}
+
+enum DatasetStatus {
+  UPLOADED
+  PROCESSING
+  READY
+  FAILED
+  ARCHIVED
+}
+
+enum AuditAction {
+  LOGIN
+  LOGOUT
+  CREATE
+  READ
+  UPDATE
+  DELETE
+  UPLOAD
+  DOWNLOAD
+  EXPORT
+  SHARE
+  PERMISSION_CHANGE
+  CONFIG_CHANGE
+  FAILED_LOGIN
+  UNAUTHORIZED_ACCESS
+  DATA_BREACH_ATTEMPT
+}
+
+enum AuditSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum EducationLevel {
+  DAI_HOC
+  THAC_SI
+  TIEN_SI
+  CU_NHAN_NGOAI_NGU
+  KHAC
+}
+
+enum PublicationType {
+  GIAO_TRINH
+  TAI_LIEU
+  BAI_TAP
+  BAI_BAO
+}
+
+enum PublicationRole {
+  CHU_BIEN
+  THAM_GIA
+  DONG_TAC_GIA
+}
+
+enum ResearchRole {
+  CHU_NHIEM
+  THAM_GIA
+  THANH_VIEN
+}
+
+enum AwardType {
+  KHEN_THUONG
+  KY_LUAT
+}
+
+enum RoomType {
+  THEORY
+  LAB
+  COMPUTER
+  LANGUAGE
+  LIBRARY
+  SEMINAR
+  WORKSHOP
+}
+
+enum RegistrationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+  COMPLETED
+}
+
+enum ExamType {
+  MIDTERM
+  FINAL
+  QUIZ
+  PRACTICAL
+  ORAL
+}
+
+enum GradeStatus {
+  PENDING
+  GRADED
+  PUBLISHED
+  APPEALED
+  FINALIZED
+}
+
+enum ApiKeyStatus {
+  ACTIVE
+  SUSPENDED
+  REVOKED
+  EXPIRED
+}
+
+enum InfraConfigType {
+  NAS
+  TRAINING_SERVER
+  BACKUP_SERVER
+}
+
+enum SyncDirection {
+  UPLOAD
+  DOWNLOAD
+  BIDIRECTIONAL
+}
+
+enum SyncStatus {
+  SUCCESS
+  PARTIAL
+  FAILED
+  CANCELLED
+}
+
+enum HealthStatus {
+  HEALTHY
+  DEGRADED
+  UNHEALTHY
+  UNKNOWN
+}
+
+enum CareerEventType {
+  ENLISTMENT
+  PROMOTION
+  APPOINTMENT
+  TRANSFER
+  TRAINING
+  AWARD
+  DISCIPLINE
+  RETIREMENT
+  DISCHARGE
+  OTHER
+}
+
+enum PartyMemberStatus {
+  ACTIVE
+  TRANSFERRED
+  SUSPENDED
+  EXPELLED
+}
+
+enum PartyActivityType {
+  MEETING
+  STUDY
+  CRITICISM
+  VOLUNTEER
+  EVALUATION
+  OTHER
+}
+
+enum AwardWorkflowStatus {
+  PROPOSED
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+enum PolicyRecordType {
+  REWARD
+  DISCIPLINE
+}
+
+enum PolicyLevel {
+  NATIONAL
+  MINISTRY
+  UNIT
+  DEPARTMENT
+}
+
+enum PolicyRecordStatus {
+  ACTIVE
+  EXPIRED
+  VOIDED
+}
+
+enum MedicalRecordType {
+  ANNUAL_CHECK
+  TREATMENT
+  VACCINATION
+  INJURY
+  OTHER
+}
+
+enum StudentStatus {
+  DANG_HOC
+  TAM_NGHI
+  DINH_CHI
+  NGHI_HOC
+  TOT_NGHIEP
+  CHUYEN_TRUONG
+}
+
+enum FamilyRelationType {
+  FATHER
+  MOTHER
+  SPOUSE
+  CHILD
+  SIBLING
+  FATHER_IN_LAW
+  MOTHER_IN_LAW
+  OTHER
+}
+
+enum PermissionType {
+  PERSONNEL_VIEW
+  PERSONNEL_EDIT
+  PERSONNEL_EDIT_SENSITIVE
+  PERSONNEL_EXPORT
+  PERSONNEL_DELETE
+  PERSONNEL_APPROVE
+}
+
+enum PermissionScopeType {
+  ALL
+  UNIT
+  PERSONNEL
+  SELF
+}
+
+enum RiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum AIAnalysisType {
+  STABILITY_INDEX
+  PROMOTION_FORECAST
+  HEALTH_TREND
+  PERFORMANCE_INSIGHT
+  ATTRITION_RISK
+  CAREER_PATH
+}
+
+enum ManagingOrgan {
+  BAN_CAN_BO
+  BAN_QUAN_LUC
+  PHONG_DAO_TAO
+  PHONG_CHINH_TRI
+}
+
+enum PersonnelStatus {
+  DANG_CONG_TAC
+  NGHI_HUU
+  CHUYEN_CONG_TAC
+  DI_HOC
+  TAM_NGHI
+  XUAT_NGU
+  TU_TRAN
+}
+
+enum PersonnelEventType {
+  CREATED
+  UPDATED
+  CAREER_CHANGE
+  UNIT_CHANGE
+  PARTY_STATUS
+  INSURANCE_UPDATE
+  FAMILY_UPDATE
+  POLICY_RECORD
+  ACCOUNT_CREATED
+  ACCOUNT_DISABLED
+  RANK_PROMOTION
+  EDUCATION_UPDATE
+}
+
+enum ConflictSeverity {
+  WARN
+  BLOCK
+}
+
+enum PolicyRequestStatus {
+  DRAFT
+  SUBMITTED
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+  CANCELLED
+  COMPLETED
+}
+
+enum PolicyWorkflowAction {
+  CREATE
+  UPDATE
+  SUBMIT
+  REVIEW
+  APPROVE
+  REJECT
+  CANCEL
+  COMPLETE
+  REOPEN
+}
+
+enum InsuranceTransactionType {
+  CONTRIBUTION
+  BENEFIT
+  ADJUSTMENT
+  REFUND
+}
+
+enum InsuranceBenefitType {
+  SICK_LEAVE
+  MATERNITY
+  RETIREMENT
+  DEATH
+  OCCUPATIONAL
+  UNEMPLOYMENT
+  OTHER
+}
+
+enum DependentRelationship {
+  SPOUSE
+  CHILD
+  PARENT
+  SIBLING
+  GRANDPARENT
+  GRANDCHILD
+  OTHER
+}
+
+enum DependentStatus {
+  ACTIVE
+  INACTIVE
+  PENDING
+}
+
+enum PositionScope {
+  SELF
+  UNIT
+  DEPARTMENT
+  ACADEMY
+}
+
+enum FunctionScope {
+  SELF
+  UNIT
+  DEPARTMENT
+  ACADEMY
+}
+
+enum ActionType {
+  VIEW
+  CREATE
+  UPDATE
+  DELETE
+  APPROVE
+  REJECT
+  EXPORT
+  IMPORT
+  SUBMIT
+}
+
+enum OfficerRank {
+  DAI_TUONG
+  THUONG_TUONG
+  TRUNG_TUONG
+  THIEU_TUONG
+  DAI_TA
+  THUONG_TA
+  TRUNG_TA
+  THIEU_TA
+  DAI_UY
+  THUONG_UY
+  TRUNG_UY
+  THIEU_UY
+}
+
+enum PromotionType {
+  THANG_CAP
+  BO_NHIEM
+  DIEU_DONG
+  LUAN_CHUYEN
+  GIANG_CHUC
+  CACH_CHUC
+  NGHI_HUU
+  XUAT_NGU
+}
+
+enum SoldierRank {
+  THUONG_SI
+  TRUNG_SI
+  HA_SI
+  BINH_NHAT
+  BINH_NHI
+}
+
+enum SoldierCategory {
+  QNCN
+  CNVQP
+  HSQ
+  CHIEN_SI
+}
+
+enum SoldierServiceType {
+  NGHIA_VU
+  HOP_DONG
+  CHUYEN_NGHIEP
+}
+
+
