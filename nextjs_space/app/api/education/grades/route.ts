@@ -13,6 +13,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { requireFunction } from '@/lib/rbac/middleware';
 import { EDUCATION } from '@/lib/rbac/function-codes';
+import { listGrades } from '@/lib/services/education/grade.service';
 
 export async function GET(req: NextRequest) {
   try {
@@ -33,49 +34,27 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const where: any = {};
-    if (classSectionId) where.classSectionId = classSectionId;
-    if (hocVienId)      where.hocVienId = hocVienId;
-    if (gradeStatus)    where.gradeStatus = gradeStatus;
-    if (termId)         where.classSection = { termId };
-
-    // Scope SELF: giảng viên chỉ xem điểm lớp học phần mình phụ trách
+    // Scope SELF: resolve facultyId của người dùng (nếu là giảng viên)
+    let restrictToFacultyId: string | undefined;
     const scope = authResult?.scope ?? 'SELF';
     if (scope === 'SELF' && user) {
       const facultyProfile = await prisma.facultyProfile.findUnique({
         where: { userId: user.id },
         select: { id: true },
       });
-      if (facultyProfile) {
-        // Lấy danh sách lớp học phần do giảng viên này phụ trách
-        where.classSection = {
-          ...(where.classSection || {}),
-          facultyId: facultyProfile.id,
-        };
-      }
-      // Nếu user không phải giảng viên (không có FacultyProfile) nhưng scope là SELF
-      // → không lọc thêm (có thể là cán bộ đào tạo xem điểm học viên mình quản lý)
+      restrictToFacultyId = facultyProfile?.id;
+      // Nếu user không có FacultyProfile (cán bộ đào tạo) → không restrict thêm
     }
 
-    const enrollments = await prisma.classEnrollment.findMany({
-      where,
-      include: {
-        hocVien: { select: { id: true, maHocVien: true, hoTen: true } },
-        classSection: {
-          select: {
-            id: true,
-            code: true,
-            name: true,
-            termId: true,
-            curriculumCourse: { select: { subjectCode: true, subjectName: true, credits: true } },
-          },
-        },
-        _count: { select: { scoreHistories: true } },
-      },
-      orderBy: [{ classSection: { code: 'asc' } }, { hocVien: { hoTen: 'asc' } }],
+    const data = await listGrades({
+      classSectionId: classSectionId ?? undefined,
+      hocVienId: hocVienId ?? undefined,
+      termId: termId ?? undefined,
+      gradeStatus: gradeStatus ?? undefined,
+      restrictToFacultyId,
     });
 
-    return NextResponse.json({ success: true, data: enrollments });
+    return NextResponse.json({ success: true, data });
   } catch (error: any) {
     console.error('GET /api/education/grades error:', error);
     return NextResponse.json({ success: false, error: 'Failed to fetch grades' }, { status: 500 });

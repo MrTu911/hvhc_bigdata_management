@@ -35,8 +35,8 @@ export async function GET(req: NextRequest, { params }: Params) {
         user: { select: { id: true, name: true, email: true } },
         _count: {
           select: {
-            classEnrollments: true,
-            ketQuaHocTap: true,
+            classEnrollments: true,   // M10 source of truth
+            ketQuaHocTap: true,       // legacy LAN – chỉ đếm, không expand
             conductRecords: true,
           },
         },

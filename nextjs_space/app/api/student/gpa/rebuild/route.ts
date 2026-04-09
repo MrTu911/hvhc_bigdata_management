@@ -1,4 +1,9 @@
 /**
+ * @deprecated Dùng /api/education/warnings/recalculate/ thay thế (M10 backbone).
+ * Route này sẽ bị tắt vào 2026-10-01. Không mở rộng thêm.
+ */
+
+/**
  * POST /api/student/gpa/rebuild
  * M07 – Trigger rebuild GPA tích lũy và cảnh báo học vụ.
  *

@@ -7,7 +7,8 @@ import { requireScopedFunction } from '@/lib/rbac/middleware';
 import { TEMPLATES } from '@/lib/rbac/function-codes';
 import { logAudit } from '@/lib/audit';
 import prisma from '@/lib/db';
-import { parsePlaceholders, TEMPLATE_BUCKET } from '@/lib/services/template-service';
+import { TEMPLATE_BUCKET } from '@/lib/services/template-service';
+import { parsePlaceholders as parsePlaceholdersFromFile } from '@/lib/integrations/render/placeholder-parser';
 import { getFileInfo } from '@/lib/minio-client';
 import minioClient from '@/lib/minio-client';
 
@@ -31,7 +32,9 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
           stream.on('error', reject);
         });
         const buffer = Buffer.concat(chunks);
-        placeholders = await parsePlaceholders(buffer, template.fileKey.includes('.xlsx') ? 'XLSX' : 'DOCX');
+        const format = template.fileKey.includes('.xlsx') ? 'XLSX' : template.fileKey.includes('.html') ? 'HTML' : 'DOCX';
+        const parseResult = await parsePlaceholdersFromFile(buffer, format);
+        placeholders = parseResult.placeholders;
       } catch {
         // File might not exist in MinIO yet
       }

@@ -20,6 +20,7 @@ import {
   XCircle,
   LayoutGrid,
   List,
+  Upload,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -250,6 +251,14 @@ export default function TemplatesPage() {
           </p>
         </div>
         <div className="flex gap-2">
+          <Button variant="outline" size="sm" onClick={() => router.push('/dashboard/templates/import')}>
+            <Upload className="h-4 w-4 mr-2" />
+            Import
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => router.push('/dashboard/templates/analytics')}>
+            <Filter className="h-4 w-4 mr-2" />
+            Thống kê
+          </Button>
           <Button variant="outline" size="sm" onClick={() => router.push('/dashboard/templates/export-jobs')}>
             <Download className="h-4 w-4 mr-2" />
             Lịch sử xuất file

@@ -1,7 +1,10 @@
 /**
+ * @deprecated Dùng /api/education/students/[id] thay thế (M10 backbone).
+ * Route này sẽ bị tắt vào 2026-10-01. Không mở rộng thêm.
+ *
  * CSDL Học viên - Student Detail API
  * Chi tiết và cập nhật học viên
- * 
+ *
  * RBAC Migration: Legacy role checks → Function-based RBAC
  */
 

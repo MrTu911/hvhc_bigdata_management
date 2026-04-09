@@ -31,6 +31,7 @@ import {
 } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import { exportToPDF, exportToExcel, exportToCSV } from '@/lib/export-utils';
+import { ACADEMIC_STANDING_COLORS } from '@/lib/constants/academic-standing';
 
 interface Student {
   id: string;
@@ -678,16 +679,7 @@ export default function MyStudentsPage() {
                     selectionMode && selectedStudents.has(student.id) ? 'ring-2 ring-purple-500 bg-purple-50' : ''
                   }`}
                   style={{
-                    borderLeftColor:
-                      student.gpa >= 9.0
-                        ? '#10b981'
-                        : student.gpa >= 8.0
-                        ? '#3b82f6'
-                        : student.gpa >= 6.5
-                        ? '#f59e0b'
-                        : student.gpa >= 5.0
-                        ? '#ef4444'
-                        : '#dc2626',
+                    borderLeftColor: ACADEMIC_STANDING_COLORS[student.hocLuc] ?? '#9ca3af',
                   }}
                   onClick={(e) => {
                     if (selectionMode) {

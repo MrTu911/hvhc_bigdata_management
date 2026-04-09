@@ -4,12 +4,15 @@
  */
 
 import prisma from '@/lib/db';
-import { uploadFileToMinio, getPresignedUrl } from '@/lib/minio-client';
+import { uploadFileToMinio, getPresignedUrl, downloadFileFromMinio } from '@/lib/minio-client';
 import { resolveEntityData, EntityType, getMissingFields } from './data-resolver-service';
 import { TEMPLATE_BUCKET } from './template-service';
 import ExcelJS from 'exceljs';
 import { v4 as uuidv4 } from 'uuid';
 import JSZip from 'jszip';
+import PizZip from 'pizzip';
+import Docxtemplater from 'docxtemplater';
+import puppeteer from 'puppeteer';
 
 const EXPORT_URL_TTL = 86400; // 24h
 
@@ -121,7 +124,7 @@ export async function exportSingle(req: ExportRequest): Promise<{
 
 /**
  * Khởi động batch export job (async)
- * Tạo job record và xử lý background
+ * Tạo job record, đẩy vào BullMQ queue để worker xử lý.
  */
 export async function startBatchExport(req: BatchExportRequest): Promise<{
   jobId: string;
@@ -152,133 +155,146 @@ export async function startBatchExport(req: BatchExportRequest): Promise<{
     },
   });
 
-  // Process in background (non-blocking)
-  processBatchJobAsync(job.id, req).catch((err) => {
-    console.error(`Batch job ${job.id} failed:`, err);
-  });
-
-  const pendingCount = await prisma.exportJob.count({
-    where: { status: { in: ['PENDING', 'PROCESSING'] } },
-  });
+  // Enqueue vào BullMQ — worker sẽ pick up và xử lý
+  const { enqueueBatchExport, getQueueDepth } = await import('@/lib/queue/export-queue');
+  await enqueueBatchExport({ exportJobId: job.id, request: req });
+  const queuePosition = await getQueueDepth();
 
   return {
     jobId: job.id,
-    queuePosition: pendingCount,
+    queuePosition,
     estimatedTime: req.entityIds.length * 2, // ~2s per entity estimate
   };
 }
 
-/**
- * Process batch job in background
- */
-async function processBatchJobAsync(jobId: string, req: BatchExportRequest): Promise<void> {
-  await prisma.exportJob.update({
-    where: { id: jobId },
-    data: { status: 'PROCESSING', progress: 0 },
-  });
-
-  const template = await prisma.reportTemplate.findUnique({ where: { id: req.templateId } });
-  if (!template) return;
-
-  const dataMap = (template.dataMap as Record<string, unknown>) || {};
-  const buffers: { entityId: string; buffer: Buffer; ext: string }[] = [];
-  const errors: { entityId: string; reason: string }[] = [];
-  let successCount = 0;
-  let failCount = 0;
-
-  for (let i = 0; i < req.entityIds.length; i++) {
-    const entityId = req.entityIds[i];
-    try {
-      const resolvedData = await resolveEntityData({
-        entityId,
-        entityType: req.entityType,
-        dataMap,
-        requestedBy: req.requestedBy,
-      });
-
-      const { buffer, ext } = await renderFile(template, resolvedData, req.outputFormat);
-      buffers.push({ entityId, buffer, ext });
-      successCount++;
-    } catch (error) {
-      errors.push({ entityId, reason: String(error) });
-      failCount++;
-    }
-
-    // Update progress
-    const progress = Math.round(((i + 1) / req.entityIds.length) * 90);
-    await prisma.exportJob.update({
-      where: { id: jobId },
-      data: { progress, successCount, failCount },
-    });
-  }
-
-  // Create ZIP if multiple files
-  let outputKey: string;
-  let signedUrl: string;
-
-  if (buffers.length === 1) {
-    outputKey = `exports/${jobId}/output.${buffers[0].ext}`;
-    await uploadFileToMinio(TEMPLATE_BUCKET, outputKey, buffers[0].buffer, {
-      jobId,
-    });
-  } else if (buffers.length > 1) {
-    // Create real ZIP archive using jszip
-    const zip = new JSZip();
-    for (const { entityId, buffer, ext } of buffers) {
-      const filename = req.zipName
-        ? `${req.zipName}_${entityId}.${ext}`
-        : `export_${entityId}.${ext}`;
-      zip.file(filename, buffer);
-    }
-    const zipBuffer = Buffer.from(await zip.generateAsync({ type: 'nodebuffer', compression: 'DEFLATE' }));
-    outputKey = `exports/${jobId}/${req.zipName || 'batch_export'}.zip`;
-    await uploadFileToMinio(TEMPLATE_BUCKET, outputKey, zipBuffer, {
-      jobId,
-      'Content-Type': 'application/zip',
-    });
-  } else {
-    await prisma.exportJob.update({
-      where: { id: jobId },
-      data: { status: 'FAILED', errors, completedAt: new Date(), progress: 100 },
-    });
-    return;
-  }
-
-  signedUrl = await getPresignedUrl(TEMPLATE_BUCKET, outputKey, EXPORT_URL_TTL);
-  const urlExpiresAt = new Date(Date.now() + EXPORT_URL_TTL * 1000);
-
-  await prisma.exportJob.update({
-    where: { id: jobId },
-    data: {
-      // PARTIAL (partial success) không có trong enum — dùng COMPLETED vì successCount/failCount đã phản ánh
-      status: failCount === req.entityIds.length ? 'FAILED' : 'COMPLETED',
-      progress: 100,
-      successCount,
-      failCount,
-      errors: errors.length > 0 ? errors : undefined,
-      outputKey,
-      signedUrl,
-      urlExpiresAt,
-      completedAt: new Date(),
-    },
-  });
-}
 
 /**
  * Render file dựa theo format
+ * Exported để internal render service có thể dùng trực tiếp mà không qua exportSingle.
+ *
+ * DOCX: dùng docxtemplater — yêu cầu template.fileKey trỏ tới file .docx trong MinIO
+ *       có chứa {placeholder} tags đúng docxtemplater syntax.
+ * XLSX: dùng ExcelJS — tạo workbook từ resolvedData (không cần template file).
+ * PDF:  dùng Puppeteer — render HTML → PDF. Không cần template file.
  */
-async function renderFile(
+export async function renderFile(
   template: { name: string; dataMap: unknown; fileKey: string | null },
   resolvedData: Record<string, unknown>,
-  outputFormat: string
+  outputFormat: string,
 ): Promise<{ buffer: Buffer; ext: string; contentType: string }> {
   if (outputFormat === 'XLSX') {
     return renderXLSX(template.name, resolvedData);
-  } else {
-    // DOCX/PDF: render as formatted text for now
-    // Full docxtemplater integration requires: npm install docxtemplater pizzip
-    return renderTextDocument(template.name, resolvedData, outputFormat);
   }
+
+  if (outputFormat === 'DOCX' && template.fileKey) {
+    const isDocxFile = template.fileKey.toLowerCase().endsWith('.docx');
+    if (isDocxFile) {
+      return renderDocx(template.fileKey, resolvedData);
+    }
+  }
+
+  if (outputFormat === 'PDF') {
+    const { buffer: htmlBuffer } = await renderTextDocument(template.name, resolvedData, 'HTML');
+    const pdfBuffer = await renderPDF(htmlBuffer.toString('utf8'));
+    return { buffer: pdfBuffer, ext: 'pdf', contentType: 'application/pdf' };
+  }
+
+  // DOCX không có file template → HTML fallback
+  return renderTextDocument(template.name, resolvedData, outputFormat);
+}
+
+/**
+ * Render HTML → PDF bằng Puppeteer.
+ *
+ * Browser singleton: launch một lần, tái sử dụng cho các lần render tiếp theo.
+ * Nếu browser crash, tự restart lần tiếp theo.
+ *
+ * Flags --no-sandbox dùng cho môi trường Linux server (Docker/VPS).
+ */
+
+let _browser: import('puppeteer').Browser | null = null;
+
+async function getBrowser(): Promise<import('puppeteer').Browser> {
+  if (_browser) {
+    try {
+      // Kiểm tra browser còn sống không
+      const pages = await _browser.pages();
+      if (pages !== undefined) return _browser;
+    } catch {
+      _browser = null;
+    }
+  }
+  _browser = await puppeteer.launch({
+    headless: true,
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-dev-shm-usage', // tránh crash trong môi trường RAM thấp
+      '--disable-gpu',
+    ],
+  });
+  _browser.on('disconnected', () => {
+    _browser = null;
+  });
+  return _browser;
+}
+
+async function renderPDF(html: string): Promise<Buffer> {
+  const browser = await getBrowser();
+  const page = await browser.newPage();
+  try {
+    await page.setContent(html, { waitUntil: 'networkidle0', timeout: 30000 });
+    const pdfUint8Array = await page.pdf({
+      format: 'A4',
+      printBackground: true,
+      margin: { top: '20mm', bottom: '20mm', left: '20mm', right: '20mm' },
+    });
+    return Buffer.from(pdfUint8Array);
+  } finally {
+    await page.close();
+  }
+}
+
+/**
+ * Render DOCX bằng docxtemplater.
+ *
+ * Quy trình:
+ *   1. Download template .docx từ MinIO
+ *   2. PizZip giải nén ZIP của DOCX
+ *   3. Docxtemplater thay thế {placeholder} bằng resolvedData
+ *   4. Trả buffer DOCX đã render
+ *
+ * Array fields: resolvedData có thể chứa array (vd. congTac_list).
+ * Template cần dùng docxtemplater loop syntax: {#congTac_list}{tuNgay} ... {/congTac_list}
+ */
+async function renderDocx(
+  templateFileKey: string,
+  resolvedData: Record<string, unknown>,
+): Promise<{ buffer: Buffer; ext: string; contentType: string }> {
+  const templateBuffer = await downloadFileFromMinio(TEMPLATE_BUCKET, templateFileKey);
+
+  const zip = new PizZip(templateBuffer);
+  const doc = new Docxtemplater(zip, {
+    paragraphLoop: true,
+    linebreaks: true,
+    // Trả lỗi rõ nếu placeholder không có trong data — giúp debug
+    errorLogging: false,
+  });
+
+  // Flatten array keys: docxtemplater dùng đúng tên key từ resolvedData
+  doc.render(resolvedData);
+
+  const outputBuffer = doc.getZip().generate({
+    type: 'nodebuffer',
+    compression: 'DEFLATE',
+  });
+
+  return {
+    buffer: Buffer.from(outputBuffer),
+    ext: 'docx',
+    contentType:
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  };
 }
 
 /**

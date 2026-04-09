@@ -82,6 +82,22 @@ export async function getPresignedUrl(
 }
 
 /**
+ * Download file từ MinIO, trả về Buffer
+ */
+export async function downloadFileFromMinio(
+  bucketName: string,
+  objectKey: string,
+): Promise<Buffer> {
+  const stream = await minioClient.getObject(bucketName, objectKey);
+  return new Promise<Buffer>((resolve, reject) => {
+    const chunks: Buffer[] = [];
+    stream.on('data', (chunk: Buffer) => chunks.push(chunk));
+    stream.on('end', () => resolve(Buffer.concat(chunks)));
+    stream.on('error', reject);
+  });
+}
+
+/**
  * Xóa file từ MinIO
  */
 export async function deleteFileFromMinio(

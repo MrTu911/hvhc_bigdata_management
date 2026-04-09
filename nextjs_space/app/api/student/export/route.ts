@@ -1,4 +1,7 @@
 /**
+ * @deprecated Dùng /api/education/graduation/export/ hoặc M18 export thay thế.
+ * Route này sẽ bị tắt vào 2026-10-01. Không mở rộng thêm.
+ *
  * API: Export Student List
  * RBAC v8.8: Migrated to function-based RBAC + Rate Limiting
  */

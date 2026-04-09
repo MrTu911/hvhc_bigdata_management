@@ -1,4 +1,7 @@
 /**
+ * @deprecated Dùng /api/education/dashboard/stats/ thay thế (M10 backbone).
+ * Route này sẽ bị tắt vào 2026-10-01. Không mở rộng thêm.
+ *
  * Student Stats API
  * RBAC: Function-based with Scope filtering
  */

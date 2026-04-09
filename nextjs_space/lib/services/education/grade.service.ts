@@ -73,6 +73,74 @@ function buildUpdateData(
   return data;
 }
 
+export type GradeListFilters = {
+  classSectionId?: string;
+  hocVienId?: string;
+  termId?: string;
+  gradeStatus?: string;
+  /** facultyId của giảng viên – khi scope SELF chỉ thấy lớp mình phụ trách */
+  restrictToFacultyId?: string;
+};
+
+export type GradeListItem = {
+  id: string;
+  hocVienId: string;
+  classSectionId: string;
+  gradeStatus: string;
+  attendanceScore: number | null;
+  assignmentScore: number | null;
+  midtermScore: number | null;
+  finalScore: number | null;
+  totalScore: number | null;
+  passFlag: boolean | null;
+  letterGrade: string | null;
+  gradedBy: string | null;
+  gradedAt: Date | null;
+  notes: string | null;
+  hocVien: { id: string; maHocVien: string; hoTen: string };
+  classSection: {
+    id: string; code: string; name: string; termId: string;
+    curriculumCourse: { subjectCode: string; subjectName: string; credits: number } | null;
+  };
+  _count: { scoreHistories: number };
+};
+
+/**
+ * Danh sách điểm học phần với scope filter.
+ * Route chỉ parse params và gọi hàm này – không được query prisma trực tiếp.
+ */
+export async function listGrades(filters: GradeListFilters): Promise<GradeListItem[]> {
+  const where: any = {};
+
+  if (filters.classSectionId) where.classSectionId = filters.classSectionId;
+  if (filters.hocVienId)      where.hocVienId      = filters.hocVienId;
+  if (filters.gradeStatus)    where.gradeStatus    = filters.gradeStatus;
+  if (filters.termId)         where.classSection   = { termId: filters.termId };
+
+  // Scope SELF: giảng viên chỉ xem lớp mình phụ trách
+  if (filters.restrictToFacultyId) {
+    where.classSection = {
+      ...(where.classSection ?? {}),
+      facultyId: filters.restrictToFacultyId,
+    };
+  }
+
+  return prisma.classEnrollment.findMany({
+    where,
+    include: {
+      hocVien: { select: { id: true, maHocVien: true, hoTen: true } },
+      classSection: {
+        select: {
+          id: true, code: true, name: true, termId: true,
+          curriculumCourse: { select: { subjectCode: true, subjectName: true, credits: true } },
+        },
+      },
+      _count: { select: { scoreHistories: true } },
+    },
+    orderBy: [{ classSection: { code: 'asc' } }, { hocVien: { hoTen: 'asc' } }],
+  }) as unknown as GradeListItem[];
+}
+
 /**
  * Cập nhật điểm học phần với ScoreHistory bắt buộc trong atomic transaction.
  *

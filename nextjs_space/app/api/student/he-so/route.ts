@@ -1,4 +1,7 @@
 /**
+ * @deprecated Dùng /api/education/coefficients/ thay thế.
+ * Route này sẽ bị tắt vào 2026-10-01. Không mở rộng thêm.
+ *
  * API: Hệ số môn học
  * RBAC v8.8: Migrated to function-based RBAC
  */

@@ -1,4 +1,7 @@
 /**
+ * @deprecated Dùng /api/education/dashboard/trends/ thay thế (M10 backbone).
+ * Route này sẽ bị tắt vào 2026-10-01. Không mở rộng thêm.
+ *
  * API: Student Performance Analysis
  * RBAC v8.8: Migrated to function-based RBAC
  */

@@ -615,14 +615,23 @@ export default function TemplateDetailPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between">
               <div>
-                <CardTitle className="text-base">Data Map – Ánh xạ Placeholder → API Field</CardTitle>
+                <CardTitle className="text-base">Data Map – Ánh xạ Placeholder → Field</CardTitle>
                 <p className="text-xs text-gray-500 mt-1">
-                  JSON định nghĩa placeholder trong mẫu → trường dữ liệu từ API
+                  Dùng Visual Editor để ánh xạ placeholder theo từng field. Raw JSON bên dưới để chỉnh sửa nâng cao.
                 </p>
               </div>
-              <Button size="sm" onClick={handleSaveDataMap} disabled={saving}>
-                <Save className="h-4 w-4 mr-1" />{saving ? 'Đang lưu...' : 'Lưu Data Map'}
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => router.push(`/dashboard/templates/${id}/datamap`)}
+                >
+                  <Code className="h-4 w-4 mr-1" />Visual Editor
+                </Button>
+                <Button size="sm" onClick={handleSaveDataMap} disabled={saving}>
+                  <Save className="h-4 w-4 mr-1" />{saving ? 'Đang lưu...' : 'Lưu JSON'}
+                </Button>
+              </div>
             </CardHeader>
             <CardContent>
               {dataMapError && (
@@ -631,7 +640,7 @@ export default function TemplateDetailPage() {
                 </div>
               )}
               <div className="text-xs text-gray-500 mb-2">
-                Ví dụ: <code className="bg-gray-100 px-1 rounded">{`{"hoTen": {"apiPath": "/api/personnel/[id]", "field": "fullName", "transform": "toUpperCase"}}`}</code>
+                Raw JSON – format: <code className="bg-gray-100 px-1 rounded">{`{"hoTen": "hoTen", "ngaySinh": "ngaySinh"}`}</code>
               </div>
               <textarea
                 className="w-full font-mono text-sm border rounded-md p-3 min-h-[400px] focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50"

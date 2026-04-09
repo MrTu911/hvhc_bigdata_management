@@ -19,5 +19,11 @@ export async function register() {
     warmMasterDataCache().catch(err =>
       console.warn('[MDM] warmMasterDataCache failed at startup:', err)
     );
+
+    // Khởi động M18 export worker (BullMQ)
+    // Worker lắng nghe queue m18:export-batch và xử lý batch export jobs.
+    // Graceful shutdown được handle bởi BullMQ khi process nhận SIGTERM.
+    const { initExportWorker } = await import('@/lib/workers/export-worker');
+    initExportWorker();
   }
 }

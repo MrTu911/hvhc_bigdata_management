@@ -41,6 +41,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import { exportToPDF, exportToCSV } from '@/lib/export-utils';
+import { ACADEMIC_STANDING_COLORS } from '@/lib/constants/academic-standing';
 
 interface SubjectStat {
   maMon: string;
@@ -147,13 +148,17 @@ export default function TeachingAnalyticsPage() {
         const totalTrungBinh = data.subjectStats.reduce((sum: number, s: SubjectStat) => sum + s.trungBinh, 0);
         const totalYeu = data.subjectStats.reduce((sum: number, s: SubjectStat) => sum + s.yeu, 0);
 
-        setDistributionData([
-          { name: 'Xuất sắc', value: totalXuatSac, color: '#10b981' },
-          { name: 'Giỏi', value: totalGioi, color: '#3b82f6' },
-          { name: 'Khá', value: totalKha, color: '#f59e0b' },
-          { name: 'Trung bình', value: totalTrungBinh, color: '#ef4444' },
-          { name: 'Yếu', value: totalYeu, color: '#dc2626' },
-        ].filter((d) => d.value > 0));
+        setDistributionData(
+          [
+            { name: 'Xuất sắc',   value: totalXuatSac   },
+            { name: 'Giỏi',       value: totalGioi       },
+            { name: 'Khá',        value: totalKha        },
+            { name: 'Trung bình', value: totalTrungBinh  },
+            { name: 'Yếu',        value: totalYeu        },
+          ]
+            .filter((d) => d.value > 0)
+            .map((d) => ({ ...d, color: ACADEMIC_STANDING_COLORS[d.name] ?? '#9ca3af' }))
+        );
       } else {
         toast.error(data.error || 'Failed to fetch teaching statistics');
       }
@@ -525,7 +530,7 @@ export default function TeachingAnalyticsPage() {
                   {subjectStats.map((stat, index) => (
                     <tr
                       key={index}
-                      className="border-b hover:bg-slate-50/60 transition-colors transition-colors"
+                      className="border-b hover:bg-slate-50/60 transition-colors"
                     >
                       <td className="p-3 text-sm">{index + 1}</td>
                       <td className="p-3 text-sm font-medium">{stat.maMon}</td>

@@ -538,6 +538,51 @@ export const TEMPLATES = {
   IMPORT: 'IMPORT_TEMPLATES',           // Import template từ file Word/Excel hiện có
 } as const;
 
+// ===== MODULE: SCIENCE (CSDL-KHQL – Khoa học Quản lý) =====
+// Phase 1: M01 Danh mục + M13 RBAC
+// Path prefix: /api/science/*  (không đụng /api/research/*)
+export const SCIENCE = {
+  // M01 – Danh mục KH
+  CATALOG_VIEW:   'VIEW_SCIENCE_CATALOG',       // Xem danh mục lĩnh vực, loại công trình...
+  CATALOG_MANAGE: 'MANAGE_SCIENCE_CATALOG',     // Quản lý danh mục KH (ADMIN/DEPT_HEAD)
+
+  // M02 – Hồ sơ nhà khoa học
+  SCIENTIST_VIEW:   'VIEW_SCIENTIST_PROFILE',   // Xem hồ sơ nhà KH
+  SCIENTIST_MANAGE: 'MANAGE_SCIENTIST_PROFILE', // Quản lý/cập nhật hồ sơ
+  SCIENTIST_SYNC_ORCID: 'SYNC_ORCID',          // Đồng bộ ORCID
+
+  // M03 – Đề tài NCKH
+  PROJECT_CREATE:          'CREATE_RESEARCH_PROJECT',    // Tạo đề tài
+  PROJECT_APPROVE_DEPT:    'APPROVE_RESEARCH_DEPT',      // Phê duyệt cấp phòng
+  PROJECT_APPROVE_ACADEMY: 'APPROVE_RESEARCH_ACADEMY',  // Phê duyệt cấp học viện
+
+  // M04 – Công trình KH (sách, giáo trình)
+  WORK_CREATE:       'CREATE_SCIENTIFIC_WORK',   // Tạo công trình KH
+  WORK_IMPORT_DOI:   'IMPORT_FROM_CROSSREF',     // Import từ CrossRef/DOI
+
+  // M05 – Thư viện số
+  LIBRARY_UPLOAD:           'UPLOAD_LIBRARY',            // Upload tài liệu
+  LIBRARY_DOWNLOAD_NORMAL:  'DOWNLOAD_LIBRARY_NORMAL',   // Tải tài liệu thường
+  LIBRARY_DOWNLOAD_SECRET:  'DOWNLOAD_LIBRARY_SECRET',   // Tải tài liệu mật
+
+  // M06 – Kinh phí NCKH
+  BUDGET_MANAGE: 'MANAGE_RESEARCH_BUDGET', // Quản lý dự toán/giải ngân
+  BUDGET_APPROVE: 'APPROVE_BUDGET',        // Phê duyệt kinh phí
+  BUDGET_VIEW_FINANCE: 'VIEW_BUDGET_FINANCE', // Xem chi tiết tài chính
+
+  // M07 – Hội đồng KH
+  COUNCIL_MANAGE:           'MANAGE_COUNCIL',       // Thành lập, quản lý hội đồng
+  COUNCIL_SUBMIT_REVIEW:    'SUBMIT_REVIEW',         // Nộp phản biện (REVIEWER role)
+  COUNCIL_FINALIZE:         'FINALIZE_ACCEPTANCE',  // Kết luận nghiệm thu
+
+  // M09/M11/M12/M14 – Dashboard, Tìm kiếm, AI, Báo cáo
+  DASHBOARD_VIEW:    'VIEW_SCIENCE_DASHBOARD',  // Xem dashboard KHQL
+  SEARCH_USE:        'USE_SCIENCE_SEARCH',      // Tìm kiếm thông minh
+  AI_USE:            'USE_AI_SCIENCE',          // Dùng AI KHQL (chatbot, trends)
+  AI_ADMIN:          'USE_AI_SCIENCE_ADMIN',    // Admin AI KHQL
+  REPORT_EXPORT:     'EXPORT_SCIENCE_REPORT',   // Xuất báo cáo BQP
+} as const;
+
 // ===== ALL FUNCTION CODES (for seeding) =====
 export const ALL_FUNCTION_CODES = {
   ...PERSONNEL,
@@ -571,6 +616,7 @@ export const ALL_FUNCTION_CODES = {
   ...WORKFLOW,
   ...DIGITAL_DOCS,
   ...TEMPLATES,
+  ...SCIENCE,
 } as const;
 
 // ===== FUNCTION_CODES (grouped by module) =====
@@ -607,6 +653,7 @@ export const FUNCTION_CODES = {
   WORKFLOW,
   DIGITAL_DOCS,
   TEMPLATES,
+  SCIENCE,
 } as const;
 
 // Type for all function codes
@@ -643,4 +690,5 @@ export const MODULE_NAMES: Record<string, string> = {
   department: 'Khoa/Phòng',
   workflow: 'Quy trình nghiệp vụ',
   digital_docs: 'Văn bản số',
+  science: 'CSDL Khoa học Quản lý',
 };

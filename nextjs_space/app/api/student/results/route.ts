@@ -1,3 +1,7 @@
+/**
+ * @deprecated Dùng /api/education/grades/ thay thế (M10 backbone – ClassEnrollment với ScoreHistory).
+ * Route này sẽ bị tắt vào 2026-10-01. Không mở rộng thêm.
+ */
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { requireFunction, requireAnyFunction } from '@/lib/rbac/middleware';

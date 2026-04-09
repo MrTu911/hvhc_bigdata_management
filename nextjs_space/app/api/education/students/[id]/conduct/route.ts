@@ -9,6 +9,7 @@ import { prisma } from '@/lib/db';
 import { requireFunction } from '@/lib/rbac/middleware';
 import { EDUCATION } from '@/lib/rbac/function-codes';
 import { logAudit } from '@/lib/audit';
+import { getItemByCode, getItemsByCategory } from '@/lib/master-data-cache';
 
 type Params = { params: { id: string } };
 
@@ -85,6 +86,26 @@ export async function POST(req: NextRequest, { params }: Params) {
         { success: false, error: 'conductScore phải từ 0 đến 100' },
         { status: 400 }
       );
+    }
+
+    // Validate conductGrade theo M19 lookup MD_CONDUCT_GRADE (nếu được cung cấp)
+    if (conductGrade) {
+      const validItem = await getItemByCode('MD_CONDUCT_GRADE', conductGrade);
+      if (validItem === null) {
+        // Chỉ từ chối nếu category MD_CONDUCT_GRADE tồn tại trong M19
+        // (graceful degradation: nếu category chưa seed thì bỏ qua)
+        const allItems = await getItemsByCategory('MD_CONDUCT_GRADE', true);
+        if (allItems.length > 0) {
+          const validCodes = allItems.map((i: any) => i.code).join(', ');
+          return NextResponse.json(
+            {
+              success: false,
+              error: `conductGrade '${conductGrade}' không hợp lệ. Giá trị cho phép: ${validCodes}`,
+            },
+            { status: 400 }
+          );
+        }
+      }
     }
 
     // Upsert – nếu đã có bản ghi cùng học viên + năm học + học kỳ thì update

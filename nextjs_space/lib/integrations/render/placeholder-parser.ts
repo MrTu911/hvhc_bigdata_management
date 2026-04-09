@@ -5,7 +5,7 @@
  *
  * Trạng thái:
  *   HTML  → READY   (regex scan trên text thuần)
- *   DOCX  → STUB    (cần cài: npm install pizzip docxtemplater)
+ *   DOCX  → READY   (pizzip + docxtemplater đã cài)
  *   XLSX  → SKIP    (XLSX dùng data binding, không dùng placeholder text)
  *
  * Placeholder convention: {fieldName} hoặc {parent.child} hoặc {list[]}
@@ -56,54 +56,22 @@ function parseHtml(buffer: Buffer): ParseResult {
   }
 }
 
-// ─── DOCX (STUB) ─────────────────────────────────────────────────────────────
-//
-// DOCX là ZIP chứa XML — không thể scan raw bytes vì:
-//   1. Binary ZIP header sẽ corrupt khi decode UTF-8
-//   2. Placeholder nằm trong word/document.xml bên trong ZIP
-//
-// Để enable:
-//   npm install pizzip docxtemplater
-//   Uncomment implementation bên dưới và xóa stub return.
-//
-// Implementation sẵn sàng (chỉ cần uncomment):
-//
-//   import PizZip from 'pizzip';
-//   import Docxtemplater from 'docxtemplater';
-//
-//   async function parseDocx(buffer: Buffer): Promise<ParseResult> {
-//     try {
-//       const zip = new PizZip(buffer);
-//       const doc = new Docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
-//       // docxtemplater expose tags sau khi render dry-run
-//       const tags: string[] = [];
-//       const xmlContent = zip.files['word/document.xml']?.asText() ?? '';
-//       const found = extractBracketPlaceholders(xmlContent);
-//       return { placeholders: found, reliable: true };
-//     } catch (err) {
-//       return { placeholders: [], reliable: false, note: `DOCX parse error: ${err}` };
-//     }
-//   }
+// ─── DOCX (READY) ────────────────────────────────────────────────────────────
+
+import PizZip from 'pizzip';
 
 async function parseDocx(buffer: Buffer): Promise<ParseResult> {
-  // STUB: pizzip + docxtemplater chưa được cài.
-  // Thực hiện best-effort scan trên raw bytes để có kết quả gần đúng.
-  // Kết quả KHÔNG đáng tin — dùng làm gợi ý ban đầu cho người dùng kiểm tra thủ công.
   try {
-    // DOCX là ZIP — cắt phần header ZIP trước để tránh garbage bytes
-    const text = buffer.toString('latin1'); // latin1 không mất byte, an toàn hơn utf8 cho binary
-    const xmlLike = text.replace(/[^\x20-\x7E{}\[\]._ ]/g, ' '); // giữ printable + placeholder chars
-    const placeholders = extractBracketPlaceholders(xmlLike);
-    return {
-      placeholders,
-      reliable: false,
-      note: 'STUB: cài pizzip + docxtemplater để parse DOCX chính xác',
-    };
-  } catch {
+    const zip = new PizZip(buffer);
+    // Scan word/document.xml — đây là file chính chứa content của DOCX
+    const xmlContent = zip.files['word/document.xml']?.asText() ?? '';
+    const placeholders = extractBracketPlaceholders(xmlContent);
+    return { placeholders, reliable: true };
+  } catch (err) {
     return {
       placeholders: [],
       reliable: false,
-      note: 'STUB: cài pizzip + docxtemplater để parse DOCX chính xác',
+      note: `DOCX parse error: ${err}`,
     };
   }
 }

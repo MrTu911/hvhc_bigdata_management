@@ -127,6 +127,7 @@ model User {
   nckhPublicationAuthorEntries        NckhPublicationAuthor[] @relation("NckhPubAuthorEntry")
   nckhPublications                    NckhPublication[]       @relation("NckhPubAuthor")
   nckhScientistProfile                NckhScientistProfile?   @relation("NckhScientist")
+  scienceCatalogsCreated              ScienceCatalog[]        @relation("ScienceCatalogCreator")
   partyMeetingsCreated                PartyMeeting[]          @relation("PartyMeetingCreator")
   partyInspectionsCreated             PartyInspectionTarget[] @relation("PartyInspectionCreator")
   partyMember                         PartyMember?
@@ -142,6 +143,7 @@ model User {
   scientificResearch                  ScientificResearch[]
   sessions                            Session[]
   studentProfile                      StudentProfile?
+  nckhProjectWorkflowActions          NckhProjectWorkflowLog[] @relation("WorkflowLogActor")
   logs                                SystemLog[]
   technicalCertificates               TechnicalCertificate[]
   commandedUnits                      Unit[]                  @relation("UnitCommander")
@@ -1535,6 +1537,23 @@ model Exam {
   @@map("exams")
 }
 
+/**
+ * GradeRecord – Điểm gắn với Registration (luồng đăng ký môn / thi riêng).
+ * ĐÂY KHÔNG PHẢI GradeRecord của M10 UC-56.
+ * Source of truth điểm học phần M10 là ClassEnrollment (có ScoreHistory audit trail).
+ * Model này chỉ dùng cho Registration flow (exam registration, legacy course registration).
+ * Không mở rộng thêm; không ghi điểm học phần mới vào đây.
+ */
+/// ─────────────────────────────────────────────────────────────────────────────
+/// GradeRecord – SCOPE: Registration flow only (Đăng ký môn học / kỳ thi).
+///
+/// ĐÂY KHÔNG PHẢI model điểm học phần của M10 UC-56.
+/// M10 UC-56 (nhập điểm, lịch sử điểm, finalize) dùng ClassEnrollment +
+/// ScoreHistory — KHÔNG dùng model này.
+///
+/// Nhầm lẫn phổ biến: design doc dùng tên "GradeRecord" → ánh xạ vào
+/// ClassEnrollment trong codebase, không phải model này.
+/// ─────────────────────────────────────────────────────────────────────────────
 model GradeRecord {
   id              String       @id @default(cuid())
   registrationId  String       @unique
@@ -1558,6 +1577,18 @@ model GradeRecord {
   @@map("grade_records")
 }
 
+/// ─────────────────────────────────────────────────────────────────────────────
+/// AcademicYear / Term – QUYẾT ĐỊNH KIẾN TRÚC: TỰ QUẢN LÝ (không sync M19).
+///
+/// Lý do: M19 quản lý lookup codes/danh mục (phân loại, tra cứu).
+/// AcademicYear và Term là operational entities cần: startDate/endDate,
+/// isCurrent flag, quan hệ cụ thể với ClassSection / CurriculumPlan.
+/// M19 không có cấu trúc phù hợp cho thực thể thời gian vận hành này.
+///
+/// String field `academicYear` trên các model khác (VD: StudentConductRecord,
+/// AcademicWarning) là denormalized copy của AcademicYear.code —
+/// cố ý để tránh JOIN khi chỉ cần hiển thị mã năm học.
+/// ─────────────────────────────────────────────────────────────────────────────
 model AcademicYear {
   id              String           @id @default(cuid())
   code            String           @unique
@@ -2542,6 +2573,21 @@ model MedicalRecord {
 /// Source of truth chuyển sang HocVien (có đầy đủ M10 relations).
 /// Chỉ giữ để tương thích backward với các route cũ đang đọc student_profiles.
 /// Kế hoạch: deprecate sau khi backfill xong sang HocVien.
+/// ─────────────────────────────────────────────────────────────────────────────
+/// @deprecated – StudentProfile là model tiền M10 (pre-backbone).
+///
+/// KHÔNG viết dữ liệu mới vào model này. Mọi thao tác học viên phải dùng
+/// HocVien (backbone M10). Các field tại đây đã được map sang HocVien:
+///   maHocVien → HocVien.maHocVien
+///   lop/khoaHoc/nganh → HocVien (text) + classId/cohortId/majorId (FK)
+///   heDaoTao/khoaQuanLy/trungDoi/daiDoi → HocVien (migrated)
+///   tinChiTichLuy/tongTinChi/diemTrungBinh/xepLoaiHocLuc → HocVien
+///   trangThai → HocVien.currentStatus (EduStudentStatus enum)
+///   ngayNhapHoc/ngayTotNghiep/lyDoNghiHoc → HocVien
+///
+/// Consumer duy nhất còn active: app/api/admin/rbac/users (deletion guard).
+/// Sunset: 2026-10-01. Xem backfill script: prisma/seed/backfill_student_profile_to_hocvien.ts
+/// ─────────────────────────────────────────────────────────────────────────────
 model StudentProfile {
   id                  String        @id @default(cuid())
   userId              String        @unique
@@ -4408,6 +4454,12 @@ model NckhProject {
   unit                    Unit?             @relation("NckhProjectUnit", fields: [unitId], references: [id])
   publications            NckhPublication[]
   reviews                 NckhReview[]
+  // Phase 3 additive fields
+  sensitivity             String            @default("NORMAL")  // NORMAL|CONFIDENTIAL|SECRET
+  embedding               Unsupported("vector(1536)")?
+  fundSourceId            String?           // FK → ScienceCatalog (type=FUND_SOURCE)
+  fundSource              ScienceCatalog?   @relation("ProjectFundSource", fields: [fundSourceId], references: [id])
+  workflowLogs            NckhProjectWorkflowLog[]
 
   @@index([principalInvestigatorId])
   @@index([submittedBy])
@@ -4417,6 +4469,7 @@ model NckhProject {
   @@index([category])
   @@index([field])
   @@index([budgetYear])
+  @@index([fundSourceId])
   @@map("nckh_projects")
 }
 
@@ -4568,10 +4621,74 @@ model NckhScientistProfile {
   researchFields     String[]
   researchVector     String?
   specialization     String?
+  // Phase 2 additive fields (nullable/default – safe migration)
+  sensitivityLevel   String   @default("NORMAL")  // NORMAL|CONFIDENTIAL
+  researchAreaIds    String[]                      // FK refs → ScienceCatalog.id[]
   user               User     @relation("NckhScientist", fields: [userId], references: [id])
+  education          NckhScientistEducation[]
+  career             NckhScientistCareer[]
+  scientistAwards    NckhScientistAward[]
 
   @@index([userId])
   @@map("nckh_scientist_profiles")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CSDL-KHQL – Phase 2: Sub-tables Nhà Khoa học (M02 mở rộng)
+// Additive only – không drop/alter trường cũ của NckhScientistProfile
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Lịch sử học vấn của nhà khoa học.
+model NckhScientistEducation {
+  id           String               @id @default(cuid())
+  scientistId  String
+  scientist    NckhScientistProfile @relation(fields: [scientistId], references: [id], onDelete: Cascade)
+  degree       String               // TSKH|TS|ThS|CN|KS|CK1|CK2
+  major        String
+  institution  String
+  country      String               @default("Việt Nam")
+  yearFrom     Int
+  yearTo       Int
+  thesisTitle  String?
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+
+  @@index([scientistId])
+  @@map("nckh_scientist_education")
+}
+
+/// Quá trình công tác / sự nghiệp của nhà khoa học.
+model NckhScientistCareer {
+  id          String               @id @default(cuid())
+  scientistId String
+  scientist   NckhScientistProfile @relation(fields: [scientistId], references: [id], onDelete: Cascade)
+  position    String
+  unitName    String
+  yearFrom    Int
+  yearTo      Int?
+  isCurrent   Boolean              @default(false)
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+
+  @@index([scientistId])
+  @@map("nckh_scientist_career")
+}
+
+/// Giải thưởng KH của nhà khoa học (riêng với AwardsRecord chung của nhân sự).
+model NckhScientistAward {
+  id          String               @id @default(cuid())
+  scientistId String
+  scientist   NckhScientistProfile @relation(fields: [scientistId], references: [id], onDelete: Cascade)
+  awardName   String
+  level       String               // MINISTRY|ACADEMY|DEPARTMENT|INTERNATIONAL
+  year        Int
+  projectId   String?              // FK → NckhProject.id nếu gắn với đề tài
+  description String?
+  createdAt   DateTime             @default(now())
+
+  @@index([scientistId])
+  @@index([year])
+  @@map("nckh_scientist_awards")
 }
 
 model NckhDuplicateCheckLog {
@@ -6588,4 +6705,46 @@ model StudentGpaHistory {
   @@index([cumulativeGpa])      // ranking dashboard, top/bottom GPA
   @@index([academicStatus])     // filter cảnh báo học vụ
   @@map("student_gpa_histories")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CSDL-KHQL – Phase 1: Danh mục Khoa học (M01)
+// Không đụng schema cũ. Path prefix /api/science/*
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Danh mục phân cấp dùng cho toàn bộ CSDL-KHQL.
+/// type: FIELD | WORK_TYPE | PUBLISHER | FUND_SOURCE | LEVEL | RESEARCH_AREA
+/// path: LTREE-style string, vd: "science.military.logistics"
+model ScienceCatalog {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  name        String
+  type        String
+  parentId    String?
+  parent      ScienceCatalog?  @relation("CatalogTree", fields: [parentId], references: [id])
+  children    ScienceCatalog[] @relation("CatalogTree")
+  level       Int      @default(1)
+  path        String?
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdById String
+  createdBy   User     @relation("ScienceCatalogCreator", fields: [createdById], references: [id])
+
+  @@index([type, isActive])
+  @@index([parentId])
+  @@map("science_catalogs")
+}
+
+/// Sequence generator cho mã định danh CSDL-KHQL.
+/// Format: HVHC-{YEAR}-{TYPE}-{SEQ:03d}
+model ScienceIdSequence {
+  id         String @id @default(cuid())
+  entityType String
+  year       Int
+  lastSeq    Int    @default(0)
+
+  @@unique([entityType, year])
+  @@map("science_id_sequences")
 }

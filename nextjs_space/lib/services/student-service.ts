@@ -9,6 +9,10 @@ import { BaseService, ScopedQueryOptions, PaginationOptions, ServiceResult } fro
 import { HocVien, KetQuaHocTap } from '@prisma/client';
 
 export interface StudentWithRelations extends HocVien {
+  /**
+   * @deprecated Dữ liệu legacy từ LAN import. Source of truth điểm M10 là ClassEnrollment.
+   * Chỉ giữ để backward compat với route cũ /api/student/[id].
+   */
   ketQuaHocTap?: KetQuaHocTap[];
 }
 
@@ -18,6 +22,12 @@ export interface StudentFilters {
   nganh?: string;
   trangThai?: string;
   search?: string;
+  /**
+   * M07 scope enforcement: danh sách HocVien.id được phép xem.
+   * Khi có giá trị, chỉ trả học viên trong danh sách này (intersection với các filter khác).
+   * null/undefined = không restrict (ACADEMY scope hoặc admin).
+   */
+  allowedHocVienIds?: string[] | null;
 }
 
 class StudentServiceClass extends BaseService {
@@ -46,6 +56,10 @@ class StudentServiceClass extends BaseService {
             { hoTen: { contains: filters.search, mode: 'insensitive' } },
             { maHocVien: { contains: filters.search, mode: 'insensitive' } },
           ],
+        }),
+        // M07 scope enforcement: chỉ xem HV trong danh sách được phép (SELF/UNIT scope)
+        ...(filters.allowedHocVienIds != null && {
+          id: { in: filters.allowedHocVienIds },
         }),
       };
 
@@ -79,6 +93,8 @@ class StudentServiceClass extends BaseService {
 
   /**
    * Lấy chi tiết học viên theo ID
+   * Note: Không include ketQuaHocTap (legacy) – source of truth M10 là ClassEnrollment.
+   * Route /api/education/students/[id] đọc trực tiếp; route cũ /api/student/[id] vẫn dùng ketQuaHocTap.
    */
   async findById(
     options: ScopedQueryOptions,
@@ -87,11 +103,6 @@ class StudentServiceClass extends BaseService {
     try {
       const student = await prisma.hocVien.findUnique({
         where: { id },
-        include: {
-          ketQuaHocTap: {
-            orderBy: { updatedAt: 'desc' },
-          },
-        },
       });
 
       if (!student) {
