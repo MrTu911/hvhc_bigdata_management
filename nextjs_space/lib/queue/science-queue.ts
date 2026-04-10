@@ -22,8 +22,15 @@ export type OrcidSyncJobData = {
   requestedByUserId: string
 }
 
-export type ScienceJobData = OrcidSyncJobData
-// Thêm job type khác ở đây khi cần (e.g. SCOPUS_SYNC, DOI_IMPORT)
+export type LibraryIndexJobData = {
+  jobType: 'LIBRARY_INDEX'
+  libraryItemId: string
+  filePath: string          // MinIO object key
+  mimeType: string
+  requestedByUserId: string
+}
+
+export type ScienceJobData = OrcidSyncJobData | LibraryIndexJobData
 
 // ─── Redis connection (lazy singleton) ───────────────────────────────────────
 
@@ -84,5 +91,25 @@ export async function enqueueOrcidSync(data: OrcidSyncJobData): Promise<string> 
   }
 
   const job = await queue.add('orcid-sync', data, { jobId })
+  return job.id ?? jobId
+}
+
+/**
+ * Enqueue library indexing job (text extraction + embedding).
+ * Mỗi libraryItemId chỉ có 1 job active tại một thời điểm.
+ */
+export async function enqueueLibraryIndex(data: LibraryIndexJobData): Promise<string> {
+  const queue = getScienceQueue()
+  const jobId = `library-index:${data.libraryItemId}`
+
+  const existing = await queue.getJob(jobId)
+  if (existing) {
+    const state = await existing.getState()
+    if (state === 'waiting' || state === 'active' || state === 'delayed') {
+      return jobId
+    }
+  }
+
+  const job = await queue.add('library-index', data, { jobId })
   return job.id ?? jobId
 }

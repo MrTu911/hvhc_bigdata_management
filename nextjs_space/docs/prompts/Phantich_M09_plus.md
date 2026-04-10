@@ -425,6 +425,7 @@ Hybrid Search (/api/science/search?q=&type=project|work|scientist):
 // BM25 ensemble score → ranked results
 Output kiểm chứng: Dashboard render đúng theo role. Search tiếng Việt có/không dấu cho kết quả liên quan.
 
+
 Phase 8 — AI nâng cao + Data Quality (Tuần 17–18)
 Mục tiêu: RAG chatbot + data quality monitoring.
 

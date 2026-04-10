@@ -144,6 +144,12 @@ model User {
   sessions                            Session[]
   studentProfile                      StudentProfile?
   nckhProjectWorkflowActions          NckhProjectWorkflowLog[] @relation("WorkflowLogActor")
+  libraryAccessLogs                   LibraryAccessLog[]
+  libraryItemsCreated                 LibraryItem[]            @relation("LibraryItemCreator")
+  researchBudgetsApproved             ResearchBudget[]         @relation("BudgetApprover")
+  councilsAsChairman                  ScientificCouncil[]      @relation("CouncilChairman")
+  councilsAsSecretary                 ScientificCouncil[]      @relation("CouncilSecretary")
+  councilMemberships                  ScientificCouncilMember[]
   logs                                SystemLog[]
   technicalCertificates               TechnicalCertificate[]
   commandedUnits                      Unit[]                  @relation("UnitCommander")
@@ -4454,9 +4460,11 @@ model NckhProject {
   unit                    Unit?             @relation("NckhProjectUnit", fields: [unitId], references: [id])
   publications            NckhPublication[]
   reviews                 NckhReview[]
+  budget                  ResearchBudget?
+  councils                ScientificCouncil[]
   // Phase 3 additive fields
   sensitivity             String            @default("NORMAL")  // NORMAL|CONFIDENTIAL|SECRET
-  embedding               Unsupported("vector(1536)")?
+  // embedding               Unsupported("vector(1536)")?  // pgvector — enable sau khi cài extension
   fundSourceId            String?           // FK → ScienceCatalog (type=FUND_SOURCE)
   fundSource              ScienceCatalog?   @relation("ProjectFundSource", fields: [fundSourceId], references: [id])
   workflowLogs            NckhProjectWorkflowLog[]
@@ -6731,6 +6739,8 @@ model ScienceCatalog {
   updatedAt   DateTime @updatedAt
   createdById String
   createdBy   User     @relation("ScienceCatalogCreator", fields: [createdById], references: [id])
+  fundedProjects NckhProject[]   @relation("ProjectFundSource")
+  fundedBudgets  ResearchBudget[] @relation("BudgetFundSource")
 
   @@index([type, isActive])
   @@index([parentId])
@@ -6747,4 +6757,221 @@ model ScienceIdSequence {
 
   @@unique([entityType, year])
   @@map("science_id_sequences")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CSDL-KHQL – Phase 3: Workflow log + ScientificWork (M04)
+// Additive only – không drop/alter gì ở NckhProject hay NckhPublication
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Audit trail mỗi lần chuyển trạng thái / phase đề tài nghiên cứu.
+model NckhProjectWorkflowLog {
+  id         String      @id @default(cuid())
+  projectId  String
+  project    NckhProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  fromStatus String
+  toStatus   String
+  fromPhase  String?
+  toPhase    String?
+  actionById String
+  actionBy   User        @relation("WorkflowLogActor", fields: [actionById], references: [id])
+  comment    String?
+  actedAt    DateTime    @default(now())
+
+  @@index([projectId])
+  @@index([actedAt])
+  @@map("nckh_project_workflow_logs")
+}
+
+/// Công trình khoa học: sách, giáo trình, tài liệu tham khảo (M04).
+/// Khác NckhPublication (bài báo/hội thảo) – đây là sản phẩm dạng xuất bản phẩm.
+model ScientificWork {
+  id          String   @id @default(cuid())
+  code        String   @unique  // HVHC-{YEAR}-WORK-{SEQ:03d}
+  type        String   // TEXTBOOK|BOOK|MONOGRAPH|REFERENCE|CURRICULUM
+  title       String
+  subtitle    String?
+  isbn        String?
+  issn        String?
+  doi         String?  @unique
+  publisherId String?  // FK → ScienceCatalog (type=PUBLISHER)
+  journalName String?
+  year        Int
+  edition     Int      @default(1)
+  sensitivity String   @default("NORMAL")  // NORMAL|CONFIDENTIAL|SECRET
+  // abstractEmbedding: pgvector – thêm qua migration --create-only riêng khi Phase 5
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  isDeleted   Boolean  @default(false)
+  authors     ScientificWorkAuthor[]
+
+  @@index([type, year])
+  @@index([isDeleted])
+  @@index([publisherId])
+  @@map("scientific_works")
+  libraryItems    LibraryItem[]
+}
+
+model ScientificWorkAuthor {
+  id           String          @id @default(cuid())
+  workId       String
+  work         ScientificWork  @relation(fields: [workId], references: [id], onDelete: Cascade)
+  scientistId  String?         // Link → NckhScientistProfile.id nếu nội bộ
+  authorName   String
+  role         String          // LEAD|CO_AUTHOR|EDITOR|REVIEWER
+  orderNum     Int
+  affiliation  String?
+
+  @@unique([workId, orderNum])
+  @@index([workId])
+  @@index([scientistId])
+  @@map("scientific_work_authors")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CSDL-KHQL – Phase 4: Thư viện Số (Digital Library)
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Tài liệu số trong thư viện KH.
+/// filePath = MinIO object key: library/{sensitivity}/{uuid}.{ext}
+model LibraryItem {
+  id             String   @id @default(cuid())
+  workId         String?  // FK → ScientificWork (tuỳ chọn)
+  work           ScientificWork? @relation(fields: [workId], references: [id])
+  title          String
+  filePath       String   // MinIO object key
+  fileSize       BigInt
+  mimeType       String
+  checksumSha256 String
+  sensitivity    String   @default("NORMAL")  // NORMAL|CONFIDENTIAL|SECRET
+  accessCount    Int      @default(0)
+  downloadCount  Int      @default(0)
+  // textEmbedding: khai báo sau khi pgvector migration sẵn sàng (Phase 5)
+  isIndexed      Boolean  @default(false)
+  indexedAt      DateTime?
+  createdAt      DateTime @default(now())
+  isDeleted      Boolean  @default(false)
+  createdById    String
+  createdBy      User     @relation("LibraryItemCreator", fields: [createdById], references: [id])
+  accessLogs     LibraryAccessLog[]
+
+  @@index([sensitivity, isDeleted])
+  @@index([workId])
+  @@index([createdById])
+  @@map("library_items")
+}
+
+/// Audit log mỗi lần VIEW hoặc DOWNLOAD tài liệu thư viện.
+model LibraryAccessLog {
+  id         String      @id @default(cuid())
+  itemId     String
+  item       LibraryItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User        @relation(fields: [userId], references: [id])
+  action     String      // VIEW|DOWNLOAD
+  ipAddress  String?
+  accessedAt DateTime    @default(now())
+
+  @@index([itemId, accessedAt])
+  @@index([userId])
+  @@map("library_access_logs")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CSDL-KHQL – Phase 5: Kinh phí + Hội đồng KH
+// Additive – NckhProject.budgetApproved/budgetRequested GIỮ NGUYÊN
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Chi tiết kinh phí đề tài (1-1 với NckhProject).
+/// Không thay thế NckhProject.budgetApproved – bổ sung thêm tracking chi tiết.
+model ResearchBudget {
+  id            String          @id @default(cuid())
+  projectId     String          @unique
+  project       NckhProject     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  fundSourceId  String
+  fundSource    ScienceCatalog  @relation("BudgetFundSource", fields: [fundSourceId], references: [id])
+  totalApproved BigInt
+  totalSpent    BigInt          @default(0)
+  year          Int
+  status        String          @default("DRAFT")  // DRAFT|APPROVED|FINALIZED
+  approvedById  String?
+  approvedBy    User?           @relation("BudgetApprover", fields: [approvedById], references: [id])
+  approvedAt    DateTime?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  lineItems     BudgetLineItem[]
+
+  @@index([fundSourceId])
+  @@index([year, status])
+  @@map("research_budgets")
+}
+
+model BudgetLineItem {
+  id            String         @id @default(cuid())
+  budgetId      String
+  budget        ResearchBudget @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+  category      String         // PERSONNEL|EQUIPMENT|TRAVEL|OVERHEAD|OTHER
+  description   String
+  plannedAmount BigInt
+  spentAmount   BigInt         @default(0)
+  period        String?        // Q1-2026|Q2-2026|...
+
+  @@index([budgetId])
+  @@map("budget_line_items")
+}
+
+/// Hội đồng KH chính thức – bổ sung cho NckhReview, không thay thế.
+model ScientificCouncil {
+  id              String   @id @default(cuid())
+  projectId       String
+  project         NckhProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  type            String   // REVIEW|ACCEPTANCE|FINAL
+  chairmanId      String
+  chairman        User     @relation("CouncilChairman", fields: [chairmanId], references: [id])
+  secretaryId     String
+  secretary       User     @relation("CouncilSecretary", fields: [secretaryId], references: [id])
+  meetingDate     DateTime?
+  result          String?  // PASS|FAIL|REVISE
+  overallScore    Float?
+  conclusionText  String?
+  minutesFilePath String?  // MinIO path
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  members         ScientificCouncilMember[]
+  reviews         ScientificCouncilReview[]
+
+  @@index([projectId])
+  @@index([type])
+  @@map("scientific_councils")
+}
+
+model ScientificCouncilMember {
+  id        String            @id @default(cuid())
+  councilId String
+  council   ScientificCouncil @relation(fields: [councilId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User              @relation(fields: [userId], references: [id])
+  role      String            // CHAIRMAN|SECRETARY|REVIEWER|EXPERT
+  /// Phiếu bầu kín – chỉ CHAIRMAN + ADMIN được đọc (enforced tại service layer)
+  vote      String?           // PASS|FAIL|REVISE
+
+  @@unique([councilId, userId])
+  @@index([userId])
+  @@map("scientific_council_members")
+}
+
+/// Điểm chấm chi tiết của từng thành viên phản biện theo tiêu chí.
+model ScientificCouncilReview {
+  id         String            @id @default(cuid())
+  councilId  String
+  council    ScientificCouncil @relation(fields: [councilId], references: [id], onDelete: Cascade)
+  memberId   String            // FK → ScientificCouncilMember.id
+  criteria   String            // SCIENTIFIC_VALUE|FEASIBILITY|BUDGET|TEAM|OUTCOME
+  score      Float             // 0–10
+  comment    String?
+  createdAt  DateTime          @default(now())
+
+  @@index([councilId])
+  @@index([memberId])
+  @@map("scientific_council_reviews")
 }

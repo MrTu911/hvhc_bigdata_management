@@ -137,6 +137,7 @@ import {
   GOVERNANCE,
   ETL,
   DEPARTMENT,
+  SCIENCE,
 } from '@/lib/rbac/function-codes';
 
 export interface MenuItem {
@@ -945,6 +946,53 @@ export const MENU_CONFIG: MenuGroup[] = [
         gradient: 'from-blue-500 to-indigo-600',
         badge: 'AI',
         functions: [RESEARCH.VIEW, DATA.VIEW],
+      },
+    ],
+  },
+
+  // ========== 9b. CSDL KHOA HỌC QUẢN LÝ (CSDL-KHQL) ==========
+  {
+    title: 'nav.scienceDatabase',
+    items: [
+      {
+        name: 'nav.scienceDashboard',
+        href: '/dashboard/science',
+        icon: BarChart3,
+        gradient: 'from-violet-500 to-purple-600',
+        badge: '📊',
+        functions: [SCIENCE.DASHBOARD_VIEW],
+      },
+      {
+        name: 'nav.scienceProjects',
+        href: '/dashboard/science/projects',
+        icon: FlaskConical,
+        gradient: 'from-indigo-500 to-violet-600',
+        badge: '🔬',
+        functions: [SCIENCE.PROJECT_CREATE, SCIENCE.PROJECT_APPROVE_DEPT],
+      },
+      {
+        name: 'nav.scienceScientists',
+        href: '/dashboard/science/scientists',
+        icon: Users,
+        gradient: 'from-amber-500 to-orange-600',
+        badge: '🎓',
+        functions: [SCIENCE.SCIENTIST_VIEW],
+      },
+      {
+        name: 'nav.scienceSearch',
+        href: '/dashboard/science/search',
+        icon: Search,
+        gradient: 'from-teal-500 to-cyan-600',
+        badge: '🔍',
+        functions: [SCIENCE.SEARCH_USE],
+      },
+      {
+        name: 'nav.scienceDataQuality',
+        href: '/dashboard/science/data-quality',
+        icon: CheckCircle,
+        gradient: 'from-emerald-500 to-green-600',
+        badge: 'DQ',
+        functions: [SCIENCE.DASHBOARD_VIEW, SCIENCE.AI_ADMIN],
       },
     ],
   },
