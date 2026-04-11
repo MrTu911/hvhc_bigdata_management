@@ -14,7 +14,7 @@
  *   npx tsx --require dotenv/config prisma/seed/seed_m20_workflow_template.ts
  */
 
-import { PrismaClient, WorkflowVersionStatus } from '@prisma/client'
+import { PrismaClient, Prisma, WorkflowVersionStatus } from '@prisma/client'
 import * as dotenv from 'dotenv'
 
 dotenv.config()
@@ -311,7 +311,7 @@ async function seedWorkflow(def: WorkflowDef) {
       slaHours: s.slaHours ?? null,
       requiresSignature: s.requiresSignature ?? false,
       isParallel: false,
-      configJson: s.configJson ?? undefined,
+      ...(s.configJson !== undefined ? { configJson: s.configJson as Prisma.InputJsonValue } : {}),
     })),
   })
 

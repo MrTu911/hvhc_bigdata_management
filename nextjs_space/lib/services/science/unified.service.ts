@@ -243,7 +243,7 @@ async function listUnits(
         name: true,
         _count: {
           select: {
-            NckhProjectUnit: true,  // projects
+            nckhProjects: true,
           },
         },
       },
@@ -258,7 +258,7 @@ async function listUnits(
       by: ['unitId'],
       where: {
         unitId: { in: unitIds },
-        scientistProfile: { isNot: null },
+        nckhScientistProfile: { isNot: null },
       },
       _count: { id: true },
     }),
@@ -272,7 +272,7 @@ async function listUnits(
     }),
   ])
 
-  const scientistMap = new Map(scientistCounts.map((s) => [s.unitId, s._count.id]))
+  const scientistMap = new Map(scientistCounts.map((s) => [s.unitId, s._count?.id ?? 0]))
   const activeMap    = new Map(activeProjCounts.map((s) => [s.unitId, s._count.id]))
 
   return {
@@ -282,7 +282,7 @@ async function listUnits(
       id:             r.id,
       name:           r.name,
       scientistCount: scientistMap.get(r.id) ?? 0,
-      projectCount:   r._count.NckhProjectUnit,
+      projectCount:   r._count.nckhProjects,
       activeProjects: activeMap.get(r.id) ?? 0,
       workCount:      0,  // workCount requires author→scientist→user join — left as 0 for perf
     })),

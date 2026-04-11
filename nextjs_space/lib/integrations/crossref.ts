@@ -134,15 +134,17 @@ function mapCrossrefMessage(doi: string, msg: any): CrossrefWorkMeta {
  * Map CrossRef type → ScientificWork type.
  * Fallback là REFERENCE nếu không xác định.
  */
-export function mapCrossrefTypeToWorkType(crossrefType: string): string {
-  const map: Record<string, string> = {
-    'book':             'BOOK',
-    'monograph':        'MONOGRAPH',
-    'edited-book':      'BOOK',
-    'book-chapter':     'BOOK',
-    'reference-book':   'REFERENCE',
-    'reference-entry':  'REFERENCE',
-    'journal-article':  'REFERENCE',
+type ScientificWorkType = 'TEXTBOOK' | 'BOOK' | 'MONOGRAPH' | 'REFERENCE' | 'CURRICULUM'
+
+export function mapCrossrefTypeToWorkType(crossrefType: string): ScientificWorkType {
+  const map: Record<string, ScientificWorkType> = {
+    'book':                'BOOK',
+    'monograph':           'MONOGRAPH',
+    'edited-book':         'BOOK',
+    'book-chapter':        'BOOK',
+    'reference-book':      'REFERENCE',
+    'reference-entry':     'REFERENCE',
+    'journal-article':     'REFERENCE',
     'proceedings-article': 'REFERENCE',
   }
   return map[crossrefType] ?? 'REFERENCE'

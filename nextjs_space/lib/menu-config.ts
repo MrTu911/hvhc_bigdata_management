@@ -1036,13 +1036,27 @@ export const MENU_CONFIG: MenuGroup[] = [
         gradient: 'from-slate-500 to-gray-600',
         functions: [SCIENCE.CATALOG_VIEW],
       },
-      // -- Công cụ --
+      // -- M26 Search / AI / Reports --
       {
         name: 'nav.scienceSearch',
         href: '/dashboard/science/search',
         icon: Search,
         gradient: 'from-teal-500 to-cyan-600',
         functions: [SCIENCE.SEARCH_USE],
+      },
+      {
+        name: 'nav.scienceAiTools',
+        href: '/dashboard/science/database/ai-tools',
+        icon: Brain,
+        gradient: 'from-purple-600 to-violet-700',
+        functions: [SCIENCE.AI_USE],
+      },
+      {
+        name: 'nav.scienceReports',
+        href: '/dashboard/science/database/reports',
+        icon: FileText,
+        gradient: 'from-amber-500 to-orange-600',
+        functions: [SCIENCE.REPORT_EXPORT],
       },
       {
         name: 'nav.scienceDataQuality',

@@ -86,20 +86,10 @@ async function aggregate(unitId: string | null, year: number): Promise<UnitKpiDa
     prisma.nckhPublication.count({
       where: { publishedYear: year, isScopus: true, author: authorUnitFilter },
     }),
+    // ScientificWorkAuthor only has scientistId (no nested relation to user/unit),
+    // so unit-scoped filtering for scientificWork is not supported here.
     prisma.scientificWork.count({
-      where: {
-        year,
-        isDeleted: false,
-        ...(unitId
-          ? {
-              authors: {
-                some: {
-                  scientist: { isNot: null, user: { unitRelation: { id: unitId } } },
-                },
-              },
-            }
-          : {}),
-      },
+      where: { year, isDeleted: false },
     }),
     prisma.researchBudget.aggregate({
       where: { project: projectWhere },
@@ -146,6 +136,89 @@ async function aggregate(unitId: string | null, year: number): Promise<UnitKpiDa
   }
 }
 
+// ─── Trend analysis ───────────────────────────────────────────────────────────
+
+const APPROVED_STATUSES_FOR_TRENDS = ['APPROVED', 'IN_PROGRESS', 'COMPLETED']
+
+export interface TrendsData {
+  byField: { field: string | null; count: number }[]
+  byYear: { year: number; count: number }[]
+  byFieldYear: { field: string | null; year: number; count: number }[]
+  topKeywords: { keyword: string; count: number }[]
+  publicationsByYear: { year: number; count: number }[]
+  meta: { yearFrom: number; yearTo: number; statuses: string[] }
+}
+
+async function aggregateTrends(yearSpan: number): Promise<TrendsData> {
+  const currentYear = new Date().getFullYear()
+  const yearFrom    = currentYear - yearSpan + 1
+
+  const [byField, byYear, byFieldYearRaw, keywordsRaw, pubsByYear] = await Promise.all([
+    prisma.nckhProject.groupBy({
+      by: ['field'],
+      where: { status: { in: APPROVED_STATUSES_FOR_TRENDS as any } },
+      _count: { id: true },
+      orderBy: { _count: { id: 'desc' } },
+      take: 10,
+    }),
+    prisma.nckhProject.groupBy({
+      by: ['budgetYear'],
+      where: {
+        status:     { in: APPROVED_STATUSES_FOR_TRENDS as any },
+        budgetYear: { gte: yearFrom, lte: currentYear },
+      },
+      _count: { id: true },
+      orderBy: { budgetYear: 'asc' },
+    }),
+    prisma.nckhProject.groupBy({
+      by: ['field', 'budgetYear'],
+      where: {
+        status:     { in: APPROVED_STATUSES_FOR_TRENDS as any },
+        budgetYear: { gte: yearFrom, lte: currentYear },
+      },
+      _count: { id: true },
+    }),
+    prisma.nckhProject.findMany({
+      where: { status: { in: APPROVED_STATUSES_FOR_TRENDS as any } },
+      select: { keywords: true },
+      take: 500,
+    }),
+    prisma.nckhPublication.groupBy({
+      by: ['publishedYear'],
+      where: { publishedYear: { gte: yearFrom, lte: currentYear } },
+      _count: { id: true },
+      orderBy: { publishedYear: 'asc' },
+    }),
+  ])
+
+  const kwFreq = new Map<string, number>()
+  for (const row of keywordsRaw) {
+    for (const kw of row.keywords) {
+      const k = kw.trim().toLowerCase()
+      if (k.length >= 3) kwFreq.set(k, (kwFreq.get(k) ?? 0) + 1)
+    }
+  }
+  const topKeywords = [...kwFreq.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 20)
+    .map(([keyword, count]) => ({ keyword, count }))
+
+  return {
+    byField:            byField.map((r) => ({ field: r.field as string | null, count: r._count.id })),
+    byYear:             byYear
+                          .filter((r): r is typeof r & { budgetYear: number } => r.budgetYear !== null)
+                          .map((r) => ({ year: r.budgetYear, count: r._count.id })),
+    byFieldYear:        byFieldYearRaw
+                          .filter((r): r is typeof r & { budgetYear: number } => r.budgetYear !== null)
+                          .map((r) => ({ field: r.field as string | null, year: r.budgetYear, count: r._count.id })),
+    topKeywords,
+    publicationsByYear: pubsByYear
+                          .filter((r): r is typeof r & { publishedYear: number } => r.publishedYear !== null)
+                          .map((r) => ({ year: r.publishedYear, count: r._count.id })),
+    meta:               { yearFrom, yearTo: currentYear, statuses: APPROVED_STATUSES_FOR_TRENDS },
+  }
+}
+
 // ─── Service ──────────────────────────────────────────────────────────────────
 
 const CACHE_TTL_SECONDS = 10 * 60 // 10 phút
@@ -171,6 +244,19 @@ export const kpiService = {
     if (cached) return { success: true as const, data: cached, fromCache: true }
 
     const data = await aggregate(null, year)
+    await setCache(cacheKey, data, CACHE_TTL_SECONDS)
+
+    return { success: true as const, data, fromCache: false }
+  },
+
+  /** Trend analysis for AI/analytics layer (M26) — cached 10 min */
+  async getTrends(yearSpan = 5) {
+    const cacheKey = `science:kpi:trends:${yearSpan}`
+
+    const cached = await getCache<TrendsData>(cacheKey)
+    if (cached) return { success: true as const, data: cached, fromCache: true }
+
+    const data = await aggregateTrends(yearSpan)
     await setCache(cacheKey, data, CACHE_TTL_SECONDS)
 
     return { success: true as const, data, fromCache: false }

@@ -46,14 +46,14 @@ model VerificationToken {
 }
 
 model User {
-  id                                  String                  @id @default(cuid())
-  email                               String                  @unique
+  id                                  String                     @id @default(cuid())
+  email                               String                     @unique
   emailVerified                       DateTime?
   name                                String
   password                            String
-  role                                UserRole                @default(HOC_VIEN)
-  status                              UserStatus              @default(ACTIVE)
-  militaryId                          String?                 @unique
+  role                                UserRole                   @default(HOC_VIEN)
+  status                              UserStatus                 @default(ACTIVE)
+  militaryId                          String?                    @unique
   rank                                String?
   department                          String?
   unit                                String?
@@ -62,10 +62,10 @@ model User {
   dateOfBirth                         DateTime?
   gender                              String?
   address                             String?
-  createdAt                           DateTime                @default(now())
-  updatedAt                           DateTime                @updatedAt
+  createdAt                           DateTime                   @default(now())
+  updatedAt                           DateTime                   @updatedAt
   lastLoginAt                         DateTime?
-  employeeId                          String?                 @unique
+  employeeId                          String?                    @unique
   endDate                             DateTime?
   personnelType                       PersonnelCategory?
   position                            String?
@@ -75,7 +75,7 @@ model User {
   joinDate                            DateTime?
   placeOfOrigin                       String?
   specialization                      String?
-  workStatus                          WorkStatus              @default(ACTIVE)
+  workStatus                          WorkStatus                 @default(ACTIVE)
   birthPlace                          String?
   bloodType                           BloodType?
   citizenId                           String?
@@ -88,7 +88,7 @@ model User {
   permanentAddress                    String?
   religion                            String?
   temporaryAddress                    String?
-  personnelId                         String?                 @unique
+  personnelId                         String?                    @unique
   managementCategory                  ManagementCategory?
   partyJoinDate                       DateTime?
   partyPosition                       String?
@@ -103,11 +103,11 @@ model User {
   specializationId                    String?
   birthPlaceId                        String?
   placeOfOriginId                     String?
-  authProvider                        String                  @default("LOCAL")
-  failedLoginCount                    Int                     @default(0)
+  authProvider                        String                     @default("LOCAL")
+  failedLoginCount                    Int                        @default(0)
   lastSsoLoginAt                      DateTime?
   lockedUntil                         DateTime?
-  mfaEnabled                          Boolean                 @default(false)
+  mfaEnabled                          Boolean                    @default(false)
   mfaSecret                           String?
   accounts                            Account[]
   aiUsageLogs                         AIUsageLog[]
@@ -121,52 +121,52 @@ model User {
   hocVien                             HocVien?
   insuranceInfo                       InsuranceInfo?
   medicalRecords                      MedicalRecord[]
-  nckhDuplicateCheckLogs              NckhDuplicateCheckLog[] @relation("NckhDupCheckUser")
-  nckhMemberships                     NckhMember[]            @relation("NckhMemberUser")
-  nckhProjectsAsPI                    NckhProject[]           @relation("NckhPI")
-  nckhPublicationAuthorEntries        NckhPublicationAuthor[] @relation("NckhPubAuthorEntry")
-  nckhPublications                    NckhPublication[]       @relation("NckhPubAuthor")
-  nckhScientistProfile                NckhScientistProfile?   @relation("NckhScientist")
-  scienceCatalogsCreated              ScienceCatalog[]        @relation("ScienceCatalogCreator")
-  partyMeetingsCreated                PartyMeeting[]          @relation("PartyMeetingCreator")
-  partyInspectionsCreated             PartyInspectionTarget[] @relation("PartyInspectionCreator")
+  nckhDuplicateCheckLogs              NckhDuplicateCheckLog[]    @relation("NckhDupCheckUser")
+  nckhMemberships                     NckhMember[]               @relation("NckhMemberUser")
+  nckhProjectsAsPI                    NckhProject[]              @relation("NckhPI")
+  nckhPublicationAuthorEntries        NckhPublicationAuthor[]    @relation("NckhPubAuthorEntry")
+  nckhPublications                    NckhPublication[]          @relation("NckhPubAuthor")
+  nckhScientistProfile                NckhScientistProfile?      @relation("NckhScientist")
+  scienceCatalogsCreated              ScienceCatalog[]           @relation("ScienceCatalogCreator")
+  partyMeetingsCreated                PartyMeeting[]             @relation("PartyMeetingCreator")
+  partyInspectionsCreated             PartyInspectionTarget[]    @relation("PartyInspectionCreator")
   partyMember                         PartyMember?
   partyRecruitmentPipelines           PartyRecruitmentPipeline[]
-  partyOrganizationsAsDeputySecretary PartyOrganization[]     @relation("PartyOrgDeputySecretary")
-  partyOrganizationsAsSecretary       PartyOrganization[]     @relation("PartyOrgSecretary")
+  partyOrganizationsAsDeputySecretary PartyOrganization[]        @relation("PartyOrgDeputySecretary")
+  partyOrganizationsAsSecretary       PartyOrganization[]        @relation("PartyOrgSecretary")
   personnelAIAnalyses                 PersonnelAIAnalysis[]
   personnelAttachments                PersonnelAttachment[]
   policyRecords                       PolicyRecord[]
-  policyRequests                      PolicyRequest[]         @relation("PolicyRequester")
+  policyRequests                      PolicyRequest[]            @relation("PolicyRequester")
   scientificProfile                   ScientificProfile?
   scientificPublications              ScientificPublication[]
   scientificResearch                  ScientificResearch[]
   sessions                            Session[]
   studentProfile                      StudentProfile?
-  nckhProjectWorkflowActions          NckhProjectWorkflowLog[] @relation("WorkflowLogActor")
+  nckhProjectWorkflowActions          NckhProjectWorkflowLog[]   @relation("WorkflowLogActor")
   libraryAccessLogs                   LibraryAccessLog[]
-  libraryItemsCreated                 LibraryItem[]            @relation("LibraryItemCreator")
-  researchBudgetsApproved             ResearchBudget[]         @relation("BudgetApprover")
-  councilsAsChairman                  ScientificCouncil[]      @relation("CouncilChairman")
-  councilsAsSecretary                 ScientificCouncil[]      @relation("CouncilSecretary")
+  libraryItemsCreated                 LibraryItem[]              @relation("LibraryItemCreator")
+  researchBudgetsApproved             ResearchBudget[]           @relation("BudgetApprover")
+  councilsAsChairman                  ScientificCouncil[]        @relation("CouncilChairman")
+  councilsAsSecretary                 ScientificCouncil[]        @relation("CouncilSecretary")
   councilMemberships                  ScientificCouncilMember[]
   logs                                SystemLog[]
   technicalCertificates               TechnicalCertificate[]
-  commandedUnits                      Unit[]                  @relation("UnitCommander")
+  commandedUnits                      Unit[]                     @relation("UnitCommander")
   activities                          UserActivity[]
-  grantedPermissions                  UserPermissionGrant[]   @relation("GrantedPermissions")
-  permissionGrants                    UserPermissionGrant[]   @relation("UserPermissions")
-  userPositions                       UserPosition[]          @relation("UserRBACPositions")
-  birthPlaceRef                       AdministrativeUnit?     @relation("UserBirthPlace", fields: [birthPlaceId], references: [id])
-  ethnicityRef                        Ethnicity?              @relation("UserEthnicity", fields: [ethnicityId], references: [id])
-  personnelProfile                    Personnel?              @relation("PersonnelAccount", fields: [personnelId], references: [id])
-  placeOfOriginRef                    AdministrativeUnit?     @relation("UserPlaceOfOrigin", fields: [placeOfOriginId], references: [id])
-  positionRef                         Position?               @relation("UserPositionRef", fields: [positionId], references: [id])
-  religionRef                         Religion?               @relation("UserReligion", fields: [religionId], references: [id])
-  specializationRef                   SpecializationCatalog?  @relation("UserSpecialization", fields: [specializationId], references: [id])
-  unitRelation                        Unit?                   @relation(fields: [unitId], references: [id])
+  grantedPermissions                  UserPermissionGrant[]      @relation("GrantedPermissions")
+  permissionGrants                    UserPermissionGrant[]      @relation("UserPermissions")
+  userPositions                       UserPosition[]             @relation("UserRBACPositions")
+  birthPlaceRef                       AdministrativeUnit?        @relation("UserBirthPlace", fields: [birthPlaceId], references: [id])
+  ethnicityRef                        Ethnicity?                 @relation("UserEthnicity", fields: [ethnicityId], references: [id])
+  personnelProfile                    Personnel?                 @relation("PersonnelAccount", fields: [personnelId], references: [id])
+  placeOfOriginRef                    AdministrativeUnit?        @relation("UserPlaceOfOrigin", fields: [placeOfOriginId], references: [id])
+  positionRef                         Position?                  @relation("UserPositionRef", fields: [positionId], references: [id])
+  religionRef                         Religion?                  @relation("UserReligion", fields: [religionId], references: [id])
+  specializationRef                   SpecializationCatalog?     @relation("UserSpecialization", fields: [specializationId], references: [id])
+  unitRelation                        Unit?                      @relation(fields: [unitId], references: [id])
   workExperience                      WorkExperience[]
-  workflowActions                     WorkflowAction[] @relation("WorkflowActionActor")
+  workflowActions                     WorkflowAction[]           @relation("WorkflowActionActor")
 
   @@index([email])
   @@index([role])
@@ -207,52 +207,52 @@ model AuthSession {
 /// Nhân thân, học vị căn cước lấy từ M02 qua personnelId.
 /// KHÔNG duplicate dữ liệu Personnel – chỉ extend thêm trường chuyên ngành giảng dạy.
 model FacultyProfile {
-  id                   String            @id @default(cuid())
-  userId               String            @unique
-  departmentId         String?
-  academicRank         String?
-  academicDegree       String?
-  specialization       String?
-  teachingSubjects     Json?
-  researchInterests    String?
-  researchProjects     Int               @default(0)
-  publications         Int               @default(0)
-  citations            Int               @default(0)
-  teachingExperience   Int               @default(0)
-  industryExperience   Int               @default(0)
-  biography            String?
-  achievements         Json?
-  certifications       Json?
-  linkedinUrl          String?
-  googleScholarUrl     String?
-  researchGateUrl      String?
-  orcidId              String?
-  isActive             Boolean           @default(true)
-  isPublic             Boolean           @default(false)
-  createdAt            DateTime          @default(now())
-  updatedAt            DateTime          @updatedAt
-  unitId               String?
+  id                 String   @id @default(cuid())
+  userId             String   @unique
+  departmentId       String?
+  academicRank       String?
+  academicDegree     String?
+  specialization     String?
+  teachingSubjects   Json?
+  researchInterests  String?
+  researchProjects   Int      @default(0)
+  publications       Int      @default(0)
+  citations          Int      @default(0)
+  teachingExperience Int      @default(0)
+  industryExperience Int      @default(0)
+  biography          String?
+  achievements       Json?
+  certifications     Json?
+  linkedinUrl        String?
+  googleScholarUrl   String?
+  researchGateUrl    String?
+  orcidId            String?
+  isActive           Boolean  @default(true)
+  isPublic           Boolean  @default(false)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  unitId             String?
 
   // M07 – Link to M02 Personnel (optional: chỉ giảng viên quân nhân)
-  personnelId          String?           @unique
+  personnelId      String?   @unique
   // M07 – Chức danh giảng dạy: lookup M19 TEACHING_POSITION
-  teachingPosition     String?
+  teachingPosition String?
   // M07 – Ngày bắt đầu giảng dạy tại HVHC
-  teachingStart        DateTime?
+  teachingStart    DateTime?
   // M07 – Định mức giờ dạy/tuần (mặc định 16 giờ)
-  weeklyHoursLimit     Float             @default(16)
+  weeklyHoursLimit Float     @default(16)
 
   researchProjectsList ResearchProject[]
   teachingSubjectsList TeachingSubject[]
-  classSections        ClassSection[]    @relation("ClassSectionFaculty")
+  classSections        ClassSection[]            @relation("ClassSectionFaculty")
   courses              Course[]
   examsInvigilated     Exam[]
-  unit                 Unit?             @relation("FacultyProfileUnit", fields: [unitId], references: [id])
-  user                 User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  unit                 Unit?                     @relation("FacultyProfileUnit", fields: [unitId], references: [id])
+  user                 User                      @relation(fields: [userId], references: [id], onDelete: Cascade)
   hocVienHuongDan      HocVien[]
-  trainingSessions     TrainingSession[] @relation("SessionFaculty")
-  thesisAdvised        ThesisProject[]   @relation("ThesisAdvisor")
-  thesisReviewed       ThesisProject[]   @relation("ThesisReviewer")
+  trainingSessions     TrainingSession[]         @relation("SessionFaculty")
+  thesisAdvised        ThesisProject[]           @relation("ThesisAdvisor")
+  thesisReviewed       ThesisProject[]           @relation("ThesisReviewer")
   // M07 – Snapshot/read-model relations
   eisScores            FacultyEISScore[]
   workloadSnapshots    FacultyWorkloadSnapshot[]
@@ -912,8 +912,8 @@ model ResearchProject {
 }
 
 model HocVien {
-  id                  String                 @id @default(cuid())
-  maHocVien           String                 @unique
+  id                  String    @id @default(cuid())
+  maHocVien           String    @unique
   hoTen               String
   ngaySinh            DateTime?
   gioiTinh            String?
@@ -924,54 +924,54 @@ model HocVien {
   email               String?
   dienThoai           String?
   diaChi              String?
-  diemTrungBinh       Float                  @default(0)
-  trangThai           String                 @default("Đang học")
-  createdAt           DateTime               @default(now())
-  updatedAt           DateTime               @updatedAt
+  diemTrungBinh       Float     @default(0)
+  trangThai           String    @default("Đang học")
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
   cohortId            String?
   classId             String?
   majorId             String?
-  userId              String?                @unique
+  userId              String?   @unique
 
   // M07 – Academic performance status (computed từ GPA, cảnh báo học vụ)
   // Phân biệt với currentStatus: đây là trạng thái học lực, không phải lifecycle
-  academicStatus           AcademicPerformanceStatus @default(NORMAL)
+  academicStatus AcademicPerformanceStatus @default(NORMAL)
 
   // M10 – Student Lifecycle fields
-  currentStatus            EduStudentStatus   @default(ACTIVE)
-  studyMode                String?            // lookup M19: STUDY_MODE
-  currentProgramVersionId  String?
-  heDaoTao                 String?            // hình thức đào tạo (legacy from StudentProfile)
-  khoaQuanLy               String?            // khoa quản lý học viên
-  trungDoi                 String?            // cấu trúc đơn vị quân sự
-  daiDoi                   String?            // cấu trúc đơn vị quân sự
-  xepLoaiHocLuc            String?            // xếp loại học lực tổng
-  tongTinChi               Int?               // tổng tín chỉ chương trình
-  tinChiTichLuy            Int?               // tín chỉ đã tích lũy
-  ngayNhapHoc              DateTime?          // ngày nhập học
-  ngayTotNghiep            DateTime?          // ngày tốt nghiệp
-  lyDoNghiHoc              String?            // lý do nghỉ học / thôi học
-  deletedAt                DateTime?          // soft delete
-  deletedBy                String?            // soft delete actor
+  currentStatus           EduStudentStatus @default(ACTIVE)
+  studyMode               String? // lookup M19: STUDY_MODE
+  currentProgramVersionId String?
+  heDaoTao                String? // hình thức đào tạo (legacy from StudentProfile)
+  khoaQuanLy              String? // khoa quản lý học viên
+  trungDoi                String? // cấu trúc đơn vị quân sự
+  daiDoi                  String? // cấu trúc đơn vị quân sự
+  xepLoaiHocLuc           String? // xếp loại học lực tổng
+  tongTinChi              Int? // tổng tín chỉ chương trình
+  tinChiTichLuy           Int? // tín chỉ đã tích lũy
+  ngayNhapHoc             DateTime? // ngày nhập học
+  ngayTotNghiep           DateTime? // ngày tốt nghiệp
+  lyDoNghiHoc             String? // lý do nghỉ học / thôi học
+  deletedAt               DateTime? // soft delete
+  deletedBy               String? // soft delete actor
 
   // Relations
   classEnrollments      ClassEnrollment[]
   examRegistrations     ExamRegistration[]
   conductRecords        StudentConductRecord[]
-  academicWarnings      AcademicWarning[]      // M10 – UC-57
-  studentClass          StudentClass?          @relation(fields: [classId], references: [id])
-  cohort                Cohort?                @relation(fields: [cohortId], references: [id])
-  giangVienHuongDan     FacultyProfile?        @relation(fields: [giangVienHuongDanId], references: [id])
-  major                 SpecializationCatalog? @relation("StudentMajor", fields: [majorId], references: [id])
-  user                  User?                  @relation(fields: [userId], references: [id])
-  currentProgramVersion ProgramVersion?        @relation(fields: [currentProgramVersionId], references: [id])
+  academicWarnings      AcademicWarning[] // M10 – UC-57
+  studentClass          StudentClass?            @relation(fields: [classId], references: [id])
+  cohort                Cohort?                  @relation(fields: [cohortId], references: [id])
+  giangVienHuongDan     FacultyProfile?          @relation(fields: [giangVienHuongDanId], references: [id])
+  major                 SpecializationCatalog?   @relation("StudentMajor", fields: [majorId], references: [id])
+  user                  User?                    @relation(fields: [userId], references: [id])
+  currentProgramVersion ProgramVersion?          @relation(fields: [currentProgramVersionId], references: [id])
   ketQuaHocTap          KetQuaHocTap[]
   registrations         Registration[]
-  thesisProjects        ThesisProject[]          // M10 – UC-59
-  graduationAudits      GraduationAudit[]        // M10 – UC-60
-  diplomaRecords        DiplomaRecord[]          // M10 – UC-60
+  thesisProjects        ThesisProject[] // M10 – UC-59
+  graduationAudits      GraduationAudit[] // M10 – UC-60
+  diplomaRecords        DiplomaRecord[] // M10 – UC-60
   repositoryItems       AcademicRepositoryItem[] // M10 – UC-61
-  gpaHistories          StudentGpaHistory[]      // M07 – GPA snapshot theo kỳ
+  gpaHistories          StudentGpaHistory[] // M07 – GPA snapshot theo kỳ
 
   @@index([maHocVien])
   @@index([userId])
@@ -1034,13 +1034,13 @@ model KetQuaHocTap {
 model StudentConductRecord {
   id                String    @id @default(cuid())
   hocVienId         String
-  academicYear      String    // mã năm học, tham chiếu AcademicYear.code
-  semesterCode      String    // mã học kỳ, tham chiếu Term.code
+  academicYear      String // mã năm học, tham chiếu AcademicYear.code
+  semesterCode      String // mã học kỳ, tham chiếu Term.code
   conductScore      Float
-  conductGrade      String?   // xếp loại: lookup M19 CONDUCT_GRADE
-  rewardSummary     String?   // tóm tắt khen thưởng
-  disciplineSummary String?   // tóm tắt kỷ luật
-  approvedBy        String?   // userId người duyệt
+  conductGrade      String? // xếp loại: lookup M19 CONDUCT_GRADE
+  rewardSummary     String? // tóm tắt khen thưởng
+  disciplineSummary String? // tóm tắt kỷ luật
+  approvedBy        String? // userId người duyệt
   approvedAt        DateTime?
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
@@ -1061,10 +1061,10 @@ model StudentConductRecord {
 model ScoreHistory {
   id           String          @id @default(cuid())
   enrollmentId String
-  changedBy    String?         // userId người sửa
-  oldValues    Json            // { attendanceScore, midtermScore, finalScore, ... }
-  newValues    Json            // giá trị sau sửa
-  reason       String?         // lý do sửa điểm
+  changedBy    String? // userId người sửa
+  oldValues    Json // { attendanceScore, midtermScore, finalScore, ... }
+  newValues    Json // giá trị sau sửa
+  reason       String? // lý do sửa điểm
   changedAt    DateTime        @default(now())
   enrollment   ClassEnrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
 
@@ -1079,20 +1079,20 @@ model ScoreHistory {
  * Trigger thủ công (manual) trong Phase 1, auto sau.
  */
 model AcademicWarning {
-  id                  String               @id @default(cuid())
-  hocVienId           String
-  academicYear        String               // VD: "2025-2026"
-  semesterCode        String               // VD: "HK1"
-  warningLevel        AcademicWarningLevel
-  warningReasonJson   Json?                // { gpa, failedCredits, absenceRate, ... }
-  suggestedAction     String?
-  isResolved          Boolean              @default(false)
-  resolvedAt          DateTime?
-  resolvedBy          String?
-  generatedAt         DateTime             @default(now())
-  createdAt           DateTime             @default(now())
-  updatedAt           DateTime             @updatedAt
-  hocVien             HocVien              @relation(fields: [hocVienId], references: [id], onDelete: Cascade)
+  id                String               @id @default(cuid())
+  hocVienId         String
+  academicYear      String // VD: "2025-2026"
+  semesterCode      String // VD: "HK1"
+  warningLevel      AcademicWarningLevel
+  warningReasonJson Json? // { gpa, failedCredits, absenceRate, ... }
+  suggestedAction   String?
+  isResolved        Boolean              @default(false)
+  resolvedAt        DateTime?
+  resolvedBy        String?
+  generatedAt       DateTime             @default(now())
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+  hocVien           HocVien              @relation(fields: [hocVienId], references: [id], onDelete: Cascade)
 
   @@unique([hocVienId, academicYear, semesterCode])
   @@index([hocVienId])
@@ -1276,17 +1276,17 @@ model EducationHistory {
 // Each row = one status change event (ACTIVE → TRANSFERRED, ACTIVE → RETIRED, etc.)
 // Used for audit trail and timeline display in the profile360 "Cơ bản" tab.
 model PersonnelStatusHistory {
-  id            String     @id @default(cuid())
-  personnelId   String
-  fromStatus    WorkStatus?               // null on the first/initial entry
-  toStatus      WorkStatus
-  effectiveDate DateTime
-  decisionNumber String?                  // số quyết định (if any)
-  reason        String?                   // lý do đổi trạng thái
-  notes         String?
-  recordedBy    String?                   // userId of who recorded the change
-  createdAt     DateTime   @default(now())
-  personnel     Personnel  @relation("StatusHistoryPersonnel", fields: [personnelId], references: [id], onDelete: Cascade)
+  id             String      @id @default(cuid())
+  personnelId    String
+  fromStatus     WorkStatus? // null on the first/initial entry
+  toStatus       WorkStatus
+  effectiveDate  DateTime
+  decisionNumber String? // số quyết định (if any)
+  reason         String? // lý do đổi trạng thái
+  notes          String?
+  recordedBy     String? // userId of who recorded the change
+  createdAt      DateTime    @default(now())
+  personnel      Personnel   @relation("StatusHistoryPersonnel", fields: [personnelId], references: [id], onDelete: Cascade)
 
   @@index([personnelId])
   @@index([effectiveDate])
@@ -1675,23 +1675,23 @@ model Program {
 
 // M10 – UC-52: Phiên bản chương trình đào tạo (CRITICAL – bắt buộc trước go-live)
 model ProgramVersion {
-  id                   String               @id @default(cuid())
-  programId            String
-  versionCode          String
-  effectiveFromCohort  String               // khóa áp dụng, ví dụ: "K45", "2023"
-  totalCredits         Int?
-  requiredCoursesJson  Json?                // khung học phần dạng JSON
-  status               ProgramVersionStatus @default(DRAFT)
-  notes                String?
-  createdBy            String?
-  approvedBy           String?
-  approvedAt           DateTime?
-  createdAt            DateTime             @default(now())
-  updatedAt            DateTime             @updatedAt
+  id                  String               @id @default(cuid())
+  programId           String
+  versionCode         String
+  effectiveFromCohort String // khóa áp dụng, ví dụ: "K45", "2023"
+  totalCredits        Int?
+  requiredCoursesJson Json? // khung học phần dạng JSON
+  status              ProgramVersionStatus @default(DRAFT)
+  notes               String?
+  createdBy           String?
+  approvedBy          String?
+  approvedAt          DateTime?
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
 
-  program          Program          @relation(fields: [programId], references: [id])
-  hocViens         HocVien[]
-  curriculumPlans  CurriculumPlan[]
+  program         Program          @relation(fields: [programId], references: [id])
+  hocViens        HocVien[]
+  curriculumPlans CurriculumPlan[]
 
   @@unique([programId, versionCode])
   @@index([programId])
@@ -1702,27 +1702,27 @@ model ProgramVersion {
 
 // M10 – UC-53: Kế hoạch đào tạo học kỳ / năm học (= SemesterPlan trong design M10)
 model CurriculumPlan {
-  id                String             @id @default(cuid())
-  code              String             @unique
-  name              String
-  programId         String
-  programVersionId  String?            // M10: gắn với phiên bản CTĐT cụ thể
-  academicYearId    String?
-  cohort            String?
-  totalCredits      Int                @default(120)
-  version           String             @default("1.0")
-  status            CurriculumStatus   @default(DRAFT)
-  notes             String?
-  isActive          Boolean            @default(true)
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
-  createdBy         String?
-  approvedBy        String?
-  approvedAt        DateTime?
-  courses           CurriculumCourse[]
-  academicYear      AcademicYear?      @relation(fields: [academicYearId], references: [id])
-  program           Program            @relation(fields: [programId], references: [id])
-  programVersion    ProgramVersion?    @relation(fields: [programVersionId], references: [id])
+  id               String             @id @default(cuid())
+  code             String             @unique
+  name             String
+  programId        String
+  programVersionId String? // M10: gắn với phiên bản CTĐT cụ thể
+  academicYearId   String?
+  cohort           String?
+  totalCredits     Int                @default(120)
+  version          String             @default("1.0")
+  status           CurriculumStatus   @default(DRAFT)
+  notes            String?
+  isActive         Boolean            @default(true)
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  createdBy        String?
+  approvedBy       String?
+  approvedAt       DateTime?
+  courses          CurriculumCourse[]
+  academicYear     AcademicYear?      @relation(fields: [academicYearId], references: [id])
+  program          Program            @relation(fields: [programId], references: [id])
+  programVersion   ProgramVersion?    @relation(fields: [programVersionId], references: [id])
 
   @@index([programId])
   @@index([programVersionId])
@@ -1796,8 +1796,8 @@ model ClassSection {
   @@index([status])
   // M10 – UC-54: Composite indexes cho conflict-check engine
   @@index([termId, dayOfWeek, startPeriod, endPeriod]) // phát hiện trùng giờ
-  @@index([termId, roomId])                            // phát hiện trùng phòng
-  @@index([termId, facultyId])                         // phát hiện trùng giảng viên
+  @@index([termId, roomId]) // phát hiện trùng phòng
+  @@index([termId, facultyId]) // phát hiện trùng giảng viên
   @@map("class_sections")
 }
 
@@ -1810,12 +1810,12 @@ model ClassEnrollment {
   withdrawnAt     DateTime?
   withdrawReason  String?
   // M10 – UC-56: Grade fields (ClassEnrollment = GradeRecord)
-  attendanceScore Float?              // điểm chuyên cần
-  assignmentScore Float?              // điểm thực hành / bài tập
+  attendanceScore Float? // điểm chuyên cần
+  assignmentScore Float? // điểm thực hành / bài tập
   midtermScore    Float?
   finalScore      Float?
   totalScore      Float?
-  passFlag        Boolean?            // đạt / không đạt (tính tự động hoặc ghi rõ)
+  passFlag        Boolean? // đạt / không đạt (tính tự động hoặc ghi rõ)
   letterGrade     String?
   gradeStatus     GradeStatus         @default(PENDING)
   gradedBy        String?
@@ -1826,7 +1826,7 @@ model ClassEnrollment {
   classSection    ClassSection        @relation(fields: [classSectionId], references: [id], onDelete: Cascade)
   hocVien         HocVien             @relation(fields: [hocVienId], references: [id], onDelete: Cascade)
   attendances     SessionAttendance[]
-  scoreHistories  ScoreHistory[]      // M10 – audit trail bắt buộc
+  scoreHistories  ScoreHistory[] // M10 – audit trail bắt buộc
 
   @@unique([classSectionId, hocVienId])
   @@index([classSectionId])
@@ -2059,14 +2059,14 @@ model CareerHistory {
 }
 
 model PartyOrganization {
-  id                    String                @id @default(cuid())
-  code                  String                @unique
+  id                    String                     @id @default(cuid())
+  code                  String                     @unique
   name                  String
   shortName             String?
   organizationType      PartyOrganizationType
-  level                 Int                   @default(1)
+  level                 Int                        @default(1)
   /// Enum level theo thiết kế M03 (Phase 1 schema UC-64)
-  orgLevel              PartyOrgLevel         @default(CHI_BO_CO_SO)
+  orgLevel              PartyOrgLevel              @default(CHI_BO_CO_SO)
   parentId              String?
   /// Field theo design M03: liên kết đơn vị quân sự tương ứng
   linkedUnitId          String?
@@ -2074,23 +2074,23 @@ model PartyOrganization {
   secretaryUserId       String?
   deputySecretaryUserId String?
   description           String?
-  isActive              Boolean               @default(true)
+  isActive              Boolean                    @default(true)
   establishedDate       DateTime?
   dissolvedDate         DateTime?
-  createdAt             DateTime              @default(now())
-  updatedAt             DateTime              @updatedAt
+  createdAt             DateTime                   @default(now())
+  updatedAt             DateTime                   @updatedAt
   histories             PartyMemberHistory[]
   members               PartyMember[]
   meetings              PartyMeeting[]
-  outgoingTransfers     PartyTransfer[]        @relation("PartyTransferFromOrg")
-  incomingTransfers     PartyTransfer[]        @relation("PartyTransferToOrg")
+  outgoingTransfers     PartyTransfer[]            @relation("PartyTransferFromOrg")
+  incomingTransfers     PartyTransfer[]            @relation("PartyTransferToOrg")
   inspections           PartyInspectionTarget[]
   recruitmentPipelines  PartyRecruitmentPipeline[] @relation("RecruitmentTargetOrg")
-  deputySecretaryUser   User?                 @relation("PartyOrgDeputySecretary", fields: [deputySecretaryUserId], references: [id])
-  parent                PartyOrganization?    @relation("PartyOrgHierarchy", fields: [parentId], references: [id])
-  children              PartyOrganization[]   @relation("PartyOrgHierarchy")
-  secretaryUser         User?                 @relation("PartyOrgSecretary", fields: [secretaryUserId], references: [id])
-  unit                  Unit?                 @relation(fields: [unitId], references: [id])
+  deputySecretaryUser   User?                      @relation("PartyOrgDeputySecretary", fields: [deputySecretaryUserId], references: [id])
+  parent                PartyOrganization?         @relation("PartyOrgHierarchy", fields: [parentId], references: [id])
+  children              PartyOrganization[]        @relation("PartyOrgHierarchy")
+  secretaryUser         User?                      @relation("PartyOrgSecretary", fields: [secretaryUserId], references: [id])
+  unit                  Unit?                      @relation(fields: [unitId], references: [id])
 
   @@index([code])
   @@index([parentId])
@@ -2105,8 +2105,8 @@ model PartyOrganization {
 }
 
 model PartyMember {
-  id                 String               @id @default(cuid())
-  userId             String               @unique
+  id                 String                   @id @default(cuid())
+  userId             String                   @unique
   organizationId     String?
   partyCardNumber    String?
   /// Mapping field theo design lifecycle (partyRole)
@@ -2120,17 +2120,17 @@ model PartyMember {
   /// Mapping field theo design lifecycle (currentReviewGrade)
   currentReviewGrade String?
   /// Mapping field theo design lifecycle (currentDebtAmount)
-  currentDebtAmount  Float?               @default(0)
+  currentDebtAmount  Float?                   @default(0)
   /// Trường nhạy cảm cho hồ sơ Đảng viên
   confidentialNote   String?
   currentPosition    PartyPosition?
-  status             PartyMemberStatus    @default(QUAN_CHUNG)
+  status             PartyMemberStatus        @default(QUAN_CHUNG)
   statusChangeDate   DateTime?
   statusChangeReason String?
   deletedAt          DateTime?
   deletedBy          String?
-  createdAt          DateTime             @default(now())
-  updatedAt          DateTime             @updatedAt
+  createdAt          DateTime                 @default(now())
+  updatedAt          DateTime                 @updatedAt
   activities         PartyActivity[]
   meetingAttendances PartyMeetingAttendance[]
   feePayments        PartyFeePayment[]
@@ -2142,8 +2142,8 @@ model PartyMember {
   histories          PartyMemberHistory[]
   lifecycleEvents    PartyLifecycleEvent[]
   lifecycleAlerts    PartyLifecycleAlert[]
-  organization       PartyOrganization?   @relation(fields: [organizationId], references: [id])
-  user               User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization       PartyOrganization?       @relation(fields: [organizationId], references: [id])
+  user               User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([organizationId])
@@ -2153,7 +2153,7 @@ model PartyMember {
 }
 
 model PartyMeeting {
-  id            String                    @id @default(cuid())
+  id            String                   @id @default(cuid())
   partyOrgId    String
   meetingType   MeetingType
   title         String
@@ -2162,13 +2162,13 @@ model PartyMeeting {
   agenda        String?
   minutesUrl    String?
   resolutionUrl String?
-  status        String                    @default("draft")
+  status        String                   @default("draft")
   createdBy     String?
-  createdAt     DateTime                  @default(now())
-  updatedAt     DateTime                  @updatedAt
+  createdAt     DateTime                 @default(now())
+  updatedAt     DateTime                 @updatedAt
   attendances   PartyMeetingAttendance[]
-  partyOrg      PartyOrganization         @relation(fields: [partyOrgId], references: [id], onDelete: Cascade)
-  creator       User?                     @relation("PartyMeetingCreator", fields: [createdBy], references: [id])
+  partyOrg      PartyOrganization        @relation(fields: [partyOrgId], references: [id], onDelete: Cascade)
+  creator       User?                    @relation("PartyMeetingCreator", fields: [createdBy], references: [id])
 
   @@index([partyOrgId])
   @@index([meetingDate])
@@ -2179,14 +2179,14 @@ model PartyMeeting {
 }
 
 model PartyMeetingAttendance {
-  id               String      @id @default(cuid())
+  id               String       @id @default(cuid())
   meetingId        String
   partyMemberId    String
   attendanceStatus String
   absenceReason    String?
   note             String?
-  createdAt        DateTime    @default(now())
-  updatedAt        DateTime    @updatedAt
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
   meeting          PartyMeeting @relation(fields: [meetingId], references: [id], onDelete: Cascade)
   partyMember      PartyMember  @relation(fields: [partyMemberId], references: [id], onDelete: Cascade)
 
@@ -2220,23 +2220,23 @@ model PartyFeePayment {
 }
 
 model PartyAnnualReview {
-  id               String                  @id @default(cuid())
+  id               String                 @id @default(cuid())
   partyMemberId    String
   reviewYear       Int
   grade            ReviewGrade
   comments         String?
   evidenceUrl      String?
   /// Trạng thái nộp báo cáo lên ban chính trị
-  submissionStatus ReviewSubmissionStatus  @default(DRAFT)
+  submissionStatus ReviewSubmissionStatus @default(DRAFT)
   submittedAt      DateTime?
   submittedBy      String?
   /// Người phê duyệt (ban chính trị)
   approvedBy       String?
   approvedAt       DateTime?
   reviewNote       String?
-  createdAt        DateTime                @default(now())
-  updatedAt        DateTime                @updatedAt
-  partyMember      PartyMember             @relation(fields: [partyMemberId], references: [id], onDelete: Cascade)
+  createdAt        DateTime               @default(now())
+  updatedAt        DateTime               @updatedAt
+  partyMember      PartyMember            @relation(fields: [partyMemberId], references: [id], onDelete: Cascade)
 
   @@unique([partyMemberId, reviewYear])
   @@index([partyMemberId])
@@ -2288,21 +2288,21 @@ model PartyDiscipline {
 }
 
 model PartyTransfer {
-  id                   String          @id @default(cuid())
+  id                   String            @id @default(cuid())
   partyMemberId        String
   transferType         TransferType
   fromPartyOrgId       String
   toPartyOrgId         String
   transferDate         DateTime
   introductionLetterNo String?
-  confirmStatus        String          @default("PENDING")
+  confirmStatus        String            @default("PENDING")
   confirmDate          DateTime?
   note                 String?
-  createdAt            DateTime        @default(now())
-  updatedAt            DateTime        @updatedAt
+  createdAt            DateTime          @default(now())
+  updatedAt            DateTime          @updatedAt
   fromPartyOrg         PartyOrganization @relation("PartyTransferFromOrg", fields: [fromPartyOrgId], references: [id])
   toPartyOrg           PartyOrganization @relation("PartyTransferToOrg", fields: [toPartyOrgId], references: [id])
-  partyMember          PartyMember     @relation(fields: [partyMemberId], references: [id], onDelete: Cascade)
+  partyMember          PartyMember       @relation(fields: [partyMemberId], references: [id], onDelete: Cascade)
 
   @@index([partyMemberId])
   @@index([transferType])
@@ -2314,7 +2314,7 @@ model PartyTransfer {
 }
 
 model PartyInspectionTarget {
-  id             String            @id @default(cuid())
+  id             String             @id @default(cuid())
   partyMemberId  String?
   partyOrgId     String?
   inspectionType InspectionType
@@ -2326,10 +2326,10 @@ model PartyInspectionTarget {
   decisionRef    String?
   attachmentUrl  String?
   createdBy      String?
-  createdAt      DateTime          @default(now())
-  updatedAt      DateTime          @updatedAt
-  creator        User?             @relation("PartyInspectionCreator", fields: [createdBy], references: [id])
-  partyMember    PartyMember?      @relation(fields: [partyMemberId], references: [id], onDelete: SetNull)
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  creator        User?              @relation("PartyInspectionCreator", fields: [createdBy], references: [id])
+  partyMember    PartyMember?       @relation(fields: [partyMemberId], references: [id], onDelete: SetNull)
   partyOrg       PartyOrganization? @relation(fields: [partyOrgId], references: [id], onDelete: SetNull)
 
   @@index([partyMemberId])
@@ -2342,23 +2342,23 @@ model PartyInspectionTarget {
 }
 
 model PartyRecruitmentPipeline {
-  id                 String            @id @default(cuid())
-  userId             String            @unique
-  currentStep        RecruitmentStep   @default(THEO_DOI)
-  targetPartyOrgId   String
-  camTinhDate        DateTime?
-  doiTuongDate       DateTime?
-  chiBoProposalDate  DateTime?
+  id                  String            @id @default(cuid())
+  userId              String            @unique
+  currentStep         RecruitmentStep   @default(THEO_DOI)
+  targetPartyOrgId    String
+  camTinhDate         DateTime?
+  doiTuongDate        DateTime?
+  chiBoProposalDate   DateTime?
   capTrenApprovalDate DateTime?
-  joinedDate         DateTime?
-  assistantMember1   String?
-  assistantMember2   String?
-  dossierStatus      String?
-  note               String?
-  createdAt          DateTime          @default(now())
-  updatedAt          DateTime          @updatedAt
-  user               User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  targetPartyOrg     PartyOrganization @relation("RecruitmentTargetOrg", fields: [targetPartyOrgId], references: [id])
+  joinedDate          DateTime?
+  assistantMember1    String?
+  assistantMember2    String?
+  dossierStatus       String?
+  note                String?
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+  user                User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  targetPartyOrg      PartyOrganization @relation("RecruitmentTargetOrg", fields: [targetPartyOrgId], references: [id])
 
   @@index([currentStep])
   @@index([targetPartyOrgId])
@@ -2416,19 +2416,19 @@ model PartyMemberHistory {
 }
 
 model PartyLifecycleEvent {
-  id              String                  @id @default(cuid())
-  partyMemberId   String
-  eventType       PartyLifecycleEventType
-  fromStatus      PartyMemberStatus?
-  toStatus        PartyMemberStatus?
-  stage           String?
-  eventDate       DateTime                @default(now())
-  dueDate         DateTime?
-  note            String?
-  triggeredBy     String?
-  metadata        Json?
-  createdAt       DateTime                @default(now())
-  partyMember     PartyMember             @relation(fields: [partyMemberId], references: [id], onDelete: Cascade)
+  id            String                  @id @default(cuid())
+  partyMemberId String
+  eventType     PartyLifecycleEventType
+  fromStatus    PartyMemberStatus?
+  toStatus      PartyMemberStatus?
+  stage         String?
+  eventDate     DateTime                @default(now())
+  dueDate       DateTime?
+  note          String?
+  triggeredBy   String?
+  metadata      Json?
+  createdAt     DateTime                @default(now())
+  partyMember   PartyMember             @relation(fields: [partyMemberId], references: [id], onDelete: Cascade)
 
   @@index([partyMemberId])
   @@index([eventType])
@@ -2437,19 +2437,19 @@ model PartyLifecycleEvent {
 }
 
 model PartyLifecycleAlert {
-  id              String                 @id @default(cuid())
-  partyMemberId   String
-  alertType       PartyLifecycleAlertType
-  dueDate         DateTime
-  daysToDue       Int
-  status          String                 @default("ACTIVE")
-  message         String?
-  resolvedAt      DateTime?
-  resolvedBy      String?
-  metadata        Json?
-  createdAt       DateTime               @default(now())
-  updatedAt       DateTime               @updatedAt
-  partyMember     PartyMember            @relation(fields: [partyMemberId], references: [id], onDelete: Cascade)
+  id            String                  @id @default(cuid())
+  partyMemberId String
+  alertType     PartyLifecycleAlertType
+  dueDate       DateTime
+  daysToDue     Int
+  status        String                  @default("ACTIVE")
+  message       String?
+  resolvedAt    DateTime?
+  resolvedBy    String?
+  metadata      Json?
+  createdAt     DateTime                @default(now())
+  updatedAt     DateTime                @updatedAt
+  partyMember   PartyMember             @relation(fields: [partyMemberId], references: [id], onDelete: Cascade)
 
   @@unique([partyMemberId, alertType, dueDate])
   @@index([partyMemberId])
@@ -2746,8 +2746,8 @@ model PersonnelAIAnalysis {
 }
 
 model Personnel {
-  id                      String                 @id @default(cuid())
-  personnelCode           String                 @unique
+  id                      String                   @id @default(cuid())
+  personnelCode           String                   @unique
   fullName                String
   dateOfBirth             DateTime?
   gender                  String?
@@ -2761,14 +2761,14 @@ model Personnel {
   managingOrganAssignedAt DateTime?
   managingOrganReason     String?
   unitId                  String?
-  status                  PersonnelStatus        @default(DANG_CONG_TAC)
-  militaryIdNumber        String?                @unique
+  status                  PersonnelStatus          @default(DANG_CONG_TAC)
+  militaryIdNumber        String?                  @unique
   militaryRank            String?
   position                String?
   enlistmentDate          DateTime?
   dischargeDate           DateTime?
-  studentIdNumber         String?                @unique
-  employeeIdNumber        String?                @unique
+  studentIdNumber         String?                  @unique
+  employeeIdNumber        String?                  @unique
   educationLevel          String?
   specialization          String?
   fullNameEn              String?
@@ -2780,34 +2780,34 @@ model Personnel {
   politicalTheory         String?
   academicTitle           String?
   academicDegree          String?
-  version                 Int                    @default(1)
+  version                 Int                      @default(1)
   deletedAt               DateTime?
   deletedBy               String?
-  createdAt               DateTime               @default(now())
-  updatedAt               DateTime               @updatedAt
+  createdAt               DateTime                 @default(now())
+  updatedAt               DateTime                 @updatedAt
   positionId              String?
   ethnicityId             String?
   religionId              String?
   specializationId        String?
   birthPlaceAdminId       String?
   placeOfOriginAdminId    String?
-  officerCareer           OfficerCareer?         @relation("OfficerCareerLink")
-  birthPlaceAdminRef      AdministrativeUnit?    @relation("PersonnelBirthPlaceAdmin", fields: [birthPlaceAdminId], references: [id])
-  ethnicityRef            Ethnicity?             @relation("PersonnelEthnicity", fields: [ethnicityId], references: [id])
-  placeOfOriginAdminRef   AdministrativeUnit?    @relation("PersonnelPlaceOfOriginAdmin", fields: [placeOfOriginAdminId], references: [id])
-  positionRef             Position?              @relation("PersonnelPositionRef", fields: [positionId], references: [id])
-  religionRef             Religion?              @relation("PersonnelReligion", fields: [religionId], references: [id])
-  specializationRef       SpecializationCatalog? @relation("PersonnelSpecialization", fields: [specializationId], references: [id])
-  unit                    Unit?                  @relation("PersonnelUnit", fields: [unitId], references: [id])
+  officerCareer           OfficerCareer?           @relation("OfficerCareerLink")
+  birthPlaceAdminRef      AdministrativeUnit?      @relation("PersonnelBirthPlaceAdmin", fields: [birthPlaceAdminId], references: [id])
+  ethnicityRef            Ethnicity?               @relation("PersonnelEthnicity", fields: [ethnicityId], references: [id])
+  placeOfOriginAdminRef   AdministrativeUnit?      @relation("PersonnelPlaceOfOriginAdmin", fields: [placeOfOriginAdminId], references: [id])
+  positionRef             Position?                @relation("PersonnelPositionRef", fields: [positionId], references: [id])
+  religionRef             Religion?                @relation("PersonnelReligion", fields: [religionId], references: [id])
+  specializationRef       SpecializationCatalog?   @relation("PersonnelSpecialization", fields: [specializationId], references: [id])
+  unit                    Unit?                    @relation("PersonnelUnit", fields: [unitId], references: [id])
   events                  PersonnelEvent[]
   sensitiveIdentity       SensitiveIdentity?
-  soldierProfile          SoldierProfile?        @relation("SoldierProfileLink")
-  account                 User?                  @relation("PersonnelAccount")
-  careerHistories         CareerHistory[]        @relation("CareerHistoryPersonnel")
-  educationHistories      EducationHistory[]     @relation("EducationHistoryPersonnel")
-  familyRelations         FamilyRelation[]       @relation("FamilyRelationPersonnel")
+  soldierProfile          SoldierProfile?          @relation("SoldierProfileLink")
+  account                 User?                    @relation("PersonnelAccount")
+  careerHistories         CareerHistory[]          @relation("CareerHistoryPersonnel")
+  educationHistories      EducationHistory[]       @relation("EducationHistoryPersonnel")
+  familyRelations         FamilyRelation[]         @relation("FamilyRelationPersonnel")
   statusHistory           PersonnelStatusHistory[] @relation("StatusHistoryPersonnel")
-  scientificProfile       ScientificProfile?     @relation("ScientificProfilePersonnel")
+  scientificProfile       ScientificProfile?       @relation("ScientificProfilePersonnel")
 
   @@index([personnelCode])
   @@index([category])
@@ -4253,30 +4253,30 @@ model MasterDataChangeLog {
 /// Quản lý mẫu biểu báo cáo – Template Library
 /// Versioning: self-reference qua parentId (root: parentId=null, isLatest=true)
 model ReportTemplate {
-  id            String             @id @default(cuid())
-  code          String             // unique per (code, version) — xem @@unique bên dưới
+  id            String                   @id @default(cuid())
+  code          String // unique per (code, version) — xem @@unique bên dưới
   name          String
   description   String?
   moduleSource  String[]
   outputFormats String[]
   fileKey       String?
-  version       Int                @default(1)
-  isActive      Boolean            @default(true)
-  isLatest      Boolean            @default(true)
+  version       Int                      @default(1)
+  isActive      Boolean                  @default(true)
+  isLatest      Boolean                  @default(true)
   rbacCode      String
-  dataMap       Json               @default("{}")
-  placeholders  Json?              // placeholder scan result từ file upload
-  changeNote    String?            // ghi chú lý do tạo version mới
+  dataMap       Json                     @default("{}")
+  placeholders  Json? // placeholder scan result từ file upload
+  changeNote    String? // ghi chú lý do tạo version mới
   category      String?
   parentId      String?
   createdBy     String
-  createdAt     DateTime           @default(now())
-  updatedAt     DateTime           @updatedAt
-  deletedAt     DateTime?          // soft delete — null = chưa xóa
-  deletedBy     String?            // user id thực hiện xóa
+  createdAt     DateTime                 @default(now())
+  updatedAt     DateTime                 @updatedAt
+  deletedAt     DateTime? // soft delete — null = chưa xóa
+  deletedBy     String? // user id thực hiện xóa
   exportJobs    ExportJob[]
-  parent        ReportTemplate?    @relation("TemplateVersions", fields: [parentId], references: [id])
-  versions      ReportTemplate[]   @relation("TemplateVersions")
+  parent        ReportTemplate?          @relation("TemplateVersions", fields: [parentId], references: [id])
+  versions      ReportTemplate[]         @relation("TemplateVersions")
   schedules     TemplateSchedule[]
   analytics     TemplateAnalyticsDaily[]
 
@@ -4421,8 +4421,8 @@ model MasterDataFlushLog {
 }
 
 model NckhProject {
-  id                      String            @id @default(cuid())
-  projectCode             String            @unique
+  id                      String                       @id @default(cuid())
+  projectCode             String                       @unique
   title                   String
   titleEn                 String?
   abstract                String?
@@ -4430,8 +4430,8 @@ model NckhProject {
   category                NckhCategory
   field                   NckhField
   researchType            NckhType
-  status                  NckhProjectStatus @default(DRAFT)
-  phase                   NckhProjectPhase  @default(PROPOSAL)
+  status                  NckhProjectStatus            @default(DRAFT)
+  phase                   NckhProjectPhase             @default(PROPOSAL)
   startDate               DateTime?
   endDate                 DateTime?
   actualEndDate           DateTime?
@@ -4450,26 +4450,26 @@ model NckhProject {
   rejectReason            String?
   completionScore         Float?
   completionGrade         String?
-  createdAt               DateTime          @default(now())
-  updatedAt               DateTime          @updatedAt
+  createdAt               DateTime                     @default(now())
+  updatedAt               DateTime                     @updatedAt
   submittedAt             DateTime?
   submittedBy             String?
   members                 NckhMember[]
   milestones              NckhMilestone[]
-  principalInvestigator   User              @relation("NckhPI", fields: [principalInvestigatorId], references: [id])
-  unit                    Unit?             @relation("NckhProjectUnit", fields: [unitId], references: [id])
+  principalInvestigator   User                         @relation("NckhPI", fields: [principalInvestigatorId], references: [id])
+  unit                    Unit?                        @relation("NckhProjectUnit", fields: [unitId], references: [id])
   publications            NckhPublication[]
   reviews                 NckhReview[]
   budget                  ResearchBudget?
   councils                ScientificCouncil[]
   // Phase 3 additive fields
-  sensitivity             String            @default("NORMAL")  // NORMAL|CONFIDENTIAL|SECRET
-  embedding               Unsupported("vector(1536)")?  // pgvector Phase 5 – requires postgresql-16-pgvector
-  fundSourceId            String?           // FK → ScienceCatalog (type=FUND_SOURCE)
-  fundSource              ScienceCatalog?   @relation("ProjectFundSource", fields: [fundSourceId], references: [id])
+  sensitivity             String                       @default("NORMAL") // NORMAL|CONFIDENTIAL|SECRET
+  embedding               Unsupported("vector(1536)")? // pgvector Phase 5 – requires postgresql-16-pgvector
+  fundSourceId            String? // FK → ScienceCatalog (type=FUND_SOURCE)
+  fundSource              ScienceCatalog?              @relation("ProjectFundSource", fields: [fundSourceId], references: [id])
   workflowLogs            NckhProjectWorkflowLog[]
   // Sprint 02 additive – nullable until M13 wiring is live (Sprint 03)
-  workflowInstanceId      String?           // FK → WorkflowInstance.id (plain string, no Prisma relation yet)
+  workflowInstanceId      String? // FK → WorkflowInstance.id (plain string, no Prisma relation yet)
 
   @@index([principalInvestigatorId])
   @@index([submittedBy])
@@ -4480,6 +4480,8 @@ model NckhProject {
   @@index([field])
   @@index([budgetYear])
   @@index([fundSourceId])
+  @@index([endDate]) // deadline alert queries
+  @@index([sensitivity]) // sensitivity-guarded list
   @@map("nckh_projects")
 }
 
@@ -4608,12 +4610,12 @@ model NckhPublicationAuthor {
 }
 
 model NckhScientistProfile {
-  id                 String   @id @default(cuid())
-  userId             String   @unique
-  hIndex             Int      @default(0)
-  i10Index           Int      @default(0)
-  totalCitations     Int      @default(0)
-  totalPublications  Int      @default(0)
+  id                 String                    @id @default(cuid())
+  userId             String                    @unique
+  hIndex             Int                       @default(0)
+  i10Index           Int                       @default(0)
+  totalCitations     Int                       @default(0)
+  totalPublications  Int                       @default(0)
   primaryField       String?
   secondaryFields    String[]
   researchKeywords   String[]
@@ -4621,22 +4623,22 @@ model NckhScientistProfile {
   scopusAuthorId     String?
   googleScholarId    String?
   bio                String?
-  updatedAt          DateTime @updatedAt
+  updatedAt          DateTime                  @updatedAt
   academicRank       String?
   awards             String[]
-  createdAt          DateTime @default(now())
+  createdAt          DateTime                  @default(now())
   degree             String?
-  projectLeadCount   Int      @default(0)
-  projectMemberCount Int      @default(0)
+  projectLeadCount   Int                       @default(0)
+  projectMemberCount Int                       @default(0)
   researchFields     String[]
   researchVector     String?
   specialization     String?
   // Phase 2 additive fields (nullable/default – safe migration)
-  sensitivityLevel   String   @default("NORMAL")  // NORMAL|CONFIDENTIAL
-  researchAreaIds    String[]                      // FK refs → ScienceCatalog.id[]
+  sensitivityLevel   String                    @default("NORMAL") // NORMAL|CONFIDENTIAL
+  researchAreaIds    String[] // FK refs → ScienceCatalog.id[]
   // Phase 3 additive fields (dual-write – backfill từ User.militaryId ?? employeeId)
-  maso               String?  @unique              // Mã số cán bộ (denorm từ User, hỗ trợ external scientist)
-  user               User     @relation("NckhScientist", fields: [userId], references: [id])
+  maso               String?                   @unique // Mã số cán bộ (denorm từ User, hỗ trợ external scientist)
+  user               User                      @relation("NckhScientist", fields: [userId], references: [id])
   education          NckhScientistEducation[]
   career             NckhScientistCareer[]
   scientistAwards    NckhScientistAward[]
@@ -4644,6 +4646,7 @@ model NckhScientistProfile {
 
   @@index([userId])
   @@index([maso])
+  @@index([sensitivityLevel]) // sensitivity-guarded list
   @@map("nckh_scientist_profiles")
 }
 
@@ -4654,18 +4657,18 @@ model NckhScientistProfile {
 
 /// Lịch sử học vấn của nhà khoa học.
 model NckhScientistEducation {
-  id           String               @id @default(cuid())
-  scientistId  String
-  scientist    NckhScientistProfile @relation(fields: [scientistId], references: [id], onDelete: Cascade)
-  degree       String               // TSKH|TS|ThS|CN|KS|CK1|CK2
-  major        String
-  institution  String
-  country      String               @default("Việt Nam")
-  yearFrom     Int
-  yearTo       Int
-  thesisTitle  String?
-  createdAt    DateTime             @default(now())
-  updatedAt    DateTime             @updatedAt
+  id          String               @id @default(cuid())
+  scientistId String
+  scientist   NckhScientistProfile @relation(fields: [scientistId], references: [id], onDelete: Cascade)
+  degree      String // TSKH|TS|ThS|CN|KS|CK1|CK2
+  major       String
+  institution String
+  country     String               @default("Việt Nam")
+  yearFrom    Int
+  yearTo      Int
+  thesisTitle String?
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
 
   @@index([scientistId])
   @@map("nckh_scientist_education")
@@ -4696,9 +4699,9 @@ model NckhScientistAward {
   scientistId String
   scientist   NckhScientistProfile @relation(fields: [scientistId], references: [id], onDelete: Cascade)
   awardName   String
-  level       String               // MINISTRY|ACADEMY|DEPARTMENT|INTERNATIONAL
+  level       String // MINISTRY|ACADEMY|DEPARTMENT|INTERNATIONAL
   year        Int
-  projectId   String?              // FK → NckhProject.id nếu gắn với đề tài
+  projectId   String? // FK → NckhProject.id nếu gắn với đề tài
   description String?
   createdAt   DateTime             @default(now())
 
@@ -5185,7 +5188,7 @@ enum GradeStatus {
   PUBLISHED
   APPEALED
   FINALIZED
-  REJECTED   // M10 – UC-56: điểm bị từ chối, cần nhập lại
+  REJECTED // M10 – UC-56: điểm bị từ chối, cần nhập lại
 }
 
 // M10 – UC-57
@@ -5280,10 +5283,10 @@ enum ReviewGrade {
 }
 
 enum ReviewSubmissionStatus {
-  DRAFT      // Đang soạn / chưa nộp
-  SUBMITTED  // Đã nộp lên ban chính trị
-  APPROVED   // Ban chính trị đã duyệt
-  REJECTED   // Trả lại yêu cầu bổ sung
+  DRAFT // Đang soạn / chưa nộp
+  SUBMITTED // Đã nộp lên ban chính trị
+  APPROVED // Ban chính trị đã duyệt
+  REJECTED // Trả lại yêu cầu bổ sung
 }
 
 enum DisciplineSeverity {
@@ -6023,13 +6026,13 @@ enum NckhPublicationStatus {
 
 // M10 – Student Lifecycle
 enum EduStudentStatus {
-  ACTIVE           // Đang học
-  TEMP_SUSPENDED   // Tạm ngưng
-  STUDY_DELAY      // Bảo lưu
-  REPEATING        // Học lại
-  DROPPED_OUT      // Thôi học
-  GRADUATED        // Tốt nghiệp
-  RESERVED         // Dự bị
+  ACTIVE // Đang học
+  TEMP_SUSPENDED // Tạm ngưng
+  STUDY_DELAY // Bảo lưu
+  REPEATING // Học lại
+  DROPPED_OUT // Thôi học
+  GRADUATED // Tốt nghiệp
+  RESERVED // Dự bị
 }
 
 // M10 – Program Curriculum
@@ -6062,38 +6065,38 @@ enum ThesisStatus {
 
 // M10 – UC-60: Trạng thái xét tốt nghiệp
 enum GraduationAuditStatus {
-  PENDING    // Chờ xét
-  ELIGIBLE   // Đủ điều kiện
+  PENDING // Chờ xét
+  ELIGIBLE // Đủ điều kiện
   INELIGIBLE // Chưa đủ điều kiện
-  APPROVED   // Đã duyệt tốt nghiệp
-  REJECTED   // Từ chối
+  APPROVED // Đã duyệt tốt nghiệp
+  REJECTED // Từ chối
 }
 
 /**
  * M10 – UC-59: Quản lý khóa luận / luận văn / đồ án
  */
 model ThesisProject {
-  id                  String       @id @default(cuid())
-  hocVienId           String
-  thesisType          String       // khoa_luan / luan_van / luan_an / do_an
-  title               String
-  titleEn             String?
-  advisorId           String?      // FK FacultyProfile – giảng viên hướng dẫn
-  reviewerId          String?      // FK FacultyProfile – phản biện
-  defenseDate         DateTime?
-  defenseScore        Float?
-  status              ThesisStatus @default(DRAFT)
-  repositoryFileUrl   String?      // URL file lưu trữ (MinIO)
-  abstractText        String?
-  keywords            String?
-  notes               String?
-  createdAt           DateTime     @default(now())
-  updatedAt           DateTime     @updatedAt
-  createdBy           String?
+  id                String       @id @default(cuid())
+  hocVienId         String
+  thesisType        String // khoa_luan / luan_van / luan_an / do_an
+  title             String
+  titleEn           String?
+  advisorId         String? // FK FacultyProfile – giảng viên hướng dẫn
+  reviewerId        String? // FK FacultyProfile – phản biện
+  defenseDate       DateTime?
+  defenseScore      Float?
+  status            ThesisStatus @default(DRAFT)
+  repositoryFileUrl String? // URL file lưu trữ (MinIO)
+  abstractText      String?
+  keywords          String?
+  notes             String?
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  createdBy         String?
 
-  hocVien  HocVien          @relation(fields: [hocVienId], references: [id], onDelete: Cascade)
-  advisor  FacultyProfile?  @relation("ThesisAdvisor",  fields: [advisorId],  references: [id])
-  reviewer FacultyProfile?  @relation("ThesisReviewer", fields: [reviewerId], references: [id])
+  hocVien  HocVien         @relation(fields: [hocVienId], references: [id], onDelete: Cascade)
+  advisor  FacultyProfile? @relation("ThesisAdvisor", fields: [advisorId], references: [id])
+  reviewer FacultyProfile? @relation("ThesisReviewer", fields: [reviewerId], references: [id])
 
   @@index([hocVienId])
   @@index([status])
@@ -6107,24 +6110,24 @@ model ThesisProject {
  * UAT bắt buộc trước go-live – xem module-m10-thesis-graduation-dashboard.md
  */
 model GraduationAudit {
-  id                    String               @id @default(cuid())
-  hocVienId             String
-  auditDate             DateTime
-  totalCreditsEarned    Int?
-  gpa                   Float?
-  conductEligible       Boolean              @default(false)
-  thesisEligible        Boolean              @default(false)
-  languageEligible      Boolean              @default(false)
-  graduationEligible    Boolean              @default(false)
-  failureReasonsJson    Json?                // [{ code, message }]
-  status                GraduationAuditStatus @default(PENDING)
-  decisionNo            String?
-  approvedBy            String?
-  approvedAt            DateTime?
-  notes                 String?
-  createdAt             DateTime             @default(now())
-  updatedAt             DateTime             @updatedAt
-  createdBy             String?
+  id                 String                @id @default(cuid())
+  hocVienId          String
+  auditDate          DateTime
+  totalCreditsEarned Int?
+  gpa                Float?
+  conductEligible    Boolean               @default(false)
+  thesisEligible     Boolean               @default(false)
+  languageEligible   Boolean               @default(false)
+  graduationEligible Boolean               @default(false)
+  failureReasonsJson Json? // [{ code, message }]
+  status             GraduationAuditStatus @default(PENDING)
+  decisionNo         String?
+  approvedBy         String?
+  approvedAt         DateTime?
+  notes              String?
+  createdAt          DateTime              @default(now())
+  updatedAt          DateTime              @updatedAt
+  createdBy          String?
 
   hocVien       HocVien        @relation(fields: [hocVienId], references: [id], onDelete: Cascade)
   diplomaRecord DiplomaRecord?
@@ -6140,18 +6143,18 @@ model GraduationAudit {
  * M10 – UC-60: Văn bằng / Chứng chỉ đã cấp
  */
 model DiplomaRecord {
-  id               String          @id @default(cuid())
-  hocVienId        String
-  graduationAuditId String?        @unique
-  diplomaNo        String?         @unique
-  diplomaType      String          // dai_hoc / thac_si / tien_si / chung_chi / ...
-  classification   String?         // Xuất sắc / Giỏi / Khá / Trung bình
-  graduationDate   DateTime?
-  issuedAt         DateTime?
-  issuedBy         String?
-  fileUrl          String?         // MinIO
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @updatedAt
+  id                String    @id @default(cuid())
+  hocVienId         String
+  graduationAuditId String?   @unique
+  diplomaNo         String?   @unique
+  diplomaType       String // dai_hoc / thac_si / tien_si / chung_chi / ...
+  classification    String? // Xuất sắc / Giỏi / Khá / Trung bình
+  graduationDate    DateTime?
+  issuedAt          DateTime?
+  issuedBy          String?
+  fileUrl           String? // MinIO
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 
   hocVien         HocVien          @relation(fields: [hocVienId], references: [id], onDelete: Cascade)
   graduationAudit GraduationAudit? @relation(fields: [graduationAuditId], references: [id])
@@ -6167,11 +6170,11 @@ model DiplomaRecord {
  */
 model AcademicRepositoryItem {
   id           String   @id @default(cuid())
-  hocVienId    String?  // optional – có thể là tài liệu chung
-  itemType     String   // transcript / thesis / dossier / certificate / other
+  hocVienId    String? // optional – có thể là tài liệu chung
+  itemType     String // transcript / thesis / dossier / certificate / other
   title        String
   fileUrl      String?
-  metadataJson Json?    // { academicYear, semesterCode, programCode, ... }
+  metadataJson Json? // { academicYear, semesterCode, programCode, ... }
   isPublic     Boolean  @default(false)
   indexedAt    DateTime @default(now())
   createdAt    DateTime @default(now())
@@ -6202,7 +6205,7 @@ model WorkflowTemplate {
   id          String   @id @default(cuid())
   code        String   @unique @db.VarChar(80)
   name        String   @db.VarChar(200)
-  moduleKey   String   @db.VarChar(10)   // "M03" | "M05" | "M09" | "M10" | ...
+  moduleKey   String   @db.VarChar(10) // "M03" | "M05" | "M09" | "M10" | ...
   description String?  @db.Text
   isActive    Boolean  @default(true)
   createdBy   String   @db.VarChar(36)
@@ -6228,11 +6231,11 @@ model WorkflowTemplateVersion {
   status         WorkflowVersionStatus @default(DRAFT)
   publishedAt    DateTime?
   publishedBy    String?               @db.VarChar(36)
-  definitionJson Json?                 // cached snapshot toàn bộ definition
+  definitionJson Json? // cached snapshot toàn bộ definition
   createdAt      DateTime              @default(now())
   updatedAt      DateTime              @updatedAt
 
-  template    WorkflowTemplate            @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  template    WorkflowTemplate             @relation(fields: [templateId], references: [id], onDelete: Cascade)
   steps       WorkflowStepTemplate[]
   transitions WorkflowTransitionTemplate[]
   instances   WorkflowInstance[]
@@ -6250,14 +6253,14 @@ model WorkflowTemplateVersion {
 model WorkflowStepTemplate {
   id                String           @id @default(cuid())
   templateVersionId String
-  code              String           @db.VarChar(60)  // unique trong phạm vi version
+  code              String           @db.VarChar(60) // unique trong phạm vi version
   name              String           @db.VarChar(200)
   stepType          WorkflowStepType
   orderIndex        Int              @db.SmallInt
   slaHours          Int?             @db.SmallInt
   isParallel        Boolean          @default(false)
   requiresSignature Boolean          @default(false)
-  configJson        Json?            // approver policy, notification policy...
+  configJson        Json? // approver policy, notification policy...
 
   templateVersion WorkflowTemplateVersion @relation(fields: [templateVersionId], references: [id], onDelete: Cascade)
 
@@ -6275,7 +6278,7 @@ model WorkflowTransitionTemplate {
   id                  String  @id @default(cuid())
   templateVersionId   String
   fromStepCode        String  @db.VarChar(60)
-  actionCode          String  @db.VarChar(40)  // APPROVE | REJECT | RETURN | ...
+  actionCode          String  @db.VarChar(40) // APPROVE | REJECT | RETURN | ...
   toStepCode          String  @db.VarChar(60)
   conditionExpression String? @db.VarChar(500)
   priority            Int     @default(0) @db.SmallInt
@@ -6296,23 +6299,23 @@ model WorkflowTransitionTemplate {
  * M13 không duplicate hay thay thế dữ liệu đó.
  */
 model WorkflowInstance {
-  id                String                @id @default(cuid())
+  id                String                 @id @default(cuid())
   templateId        String
   templateVersionId String
-  entityType        String                @db.VarChar(80)  // "PolicyRecord" | "ResearchProject" | ...
-  entityId          String                @db.VarChar(36)
-  title             String                @db.VarChar(300)
-  summary           String?               @db.Text
+  entityType        String                 @db.VarChar(80) // "PolicyRecord" | "ResearchProject" | ...
+  entityId          String                 @db.VarChar(36)
+  title             String                 @db.VarChar(300)
+  summary           String?                @db.Text
   status            WorkflowInstanceStatus @default(DRAFT)
-  currentStepCode   String?               @db.VarChar(60)
-  initiatorId       String                @db.VarChar(36)
-  currentAssigneeId String?               @db.VarChar(36)  // nullable nếu parallel/multi
-  priority          Int                   @default(0) @db.SmallInt
-  startedAt         DateTime              @default(now())
+  currentStepCode   String?                @db.VarChar(60)
+  initiatorId       String                 @db.VarChar(36)
+  currentAssigneeId String?                @db.VarChar(36) // nullable nếu parallel/multi
+  priority          Int                    @default(0) @db.SmallInt
+  startedAt         DateTime               @default(now())
   completedAt       DateTime?
   cancelledAt       DateTime?
-  createdAt         DateTime              @default(now())
-  updatedAt         DateTime              @updatedAt
+  createdAt         DateTime               @default(now())
+  updatedAt         DateTime               @updatedAt
 
   templateVersion WorkflowTemplateVersion @relation(fields: [templateVersionId], references: [id])
   steps           WorkflowStepInstance[]
@@ -6394,17 +6397,17 @@ model WorkflowAction {
  * hashValue + certificateInfoJson là bằng chứng kiểm tra về sau.
  */
 model WorkflowSignature {
-  id                  String                 @id @default(cuid())
+  id                  String                  @id @default(cuid())
   workflowInstanceId  String
   stepInstanceId      String
-  signerId            String                 @db.VarChar(36)
-  signatureType       String                 @db.VarChar(40)  // lookup M19
-  providerCode        String?                @db.VarChar(40)
+  signerId            String                  @db.VarChar(36)
+  signatureType       String                  @db.VarChar(40) // lookup M19
+  providerCode        String?                 @db.VarChar(40)
   signedAt            DateTime?
   status              WorkflowSignatureStatus @default(PENDING)
   certificateInfoJson Json?
-  evidenceFileId      String?                @db.VarChar(36)  // MinIO fileId
-  hashValue           String?                @db.VarChar(500)
+  evidenceFileId      String?                 @db.VarChar(36) // MinIO fileId
+  hashValue           String?                 @db.VarChar(500)
 
   workflowInstance WorkflowInstance @relation(fields: [workflowInstanceId], references: [id], onDelete: Cascade)
 
@@ -6419,19 +6422,19 @@ model WorkflowSignature {
  * readAt null = chưa đọc → dùng cho badge count ở UI.
  */
 model WorkflowNotification {
-  id                 String   @id @default(cuid())
+  id                 String    @id @default(cuid())
   workflowInstanceId String
-  recipientId        String   @db.VarChar(36)
-  channel            String   @db.VarChar(20) @default("IN_APP")  // IN_APP | EMAIL | SMS
-  eventType          String   @db.VarChar(60)  // NEW_TASK | APPROVED | REJECTED | RETURNED | OVERDUE | ...
-  title              String   @db.VarChar(300)
-  message            String   @db.Text
-  status             String   @db.VarChar(20) @default("PENDING")  // PENDING | SENT | FAILED
+  recipientId        String    @db.VarChar(36)
+  channel            String    @default("IN_APP") @db.VarChar(20) // IN_APP | EMAIL | SMS
+  eventType          String    @db.VarChar(60) // NEW_TASK | APPROVED | REJECTED | RETURNED | OVERDUE | ...
+  title              String    @db.VarChar(300)
+  message            String    @db.Text
+  status             String    @default("PENDING") @db.VarChar(20) // PENDING | SENT | FAILED
   scheduledAt        DateTime?
   sentAt             DateTime?
   readAt             DateTime?
   payloadJson        Json?
-  createdAt          DateTime @default(now())
+  createdAt          DateTime  @default(now())
 
   workflowInstance WorkflowInstance @relation(fields: [workflowInstanceId], references: [id], onDelete: Cascade)
 
@@ -6452,8 +6455,8 @@ model WorkflowEscalation {
   id                 String   @id @default(cuid())
   workflowInstanceId String
   stepInstanceId     String
-  escalatedBy        String   @db.VarChar(36)  // "SYSTEM" | userId
-  escalatedTo        String?  @db.VarChar(36)  // userId người nhận leo thang
+  escalatedBy        String   @db.VarChar(36) // "SYSTEM" | userId
+  escalatedTo        String?  @db.VarChar(36) // userId người nhận leo thang
   reason             String?  @db.VarChar(500)
   createdAt          DateTime @default(now())
 
@@ -6495,67 +6498,67 @@ model WorkflowAuditLog {
 
 /// Trạng thái version của workflow template
 enum WorkflowVersionStatus {
-  DRAFT      // đang soạn thảo, chưa dùng được
-  PUBLISHED  // đang active, workflow mới sẽ dùng version này
-  ARCHIVED   // đã khóa, không dùng nữa
+  DRAFT // đang soạn thảo, chưa dùng được
+  PUBLISHED // đang active, workflow mới sẽ dùng version này
+  ARCHIVED // đã khóa, không dùng nữa
 }
 
 /// Loại step trong định nghĩa quy trình
 enum WorkflowStepType {
-  START      // bước bắt đầu, chỉ 1 trong mỗi template
-  TASK       // bước xử lý thông thường
-  APPROVAL   // bước yêu cầu phê duyệt
-  SIGNATURE  // bước yêu cầu ký số
-  END        // bước kết thúc
+  START // bước bắt đầu, chỉ 1 trong mỗi template
+  TASK // bước xử lý thông thường
+  APPROVAL // bước yêu cầu phê duyệt
+  SIGNATURE // bước yêu cầu ký số
+  END // bước kết thúc
 }
 
 /// Trạng thái tổng của một workflow instance
 enum WorkflowInstanceStatus {
-  DRAFT       // vừa khởi tạo, chưa submit
-  PENDING     // đã submit, đang chờ xử lý bước đầu
+  DRAFT // vừa khởi tạo, chưa submit
+  PENDING // đã submit, đang chờ xử lý bước đầu
   IN_PROGRESS // đang trong quá trình duyệt
-  APPROVED    // đã duyệt hoàn toàn
-  REJECTED    // bị từ chối
-  RETURNED    // bị trả lại để bổ sung
-  CANCELLED   // bị hủy bởi người khởi tạo hoặc admin
-  EXPIRED     // quá hạn tổng workflow (nếu có SLA toàn quy trình)
-  FAILED      // lỗi hệ thống không phục hồi được
+  APPROVED // đã duyệt hoàn toàn
+  REJECTED // bị từ chối
+  RETURNED // bị trả lại để bổ sung
+  CANCELLED // bị hủy bởi người khởi tạo hoặc admin
+  EXPIRED // quá hạn tổng workflow (nếu có SLA toàn quy trình)
+  FAILED // lỗi hệ thống không phục hồi được
 }
 
 /// Trạng thái của từng step trong runtime
 enum WorkflowStepStatus {
-  WAITING     // chờ step trước hoàn thành
-  READY       // sẵn sàng để xử lý, đã có assignee
+  WAITING // chờ step trước hoàn thành
+  READY // sẵn sàng để xử lý, đã có assignee
   IN_PROGRESS // assignee đang xử lý
-  APPROVED    // step được duyệt
-  REJECTED    // step bị từ chối
-  RETURNED    // step bị trả lại
-  SKIPPED     // bỏ qua theo điều kiện (conditional branch)
-  CANCELLED   // bị hủy do workflow cancel
-  EXPIRED     // quá SLA của bước
+  APPROVED // step được duyệt
+  REJECTED // step bị từ chối
+  RETURNED // step bị trả lại
+  SKIPPED // bỏ qua theo điều kiện (conditional branch)
+  CANCELLED // bị hủy do workflow cancel
+  EXPIRED // quá SLA của bước
 }
 
 /// Các action chuẩn người dùng hoặc hệ thống thực hiện tại một step
 enum WorkflowActionCode {
-  SUBMIT          // người khởi tạo nộp hồ sơ
-  APPROVE         // phê duyệt bước
-  REJECT          // từ chối toàn bộ quy trình
-  RETURN          // trả lại bổ sung
-  CANCEL          // hủy quy trình
-  SIGN            // ký số điện tử
-  COMMENT         // cho ý kiến không thay đổi trạng thái
-  REASSIGN        // chuyển xử lý người khác
-  ESCALATE        // nâng cấp xử lý
-  SYSTEM_TIMEOUT  // hệ thống tự động đánh dấu quá hạn
+  SUBMIT // người khởi tạo nộp hồ sơ
+  APPROVE // phê duyệt bước
+  REJECT // từ chối toàn bộ quy trình
+  RETURN // trả lại bổ sung
+  CANCEL // hủy quy trình
+  SIGN // ký số điện tử
+  COMMENT // cho ý kiến không thay đổi trạng thái
+  REASSIGN // chuyển xử lý người khác
+  ESCALATE // nâng cấp xử lý
+  SYSTEM_TIMEOUT // hệ thống tự động đánh dấu quá hạn
 }
 
 /// Trạng thái chữ ký số tại một step
 enum WorkflowSignatureStatus {
-  PENDING  // chờ ký
-  SIGNED   // đã ký thành công
-  FAILED   // ký thất bại (lỗi kỹ thuật)
-  REVOKED  // chữ ký bị thu hồi
-  EXPIRED  // chứng chỉ hết hạn
+  PENDING // chờ ký
+  SIGNED // đã ký thành công
+  FAILED // ký thất bại (lỗi kỹ thuật)
+  REVOKED // chữ ký bị thu hồi
+  EXPIRED // chứng chỉ hết hạn
 }
 
 // ─────────────────────────────────────────────
@@ -6564,24 +6567,24 @@ enum WorkflowSignatureStatus {
 
 /// M07 – Xu hướng điểm EIS giữa các kỳ
 enum EisTrend {
-  IMPROVING  // đang cải thiện
-  STABLE     // ổn định
-  DECLINING  // đang giảm
+  IMPROVING // đang cải thiện
+  STABLE // ổn định
+  DECLINING // đang giảm
 }
 
 /// M07 – Trạng thái xử lý cảnh báo quá tải/thiếu tải giảng viên
 enum WorkloadAlertStatus {
-  OPEN         // chưa xử lý
+  OPEN // chưa xử lý
   ACKNOWLEDGED // đã ghi nhận
-  RESOLVED     // đã giải quyết
+  RESOLVED // đã giải quyết
 }
 
 /// M07 – Trạng thái học lực tích lũy của học viên (performance, khác với EduStudentStatus là lifecycle)
 enum AcademicPerformanceStatus {
-  NORMAL     // học lực bình thường
-  WARNING    // cảnh báo học vụ (GPA thấp, nợ tín chỉ)
-  PROBATION  // bị xem xét đình chỉ học
-  SUSPENDED  // đình chỉ học (học thuật, khác TEMP_SUSPENDED lifecycle)
+  NORMAL // học lực bình thường
+  WARNING // cảnh báo học vụ (GPA thấp, nợ tín chỉ)
+  PROBATION // bị xem xét đình chỉ học
+  SUSPENDED // đình chỉ học (học thuật, khác TEMP_SUSPENDED lifecycle)
 }
 
 // ─────────────────────────────────────────────
@@ -6593,40 +6596,40 @@ enum AcademicPerformanceStatus {
 /// KHÔNG cho chỉnh tay totalEIS nếu không có quyền FACULTY.EIS_MANAGE.
 /// Unique: mỗi giảng viên chỉ có 1 bản EIS mỗi (academicYear, semesterCode).
 model FacultyEISScore {
-  id               String     @id @default(cuid())
+  id               String @id @default(cuid())
   facultyProfileId String
 
-  academicYear     String     // VD: "2025-2026"
-  semesterCode     String     // VD: "HK1"
+  academicYear String // VD: "2025-2026"
+  semesterCode String // VD: "HK1"
 
   // Sáu chiều đánh giá – mỗi chiều thang 0–100, chuẩn hóa trước khi nhân trọng số
-  teachingScore    Float      @default(0)   // T – Teaching quality (trọng số 0.25)
-  researchScore    Float      @default(0)   // R – Research output (trọng số 0.25)
-  mentoringScore   Float      @default(0)   // M – Mentoring (trọng số 0.20)
-  serviceScore     Float      @default(0)   // S – Service/Đảng/đoàn (trọng số 0.15)
-  innovationScore  Float      @default(0)   // I – Innovation/sáng kiến (trọng số 0.10)
-  developmentScore Float      @default(0)   // D – Development/học thêm (trọng số 0.05)
+  teachingScore    Float @default(0) // T – Teaching quality (trọng số 0.25)
+  researchScore    Float @default(0) // R – Research output (trọng số 0.25)
+  mentoringScore   Float @default(0) // M – Mentoring (trọng số 0.20)
+  serviceScore     Float @default(0) // S – Service/Đảng/đoàn (trọng số 0.15)
+  innovationScore  Float @default(0) // I – Innovation/sáng kiến (trọng số 0.10)
+  developmentScore Float @default(0) // D – Development/học thêm (trọng số 0.05)
 
   // Điểm tổng hợp: T×0.25 + R×0.25 + M×0.20 + S×0.15 + I×0.10 + D×0.05
-  totalEIS         Float      @default(0)
-  trend            EisTrend?  // so với kỳ liền trước
+  totalEIS Float     @default(0)
+  trend    EisTrend? // so với kỳ liền trước
 
   // AI recommendations (JSON array, 1 phần tử/chiều nếu cần cải thiện)
-  recommendations  Json?
+  recommendations Json?
   // Snapshot raw inputs dùng để tính (audit trail – không cho sửa sau khi chốt)
-  sourceDataJson   Json?
+  sourceDataJson  Json?
 
-  calculatedAt     DateTime   @default(now())
-  calculatedBy     String?    // userId hoặc 'system'
-  createdAt        DateTime   @default(now())
-  updatedAt        DateTime   @updatedAt
+  calculatedAt DateTime @default(now())
+  calculatedBy String? // userId hoặc 'system'
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
-  facultyProfile   FacultyProfile @relation(fields: [facultyProfileId], references: [id], onDelete: Cascade)
+  facultyProfile FacultyProfile @relation(fields: [facultyProfileId], references: [id], onDelete: Cascade)
 
   @@unique([facultyProfileId, academicYear, semesterCode])
   @@index([facultyProfileId])
   @@index([academicYear, semesterCode])
-  @@index([totalEIS])          // ranking dashboard
+  @@index([totalEIS]) // ranking dashboard
   @@index([trend])
   @@map("faculty_eis_scores")
 }
@@ -6636,31 +6639,31 @@ model FacultyEISScore {
 /// Không nhập tay song song nếu đã có nguồn M10.
 /// Rebuild định kỳ (cuối tuần hoặc cuối kỳ) để tránh runtime query nặng.
 model FacultyWorkloadSnapshot {
-  id               String   @id @default(cuid())
+  id               String @id @default(cuid())
   facultyProfileId String
 
-  academicYear     String   // VD: "2025-2026"
-  semesterCode     String   // VD: "HK1"
+  academicYear String // VD: "2025-2026"
+  semesterCode String // VD: "HK1"
 
-  totalClasses        Int   @default(0)   // số lớp học phần đang dạy trong kỳ
-  totalHoursWeekly    Float @default(0)   // giờ dạy/tuần thực tế (tính theo lịch M10)
-  totalHoursTerm      Float @default(0)   // tổng giờ dạy cả kỳ
-  overloadHours       Float @default(0)   // số giờ vượt định mức (nếu > weeklyHoursLimit)
-  weeklyHoursLimit    Float @default(16)  // snapshot định mức tại thời điểm tính
-  advisingCount       Int   @default(0)   // số học viên cố vấn học tập
-  thesisCount         Int   @default(0)   // số khóa luận/luận văn đang hướng dẫn
+  totalClasses     Int   @default(0) // số lớp học phần đang dạy trong kỳ
+  totalHoursWeekly Float @default(0) // giờ dạy/tuần thực tế (tính theo lịch M10)
+  totalHoursTerm   Float @default(0) // tổng giờ dạy cả kỳ
+  overloadHours    Float @default(0) // số giờ vượt định mức (nếu > weeklyHoursLimit)
+  weeklyHoursLimit Float @default(16) // snapshot định mức tại thời điểm tính
+  advisingCount    Int   @default(0) // số học viên cố vấn học tập
+  thesisCount      Int   @default(0) // số khóa luận/luận văn đang hướng dẫn
 
-  builtAt          DateTime @default(now())  // thời điểm rebuild snapshot
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  builtAt   DateTime @default(now()) // thời điểm rebuild snapshot
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  facultyProfile   FacultyProfile         @relation(fields: [facultyProfileId], references: [id], onDelete: Cascade)
-  alerts           FacultyWorkloadAlert[]
+  facultyProfile FacultyProfile         @relation(fields: [facultyProfileId], references: [id], onDelete: Cascade)
+  alerts         FacultyWorkloadAlert[]
 
   @@unique([facultyProfileId, academicYear, semesterCode])
   @@index([facultyProfileId])
   @@index([academicYear, semesterCode])
-  @@index([totalHoursWeekly])  // filter quá tải / thiếu tải
+  @@index([totalHoursWeekly]) // filter quá tải / thiếu tải
   @@index([overloadHours])
   @@map("faculty_workload_snapshots")
 }
@@ -6669,20 +6672,20 @@ model FacultyWorkloadSnapshot {
 /// Gắn với FacultyWorkloadSnapshot của kỳ tương ứng.
 /// Dashboard khoa/bộ môn theo dõi và mark acknowledged/resolved.
 model FacultyWorkloadAlert {
-  id         String              @id @default(cuid())
+  id         String @id @default(cuid())
   snapshotId String
 
   // Loại cảnh báo: OVERLOAD | UNDERLOAD – có thể lookup M19 WORKLOAD_ALERT_TYPE sau
-  alertType  String
-  status     WorkloadAlertStatus @default(OPEN)
-  message    String?
+  alertType String
+  status    WorkloadAlertStatus @default(OPEN)
+  message   String?
 
-  resolvedBy String?    // userId người xử lý
+  resolvedBy String? // userId người xử lý
   resolvedAt DateTime?
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
 
-  snapshot   FacultyWorkloadSnapshot @relation(fields: [snapshotId], references: [id], onDelete: Cascade)
+  snapshot FacultyWorkloadSnapshot @relation(fields: [snapshotId], references: [id], onDelete: Cascade)
 
   @@index([snapshotId])
   @@index([status])
@@ -6695,31 +6698,31 @@ model FacultyWorkloadAlert {
 /// Source of truth điểm vẫn là KetQuaHocTap trong M10.
 /// Unique: mỗi học viên chỉ có 1 snapshot mỗi (academicYear, semesterCode).
 model StudentGpaHistory {
-  id            String   @id @default(cuid())
-  hocVienId     String
+  id        String @id @default(cuid())
+  hocVienId String
 
-  academicYear  String   // VD: "2025-2026"
-  semesterCode  String   // VD: "HK1"
+  academicYear String // VD: "2025-2026"
+  semesterCode String // VD: "HK1"
 
-  semesterGpa             Float @default(0)   // GPA riêng kỳ này
-  cumulativeGpa           Float @default(0)   // GPA tích lũy đến hết kỳ này
-  creditsEarned           Int   @default(0)   // tín chỉ tích lũy được trong kỳ
-  totalCreditsAccumulated Int   @default(0)   // tổng tín chỉ tích lũy đến hết kỳ
+  semesterGpa             Float @default(0) // GPA riêng kỳ này
+  cumulativeGpa           Float @default(0) // GPA tích lũy đến hết kỳ này
+  creditsEarned           Int   @default(0) // tín chỉ tích lũy được trong kỳ
+  totalCreditsAccumulated Int   @default(0) // tổng tín chỉ tích lũy đến hết kỳ
 
   // Trạng thái học lực tại thời điểm snapshot – theo ngưỡng cảnh báo đã thống nhất
   academicStatus AcademicPerformanceStatus @default(NORMAL)
 
-  builtAt       DateTime @default(now())  // thời điểm rebuild
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  builtAt   DateTime @default(now()) // thời điểm rebuild
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  hocVien       HocVien  @relation(fields: [hocVienId], references: [id], onDelete: Cascade)
+  hocVien HocVien @relation(fields: [hocVienId], references: [id], onDelete: Cascade)
 
   @@unique([hocVienId, academicYear, semesterCode])
   @@index([hocVienId])
   @@index([academicYear, semesterCode])
-  @@index([cumulativeGpa])      // ranking dashboard, top/bottom GPA
-  @@index([academicStatus])     // filter cảnh báo học vụ
+  @@index([cumulativeGpa]) // ranking dashboard, top/bottom GPA
+  @@index([academicStatus]) // filter cảnh báo học vụ
   @@map("student_gpa_histories")
 }
 
@@ -6732,22 +6735,22 @@ model StudentGpaHistory {
 /// type: FIELD | WORK_TYPE | PUBLISHER | FUND_SOURCE | LEVEL | RESEARCH_AREA
 /// path: LTREE-style string, vd: "science.military.logistics"
 model ScienceCatalog {
-  id          String   @id @default(cuid())
-  code        String   @unique
-  name        String
-  type        String
-  parentId    String?
-  parent      ScienceCatalog?  @relation("CatalogTree", fields: [parentId], references: [id])
-  children    ScienceCatalog[] @relation("CatalogTree")
-  level       Int      @default(1)
-  path        String?
-  description String?
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  createdById String
-  createdBy   User     @relation("ScienceCatalogCreator", fields: [createdById], references: [id])
-  fundedProjects NckhProject[]   @relation("ProjectFundSource")
+  id             String           @id @default(cuid())
+  code           String           @unique
+  name           String
+  type           String
+  parentId       String?
+  parent         ScienceCatalog?  @relation("CatalogTree", fields: [parentId], references: [id])
+  children       ScienceCatalog[] @relation("CatalogTree")
+  level          Int              @default(1)
+  path           String?
+  description    String?
+  isActive       Boolean          @default(true)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  createdById    String
+  createdBy      User             @relation("ScienceCatalogCreator", fields: [createdById], references: [id])
+  fundedProjects NckhProject[]    @relation("ProjectFundSource")
   fundedBudgets  ResearchBudget[] @relation("BudgetFundSource")
 
   @@index([type, isActive])
@@ -6794,41 +6797,42 @@ model NckhProjectWorkflowLog {
 /// Công trình khoa học: sách, giáo trình, tài liệu tham khảo (M04).
 /// Khác NckhPublication (bài báo/hội thảo) – đây là sản phẩm dạng xuất bản phẩm.
 model ScientificWork {
-  id          String   @id @default(cuid())
-  code        String   @unique  // HVHC-{YEAR}-WORK-{SEQ:03d}
-  type        String   // TEXTBOOK|BOOK|MONOGRAPH|REFERENCE|CURRICULUM
-  title       String
-  subtitle    String?
-  isbn        String?
-  issn        String?
-  doi         String?  @unique
-  publisherId String?  // FK → ScienceCatalog (type=PUBLISHER)
-  journalName String?
-  year        Int
-  edition     Int      @default(1)
-  sensitivity String   @default("NORMAL")  // NORMAL|CONFIDENTIAL|SECRET
-  abstractEmbedding       Unsupported("vector(1536)")?  // pgvector Phase 5 – requires postgresql-16-pgvector
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  isDeleted   Boolean  @default(false)
-  authors     ScientificWorkAuthor[]
+  id                String                       @id @default(cuid())
+  code              String                       @unique // HVHC-{YEAR}-WORK-{SEQ:03d}
+  type              String // TEXTBOOK|BOOK|MONOGRAPH|REFERENCE|CURRICULUM
+  title             String
+  subtitle          String?
+  isbn              String?
+  issn              String?
+  doi               String?                      @unique
+  publisherId       String? // FK → ScienceCatalog (type=PUBLISHER)
+  journalName       String?
+  year              Int
+  edition           Int                          @default(1)
+  sensitivity       String                       @default("NORMAL") // NORMAL|CONFIDENTIAL|SECRET
+  abstractEmbedding Unsupported("vector(1536)")? // pgvector Phase 5 – requires postgresql-16-pgvector
+  createdAt         DateTime                     @default(now())
+  updatedAt         DateTime                     @updatedAt
+  isDeleted         Boolean                      @default(false)
+  authors           ScientificWorkAuthor[]
+  libraryItems      LibraryItem[]
 
   @@index([type, year])
   @@index([isDeleted])
   @@index([publisherId])
+  @@index([sensitivity, isDeleted]) // download permission filter
   @@map("scientific_works")
-  libraryItems    LibraryItem[]
 }
 
 model ScientificWorkAuthor {
-  id           String          @id @default(cuid())
-  workId       String
-  work         ScientificWork  @relation(fields: [workId], references: [id], onDelete: Cascade)
-  scientistId  String?         // Link → NckhScientistProfile.id nếu nội bộ
-  authorName   String
-  role         String          // LEAD|CO_AUTHOR|EDITOR|REVIEWER
-  orderNum     Int
-  affiliation  String?
+  id          String         @id @default(cuid())
+  workId      String
+  work        ScientificWork @relation(fields: [workId], references: [id], onDelete: Cascade)
+  scientistId String? // Link → NckhScientistProfile.id nếu nội bộ
+  authorName  String
+  role        String // LEAD|CO_AUTHOR|EDITOR|REVIEWER
+  orderNum    Int
+  affiliation String?
 
   @@unique([workId, orderNum])
   @@index([workId])
@@ -6843,29 +6847,30 @@ model ScientificWorkAuthor {
 /// Tài liệu số trong thư viện KH.
 /// filePath = MinIO object key: library/{sensitivity}/{uuid}.{ext}
 model LibraryItem {
-  id             String   @id @default(cuid())
-  workId         String?  // FK → ScientificWork (tuỳ chọn)
-  work           ScientificWork? @relation(fields: [workId], references: [id])
+  id             String                       @id @default(cuid())
+  workId         String? // FK → ScientificWork (tuỳ chọn)
+  work           ScientificWork?              @relation(fields: [workId], references: [id])
   title          String
-  filePath       String   // MinIO object key
+  filePath       String // MinIO object key
   fileSize       BigInt
   mimeType       String
   checksumSha256 String
-  sensitivity    String   @default("NORMAL")  // NORMAL|CONFIDENTIAL|SECRET
-  accessCount    Int      @default(0)
-  downloadCount  Int      @default(0)
-  textEmbedding  Unsupported("vector(1536)")?  // pgvector Phase 5 – requires postgresql-16-pgvector
-  isIndexed      Boolean  @default(false)
+  sensitivity    String                       @default("NORMAL") // NORMAL|CONFIDENTIAL|SECRET
+  accessCount    Int                          @default(0)
+  downloadCount  Int                          @default(0)
+  textEmbedding  Unsupported("vector(1536)")? // pgvector Phase 5 – requires postgresql-16-pgvector
+  isIndexed      Boolean                      @default(false)
   indexedAt      DateTime?
-  createdAt      DateTime @default(now())
-  isDeleted      Boolean  @default(false)
+  createdAt      DateTime                     @default(now())
+  isDeleted      Boolean                      @default(false)
   createdById    String
-  createdBy      User     @relation("LibraryItemCreator", fields: [createdById], references: [id])
+  createdBy      User                         @relation("LibraryItemCreator", fields: [createdById], references: [id])
   accessLogs     LibraryAccessLog[]
 
   @@index([sensitivity, isDeleted])
   @@index([workId])
   @@index([createdById])
+  @@index([isIndexed, isDeleted]) // worker picks up pending index jobs
   @@map("library_items")
 }
 
@@ -6876,7 +6881,7 @@ model LibraryAccessLog {
   item       LibraryItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
   userId     String
   user       User        @relation(fields: [userId], references: [id])
-  action     String      // VIEW|DOWNLOAD
+  action     String // VIEW|DOWNLOAD
   ipAddress  String?
   accessedAt DateTime    @default(now())
 
@@ -6893,20 +6898,20 @@ model LibraryAccessLog {
 /// Chi tiết kinh phí đề tài (1-1 với NckhProject).
 /// Không thay thế NckhProject.budgetApproved – bổ sung thêm tracking chi tiết.
 model ResearchBudget {
-  id            String          @id @default(cuid())
-  projectId     String          @unique
-  project       NckhProject     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  id            String           @id @default(cuid())
+  projectId     String           @unique
+  project       NckhProject      @relation(fields: [projectId], references: [id], onDelete: Cascade)
   fundSourceId  String
-  fundSource    ScienceCatalog  @relation("BudgetFundSource", fields: [fundSourceId], references: [id])
+  fundSource    ScienceCatalog   @relation("BudgetFundSource", fields: [fundSourceId], references: [id])
   totalApproved BigInt
-  totalSpent    BigInt          @default(0)
+  totalSpent    BigInt           @default(0)
   year          Int
-  status        String          @default("DRAFT")  // DRAFT|APPROVED|FINALIZED
+  status        String           @default("DRAFT") // DRAFT|APPROVED|FINALIZED
   approvedById  String?
-  approvedBy    User?           @relation("BudgetApprover", fields: [approvedById], references: [id])
+  approvedBy    User?            @relation("BudgetApprover", fields: [approvedById], references: [id])
   approvedAt    DateTime?
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
   lineItems     BudgetLineItem[]
 
   @@index([fundSourceId])
@@ -6918,11 +6923,11 @@ model BudgetLineItem {
   id            String         @id @default(cuid())
   budgetId      String
   budget        ResearchBudget @relation(fields: [budgetId], references: [id], onDelete: Cascade)
-  category      String         // PERSONNEL|EQUIPMENT|TRAVEL|OVERHEAD|OTHER
+  category      String // PERSONNEL|EQUIPMENT|TRAVEL|OVERHEAD|OTHER
   description   String
   plannedAmount BigInt
   spentAmount   BigInt         @default(0)
-  period        String?        // Q1-2026|Q2-2026|...
+  period        String? // Q1-2026|Q2-2026|...
 
   @@index([budgetId])
   @@map("budget_line_items")
@@ -6930,28 +6935,29 @@ model BudgetLineItem {
 
 /// Hội đồng KH chính thức – bổ sung cho NckhReview, không thay thế.
 model ScientificCouncil {
-  id              String   @id @default(cuid())
-  projectId       String
-  project         NckhProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  type            String   // REVIEW|ACCEPTANCE|FINAL
-  chairmanId      String
-  chairman        User     @relation("CouncilChairman", fields: [chairmanId], references: [id])
-  secretaryId     String
-  secretary       User     @relation("CouncilSecretary", fields: [secretaryId], references: [id])
-  meetingDate          DateTime?
-  result               String?   // PASS|FAIL|REVISE
-  overallScore         Float?
-  conclusionText       String?
-  minutesFilePath      String?   // MinIO path – Sprint 05: will be populated by M18 render
+  id                 String                    @id @default(cuid())
+  projectId          String
+  project            NckhProject               @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  type               String // REVIEW|ACCEPTANCE|FINAL
+  chairmanId         String
+  chairman           User                      @relation("CouncilChairman", fields: [chairmanId], references: [id])
+  secretaryId        String
+  secretary          User                      @relation("CouncilSecretary", fields: [secretaryId], references: [id])
+  meetingDate        DateTime?
+  result             String? // PASS|FAIL|REVISE
+  overallScore       Float?
+  conclusionText     String?
+  minutesFilePath    String? // MinIO path – Sprint 05: will be populated by M18 render
   // Sprint 02: tracks M18 ExportJob.id once council minutes rendering is wired (Sprint 05)
-  minutesExportJobId   String?
-  createdAt            DateTime  @default(now())
-  updatedAt            DateTime  @updatedAt
-  members              ScientificCouncilMember[]
-  reviews              ScientificCouncilReview[]
+  minutesExportJobId String?
+  createdAt          DateTime                  @default(now())
+  updatedAt          DateTime                  @updatedAt
+  members            ScientificCouncilMember[]
+  reviews            ScientificCouncilReview[]
 
   @@index([projectId])
   @@index([type])
+  @@index([result]) // filter councils by PASS/FAIL/REVISE
   @@map("scientific_councils")
 }
 
@@ -6964,9 +6970,9 @@ model ScientificCouncilMember {
   // Additive: FK tường minh → NckhScientistProfile (nullable – external expert có thể chưa có profile)
   scientistId String?
   scientist   NckhScientistProfile? @relation("CouncilMemberScientist", fields: [scientistId], references: [id])
-  role        String                // CHAIRMAN|SECRETARY|REVIEWER|EXPERT
+  role        String // CHAIRMAN|SECRETARY|REVIEWER|EXPERT
   /// Phiếu bầu kín – chỉ CHAIRMAN + ADMIN được đọc (enforced tại service layer)
-  vote        String?               // PASS|FAIL|REVISE
+  vote        String? // PASS|FAIL|REVISE
 
   @@unique([councilId, userId])
   @@index([userId])
@@ -6976,14 +6982,14 @@ model ScientificCouncilMember {
 
 /// Điểm chấm chi tiết của từng thành viên phản biện theo tiêu chí.
 model ScientificCouncilReview {
-  id         String            @id @default(cuid())
-  councilId  String
-  council    ScientificCouncil @relation(fields: [councilId], references: [id], onDelete: Cascade)
-  memberId   String            // FK → ScientificCouncilMember.id
-  criteria   String            // SCIENTIFIC_VALUE|FEASIBILITY|BUDGET|TEAM|OUTCOME
-  score      Float             // 0–10
-  comment    String?
-  createdAt  DateTime          @default(now())
+  id        String            @id @default(cuid())
+  councilId String
+  council   ScientificCouncil @relation(fields: [councilId], references: [id], onDelete: Cascade)
+  memberId  String // FK → ScientificCouncilMember.id
+  criteria  String // SCIENTIFIC_VALUE|FEASIBILITY|BUDGET|TEAM|OUTCOME
+  score     Float // 0–10
+  comment   String?
+  createdAt DateTime          @default(now())
 
   @@index([councilId])
   @@index([memberId])

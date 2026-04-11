@@ -72,9 +72,9 @@ export async function GET(req: NextRequest) {
   const { type, unit, year, format } = parsed.data;
   const templateCode = REPORT_TYPE_TO_TEMPLATE_CODE[type];
 
-  // Resolve template by BQP code
-  const template = await prisma.reportTemplate.findUnique({
-    where: { code: templateCode },
+  // Resolve latest active template by BQP code (code+version composite unique — use findFirst)
+  const template = await prisma.reportTemplate.findFirst({
+    where: { code: templateCode, isLatest: true, deletedAt: null },
     select: { id: true, isActive: true, version: true, name: true },
   });
 

@@ -9,6 +9,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { requireFunction } from '@/lib/rbac/middleware'
 import { SCIENCE } from '@/lib/rbac/function-codes'
 import { councilService } from '@/lib/services/science/council.service'
+import { logAudit } from '@/lib/audit'
 
 interface RouteParams {
   params: Promise<{ id: string }>
@@ -19,11 +20,23 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
   if (!auth.allowed) return auth.response!
 
   const { id } = await params
+  const ipAddress = req.headers.get('x-forwarded-for') ?? undefined
 
   const result = await councilService.getVoteSummary(id)
   if (!result.success) {
     return NextResponse.json({ success: false, error: result.error }, { status: 404 })
   }
+
+  await logAudit({
+    userId: auth.user!.id,
+    functionCode: 'FINALIZE_ACCEPTANCE',
+    action: 'READ',
+    resourceType: 'COUNCIL_VOTE_SUMMARY',
+    resourceId: id,
+    result: 'SUCCESS',
+    ipAddress,
+    metadata: { total: result.data.total, voted: result.data.voted },
+  })
 
   return NextResponse.json({ success: true, data: result.data, error: null })
 }

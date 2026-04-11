@@ -180,6 +180,8 @@ const translations = {
     'nav.scienceDataQuality':       'Chất lượng Dữ liệu',
     'nav.scienceDataHubOverview':   'Kho dữ liệu KH (M22)',
     'nav.scienceDataHubRecords':    'Unified Records',
+    'nav.scienceAiTools':           'AI Tools',
+    'nav.scienceReports':           'Xuất báo cáo BQP',
 
     // 7. CSDL Nghiên cứu Khoa học
     'nav.researchDatabase': 'CSDL Nghiên cứu Khoa học',
@@ -605,6 +607,8 @@ const translations = {
     'nav.scienceDataQuality':       'Data Quality',
     'nav.scienceDataHubOverview':   'Science Data Hub (M22)',
     'nav.scienceDataHubRecords':    'Unified Records',
+    'nav.scienceAiTools':           'AI Tools',
+    'nav.scienceReports':           'Export BQP Reports',
 
     // 7. Research Database
     'nav.researchDatabase': 'Research Database',

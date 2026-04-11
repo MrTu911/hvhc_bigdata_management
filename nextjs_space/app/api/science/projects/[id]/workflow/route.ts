@@ -90,7 +90,22 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
   }
 
   const ipAddress = req.headers.get('x-forwarded-for') ?? undefined
-  const result = await projectService.transitionWorkflow(id, parsed.data, auth.user!.id, ipAddress)
+
+  // Pass actual performing function code so audit trail is accurate
+  const performingFunctionCode = academyCheck.allowed
+    ? SCIENCE.PROJECT_APPROVE_ACADEMY
+    : deptCheck.allowed
+      ? SCIENCE.PROJECT_APPROVE_DEPT
+      : SCIENCE.PROJECT_CREATE
+
+  const result = await projectService.transitionWorkflow(
+    id,
+    parsed.data,
+    auth.user!.id,
+    ipAddress,
+    performingFunctionCode,
+    auth.user!,
+  )
 
   if (!result.success) {
     return NextResponse.json({ success: false, error: result.error }, { status: 400 })

@@ -5,6 +5,7 @@
  */
 import 'server-only'
 import prisma from '@/lib/db'
+import type { Prisma } from '@prisma/client'
 import type {
   ProjectCreateInput,
   ProjectUpdateInput,
@@ -103,13 +104,13 @@ export const projectRepo = {
 
     const [items, total] = await Promise.all([
       prisma.nckhProject.findMany({
-        where,
+        where: where as Prisma.NckhProjectWhereInput,
         select: PROJECT_SELECT,
         skip,
         take: pageSize,
         orderBy: { updatedAt: 'desc' },
       }),
-      prisma.nckhProject.count({ where }),
+      prisma.nckhProject.count({ where: where as Prisma.NckhProjectWhereInput }),
     ])
 
     return { items, total }

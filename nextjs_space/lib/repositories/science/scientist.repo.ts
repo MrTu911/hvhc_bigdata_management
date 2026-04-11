@@ -7,6 +7,7 @@
  */
 import 'server-only'
 import prisma from '@/lib/db'
+import type { Prisma } from '@prisma/client'
 import type {
   ScientistListFilter,
   ScientistProfileUpdateInput,
@@ -67,7 +68,7 @@ const PROFILE_SELECT = {
   scientistAwards: {
     orderBy: { year: 'desc' as const },
   },
-} as const
+} satisfies Prisma.NckhScientistProfileSelect
 
 // ─── Repository ───────────────────────────────────────────────────────────────
 
@@ -145,7 +146,7 @@ export const scientistRepo = {
     if (!maso) return
     await prisma.nckhScientistProfile.update({
       where: { id: profileId },
-      data: { maso },
+      data: { maso } as Prisma.NckhScientistProfileUncheckedUpdateInput,
     })
   },
 

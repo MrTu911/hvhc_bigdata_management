@@ -77,11 +77,12 @@ export async function POST(req: NextRequest) {
     parsed.data,
     auth.user!.id,
     auth.user!.id,
-    ipAddress
+    ipAddress,
+    auth.user!,
   )
 
   if (!result.success) {
-    return NextResponse.json({ success: false, error: result.error }, { status: 400 })
+    return NextResponse.json({ success: false, error: 'Lỗi tạo đề tài' }, { status: 400 })
   }
 
   return NextResponse.json({ success: true, data: result.data }, { status: 201 })

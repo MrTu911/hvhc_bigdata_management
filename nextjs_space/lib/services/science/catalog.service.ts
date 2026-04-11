@@ -13,11 +13,10 @@ import type {
   ScienceCatalogCreateInput,
   ScienceCatalogUpdateInput,
   ScienceCatalogType,
-  CatalogListFilter,
+  ScienceCatalogListFilter,
 } from '@/lib/validations/science-catalog'
 
-// Re-export for convenience
-export type { CatalogListFilter }
+export type CatalogListFilter = ScienceCatalogListFilter
 
 // ─── Cache keys ────────────────────────────────────────────────────────────────
 const CACHE_TTL_SECONDS = 3600 // 1 giờ per design doc

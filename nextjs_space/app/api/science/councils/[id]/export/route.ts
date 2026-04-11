@@ -98,7 +98,7 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
         action:       'EXPORT',
         resourceType: 'SCIENTIFIC_COUNCIL',
         resourceId:   id,
-        result:       'FAILURE',
+        result:       'FAIL',
         ipAddress,
         metadata:     { templateId, outputFormat, error: msg },
       })

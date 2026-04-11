@@ -83,8 +83,8 @@ function StatusBadge({ status }: { status: string }) {
 }
 
 function SensitivityIcon({ level }: { level: string }) {
-  if (level === 'SECRET')       return <ShieldAlert size={13} className="text-red-500" title="MẬT" />;
-  if (level === 'CONFIDENTIAL') return <Shield size={13} className="text-amber-500" title="Bảo mật" />;
+  if (level === 'SECRET')       return <span aria-label="MẬT"><ShieldAlert size={13} className="text-red-500" /></span>;
+  if (level === 'CONFIDENTIAL') return <span aria-label="Bảo mật"><Shield size={13} className="text-amber-500" /></span>;
   return null;
 }
 

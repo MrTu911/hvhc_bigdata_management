@@ -84,7 +84,8 @@ export type WorkflowTransitionInput = z.infer<typeof workflowTransitionSchema>
 
 // ─── Lock rule ────────────────────────────────────────────────────────────────
 // Trạng thái không cho phép sửa đề tài (lock)
-export const LOCKED_STATUSES = new Set<ProjectStatus>(['ARCHIVED', 'CANCELLED'])
+// ARCHIVED is a phase value, not a status — lock check: status=CANCELLED || phase=ARCHIVED
+export const LOCKED_STATUSES = new Set<ProjectStatus>(['CANCELLED'])
 
 // ─── Milestone schemas ────────────────────────────────────────────────────────
 

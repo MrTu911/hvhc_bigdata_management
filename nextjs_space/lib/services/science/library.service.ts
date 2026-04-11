@@ -83,7 +83,7 @@ export const libraryService = {
         action: 'CREATE',
         resourceType: 'LIBRARY_ITEM',
         resourceId: 'N/A',
-        result: 'FAILURE',
+        result: 'FAIL',
         ipAddress,
         metadata: { threat: scanResult.threat, filename },
       })
@@ -163,7 +163,7 @@ export const libraryService = {
           action: 'READ',
           resourceType: 'LIBRARY_ITEM',
           resourceId: id,
-          result: 'FAILURE',
+          result: 'FAIL',
           ipAddress,
           metadata: { reason: 'IP not whitelisted', ip },
         })

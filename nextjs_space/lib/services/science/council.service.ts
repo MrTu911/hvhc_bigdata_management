@@ -155,7 +155,7 @@ export const councilService = {
         action: 'CREATE',
         resourceType: 'SCIENTIFIC_COUNCIL',
         resourceId: 'N/A',
-        result: 'FAILURE',
+        result: 'FAIL',
         ipAddress,
         metadata: {
           projectId: input.projectId,

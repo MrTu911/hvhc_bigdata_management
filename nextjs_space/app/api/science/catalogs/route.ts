@@ -38,8 +38,9 @@ export async function GET(req: NextRequest) {
   }
 
   const result = await scienceCatalogService.listCatalogs(parsed.data)
+  // listCatalogs always returns success:true; guard kept for future failure cases
   if (!result.success) {
-    return NextResponse.json({ success: false, error: result.error }, { status: 500 })
+    return NextResponse.json({ success: false, error: 'Lỗi tải danh mục' }, { status: 500 })
   }
 
   return NextResponse.json({

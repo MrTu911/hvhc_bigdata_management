@@ -1,31 +1,33 @@
 -- Migration: add_pgvector_embedding
--- Yêu cầu: postgresql-16-pgvector phải được cài trước khi chạy migration này.
---   sudo apt-get install -y postgresql-16-pgvector
 --
--- Sau khi cài xong, chạy:
---   npx prisma migrate deploy
+-- Yêu cầu DBA (superuser) chạy trước:
+--   CREATE EXTENSION IF NOT EXISTS vector;
 --
--- Ba embedding columns:
---   1. nckh_projects.embedding          – embedding đề tài (title + abstract)
---   2. scientific_works.abstractEmbedding – embedding tóm tắt công trình
---   3. library_items.textEmbedding       – embedding full-text tài liệu (sau indexing)
+-- Migration này tự phát hiện extension đã cài chưa.
+-- Nếu chưa cài → bỏ qua (NOTICE), các column vector sẽ không tồn tại.
+-- Nếu đã cài   → tạo column bình thường.
+--
+-- Sau khi DBA cài xong:
+--   psql -U postgres -d hvhc_bigdata_89 -c "CREATE EXTENSION IF NOT EXISTS vector;"
+-- Rồi chạy thủ công:
+--   ALTER TABLE "nckh_projects"     ADD COLUMN IF NOT EXISTS "embedding"          vector(1536);
+--   ALTER TABLE "scientific_works"  ADD COLUMN IF NOT EXISTS "abstractEmbedding"  vector(1536);
+--   ALTER TABLE "library_items"     ADD COLUMN IF NOT EXISTS "textEmbedding"      vector(1536);
 
--- ─── Bật extension pgvector ──────────────────────────────────────────────────
-CREATE EXTENSION IF NOT EXISTS vector;
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_extension WHERE extname = 'vector') THEN
+    ALTER TABLE "nckh_projects"
+      ADD COLUMN IF NOT EXISTS "embedding" vector(1536);
 
--- ─── NckhProject: embedding đề tài ──────────────────────────────────────────
-ALTER TABLE "nckh_projects"
-  ADD COLUMN IF NOT EXISTS "embedding" vector(1536);
+    ALTER TABLE "scientific_works"
+      ADD COLUMN IF NOT EXISTS "abstractEmbedding" vector(1536);
 
--- IVFFlat index cho ANN search trên đề tài (lists = sqrt(rows_estimate))
--- Bật sau khi backfill xong: CREATE INDEX CONCURRENTLY ...
--- CREATE INDEX CONCURRENTLY IF NOT EXISTS "nckh_projects_embedding_ivfflat_idx"
---   ON "nckh_projects" USING ivfflat ("embedding" vector_cosine_ops) WITH (lists = 100);
+    ALTER TABLE "library_items"
+      ADD COLUMN IF NOT EXISTS "textEmbedding" vector(1536);
 
--- ─── ScientificWork: abstractEmbedding ──────────────────────────────────────
-ALTER TABLE "scientific_works"
-  ADD COLUMN IF NOT EXISTS "abstractEmbedding" vector(1536);
-
--- ─── LibraryItem: textEmbedding ──────────────────────────────────────────────
-ALTER TABLE "library_items"
-  ADD COLUMN IF NOT EXISTS "textEmbedding" vector(1536);
+    RAISE NOTICE 'pgvector columns added successfully.';
+  ELSE
+    RAISE NOTICE 'pgvector extension not installed — embedding columns skipped. Install extension as superuser then add columns manually.';
+  END IF;
+END $$;

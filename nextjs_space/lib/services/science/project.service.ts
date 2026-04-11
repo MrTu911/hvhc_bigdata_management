@@ -10,6 +10,8 @@ import 'server-only'
 import { projectRepo, milestoneRepo, acceptanceRepo } from '@/lib/repositories/science/project.repo'
 import { scienceCatalogRepo } from '@/lib/repositories/science/catalog.repo'
 import { logAudit } from '@/lib/audit'
+import { scienceWorkflowAdapter } from '@/lib/integrations/science/workflow-adapter'
+import type { AuthUser } from '@/lib/rbac/types'
 import {
   VALID_STATUS_TRANSITIONS,
   LOCKED_STATUSES,
@@ -81,7 +83,8 @@ export const projectService = {
     input: ProjectCreateInput,
     principalInvestigatorId: string,
     userId: string,
-    ipAddress?: string
+    ipAddress?: string,
+    actor?: AuthUser,
   ) {
     const projectCode = await generateProjectCode()
 
@@ -101,6 +104,16 @@ export const projectService = {
       ipAddress,
       metadata: { projectCode },
     })
+
+    // Khởi tạo M13 approval workflow (graceful fallback nếu template chưa PUBLISHED)
+    if (actor) {
+      await scienceWorkflowAdapter.tryStartApprovalWorkflow(
+        created.id,
+        projectCode,
+        input.title,
+        actor,
+      )
+    }
 
     return { success: true as const, data: created }
   },
@@ -133,7 +146,9 @@ export const projectService = {
     id: string,
     input: WorkflowTransitionInput,
     userId: string,
-    ipAddress?: string
+    ipAddress?: string,
+    performingFunctionCode?: string,
+    actor?: AuthUser,
   ) {
     const project = await projectRepo.findById(id)
     if (!project) return { success: false as const, error: 'Không tìm thấy đề tài' }
@@ -156,9 +171,18 @@ export const projectService = {
       input.comment
     )
 
+    // Derive audit function code from performing role if not provided
+    const auditFunctionCode =
+      performingFunctionCode ??
+      (input.toStatus === 'APPROVED' || input.toStatus === 'COMPLETED'
+        ? 'APPROVE_RESEARCH_ACADEMY'
+        : input.toStatus === 'SUBMITTED' || input.toStatus === 'IN_PROGRESS'
+          ? 'CREATE_RESEARCH_PROJECT'
+          : 'APPROVE_RESEARCH_DEPT')
+
     await logAudit({
       userId,
-      functionCode: 'APPROVE_RESEARCH_DEPT',
+      functionCode: auditFunctionCode,
       action: 'UPDATE',
       resourceType: 'RESEARCH_PROJECT_WORKFLOW',
       resourceId: id,
@@ -170,6 +194,26 @@ export const projectService = {
         toPhase: input.toPhase,
       },
     })
+
+    // Khi đề tài chuyển sang FINAL_REVIEW phase, khởi tạo M20-ACCEPTANCE workflow
+    if (input.toPhase === 'FINAL_REVIEW' && actor) {
+      await scienceWorkflowAdapter.tryStartAcceptanceWorkflow(
+        id,
+        project.projectCode,
+        project.title,
+        actor,
+      )
+    }
+
+    // Trigger M13 action theo transition (graceful fallback nếu template DRAFT)
+    if (actor) {
+      await scienceWorkflowAdapter.tryActOnTransition(
+        id,
+        input.toStatus,
+        actor,
+        input.comment,
+      )
+    }
 
     return { success: true as const, data: updated }
   },

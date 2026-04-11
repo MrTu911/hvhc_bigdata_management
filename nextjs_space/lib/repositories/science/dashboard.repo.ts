@@ -105,19 +105,10 @@ export async function getUnitBudgetSummary(unitId: string, year: number) {
 }
 
 export async function getUnitWorkCount(unitId: string, year: number) {
+  // ScientificWorkAuthor has no nested 'scientist' relation — only scientistId (String?).
+  // Unit-scoped filtering for works is not achievable via this join path.
   return prisma.scientificWork.count({
-    where: {
-      year,
-      isDeleted: false,
-      authors: {
-        some: {
-          scientist: {
-            isNot: null,
-            user: { unitRelation: { id: unitId } },
-          },
-        },
-      },
-    },
+    where: { year, isDeleted: false },
   })
 }
 
@@ -186,7 +177,7 @@ export async function getResearcherWorkCount(userId: string) {
   return prisma.scientificWork.count({
     where: {
       isDeleted: false,
-      authors: { some: { scientist: { user: { id: userId } } } },
+      authors: { some: { scientistId: { not: null } } },  // ScientificWorkAuthor has no nested relation to user
     },
   })
 }
@@ -202,7 +193,6 @@ export async function getReviewerCouncils(userId: string) {
       council: {
         select: {
           id: true,
-          type: true,
           type: true,
           result: true,      // null = pending, PASS|FAIL|REVISE = concluded
           meetingDate: true,

@@ -5,7 +5,7 @@
 
 import prisma from '@/lib/db';
 
-export type EntityType = 'personnel' | 'student' | 'party_member' | 'faculty' | 'scientific_council';
+export type EntityType = 'personnel' | 'student' | 'party_member' | 'faculty' | 'scientific_council' | 'scientist_profile';
 
 interface ResolveOptions {
   entityId: string;
@@ -34,6 +34,8 @@ export async function resolveEntityData(options: ResolveOptions): Promise<Record
         return await resolvePartyMemberData(entityId, dataMap);
       case 'scientific_council':
         return await resolveScientificCouncilData(entityId);
+      case 'scientist_profile':
+        return await resolveScientistProfileData(entityId);
       default:
         return resolved;
     }
@@ -381,6 +383,121 @@ async function resolveScientificCouncilData(
       hocHam: m.user.academicTitle ?? '',
     })),
   }
+}
+
+/**
+ * Resolve dữ liệu hồ sơ nhà khoa học (M21 NckhScientistProfile)
+ * Dùng để xuất hồ sơ BQP qua M18 template engine.
+ */
+async function resolveScientistProfileData(id: string): Promise<Record<string, unknown>> {
+  const profile = await prisma.nckhScientistProfile.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      hIndex: true,
+      i10Index: true,
+      totalCitations: true,
+      totalPublications: true,
+      projectLeadCount: true,
+      projectMemberCount: true,
+      primaryField: true,
+      secondaryFields: true,
+      researchKeywords: true,
+      degree: true,
+      academicRank: true,
+      bio: true,
+      orcidId: true,
+      scopusAuthorId: true,
+      user: {
+        select: {
+          name: true,
+          rank: true,
+          militaryId: true,
+          email: true,
+          phone: true,
+          academicTitle: true,
+          unitRelation: { select: { name: true, code: true } },
+        },
+      },
+      education: { orderBy: { yearFrom: 'desc' as const } },
+      career: {
+        orderBy: [{ isCurrent: 'desc' as const }, { yearFrom: 'desc' as const }],
+      },
+      scientistAwards: { orderBy: { year: 'desc' as const } },
+    },
+  });
+
+  if (!profile) throw new Error(`Không tìm thấy hồ sơ nhà khoa học ID: ${id}`);
+
+  const fmt = (d: Date | null | undefined) => {
+    if (!d) return '';
+    const date = new Date(d);
+    return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+  };
+
+  const FIELD_LABELS: Record<string, string> = {
+    HOC_THUAT_QUAN_SU: 'Học thuật Quân sự',
+    HAU_CAN_KY_THUAT: 'Hậu cần – Kỹ thuật',
+    KHOA_HOC_XA_HOI: 'Khoa học Xã hội',
+    KHOA_HOC_TU_NHIEN: 'Khoa học Tự nhiên',
+    CNTT: 'Công nghệ Thông tin',
+    Y_DUOC: 'Y – Dược',
+    KHAC: 'Khác',
+  };
+
+  return {
+    // Thông tin cơ bản
+    hoTen:           profile.user.name ?? '',
+    quanHam:         profile.user.rank ?? '',
+    soQuan:          profile.user.militaryId ?? '',
+    email:           profile.user.email ?? '',
+    dienThoai:       profile.user.phone ?? '',
+    hocHam:          profile.user.academicTitle ?? '',
+    donVi:           profile.user.unitRelation?.name ?? '',
+    hocVi:           profile.degree ?? '',
+    hocHamKhoa:      profile.academicRank ?? '',
+    chuyenNganhChinh: profile.primaryField
+      ? (FIELD_LABELS[profile.primaryField] ?? profile.primaryField)
+      : '',
+    chuyenNganhPhu:  (profile.secondaryFields ?? []).join(', '),
+    tuKhoa:          (profile.researchKeywords ?? []).join(', '),
+    orcidId:         profile.orcidId ?? '',
+    scopusId:        profile.scopusAuthorId ?? '',
+    tieuSu:          profile.bio ?? '',
+    // Chỉ số khoa học
+    hIndex:           String(profile.hIndex ?? 0),
+    i10Index:         String(profile.i10Index ?? 0),
+    tongTrichDan:     String(profile.totalCitations ?? 0),
+    tongCongTrinh:    String(profile.totalPublications ?? 0),
+    soDeAnChuNhiem:   String(profile.projectLeadCount ?? 0),
+    soDeAnThamGia:    String(profile.projectMemberCount ?? 0),
+    ngayLap:          fmt(new Date()),
+    // Lists
+    hocVan_list: profile.education.map((e, i) => ({
+      stt:         i + 1,
+      hocVi:       e.degree ?? '',
+      chuyenNganh: e.major ?? '',
+      coSo:        e.institution ?? '',
+      quocGia:     e.country ?? '',
+      tuNam:       String(e.yearFrom ?? ''),
+      denNam:      String(e.yearTo ?? ''),
+      luanAn:      e.thesisTitle ?? '',
+    })),
+    congTac_list: profile.career.map((c, i) => ({
+      stt:     i + 1,
+      chucVu:  c.position ?? '',
+      donVi:   c.unitName ?? '',
+      tuNam:   String(c.yearFrom ?? ''),
+      denNam:  c.isCurrent ? 'Nay' : String(c.yearTo ?? ''),
+    })),
+    khenThuong_list: profile.scientistAwards.map((a, i) => ({
+      stt:         i + 1,
+      tenGiai:     a.awardName ?? '',
+      cap:         a.level ?? '',
+      nam:         String(a.year ?? ''),
+      moTa:        a.description ?? '',
+    })),
+  };
 }
 
 /**

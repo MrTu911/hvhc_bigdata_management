@@ -122,7 +122,7 @@ async function ilikeFallback(
   if (type === 'project') {
     const rows = await prisma.nckhProject.findMany({
       where: {
-        OR: [{ title: { contains: q, mode: 'insensitive' } }, { description: { contains: q, mode: 'insensitive' } }],
+        OR: [{ title: { contains: q, mode: 'insensitive' } }, { abstract: { contains: q, mode: 'insensitive' } }],
         sensitivity: { in: allowedSensitivities },
       },
       take: limit,
