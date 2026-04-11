@@ -277,6 +277,7 @@ export function DashboardSidebarEnhanced() {
     'nav.awardsDatabase':    { dot: 'bg-amber-500',   text: 'text-amber-600',   bg: 'hover:bg-amber-50/60' },
     'nav.educationModule':   { dot: 'bg-emerald-500', text: 'text-emerald-600', bg: 'hover:bg-emerald-50/60' },
     'nav.researchDatabase':  { dot: 'bg-cyan-500',    text: 'text-cyan-600',    bg: 'hover:bg-cyan-50/60' },
+    'nav.scienceDatabase':   { dot: 'bg-violet-500',  text: 'text-violet-600',  bg: 'hover:bg-violet-50/60' },
     'nav.analyticsReports':  { dot: 'bg-indigo-500',  text: 'text-indigo-600',  bg: 'hover:bg-indigo-50/60' },
     'nav.dataManagement':    { dot: 'bg-slate-500',   text: 'text-slate-600',   bg: 'hover:bg-slate-100/60' },
     'nav.systemAdmin':       { dot: 'bg-rose-500',    text: 'text-rose-600',    bg: 'hover:bg-rose-50/60' },

@@ -3,7 +3,7 @@
  * Data access cho ScientificWork + ScientificWorkAuthor.
  */
 import 'server-only'
-import { db } from '@/lib/db'
+import prisma from '@/lib/db'
 import type { WorkCreateInput, WorkUpdateInput, WorkListFilter } from '@/lib/validations/science-work'
 
 const WORK_SELECT = {
@@ -58,28 +58,28 @@ export const workRepo = {
     }
 
     const [items, total] = await Promise.all([
-      db.scientificWork.findMany({
+      prisma.scientificWork.findMany({
         where,
         select: WORK_SELECT,
         skip,
         take: pageSize,
         orderBy: [{ year: 'desc' }, { createdAt: 'desc' }],
       }),
-      db.scientificWork.count({ where }),
+      prisma.scientificWork.count({ where }),
     ])
 
     return { items, total }
   },
 
   async findById(id: string) {
-    return db.scientificWork.findFirst({
+    return prisma.scientificWork.findFirst({
       where: { id, isDeleted: false },
       select: WORK_SELECT,
     })
   },
 
   async findByDoi(doi: string) {
-    return db.scientificWork.findFirst({
+    return prisma.scientificWork.findFirst({
       where: { doi, isDeleted: false },
       select: { id: true, code: true, title: true },
     })
@@ -87,7 +87,7 @@ export const workRepo = {
 
   async create(data: WorkCreateInput & { code: string }) {
     const { authors, ...workData } = data
-    return db.scientificWork.create({
+    return prisma.scientificWork.create({
       data: {
         ...workData,
         authors: {
@@ -103,9 +103,9 @@ export const workRepo = {
 
     if (authors) {
       // Replace authors atomically
-      await db.$transaction([
-        db.scientificWorkAuthor.deleteMany({ where: { workId: id } }),
-        db.scientificWork.update({
+      await prisma.$transaction([
+        prisma.scientificWorkAuthor.deleteMany({ where: { workId: id } }),
+        prisma.scientificWork.update({
           where: { id },
           data: {
             ...workData,
@@ -113,10 +113,10 @@ export const workRepo = {
           },
         }),
       ])
-      return db.scientificWork.findUnique({ where: { id }, select: WORK_SELECT })
+      return prisma.scientificWork.findUnique({ where: { id }, select: WORK_SELECT })
     }
 
-    return db.scientificWork.update({
+    return prisma.scientificWork.update({
       where: { id },
       data: workData,
       select: WORK_SELECT,
@@ -124,7 +124,7 @@ export const workRepo = {
   },
 
   async softDelete(id: string) {
-    return db.scientificWork.update({ where: { id }, data: { isDeleted: true } })
+    return prisma.scientificWork.update({ where: { id }, data: { isDeleted: true } })
   },
 
   /**
@@ -132,7 +132,7 @@ export const workRepo = {
    * Returns top candidates by title similarity to compare cosine in service.
    */
   async findByTitleLike(title: string, limit = 20) {
-    return db.scientificWork.findMany({
+    return prisma.scientificWork.findMany({
       where: {
         isDeleted: false,
         title: { contains: title.split(' ').slice(0, 5).join(' '), mode: 'insensitive' },

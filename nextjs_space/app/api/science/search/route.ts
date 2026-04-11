@@ -24,6 +24,7 @@ import { requireFunction } from '@/lib/rbac/middleware'
 import { authorize } from '@/lib/rbac/authorize'
 import { SCIENCE } from '@/lib/rbac/function-codes'
 import { searchService } from '@/lib/services/science/search.service'
+import { extractClientIp, filterSensitivitiesByIp } from '@/lib/security/ip-guard'
 import type { SearchEntityType } from '@/lib/repositories/science/search.repo'
 
 // ─── Validation ───────────────────────────────────────────────────────────────
@@ -36,16 +37,20 @@ const searchQuerySchema = z.object({
 
 // ─── Sensitivity gating ───────────────────────────────────────────────────────
 
-async function getAllowedSensitivities(user: NonNullable<ReturnType<typeof requireFunction> extends Promise<infer R> ? R : never>['user']): Promise<string[]> {
+type AuthUser = NonNullable<ReturnType<typeof requireFunction> extends Promise<infer R> ? R : never>['user']
+
+async function getAllowedSensitivities(user: AuthUser, clientIp: string): Promise<string[]> {
   const [canConfidential, canSecret] = await Promise.all([
     authorize(user as never, SCIENCE.PROJECT_APPROVE_DEPT),
     authorize(user as never, SCIENCE.PROJECT_APPROVE_ACADEMY),
   ])
 
-  const allowed = ['NORMAL']
-  if (canConfidential.allowed) allowed.push('CONFIDENTIAL')
-  if (canSecret.allowed)       allowed.push('SECRET')
-  return allowed
+  const byClearance = ['NORMAL']
+  if (canConfidential.allowed) byClearance.push('CONFIDENTIAL')
+  if (canSecret.allowed)       byClearance.push('SECRET')
+
+  // SECRET results chỉ trả về từ IP nội bộ; external IP nhận CONFIDENTIAL trở xuống
+  return filterSensitivitiesByIp(byClearance, clientIp)
 }
 
 // ─── Handler ──────────────────────────────────────────────────────────────────
@@ -69,7 +74,8 @@ export async function GET(req: NextRequest) {
   }
 
   const { q, type, limit } = parsed.data
-  const allowedSensitivities = await getAllowedSensitivities(auth.user!)
+  const clientIp = extractClientIp(req)
+  const allowedSensitivities = await getAllowedSensitivities(auth.user!, clientIp)
 
   const result = await searchService.search({
     q,

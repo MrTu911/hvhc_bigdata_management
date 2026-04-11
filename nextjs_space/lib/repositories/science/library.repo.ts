@@ -4,7 +4,7 @@
  * Semantic search dùng raw SQL (pgvector <=> cosine distance).
  */
 import 'server-only'
-import { db } from '@/lib/db'
+import prisma from '@/lib/db'
 import type { LibraryListFilter } from '@/lib/validations/science-library'
 
 // ─── Shared select ────────────────────────────────────────────────────────────
@@ -52,21 +52,21 @@ export const libraryRepo = {
     }
 
     const [items, total] = await Promise.all([
-      db.libraryItem.findMany({
+      prisma.libraryItem.findMany({
         where,
         select: ITEM_SELECT,
         skip,
         take: pageSize,
         orderBy: { createdAt: 'desc' },
       }),
-      db.libraryItem.count({ where }),
+      prisma.libraryItem.count({ where }),
     ])
 
     return { items, total }
   },
 
   async findById(id: string) {
-    return db.libraryItem.findFirst({
+    return prisma.libraryItem.findFirst({
       where: { id, isDeleted: false },
       select: ITEM_SELECT,
     })
@@ -82,22 +82,22 @@ export const libraryRepo = {
     workId?: string
     createdById: string
   }) {
-    return db.libraryItem.create({ data, select: ITEM_SELECT })
+    return prisma.libraryItem.create({ data, select: ITEM_SELECT })
   },
 
   async softDelete(id: string) {
-    return db.libraryItem.update({ where: { id }, data: { isDeleted: true } })
+    return prisma.libraryItem.update({ where: { id }, data: { isDeleted: true } })
   },
 
   async markIndexed(id: string) {
-    return db.libraryItem.update({
+    return prisma.libraryItem.update({
       where: { id },
       data: { isIndexed: true, indexedAt: new Date() },
     })
   },
 
   async incrementAccess(id: string, action: 'VIEW' | 'DOWNLOAD') {
-    return db.libraryItem.update({
+    return prisma.libraryItem.update({
       where: { id },
       data:
         action === 'DOWNLOAD'
@@ -107,7 +107,7 @@ export const libraryRepo = {
   },
 
   async logAccess(itemId: string, userId: string, action: string, ipAddress?: string) {
-    return db.libraryAccessLog.create({
+    return prisma.libraryAccessLog.create({
       data: { itemId, userId, action, ipAddress },
     })
   },
@@ -135,7 +135,7 @@ export const libraryRepo = {
     const sensitivityPlaceholders = sensitivities.map((_, i) => `$${i + 2}`).join(', ')
 
     try {
-      const rows = await db.$queryRawUnsafe<
+      const rows = await prisma.$queryRawUnsafe<
         { id: string; title: string; sensitivity: string; distance: number }[]
       >(
         `SELECT id, title, sensitivity,

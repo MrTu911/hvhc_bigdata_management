@@ -4,11 +4,14 @@
  * Không sửa /lib/repositories/research/* – backward compatible.
  */
 import 'server-only'
-import { db } from '@/lib/db'
+import prisma from '@/lib/db'
 import type {
   ProjectCreateInput,
   ProjectUpdateInput,
   ProjectListFilter,
+  MilestoneCreateInput,
+  MilestoneUpdateInput,
+  AcceptanceSubmitInput,
 } from '@/lib/validations/science-project'
 
 // ─── Shared select ────────────────────────────────────────────────────────────
@@ -99,21 +102,21 @@ export const projectRepo = {
     }
 
     const [items, total] = await Promise.all([
-      db.nckhProject.findMany({
+      prisma.nckhProject.findMany({
         where,
         select: PROJECT_SELECT,
         skip,
         take: pageSize,
         orderBy: { updatedAt: 'desc' },
       }),
-      db.nckhProject.count({ where }),
+      prisma.nckhProject.count({ where }),
     ])
 
     return { items, total }
   },
 
   async findById(id: string) {
-    return db.nckhProject.findUnique({
+    return prisma.nckhProject.findUnique({
       where: { id },
       select: {
         ...PROJECT_SELECT,
@@ -136,14 +139,14 @@ export const projectRepo = {
 
   async create(data: ProjectCreateInput & { projectCode: string; principalInvestigatorId: string }) {
     const { authors: _a, ...rest } = data as any
-    return db.nckhProject.create({
+    return prisma.nckhProject.create({
       data: rest,
       select: PROJECT_SELECT,
     })
   },
 
   async update(id: string, data: ProjectUpdateInput) {
-    return db.nckhProject.update({
+    return prisma.nckhProject.update({
       where: { id },
       data,
       select: PROJECT_SELECT,
@@ -157,7 +160,7 @@ export const projectRepo = {
     actionById: string,
     options?: { fromPhase?: string; toPhase?: string; comment?: string }
   ) {
-    return db.nckhProjectWorkflowLog.create({
+    return prisma.nckhProjectWorkflowLog.create({
       data: {
         projectId,
         fromStatus,
@@ -177,14 +180,14 @@ export const projectRepo = {
     actionById: string,
     comment?: string
   ) {
-    const current = await db.nckhProject.findUnique({
+    const current = await prisma.nckhProject.findUnique({
       where: { id },
       select: { status: true, phase: true },
     })
     if (!current) return null
 
-    const [updated] = await db.$transaction([
-      db.nckhProject.update({
+    const [updated] = await prisma.$transaction([
+      prisma.nckhProject.update({
         where: { id },
         data: {
           status: toStatus as any,
@@ -192,7 +195,7 @@ export const projectRepo = {
         },
         select: PROJECT_SELECT,
       }),
-      db.nckhProjectWorkflowLog.create({
+      prisma.nckhProjectWorkflowLog.create({
         data: {
           projectId: id,
           fromStatus: current.status,
@@ -212,7 +215,7 @@ export const projectRepo = {
     const cutoff = new Date()
     cutoff.setDate(cutoff.getDate() + daysAhead)
 
-    return db.nckhProject.findMany({
+    return prisma.nckhProject.findMany({
       where: {
         status: { in: ['IN_PROGRESS', 'SUBMITTED', 'UNDER_REVIEW'] },
         endDate: { lte: cutoff, gte: new Date() },
@@ -232,3 +235,64 @@ export const projectRepo = {
 }
 
 export type ProjectFull = NonNullable<Awaited<ReturnType<typeof projectRepo.findById>>>
+
+// ─── Milestone repo ───────────────────────────────────────────────────────────
+
+export const milestoneRepo = {
+  async findByProject(projectId: string) {
+    return prisma.nckhMilestone.findMany({
+      where: { projectId },
+      orderBy: { dueDate: 'asc' },
+    })
+  },
+
+  async findById(id: string) {
+    return prisma.nckhMilestone.findUnique({ where: { id } })
+  },
+
+  async create(projectId: string, data: MilestoneCreateInput) {
+    return prisma.nckhMilestone.create({
+      data: { projectId, ...data, status: 'PENDING' },
+    })
+  },
+
+  async update(id: string, data: MilestoneUpdateInput) {
+    return prisma.nckhMilestone.update({
+      where: { id },
+      data: {
+        ...data,
+        // Auto-set completedAt khi status → COMPLETED
+        ...(data.status === 'COMPLETED' && !data.completedAt
+          ? { completedAt: new Date() }
+          : {}),
+      },
+    })
+  },
+}
+
+// ─── Acceptance (NckhReview) repo ─────────────────────────────────────────────
+
+export const acceptanceRepo = {
+  async findByProject(projectId: string) {
+    return prisma.nckhReview.findMany({
+      where: { projectId },
+      orderBy: { reviewDate: 'desc' },
+    })
+  },
+
+  async create(projectId: string, data: AcceptanceSubmitInput) {
+    return prisma.nckhReview.create({
+      data: { projectId, ...data },
+    })
+  },
+
+  async getLatestAcceptance(projectId: string) {
+    return prisma.nckhReview.findFirst({
+      where: {
+        projectId,
+        reviewType: { in: ['NGHIEM_THU_CO_SO', 'NGHIEM_THU_CAP_HV', 'NGHIEM_THU_CAP_TREN'] },
+      },
+      orderBy: { reviewDate: 'desc' },
+    })
+  },
+}

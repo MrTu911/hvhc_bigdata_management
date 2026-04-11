@@ -273,6 +273,384 @@ chuyên ngành đào tạo
 hình thức đào tạo
 học vị / học hàm
 các danh mục chuẩn hóa cho giáo dục đào tạo
+
+## 4.20. Tích hợp cho Science Domain Extension
+
+Science domain extension là lớp mở rộng mới của hệ thống, gồm các module:
+- M20 Science Activities
+- M21 Science Resources
+- M22 Science Data Hub
+- M23 Science Councils & Evaluation
+- M24 Science Budgets
+- M25 Science Works & Library
+- M26 Science Search, AI & Reports
+
+Các module này không được hoạt động như một hệ thống độc lập, mà phải tích hợp trên nền:
+- M01 Security / RBAC / Scope / Audit
+- M02 Personnel Master
+- M13 Workflow Engine
+- M18 Template / Export
+- M19 Master Data
+
+---
+
+### 4.20.1. M20 ↔ M01
+**M20 dùng M01**
+- xác thực người dùng
+- RBAC cho create/update/submit/review/approve/archive
+- scope dữ liệu theo đơn vị / vai trò
+- audit toàn bộ các action quan trọng
+
+**M01 dùng M20**
+- không bắt buộc trực tiếp
+- có thể ghi audit/wf actions liên quan hồ sơ khoa học
+
+---
+
+### 4.20.2. M20 ↔ M02
+**M20 dùng M02**
+- chủ nhiệm đề tài
+- thành viên nghiên cứu
+- đơn vị chủ trì / phối hợp
+- thông tin nhân sự để xác minh hồ sơ
+
+**M02 dùng M20**
+- profile360 có thể hiển thị:
+  - đề tài
+  - sáng kiến
+  - công trình
+  - lịch sử tham gia nghiên cứu
+
+---
+
+### 4.20.3. M20 ↔ M13
+**M20 dùng M13**
+- workflow đề xuất
+- workflow tiếp nhận / thẩm định / phê duyệt
+- workflow nghiệm thu
+- workflow công nhận / lưu trữ nếu thiết kế áp dụng
+
+**M13 dùng M20**
+- lấy business context cho workflow instances
+- có thể render biểu mẫu/quyết định qua M18 dựa trên dữ liệu M20
+
+---
+
+### 4.20.4. M20 ↔ M18
+**M20 dùng M18**
+- xuất biểu mẫu đề tài
+- quyết định giao nhiệm vụ
+- báo cáo tiến độ
+- hồ sơ nghiệm thu
+- báo cáo tổng hợp hồ sơ khoa học
+
+**M18 dùng M20**
+- lấy dữ liệu nguồn hồ sơ khoa học để render tài liệu
+
+---
+
+### 4.20.5. M20 ↔ M19
+**M20 dùng M19**
+- loại hồ sơ khoa học
+- cấp đề tài
+- lĩnh vực nghiên cứu
+- trạng thái chuẩn hóa
+- danh mục liên quan workflow/form/filter
+
+**M19 dùng M20**
+- không bắt buộc trực tiếp ngoài admin/audit/master data governance
+
+---
+
+### 4.20.6. M20 ↔ M23
+**M20 dùng M23**
+- lập hội đồng thẩm định
+- lập hội đồng nghiệm thu
+- nhận kết quả đánh giá hội đồng
+- dùng kết luận hội đồng để quyết định bước tiếp theo
+
+**M23 dùng M20**
+- lấy hồ sơ khoa học làm đối tượng được đánh giá
+
+---
+
+### 4.20.7. M20 ↔ M24
+**M20 dùng M24**
+- tạo dự toán gắn hồ sơ khoa học
+- phê duyệt kinh phí
+- theo dõi giải ngân / sử dụng
+- hỗ trợ quyết toán
+
+**M24 dùng M20**
+- dùng hồ sơ khoa học làm business object gốc của ngân sách khoa học
+
+---
+
+### 4.20.8. M20 ↔ M25
+**M20 dùng M25**
+- ghi nhận sản phẩm đầu ra
+- liên kết công trình khoa học / tài liệu / sản phẩm
+- chuyển kết quả sang kho tri thức nếu cần
+
+**M25 dùng M20**
+- liên kết công trình/tài liệu với đề tài, sáng kiến, hồ sơ khoa học
+
+---
+
+### 4.20.9. M21 ↔ M01
+**M21 dùng M01**
+- auth
+- scope dữ liệu nhà khoa học
+- audit các chỉnh sửa hồ sơ và chỉ số
+
+**M01 dùng M21**
+- không bắt buộc trực tiếp ngoài security/audit
+
+---
+
+### 4.20.10. M21 ↔ M02
+**M21 dùng M02**
+- reuse dữ liệu cán bộ / đơn vị
+- map nhà khoa học với personnel/unit hiện có
+- không nhân đôi backbone nhân sự
+
+**M02 dùng M21**
+- profile360 có thể hiển thị lý lịch khoa học mở rộng
+
+---
+
+### 4.20.11. M21 ↔ M18
+**M21 dùng M18**
+- export hồ sơ nhà khoa học
+- export báo cáo năng lực đơn vị
+- export danh sách chuyên gia
+
+---
+
+### 4.20.12. M21 ↔ M19
+**M21 dùng M19**
+- học hàm
+- học vị
+- lĩnh vực nghiên cứu
+- loại chuyên gia
+- loại đơn vị
+- các lookup chuẩn hóa khác
+
+---
+
+### 4.20.13. M21 ↔ M23
+**M23 dùng M21**
+- lọc chuyên gia đủ điều kiện
+- kiểm tra xung đột lợi ích
+- chọn thành viên hội đồng phù hợp
+
+**M21 dùng M23**
+- có thể tổng hợp lịch sử tham gia hội đồng để làm chỉ số/chỉ báo năng lực
+
+---
+
+### 4.20.14. M22 ↔ M01
+**M22 dùng M01**
+- scope dữ liệu khi xem dashboard/hồ sơ hợp nhất
+- audit với các action quản trị dữ liệu
+- kiểm soát truy cập dữ liệu nhạy cảm
+
+---
+
+### 4.20.15. M22 ↔ M18
+**M22 dùng M18**
+- export dashboard
+- export hồ sơ hợp nhất
+- export báo cáo chất lượng dữ liệu
+- export báo cáo dữ liệu khoa học
+
+---
+
+### 4.20.16. M22 ↔ M19
+**M22 dùng M19**
+- namespace catalogs khoa học
+- filters chuẩn hóa
+- lookup cho dashboard, quality, records, reports
+
+---
+
+### 4.20.17. M22 ↔ M20/M21/M23/M24/M25
+**M22 dùng các module nguồn**
+- M20: hồ sơ khoa học và lifecycle
+- M21: nhà khoa học / đơn vị / chuyên gia
+- M23: hội đồng / phản biện / đánh giá
+- M24: ngân sách khoa học
+- M25: công trình / thư viện / tài liệu
+
+**Nguyên tắc**
+- M22 là aggregate/data-hub layer
+- M22 không sở hữu dữ liệu nghiệp vụ gốc nếu dữ liệu đó đã thuộc module nguồn
+
+---
+
+### 4.20.18. M23 ↔ M01
+**M23 dùng M01**
+- auth/scope
+- audit vote/review/session actions
+- visibility control cho closed review
+
+---
+
+### 4.20.19. M23 ↔ M13
+**M23 dùng M13**
+- gắn action hội đồng vào workflow hồ sơ khoa học nếu cần
+- đồng bộ kết quả đánh giá với bước workflow tiếp theo
+
+---
+
+### 4.20.20. M23 ↔ M18
+**M23 dùng M18**
+- biên bản họp
+- kết luận hội đồng
+- quyết định liên quan hội đồng nếu cần export/template
+
+---
+
+### 4.20.21. M24 ↔ M01
+**M24 dùng M01**
+- auth
+- scope
+- audit approval/disbursement/adjustment
+
+---
+
+### 4.20.22. M24 ↔ M18
+**M24 dùng M18**
+- dự toán
+- phê duyệt kinh phí
+- báo cáo sử dụng kinh phí
+- báo cáo quyết toán
+
+---
+
+### 4.20.23. M24 ↔ M19
+**M24 dùng M19**
+- nguồn kinh phí
+- loại ngân sách
+- loại hạng mục chi
+- danh mục cảnh báo/threshold nếu được cấu hình hóa
+
+---
+
+### 4.20.24. M25 ↔ M01
+**M25 dùng M01**
+- auth/access control
+- download permission
+- audit upload/update/download nhạy cảm nếu cần
+
+---
+
+### 4.20.25. M25 ↔ M18
+**M25 dùng M18**
+- export metadata công trình
+- export hồ sơ thư viện
+- export thống kê tài liệu
+
+---
+
+### 4.20.26. M25 ↔ M19
+**M25 dùng M19**
+- loại công trình
+- loại tài liệu
+- NXB
+- tạp chí
+- lĩnh vực
+- mức phân loại chuẩn hóa khác
+
+---
+
+### 4.20.27. M25 ↔ M21
+**M25 dùng M21**
+- tác giả / đồng tác giả / nhà khoa học
+- liên kết công trình với năng lực khoa học cá nhân và đơn vị
+
+---
+
+### 4.20.28. M26 ↔ M01
+**M26 dùng M01**
+- search scope
+- sensitivity control
+- AI/report access control
+- audit report generation và AI actions nếu policy yêu cầu
+
+---
+
+### 4.20.29. M26 ↔ M18
+**M26 dùng M18**
+- generate báo cáo
+- export kết quả tìm kiếm
+- render tài liệu đầu ra của reporting layer
+
+---
+
+### 4.20.30. M26 ↔ M19
+**M26 dùng M19**
+- filters
+- categories
+- search facets
+- reporting parameters chuẩn hóa
+
+---
+
+### 4.20.31. M26 ↔ M22
+**M26 dùng M22**
+- unified records
+- data hub views
+- dashboard/quality context
+- aggregate data phục vụ report/AI/search
+
+---
+
+### 4.20.32. M26 ↔ M20/M21/M23/M24/M25
+**M26 dùng dữ liệu nguồn**
+- M20 cho search/report về hồ sơ khoa học
+- M21 cho search/report về nhà khoa học, đơn vị, chuyên gia
+- M23 cho report và evaluation insights
+- M24 cho report ngân sách
+- M25 cho search/AI/report trên công trình và thư viện
+
+**Nguyên tắc**
+- M26 là orchestration/search/report/AI layer
+- M26 không được trở thành source of truth dữ liệu nghiệp vụ gốc
+
+---
+
+## 4.21. Quy tắc bắt buộc cho Science Domain Extension
+
+### 4.21.1. Không bypass module nền
+Các module M20–M26:
+- không tự hard-code quyền, phải đi qua M01
+- không tự hard-code lookup, phải ưu tiên M19
+- không tự viết export engine riêng nếu có thể đi qua M18
+- không tự dựng workflow engine riêng nếu đã có M13
+- không tự tạo nhân sự/đơn vị master riêng nếu đã có M02
+
+### 4.21.2. Nguồn dữ liệu gốc phải rõ
+- auth/scope/audit: M01
+- personnel/unit backbone: M02
+- workflow: M13
+- export/template: M18
+- master data: M19
+- science lifecycle: M20
+- science resources: M21
+- councils/evaluation: M23
+- budgets: M24
+- works/library: M25
+- aggregate data hub: M22
+- search/AI/report orchestration: M26
+
+### 4.21.3. Không thiết kế science domain theo kiểu self-contained giả tạo
+Khi làm M20–M26, Claude luôn phải xác định:
+- dữ liệu gốc đến từ đâu,
+- phụ thuộc vào M01/M02/M13/M18/M19 ở mức nào,
+- có cần hook vào export/workflow/master data hay không.
+
+Nếu thực tế phụ thuộc mạnh vào nền, không được thiết kế như một hệ độc lập.
 5. Tích hợp với hệ ngoài
 5.1. BQP SSO / Định danh quân nhân
 

@@ -954,45 +954,102 @@ export const MENU_CONFIG: MenuGroup[] = [
   {
     title: 'nav.scienceDatabase',
     items: [
+      // -- Tổng quan --
       {
         name: 'nav.scienceDashboard',
         href: '/dashboard/science',
         icon: BarChart3,
         gradient: 'from-violet-500 to-purple-600',
-        badge: '📊',
         functions: [SCIENCE.DASHBOARD_VIEW],
       },
+      // -- Đề tài & Nhân lực --
       {
         name: 'nav.scienceProjects',
         href: '/dashboard/science/projects',
         icon: FlaskConical,
         gradient: 'from-indigo-500 to-violet-600',
-        badge: '🔬',
         functions: [SCIENCE.PROJECT_CREATE, SCIENCE.PROJECT_APPROVE_DEPT],
       },
       {
+        name: 'nav.scienceActivities',
+        href: '/dashboard/science/activities/proposals',
+        icon: FlaskConical,
+        gradient: 'from-violet-500 to-indigo-600',
+        functions: [SCIENCE.PROJECT_CREATE, SCIENCE.PROJECT_APPROVE_DEPT, SCIENCE.PROJECT_APPROVE_ACADEMY],
+      },
+      {
         name: 'nav.scienceScientists',
-        href: '/dashboard/science/scientists',
+        href: '/dashboard/science/resources/scientists',
         icon: Users,
         gradient: 'from-amber-500 to-orange-600',
-        badge: '🎓',
         functions: [SCIENCE.SCIENTIST_VIEW],
       },
+      // -- Quản trị & Tài chính --
+      {
+        name: 'nav.scienceCouncils',
+        href: '/dashboard/science/councils',
+        icon: Award,
+        gradient: 'from-blue-500 to-indigo-600',
+        functions: [SCIENCE.COUNCIL_MANAGE, SCIENCE.COUNCIL_SUBMIT_REVIEW],
+      },
+      {
+        name: 'nav.scienceBudgets',
+        href: '/dashboard/science/budgets',
+        icon: Coins,
+        gradient: 'from-emerald-500 to-teal-600',
+        functions: [SCIENCE.BUDGET_MANAGE, SCIENCE.BUDGET_VIEW_FINANCE],
+      },
+      // -- M22 Data Hub --
+      {
+        name: 'nav.scienceDataHubOverview',
+        href: '/dashboard/science/database/overview',
+        icon: Database,
+        gradient: 'from-violet-600 to-purple-700',
+        functions: [SCIENCE.SCIENTIST_VIEW],
+      },
+      {
+        name: 'nav.scienceDataHubRecords',
+        href: '/dashboard/science/database/records',
+        icon: Layers,
+        gradient: 'from-indigo-600 to-violet-700',
+        functions: [SCIENCE.SCIENTIST_VIEW],
+      },
+      // -- Kho tri thức --
+      {
+        name: 'nav.scienceWorks',
+        href: '/dashboard/science/works',
+        icon: BookOpen,
+        gradient: 'from-teal-500 to-cyan-600',
+        functions: [SCIENCE.WORK_CREATE, SCIENCE.DASHBOARD_VIEW],
+      },
+      {
+        name: 'nav.scienceLibrary',
+        href: '/dashboard/science/library',
+        icon: LibraryBig,
+        gradient: 'from-cyan-500 to-blue-600',
+        functions: [SCIENCE.LIBRARY_DOWNLOAD_NORMAL],
+      },
+      {
+        name: 'nav.scienceCatalogs',
+        href: '/dashboard/science/catalogs',
+        icon: BookMarked,
+        gradient: 'from-slate-500 to-gray-600',
+        functions: [SCIENCE.CATALOG_VIEW],
+      },
+      // -- Công cụ --
       {
         name: 'nav.scienceSearch',
         href: '/dashboard/science/search',
         icon: Search,
         gradient: 'from-teal-500 to-cyan-600',
-        badge: '🔍',
         functions: [SCIENCE.SEARCH_USE],
       },
       {
         name: 'nav.scienceDataQuality',
         href: '/dashboard/science/data-quality',
         icon: CheckCircle,
-        gradient: 'from-emerald-500 to-green-600',
-        badge: 'DQ',
-        functions: [SCIENCE.DASHBOARD_VIEW, SCIENCE.AI_ADMIN],
+        gradient: 'from-green-500 to-emerald-600',
+        functions: [SCIENCE.DATA_QUALITY_VIEW],
       },
     ],
   },
@@ -1238,7 +1295,7 @@ export const MENU_CONFIG: MenuGroup[] = [
       },
       {
         name: 'nav.documentOCR',
-        href: '/dashboard/documents',
+        href: '/dashboard/documents/ocr',
         icon: ScanText,
         gradient: 'from-violet-500 to-purple-600',
         badge: 'OCR',
@@ -1511,10 +1568,16 @@ export function filterMenu(
     ? userFunctions
     : new Set(userFunctions);
 
+  const seenHrefs = new Set<string>();
+
   return menu
     .map(group => ({
       ...group,
       items: group.items.filter(item => {
+        // Loại bỏ item trùng href (guard chống lỗi data)
+        if (item.href && seenHrefs.has(item.href)) return false;
+        if (item.href) seenHrefs.add(item.href);
+
         // Menu không yêu cầu quyền → luôn hiện
         if (!item.functions || item.functions.length === 0) {
           return true;

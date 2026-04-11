@@ -115,20 +115,29 @@ install_postgresql() {
   section "Cài đặt PostgreSQL ${PG_VERSION}"
   if command -v psql &>/dev/null; then
     ok "PostgreSQL đã cài sẵn: $(psql --version)"
-    return
-  fi
-  # Thêm repo chính thức của PostgreSQL
-  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/postgresql.gpg] \
+  else
+    # Thêm repo chính thức của PostgreSQL
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/postgresql.gpg] \
 https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" \
-    > /etc/apt/sources.list.d/pgdg.list
-  curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc \
-    | gpg --dearmor > /usr/share/keyrings/postgresql.gpg
-  apt-get update -qq >> "$LOG_FILE" 2>&1
-  apt-get install -y -qq postgresql-${PG_VERSION} postgresql-contrib-${PG_VERSION} \
-    | tee -a "$LOG_FILE"
-  systemctl enable postgresql
-  systemctl start postgresql
-  ok "PostgreSQL ${PG_VERSION} đã cài và khởi động"
+      > /etc/apt/sources.list.d/pgdg.list
+    curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc \
+      | gpg --dearmor > /usr/share/keyrings/postgresql.gpg
+    apt-get update -qq >> "$LOG_FILE" 2>&1
+    apt-get install -y -qq postgresql-${PG_VERSION} postgresql-contrib-${PG_VERSION} \
+      | tee -a "$LOG_FILE"
+    systemctl enable postgresql
+    systemctl start postgresql
+    ok "PostgreSQL ${PG_VERSION} đã cài và khởi động"
+  fi
+
+  # ─── pgvector extension (Phase 5 – semantic search) ─────────────────────────
+  if dpkg -l "postgresql-${PG_VERSION}-pgvector" &>/dev/null; then
+    ok "pgvector đã cài sẵn"
+  else
+    info "Cài đặt postgresql-${PG_VERSION}-pgvector..."
+    apt-get install -y -qq "postgresql-${PG_VERSION}-pgvector" | tee -a "$LOG_FILE"
+    ok "pgvector đã cài"
+  fi
 }
 
 configure_postgresql() {
@@ -369,6 +378,13 @@ PORT="3000"
 # ── AI (tùy chọn — để trống nếu không dùng) ─────────────────────────────────
 OPENAI_API_KEY=""
 SCIENCE_AI_MODEL="gpt-4o"
+
+# ── Bảo mật — IP whitelist cho dữ liệu MẬT (§7.1 CSDL-KHQL) ───────────────
+# Điền dải LAN nội bộ thực tế: VD 10.10.0.0/16,192.168.1.0/24
+SCIENCE_SECRET_IP_WHITELIST=127.0.0.1,::1
+
+# ── MinIO — Thư viện số KHQL ─────────────────────────────────────────────────
+LIBRARY_MINIO_BUCKET=hvhc-library
 EOF
 
   chown "${APP_USER}:${APP_GROUP}" "${env_file}"
@@ -379,12 +395,23 @@ EOF
 
 # ─── Prisma migrate + build ───────────────────────────────────────────────────
 run_prisma_and_build() {
-  section "Prisma db push + Build ứng dụng"
+  section "Prisma migrate + Build ứng dụng"
   cd "${NEXTJS_DIR}"
-  # Nếu chưa restore DB từ USB thì push schema
+
   sudo -u "${APP_USER}" npx prisma generate >> "$LOG_FILE" 2>&1
-  sudo -u "${APP_USER}" npx prisma db push --accept-data-loss >> "$LOG_FILE" 2>&1
-  ok "Prisma schema đã sync"
+  ok "Prisma client đã generate"
+
+  # Dùng migrate deploy nếu có migrations directory (đã baseline).
+  # Fallback sang db push khi source cũ không có migrations/ (không nên xảy ra).
+  if [[ -d "${NEXTJS_DIR}/prisma/migrations" ]]; then
+    info "Áp dụng migrations (prisma migrate deploy)..."
+    sudo -u "${APP_USER}" npx prisma migrate deploy >> "$LOG_FILE" 2>&1
+    ok "Prisma migrations đã apply"
+  else
+    warn "Không tìm thấy prisma/migrations/ — fallback sang db push (legacy)"
+    sudo -u "${APP_USER}" npx prisma db push --accept-data-loss >> "$LOG_FILE" 2>&1
+    ok "Prisma schema đã sync (db push)"
+  fi
 
   info "Build Next.js (có thể mất 3–5 phút)..."
   sudo -u "${APP_USER}" npm run build >> "$LOG_FILE" 2>&1

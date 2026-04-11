@@ -38,12 +38,12 @@ interface AcademyData {
   topResearchers: Array<{
     id: string; hIndex: number; totalCitations: number; totalPublications: number;
     academicRank: string | null; primaryField: string | null;
-    user: { id: string; fullName: string; unitRelation: { name: string } | null };
+    user: { id: string; name: string; unitRelation: { name: string } | null };
   }>;
   recentActivity: Array<{
     id: string; fromStatus: string; toStatus: string; actedAt: string;
     project: { id: string; title: string; projectCode: string };
-    actionBy: { id: string; fullName: string };
+    actionBy: { id: string; name: string };
   }>;
 }
 
@@ -56,7 +56,7 @@ interface UnitData {
     recentProjects: Array<{
       id: string; projectCode: string; title: string; status: string;
       phase: string; endDate: string | null;
-      principalInvestigator: { id: string; fullName: string };
+      principalInvestigator: { id: string; name: string };
     }>;
   };
   budget: { totalApproved: string; totalSpent: string; projectCount: number };
@@ -78,7 +78,7 @@ interface ResearcherData {
   }>;
   publications: {
     total: number; isi: number; scopus: number;
-    recentPubs: Array<{ id: string; title: string; journalName: string | null; publishedYear: number; isISI: boolean; isScopus: boolean }>;
+    recentPubs: Array<{ id: string; title: string; journal: string | null; publishedYear: number; isISI: boolean; isScopus: boolean }>;
   };
   workCount: number;
 }
@@ -222,7 +222,7 @@ function AcademyDashboard({ d }: { d: AcademyData }) {
               <div key={r.id} className="flex items-center gap-3">
                 <span className="w-5 text-xs font-bold text-muted-foreground">{i + 1}</span>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium truncate">{r.user.fullName}</p>
+                  <p className="text-sm font-medium truncate">{r.user.name}</p>
                   <p className="text-xs text-muted-foreground">{r.user.unitRelation?.name ?? '—'} · h={r.hIndex}</p>
                 </div>
                 <Badge variant="outline" className="text-xs">{r.totalPublications} CB</Badge>
@@ -243,7 +243,7 @@ function AcademyDashboard({ d }: { d: AcademyData }) {
                 <div className="min-w-0">
                   <p className="text-xs font-medium truncate">{a.project.title}</p>
                   <p className="text-xs text-muted-foreground">
-                    {STATUS_LABELS[a.fromStatus]} → <span className="text-violet-600 font-medium">{STATUS_LABELS[a.toStatus]}</span> · {a.actionBy.fullName}
+                    {STATUS_LABELS[a.fromStatus]} → <span className="text-violet-600 font-medium">{STATUS_LABELS[a.toStatus]}</span> · {a.actionBy.name}
                   </p>
                 </div>
               </div>
@@ -296,7 +296,7 @@ function UnitDashboard({ d }: { d: UnitData }) {
                 <div className={`h-2 w-2 rounded-full shrink-0`} style={{ background: STATUS_COLOR[p.status] ?? '#94a3b8' }} />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium truncate">{p.title}</p>
-                  <p className="text-xs text-muted-foreground">{p.projectCode} · {p.principalInvestigator.fullName}</p>
+                  <p className="text-xs text-muted-foreground">{p.projectCode} · {p.principalInvestigator.name}</p>
                 </div>
                 <Badge variant="outline" className="text-xs shrink-0">{STATUS_LABELS[p.status] ?? p.status}</Badge>
               </div>
@@ -368,7 +368,7 @@ function ResearcherDashboard({ d }: { d: ResearcherData }) {
                   <div className="h-1.5 w-1.5 rounded-full bg-violet-400 mt-1.5 shrink-0" />
                   <div className="min-w-0">
                     <p className="text-xs font-medium truncate">{pub.title}</p>
-                    <p className="text-xs text-muted-foreground">{pub.journalName ?? '—'} · {pub.publishedYear}</p>
+                    <p className="text-xs text-muted-foreground">{pub.journal ?? '—'} · {pub.publishedYear}</p>
                   </div>
                   {pub.isISI && <Badge className="text-xs bg-blue-100 text-blue-700 shrink-0">ISI</Badge>}
                 </div>

@@ -24,7 +24,10 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
   const finalizeCheck = await authorize(auth.user!, SCIENCE.COUNCIL_FINALIZE)
   const canSeeVotes = finalizeCheck.allowed
 
-  const result = await councilService.getCouncilById(id, canSeeVotes)
+  const result = await councilService.getCouncilById(id, {
+    canSeeVotes,
+    callerUserId: auth.user!.id,
+  })
   if (!result.success) {
     return NextResponse.json({ success: false, error: result.error }, { status: 404 })
   }

@@ -1,34 +1,128 @@
 /**
- * CouncilService – CSDL-KHQL Phase 5
+ * CouncilService – CSDL-KHQL Phase 5 / Sprint 02
  * Business logic cho ScientificCouncil:
- *   - Tạo hội đồng + chỉ định thành viên
+ *   - Tạo hội đồng + chỉ định thành viên (Sprint 02: conflict-of-interest guard)
  *   - Thành viên nộp điểm chấm + phiếu bầu kín
  *   - Chairman finalize kết quả PASS/FAIL/REVISE
  *
- * Security: vote field chỉ expose khi caller là CHAIRMAN hoặc có COUNCIL_FINALIZE.
+ * Security:
+ *   - vote field chỉ expose khi caller là CHAIRMAN hoặc có COUNCIL_FINALIZE.
+ *   - Sprint 02: PI của đề tài và thành viên nghiên cứu không được tham gia hội đồng đánh giá đề tài đó.
  */
 import 'server-only'
-import { councilRepo } from '@/lib/repositories/science/council.repo'
+import { councilRepo, type VoteSummary } from '@/lib/repositories/science/council.repo'
 import { logAudit } from '@/lib/audit'
+import prisma from '@/lib/db'
 import type {
   CouncilCreateInput,
   CouncilReviewSubmitInput,
   CouncilAcceptanceInput,
 } from '@/lib/validations/science-council'
 
+// ─── Conflict-of-interest check ──────────────────────────────────────────────
+
+/**
+ * Kiểm tra xung đột lợi ích khi thêm thành viên vào hội đồng.
+ *
+ * Quy tắc:
+ *   - Principal Investigator của đề tài không được tham gia hội đồng đánh giá đề tài đó.
+ *   - Thành viên nghiên cứu chính thức (NckhMember) của đề tài không được tham gia hội đồng.
+ *
+ * Trả về mảng userId vi phạm kèm lý do để caller có thể log rõ ràng.
+ */
+async function checkConflictOfInterest(
+  projectId: string,
+  proposedMemberIds: string[],
+): Promise<{ userId: string; reason: 'PI' | 'RESEARCH_MEMBER' }[]> {
+  const [project, researchMembers] = await Promise.all([
+    prisma.nckhProject.findUnique({
+      where: { id: projectId },
+      select: { principalInvestigatorId: true },
+    }),
+    prisma.nckhMember.findMany({
+      where: { projectId },
+      select: { userId: true },
+    }),
+  ])
+
+  if (!project) return []
+
+  const piId = project.principalInvestigatorId
+  const researchMemberIds = new Set(researchMembers.map((m) => m.userId))
+
+  const conflicts: { userId: string; reason: 'PI' | 'RESEARCH_MEMBER' }[] = []
+
+  for (const userId of proposedMemberIds) {
+    if (userId === piId) {
+      conflicts.push({ userId, reason: 'PI' })
+    } else if (researchMemberIds.has(userId)) {
+      conflicts.push({ userId, reason: 'RESEARCH_MEMBER' })
+    }
+  }
+
+  return conflicts
+}
+
 export const councilService = {
+  async listCouncils(filter: {
+    type?: string
+    result?: string
+    projectId?: string
+    page: number
+    pageSize: number
+  }) {
+    const data = await councilRepo.findMany(filter)
+    return { success: true as const, data }
+  },
+
   async getCouncilsByProject(projectId: string) {
     const councils = await councilRepo.findByProjectId(projectId)
     return { success: true as const, data: councils }
   },
 
-  async getCouncilById(id: string, canSeeVotes: boolean) {
+  async getCouncilById(
+    id: string,
+    options: {
+      canSeeVotes: boolean
+      /** userId của caller – nếu cung cấp, reviews sẽ được lọc chỉ trả review của member này (closed-review). Bỏ qua khi canSeeVotes=true. */
+      callerUserId?: string
+    }
+  ) {
+    const { canSeeVotes, callerUserId } = options
     const council = canSeeVotes
       ? await councilRepo.findByIdWithVotes(id)
       : await councilRepo.findById(id)
 
     if (!council) return { success: false as const, error: 'Không tìm thấy hội đồng' }
+
+    if (!canSeeVotes && callerUserId) {
+      // Closed-review: mỗi thành viên chỉ thấy review của chính mình.
+      const memberRecord = await councilRepo.findMember(id, callerUserId)
+      const ownReviews = memberRecord
+        ? await councilRepo.getReviewsByMember(id, memberRecord.id)
+        : []
+
+      return {
+        success: true as const,
+        data: {
+          ...council,
+          reviews: ownReviews,
+        },
+      }
+    }
+
     return { success: true as const, data: council }
+  },
+
+  /**
+   * Lấy tổng hợp phiếu bầu. Chỉ dành cho CHAIRMAN / COUNCIL_FINALIZE.
+   * Áp dụng quy tắc 2/3: PASS >= 2/3 tổng phiếu có giá trị → gợi ý PASS.
+   */
+  async getVoteSummary(councilId: string): Promise<{ success: true; data: VoteSummary } | { success: false; error: string }> {
+    const council = await councilRepo.findById(councilId)
+    if (!council) return { success: false, error: 'Không tìm thấy hội đồng' }
+    const summary = await councilRepo.getVoteSummary(councilId)
+    return { success: true, data: summary }
   },
 
   async createCouncil(input: CouncilCreateInput, userId: string, ipAddress?: string) {
@@ -39,6 +133,42 @@ export const councilService = {
     }
     if (!memberIds.has(input.secretaryId)) {
       input.members.push({ userId: input.secretaryId, role: 'SECRETARY' })
+    }
+
+    // ─── Conflict-of-interest check (Sprint 02) ───────────────────────────
+    // PI và thành viên nghiên cứu không được tham gia hội đồng đánh giá đề tài của chính mình.
+    const proposedIds = input.members.map((m) => m.userId)
+    const conflicts = await checkConflictOfInterest(input.projectId, proposedIds)
+
+    if (conflicts.length > 0) {
+      const details = conflicts
+        .map((c) =>
+          c.reason === 'PI'
+            ? `userId=${c.userId} là Chủ nhiệm đề tài`
+            : `userId=${c.userId} là thành viên nghiên cứu đề tài`,
+        )
+        .join('; ')
+
+      await logAudit({
+        userId,
+        functionCode: 'MANAGE_COUNCIL',
+        action: 'CREATE',
+        resourceType: 'SCIENTIFIC_COUNCIL',
+        resourceId: 'N/A',
+        result: 'FAILURE',
+        ipAddress,
+        metadata: {
+          projectId: input.projectId,
+          type: input.type,
+          reason: 'CONFLICT_OF_INTEREST',
+          conflicts: conflicts,
+        },
+      })
+
+      return {
+        success: false as const,
+        error: `Xung đột lợi ích: ${details}. Chủ nhiệm đề tài và thành viên nghiên cứu không được tham gia hội đồng đánh giá đề tài của mình.`,
+      }
     }
 
     const council = await councilRepo.create(input)

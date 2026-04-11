@@ -4,7 +4,7 @@
  * Vote field visibility enforced at service layer (not here).
  */
 import 'server-only'
-import { db } from '@/lib/db'
+import prisma from '@/lib/db'
 import type {
   CouncilCreateInput,
   CouncilAcceptanceInput,
@@ -48,7 +48,7 @@ const COUNCIL_SELECT_BASE = {
 
 export const councilRepo = {
   async findById(id: string) {
-    return db.scientificCouncil.findUnique({
+    return prisma.scientificCouncil.findUnique({
       where: { id },
       select: COUNCIL_SELECT_BASE,
     })
@@ -56,7 +56,7 @@ export const councilRepo = {
 
   /** Full record including votes – only for chairman/admin */
   async findByIdWithVotes(id: string) {
-    return db.scientificCouncil.findUnique({
+    return prisma.scientificCouncil.findUnique({
       where: { id },
       select: {
         ...COUNCIL_SELECT_BASE,
@@ -73,16 +73,57 @@ export const councilRepo = {
   },
 
   async findByProjectId(projectId: string) {
-    return db.scientificCouncil.findMany({
+    return prisma.scientificCouncil.findMany({
       where: { projectId },
       select: COUNCIL_SELECT_BASE,
       orderBy: { createdAt: 'asc' },
     })
   },
 
+  async findMany(filter: {
+    type?: string
+    result?: string
+    projectId?: string
+    page: number
+    pageSize: number
+  }) {
+    const { type, result, projectId, page, pageSize } = filter
+    const skip  = (page - 1) * pageSize
+    const where = {
+      ...(type      ? { type }      : {}),
+      ...(result    ? { result }    : {}),
+      ...(projectId ? { projectId } : {}),
+    }
+
+    const LIST_SELECT = {
+      id:           true,
+      type:         true,
+      meetingDate:  true,
+      result:       true,
+      overallScore: true,
+      createdAt:    true,
+      project: { select: { id: true, projectCode: true, title: true } },
+      chairman: { select: { id: true, name: true } },
+      _count: { select: { members: true, reviews: true } },
+    } as const
+
+    const [items, total] = await Promise.all([
+      prisma.scientificCouncil.findMany({
+        where,
+        select: LIST_SELECT,
+        skip,
+        take: pageSize,
+        orderBy: { createdAt: 'desc' },
+      }),
+      prisma.scientificCouncil.count({ where }),
+    ])
+
+    return { items, total }
+  },
+
   async create(input: CouncilCreateInput) {
     const { members, ...councilData } = input
-    return db.scientificCouncil.create({
+    return prisma.scientificCouncil.create({
       data: {
         ...councilData,
         members: { create: members },
@@ -92,13 +133,13 @@ export const councilRepo = {
   },
 
   async findMember(councilId: string, userId: string) {
-    return db.scientificCouncilMember.findUnique({
+    return prisma.scientificCouncilMember.findUnique({
       where: { councilId_userId: { councilId, userId } },
     })
   },
 
   async submitMemberVote(memberId: string, vote: string) {
-    return db.scientificCouncilMember.update({
+    return prisma.scientificCouncilMember.update({
       where: { id: memberId },
       data: { vote },
     })
@@ -109,14 +150,14 @@ export const councilRepo = {
     memberId: string,
     scores: { criteria: string; score: number; comment?: string }[]
   ) {
-    return db.scientificCouncilReview.createMany({
+    return prisma.scientificCouncilReview.createMany({
       data: scores.map((s) => ({ councilId, memberId, ...s })),
       skipDuplicates: true,
     })
   },
 
   async finalize(id: string, input: CouncilAcceptanceInput) {
-    return db.scientificCouncil.update({
+    return prisma.scientificCouncil.update({
       where: { id },
       data: {
         result: input.result,
@@ -129,12 +170,72 @@ export const councilRepo = {
   },
 
   async computeAverageScore(councilId: string) {
-    const agg = await db.scientificCouncilReview.aggregate({
+    const agg = await prisma.scientificCouncilReview.aggregate({
       where: { councilId },
       _avg: { score: true },
     })
     return agg._avg.score
   },
+
+  /**
+   * Tổng hợp phiếu bầu của hội đồng – chỉ dùng khi caller có quyền xem vote.
+   * Trả về số lượng PASS/FAIL/REVISE và gợi ý kết quả theo quy tắc 2/3.
+   */
+  async getVoteSummary(councilId: string): Promise<VoteSummary> {
+    const members = await prisma.scientificCouncilMember.findMany({
+      where: { councilId },
+      select: { id: true, vote: true, role: true, user: { select: { id: true, name: true } } },
+    })
+
+    const total = members.length
+    const voteCounts = { PASS: 0, FAIL: 0, REVISE: 0, PENDING: 0 }
+    const voteDetails: VoteSummary['voteDetails'] = []
+
+    for (const m of members) {
+      const vote = (m.vote ?? 'PENDING') as keyof typeof voteCounts
+      if (vote in voteCounts) voteCounts[vote]++
+      voteDetails.push({
+        memberId: m.id,
+        userId: m.user.id,
+        userName: m.user.name,
+        role: m.role,
+        vote: m.vote ?? null,
+      })
+    }
+
+    const voted = total - voteCounts.PENDING
+    // Quy tắc 2/3: khi đủ túc số và PASS >= 2/3 thành viên có mặt thì gợi ý PASS
+    const suggestedResult =
+      voted > 0 && voteCounts.PASS >= Math.ceil((voted * 2) / 3)
+        ? 'PASS'
+        : voted > 0 && voteCounts.FAIL >= Math.ceil((voted * 2) / 3)
+          ? 'FAIL'
+          : null
+
+    return { total, voted, voteCounts, suggestedResult, voteDetails }
+  },
+
+  /** Lấy review của một thành viên cụ thể trong hội đồng (closed-review). */
+  async getReviewsByMember(councilId: string, memberId: string) {
+    return prisma.scientificCouncilReview.findMany({
+      where: { councilId, memberId },
+      select: { id: true, criteria: true, score: true, comment: true, createdAt: true },
+    })
+  },
+}
+
+export type VoteSummary = {
+  total: number
+  voted: number
+  voteCounts: { PASS: number; FAIL: number; REVISE: number; PENDING: number }
+  suggestedResult: 'PASS' | 'FAIL' | null
+  voteDetails: {
+    memberId: string
+    userId: string
+    userName: string
+    role: string
+    vote: string | null
+  }[]
 }
 
 export type CouncilRecord = NonNullable<Awaited<ReturnType<typeof councilRepo.findById>>>

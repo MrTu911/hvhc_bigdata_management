@@ -4464,10 +4464,12 @@ model NckhProject {
   councils                ScientificCouncil[]
   // Phase 3 additive fields
   sensitivity             String            @default("NORMAL")  // NORMAL|CONFIDENTIAL|SECRET
-  // embedding               Unsupported("vector(1536)")?  // pgvector — enable sau khi cài extension
+  embedding               Unsupported("vector(1536)")?  // pgvector Phase 5 – requires postgresql-16-pgvector
   fundSourceId            String?           // FK → ScienceCatalog (type=FUND_SOURCE)
   fundSource              ScienceCatalog?   @relation("ProjectFundSource", fields: [fundSourceId], references: [id])
   workflowLogs            NckhProjectWorkflowLog[]
+  // Sprint 02 additive – nullable until M13 wiring is live (Sprint 03)
+  workflowInstanceId      String?           // FK → WorkflowInstance.id (plain string, no Prisma relation yet)
 
   @@index([principalInvestigatorId])
   @@index([submittedBy])
@@ -4632,12 +4634,16 @@ model NckhScientistProfile {
   // Phase 2 additive fields (nullable/default – safe migration)
   sensitivityLevel   String   @default("NORMAL")  // NORMAL|CONFIDENTIAL
   researchAreaIds    String[]                      // FK refs → ScienceCatalog.id[]
+  // Phase 3 additive fields (dual-write – backfill từ User.militaryId ?? employeeId)
+  maso               String?  @unique              // Mã số cán bộ (denorm từ User, hỗ trợ external scientist)
   user               User     @relation("NckhScientist", fields: [userId], references: [id])
   education          NckhScientistEducation[]
   career             NckhScientistCareer[]
   scientistAwards    NckhScientistAward[]
+  councilMemberships ScientificCouncilMember[] @relation("CouncilMemberScientist")
 
   @@index([userId])
+  @@index([maso])
   @@map("nckh_scientist_profiles")
 }
 
@@ -4675,6 +4681,8 @@ model NckhScientistCareer {
   yearFrom    Int
   yearTo      Int?
   isCurrent   Boolean              @default(false)
+  // Sprint 02: true = ngoài HVHC (external institution); false = vị trí tại HVHC (canonical source: M02 WorkExperience)
+  isExternal  Boolean              @default(true)
   createdAt   DateTime             @default(now())
   updatedAt   DateTime             @updatedAt
 
@@ -6799,7 +6807,7 @@ model ScientificWork {
   year        Int
   edition     Int      @default(1)
   sensitivity String   @default("NORMAL")  // NORMAL|CONFIDENTIAL|SECRET
-  // abstractEmbedding: pgvector – thêm qua migration --create-only riêng khi Phase 5
+  abstractEmbedding       Unsupported("vector(1536)")?  // pgvector Phase 5 – requires postgresql-16-pgvector
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   isDeleted   Boolean  @default(false)
@@ -6846,7 +6854,7 @@ model LibraryItem {
   sensitivity    String   @default("NORMAL")  // NORMAL|CONFIDENTIAL|SECRET
   accessCount    Int      @default(0)
   downloadCount  Int      @default(0)
-  // textEmbedding: khai báo sau khi pgvector migration sẵn sàng (Phase 5)
+  textEmbedding  Unsupported("vector(1536)")?  // pgvector Phase 5 – requires postgresql-16-pgvector
   isIndexed      Boolean  @default(false)
   indexedAt      DateTime?
   createdAt      DateTime @default(now())
@@ -6930,15 +6938,17 @@ model ScientificCouncil {
   chairman        User     @relation("CouncilChairman", fields: [chairmanId], references: [id])
   secretaryId     String
   secretary       User     @relation("CouncilSecretary", fields: [secretaryId], references: [id])
-  meetingDate     DateTime?
-  result          String?  // PASS|FAIL|REVISE
-  overallScore    Float?
-  conclusionText  String?
-  minutesFilePath String?  // MinIO path
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  members         ScientificCouncilMember[]
-  reviews         ScientificCouncilReview[]
+  meetingDate          DateTime?
+  result               String?   // PASS|FAIL|REVISE
+  overallScore         Float?
+  conclusionText       String?
+  minutesFilePath      String?   // MinIO path – Sprint 05: will be populated by M18 render
+  // Sprint 02: tracks M18 ExportJob.id once council minutes rendering is wired (Sprint 05)
+  minutesExportJobId   String?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  members              ScientificCouncilMember[]
+  reviews              ScientificCouncilReview[]
 
   @@index([projectId])
   @@index([type])
@@ -6946,17 +6956,21 @@ model ScientificCouncil {
 }
 
 model ScientificCouncilMember {
-  id        String            @id @default(cuid())
-  councilId String
-  council   ScientificCouncil @relation(fields: [councilId], references: [id], onDelete: Cascade)
-  userId    String
-  user      User              @relation(fields: [userId], references: [id])
-  role      String            // CHAIRMAN|SECRETARY|REVIEWER|EXPERT
+  id          String                @id @default(cuid())
+  councilId   String
+  council     ScientificCouncil     @relation(fields: [councilId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User                  @relation(fields: [userId], references: [id])
+  // Additive: FK tường minh → NckhScientistProfile (nullable – external expert có thể chưa có profile)
+  scientistId String?
+  scientist   NckhScientistProfile? @relation("CouncilMemberScientist", fields: [scientistId], references: [id])
+  role        String                // CHAIRMAN|SECRETARY|REVIEWER|EXPERT
   /// Phiếu bầu kín – chỉ CHAIRMAN + ADMIN được đọc (enforced tại service layer)
-  vote      String?           // PASS|FAIL|REVISE
+  vote        String?               // PASS|FAIL|REVISE
 
   @@unique([councilId, userId])
   @@index([userId])
+  @@index([scientistId])
   @@map("scientific_council_members")
 }
 

@@ -576,11 +576,12 @@ export const SCIENCE = {
   COUNCIL_FINALIZE:         'FINALIZE_ACCEPTANCE',  // Kết luận nghiệm thu
 
   // M09/M11/M12/M14 – Dashboard, Tìm kiếm, AI, Báo cáo
-  DASHBOARD_VIEW:    'VIEW_SCIENCE_DASHBOARD',  // Xem dashboard KHQL
-  SEARCH_USE:        'USE_SCIENCE_SEARCH',      // Tìm kiếm thông minh
-  AI_USE:            'USE_AI_SCIENCE',          // Dùng AI KHQL (chatbot, trends)
-  AI_ADMIN:          'USE_AI_SCIENCE_ADMIN',    // Admin AI KHQL
-  REPORT_EXPORT:     'EXPORT_SCIENCE_REPORT',   // Xuất báo cáo BQP
+  DASHBOARD_VIEW:    'VIEW_SCIENCE_DASHBOARD',      // Xem dashboard KHQL
+  DATA_QUALITY_VIEW: 'VIEW_SCIENCE_DATA_QUALITY',   // Xem báo cáo chất lượng dữ liệu KH
+  SEARCH_USE:        'USE_SCIENCE_SEARCH',           // Tìm kiếm thông minh
+  AI_USE:            'USE_AI_SCIENCE',               // Dùng AI KHQL (chatbot, trends)
+  AI_ADMIN:          'USE_AI_SCIENCE_ADMIN',         // Admin AI KHQL
+  REPORT_EXPORT:     'EXPORT_SCIENCE_REPORT',        // Xuất báo cáo BQP
 } as const;
 
 // ===== ALL FUNCTION CODES (for seeding) =====

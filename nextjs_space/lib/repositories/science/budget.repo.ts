@@ -3,7 +3,7 @@
  * Data access cho ResearchBudget + BudgetLineItem.
  */
 import 'server-only'
-import { db } from '@/lib/db'
+import prisma from '@/lib/db'
 import type { BudgetCreateInput, BudgetUpdateInput, BudgetLineItemInput } from '@/lib/validations/science-budget'
 
 const BUDGET_SELECT = {
@@ -36,36 +36,37 @@ const BUDGET_SELECT = {
 
 export const budgetRepo = {
   async findByProjectId(projectId: string) {
-    return db.researchBudget.findUnique({
+    return prisma.researchBudget.findUnique({
       where: { projectId },
       select: BUDGET_SELECT,
     })
   },
 
   async findById(id: string) {
-    return db.researchBudget.findUnique({
+    return prisma.researchBudget.findUnique({
       where: { id },
       select: BUDGET_SELECT,
     })
   },
 
-  async findMany(filter: { year?: number; status?: string; page: number; pageSize: number }) {
-    const { year, status, page, pageSize } = filter
+  async findMany(filter: { year?: number; status?: string; projectId?: string; page: number; pageSize: number }) {
+    const { year, status, projectId, page, pageSize } = filter
     const skip = (page - 1) * pageSize
     const where = {
-      ...(year ? { year } : {}),
-      ...(status ? { status } : {}),
+      ...(year      ? { year }      : {}),
+      ...(status    ? { status }    : {}),
+      ...(projectId ? { projectId } : {}),
     }
 
     const [items, total] = await Promise.all([
-      db.researchBudget.findMany({
+      prisma.researchBudget.findMany({
         where,
         select: BUDGET_SELECT,
         skip,
         take: pageSize,
         orderBy: { createdAt: 'desc' },
       }),
-      db.researchBudget.count({ where }),
+      prisma.researchBudget.count({ where }),
     ])
 
     return { items, total }
@@ -73,7 +74,7 @@ export const budgetRepo = {
 
   async create(input: BudgetCreateInput) {
     const { lineItems, ...budgetData } = input
-    return db.researchBudget.create({
+    return prisma.researchBudget.create({
       data: {
         ...budgetData,
         lineItems: { create: lineItems },
@@ -90,28 +91,28 @@ export const budgetRepo = {
       const toCreate = lineItems.filter((l) => !l.id)
       const toUpdate = lineItems.filter((l) => l.id)
 
-      await db.$transaction([
-        db.researchBudget.update({
+      await prisma.$transaction([
+        prisma.researchBudget.update({
           where: { id },
           data: budgetData,
         }),
         ...toCreate.map((l) =>
-          db.budgetLineItem.create({
+          prisma.budgetLineItem.create({
             data: { budgetId: id, ...(l as BudgetLineItemInput) },
           })
         ),
         ...toUpdate.map((l) =>
-          db.budgetLineItem.update({
+          prisma.budgetLineItem.update({
             where: { id: l.id! },
             data: { ...l, id: undefined },
           })
         ),
       ])
 
-      return db.researchBudget.findUnique({ where: { id }, select: BUDGET_SELECT })
+      return prisma.researchBudget.findUnique({ where: { id }, select: BUDGET_SELECT })
     }
 
-    return db.researchBudget.update({
+    return prisma.researchBudget.update({
       where: { id },
       data: budgetData,
       select: BUDGET_SELECT,
@@ -119,19 +120,19 @@ export const budgetRepo = {
   },
 
   async updateLineItemSpent(lineItemId: string, spentAmount: bigint) {
-    return db.budgetLineItem.update({
+    return prisma.budgetLineItem.update({
       where: { id: lineItemId },
       data: { spentAmount },
     })
   },
 
   async recalculateTotalSpent(budgetId: string) {
-    const agg = await db.budgetLineItem.aggregate({
+    const agg = await prisma.budgetLineItem.aggregate({
       where: { budgetId },
       _sum: { spentAmount: true },
     })
     const totalSpent = agg._sum.spentAmount ?? BigInt(0)
-    return db.researchBudget.update({
+    return prisma.researchBudget.update({
       where: { id: budgetId },
       data: { totalSpent },
     })
@@ -142,7 +143,7 @@ export const budgetRepo = {
     status: string,
     approvedById?: string,
   ) {
-    return db.researchBudget.update({
+    return prisma.researchBudget.update({
       where: { id },
       data: {
         status,
@@ -155,7 +156,7 @@ export const budgetRepo = {
   /** Tất cả budget có chi tiêu vượt ngưỡng phần trăm của totalApproved */
   async findOverspending(thresholdPct: number) {
     // Raw SQL vì Prisma không hỗ trợ so sánh giữa 2 BigInt field trực tiếp
-    const rows = await db.$queryRaw<
+    const rows = await prisma.$queryRaw<
       { id: string; projectId: string; totalApproved: bigint; totalSpent: bigint; pct: number }[]
     >`
       SELECT id, project_id AS "projectId",

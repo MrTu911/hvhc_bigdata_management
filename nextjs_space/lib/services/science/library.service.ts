@@ -22,15 +22,11 @@ import {
 } from '@/lib/minio-client'
 import type { LibraryListFilter, LibraryUploadMeta, SemanticSearchInput } from '@/lib/validations/science-library'
 import { ALLOWED_MIME_TYPES, MAX_FILE_SIZE_BYTES } from '@/lib/validations/science-library'
+import { isInternalIp } from '@/lib/security/ip-guard'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const LIBRARY_BUCKET = process.env.LIBRARY_MINIO_BUCKET ?? 'hvhc-library'
-
-/** IPs nội bộ được phép download tài liệu SECRET */
-const SECRET_IP_WHITELIST = new Set(
-  (process.env.LIBRARY_SECRET_IP_WHITELIST ?? '127.0.0.1,::1').split(',').map((s) => s.trim())
-)
 
 /** Expiry presigned URL: 15 phút */
 const PRESIGNED_EXPIRY_SECONDS = 15 * 60
@@ -157,10 +153,10 @@ export const libraryService = {
       return { success: false as const, error: 'Không có quyền tải tài liệu này' }
     }
 
-    // SECRET: chỉ phục vụ từ IP whitelist nội bộ
+    // SECRET: chỉ phục vụ từ IP whitelist nội bộ (SCIENCE_SECRET_IP_WHITELIST)
     if (item.sensitivity === 'SECRET') {
       const ip = clientIp ?? ''
-      if (!SECRET_IP_WHITELIST.has(ip)) {
+      if (!isInternalIp(ip)) {
         await logAudit({
           userId,
           functionCode: 'DOWNLOAD_LIBRARY_SECRET',

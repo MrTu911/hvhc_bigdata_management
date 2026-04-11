@@ -6,6 +6,7 @@
 export * from './encryption-old';
 export * from './rate-limiter';
 export * from './validation';
+export * from './ip-guard';
 
 // Re-export defaults
 import encryption from './encryption-old';

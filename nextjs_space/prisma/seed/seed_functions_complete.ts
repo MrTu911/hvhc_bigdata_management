@@ -296,6 +296,48 @@ const ALL_FUNCTIONS: FunctionDef[] = [
   { code: 'WF.OVERRIDE',                  name: 'Phê duyệt / Lưu trữ phiên bản QT',     description: 'Publish / Archive template version; can thiệp hoặc force cancel',      module: 'WORKFLOW', actionType: 'UPDATE',   isCritical: true },
   { code: 'WF.DASHBOARD',                 name: 'Xem dashboard quy trình toàn cục',      description: 'Xem tổng quan và KPI workflow toàn học viện',                          module: 'WORKFLOW', actionType: 'VIEW' },
   { code: 'WF.EXPORT',                    name: 'Xuất báo cáo quy trình',               description: 'Xuất thống kê, lịch sử và báo cáo workflow ra file',                   module: 'WORKFLOW', actionType: 'EXPORT' },
+
+  // ─── SCIENCE (CSDL-KHQL – Khoa học Quản lý) ───
+  // M01 – Danh mục KH
+  { code: 'VIEW_SCIENCE_CATALOG',        name: 'Xem danh mục khoa học',                description: 'Xem danh mục lĩnh vực nghiên cứu, loại công trình, nhà xuất bản',    module: 'SCIENCE', actionType: 'VIEW' },
+  { code: 'MANAGE_SCIENCE_CATALOG',      name: 'Quản lý danh mục khoa học',            description: 'Tạo, sửa, xóa danh mục khoa học (ADMIN/trưởng khoa)',               module: 'SCIENCE', actionType: 'CREATE', isCritical: true },
+
+  // M02 – Hồ sơ nhà khoa học
+  { code: 'VIEW_SCIENTIST_PROFILE',      name: 'Xem hồ sơ nhà khoa học',              description: 'Xem thông tin cá nhân, chỉ số H-index, công trình của nhà KH',      module: 'SCIENCE', actionType: 'VIEW' },
+  { code: 'MANAGE_SCIENTIST_PROFILE',    name: 'Quản lý hồ sơ nhà khoa học',          description: 'Cập nhật, bổ sung thông tin hồ sơ nhà khoa học',                    module: 'SCIENCE', actionType: 'UPDATE' },
+  { code: 'SYNC_ORCID',                  name: 'Đồng bộ ORCID',                        description: 'Kết nối và đồng bộ dữ liệu từ tài khoản ORCID của nhà KH',          module: 'SCIENCE', actionType: 'IMPORT' },
+
+  // M03 – Đề tài NCKH
+  { code: 'CREATE_RESEARCH_PROJECT',     name: 'Tạo đề tài NCKH',                      description: 'Khởi tạo hồ sơ đề tài nghiên cứu khoa học mới',                     module: 'SCIENCE', actionType: 'CREATE' },
+  { code: 'APPROVE_RESEARCH_DEPT',       name: 'Phê duyệt đề tài cấp phòng',           description: 'Phê duyệt đề tài NCKH ở cấp khoa/phòng ban',                        module: 'SCIENCE', actionType: 'APPROVE', isCritical: true },
+  { code: 'APPROVE_RESEARCH_ACADEMY',    name: 'Phê duyệt đề tài cấp học viện',        description: 'Phê duyệt đề tài NCKH ở cấp học viện — bao gồm dữ liệu MẬT',      module: 'SCIENCE', actionType: 'APPROVE', isCritical: true },
+
+  // M04 – Công trình KH
+  { code: 'CREATE_SCIENTIFIC_WORK',      name: 'Tạo công trình khoa học',              description: 'Nhập mới sách, giáo trình, bài báo vào hệ thống',                   module: 'SCIENCE', actionType: 'CREATE' },
+  { code: 'IMPORT_FROM_CROSSREF',        name: 'Import từ CrossRef/DOI',               description: 'Nhập dữ liệu công trình tự động qua API CrossRef',                   module: 'SCIENCE', actionType: 'IMPORT' },
+
+  // M05 – Thư viện số
+  { code: 'UPLOAD_LIBRARY',              name: 'Upload tài liệu thư viện',             description: 'Tải tài liệu khoa học lên kho thư viện số',                          module: 'SCIENCE', actionType: 'CREATE' },
+  { code: 'DOWNLOAD_LIBRARY_NORMAL',     name: 'Tải tài liệu thường',                  description: 'Tải tài liệu mức NORMAL và CONFIDENTIAL từ thư viện',               module: 'SCIENCE', actionType: 'VIEW' },
+  { code: 'DOWNLOAD_LIBRARY_SECRET',     name: 'Tải tài liệu mật',                     description: 'Tải tài liệu mức SECRET — chỉ từ IP nội bộ',                        module: 'SCIENCE', actionType: 'VIEW',   isCritical: true },
+
+  // M06 – Kinh phí NCKH
+  { code: 'MANAGE_RESEARCH_BUDGET',      name: 'Quản lý kinh phí NCKH',               description: 'Lập dự toán, ghi nhận giải ngân kinh phí đề tài',                    module: 'SCIENCE', actionType: 'UPDATE' },
+  { code: 'APPROVE_BUDGET',              name: 'Phê duyệt kinh phí NCKH',             description: 'Duyệt dự toán và quyết toán kinh phí nghiên cứu',                    module: 'SCIENCE', actionType: 'APPROVE', isCritical: true },
+  { code: 'VIEW_BUDGET_FINANCE',         name: 'Xem chi tiết tài chính NCKH',         description: 'Xem số liệu tài chính chi tiết của kinh phí NCKH',                   module: 'SCIENCE', actionType: 'VIEW',   isCritical: true },
+
+  // M07 – Hội đồng KH
+  { code: 'MANAGE_COUNCIL',              name: 'Quản lý hội đồng khoa học',           description: 'Thành lập, cấu hình và giải thể hội đồng NCKH',                      module: 'SCIENCE', actionType: 'CREATE', isCritical: true },
+  { code: 'SUBMIT_REVIEW',               name: 'Nộp phản biện hội đồng',              description: 'Gửi nhận xét phản biện với tư cách thành viên hội đồng',             module: 'SCIENCE', actionType: 'SUBMIT' },
+  { code: 'FINALIZE_ACCEPTANCE',         name: 'Kết luận nghiệm thu',                  description: 'Chốt kết quả nghiệm thu chính thức của hội đồng',                    module: 'SCIENCE', actionType: 'APPROVE', isCritical: true },
+
+  // Dashboard, Tìm kiếm, AI, Báo cáo, Chất lượng dữ liệu
+  { code: 'VIEW_SCIENCE_DASHBOARD',      name: 'Xem dashboard khoa học',               description: 'Xem tổng quan KPI và biểu đồ thống kê NCKH',                         module: 'SCIENCE', actionType: 'VIEW' },
+  { code: 'VIEW_SCIENCE_DATA_QUALITY',   name: 'Xem báo cáo chất lượng dữ liệu KH',   description: 'Xem điểm completeness/accuracy/timeliness của dữ liệu khoa học',     module: 'SCIENCE', actionType: 'VIEW' },
+  { code: 'USE_SCIENCE_SEARCH',          name: 'Tìm kiếm thông minh KHQL',             description: 'Dùng tìm kiếm hybrid (full-text + trigram + semantic) trên CSDL KH', module: 'SCIENCE', actionType: 'VIEW' },
+  { code: 'USE_AI_SCIENCE',              name: 'Dùng AI KHQL',                          description: 'Tương tác với chatbot AI và tính năng phân tích xu hướng NCKH',      module: 'SCIENCE', actionType: 'VIEW' },
+  { code: 'USE_AI_SCIENCE_ADMIN',        name: 'Admin AI KHQL',                         description: 'Cấu hình, giám sát và quản lý hệ thống AI KHQL',                    module: 'SCIENCE', actionType: 'UPDATE', isCritical: true },
+  { code: 'EXPORT_SCIENCE_REPORT',       name: 'Xuất báo cáo KHQL',                    description: 'Xuất báo cáo NCKH theo mẫu BQP/chuẩn',                              module: 'SCIENCE', actionType: 'EXPORT' },
 ];
 
 async function main() {

@@ -16,7 +16,7 @@ import type {
 } from '@/lib/validations/science-budget'
 
 export const budgetService = {
-  async listBudgets(filter: { year?: number; status?: string; page: number; pageSize: number }) {
+  async listBudgets(filter: { year?: number; status?: string; projectId?: string; page: number; pageSize: number }) {
     const result = await budgetRepo.findMany(filter)
     return { success: true as const, data: result }
   },
@@ -83,8 +83,8 @@ export const budgetService = {
 
   async recordSpend(input: LineItemSpendInput, userId: string, ipAddress?: string) {
     // Tìm budget qua lineItem
-    const lineItem = await import('@/lib/db').then(({ db }) =>
-      db.budgetLineItem.findUnique({
+    const lineItem = await import('@/lib/db').then(({ default: prismaClient }) =>
+      prismaClient.budgetLineItem.findUnique({
         where: { id: input.lineItemId },
         select: { id: true, budgetId: true, plannedAmount: true },
       })

@@ -25,5 +25,10 @@ export async function register() {
     // Graceful shutdown được handle bởi BullMQ khi process nhận SIGTERM.
     const { initExportWorker } = await import('@/lib/workers/export-worker');
     initExportWorker();
+
+    // Khởi động M20–M26 science worker (BullMQ) – Sprint 02
+    // Xử lý: ORCID_SYNC, LIBRARY_INDEX (EMBEDDING_BACKFILL là stub đến Sprint 06).
+    const { initScienceWorker } = await import('@/lib/workers/science-worker');
+    initScienceWorker();
   }
 }

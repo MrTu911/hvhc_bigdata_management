@@ -6,7 +6,7 @@
  * Không sửa /lib/repositories/research/* – backward compatible.
  */
 import 'server-only'
-import { db } from '@/lib/db'
+import prisma from '@/lib/db'
 import type {
   ScientistListFilter,
   ScientistProfileUpdateInput,
@@ -42,6 +42,7 @@ const PROFILE_SELECT = {
   projectMemberCount: true,
   sensitivityLevel: true,
   researchAreaIds: true,
+  maso: true,
   updatedAt: true,
   createdAt: true,
   user: {
@@ -78,13 +79,18 @@ export const scientistRepo = {
     const where = {
       ...(keyword
         ? {
-            user: {
-              OR: [
-                { name: { contains: keyword, mode: 'insensitive' as const } },
-                { militaryId: { contains: keyword, mode: 'insensitive' as const } },
-                { email: { contains: keyword, mode: 'insensitive' as const } },
-              ],
-            },
+            OR: [
+              {
+                user: {
+                  OR: [
+                    { name: { contains: keyword, mode: 'insensitive' as const } },
+                    { militaryId: { contains: keyword, mode: 'insensitive' as const } },
+                    { email: { contains: keyword, mode: 'insensitive' as const } },
+                  ],
+                },
+              },
+              { maso: { contains: keyword, mode: 'insensitive' as const } },
+            ],
           }
         : {}),
       ...(primaryField
@@ -95,102 +101,193 @@ export const scientistRepo = {
     }
 
     const [items, total] = await Promise.all([
-      db.nckhScientistProfile.findMany({
+      prisma.nckhScientistProfile.findMany({
         where,
         select: PROFILE_SELECT,
         skip,
         take: pageSize,
         orderBy: { updatedAt: 'desc' },
       }),
-      db.nckhScientistProfile.count({ where }),
+      prisma.nckhScientistProfile.count({ where }),
     ])
 
     return { items, total }
   },
 
   async findById(id: string) {
-    return db.nckhScientistProfile.findUnique({
+    return prisma.nckhScientistProfile.findUnique({
       where: { id },
       select: PROFILE_SELECT,
     })
   },
 
   async findByUserId(userId: string) {
-    return db.nckhScientistProfile.findUnique({
+    return prisma.nckhScientistProfile.findUnique({
       where: { userId },
       select: PROFILE_SELECT,
     })
   },
 
-  async updateProfile(id: string, data: ScientistProfileUpdateInput) {
-    return db.nckhScientistProfile.update({
+  async updateProfile(id: string, data: ScientistProfileUpdateInput & { maso?: string | null }) {
+    return prisma.nckhScientistProfile.update({
       where: { id },
       data,
       select: PROFILE_SELECT,
     })
   },
 
+  /**
+   * Dual-write helper: cập nhật maso từ User.militaryId ?? employeeId.
+   * Gọi sau khi User thay đổi militaryId/employeeId (hoặc khi tạo profile mới).
+   */
+  async syncMasoFromUser(profileId: string, militaryId: string | null, employeeId: string | null) {
+    const maso = militaryId ?? employeeId ?? null
+    if (!maso) return
+    await prisma.nckhScientistProfile.update({
+      where: { id: profileId },
+      data: { maso },
+    })
+  },
+
   // ─── Education sub-table ────────────────────────────────────────────────────
 
   async createEducation(scientistId: string, data: ScientistEducationCreateInput) {
-    return db.nckhScientistEducation.create({
+    return prisma.nckhScientistEducation.create({
       data: { ...data, scientistId },
     })
   },
 
   async updateEducation(id: string, data: ScientistEducationUpdateInput) {
-    return db.nckhScientistEducation.update({ where: { id }, data })
+    return prisma.nckhScientistEducation.update({ where: { id }, data })
   },
 
   async deleteEducation(id: string) {
-    return db.nckhScientistEducation.delete({ where: { id } })
+    return prisma.nckhScientistEducation.delete({ where: { id } })
   },
 
   async findEducationById(id: string) {
-    return db.nckhScientistEducation.findUnique({ where: { id } })
+    return prisma.nckhScientistEducation.findUnique({ where: { id } })
   },
 
   // ─── Career sub-table ───────────────────────────────────────────────────────
 
   async createCareer(scientistId: string, data: ScientistCareerCreateInput) {
-    return db.nckhScientistCareer.create({
+    return prisma.nckhScientistCareer.create({
       data: { ...data, scientistId },
     })
   },
 
   async updateCareer(id: string, data: ScientistCareerUpdateInput) {
-    return db.nckhScientistCareer.update({ where: { id }, data })
+    return prisma.nckhScientistCareer.update({ where: { id }, data })
   },
 
   async deleteCareer(id: string) {
-    return db.nckhScientistCareer.delete({ where: { id } })
+    return prisma.nckhScientistCareer.delete({ where: { id } })
   },
 
   async findCareerById(id: string) {
-    return db.nckhScientistCareer.findUnique({ where: { id } })
+    return prisma.nckhScientistCareer.findUnique({ where: { id } })
   },
 
   // ─── Award sub-table ────────────────────────────────────────────────────────
 
   async createAward(scientistId: string, data: ScientistAwardCreateInput) {
-    return db.nckhScientistAward.create({
+    return prisma.nckhScientistAward.create({
       data: { ...data, scientistId },
     })
   },
 
   async updateAward(id: string, data: ScientistAwardUpdateInput) {
-    return db.nckhScientistAward.update({ where: { id }, data })
+    return prisma.nckhScientistAward.update({ where: { id }, data })
   },
 
   async deleteAward(id: string) {
-    return db.nckhScientistAward.delete({ where: { id } })
+    return prisma.nckhScientistAward.delete({ where: { id } })
   },
 
   async findAwardById(id: string) {
-    return db.nckhScientistAward.findUnique({ where: { id } })
+    return prisma.nckhScientistAward.findUnique({ where: { id } })
   },
 }
 
 export type ScientistProfileFull = NonNullable<
   Awaited<ReturnType<typeof scientistRepo.findById>>
 >
+
+// ─── Unit capacity aggregation ────────────────────────────────────────────────
+
+export interface UnitCapacityItem {
+  unitId: string
+  unitName: string
+  unitCode: string
+  scientistCount: number
+  doctoralCount: number // TS + TSKH
+  masterCount: number   // ThS + CK2
+  projectLeadCount: number
+  projectMemberCount: number
+  totalCitations: number
+  totalPublications: number
+  topFields: string[]
+}
+
+export const unitCapacityRepo = {
+  async getAll(): Promise<UnitCapacityItem[]> {
+    // Fetch all profiles with user/unit info for aggregation
+    const profiles = await prisma.nckhScientistProfile.findMany({
+      where: { user: { unitId: { not: null } } },
+      select: {
+        degree: true,
+        projectLeadCount: true,
+        projectMemberCount: true,
+        totalCitations: true,
+        totalPublications: true,
+        primaryField: true,
+        user: {
+          select: {
+            unitId: true,
+            unitRelation: { select: { id: true, name: true, code: true } },
+          },
+        },
+      },
+    })
+
+    // Group by unit
+    const map = new Map<string, UnitCapacityItem>()
+
+    for (const p of profiles) {
+      const unit = p.user.unitRelation
+      if (!unit || !p.user.unitId) continue
+
+      const key = p.user.unitId
+      if (!map.has(key)) {
+        map.set(key, {
+          unitId: unit.id,
+          unitName: unit.name,
+          unitCode: unit.code ?? '',
+          scientistCount: 0,
+          doctoralCount: 0,
+          masterCount: 0,
+          projectLeadCount: 0,
+          projectMemberCount: 0,
+          totalCitations: 0,
+          totalPublications: 0,
+          topFields: [],
+        })
+      }
+
+      const entry = map.get(key)!
+      entry.scientistCount += 1
+      if (['TS', 'TSKH'].includes(p.degree ?? '')) entry.doctoralCount += 1
+      if (['ThS', 'CK2'].includes(p.degree ?? '')) entry.masterCount += 1
+      entry.projectLeadCount += p.projectLeadCount ?? 0
+      entry.projectMemberCount += p.projectMemberCount ?? 0
+      entry.totalCitations += p.totalCitations ?? 0
+      entry.totalPublications += p.totalPublications ?? 0
+      if (p.primaryField && !entry.topFields.includes(p.primaryField)) {
+        entry.topFields.push(p.primaryField)
+      }
+    }
+
+    return [...map.values()].sort((a, b) => b.scientistCount - a.scientistCount)
+  },
+}

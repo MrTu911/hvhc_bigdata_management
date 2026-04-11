@@ -49,7 +49,213 @@ Một số module hoặc phân hệ mang tính tăng cường:
 - sync external systems
 
 ---
+### Tầng E – Science Domain Extension
+Đây là lớp mở rộng mới cho miền nghiên cứu khoa học, được phát triển **trên nền kiến trúc HVHC BigData hiện có**, không thay thế các module nền của hệ thống.
 
+Các module science domain extension dùng hệ mã mới:
+
+- **M20 – Science Activities**
+- **M21 – Science Resources**
+- **M22 – Science Data Hub**
+- **M23 – Science Councils & Evaluation**
+- **M24 – Science Budgets**
+- **M25 – Science Works & Library**
+- **M26 – Science Search, AI & Reports**
+
+**Nguyên tắc kiến trúc**
+- Các module M20–M26 là lớp mở rộng nghiệp vụ chuyên sâu cho miền nghiên cứu khoa học.
+- M20–M26 không được tạo hệ song song cho auth, workflow, export, master data.
+- M20–M26 bắt buộc tái sử dụng:
+  - **M01** cho auth / RBAC / scope / audit
+  - **M02** cho dữ liệu người / nhân sự / đơn vị
+  - **M13** cho workflow engine
+  - **M18** cho export / template / report rendering
+  - **M19** cho master data / catalogs / lookup
+
+**Tính chất**
+- Đây là nhóm module phát triển mới theo hướng domain-based expansion.
+- Các module này phải được thiết kế như extension modules, không phải rewrite của các module cũ.
+- Nếu tài liệu cũ của miền khoa học dùng numbering khác, Claude phải bỏ qua numbering cũ và chỉ dùng M20–M26 cho code mới.
+
+---
+
+### M20 – Science Activities
+**Vai trò**
+- Quản lý toàn bộ vòng đời hồ sơ khoa học:
+  - đề xuất,
+  - tiếp nhận,
+  - thẩm định,
+  - phê duyệt,
+  - giao thực hiện,
+  - theo dõi tiến độ,
+  - nghiệm thu,
+  - công nhận kết quả,
+  - lưu trữ hồ sơ.
+
+**Tính chất**
+- Module nghiệp vụ lõi của science domain
+- Lifecycle-heavy
+- Phụ thuộc mạnh vào workflow, audit, personnel, budgets, councils
+
+**Phụ thuộc vào**
+- M01
+- M02
+- M13
+- M18
+- M19
+- M23
+- M24
+- M25
+- M26
+
+---
+
+### M21 – Science Resources
+**Vai trò**
+- Quản lý tiềm lực khoa học:
+  - hồ sơ nhà khoa học,
+  - năng lực đơn vị,
+  - nguồn chuyên gia,
+  - chỉ số tiềm lực.
+
+**Tính chất**
+- Module dữ liệu nguồn của science domain
+- Không được nhân đôi dữ liệu nhân sự nếu M02 đã có backbone
+
+**Phụ thuộc vào**
+- M01
+- M02
+- M18
+- M19
+
+---
+
+### M22 – Science Data Hub
+**Vai trò**
+- Quản lý dữ liệu hợp nhất của science domain:
+  - dashboard dữ liệu khoa học,
+  - hồ sơ hợp nhất,
+  - namespace danh mục khoa học,
+  - theo dõi chất lượng dữ liệu,
+  - alerts dữ liệu.
+
+**Tính chất**
+- Data hub ở cấp domain
+- Không phải source of truth tách rời khỏi hệ thống
+- Aggregate từ các module khoa học khác
+
+**Phụ thuộc vào**
+- M01
+- M18
+- M19
+- M20
+- M21
+- M23
+- M24
+- M25
+
+---
+
+### M23 – Science Councils & Evaluation
+**Vai trò**
+- Quản lý hội đồng khoa học và đánh giá:
+  - thành lập hội đồng,
+  - phân công thành viên,
+  - phản biện kín,
+  - bỏ phiếu,
+  - kết luận,
+  - biên bản họp,
+  - hỗ trợ đánh giá nghiệm thu.
+
+**Tính chất**
+- Module nhạy cảm cao
+- Có rule visibility riêng
+- Dùng cho cả thẩm định và nghiệm thu
+
+**Phụ thuộc vào**
+- M01
+- M13
+- M18
+- M20
+- M21
+
+---
+
+### M24 – Science Budgets
+**Vai trò**
+- Quản lý kinh phí khoa học:
+  - dự toán,
+  - phê duyệt,
+  - giải ngân,
+  - theo dõi kế hoạch/thực tế,
+  - cảnh báo vượt ngưỡng.
+
+**Tính chất**
+- Module tài chính nội bộ của science domain
+- Gắn chặt với lifecycle hồ sơ khoa học
+
+**Phụ thuộc vào**
+- M01
+- M18
+- M19
+- M20
+
+---
+
+### M25 – Science Works & Library
+**Vai trò**
+- Quản lý công trình khoa học và thư viện số:
+  - bài báo,
+  - giáo trình,
+  - sách,
+  - metadata,
+  - DOI/ISBN/ISSN,
+  - import metadata,
+  - duplicate check,
+  - tài liệu số,
+  - analytics khai thác.
+
+**Tính chất**
+- Nguồn tri thức nền của science domain
+- Có tích hợp metadata, storage, search support
+
+**Phụ thuộc vào**
+- M01
+- M18
+- M19
+- M21
+- storage / indexing / integration services dùng chung
+
+---
+
+### M26 – Science Search, AI & Reports
+**Vai trò**
+- Quản lý lớp tra cứu, AI và báo cáo của science domain:
+  - keyword search,
+  - full-text search,
+  - semantic search,
+  - hybrid search,
+  - saved filters,
+  - chatbot/RAG,
+  - summarize,
+  - trends,
+  - duplicate check,
+  - báo cáo hoạt động KH,
+  - báo cáo tiềm lực,
+  - generate biểu mẫu.
+
+**Tính chất**
+- Lớp tăng cường
+- Không phải source of truth dữ liệu gốc
+- Phụ thuộc mạnh vào data hub, export, master data, security
+
+**Phụ thuộc vào**
+- M01
+- M18
+- M19
+- M22
+- các nguồn dữ liệu từ M20, M21, M23, M24, M25
+  
 ## 3. Danh mục module trọng yếu
 
 ### M01 – Hệ thống Quản trị & Bảo mật

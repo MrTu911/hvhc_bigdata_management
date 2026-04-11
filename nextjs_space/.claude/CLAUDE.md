@@ -7,10 +7,68 @@ Mục tiêu:
 - giúp Claude hành xử như một chuyên gia lập trình phát triển phần mềm,
 - bám đúng kiến trúc toàn hệ thống,
 - tôn trọng tài liệu thiết kế,
-- triển khai code theo phase,
-- giảm tối đa việc code lệch nghiệp vụ, lệch module, lệch data model.
+- triển khai code theo phase và sprint,
+- giảm tối đa việc code lệch nghiệp vụ, lệch module, lệch data model,
+- hỗ trợ đồng thời việc hoàn thiện hệ thống cũ và phát triển mở rộng miền nghiên cứu khoa học.
 
 Claude phải coi tài liệu này là luật vận hành trung tâm của repo.
+
+---
+
+# 0. UPDATE NOTICE — BASE ARCHITECTURE + SCIENCE DOMAIN EXTENSION
+
+Hệ thống hiện được phát triển theo **2 lớp song hành**:
+
+1. **HVHC BigData base architecture**
+   - là nền kiến trúc chính của toàn hệ thống,
+   - giữ nguyên các module nền và module cũ đang tiếp tục hoàn thiện.
+
+2. **Science domain extension**
+   - là gói mở rộng mới cho miền nghiên cứu khoa học,
+   - được phát triển trên nền kiến trúc gốc,
+   - không thay thế kiến trúc gốc.
+
+## 0.1. Quy ước mã module cho miền nghiên cứu khoa học
+Từ thời điểm này, Claude phải dùng **chỉ** các mã sau cho miền nghiên cứu khoa học:
+
+- **M20** — Science Activities
+- **M21** — Science Resources
+- **M22** — Science Data Hub
+- **M23** — Science Councils & Evaluation
+- **M24** — Science Budgets
+- **M25** — Science Works & Library
+- **M26** — Science Search, AI & Reports
+
+Claude **không được** dùng lại mã cũ từ các tài liệu thiết kế 3 miền trước đây cho domain khoa học.
+
+## 0.2. Module nền bắt buộc tái sử dụng
+Các module nền sau vẫn là source of truth toàn hệ thống:
+- **M01** — Security Platform
+- **M02** — Personnel Core
+- **M13** — Workflow Platform
+- **M18** — Export & Template Platform
+- **M19** — Master Data Platform
+
+Claude không được tạo hệ song song cho:
+- auth / RBAC / audit,
+- workflow engine,
+- export / template / report rendering,
+- master data / catalogs.
+
+## 0.3. Quy tắc ưu tiên tài liệu
+Khi làm việc với module cũ:
+- tiếp tục ưu tiên system docs và module docs hiện có.
+
+Khi làm việc với miền nghiên cứu khoa học mới:
+- ưu tiên file Excel thiết kế kỹ thuật M20–M26,
+- ưu tiên prompt pack M20–M26,
+- ưu tiên sprint prompt pack nếu task đang triển khai theo sprint.
+
+## 0.4. Quy tắc chống nhầm lẫn
+Nếu gặp tài liệu cũ dùng mã module khác cho miền nghiên cứu khoa học:
+- không dùng lại mã cũ đó trong code mới,
+- chỉ map ý nghĩa nghiệp vụ sang M20–M26,
+- nếu có xung đột, giữ nguyên module nền cũ và áp dụng mã mới cho domain khoa học.
 
 ---
 
@@ -42,17 +100,25 @@ Claude không được ưu tiên “code nhanh” hơn “code đúng”.
 ## 2.1. Luôn đọc tài liệu trước khi code
 Trước khi triển khai bất kỳ module/use case nào, Claude phải đọc tài liệu liên quan.
 
-Thứ tự đọc chuẩn:
+### Thứ tự đọc chuẩn cho hệ thống cũ / module nền
 1. `docs/design/system-overview.md`
 2. `docs/design/system-module-map.md`
 3. `docs/design/system-integration-map.md`
 4. file overview của module
 5. file use case / file chi tiết của module
 
-Không được code một module lớn khi chưa đọc system docs.
+### Thứ tự đọc chuẩn cho miền nghiên cứu khoa học M20–M26
+1. file Excel thiết kế kỹ thuật chi tiết M20–M26
+2. prompt pack M20–M26
+3. sprint prompt pack M20–M26
+4. các system docs nền nếu cần tái sử dụng M01/M02/M13/M18/M19
+5. file overview / detail docs của module khoa học nếu đã có
+
+Không được code một module lớn khi chưa đọc system docs hoặc docs module tương ứng.
 
 ## 2.2. Luôn mapping vào codebase hiện tại
 Claude không được giả định repo là trống.
+
 Trước khi thêm model, route, service, component, Claude phải:
 - kiểm tra code hiện có,
 - kiểm tra schema hiện có,
@@ -71,7 +137,16 @@ Phải chia phase:
 6. review/test
 7. migration/refactor nếu có
 
-## 2.4. Không phá dữ liệu cũ khi chưa có kế hoạch migrate
+## 2.4. Với science domain mới, ưu tiên triển khai theo sprint
+Nếu task thuộc M20–M26, Claude phải ưu tiên:
+1. đọc `00-SYSTEM-SPRINT-GUARD.md`
+2. đọc đúng file sprint tương ứng
+3. chỉ làm đúng phạm vi sprint
+4. self-review trước khi sang sprint tiếp theo
+
+Không được làm nhiều sprint lớn trong một lượt nếu chưa review xong sprint trước.
+
+## 2.5. Không phá dữ liệu cũ khi chưa có kế hoạch migrate
 Nếu có model cũ, field cũ, route cũ, service cũ:
 - không drop ngay,
 - không xóa ngay,
@@ -84,7 +159,7 @@ Nếu có model cũ, field cũ, route cũ, service cũ:
   - backfill
   - deprecate
 
-## 2.5. Không làm module theo kiểu cô lập giả tạo
+## 2.6. Không làm module theo kiểu cô lập giả tạo
 Claude phải luôn xác định:
 - module này phụ thuộc M01/M02/M13/M18/M19 thế nào,
 - dữ liệu nguồn gốc đến từ đâu,
@@ -107,13 +182,22 @@ Claude phải luôn xác định:
 ## 3.2. Module dữ liệu nguồn
 - **M02**: master data cán bộ / nhân sự / đơn vị / profile360
 
-## 3.3. Các module nghiệp vụ lớn hiện tại
+## 3.3. Các module nghiệp vụ lớn của hệ thống cũ
 - **M03**: đảng viên
 - **M05**: chính sách
 - **M09**: nghiên cứu khoa học
 - **M10**: giáo dục đào tạo
 
-## 3.4. Quy tắc phụ thuộc chuẩn
+## 3.4. Science domain extension modules
+- **M20**: Science Activities
+- **M21**: Science Resources
+- **M22**: Science Data Hub
+- **M23**: Science Councils & Evaluation
+- **M24**: Science Budgets
+- **M25**: Science Works & Library
+- **M26**: Science Search, AI & Reports
+
+## 3.5. Quy tắc phụ thuộc chuẩn
 - Auth, permission, scope, audit → đi qua **M01**
 - Lookup/master data → ưu tiên **M19**
 - User/personnel/unit → ưu tiên **M02**
@@ -225,12 +309,12 @@ Claude phải trả lời được:
 3. Module này thuộc tầng nào của hệ thống
 4. Phụ thuộc vào M01/M02/M13/M18/M19 thế nào
 5. File nào sẽ tạo/sửa
-6. Phase nào đang làm
+6. Phase hoặc sprint nào đang làm
 7. Rủi ro dữ liệu/kiến trúc nằm ở đâu
 
 ## 6.3. Trong khi code
 Claude phải:
-- chỉ code đúng phase được giao
+- chỉ code đúng phase hoặc sprint được giao
 - bám rules
 - bám design docs
 - giữ tương thích nếu có legacy
@@ -324,6 +408,13 @@ Dùng khi:
 - xử lý route nhạy cảm
 - cần rà hard-code secret, rate limit, headers, scope leaks
 
+## 7.13. `sprint-execution`
+Dùng khi:
+- task thuộc M20–M26
+- đã có sprint prompt pack
+- cần giữ phạm vi thật chặt
+- cần tránh Claude lan ra ngoài sprint
+
 ---
 
 # 8. LUÔN ĐỌC RULES TRƯỚC KHI LÀM
@@ -357,10 +448,9 @@ Các file rules hiện có:
   - `database-schema.md`
   - `logging-observability.md`
 - Review/debug → đặc biệt ưu tiên:
-  - `review-code`
-  - `debug-production-issue`
   - `testing.md`
   - `security.md`
+  - `logging-observability.md`
 
 ---
 
@@ -384,10 +474,17 @@ Nếu code hiện tại lệch design:
 - không được lờ đi design chỉ vì code cũ đang tồn tại
 
 ## 9.3. Claude phải đọc system docs trước
-Trước khi làm module lớn, phải đọc:
+Trước khi làm module lớn của hệ thống cũ, phải đọc:
 - `docs/design/system-overview.md`
 - `docs/design/system-module-map.md`
 - `docs/design/system-integration-map.md`
+
+## 9.4. Với science domain extension
+Claude phải ưu tiên:
+- file Excel thiết kế kỹ thuật M20–M26
+- prompt pack M20–M26
+- sprint prompt pack M20–M26
+- các docs nền về M01/M02/M13/M18/M19 khi cần
 
 ---
 
@@ -429,6 +526,13 @@ Có thể tạm coexist trong giai đoạn chuyển đổi, nhưng phải có:
 - migration plan
 - rollback thinking
 
+## 10.4. Với science domain mới
+Nếu một chức năng khoa học mới có liên quan tới logic cũ:
+- ưu tiên reuse nền cũ
+- tránh nhân đôi dữ liệu
+- tránh tạo router trùng nghĩa nếu có thể mở rộng router cũ bằng namespace/service mới
+- chỉ tạo module mới khi thật sự là một domain extension rõ ràng
+
 ---
 
 # 11. QUY TẮC CHO BẢO MẬT
@@ -438,8 +542,14 @@ Các module sau mặc định là nhạy cảm cao:
 - M03
 - M05
 - M10
-- M01
-- các route điểm, chính sách, đảng viên, session, audit, retirement, discipline
+- M20
+- M21
+- M22
+- M23
+- M24
+- M25
+- M26
+- các route điểm, chính sách, đảng viên, session, audit, retirement, discipline, research review, council, budget, export, AI trên dữ liệu nội bộ
 
 ## 11.2. Phải check backend
 - function code
@@ -464,6 +574,11 @@ Các hành động sau phải có audit nếu thiết kế yêu cầu:
 - policy settlement
 - export nhạy cảm
 - login/logout/revoke session
+- submit/review/approve/archive hồ sơ khoa học
+- bỏ phiếu hội đồng
+- duyệt/giải ngân kinh phí
+- export/báo cáo dữ liệu khoa học
+- AI operation trên dữ liệu nhạy cảm nếu có logging policy
 
 ---
 
@@ -477,6 +592,10 @@ Ví dụ:
 - ProgramVersion không bị overwrite
 - graduation engine không cấp bằng sai
 - retirement planner không tính sai rule cứng
+- workflow hồ sơ khoa học không nhảy sai trạng thái
+- council vote không tính sai ngưỡng
+- quality score không chấm sai bản ghi
+- search không lộ dữ liệu vượt quyền
 
 ## 12.2. Review sau mỗi phase lớn
 Sau khi xong một phase quan trọng, Claude nên chủ động review:
@@ -485,6 +604,14 @@ Sau khi xong một phase quan trọng, Claude nên chủ động review:
 - thiếu integration chưa
 - thiếu validation chưa
 - rủi ro production chưa
+
+## 12.3. Review sau mỗi sprint lớn
+Với M20–M26, sau mỗi sprint Claude phải review:
+- phạm vi sprint có bị vượt không
+- có bypass module nền không
+- có hard-code lookup không
+- có tạo export/AI/workflow song song không
+- có tạo source of truth mới không cần thiết không
 
 ---
 
@@ -497,7 +624,7 @@ Claude phải trả:
 3. API/UI chính
 4. Phụ thuộc hệ thống
 5. File cần tạo/sửa
-6. Phase triển khai
+6. Phase hoặc sprint triển khai
 7. Rủi ro
 
 ## 13.2. Khi code
@@ -528,7 +655,7 @@ Claude phải trả:
 
 ---
 
-# 14. QUY TẮC CHO MỘT SỐ MODULE TRỌNG ĐIỂM
+# 14. QUY TẮC CHO CÁC MODULE TRỌNG ĐIỂM
 
 ## 14.1. Với M01
 - M01 là nền bắt buộc
@@ -571,22 +698,78 @@ Claude phải trả:
 - là nguồn lookup/master data
 - không hard-code enum nếu M19 đã có category phù hợp
 
+## 14.9. Với M20 — Science Activities
+- là trục vòng đời hồ sơ khoa học
+- không tự dựng workflow engine riêng
+- mọi chuyển trạng thái quan trọng phải đi qua workflow/service rõ ràng
+- audit là bắt buộc với submit/review/approve/recognize/archive
+- phải chuẩn bị hook cho M23, M24, M25, M26
+
+## 14.10. Với M21 — Science Resources
+- là nguồn dữ liệu nhà khoa học và tiềm lực khoa học
+- phải reuse M02 tối đa
+- không copy nhân sự dư thừa
+- expert capability phải phục vụ M23
+- metrics phải rõ nguồn aggregate
+
+## 14.11. Với M22 — Science Data Hub
+- là kho dữ liệu hợp nhất của miền khoa học
+- không trở thành “DB mới tách rời” khỏi hệ thống
+- catalog phải đi qua M19
+- unified record phải rõ dữ liệu nguồn
+- quality và dashboard phải tách lớp rõ ràng
+
+## 14.12. Với M23 — Science Councils & Evaluation
+- dữ liệu rất nhạy cảm
+- closed review là bắt buộc nếu thiết kế yêu cầu
+- rule bỏ phiếu phải được test
+- tích hợp chuyên gia từ M21
+- biên bản/quyết định phải đi theo chuẩn M18 nếu có export
+
+## 14.13. Với M24 — Science Budgets
+- là module nghiệp vụ tài chính nội bộ
+- tính toán planned vs actual phải ở service
+- mọi approval/disbursement phải audit
+- phải gắn chặt với M20, không đứng độc lập giả tạo
+
+## 14.14. Với M25 — Science Works & Library
+- công trình khoa học và thư viện số là nguồn tri thức nền
+- metadata phải chuẩn hóa tốt
+- duplicate check và import phải tách service
+- access/download phải kiểm quyền backend
+- không tự dựng export engine riêng
+
+## 14.15. Với M26 — Science Search, AI & Reports
+- là lớp tăng cường, không phải source of truth
+- search phải tôn trọng scope và sensitivity
+- AI chỉ là trợ lý, không tự quyết nghiệp vụ cứng
+- mọi export/báo cáo đi qua M18
+- mọi filter danh mục đi qua M19
+
 ---
 
 # 15. CHIẾN LƯỢC LÀM VIỆC MẶC ĐỊNH
 
 Nếu không có chỉ dẫn khác, Claude phải đi theo chiến lược này:
 
-1. đọc system docs
+1. đọc system docs hoặc docs module tương ứng
 2. đọc module overview
 3. đọc module detail docs
 4. phân tích module
 5. mapping vào codebase hiện có
-6. chia phase
-7. code đúng phase được giao
+6. chia phase hoặc xác định sprint
+7. code đúng phase hoặc sprint được giao
 8. báo cáo file đã tạo/sửa
-9. review phase
+9. review phase/sprint
 10. đề xuất bước tiếp theo
+
+### Với task thuộc science domain extension
+Thứ tự mặc định là:
+1. đọc sprint guard
+2. đọc đúng file sprint
+3. xác nhận M20–M26 module scope
+4. chỉ code trong phạm vi sprint
+5. self-review trước khi đề xuất sprint tiếp theo
 
 ---
 
@@ -605,6 +788,9 @@ Claude không được:
 - drop legacy model/field ngay khi chưa migrate
 - tạo route trùng chức năng khi route cũ có thể extend/deprecate
 - trả lời mơ hồ kiểu “đã sửa xong” mà không liệt kê file affected
+- dùng lại mã cũ của thiết kế 3 miền cho miền nghiên cứu khoa học
+- tạo module khoa học mới ngoài M20–M26 nếu chưa có quyết định kiến trúc mới
+- làm nhiều sprint lớn trong một lần mà không self-review
 
 ---
 
@@ -615,8 +801,9 @@ Khi không chắc:
 2. kiểm tra code hiện có
 3. kiểm tra design docs
 4. kiểm tra system integration docs
-5. chọn phương án ít phá dữ liệu nhất
-6. nêu rõ giả định kỹ thuật thay vì tự quyết mù quáng
+5. kiểm tra sprint/module prompt liên quan
+6. chọn phương án ít phá dữ liệu nhất
+7. nêu rõ giả định kỹ thuật thay vì tự quyết mù quáng
 
 ---
 
@@ -633,3 +820,4 @@ Claude phải giúp repo này đạt được:
 - dễ review
 - dễ migration
 - sẵn sàng production theo từng giai đoạn
+- đồng thời hỗ trợ mở rộng chắc chắn sang miền nghiên cứu khoa học M20–M26 mà không phá nền cũ

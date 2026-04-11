@@ -12,7 +12,7 @@ import 'server-only'
 import { workRepo } from '@/lib/repositories/science/work.repo'
 import { fetchCrossrefByDoi, mapCrossrefTypeToWorkType } from '@/lib/integrations/crossref'
 import { logAudit } from '@/lib/audit'
-import { db } from '@/lib/db'
+import prisma from '@/lib/db'
 import type {
   WorkCreateInput,
   WorkUpdateInput,
@@ -26,7 +26,7 @@ import type {
 async function generateWorkCode(): Promise<string> {
   const year = new Date().getFullYear()
 
-  const seq = await db.scienceIdSequence.upsert({
+  const seq = await prisma.scienceIdSequence.upsert({
     where: { entityType_year: { entityType: 'WORK', year } },
     create: { entityType: 'WORK', year, lastSeq: 1 },
     update: { lastSeq: { increment: 1 } },

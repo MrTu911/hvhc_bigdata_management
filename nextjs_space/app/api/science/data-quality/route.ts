@@ -10,7 +10,7 @@
  *
  * Cache: 30 min Redis (data quality is expensive to compute).
  *
- * RBAC: SCIENCE.DASHBOARD_VIEW or SCIENCE.AI_ADMIN
+ * RBAC: SCIENCE.DATA_QUALITY_VIEW ('VIEW_SCIENCE_DATA_QUALITY')
  */
 
 import { NextRequest, NextResponse } from 'next/server'
@@ -25,15 +25,10 @@ const querySchema = z.object({
 })
 
 export async function GET(req: NextRequest) {
-  // Allow either DASHBOARD_VIEW (managers) or AI_ADMIN (data stewards)
-  const dashAuth  = await requireFunction(req, SCIENCE.DASHBOARD_VIEW)
-  const adminAuth = await requireFunction(req, SCIENCE.AI_ADMIN)
+  const auth = await requireFunction(req, SCIENCE.DATA_QUALITY_VIEW)
+  if (!auth.allowed) return auth.response!
 
-  if (!dashAuth.allowed && !adminAuth.allowed) {
-    return dashAuth.response!   // returns 401/403 with standard body
-  }
-
-  const user = (dashAuth.allowed ? dashAuth : adminAuth).user!
+  const user = auth.user!
 
   const { searchParams } = new URL(req.url)
   const parsed = querySchema.safeParse({ unit: searchParams.get('unit') ?? undefined })

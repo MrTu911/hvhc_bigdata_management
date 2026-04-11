@@ -31,7 +31,9 @@ export const VALID_STATUS_TRANSITIONS: Record<ProjectStatus, ProjectStatus[]> = 
   REJECTED:     ['DRAFT'],
   IN_PROGRESS:  ['PAUSED', 'COMPLETED', 'CANCELLED'],
   PAUSED:       ['IN_PROGRESS', 'CANCELLED'],
-  COMPLETED:    ['ARCHIVED'],
+  // COMPLETED → ARCHIVED là phase change, không phải status change.
+  // Dùng POST /api/science/projects/:id/archive thay vì workflow route.
+  COMPLETED:    [],
   CANCELLED:    [],
 }
 
@@ -79,3 +81,68 @@ export type ProjectCreateInput = z.infer<typeof projectCreateSchema>
 export type ProjectUpdateInput = z.infer<typeof projectUpdateSchema>
 export type ProjectListFilter = z.infer<typeof projectListFilterSchema>
 export type WorkflowTransitionInput = z.infer<typeof workflowTransitionSchema>
+
+// ─── Lock rule ────────────────────────────────────────────────────────────────
+// Trạng thái không cho phép sửa đề tài (lock)
+export const LOCKED_STATUSES = new Set<ProjectStatus>(['ARCHIVED', 'CANCELLED'])
+
+// ─── Milestone schemas ────────────────────────────────────────────────────────
+
+export const MILESTONE_STATUS_VALUES = [
+  'PENDING', 'IN_PROGRESS', 'COMPLETED', 'OVERDUE', 'CANCELLED',
+] as const
+export type MilestoneStatus = (typeof MILESTONE_STATUS_VALUES)[number]
+
+export const milestoneCreateSchema = z.object({
+  title: z.string().min(3).max(300),
+  dueDate: z.coerce.date(),
+  note: z.string().max(1000).optional(),
+  attachmentUrl: z.string().url().optional(),
+})
+
+export const milestoneUpdateSchema = z.object({
+  title: z.string().min(3).max(300).optional(),
+  dueDate: z.coerce.date().optional(),
+  status: z.enum(MILESTONE_STATUS_VALUES).optional(),
+  completedAt: z.coerce.date().optional(),
+  note: z.string().max(1000).optional(),
+  attachmentUrl: z.string().url().optional(),
+})
+
+export type MilestoneCreateInput = z.infer<typeof milestoneCreateSchema>
+export type MilestoneUpdateInput = z.infer<typeof milestoneUpdateSchema>
+
+// ─── Acceptance (nghiệm thu) schemas ─────────────────────────────────────────
+
+export const REVIEW_TYPE_VALUES = [
+  'THAM_DINH_DE_CUONG',
+  'KIEM_TRA_GIUA_KY',
+  'NGHIEM_THU_CO_SO',
+  'NGHIEM_THU_CAP_HV',
+  'NGHIEM_THU_CAP_TREN',
+] as const
+export type ReviewType = (typeof REVIEW_TYPE_VALUES)[number]
+
+export const REVIEW_DECISION_VALUES = ['PASSED', 'FAILED', 'REVISION_REQUIRED'] as const
+export type ReviewDecision = (typeof REVIEW_DECISION_VALUES)[number]
+
+export const acceptanceSubmitSchema = z.object({
+  reviewType: z.enum(REVIEW_TYPE_VALUES),
+  reviewDate: z.coerce.date(),
+  score: z.number().min(0).max(10).optional(),
+  grade: z.string().max(50).optional(),
+  comments: z.string().max(3000).optional(),
+  decision: z.enum(REVIEW_DECISION_VALUES),
+  minutesUrl: z.string().url().optional(),
+})
+
+export type AcceptanceSubmitInput = z.infer<typeof acceptanceSubmitSchema>
+
+// ─── Archive schemas ──────────────────────────────────────────────────────────
+
+export const archiveTransitionSchema = workflowTransitionSchema.extend({
+  completionScore: z.number().min(0).max(10).optional(),
+  completionGrade: z.string().max(50).optional(),
+})
+
+export type ArchiveTransitionInput = z.infer<typeof archiveTransitionSchema>

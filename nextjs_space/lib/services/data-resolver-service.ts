@@ -5,7 +5,7 @@
 
 import prisma from '@/lib/db';
 
-export type EntityType = 'personnel' | 'student' | 'party_member' | 'faculty';
+export type EntityType = 'personnel' | 'student' | 'party_member' | 'faculty' | 'scientific_council';
 
 interface ResolveOptions {
   entityId: string;
@@ -32,6 +32,8 @@ export async function resolveEntityData(options: ResolveOptions): Promise<Record
         return await resolveFacultyData(entityId, dataMap);
       case 'party_member':
         return await resolvePartyMemberData(entityId, dataMap);
+      case 'scientific_council':
+        return await resolveScientificCouncilData(entityId);
       default:
         return resolved;
     }
@@ -270,6 +272,115 @@ async function resolvePartyMemberData(
     chiBoHienTai: member.partyCell || '',
     xepLoai: '',
   };
+}
+
+/**
+ * Resolve dữ liệu hội đồng khoa học (M23)
+ * Dùng để xuất biên bản hội đồng qua M18 template engine.
+ */
+async function resolveScientificCouncilData(
+  id: string
+): Promise<Record<string, unknown>> {
+  const council = await prisma.scientificCouncil.findUnique({
+    where: { id },
+    include: {
+      project: { select: { projectCode: true, title: true, category: true } },
+      chairman:  { select: { name: true, rank: true, academicTitle: true } },
+      secretary: { select: { name: true, rank: true } },
+      members: {
+        select: {
+          role: true,
+          vote: true,
+          user: { select: { name: true, rank: true, academicTitle: true } },
+        },
+        orderBy: { role: 'asc' },
+      },
+      reviews: {
+        select: { criteria: true, score: true, comment: true, memberId: true },
+      },
+    },
+  })
+
+  if (!council) throw new Error(`Không tìm thấy hội đồng ID: ${id}`)
+
+  const fmt = (d: Date | null | undefined) => {
+    if (!d) return ''
+    const date = new Date(d)
+    return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`
+  }
+
+  const COUNCIL_TYPE_MAP: Record<string, string> = {
+    REVIEW:     'Thẩm định',
+    ACCEPTANCE: 'Nghiệm thu',
+    FINAL:      'Kết luận cuối',
+  }
+  const RESULT_MAP: Record<string, string> = {
+    PASS:   'ĐẠT',
+    FAIL:   'KHÔNG ĐẠT',
+    REVISE: 'CẦN BỔ SUNG',
+  }
+  const CRITERIA_MAP: Record<string, string> = {
+    SCIENTIFIC_VALUE: 'Giá trị khoa học',
+    FEASIBILITY:      'Tính khả thi',
+    BUDGET:           'Kinh phí',
+    TEAM:             'Nhóm nghiên cứu',
+    OUTCOME:          'Kết quả dự kiến',
+  }
+
+  // Tổng hợp điểm trung bình
+  const avgScore = council.reviews.length > 0
+    ? council.reviews.reduce((s, r) => s + (r.score ?? 0), 0) / council.reviews.length
+    : null
+
+  // Danh sách thành viên theo vai trò
+  const membersByRole = (role: string) =>
+    council.members.filter((m) => m.role === role)
+
+  return {
+    tenHoiDong:       COUNCIL_TYPE_MAP[council.type] ?? council.type,
+    maDeTai:          council.project?.projectCode ?? '',
+    tenDeTai:         council.project?.title ?? '',
+    loaiDeTai:        council.project?.category ?? '',
+    ngayHop:          fmt(council.meetingDate),
+    chuTich:          council.chairman ? `${council.chairman.rank ?? ''} ${council.chairman.name}`.trim() : '',
+    chuTich_hocHam:   council.chairman?.academicTitle ?? '',
+    thuKy:            council.secretary ? `${council.secretary.rank ?? ''} ${council.secretary.name}`.trim() : '',
+    ketQua:           council.result ? (RESULT_MAP[council.result] ?? council.result) : 'Chưa có kết quả',
+    diemTrungBinh:    avgScore != null ? avgScore.toFixed(2) : '',
+    ketLuan:          council.conclusionText ?? '',
+    ngayLap:          fmt(new Date()),
+    tongThanhVien:    String(council.members.length),
+    soPhienBan:       council.id.slice(-6).toUpperCase(),
+
+    // Danh sách thành viên
+    thanhVien_list: council.members.map((m, i) => ({
+      stt:     i + 1,
+      hoTen:   `${m.user.rank ?? ''} ${m.user.name}`.trim(),
+      hocHam:  m.user.academicTitle ?? '',
+      vaiTro:  m.role === 'CHAIRMAN' ? 'Chủ tịch' : m.role === 'SECRETARY' ? 'Thư ký' : m.role === 'EXPERT' ? 'Chuyên gia' : 'Phản biện',
+      phieuBau: m.vote ? (RESULT_MAP[m.vote] ?? m.vote) : 'Chưa bỏ phiếu',
+    })),
+
+    // Tiêu chí chấm điểm tổng hợp
+    tieuChi_list: Object.entries(CRITERIA_MAP).map(([k, label]) => {
+      const related = council.reviews.filter((r) => r.criteria === k)
+      const avg = related.length > 0
+        ? related.reduce((s, r) => s + (r.score ?? 0), 0) / related.length
+        : null
+      return {
+        tieuChi:  label,
+        diemTB:   avg != null ? avg.toFixed(1) : '—',
+        soPhieu:  related.length,
+      }
+    }),
+
+    // Phản biện viên
+    phanBien_list: membersByRole('REVIEWER').map((m, i) => ({
+      stt:    i + 1,
+      hoTen:  `${m.user.rank ?? ''} ${m.user.name}`.trim(),
+      hocHam: m.user.academicTitle ?? '',
+    })),
+  }
 }
 
 /**

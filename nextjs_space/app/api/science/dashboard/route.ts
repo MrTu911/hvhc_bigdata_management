@@ -41,10 +41,18 @@ export async function GET(req: NextRequest) {
   const { year } = parsed.data
   const user = auth.user!
 
-  const data = await dashboardService.getDashboard(
-    { id: user.id, unitId: (user as { unitId?: string | null }).unitId },
-    year,
-  )
-
-  return NextResponse.json({ success: true, data, error: null })
+  try {
+    const data = await dashboardService.getDashboard(
+      { id: user.id, unitId: (user as { unitId?: string | null }).unitId },
+      year,
+    )
+    return NextResponse.json({ success: true, data, error: null })
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err)
+    console.error('[/api/science/dashboard] Error:', err)
+    return NextResponse.json(
+      { success: false, data: null, error: message },
+      { status: 500 },
+    )
+  }
 }

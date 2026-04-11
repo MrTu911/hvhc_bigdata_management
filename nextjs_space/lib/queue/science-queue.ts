@@ -30,13 +30,19 @@ export type LibraryIndexJobData = {
   requestedByUserId: string
 }
 
-export type ScienceJobData = OrcidSyncJobData | LibraryIndexJobData
+export type EmbeddingBackfillJobData = {
+  jobType: 'EMBEDDING_BACKFILL'
+  entityType: 'NCKH_PROJECT' | 'SCIENTIFIC_WORK' | 'LIBRARY_ITEM'
+  entityId: string
+}
+
+export type ScienceJobData = OrcidSyncJobData | LibraryIndexJobData | EmbeddingBackfillJobData
 
 // ─── Redis connection (lazy singleton) ───────────────────────────────────────
 
 let _scienceConn: IORedis | null = null
 
-function getScienceRedisConnection(): IORedis {
+export function getScienceRedisConnection(): IORedis {
   if (!_scienceConn) {
     const url = process.env.REDIS_URL || 'redis://localhost:6379'
     _scienceConn = new IORedis(url, {
@@ -111,5 +117,29 @@ export async function enqueueLibraryIndex(data: LibraryIndexJobData): Promise<st
   }
 
   const job = await queue.add('library-index', data, { jobId })
+  return job.id ?? jobId
+}
+
+/**
+ * Enqueue embedding backfill job cho một entity.
+ * Idempotent: bỏ qua nếu job đang waiting/active/delayed.
+ */
+export async function enqueueEmbeddingBackfill(data: EmbeddingBackfillJobData): Promise<string> {
+  const queue = getScienceQueue()
+  const jobId = `embedding-backfill:${data.entityType}:${data.entityId}`
+
+  const existing = await queue.getJob(jobId)
+  if (existing) {
+    const state = await existing.getState()
+    if (state === 'waiting' || state === 'active' || state === 'delayed') {
+      return jobId
+    }
+  }
+
+  const job = await queue.add('embedding-backfill', data, {
+    jobId,
+    // Backfill chạy với priority thấp hơn ORCID sync và library index
+    priority: 10,
+  })
   return job.id ?? jobId
 }

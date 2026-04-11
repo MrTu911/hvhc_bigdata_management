@@ -77,7 +77,7 @@ export async function tsvectorSearch(
     }
 
     if (type === 'scientist') {
-      // Join NckhScientistProfile → User for fullName
+      // Join NckhScientistProfile → User for name
       const rows = await prisma.$queryRawUnsafe<Array<{ id: string; title: string; ts_score: number }>>(
         `SELECT sp.id,
                 u.full_name AS title,
@@ -147,14 +147,14 @@ async function ilikeFallback(
   const rows = await prisma.nckhScientistProfile.findMany({
     where: {
       OR: [
-        { user: { fullName: { contains: q, mode: 'insensitive' } } },
+        { user: { name: { contains: q, mode: 'insensitive' } } },
         { primaryField: { contains: q, mode: 'insensitive' } },
       ],
     },
     take: limit,
-    select: { id: true, user: { select: { fullName: true } } },
+    select: { id: true, user: { select: { name: true } } },
   })
-  return rows.map((r) => ({ id: r.id, title: r.user.fullName ?? '', ts_score: 0.5 }))
+  return rows.map((r) => ({ id: r.id, title: r.user.name ?? '', ts_score: 0.5 }))
 
   // suppress unused variable warning
   void pattern

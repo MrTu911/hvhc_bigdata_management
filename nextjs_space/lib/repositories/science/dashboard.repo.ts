@@ -44,7 +44,7 @@ export async function getTopResearchers(limit = 10) {
       user: {
         select: {
           id: true,
-          fullName: true,
+          name: true,
           email: true,
           unitRelation: { select: { id: true, name: true } },
         },
@@ -63,7 +63,7 @@ export async function getAcademyRecentActivity(limit = 10) {
       toStatus: true,
       actedAt: true,
       comment: true,
-      actionBy: { select: { id: true, fullName: true } },
+      actionBy: { select: { id: true, name: true } },
       project: { select: { id: true, title: true, projectCode: true } },
     },
   })
@@ -89,7 +89,7 @@ export async function getUnitProjectSummary(unitId: string, year: number) {
         status: true,
         phase: true,
         endDate: true,
-        principalInvestigator: { select: { id: true, fullName: true } },
+        principalInvestigator: { select: { id: true, name: true } },
       },
     }),
   ])
@@ -153,7 +153,7 @@ export async function getResearcherPublicationSummary(userId: string) {
       select: {
         id: true,
         title: true,
-        journalName: true,
+        journal: true,
         publishedYear: true,
         isISI: true,
         isScopus: true,
@@ -217,7 +217,7 @@ export async function getReviewerPendingReviews(userId: string) {
   // Step 1: Get all member IDs for this user
   const myMemberships = await prisma.scientificCouncilMember.findMany({
     where: { userId, council: { result: null } }, // result=null → council not yet concluded
-    select: { id: true, council: { select: { id: true, name: true, meetingDate: true, project: { select: { id: true, title: true } } } } },
+    select: { id: true, role: true, council: { select: { id: true, type: true, meetingDate: true, project: { select: { id: true, title: true } } } } },
   })
 
   if (myMemberships.length === 0) return []

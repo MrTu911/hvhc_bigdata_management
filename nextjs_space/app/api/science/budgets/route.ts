@@ -12,10 +12,11 @@ import { budgetCreateSchema } from '@/lib/validations/science-budget'
 import { z } from 'zod'
 
 const listFilterSchema = z.object({
-  year: z.coerce.number().int().optional(),
-  status: z.string().optional(),
-  page: z.coerce.number().int().min(1).default(1),
-  pageSize: z.coerce.number().int().min(1).max(100).default(20),
+  year:      z.coerce.number().int().optional(),
+  status:    z.string().optional(),
+  projectId: z.string().cuid().optional(),
+  page:      z.coerce.number().int().min(1).default(1),
+  pageSize:  z.coerce.number().int().min(1).max(100).default(20),
 })
 
 export async function GET(req: NextRequest) {
@@ -24,19 +25,33 @@ export async function GET(req: NextRequest) {
 
   const { searchParams } = new URL(req.url)
   const parsed = listFilterSchema.safeParse({
-    year: searchParams.get('year') ?? undefined,
-    status: searchParams.get('status') ?? undefined,
-    page: searchParams.get('page') ?? undefined,
-    pageSize: searchParams.get('pageSize') ?? undefined,
+    year:      searchParams.get('year')      ?? undefined,
+    status:    searchParams.get('status')    ?? undefined,
+    projectId: searchParams.get('projectId') ?? undefined,
+    page:      searchParams.get('page')      ?? undefined,
+    pageSize:  searchParams.get('pageSize')  ?? undefined,
   })
   if (!parsed.success) {
     return NextResponse.json({ success: false, error: parsed.error.flatten().fieldErrors }, { status: 400 })
   }
 
   const result = await budgetService.listBudgets(parsed.data)
+
+  // Serialize BigInt fields — totalApproved, totalSpent, lineItems.plannedAmount/spentAmount
+  const items = result.data.items.map((b: any) => ({
+    ...b,
+    totalApproved: b.totalApproved?.toString() ?? '0',
+    totalSpent:    b.totalSpent?.toString()    ?? '0',
+    lineItems: (b.lineItems ?? []).map((l: any) => ({
+      ...l,
+      plannedAmount: l.plannedAmount?.toString() ?? '0',
+      spentAmount:   l.spentAmount?.toString()   ?? '0',
+    })),
+  }))
+
   return NextResponse.json({
     success: true,
-    data: result.data.items,
+    data: items,
     meta: {
       total: result.data.total,
       page: parsed.data.page,

@@ -23,6 +23,21 @@ interface RouteParams {
   params: Promise<{ id: string }>
 }
 
+/** Serialize BigInt fields on a budget object for JSON responses */
+function serializeBudget(b: any) {
+  if (!b) return b
+  return {
+    ...b,
+    totalApproved: b.totalApproved?.toString() ?? '0',
+    totalSpent:    b.totalSpent?.toString()    ?? '0',
+    lineItems: (b.lineItems ?? []).map((l: any) => ({
+      ...l,
+      plannedAmount: l.plannedAmount?.toString() ?? '0',
+      spentAmount:   l.spentAmount?.toString()   ?? '0',
+    })),
+  }
+}
+
 export async function GET(req: NextRequest, { params }: RouteParams) {
   const auth = await requireFunction(req, SCIENCE.BUDGET_VIEW_FINANCE)
   if (!auth.allowed) return auth.response!
@@ -32,7 +47,8 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
     ({ budgetRepo }) => budgetRepo.findById(id)
   )
   if (!budget) return NextResponse.json({ success: false, error: 'Không tìm thấy ngân sách' }, { status: 404 })
-  return NextResponse.json({ success: true, data: budget })
+
+  return NextResponse.json({ success: true, data: serializeBudget(budget) })
 }
 
 export async function PATCH(req: NextRequest, { params }: RouteParams) {
@@ -53,7 +69,7 @@ export async function PATCH(req: NextRequest, { params }: RouteParams) {
 
     const result = await budgetService.approveBudget(id, parsed.data, auth.user!.id, ipAddress)
     if (!result.success) return NextResponse.json({ success: false, error: result.error }, { status: 400 })
-    return NextResponse.json({ success: true, data: result.data })
+    return NextResponse.json({ success: true, data: serializeBudget(result.data) })
   }
 
   // Default: requires BUDGET_MANAGE
@@ -67,7 +83,7 @@ export async function PATCH(req: NextRequest, { params }: RouteParams) {
     }
     const result = await budgetService.recordSpend(parsed.data, auth.user!.id, ipAddress)
     if (!result.success) return NextResponse.json({ success: false, error: result.error }, { status: 400 })
-    return NextResponse.json({ success: true, data: result.data })
+    return NextResponse.json({ success: true, data: serializeBudget(result.data) })
   }
 
   const parsed = budgetUpdateSchema.safeParse(body)
@@ -76,5 +92,5 @@ export async function PATCH(req: NextRequest, { params }: RouteParams) {
   }
   const result = await budgetService.updateBudget(id, parsed.data, auth.user!.id, ipAddress)
   if (!result.success) return NextResponse.json({ success: false, error: result.error }, { status: 400 })
-  return NextResponse.json({ success: true, data: result.data })
+  return NextResponse.json({ success: true, data: serializeBudget(result.data) })
 }

@@ -10,7 +10,7 @@
  * Cache Redis 10 phút per (unitId, year).
  */
 import 'server-only'
-import { db } from '@/lib/db'
+import prisma from '@/lib/db'
 import { getCache, setCache } from '@/lib/cache'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -25,8 +25,8 @@ export interface UnitKpiData {
   isiPublications: number
   scopusPublications: number
   totalScientificWorks: number
-  totalBudgetApproved: bigint
-  totalBudgetUsed: bigint
+  totalBudgetApproved: string    // serialized as string — BigInt không JSON-serializable
+  totalBudgetUsed: string        // serialized as string — BigInt không JSON-serializable
   budgetUtilizationPct: number   // totalBudgetUsed / totalBudgetApproved * 100
   avgCompletionScore: number
   impactScore: number            // Weighted formula (see below)
@@ -72,21 +72,21 @@ async function aggregate(unitId: string | null, year: number): Promise<UnitKpiDa
     approvedProjects,
     completedProjects,
   ] = await Promise.all([
-    db.nckhProject.aggregate({
+    prisma.nckhProject.aggregate({
       where: projectWhere,
       _count: { id: true },
       _avg: { completionScore: true },
     }),
-    db.nckhPublication.count({
+    prisma.nckhPublication.count({
       where: { publishedYear: year, author: authorUnitFilter },
     }),
-    db.nckhPublication.count({
+    prisma.nckhPublication.count({
       where: { publishedYear: year, isISI: true, author: authorUnitFilter },
     }),
-    db.nckhPublication.count({
+    prisma.nckhPublication.count({
       where: { publishedYear: year, isScopus: true, author: authorUnitFilter },
     }),
-    db.scientificWork.count({
+    prisma.scientificWork.count({
       where: {
         year,
         isDeleted: false,
@@ -101,26 +101,26 @@ async function aggregate(unitId: string | null, year: number): Promise<UnitKpiDa
           : {}),
       },
     }),
-    db.researchBudget.aggregate({
+    prisma.researchBudget.aggregate({
       where: { project: projectWhere },
       _sum: { totalApproved: true, totalSpent: true },
     }),
-    db.nckhProject.count({
+    prisma.nckhProject.count({
       where: {
         ...projectWhere,
         status: { in: ['APPROVED', 'IN_PROGRESS', 'COMPLETED', 'PAUSED'] },
       },
     }),
-    db.nckhProject.count({
+    prisma.nckhProject.count({
       where: { ...projectWhere, status: 'COMPLETED' },
     }),
   ])
 
-  const totalBudgetApproved = budgetAgg._sum.totalApproved ?? BigInt(0)
-  const totalBudgetUsed = budgetAgg._sum.totalSpent ?? BigInt(0)
+  const rawApproved = budgetAgg._sum.totalApproved ?? BigInt(0)
+  const rawUsed     = budgetAgg._sum.totalSpent    ?? BigInt(0)
   const budgetUtilizationPct =
-    totalBudgetApproved > BigInt(0)
-      ? Number((totalBudgetUsed * BigInt(1000)) / totalBudgetApproved) / 10
+    rawApproved > BigInt(0)
+      ? Number((rawUsed * BigInt(1000)) / rawApproved) / 10
       : 0
 
   const partial: Omit<UnitKpiData, 'impactScore' | 'generatedAt'> = {
@@ -133,8 +133,8 @@ async function aggregate(unitId: string | null, year: number): Promise<UnitKpiDa
     isiPublications: isiCount,
     scopusPublications: scopusCount,
     totalScientificWorks: workCount,
-    totalBudgetApproved,
-    totalBudgetUsed,
+    totalBudgetApproved: rawApproved.toString(),
+    totalBudgetUsed:     rawUsed.toString(),
     budgetUtilizationPct,
     avgCompletionScore: projectStats._avg.completionScore ?? 0,
   }

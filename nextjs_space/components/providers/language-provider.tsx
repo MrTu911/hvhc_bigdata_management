@@ -165,6 +165,22 @@ const translations = {
     'nav.learningMaterials': 'Học liệu',
     'nav.labManagement': 'Phòng thí nghiệm',
     
+    // 9b. CSDL Khoa học Quản lý (CSDL-KHQL)
+    'nav.scienceDatabase':    'CSDL Khoa học Quản lý',
+    'nav.scienceDashboard':   'Tổng quan KHQL',
+    'nav.scienceProjects':    'Quản lý Đề tài',
+    'nav.scienceActivities':  'Vòng đời Đề tài',
+    'nav.scienceScientists':  'Nhà Khoa học',
+    'nav.scienceCouncils':    'Hội đồng KH',
+    'nav.scienceBudgets':     'Kinh phí NCKH',
+    'nav.scienceLibrary':     'Thư viện số',
+    'nav.scienceCatalogs':    'Danh mục KH',
+    'nav.scienceWorks':             'Công trình KH',
+    'nav.scienceSearch':            'Tìm kiếm thông minh',
+    'nav.scienceDataQuality':       'Chất lượng Dữ liệu',
+    'nav.scienceDataHubOverview':   'Kho dữ liệu KH (M22)',
+    'nav.scienceDataHubRecords':    'Unified Records',
+
     // 7. CSDL Nghiên cứu Khoa học
     'nav.researchDatabase': 'CSDL Nghiên cứu Khoa học',
     'nav.researchOverview': 'Tổng quan CSDL NCKH',
@@ -574,6 +590,22 @@ const translations = {
     'nav.learningMaterials': 'Learning Materials',
     'nav.labManagement': 'Laboratory',
     
+    // 9b. Science Management Database (CSDL-KHQL)
+    'nav.scienceDatabase':    'Science Management DB',
+    'nav.scienceDashboard':   'Science Overview',
+    'nav.scienceProjects':    'Research Projects',
+    'nav.scienceActivities':  'Project Lifecycle',
+    'nav.scienceScientists':  'Scientists',
+    'nav.scienceCouncils':    'Scientific Councils',
+    'nav.scienceBudgets':     'Research Budget',
+    'nav.scienceLibrary':     'Digital Library',
+    'nav.scienceCatalogs':    'Science Catalogs',
+    'nav.scienceWorks':             'Scientific Works',
+    'nav.scienceSearch':            'Smart Search',
+    'nav.scienceDataQuality':       'Data Quality',
+    'nav.scienceDataHubOverview':   'Science Data Hub (M22)',
+    'nav.scienceDataHubRecords':    'Unified Records',
+
     // 7. Research Database
     'nav.researchDatabase': 'Research Database',
     'nav.researchOverview': 'Research DB Overview',

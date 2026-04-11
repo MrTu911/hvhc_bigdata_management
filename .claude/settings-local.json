@@ -1,0 +1,11 @@
+{
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://openrouter.ai/api",
+    "ANTHROPIC_AUTH_TOKEN": "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",
+    "ANTHROPIC_API_KEY": "",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "nvidia/nemotron-3-super-120b-a12b:free",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "openai/gpt-oss-120b:free",
+    "ANTHROPIC_DEFAULT_SONET_MODEL": "google/gemma-4-31b-it:free"
+
+  }
+}
