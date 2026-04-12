@@ -39,6 +39,7 @@ const SOLDIER_RANK_KEYWORDS = ['sĩ', 'binh'];
 
 interface RankItem { id: string; name: string; category: string; }
 interface EduLevelItem { id: string; name: string; }
+interface PositionItem { code: string; nameVi: string; }
 
 const WORK_STATUS_LABELS: Record<string, string> = {
   ACTIVE: 'Đang công tác',
@@ -136,6 +137,7 @@ function PersonnelModal({
   units,
   ranks,
   educationLevels,
+  positions,
   onClose,
   onSaved,
 }: {
@@ -144,6 +146,7 @@ function PersonnelModal({
   units: Unit[];
   ranks: RankItem[];
   educationLevels: EduLevelItem[];
+  positions: PositionItem[];
   onClose: () => void;
   onSaved: () => void;
 }) {
@@ -304,11 +307,22 @@ function PersonnelModal({
           </div>
           <div>
             <Label>Chức vụ</Label>
-            <Input
-              value={form.position}
-              onChange={e => update('position', e.target.value)}
-              placeholder="Giảng viên, Trưởng phòng..."
-            />
+            {positions.length > 0 ? (
+              <Select value={form.position} onValueChange={v => update('position', v)}>
+                <SelectTrigger><SelectValue placeholder="Chọn chức vụ" /></SelectTrigger>
+                <SelectContent>
+                  {positions.map(p => (
+                    <SelectItem key={p.code} value={p.nameVi}>{p.nameVi}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            ) : (
+              <Input
+                value={form.position}
+                onChange={e => update('position', e.target.value)}
+                placeholder="Giảng viên, Trưởng phòng..."
+              />
+            )}
           </div>
 
           {/* Đơn vị */}
@@ -428,6 +442,7 @@ export default function PersonnelListPage() {
   const [units, setUnits] = useState<Unit[]>([]);
   const [ranks, setRanks] = useState<RankItem[]>([]);
   const [educationLevels, setEducationLevels] = useState<EduLevelItem[]>([]);
+  const [positions, setPositions] = useState<PositionItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [typeTab, setTypeTab] = useState<TypeTab>('ALL');
@@ -437,6 +452,7 @@ export default function PersonnelListPage() {
   const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [stats, setStats] = useState<Record<string, number>>({});
+  const [typeStats, setTypeStats] = useState({ OFFICER: 0, SOLDIER: 0, CIVILIAN: 0, TOTAL: 0 });
 
   // Modal state
   const [createModal, setCreateModal] = useState(false);
@@ -454,6 +470,7 @@ export default function PersonnelListPage() {
         ...(search && { search }),
         ...(rankFilter !== 'ALL' && { rank: rankFilter }),
         ...(statusFilter !== 'ALL' && { workStatus: statusFilter }),
+        ...(typeTab !== 'ALL' && { type: typeTab }),
       });
       const res = await fetch(`/api/personnel?${params}`);
       const data = await res.json();
@@ -462,34 +479,33 @@ export default function PersonnelListPage() {
         setTotalPages(data.pagination?.totalPages || 1);
         setTotalCount(data.pagination?.total || 0);
         setStats(data.stats || {});
+        if (data.typeStats) setTypeStats(data.typeStats);
       }
     } catch (error) {
       console.error('Error:', error);
     } finally {
       setLoading(false);
     }
-  }, [currentPage, rankFilter, statusFilter, search]);
+  }, [currentPage, rankFilter, statusFilter, search, typeTab]);
 
   useEffect(() => {
     fetch('/api/units?limit=200').then(r => r.json()).then(d => { if (d.units) setUnits(d.units); }).catch(() => {});
     fetch('/api/master-data/ranks').then(r => r.json()).then(d => { if (d.success) setRanks(d.data); }).catch(() => {});
     fetch('/api/master-data/education-levels').then(r => r.json()).then(d => { if (d.success) setEducationLevels(d.data); }).catch(() => {});
+    fetch('/api/master-data/MD_POSITION_TYPE/items?onlyActive=true').then(r => r.json()).then(d => { if (d.success) setPositions(d.data); }).catch(() => {});
   }, []);
 
   useEffect(() => { fetchPersonnel(); }, [fetchPersonnel]);
 
+  // Reset to page 1 when tab changes (fetchPersonnel will re-run via useCallback dep)
+  useEffect(() => { setCurrentPage(1); }, [typeTab]);
+
   const handleSearch = () => { setCurrentPage(1); fetchPersonnel(); };
 
-  // Client-side type filtering
-  const filteredPersonnel = personnel.filter(p => {
-    if (typeTab === 'ALL') return true;
-    const t = getPersonnelType(p.rank);
-    return typeTab === 'OFFICER' ? t === 'OFFICER' : t === 'SOLDIER';
-  });
+  // Server-side filtering is already applied; render all returned personnel
+  const filteredPersonnel = personnel;
 
-  // Derived counts from current page
-  const officerCount = personnel.filter(p => getPersonnelType(p.rank) === 'OFFICER').length;
-  const soldierCount = personnel.filter(p => getPersonnelType(p.rank) === 'SOLDIER').length;
+  // Use server-side type stats for accurate totals
   const activeCount = stats['ACTIVE'] || 0;
 
   const handleExport = async (format: 'excel' | 'csv') => {
@@ -513,9 +529,9 @@ export default function PersonnelListPage() {
   };
 
   const TYPE_TABS: { value: TypeTab; label: string; count: number }[] = [
-    { value: 'ALL', label: 'Tất cả', count: personnel.length },
-    { value: 'OFFICER', label: 'Sĩ quan', count: officerCount },
-    { value: 'SOLDIER', label: 'Quân nhân', count: soldierCount },
+    { value: 'ALL', label: 'Tất cả', count: typeStats.TOTAL },
+    { value: 'OFFICER', label: 'Sĩ quan', count: typeStats.OFFICER },
+    { value: 'SOLDIER', label: 'Quân nhân', count: typeStats.SOLDIER },
   ];
 
   return (
@@ -581,7 +597,7 @@ export default function PersonnelListPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Sĩ quan</p>
-                <p className="text-2xl font-bold text-purple-600">{officerCount}</p>
+                <p className="text-2xl font-bold text-purple-600">{typeStats.OFFICER}</p>
               </div>
               <Star className="h-8 w-8 text-purple-300" />
             </div>
@@ -592,7 +608,7 @@ export default function PersonnelListPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs text-muted-foreground">Quân nhân</p>
-                <p className="text-2xl font-bold text-indigo-600">{soldierCount}</p>
+                <p className="text-2xl font-bold text-indigo-600">{typeStats.SOLDIER}</p>
               </div>
               <Shield className="h-8 w-8 text-indigo-300" />
             </div>
@@ -849,6 +865,7 @@ export default function PersonnelListPage() {
           units={units}
           ranks={ranks}
           educationLevels={educationLevels}
+          positions={positions}
           onClose={() => setCreateModal(false)}
           onSaved={() => { setCreateModal(false); fetchPersonnel(); }}
         />
@@ -860,6 +877,7 @@ export default function PersonnelListPage() {
           units={units}
           ranks={ranks}
           educationLevels={educationLevels}
+          positions={positions}
           onClose={() => setEditTarget(null)}
           onSaved={() => { setEditTarget(null); fetchPersonnel(); }}
         />

@@ -254,10 +254,21 @@ export async function PATCH(
             'specialization', 'rank', 'position', 'personnelType', 'workStatus',
           ];
 
+    // DateTime fields that must not receive empty strings
+    const DATE_FIELDS = new Set(['dateOfBirth', 'joinDate', 'startDate', 'endDate']);
+
     const updateData: any = {};
     for (const field of allowedFields) {
-      if (body[field] !== undefined) {
-        updateData[field] = body[field];
+      const value = body[field];
+      if (value === undefined) continue;
+      // Convert empty string to null for DateTime fields; skip truly empty dates
+      if (DATE_FIELDS.has(field)) {
+        updateData[field] = value === '' ? null : new Date(value);
+      } else if (field === 'unitId' && value === '') {
+        // Empty unitId = unassign from unit
+        updateData[field] = null;
+      } else {
+        updateData[field] = value;
       }
     }
 

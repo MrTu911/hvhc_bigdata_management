@@ -13,6 +13,20 @@ import { requireScopedFunction } from '@/lib/rbac/middleware';
 import { PERSONNEL } from '@/lib/rbac/function-codes';
 import { logAudit } from '@/lib/audit';
 
+// Rank keyword classification — consistent with frontend getPersonnelType()
+const OFFICER_RANK_KEYWORDS = ['tướng', 'tá', 'úy'];
+const SOLDIER_RANK_KEYWORDS = ['sĩ', 'binh'];
+
+function officerRankCond() {
+  return { OR: OFFICER_RANK_KEYWORDS.map(k => ({ rank: { contains: k, mode: 'insensitive' as const } })) };
+}
+function soldierRankCond() {
+  return { OR: SOLDIER_RANK_KEYWORDS.map(k => ({ rank: { contains: k, mode: 'insensitive' as const } })) };
+}
+function addAnd(where: any, extra: any) {
+  return { ...where, AND: [...(Array.isArray(where.AND) ? where.AND : []), extra] };
+}
+
 // Helper: Lấy danh sách đơn vị con (recursive)
 async function getSubordinateUnitIds(unitId: string): Promise<string[]> {
   const result: string[] = [unitId];
@@ -96,6 +110,17 @@ export async function GET(request: NextRequest) {
       where.rank = rank;
     }
 
+    // Snapshot for type stats BEFORE type-specific rank filter
+    const baseWhere = { ...where };
+
+    // Type filter (OFFICER / SOLDIER) — rank keyword matching
+    const type = searchParams.get('type');
+    if (type === 'OFFICER') {
+      where.AND = [...(Array.isArray(where.AND) ? where.AND : []), officerRankCond()];
+    } else if (type === 'SOLDIER') {
+      where.AND = [...(Array.isArray(where.AND) ? where.AND : []), soldierRankCond()];
+    }
+
     // Query with pagination
     const [personnel, total] = await Promise.all([
       prisma.user.findMany({
@@ -139,12 +164,13 @@ export async function GET(request: NextRequest) {
       prisma.user.count({ where }),
     ]);
 
-    // Get statistics
-    const stats = await prisma.user.groupBy({
-      by: ['workStatus'],
-      where,
-      _count: { id: true },
-    });
+    // Get work-status stats + type counts (all against baseWhere, not type-filtered)
+    const [stats, officerTotal, soldierTotal, grandTotal] = await Promise.all([
+      prisma.user.groupBy({ by: ['workStatus'], where: baseWhere, _count: { id: true } }),
+      prisma.user.count({ where: addAnd(baseWhere, officerRankCond()) }),
+      prisma.user.count({ where: addAnd(baseWhere, soldierRankCond()) }),
+      prisma.user.count({ where: baseWhere }),
+    ]);
 
     // Log audit
     await logAudit({
@@ -169,6 +195,12 @@ export async function GET(request: NextRequest) {
         acc[s.workStatus || 'UNKNOWN'] = s._count.id;
         return acc;
       }, {} as Record<string, number>),
+      typeStats: {
+        OFFICER: officerTotal,
+        SOLDIER: soldierTotal,
+        CIVILIAN: grandTotal - officerTotal - soldierTotal,
+        TOTAL: grandTotal,
+      },
     });
   } catch (error) {
     console.error('Error fetching personnel:', error);

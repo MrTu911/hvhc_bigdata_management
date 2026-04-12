@@ -104,16 +104,16 @@ export async function getNotificationStats(timeRange: 'today' | 'week' | 'month'
     if (timeRange === 'today') interval = '1 day';
     if (timeRange === 'month') interval = '30 days';
 
-    const stats = await db.$queryRaw`
-      SELECT 
+    const stats = await db.$queryRawUnsafe(`
+      SELECT
         notification_type,
         status,
         COUNT(*) as count
       FROM notification_history
-      WHERE sent_at >= NOW() - INTERVAL ${interval}
+      WHERE sent_at >= NOW() - INTERVAL '${interval}'
       GROUP BY notification_type, status
       ORDER BY notification_type, status
-    `;
+    `);
 
     return stats;
   } catch (error) {
