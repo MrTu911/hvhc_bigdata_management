@@ -24,6 +24,9 @@ export async function GET(req: NextRequest) {
     const khoaHoc      = searchParams.get('khoaHoc');
     const nganh        = searchParams.get('nganh');
     const studyMode    = searchParams.get('studyMode');
+    const trainingSystemUnitId = searchParams.get('trainingSystemUnitId');
+    const battalionUnitId      = searchParams.get('battalionUnitId');
+    const heDaoTaoFilter       = searchParams.get('heDaoTao');
     // 'military' = khoaQuanLy NOT NULL; 'civil' = khoaQuanLy IS NULL; null = no filter
     const studentType  = searchParams.get('studentType');
     const page         = Math.max(1, parseInt(searchParams.get('page') || '1'));
@@ -45,23 +48,44 @@ export async function GET(req: NextRequest) {
     if (khoaHoc) where.khoaHoc = khoaHoc;
     if (nganh) where.nganh = nganh;
     if (studyMode) where.studyMode = studyMode;
+    if (trainingSystemUnitId) where.trainingSystemUnitId = trainingSystemUnitId;
+    if (battalionUnitId) where.battalionUnitId = battalionUnitId;
+    if (heDaoTaoFilter) where.heDaoTao = heDaoTaoFilter;
     // studentType: 'military' → has khoaQuanLy (military unit structure)
     //              'civil'    → no khoaQuanLy
     if (studentType === 'military') where.khoaQuanLy = { not: null };
     else if (studentType === 'civil') where.khoaQuanLy = null;
 
-    // Scope SELF: giảng viên chỉ xem học viên mình cố vấn (giangVienHuongDanId)
-    // Scope UNIT/DEPARTMENT/ACADEMY: không lọc thêm (function-code guard đã đủ)
-    const scope = authResult?.scope ?? 'SELF';
-    if (scope === 'SELF' && user) {
-      const facultyProfile = await prisma.facultyProfile.findUnique({
-        where: { userId: user.id },
-        select: { id: true },
-      });
-      if (facultyProfile) {
-        where.giangVienHuongDanId = facultyProfile.id;
+    // Scope enforcement theo vai trò chỉ huy quản lý học viên
+    if (user) {
+      const userUnit = user.unitId
+        ? await prisma.unit.findUnique({ where: { id: user.unitId }, select: { id: true, type: true } })
+        : null;
+
+      if (userUnit?.type === 'HE') {
+        // CHI_HUY_HE: chỉ thấy học viên thuộc Hệ mình (trừ khi đã filter cụ thể hơn)
+        if (!trainingSystemUnitId && !battalionUnitId) {
+          where.trainingSystemUnitId = userUnit.id;
+        }
+      } else if (userUnit?.type === 'TIEUDOAN') {
+        // CHI_HUY_TIEU_DOAN: chỉ thấy học viên thuộc Tiểu đoàn mình
+        if (!battalionUnitId) {
+          where.battalionUnitId = userUnit.id;
+        }
+      } else {
+        // Scope SELF: giảng viên chỉ xem học viên mình cố vấn (giangVienHuongDanId)
+        // Scope UNIT/DEPARTMENT/ACADEMY: không lọc thêm (function-code guard đã đủ)
+        const scope = authResult?.scope ?? 'SELF';
+        if (scope === 'SELF') {
+          const facultyProfile = await prisma.facultyProfile.findUnique({
+            where: { userId: user.id },
+            select: { id: true },
+          });
+          if (facultyProfile) {
+            where.giangVienHuongDanId = facultyProfile.id;
+          }
+        }
       }
-      // Không có FacultyProfile (cán bộ phi giảng viên): không lọc thêm
     }
 
     const [data, total] = await Promise.all([
@@ -88,6 +112,12 @@ export async function GET(req: NextRequest) {
           },
           giangVienHuongDan: {
             select: { id: true, user: { select: { name: true } } },
+          },
+          trainingSystemUnit: {
+            select: { id: true, code: true, name: true },
+          },
+          battalionUnit: {
+            select: { id: true, code: true, name: true },
           },
         },
         orderBy: { maHocVien: 'asc' },

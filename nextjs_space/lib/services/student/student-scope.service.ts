@@ -70,6 +70,10 @@ const ADMIN_ROLES: UserRole[] = [
 /**
  * Xây dựng where clause lọc HocVien theo scope của actor.
  *
+ * Ngoài FunctionScope chuẩn, hàm này cũng xét Unit.type của user:
+ *   - Unit.type = 'HE'       → filter theo trainingSystemUnitId (CHI_HUY_HE)
+ *   - Unit.type = 'TIEUDOAN' → filter theo battalionUnitId (CHI_HUY_TIEU_DOAN)
+ *
  * @param user          AuthUser từ session (chứa id, role, unitId)
  * @param scope         FunctionScope từ RBAC (SELF | UNIT | DEPARTMENT | ACADEMY)
  */
@@ -79,6 +83,11 @@ export async function buildStudentScopeFilter(
 ): Promise<StudentScopeFilter> {
   // ── ACADEMY: không filter ────────────────────────────────────────────────
   if (scope === FunctionScope.ACADEMY) {
+    // Nhưng vẫn kiểm tra Unit.type để giới hạn nếu user là CHI_HUY_HE / CHI_HUY_TIEU_DOAN
+    // với scope ACADEMY (defensive: đảm bảo đúng scope dù role có scope cao)
+    const unitFilter = await buildUnitTypeFilter(user);
+    if (unitFilter) return unitFilter;
+
     return {
       where: {},
       appliedScope: 'ACADEMY',
@@ -88,6 +97,10 @@ export async function buildStudentScopeFilter(
 
   // ── DEPARTMENT / UNIT: filter theo đơn vị ───────────────────────────────
   if (scope === FunctionScope.DEPARTMENT || scope === FunctionScope.UNIT) {
+    // Nếu đơn vị user là HE hoặc TIEUDOAN, ưu tiên unit-type filter
+    const unitFilter = await buildUnitTypeFilter(user);
+    if (unitFilter) return unitFilter;
+
     return buildUnitScopeFilter(user, scope);
   }
 
@@ -146,9 +159,21 @@ export async function canActorViewStudent(
   }
 
   // DEPARTMENT / UNIT scope: kiểm tra học viên có thuộc đơn vị không
-  if (scope === FunctionScope.DEPARTMENT || scope === FunctionScope.UNIT) {
+  if (scope === FunctionScope.DEPARTMENT || scope === FunctionScope.UNIT || scope === FunctionScope.ACADEMY) {
     const authUser: AuthUser = { id: actorUserId, email: '', role: actorRole };
-    const filter = await buildUnitScopeFilter(authUser, scope);
+
+    // Ưu tiên unit-type filter (HE / TIEUDOAN) trước khi dùng scope chuẩn
+    const unitTypeFilter = await buildUnitTypeFilter(authUser);
+    if (unitTypeFilter) {
+      const count = await prisma.hocVien.count({
+        where: { id: targetHocVienId, ...unitTypeFilter.where },
+      });
+      return count > 0;
+    }
+
+    if (scope === FunctionScope.ACADEMY) return true;
+
+    const filter = await buildUnitScopeFilter(authUser, scope as FunctionScope.DEPARTMENT | FunctionScope.UNIT);
     const count = await prisma.hocVien.count({
       where: { id: targetHocVienId, ...filter.where },
     });
@@ -160,6 +185,42 @@ export async function canActorViewStudent(
 }
 
 // ─── Private helpers ──────────────────────────────────────────────────────────
+
+/**
+ * Kiểm tra Unit.type của user để áp dụng filter đúng cho CHI_HUY_HE / CHI_HUY_TIEU_DOAN.
+ *
+ * - Unit.type = 'HE'       → filter trainingSystemUnitId = user.unitId
+ * - Unit.type = 'TIEUDOAN' → filter battalionUnitId = user.unitId
+ * - Các loại Unit khác      → trả null (để caller tiếp tục xử lý scope bình thường)
+ */
+async function buildUnitTypeFilter(user: AuthUser): Promise<StudentScopeFilter | null> {
+  if (!user.unitId) return null;
+
+  const unit = await prisma.unit.findUnique({
+    where: { id: user.unitId },
+    select: { id: true, type: true, name: true },
+  });
+
+  if (!unit) return null;
+
+  if (unit.type === 'HE') {
+    return {
+      where: { trainingSystemUnitId: unit.id },
+      appliedScope: 'UNIT',
+      reason: `CHI_HUY_HE – chỉ xem học viên thuộc Hệ "${unit.name}" (trainingSystemUnitId=${unit.id})`,
+    };
+  }
+
+  if (unit.type === 'TIEUDOAN') {
+    return {
+      where: { battalionUnitId: unit.id },
+      appliedScope: 'UNIT',
+      reason: `CHI_HUY_TIEU_DOAN – chỉ xem học viên thuộc Tiểu đoàn "${unit.name}" (battalionUnitId=${unit.id})`,
+    };
+  }
+
+  return null;
+}
 
 /**
  * Filter cho DEPARTMENT và UNIT scope.

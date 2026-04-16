@@ -693,6 +693,21 @@ export const MENU_CONFIG: MenuGroup[] = [
     ],
   },
 
+  // ========== 8b2. HỆ ĐÀO TẠO & TIỂU ĐOÀN ==========
+  {
+    title: 'nav.trainingSystemGroup',
+    items: [
+      {
+        name: 'nav.trainingSystems',
+        href: '/dashboard/education/training-systems',
+        icon: Building2,
+        gradient: 'from-indigo-600 to-blue-700',
+        badge: '🏛️',
+        functions: [EDUCATION.VIEW_TRAINING_SYSTEM],
+      },
+    ],
+  },
+
   // ========== 8c. QUẢN LÝ NGƯỜI HỌC ==========
   {
     title: 'nav.studentManagementGroup',

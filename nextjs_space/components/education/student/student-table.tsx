@@ -64,8 +64,8 @@ export function StudentTable({
               <TableRow>
                 <TableHead>Mã HV</TableHead>
                 <TableHead>Họ tên</TableHead>
+                <TableHead>Hệ / Tiểu đoàn</TableHead>
                 <TableHead>Lớp</TableHead>
-                <TableHead>Khóa</TableHead>
                 <TableHead>Ngành</TableHead>
                 <TableHead>CTĐT</TableHead>
                 <TableHead>GPA</TableHead>
@@ -84,8 +84,19 @@ export function StudentTable({
                       <div className="text-xs text-muted-foreground">{s.studyMode}</div>
                     )}
                   </TableCell>
+                  <TableCell>
+                    {s.trainingSystemUnit ? (
+                      <div>
+                        <div className="text-xs font-semibold text-indigo-700">{s.trainingSystemUnit.name}</div>
+                        {s.battalionUnit && (
+                          <div className="text-xs text-muted-foreground">{s.battalionUnit.name}</div>
+                        )}
+                      </div>
+                    ) : (
+                      <span className="text-xs text-muted-foreground">—</span>
+                    )}
+                  </TableCell>
                   <TableCell>{s.lop || '—'}</TableCell>
-                  <TableCell>{s.khoaHoc || '—'}</TableCell>
                   <TableCell>{s.nganh || '—'}</TableCell>
                   <TableCell>
                     {s.currentProgramVersion ? (

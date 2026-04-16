@@ -20,9 +20,22 @@ export default function StudentsPage() {
   const [filterStatus, setFilterStatus] = useState('');
   const [filterKhoaHoc, setFilterKhoaHoc] = useState('');
   const [filterStudyMode, setFilterStudyMode] = useState('');
+  const [filterTrainingSystem, setFilterTrainingSystem] = useState('');
+  const [filterBattalion, setFilterBattalion] = useState('');
+  const [trainingSystems, setTrainingSystems] = useState<any[]>([]);
   const [page, setPage] = useState(1);
   const [meta, setMeta] = useState({ total: 0, totalPages: 1 });
   const limit = 20;
+
+  // Lấy danh sách Hệ cho dropdown filter
+  useEffect(() => {
+    fetch('/api/education/training-systems')
+      .then((r) => r.json())
+      .then((json) => { if (json.success) setTrainingSystems(json.data || []); })
+      .catch(() => {});
+  }, []);
+
+  const selectedSystem = trainingSystems.find((s) => s.id === filterTrainingSystem);
 
   const fetchStudents = useCallback(async () => {
     setLoading(true);
@@ -32,6 +45,8 @@ export default function StudentsPage() {
       if (filterStatus && filterStatus !== 'ALL') params.set('currentStatus', filterStatus);
       if (filterKhoaHoc) params.set('khoaHoc', filterKhoaHoc);
       if (filterStudyMode && filterStudyMode !== 'ALL') params.set('studyMode', filterStudyMode);
+      if (filterTrainingSystem && filterTrainingSystem !== 'ALL') params.set('trainingSystemUnitId', filterTrainingSystem);
+      if (filterBattalion && filterBattalion !== 'ALL') params.set('battalionUnitId', filterBattalion);
 
       const res = await fetch(`/api/education/students?${params}`);
       const json = await res.json();
@@ -43,7 +58,7 @@ export default function StudentsPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, search, filterStatus, filterKhoaHoc, filterStudyMode]);
+  }, [page, search, filterStatus, filterKhoaHoc, filterStudyMode, filterTrainingSystem, filterBattalion]);
 
   useEffect(() => { fetchStudents(); }, [fetchStudents]);
 
@@ -89,6 +104,32 @@ export default function StudentsPage() {
                 ))}
               </SelectContent>
             </Select>
+
+            <Select value={filterTrainingSystem} onValueChange={v => { setFilterTrainingSystem(v); setFilterBattalion(''); setPage(1); }}>
+              <SelectTrigger className="w-48">
+                <SelectValue placeholder="Hệ đào tạo" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="ALL">Tất cả Hệ</SelectItem>
+                {trainingSystems.map((sys: any) => (
+                  <SelectItem key={sys.id} value={sys.id}>{sys.name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            {selectedSystem?.battalions?.length > 0 && (
+              <Select value={filterBattalion} onValueChange={v => { setFilterBattalion(v); setPage(1); }}>
+                <SelectTrigger className="w-48">
+                  <SelectValue placeholder="Tiểu đoàn" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="ALL">Tất cả Tiểu đoàn</SelectItem>
+                  {selectedSystem.battalions.map((bat: any) => (
+                    <SelectItem key={bat.id} value={bat.id}>{bat.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
 
             <Select value={filterStudyMode} onValueChange={v => { setFilterStudyMode(v); setPage(1); }}>
               <SelectTrigger className="w-44">

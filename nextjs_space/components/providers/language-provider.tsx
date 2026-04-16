@@ -125,11 +125,13 @@ const translations = {
     // Menu groups (new restructured)
     'nav.educationOverviewGroup':    'Tổng quan Đào tạo',
     'nav.facultyManagementGroup':    'Quản lý Giảng viên',
+    'nav.trainingSystemGroup':       'Hệ đào tạo & Tiểu đoàn',
     'nav.studentManagementGroup':    'Quản lý Người học',
     'nav.educationProgramGroup':     'Chương trình & Vận hành',
     // Menu items
     'nav.educationOverview': 'Tổng quan GD-ĐT',
     'nav.facultyOverview':   'Quản lý Giảng viên',
+    'nav.trainingSystems':   'Hệ đào tạo & Tiểu đoàn',
     'nav.militaryStudents':  'Học viên Quân sự',
     'nav.civilStudents':     'Sinh viên Dân sự',
     'nav.educationConduct':  'Điểm rèn luyện',
@@ -552,11 +554,13 @@ const translations = {
     // Menu groups (new restructured)
     'nav.educationOverviewGroup':   'Education Overview',
     'nav.facultyManagementGroup':   'Faculty Management',
+    'nav.trainingSystemGroup':      'Training Systems & Battalions',
     'nav.studentManagementGroup':   'Student Management',
     'nav.educationProgramGroup':    'Programs & Operations',
     // Menu items
     'nav.educationOverview': 'Education Overview',
     'nav.facultyOverview':   'Faculty Management',
+    'nav.trainingSystems':   'Training Systems & Battalions',
     'nav.militaryStudents':  'Military Students',
     'nav.civilStudents':     'Civil Students',
     'nav.educationConduct':  'Conduct Records',

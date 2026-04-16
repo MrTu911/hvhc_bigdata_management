@@ -68,6 +68,33 @@ export async function GET(req: NextRequest) {
       currentTerm?.id ? prisma.classEnrollment.count({ where: { classSection: { termId: currentTerm.id } } }) : Promise.resolve(0),
     ]);
 
+    // Breakdown theo Hệ đào tạo
+    const trainingSystems = await prisma.unit.findMany({
+      where: { type: 'HE', active: true },
+      select: { id: true, code: true, name: true },
+      orderBy: { code: 'asc' },
+    });
+
+    const systemStudentCounts = await prisma.hocVien.groupBy({
+      by: ['trainingSystemUnitId'],
+      _count: { id: true },
+      where: { deletedAt: null, trainingSystemUnitId: { not: null } },
+    });
+
+    const systemActiveStudentCounts = await prisma.hocVien.groupBy({
+      by: ['trainingSystemUnitId'],
+      _count: { id: true },
+      where: { deletedAt: null, currentStatus: 'ACTIVE', trainingSystemUnitId: { not: null } },
+    });
+
+    const byTrainingSystem = trainingSystems.map((sys) => ({
+      systemId:       sys.id,
+      systemCode:     sys.code,
+      systemName:     sys.name,
+      totalStudents:  systemStudentCounts.find((s) => s.trainingSystemUnitId === sys.id)?._count?.id ?? 0,
+      activeStudents: systemActiveStudentCounts.find((s) => s.trainingSystemUnitId === sys.id)?._count?.id ?? 0,
+    }));
+
     const totalWarnings = warningCritical + warningHigh + warningMedium + warningLow;
     const warningRate   = activeStudents > 0 ? Math.round((totalWarnings / activeStudents) * 100) : 0;
 
@@ -104,6 +131,7 @@ export async function GET(req: NextRequest) {
         diplomas:    diplomaCount,
         termSections:   totalSections,
         termEnrollments: totalEnrollments,
+        byTrainingSystem,
       },
     });
   } catch (error: any) {

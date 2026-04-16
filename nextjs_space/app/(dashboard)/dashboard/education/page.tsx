@@ -82,6 +82,13 @@ interface EducationDashboardStatsResponse {
     diplomas: number;
     termSections: number;
     termEnrollments: number;
+    byTrainingSystem: Array<{
+      systemId: string;
+      systemCode: string;
+      systemName: string;
+      totalStudents: number;
+      activeStudents: number;
+    }>;
   };
 }
 
@@ -511,6 +518,46 @@ export default function EducationOverviewDashboard() {
 
       {/* Graduation status */}
       <GraduationStatus />
+
+      {/* Phân bổ học viên theo Hệ đào tạo */}
+      {edu?.byTrainingSystem && edu.byTrainingSystem.length > 0 && (
+        <div>
+          <h2 className="text-lg font-semibold text-gray-800 mb-3">Học viên theo Hệ đào tạo</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {edu.byTrainingSystem.map((sys) => {
+              const pct = sys.totalStudents > 0 ? Math.round((sys.activeStudents / sys.totalStudents) * 100) : 0;
+              const colorMap: Record<string, string> = {
+                'HE-SDH': 'border-purple-500 bg-purple-50',
+                'HE-CHTS': 'border-blue-500 bg-blue-50',
+                'HE-CN': 'border-green-500 bg-green-50',
+                'HE-QT': 'border-orange-500 bg-orange-50',
+              };
+              const color = colorMap[sys.systemCode] ?? 'border-gray-400 bg-gray-50';
+              return (
+                <Card
+                  key={sys.systemId}
+                  className={`cursor-pointer hover:shadow-md transition-shadow border-l-4 ${color}`}
+                  onClick={go(`/dashboard/education/training-systems/${sys.systemId}`)}
+                >
+                  <CardHeader className="pb-1">
+                    <CardTitle className="text-sm font-semibold text-gray-700 truncate">{sys.systemName}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="pt-1">
+                    <p className="text-2xl font-bold text-gray-900">{formatNumber(sys.totalStudents)}</p>
+                    <p className="text-xs text-gray-500">Đang học: {formatNumber(sys.activeStudents)}</p>
+                    <Progress value={pct} className="h-1 mt-2" />
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+          <div className="mt-2 text-right">
+            <Button variant="outline" size="sm" onClick={go("/dashboard/education/training-systems")}>
+              Xem tất cả Hệ đào tạo →
+            </Button>
+          </div>
+        </div>
+      )}
 
       {/* Quick navigation */}
       <QuickNav />

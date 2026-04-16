@@ -100,6 +100,11 @@ export const EDUCATION = {
   EXPORT_GRADUATION: 'EXPORT_GRADUATION', // Xuất danh sách / văn bằng
   // Kho học vụ (M10 – UC-61)
   VIEW_REPOSITORY: 'VIEW_REPOSITORY',     // Tra cứu kho học vụ
+  // Hệ đào tạo & Tiểu đoàn (M10 – unit hierarchy)
+  VIEW_TRAINING_SYSTEM: 'VIEW_TRAINING_SYSTEM',     // Xem danh sách và chi tiết Hệ đào tạo
+  MANAGE_TRAINING_SYSTEM: 'MANAGE_TRAINING_SYSTEM', // Quản lý cấu hình Hệ đào tạo
+  VIEW_BATTALION: 'VIEW_BATTALION',                 // Xem danh sách và chi tiết Tiểu đoàn
+  MANAGE_BATTALION: 'MANAGE_BATTALION',             // Quản lý cấu hình Tiểu đoàn
 } as const;
 
 // ===== MODULE: EXAM (KHẢO THÍ) =====
