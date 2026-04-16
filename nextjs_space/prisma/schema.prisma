@@ -829,6 +829,8 @@ model Unit {
   children          Unit[]              @relation("UnitHierarchy")
   userPositions     UserPosition[]      @relation("UserPositionUnit")
   users             User[]
+  studentsBySystem    HocVien[]         @relation("HocVienTrainingSystem")
+  studentsByBattalion HocVien[]         @relation("HocVienBattalion")
 
   @@index([code])
   @@index([type])
@@ -956,6 +958,10 @@ model HocVien {
   deletedAt               DateTime? // soft delete
   deletedBy               String? // soft delete actor
 
+  // M10 – Training system & battalion unit assignment
+  trainingSystemUnitId    String? // FK → Unit (type='HE') — Hệ 1/2/3/4
+  battalionUnitId         String? // FK → Unit (type='TIEU_DOAN')
+
   // Relations
   classEnrollments      ClassEnrollment[]
   examRegistrations     ExamRegistration[]
@@ -974,6 +980,8 @@ model HocVien {
   diplomaRecords        DiplomaRecord[] // M10 – UC-60
   repositoryItems       AcademicRepositoryItem[] // M10 – UC-61
   gpaHistories          StudentGpaHistory[] // M07 – GPA snapshot theo kỳ
+  trainingSystemUnit    Unit?                    @relation("HocVienTrainingSystem", fields: [trainingSystemUnitId], references: [id])
+  battalionUnit         Unit?                    @relation("HocVienBattalion", fields: [battalionUnitId], references: [id])
 
   @@index([maHocVien])
   @@index([userId])
@@ -987,6 +995,8 @@ model HocVien {
   @@index([currentStatus])
   @@index([currentProgramVersionId])
   @@index([deletedAt])
+  @@index([trainingSystemUnitId])
+  @@index([battalionUnitId])
   @@map("hoc_vien")
 }
 
