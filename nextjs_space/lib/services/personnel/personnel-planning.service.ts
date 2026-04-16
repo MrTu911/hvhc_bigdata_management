@@ -20,7 +20,7 @@ import type {
 } from '@/lib/repositories/personnel/personnel-search.repo'
 import { talentSearchSchema } from '@/lib/validators/personnel-search.schema'
 import type { AuthUser } from '@/lib/rbac/types'
-import type { FunctionScope, PersonnelCategory } from '@prisma/client'
+import type { FunctionScope, PersonnelCategory, PersonnelStatus, CareerEventType } from '@prisma/client'
 
 // ─── Internal config object ───────────────────────────────────────────────────
 
@@ -101,7 +101,7 @@ function applyHardFilters(
   // Block active serious discipline (DISCIPLINE type + ACTIVE status)
   if (config.hardFilters.blockActiveSeriousDiscipline) {
     const hasActiveDiscipline = p.account?.policyRecords?.some(
-      (r) => r.type === 'DISCIPLINE' && r.status === 'ACTIVE',
+      (r) => r.recordType === 'DISCIPLINE' && r.status === 'ACTIVE',
     )
     if (hasActiveDiscipline) {
       reasons.push('Đang trong thời gian kỷ luật')
@@ -180,7 +180,7 @@ function applySoftScores(
 
   // 3. Reward count (EMULATION / REWARD type, APPROVED workflow)
   const rewardCount = p.account?.policyRecords?.filter(
-    (r) => (r.type === 'EMULATION' || r.type === 'REWARD') && r.workflowStatus === 'APPROVED',
+    (r) => (r.recordType === 'EMULATION' || r.recordType === 'REWARD') && r.workflowStatus === 'APPROVED',
   ).length ?? 0
   const rewardPoints = Math.min(rewardCount * w.rewardCount, 15)
   details.push({ criterion: 'Khen thưởng', points: rewardPoints, max: 15 })
@@ -188,7 +188,7 @@ function applySoftScores(
 
   // 4. No active discipline
   const hasActiveDiscipline = p.account?.policyRecords?.some(
-    (r) => r.type === 'DISCIPLINE' && r.status === 'ACTIVE',
+    (r) => r.recordType === 'DISCIPLINE' && r.status === 'ACTIVE',
   )
   details.push({
     criterion: 'Không có kỷ luật đang hiệu lực',
@@ -204,16 +204,15 @@ function applySoftScores(
   }
 
   // 6. Similar position experience (career events: APPOINTMENT / POSITION_CHANGE)
+  const POSITION_EVENT_TYPES: CareerEventType[] = ['APPOINTMENT', 'POSITION_CHANGE']
   const hasPositionExp = input.targetPosition
-    ? p.careerHistories?.some((c) => {
-        const type = c.eventType
-        return (
-          (type === 'APPOINTMENT' || type === 'POSITION_CHANGE') &&
+    ? p.careerHistories?.some(
+        (c) =>
+          POSITION_EVENT_TYPES.includes(c.eventType) &&
           c.newPosition &&
           input.targetPosition &&
-          c.newPosition.toLowerCase().includes(input.targetPosition.toLowerCase())
-        )
-      })
+          c.newPosition.toLowerCase().includes(input.targetPosition.toLowerCase()),
+      )
     : false
   details.push({
     criterion: 'Kinh nghiệm chức vụ tương tự',
@@ -308,6 +307,15 @@ export const PersonnelPlanningService = {
     /** Override config – reserved for Phase 2 UI config injection */
     configOverride?: Partial<TalentSearchConfig>,
   ) {
+    // SELF scope cannot access planning — requires at minimum UNIT scope
+    if (scope === 'SELF') {
+      return {
+        success: false as const,
+        error: 'Không đủ quyền thực hiện tìm kiếm quy hoạch. Yêu cầu tối thiểu phạm vi đơn vị (UNIT).',
+        status: 403,
+      }
+    }
+
     const parsed = talentSearchSchema.safeParse(rawInput)
     if (!parsed.success) {
       return {
@@ -333,8 +341,11 @@ export const PersonnelPlanningService = {
       category: input.category,
       unitId: scopeConstraints.effectiveUnitId,
       allowedUnitIds: scopeConstraints.allowedUnitIds,
-      degree: input.requiredDegree,
-      politicalTheory: input.requiredPoliticalTheory,
+      // Only plan for active personnel — exclude retired, transferred, discharged
+      status: 'DANG_CONG_TAC' as PersonnelStatus,
+      // degree & politicalTheory are intentionally NOT used as pre-filter WHERE clauses:
+      // these fields are sparsely populated; qualitative evaluation is done in applySoftScores /
+      // applyHardFilters (Step 3) via degreeRank() comparison and includes() matching.
       enlistedBefore: input.requiredServiceYearsMin !== undefined
         ? serviceYearsToEnlistedBefore(input.requiredServiceYearsMin)
         : undefined,
@@ -347,7 +358,7 @@ export const PersonnelPlanningService = {
         success: true as const,
         data: [],
         total: 0,
-        meta: { topN: input.topN, inputUsed: input },
+        meta: { topN: input.topN, totalScanned: 0, hardFiltered: 0 },
       }
     }
 
@@ -400,7 +411,6 @@ export const PersonnelPlanningService = {
         topN: input.topN,
         totalScanned: candidates.length,
         hardFiltered: candidates.filter((c) => !c.hardFilterPassed).length,
-        inputUsed: input,
       },
     }
   },

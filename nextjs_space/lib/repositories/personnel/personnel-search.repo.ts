@@ -7,7 +7,7 @@
  */
 import 'server-only'
 import db from '@/lib/db'
-import type { PersonnelCategory, PersonnelStatus } from '@prisma/client'
+import type { PersonnelCategory, PersonnelStatus, PolicyRecordType, AwardWorkflowStatus, PolicyRecordStatus, CareerEventType } from '@prisma/client'
 
 // ─── Input types ──────────────────────────────────────────────────────────────
 
@@ -156,8 +156,8 @@ export const PersonnelSearchRepo = {
    * Fetch a batch of personnel by IDs for the talent scoring pass.
    * Returns full scoring inputs (career histories, education histories, policy records).
    */
-  async findForScoring(personnelIds: string[]) {
-    return db.personnel.findMany({
+  async findForScoring(personnelIds: string[]): Promise<PersonnelForScoring[]> {
+    const rows = await db.personnel.findMany({
       where: { id: { in: personnelIds }, deletedAt: null },
       select: {
         id: true,
@@ -177,7 +177,8 @@ export const PersonnelSearchRepo = {
         unitId: true,
         unit: { select: { id: true, name: true, code: true } },
         educationHistories: {
-          where: { deletedAt: null },
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          where: { deletedAt: null } as any,
           select: { level: true, major: true, endDate: true },
         },
         careerHistories: {
@@ -190,12 +191,13 @@ export const PersonnelSearchRepo = {
             id: true,
             policyRecords: {
               where: { deletedAt: null },
-              select: { type: true, workflowStatus: true, status: true },
+              select: { recordType: true, workflowStatus: true, status: true },
             },
           },
         },
       },
     })
+    return rows as unknown as PersonnelForScoring[]
   },
 }
 
@@ -203,6 +205,36 @@ export type PersonnelSearchResult = Awaited<
   ReturnType<typeof PersonnelSearchRepo.search>
 >['data'][number]
 
-export type PersonnelForScoring = Awaited<
-  ReturnType<typeof PersonnelSearchRepo.findForScoring>
->[number]
+/**
+ * Explicit type for the talent-scoring payload.
+ * Must stay in sync with the select clause in findForScoring().
+ */
+export interface PersonnelForScoring {
+  id: string
+  fullName: string
+  personnelCode: string
+  dateOfBirth: Date | null
+  category: PersonnelCategory | null
+  status: PersonnelStatus
+  militaryRank: string | null
+  position: string | null
+  academicDegree: string | null
+  academicTitle: string | null
+  educationLevel: string | null
+  specialization: string | null
+  politicalTheory: string | null
+  enlistmentDate: Date | null
+  unitId: string | null
+  unit: { id: string; name: string; code: string } | null
+  educationHistories: Array<{ level: string | null; major: string | null; endDate: Date | null }>
+  careerHistories: Array<{ eventType: CareerEventType; newPosition: string | null; effectiveDate: Date | null }>
+  scientificProfile: { id: string } | null
+  account: {
+    id: string
+    policyRecords: Array<{
+      recordType: PolicyRecordType
+      workflowStatus: AwardWorkflowStatus
+      status: PolicyRecordStatus
+    }>
+  } | null
+}

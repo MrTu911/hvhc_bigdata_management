@@ -47,8 +47,9 @@ import {
   Calendar, Eye, FileEdit, Download, Upload, Check, ArrowLeft,
   ChevronRight, ChevronLeft, ListFilter, Layers, Pencil,
   CheckSquare, Square, Star, Settings2, BarChart3, ClipboardList,
-  Activity,
+  Activity, MonitorSmartphone,
 } from 'lucide-react';
+import { SidebarPreviewTab } from '@/components/dashboard/admin/rbac/sidebar-preview-tab';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -639,11 +640,12 @@ export default function RBACManagementPage() {
           {/* ── Main Tabs ────────────────────────────────────────────────── */}
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="bg-white border shadow-sm h-11">
-              <TabsTrigger value="overview"   className="gap-2 px-4"><BarChart3     className="h-4 w-4" /> Tổng quan</TabsTrigger>
-              <TabsTrigger value="matrix"     className="gap-2 px-4"><Grid3X3      className="h-4 w-4" /> Ma trận Quyền</TabsTrigger>
-              <TabsTrigger value="users"      className="gap-2 px-4"><UserPlus     className="h-4 w-4" /> Gán Chức vụ</TabsTrigger>
-              <TabsTrigger value="positions"  className="gap-2 px-4"><Settings2    className="h-4 w-4" /> Chức vụ</TabsTrigger>
-              <TabsTrigger value="audit"      className="gap-2 px-4"><ClipboardList className="h-4 w-4" /> Nhật ký</TabsTrigger>
+              <TabsTrigger value="overview"        className="gap-2 px-4"><BarChart3         className="h-4 w-4" /> Tổng quan</TabsTrigger>
+              <TabsTrigger value="matrix"          className="gap-2 px-4"><Grid3X3          className="h-4 w-4" /> Ma trận Quyền</TabsTrigger>
+              <TabsTrigger value="users"           className="gap-2 px-4"><UserPlus         className="h-4 w-4" /> Gán Chức vụ</TabsTrigger>
+              <TabsTrigger value="positions"       className="gap-2 px-4"><Settings2        className="h-4 w-4" /> Chức vụ</TabsTrigger>
+              <TabsTrigger value="sidebar-preview" className="gap-2 px-4"><MonitorSmartphone className="h-4 w-4" /> Xem trước Sidebar</TabsTrigger>
+              <TabsTrigger value="audit"           className="gap-2 px-4"><ClipboardList    className="h-4 w-4" /> Nhật ký</TabsTrigger>
             </TabsList>
 
             {/* ═══════════════════════════════════════════════════
@@ -1433,7 +1435,14 @@ export default function RBACManagementPage() {
             </TabsContent>
 
             {/* ═══════════════════════════════════════════════════
-                TAB 5: AUDIT LOG
+                TAB 5: SIDEBAR PREVIEW
+            ═══════════════════════════════════════════════════ */}
+            <TabsContent value="sidebar-preview" className="mt-4">
+              <SidebarPreviewTab positions={positions} />
+            </TabsContent>
+
+            {/* ═══════════════════════════════════════════════════
+                TAB 6: AUDIT LOG
             ═══════════════════════════════════════════════════ */}
             <TabsContent value="audit" className="mt-4">
               <Card className="shadow-sm">

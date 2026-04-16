@@ -288,6 +288,8 @@ export const STUDENT = {
   GPA_MANAGE: 'MANAGE_STUDENT_GPA',       // Trigger rebuild GPA batch, ghi StudentGpaHistory + AcademicWarning
   CONDUCT_VIEW: 'VIEW_STUDENT_CONDUCT',   // Xem điểm rèn luyện học viên
   DASHBOARD_VIEW: 'VIEW_STUDENT_DASHBOARD', // Xem dashboard học viên tổng hợp
+  // M07 – Hồ sơ 360°
+  PROFILE360_VIEW: 'VIEW_STUDENT_PROFILE360', // Xem hồ sơ 360° tổng hợp học viên
 } as const;
 
 // ===== MODULE: FACULTY (GIẢNG VIÊN) =====

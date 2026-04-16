@@ -1,42 +1,48 @@
 /**
- * MY DASHBOARD PAGE - Trang tùy chỉnh Dashboard cá nhân
- * 
- * Cho phép user tự tạo dashboard theo ý thích
+ * MY DASHBOARD PAGE – M11 Phase 1
+ *
+ * Smart landing: redirect user về đúng dashboard theo role.
+ * Nếu không redirect được (admin/custom), hiển thị DashboardBuilder.
  */
 
-'use client';
+'use client'
 
-import { useEffect } from 'react';
-import { DashboardBuilder } from '@/components/dashboard/dashboard-builder';
-import { usePermissions } from '@/hooks/use-permissions';
-import { useDashboardStore } from '@/lib/dashboard/dashboard-store';
-import { WIDGET_REGISTRY } from '@/lib/dashboard/widget-registry';
-import { Skeleton } from '@/components/ui/skeleton';
+import { useEffect } from 'react'
+import { DashboardBuilder } from '@/components/dashboard/dashboard-builder'
+import { usePermissions } from '@/hooks/use-permissions'
+import { useDashboardStore } from '@/lib/dashboard/dashboard-store'
+import { useDashboardRedirect } from '@/hooks/use-dashboard-redirect'
+import { WIDGET_REGISTRY } from '@/lib/dashboard/widget-registry'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export default function MyDashboardPage() {
-  const { permissions, isAdmin, isLoading } = usePermissions();
-  const { initializeLayout, currentLayout } = useDashboardStore();
+  // M11: redirect về đúng dashboard role – autoRedirect=true
+  const { loading: redirectLoading } = useDashboardRedirect({ autoRedirect: true })
 
-  // Initialize layout
+  const { permissions, isAdmin, isLoading: permLoading } = usePermissions()
+  const { initializeLayout, currentLayout } = useDashboardStore()
+
+  const isLoading = redirectLoading || permLoading
+
+  // Khởi tạo layout widget builder nếu redirect không xảy ra (custom/admin)
   useEffect(() => {
-    if (!isLoading) {
-      const functions = isAdmin 
+    if (!permLoading) {
+      const functions = isAdmin
         ? WIDGET_REGISTRY.map(w => w.requiredFunction)
-        : (permissions?.functionCodes || []);
-      
+        : (permissions?.functionCodes || [])
       if (!currentLayout && functions.length > 0) {
-        initializeLayout(functions);
+        initializeLayout(functions)
       }
     }
-  }, [isLoading, isAdmin, permissions, currentLayout, initializeLayout]);
+  }, [permLoading, isAdmin, permissions, currentLayout, initializeLayout])
 
   if (isLoading) {
     return (
-      <div className="space-y-4">
+      <div className="space-y-4 p-6">
         <Skeleton className="h-8 w-64" />
         <Skeleton className="h-[600px]" />
       </div>
-    );
+    )
   }
 
   return (
@@ -47,8 +53,7 @@ export default function MyDashboardPage() {
           Tùy chỉnh dashboard theo ý thích của bạn
         </p>
       </div>
-      
       <DashboardBuilder />
     </div>
-  );
+  )
 }

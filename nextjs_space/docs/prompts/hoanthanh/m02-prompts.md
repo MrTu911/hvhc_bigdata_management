@@ -389,3 +389,42 @@ Hãy tóm tắt:
 ````
 
 Bước tiếp theo hợp lý nhất là dựng luôn **khung chuẩn cho M03**, vì M03 phụ thuộc rất mạnh vào M01, M02, M13, M19 và là module nghiệp vụ nhạy cảm kế tiếp.
+
+6. THỨ TỰ SỬA TỐI ƯU
+Ưu tiên 1 — Chặn rò rỉ dữ liệu ngay (bảo mật)
+
+app/api/personnel/[id]/route.ts GET: thiếu sensitive field stripping — user không có PERSONNEL.VIEW_SENSITIVE vẫn thấy citizenId, permanentAddress
+Chuyển GET detail và PATCH vào PersonnelProfileService thay vì gọi prisma.user trực tiếp trong route
+Ưu tiên 2 — Fix kiến trúc route/service (nợ kỹ thuật lớn nhất)
+
+Chuyển getSubordinateUnitIds() ra lib/rbac/scope.ts hoặc service layer — không để trong route
+Chuyển allowedFields logic ra PersonnelProfileService.update()
+Thêm Zod schema validation cho PATCH body trong route /api/personnel/[id]
+Ưu tiên 3 — Xác định convergence plan cho User vs Personnel
+
+Đây là quyết định kiến trúc quan trọng nhất cần user xác nhận:
+Có plan migrate User.id → Personnel.id làm FK chuẩn cho M03/M05/M07/M09 không?
+Nếu có: bắt đầu bằng dual-write, sau đó single-write Personnel, dần deprecate User fields trùng lặp
+Nếu giữ bridge lâu dài: phải document rõ, tránh thêm FK mới vào User
+Ưu tiên 4 — Thêm audit thiếu cho sub-routes
+
+POST /api/personnel/[id]/career — thiếu audit khi thêm career event
+POST/PUT /api/personnel/[id]/education — thiếu audit
+POST/PUT /api/personnel/[id]/family — thiếu audit (sensitive data!)
+Ưu tiên 5 — Scope enforcement đầy đủ
+
+Implement getAccessibleUnitIds(user, scope) thật sự để UNIT scope expand child units
+Hiện tại UNIT scope chỉ restrict về user.unitId single — sai với unit hierarchy
+Ưu tiên 6 — Deprecate advanced-search route (hoặc redirect về search)
+
+/api/personnel/advanced-search trùng chức năng, dùng User, không scope-aware
+Người dùng nên dùng /api/personnel/search thay thế
+Ưu tiên 7 — Export đi qua M18
+
+/api/personnel/export và /api/personnel/export-2a cần kiểm tra xem có tự render không
+Nếu có: phải xem xét chuyển render logic sang M18 theo kiến trúc chuẩn
+Ưu tiên 8 — M19 cho academicDegree/academicTitle/politicalTheory
+
+Thêm FK academicDegreeId, academicTitleId, politicalTheoryId → M19 item
+Backend validation dùng M19 item thay vì so string thô
+Giảm lỗi như đã gặp trong session này (degreeRank so string không nhất quán)

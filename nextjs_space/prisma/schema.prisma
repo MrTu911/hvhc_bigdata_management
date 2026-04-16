@@ -167,6 +167,8 @@ model User {
   unitRelation                        Unit?                      @relation(fields: [unitId], references: [id])
   workExperience                      WorkExperience[]
   workflowActions                     WorkflowAction[]           @relation("WorkflowActionActor")
+  dashboardLayouts                    DashboardUserLayout[]      @relation("UserDashboardLayouts")
+  dashboardAccessLogs                 DashboardAccessLog[]       @relation("UserDashboardAccessLogs")
 
   @@index([email])
   @@index([role])
@@ -6994,4 +6996,98 @@ model ScientificCouncilReview {
   @@index([councilId])
   @@index([memberId])
   @@map("scientific_council_reviews")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// M11 – Dashboard & Trực quan hóa
+// ─────────────────────────────────────────────────────────────────────────────
+
+enum DashboardRoleKey {
+  EXECUTIVE   // Ban Giám đốc Học viện
+  DEPARTMENT  // Trưởng phòng / khoa
+  EDUCATION   // Phòng Đào tạo
+  PARTY       // Phòng Chính trị
+  FACULTY     // Giảng viên
+  STUDENT     // Học viên / Sinh viên
+}
+
+enum DashboardAccessAction {
+  VIEW
+  EXPORT
+  REFRESH
+  LAYOUT_SAVE
+  LAYOUT_RESET
+  ALERT_ACK
+}
+
+/// Layout mặc định theo role – do admin cấu hình, là template gốc cho toàn role.
+model DashboardRoleTemplate {
+  id          String           @id @default(cuid())
+  /// Mỗi role chỉ có một template active tại một thời điểm
+  roleKey     DashboardRoleKey @unique
+  /// JSON array of { widgetId, x, y, w, h }
+  layoutJson  Json
+  /// Widget keys được phép dùng trong role này
+  widgetKeys  String[]
+  isActive    Boolean          @default(true)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  userLayouts DashboardUserLayout[]
+
+  @@map("dashboard_role_templates")
+}
+
+/// Layout cá nhân hóa của từng user – tùy chỉnh trong phạm vi role template cho phép.
+model DashboardUserLayout {
+  id           String                @id @default(cuid())
+  userId       String
+  user         User                  @relation("UserDashboardLayouts", fields: [userId], references: [id], onDelete: Cascade)
+  dashboardKey DashboardRoleKey
+  /// JSON array of { widgetId, x, y, w, h } – user's overrides
+  layoutJson   Json
+  /// Trỏ về template gốc đã dùng để tạo layout này
+  templateId   String?
+  template     DashboardRoleTemplate? @relation(fields: [templateId], references: [id])
+  createdAt    DateTime              @default(now())
+  updatedAt    DateTime              @updatedAt
+
+  @@unique([userId, dashboardKey])
+  @@index([userId])
+  @@map("dashboard_user_layouts")
+}
+
+/// Cache aggregate data cho từng widget, có scope key để tránh rò rỉ dữ liệu giữa role/đơn vị.
+/// Không phải source of truth – chỉ là read-model tạm thời.
+model DashboardWidgetDataCache {
+  id         String   @id @default(cuid())
+  widgetKey  String
+  /// Compound scope key: "role:{roleKey}:scope:{scope}:unit:{unitId}" hoặc "user:{userId}"
+  scopeKey   String
+  dataJson   Json
+  cachedAt   DateTime @default(now())
+  expiresAt  DateTime
+  ttlSeconds Int
+
+  @@unique([widgetKey, scopeKey])
+  @@index([widgetKey])
+  @@index([expiresAt]) // dùng cho cleanup job
+  @@map("dashboard_widget_data_cache")
+}
+
+/// Audit log truy cập dashboard – ghi VIEW, EXPORT, REFRESH, LAYOUT_SAVE, LAYOUT_RESET, ALERT_ACK.
+model DashboardAccessLog {
+  id           String                @id @default(cuid())
+  userId       String
+  user         User                  @relation("UserDashboardAccessLogs", fields: [userId], references: [id])
+  dashboardKey String
+  action       DashboardAccessAction
+  /// Metadata tuỳ theo action: { widgetKey, exportFormat, ... }
+  meta         Json?
+  createdAt    DateTime              @default(now())
+
+  @@index([userId])
+  @@index([dashboardKey])
+  @@index([action])
+  @@index([createdAt])
+  @@map("dashboard_access_logs")
 }

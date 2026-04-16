@@ -63,6 +63,9 @@ import {
   X,
   ArrowUpCircle,
   CalendarCheck,
+  HeartPulse,
+  Activity,
+  ClipboardList,
 } from 'lucide-react';
 import {
   PieChart,
@@ -484,15 +487,16 @@ export default function OfficerManagementPage() {
         fetch('/api/officer-career/stats'),
       ]);
 
+      if (!officersRes.ok) throw new Error(`Lỗi tải danh sách: ${officersRes.status}`);
       const officersData = await officersRes.json();
-      const statsData = await statsRes.json();
+      const statsData = statsRes.ok ? await statsRes.json() : null;
 
       if (officersData.success) {
         setOfficers(officersData.data);
         setTotalPages(officersData.pagination.totalPages);
         setTotalOfficers(officersData.pagination.total);
       }
-      if (statsData.success) setStats(statsData.data);
+      if (statsData?.success) setStats(statsData.data);
     } catch (e) {
       console.error(e);
     } finally {
@@ -514,6 +518,7 @@ export default function OfficerManagementPage() {
         limit: '20',
       });
       const res = await fetch(`/api/officer-career/promotion-deadlines?${params}`);
+      if (!res.ok) throw new Error(`Lỗi tải hạn thăng: ${res.status}`);
       const data = await res.json();
       if (data.success) {
         setDeadlines(data.data);
@@ -539,6 +544,7 @@ export default function OfficerManagementPage() {
       const res = await fetch(
         `/api/officer-career/special-cases?activeOnly=${!showAllCases}`,
       );
+      if (!res.ok) throw new Error(`Lỗi tải trường hợp đặc biệt: ${res.status}`);
       const data = await res.json();
       if (data.success) setSpecialCases(data.data);
     } catch (e) {
@@ -565,6 +571,7 @@ export default function OfficerManagementPage() {
       if (promotionTypeFilter !== 'ALL') params.set('promotionType', promotionTypeFilter);
 
       const res = await fetch(`/api/officer-career/promotions?${params}`);
+      if (!res.ok) throw new Error(`Lỗi tải danh sách thăng cấp: ${res.status}`);
       const data = await res.json();
       if (data.success) {
         setPromotions(data.data);
@@ -634,9 +641,9 @@ export default function OfficerManagementPage() {
     setPromotionForm({
       officerCareerId:  p.officerCareerId,
       promotionType:    p.promotionType,
-      effectiveDate:    p.effectiveDate ? p.effectiveDate.split('T')[0] : '',
+      effectiveDate:    p.effectiveDate ? new Date(p.effectiveDate).toISOString().split('T')[0] : '',
       decisionNumber:   p.decisionNumber   ?? '',
-      decisionDate:     p.decisionDate     ? p.decisionDate.split('T')[0] : '',
+      decisionDate:     p.decisionDate     ? new Date(p.decisionDate).toISOString().split('T')[0] : '',
       previousRank:     p.previousRank     ?? '',
       newRank:          p.newRank          ?? '',
       previousPosition: p.previousPosition ?? '',
@@ -679,7 +686,7 @@ export default function OfficerManagementPage() {
       const res  = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
       const data = await res.json();
 
-      if (data.success || data.data) {
+      if (data.success) {
         setPromotionDialog({ open: false, mode: 'create' });
         fetchPromotions();
         // Refresh stats so overview updates
@@ -725,6 +732,7 @@ export default function OfficerManagementPage() {
       if (showUnchecked) params.set('needsCheck', 'true');
 
       const res = await fetch(`/api/officer-career/health?${params}`);
+      if (!res.ok) throw new Error(`Lỗi tải hồ sơ sức khỏe: ${res.status}`);
       const data = await res.json();
       if (data.success) {
         setHealthRecords(data.data);
@@ -748,7 +756,7 @@ export default function OfficerManagementPage() {
       healthCategory:      record.healthCategory      ?? '',
       healthNotes:         record.healthNotes          ?? '',
       lastHealthCheckDate: record.lastHealthCheckDate
-        ? record.lastHealthCheckDate.split('T')[0]
+        ? new Date(record.lastHealthCheckDate).toISOString().split('T')[0]
         : '',
     });
     setHealthDialog({ open: true, record });
@@ -843,7 +851,7 @@ export default function OfficerManagementPage() {
       officerIdNumber: officer.officerIdNumber || '',
       currentRank: officer.currentRank || '',
       currentPosition: officer.currentPosition || '',
-      commissionedDate: officer.commissionedDate ? officer.commissionedDate.split('T')[0] : '',
+      commissionedDate: officer.commissionedDate ? new Date(officer.commissionedDate).toISOString().split('T')[0] : '',
       lastEvaluationResult: '',
     });
     setOfficerDialog({ open: true, mode: 'edit', data: officer });
@@ -864,7 +872,7 @@ export default function OfficerManagementPage() {
           }),
         });
         const data = await res.json();
-        if (data.success || data.data) {
+        if (data.success) {
           setOfficerDialog({ open: false, mode: 'create' });
           fetchData();
         } else {
@@ -884,7 +892,7 @@ export default function OfficerManagementPage() {
           }),
         });
         const data = await res.json();
-        if (data.success || data.data) {
+        if (data.success) {
           setOfficerDialog({ open: false, mode: 'create' });
           fetchData();
         } else {
@@ -974,9 +982,18 @@ export default function OfficerManagementPage() {
 
   const deleteSpecialCase = async (id: string) => {
     if (!confirm('Xóa trường hợp đặc biệt này?')) return;
-    await fetch(`/api/officer-career/special-cases/${id}`, { method: 'DELETE' });
-    fetchAllSpecialCases();
-    fetchDeadlines();
+    try {
+      const res = await fetch(`/api/officer-career/special-cases/${id}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) {
+        fetchAllSpecialCases();
+        fetchDeadlines();
+      } else {
+        alert(data.error || 'Lỗi khi xóa trường hợp đặc biệt');
+      }
+    } catch {
+      alert('Đã xảy ra lỗi khi xóa');
+    }
   };
 
   const openCreateScDialog = () => {
@@ -1000,7 +1017,7 @@ export default function OfficerManagementPage() {
       description: sc.description ?? '',
       reductionMonths: sc.reductionMonths.toString(),
       decisionNumber: sc.decisionNumber ?? '',
-      decisionDate: sc.decisionDate ? sc.decisionDate.split('T')[0] : '',
+      decisionDate: sc.decisionDate ? new Date(sc.decisionDate).toISOString().split('T')[0] : '',
       issuedBy: sc.issuedBy ?? '',
       notes: sc.notes ?? '',
       isActive: sc.isActive,
@@ -2339,6 +2356,141 @@ export default function OfficerManagementPage() {
               {officerSaving ? (
                 <><Loader2 className="h-4 w-4 mr-1.5 animate-spin" /> Đang lưu...</>
               ) : officerDialog.mode === 'create' ? 'Tạo hồ sơ' : 'Lưu thay đổi'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* ── Health Update Dialog ─────────────────────────────────────────────── */}
+      <Dialog open={healthDialog.open} onOpenChange={(o) => setHealthDialog(prev => ({ ...prev, open: o }))}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 text-slate-800">
+              <HeartPulse className="h-5 w-5 text-rose-600" />
+              Cập nhật sức khỏe sĩ quan
+            </DialogTitle>
+            <DialogDescription>
+              {healthDialog.record?.personnel.fullName && (
+                <span>
+                  Cán bộ: <span className="font-semibold text-slate-700">{healthDialog.record.personnel.fullName}</span>
+                  {' · '}
+                  <span className="font-mono text-xs">{healthDialog.record.personnel.personnelCode}</span>
+                </span>
+              )}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4">
+            {/* Category selector */}
+            <div className="space-y-2">
+              <Label className="text-slate-700 font-medium">
+                Phân loại sức khỏe <span className="text-red-500">*</span>
+              </Label>
+              <div className="grid grid-cols-2 gap-2">
+                {HEALTH_CATEGORIES_CONFIG.map((cat) => (
+                  <button
+                    key={cat.value}
+                    type="button"
+                    onClick={() => setHealthForm(f => ({ ...f, healthCategory: cat.value }))}
+                    className={`relative flex items-start gap-2.5 p-3 rounded-lg border-2 text-left transition-all ${
+                      healthForm.healthCategory === cat.value
+                        ? 'border-blue-500 bg-blue-50 shadow-sm'
+                        : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50'
+                    }`}
+                  >
+                    <span className={`mt-0.5 w-3 h-3 rounded-full flex-shrink-0 ${cat.dotColor}`} />
+                    <div>
+                      <div className="text-sm font-semibold text-slate-800">{cat.label}</div>
+                      <div className="text-xs text-slate-500 leading-tight mt-0.5">{cat.description}</div>
+                    </div>
+                    {healthForm.healthCategory === cat.value && (
+                      <CheckCircle2 className="absolute top-2 right-2 h-4 w-4 text-blue-600" />
+                    )}
+                  </button>
+                ))}
+              </div>
+              {healthForm.healthCategory && (
+                <button
+                  type="button"
+                  className="text-xs text-slate-400 hover:text-slate-600 underline"
+                  onClick={() => setHealthForm(f => ({ ...f, healthCategory: '' }))}
+                >
+                  Xóa phân loại
+                </button>
+              )}
+            </div>
+
+            {/* Last check date */}
+            <div className="space-y-1.5">
+              <Label className="text-slate-700 flex items-center gap-1.5">
+                <Activity className="h-3.5 w-3.5 text-slate-400" />
+                Ngày kiểm tra sức khỏe gần nhất
+              </Label>
+              <Input
+                type="date"
+                value={healthForm.lastHealthCheckDate}
+                onChange={e => setHealthForm(f => ({ ...f, lastHealthCheckDate: e.target.value }))}
+                max={new Date().toISOString().split('T')[0]}
+                className="border-slate-200"
+              />
+            </div>
+
+            {/* Health notes */}
+            <div className="space-y-1.5">
+              <Label className="text-slate-700 flex items-center gap-1.5">
+                <ClipboardList className="h-3.5 w-3.5 text-slate-400" />
+                Ghi chú / Tình trạng sức khỏe
+              </Label>
+              <Textarea
+                value={healthForm.healthNotes}
+                onChange={e => setHealthForm(f => ({ ...f, healthNotes: e.target.value }))}
+                placeholder="Mô tả tình trạng sức khỏe, bệnh lý, khuyến nghị..."
+                rows={3}
+                className="border-slate-200 resize-none"
+              />
+              <p className="text-xs text-slate-400">
+                Thông tin này được ghi vào hồ sơ và phục vụ theo dõi định kỳ.
+              </p>
+            </div>
+
+            {/* Current state summary */}
+            {healthDialog.record && (
+              <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Trạng thái hiện tại</p>
+                <div className="flex items-center gap-3 text-sm">
+                  {healthDialog.record.healthCategory ? (
+                    <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium border ${
+                      HEALTH_CAT_MAP[healthDialog.record.healthCategory]?.badgeColor ?? 'bg-gray-100 text-gray-600'
+                    }`}>
+                      <span className={`w-1.5 h-1.5 rounded-full ${HEALTH_CAT_MAP[healthDialog.record.healthCategory]?.dotColor ?? 'bg-gray-400'}`} />
+                      {healthDialog.record.healthCategory}
+                    </span>
+                  ) : (
+                    <span className="text-slate-400 italic text-xs">Chưa phân loại</span>
+                  )}
+                  <span className="text-slate-400">·</span>
+                  <span className="text-slate-500 text-xs">
+                    {healthDialog.record.lastHealthCheckDate
+                      ? `Kiểm tra: ${formatDate(healthDialog.record.lastHealthCheckDate)}`
+                      : 'Chưa có ngày kiểm tra'}
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setHealthDialog({ open: false })}>
+              Hủy
+            </Button>
+            <Button
+              onClick={saveHealth}
+              disabled={healthSaving}
+              className="bg-rose-600 hover:bg-rose-700 text-white"
+            >
+              {healthSaving ? (
+                <><Loader2 className="h-4 w-4 mr-1.5 animate-spin" /> Đang lưu...</>
+              ) : 'Lưu sức khỏe'}
             </Button>
           </DialogFooter>
         </DialogContent>

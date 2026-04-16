@@ -35,6 +35,7 @@ import {
   FACULTY,
   RESEARCH,
   EDUCATION,
+  WORKFLOW,
 } from '@/lib/rbac/function-codes';
 
 // ============================================================================
@@ -43,6 +44,12 @@ import {
 
 export type WidgetType = 'kpi' | 'pie' | 'bar' | 'line' | 'table' | 'list' | 'radar' | 'area';
 export type WidgetSize = '1x1' | '1x2' | '2x1' | '2x2' | '3x1' | '3x2' | '4x1' | '4x2';
+
+export interface WidgetRefreshPolicy {
+  /** Cache layer: 1=60s fast KPI, 2=5min chart, 3=30min complex */
+  layer: 1 | 2 | 3;
+  ttlSeconds: number;
+}
 
 export interface WidgetConfig {
   id: string;
@@ -53,7 +60,7 @@ export interface WidgetConfig {
   size: WidgetSize;
   apiEndpoint: string;
   requiredFunction: string;      // Function code cần để hiển thị widget
-  module: string;                // Module CSDL
+  module: string;                // Module CSDL nguồn
   color: string;                 // Gradient color
   dataKey?: string;              // Key trong response data
   chartConfig?: {
@@ -63,6 +70,15 @@ export interface WidgetConfig {
     valueKey?: string;
     colors?: string[];
   };
+  // ── M11 metadata ──────────────────────────────────────────────────────────
+  /** Roles mặc định được thêm widget này vào template */
+  defaultRoles?: string[];
+  /** Là widget cảnh báo – hiển thị badge đỏ khi có giá trị */
+  isAlert?: boolean;
+  /** Route để drill-down chi tiết khi click widget */
+  drilldownRoute?: string;
+  /** Chính sách cache. Mặc định layer 2 (5 phút) nếu không khai báo */
+  refreshPolicy?: WidgetRefreshPolicy;
 }
 
 export interface WidgetData {
@@ -680,6 +696,113 @@ export const EDUCATION_WIDGETS: WidgetConfig[] = [
   },
 ];
 
+// ---------- ALERT WIDGETS (M11 cảnh báo tổng hợp) ----------
+// Các widget này không phải nguồn cảnh báo gốc – chỉ tổng hợp từ module nguồn.
+export const ALERT_WIDGETS: WidgetConfig[] = [
+  {
+    id: 'PERSONNEL_RETIRING',
+    name: 'Cán bộ sắp nghỉ hưu',
+    description: 'Danh sách cán bộ dự kiến nghỉ hưu trong 3 tháng tới',
+    icon: Users,
+    type: 'list',
+    size: '2x2',
+    apiEndpoint: '/api/dashboard/widgets/PERSONNEL_RETIRING/data',
+    requiredFunction: PERSONNEL.VIEW,
+    module: 'PERSONNEL',
+    color: 'from-orange-500 to-red-500',
+    dataKey: 'items',
+    isAlert: true,
+    defaultRoles: ['EXECUTIVE', 'DEPARTMENT'],
+    drilldownRoute: '/dashboard/personnel',
+    refreshPolicy: { layer: 1, ttlSeconds: 60 },
+  },
+  {
+    id: 'ACADEMIC_WARNINGS',
+    name: 'Cảnh báo học vụ',
+    description: 'Học viên đang trong tình trạng cảnh báo học vụ',
+    icon: GraduationCap,
+    type: 'kpi',
+    size: '1x1',
+    apiEndpoint: '/api/dashboard/widgets/ACADEMIC_WARNINGS/data',
+    requiredFunction: STUDENT.VIEW,
+    module: 'STUDENT',
+    color: 'from-yellow-500 to-orange-500',
+    dataKey: 'count',
+    isAlert: true,
+    defaultRoles: ['EXECUTIVE', 'DEPARTMENT', 'EDUCATION'],
+    drilldownRoute: '/dashboard/education/warnings',
+    refreshPolicy: { layer: 1, ttlSeconds: 60 },
+  },
+  {
+    id: 'PARTY_FEE_DEBT',
+    name: 'Nợ đảng phí',
+    description: 'Đảng viên nợ đảng phí quá hạn',
+    icon: Shield,
+    type: 'kpi',
+    size: '1x1',
+    apiEndpoint: '/api/dashboard/widgets/PARTY_FEE_DEBT/data',
+    requiredFunction: PARTY.VIEW,
+    module: 'PARTY',
+    color: 'from-red-500 to-rose-600',
+    dataKey: 'count',
+    isAlert: true,
+    defaultRoles: ['EXECUTIVE', 'PARTY'],
+    drilldownRoute: '/dashboard/party',
+    refreshPolicy: { layer: 1, ttlSeconds: 60 },
+  },
+  {
+    id: 'BHYT_EXPIRING',
+    name: 'BHYT sắp hết hạn',
+    description: 'Hồ sơ BHYT hết hạn trong 30 ngày tới',
+    icon: Heart,
+    type: 'kpi',
+    size: '1x1',
+    apiEndpoint: '/api/dashboard/widgets/BHYT_EXPIRING/data',
+    requiredFunction: INSURANCE.VIEW,
+    module: 'INSURANCE',
+    color: 'from-pink-500 to-rose-500',
+    dataKey: 'count',
+    isAlert: true,
+    defaultRoles: ['EXECUTIVE', 'DEPARTMENT'],
+    drilldownRoute: '/dashboard/insurance',
+    refreshPolicy: { layer: 1, ttlSeconds: 60 },
+  },
+  {
+    id: 'SLA_OVERDUE',
+    name: 'Workflow quá hạn SLA',
+    description: 'Quy trình phê duyệt đang vượt quá thời hạn xử lý',
+    icon: Activity,
+    type: 'kpi',
+    size: '1x1',
+    apiEndpoint: '/api/dashboard/widgets/SLA_OVERDUE/data',
+    requiredFunction: WORKFLOW.VIEW,
+    module: 'WORKFLOW',
+    color: 'from-red-600 to-rose-700',
+    dataKey: 'count',
+    isAlert: true,
+    defaultRoles: ['EXECUTIVE', 'DEPARTMENT'],
+    drilldownRoute: '/dashboard/workflow',
+    refreshPolicy: { layer: 1, ttlSeconds: 60 },
+  },
+  {
+    id: 'WORKFLOW_PENDING',
+    name: 'Chờ phê duyệt',
+    description: 'Số lượng quy trình đang chờ phê duyệt của bạn',
+    icon: FileText,
+    type: 'kpi',
+    size: '1x1',
+    apiEndpoint: '/api/dashboard/widgets/WORKFLOW_PENDING/data',
+    requiredFunction: WORKFLOW.VIEW,
+    module: 'WORKFLOW',
+    color: 'from-amber-500 to-yellow-600',
+    dataKey: 'count',
+    isAlert: false,
+    defaultRoles: ['EXECUTIVE', 'DEPARTMENT', 'EDUCATION', 'PARTY', 'FACULTY'],
+    drilldownRoute: '/dashboard/workflow',
+    refreshPolicy: { layer: 1, ttlSeconds: 60 },
+  },
+];
+
 // ============================================================================
 // WIDGET REGISTRY - Combined
 // ============================================================================
@@ -694,6 +817,7 @@ export const WIDGET_REGISTRY: WidgetConfig[] = [
   ...FACULTY_WIDGETS,
   ...RESEARCH_WIDGETS,
   ...EDUCATION_WIDGETS,
+  ...ALERT_WIDGETS,
 ];
 
 // ============================================================================
@@ -765,6 +889,29 @@ export function generateDefaultLayout(userFunctions: Set<string> | string[]): Da
     description: 'Layout tự động theo quyền',
     widgets,
   };
+}
+
+/** Lấy widgets mặc định cho một role key (dùng khi khởi tạo template) */
+export function getWidgetsByRole(roleKey: string): WidgetConfig[] {
+  return WIDGET_REGISTRY.filter(w => w.defaultRoles?.includes(roleKey));
+}
+
+/** Lấy alert widgets (isAlert=true) mà user có quyền */
+export function getAlertWidgets(userFunctions: Set<string> | string[]): WidgetConfig[] {
+  const funcSet = userFunctions instanceof Set ? userFunctions : new Set(userFunctions);
+  return WIDGET_REGISTRY.filter(w => w.isAlert && funcSet.has(w.requiredFunction));
+}
+
+/** Default TTL theo layer */
+export const WIDGET_LAYER_TTL: Record<1 | 2 | 3, number> = {
+  1: 60,    // Fast KPI
+  2: 300,   // Aggregate charts (5 min)
+  3: 1800,  // Complex reports (30 min)
+};
+
+/** Trả về TTL của widget, fallback về layer 2 nếu không khai báo */
+export function getWidgetTtl(widget: WidgetConfig): number {
+  return widget.refreshPolicy?.ttlSeconds ?? WIDGET_LAYER_TTL[2];
 }
 
 // Module info for display

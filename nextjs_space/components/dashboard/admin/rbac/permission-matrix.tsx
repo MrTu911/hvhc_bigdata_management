@@ -1,3 +1,10 @@
+/**
+ * @deprecated Dead code — không được dùng ở đâu.
+ * Ma trận quyền thực tế đã được tích hợp trực tiếp vào tab "Ma trận Quyền"
+ * trong /dashboard/admin/rbac (page.tsx) và kết nối với dữ liệu DB thực tế.
+ * Component này dùng dữ liệu hardcode cũ (10 permissions, 8 roles) — KHÔNG phản ánh hệ thống thực.
+ * TODO: Xóa file này sau khi xác nhận không có consumer nào.
+ */
 
 'use client';
 
