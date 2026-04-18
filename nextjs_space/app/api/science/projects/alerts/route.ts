@@ -9,6 +9,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { requireFunction } from '@/lib/rbac/middleware'
 import { SCIENCE } from '@/lib/rbac/function-codes'
 import { projectService } from '@/lib/services/science/project.service'
+import prisma from '@/lib/db'
 
 export async function GET(req: NextRequest) {
   const auth = await requireFunction(req, SCIENCE.PROJECT_APPROVE_DEPT)
@@ -20,14 +21,22 @@ export async function GET(req: NextRequest) {
     90 // tối đa 90 ngày
   )
 
-  const result = await projectService.getDeadlineAlerts(daysAhead)
+  const [result, extensionsPending, midtermPending] = await Promise.all([
+    projectService.getDeadlineAlerts(daysAhead),
+    prisma.nckhExtension.count({ where: { status: 'PENDING' } }),
+    prisma.nckhProject.count({
+      where: { status: 'IN_PROGRESS', midtermReview: null, startDate: { not: null } },
+    }),
+  ])
 
   return NextResponse.json({
     success: true,
     data: result.data,
+    extensionsPending,
+    midtermPending,
     meta: {
       daysAhead,
-      count: result.data.length,
+      deadlineCount: result.data.length,
       generatedAt: new Date().toISOString(),
     },
   })

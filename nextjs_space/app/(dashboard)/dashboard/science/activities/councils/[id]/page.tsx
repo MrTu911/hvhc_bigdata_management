@@ -21,8 +21,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import {
   ArrowLeft, Users, ClipboardList, CheckCircle2, Vote, FileText,
-  RefreshCw, ChevronRight, Download, Loader2,
+  RefreshCw, ChevronRight, Download, Loader2, CalendarDays, Plus, ChevronDown, Paperclip,
 } from 'lucide-react';
+import { ScienceAttachmentPanel } from '@/components/science/ScienceAttachmentPanel';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -93,6 +94,29 @@ interface CouncilDetail {
   reviews: CouncilReview[];
 }
 
+interface CouncilMeeting {
+  id: string;
+  meetingDate: string;
+  location?: string | null;
+  agenda?: string | null;
+  minutesContent?: string | null;
+  minutesUrl?: string | null;
+  attendanceCount: number;
+  createdAt: string;
+  createdBy: { id: string; fullName: string };
+  _count: { votes: number };
+}
+
+interface MeetingVoteSummary {
+  total: number;
+  approve: number;
+  reject: number;
+  abstain: number;
+  scoreSum: number;
+  scoreCount: number;
+  averageScore: number | null;
+}
+
 interface VoteSummary {
   total: number;
   voted: number;
@@ -107,7 +131,7 @@ interface VoteSummary {
   }[];
 }
 
-type TabKey = 'info' | 'members' | 'reviews' | 'votes' | 'conclusion';
+type TabKey = 'info' | 'members' | 'reviews' | 'votes' | 'meetings' | 'conclusion' | 'documents';
 
 // ─── Tab component ────────────────────────────────────────────────────────────
 
@@ -116,8 +140,10 @@ function Tabs({ active, onChange }: { active: TabKey; onChange: (t: TabKey) => v
     { key: 'info',       label: 'Thông tin',  icon: <FileText className="h-3.5 w-3.5" /> },
     { key: 'members',    label: 'Thành viên', icon: <Users className="h-3.5 w-3.5" /> },
     { key: 'reviews',    label: 'Phản biện',  icon: <ClipboardList className="h-3.5 w-3.5" /> },
-    { key: 'votes',      label: 'Bỏ phiếu',  icon: <Vote className="h-3.5 w-3.5" /> },
-    { key: 'conclusion', label: 'Kết luận',   icon: <CheckCircle2 className="h-3.5 w-3.5" /> },
+    { key: 'votes',      label: 'Bỏ phiếu',   icon: <Vote className="h-3.5 w-3.5" /> },
+    { key: 'meetings',   label: 'Phiên họp',  icon: <CalendarDays className="h-3.5 w-3.5" /> },
+    { key: 'conclusion', label: 'Kết luận',    icon: <CheckCircle2 className="h-3.5 w-3.5" /> },
+    { key: 'documents',  label: 'Tài liệu',   icon: <Paperclip className="h-3.5 w-3.5" /> },
   ];
   return (
     <div className="flex gap-1 border-b border-gray-200 pb-1 overflow-x-auto">
@@ -533,6 +559,365 @@ function ConclusionTab({
   );
 }
 
+// ─── Tab: Phiên họp ──────────────────────────────────────────────────────────
+
+function MeetingsTab({ councilId, members }: { councilId: string; members: CouncilMember[] }) {
+  const [meetings, setMeetings]         = useState<CouncilMeeting[]>([]);
+  const [loading, setLoading]           = useState(true);
+  const [expandedId, setExpandedId]     = useState<string | null>(null);
+  const [voteSummary, setVoteSummary]   = useState<Record<string, MeetingVoteSummary>>({});
+  const [showNewForm, setShowNewForm]   = useState(false);
+
+  // New meeting form state
+  const [newDate,        setNewDate]        = useState('');
+  const [newLocation,    setNewLocation]    = useState('');
+  const [newAgenda,      setNewAgenda]      = useState('');
+  const [newAttendance,  setNewAttendance]  = useState('');
+  const [creating,       setCreating]       = useState(false);
+
+  // Vote form state (per meeting)
+  const [voteFormId,   setVoteFormId]   = useState<string | null>(null);
+  const [voteMemberId, setVoteMemberId] = useState('');
+  const [voteType,     setVoteType]     = useState('APPROVAL');
+  const [vote,         setVote]         = useState('');
+  const [voteScore,    setVoteScore]    = useState('');
+  const [voteComment,  setVoteComment]  = useState('');
+  const [submittingVote, setSubmittingVote] = useState(false);
+
+  const loadMeetings = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/science/councils/${councilId}/meetings`);
+      if (!res.ok) throw new Error();
+      const json = await res.json();
+      setMeetings(json.data ?? []);
+    } catch {
+      toast.error('Không thể tải danh sách phiên họp');
+    } finally {
+      setLoading(false);
+    }
+  }, [councilId]);
+
+  useEffect(() => { loadMeetings(); }, [loadMeetings]);
+
+  const loadVoteSummary = async (meetId: string) => {
+    if (voteSummary[meetId]) return;
+    try {
+      const res = await fetch(`/api/science/councils/${councilId}/meetings/${meetId}/votes`);
+      if (res.status === 403) return; // Not chairman/admin — silent
+      if (!res.ok) return;
+      const json = await res.json();
+      setVoteSummary((prev) => ({ ...prev, [meetId]: json.data }));
+    } catch {
+      /* silent */
+    }
+  };
+
+  const handleExpand = (meetId: string) => {
+    if (expandedId === meetId) { setExpandedId(null); return; }
+    setExpandedId(meetId);
+    loadVoteSummary(meetId);
+  };
+
+  const handleCreateMeeting = async () => {
+    if (!newDate) { toast.error('Vui lòng chọn ngày họp'); return; }
+    setCreating(true);
+    try {
+      const res = await fetch(`/api/science/councils/${councilId}/meetings`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          meetingDate: newDate,
+          location:    newLocation || undefined,
+          agenda:      newAgenda   || undefined,
+          attendanceCount: newAttendance ? Number(newAttendance) : 0,
+        }),
+      });
+      if (!res.ok) {
+        const json = await res.json();
+        throw new Error(json.error ?? 'Lỗi tạo phiên họp');
+      }
+      toast.success('Đã tạo phiên họp mới');
+      setShowNewForm(false);
+      setNewDate(''); setNewLocation(''); setNewAgenda(''); setNewAttendance('');
+      loadMeetings();
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : 'Lỗi không xác định');
+    } finally {
+      setCreating(false);
+    }
+  };
+
+  const handleCastVote = async (meetId: string) => {
+    if (!voteMemberId || !voteType || !vote) {
+      toast.error('Vui lòng chọn thành viên và kết quả bỏ phiếu'); return;
+    }
+    setSubmittingVote(true);
+    try {
+      const res = await fetch(`/api/science/councils/${councilId}/meetings/${meetId}/votes`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          memberId: voteMemberId,
+          voteType,
+          vote,
+          score:   voteScore   ? Number(voteScore)   : undefined,
+          comment: voteComment || undefined,
+        }),
+      });
+      if (!res.ok) {
+        const json = await res.json();
+        throw new Error(json.error ?? 'Lỗi bỏ phiếu');
+      }
+      toast.success('Đã ghi nhận phiếu bầu');
+      setVoteFormId(null);
+      setVoteMemberId(''); setVoteType('APPROVAL'); setVote(''); setVoteScore(''); setVoteComment('');
+      // Refresh vote summary
+      setVoteSummary((prev) => { const next = { ...prev }; delete next[meetId]; return next; });
+      loadVoteSummary(meetId);
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : 'Lỗi không xác định');
+    } finally {
+      setSubmittingVote(false);
+    }
+  };
+
+  if (loading) return <div className="flex justify-center py-12 text-gray-400 text-sm">Đang tải...</div>;
+
+  return (
+    <div className="space-y-4">
+      {/* Header + create button */}
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-gray-500">
+          {meetings.length > 0 ? `${meetings.length} phiên họp` : 'Chưa có phiên họp nào'}
+        </p>
+        <Button
+          size="sm"
+          onClick={() => setShowNewForm(!showNewForm)}
+          className="gap-1.5 bg-violet-600 hover:bg-violet-700 text-white"
+        >
+          <Plus className="h-3.5 w-3.5" />
+          Tạo phiên họp
+        </Button>
+      </div>
+
+      {/* New meeting form */}
+      {showNewForm && (
+        <Card className="border-violet-200 bg-violet-50/40">
+          <CardHeader className="pb-2"><CardTitle className="text-sm text-violet-700">Phiên họp mới</CardTitle></CardHeader>
+          <CardContent className="space-y-3">
+            <div className="grid md:grid-cols-2 gap-3">
+              <div className="space-y-1">
+                <label className="text-xs font-medium text-gray-600">Ngày họp *</label>
+                <Input type="datetime-local" value={newDate} onChange={(e) => setNewDate(e.target.value)} className="text-sm" />
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-medium text-gray-600">Địa điểm</label>
+                <Input value={newLocation} onChange={(e) => setNewLocation(e.target.value)} placeholder="Phòng họp..." className="text-sm" />
+              </div>
+              <div className="space-y-1">
+                <label className="text-xs font-medium text-gray-600">Số người tham dự</label>
+                <Input type="number" min={0} value={newAttendance} onChange={(e) => setNewAttendance(e.target.value)} placeholder="0" className="text-sm" />
+              </div>
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-gray-600">Nội dung chương trình nghị sự</label>
+              <Textarea value={newAgenda} onChange={(e) => setNewAgenda(e.target.value)} rows={3} placeholder="Nội dung họp..." className="text-sm resize-none" />
+            </div>
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" size="sm" onClick={() => setShowNewForm(false)}>Huỷ</Button>
+              <Button size="sm" onClick={handleCreateMeeting} disabled={creating} className="bg-violet-600 hover:bg-violet-700 text-white gap-1">
+                {creating ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Plus className="h-3.5 w-3.5" />}
+                {creating ? 'Đang tạo...' : 'Tạo phiên họp'}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Meetings list */}
+      {meetings.length === 0 && !showNewForm && (
+        <div className="flex flex-col items-center py-12 text-gray-400 gap-2">
+          <CalendarDays className="h-8 w-8 opacity-30" />
+          <p className="text-sm">Chưa có phiên họp nào được tạo</p>
+        </div>
+      )}
+
+      {meetings.map((m) => {
+        const isExpanded = expandedId === m.id;
+        const vs = voteSummary[m.id];
+        return (
+          <Card key={m.id} className="overflow-hidden">
+            {/* Meeting header row */}
+            <button
+              onClick={() => handleExpand(m.id)}
+              className="w-full text-left px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors"
+            >
+              <div className="flex items-center gap-3">
+                <CalendarDays className="h-4 w-4 text-violet-500 shrink-0" />
+                <div>
+                  <p className="text-sm font-medium text-gray-800">
+                    {new Date(m.meetingDate).toLocaleString('vi-VN', {
+                      day: '2-digit', month: '2-digit', year: 'numeric',
+                      hour: '2-digit', minute: '2-digit',
+                    })}
+                    {m.location && <span className="ml-2 text-gray-500 font-normal">— {m.location}</span>}
+                  </p>
+                  <p className="text-xs text-gray-400">
+                    {m.attendanceCount} người tham dự · {m._count.votes} phiếu bầu · Tạo bởi: {m.createdBy.fullName}
+                  </p>
+                </div>
+              </div>
+              <ChevronDown className={`h-4 w-4 text-gray-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
+            </button>
+
+            {/* Expanded detail */}
+            {isExpanded && (
+              <div className="border-t border-gray-100 px-4 py-4 space-y-4">
+                {m.agenda && (
+                  <div>
+                    <p className="text-xs font-medium text-gray-500 mb-1">Chương trình nghị sự</p>
+                    <p className="text-sm text-gray-700 whitespace-pre-wrap">{m.agenda}</p>
+                  </div>
+                )}
+                {m.minutesContent && (
+                  <div>
+                    <p className="text-xs font-medium text-gray-500 mb-1">Biên bản</p>
+                    <p className="text-sm text-gray-700 whitespace-pre-wrap">{m.minutesContent}</p>
+                  </div>
+                )}
+                {m.minutesUrl && (
+                  <a href={m.minutesUrl} target="_blank" rel="noopener noreferrer"
+                    className="text-xs text-violet-600 hover:underline">
+                    Xem file biên bản
+                  </a>
+                )}
+
+                {/* Vote summary (chairman/admin only) */}
+                {vs && (
+                  <div className="rounded-lg border border-blue-100 bg-blue-50 p-3">
+                    <p className="text-xs font-semibold text-blue-700 mb-2">Tổng hợp phiếu bầu</p>
+                    <div className="grid grid-cols-4 gap-2 text-center text-xs">
+                      <div>
+                        <p className="font-bold text-base text-gray-800">{vs.total}</p>
+                        <p className="text-gray-500">Tổng phiếu</p>
+                      </div>
+                      <div>
+                        <p className="font-bold text-base text-emerald-600">{vs.approve}</p>
+                        <p className="text-gray-500">Tán thành</p>
+                      </div>
+                      <div>
+                        <p className="font-bold text-base text-red-500">{vs.reject}</p>
+                        <p className="text-gray-500">Không tán thành</p>
+                      </div>
+                      <div>
+                        <p className="font-bold text-base text-amber-500">{vs.abstain}</p>
+                        <p className="text-gray-500">Trắng phiếu</p>
+                      </div>
+                    </div>
+                    {vs.averageScore != null && (
+                      <p className="text-xs text-blue-700 mt-2 text-center">
+                        Điểm trung bình: <strong>{vs.averageScore.toFixed(2)}</strong>
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {/* Cast vote button / form */}
+                {voteFormId === m.id ? (
+                  <div className="rounded-lg border border-violet-200 bg-violet-50/40 p-3 space-y-3">
+                    <p className="text-xs font-semibold text-violet-700">Bỏ phiếu</p>
+                    <div className="grid md:grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <label className="text-xs font-medium text-gray-600">Thành viên *</label>
+                        <select
+                          value={voteMemberId}
+                          onChange={(e) => setVoteMemberId(e.target.value)}
+                          className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-400"
+                        >
+                          <option value="">Chọn thành viên...</option>
+                          {members.map((mem) => (
+                            <option key={mem.id} value={mem.id}>
+                              {mem.user.name} ({MEMBER_ROLE_LABELS[mem.role] ?? mem.role})
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-xs font-medium text-gray-600">Loại phiếu</label>
+                        <select
+                          value={voteType}
+                          onChange={(e) => setVoteType(e.target.value)}
+                          className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-400"
+                        >
+                          <option value="APPROVAL">Phê duyệt</option>
+                          <option value="EVALUATION">Đánh giá</option>
+                          <option value="ELECTION">Bầu cử</option>
+                        </select>
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-xs font-medium text-gray-600">Kết quả *</label>
+                        <select
+                          value={vote}
+                          onChange={(e) => setVote(e.target.value)}
+                          className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-violet-400"
+                        >
+                          <option value="">Chọn kết quả...</option>
+                          <option value="APPROVE">Tán thành</option>
+                          <option value="REJECT">Không tán thành</option>
+                          <option value="ABSTAIN">Trắng phiếu</option>
+                        </select>
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-xs font-medium text-gray-600">Điểm (nếu có)</label>
+                        <Input
+                          type="number" min={0} max={10} step={0.1}
+                          value={voteScore} onChange={(e) => setVoteScore(e.target.value)}
+                          placeholder="0.0 – 10.0" className="text-sm"
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-xs font-medium text-gray-600">Nhận xét (tuỳ chọn)</label>
+                      <Textarea
+                        value={voteComment} onChange={(e) => setVoteComment(e.target.value)}
+                        rows={2} placeholder="Ý kiến..." className="text-sm resize-none"
+                      />
+                    </div>
+                    <div className="flex justify-end gap-2">
+                      <Button variant="outline" size="sm" onClick={() => setVoteFormId(null)}>Huỷ</Button>
+                      <Button
+                        size="sm"
+                        onClick={() => handleCastVote(m.id)}
+                        disabled={submittingVote}
+                        className="bg-violet-600 hover:bg-violet-700 text-white gap-1"
+                      >
+                        {submittingVote ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Vote className="h-3.5 w-3.5" />}
+                        {submittingVote ? 'Đang gửi...' : 'Gửi phiếu'}
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex justify-end">
+                    <Button
+                      variant="outline" size="sm"
+                      onClick={() => { setVoteFormId(m.id); setVoteMemberId(''); setVote(''); }}
+                      className="gap-1.5 text-violet-600 border-violet-200 hover:bg-violet-50"
+                    >
+                      <Vote className="h-3.5 w-3.5" />
+                      Bỏ phiếu
+                    </Button>
+                  </div>
+                )}
+              </div>
+            )}
+          </Card>
+        );
+      })}
+    </div>
+  );
+}
+
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 // ─── Export button ────────────────────────────────────────────────────────────
@@ -691,7 +1076,16 @@ export default function CouncilDetailPage() {
         {activeTab === 'members'    && <MembersTab members={council.members} />}
         {activeTab === 'reviews'    && <ReviewsTab reviews={council.reviews} members={council.members} />}
         {activeTab === 'votes'      && <VotesTab councilId={council.id} hasResult={!!council.result} />}
+        {activeTab === 'meetings'   && <MeetingsTab councilId={council.id} members={council.members} />}
         {activeTab === 'conclusion' && <ConclusionTab council={council} onFinalized={loadCouncil} />}
+        {activeTab === 'documents'  && (
+          <ScienceAttachmentPanel
+            entityType="COUNCIL_MEETING"
+            entityId={council.id}
+            allowUpload
+            allowDelete
+          />
+        )}
       </div>
     </div>
   );

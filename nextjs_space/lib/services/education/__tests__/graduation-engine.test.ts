@@ -45,6 +45,7 @@ import {
  */
 function makeStudent(overrides: Partial<{
   id: string;
+  currentStatus: string;
   diemTrungBinh: number;
   tinChiTichLuy: number;
   tongTinChi: number | null;
@@ -53,6 +54,7 @@ function makeStudent(overrides: Partial<{
 }> = {}) {
   return {
     id: 'hv-001',
+    currentStatus: 'ACTIVE',
     diemTrungBinh: MIN_GPA_FOR_GRADUATION,          // đúng ngưỡng
     tinChiTichLuy: DEFAULT_REQUIRED_CREDITS,         // đủ tín chỉ
     tongTinChi: null,
@@ -365,5 +367,86 @@ describe('runGraduationEngine', () => {
     expect(typeof result!.gpa).toBe('number');
     expect(typeof result!.totalCreditsEarned).toBe('number');
     expect(typeof result!.requiredCredits).toBe('number');
+  });
+
+  // ── requiredCredits fallback chain ────────────────────────────────────────
+
+  it('requiredCredits = DEFAULT_REQUIRED_CREDITS khi không có ProgramVersion và không có tongTinChi', async () => {
+    // currentProgramVersion = null, tongTinChi = null → phải dùng DEFAULT_REQUIRED_CREDITS
+    vi.mocked(prisma.hocVien.findFirst).mockResolvedValue(
+      makeStudent({ currentProgramVersion: null, tongTinChi: null }) as any
+    );
+    vi.mocked(prisma.studentConductRecord.findFirst).mockResolvedValue({ conductScore: 80 } as any);
+    vi.mocked(prisma.thesisProject.findFirst).mockResolvedValue(null);
+    vi.mocked(prisma.foreignLanguageCert.findFirst).mockResolvedValue({ id: 'cert-001' } as any);
+
+    const result = await runGraduationEngine('hv-001');
+
+    expect(result!.requiredCredits).toBe(DEFAULT_REQUIRED_CREDITS);
+  });
+
+  it('requiredCredits dùng tongTinChi khi ProgramVersion null nhưng tongTinChi có giá trị', async () => {
+    // Tier 2: currentProgramVersion null → tongTinChi = 130
+    const customCredits = 130;
+    vi.mocked(prisma.hocVien.findFirst).mockResolvedValue(
+      makeStudent({
+        currentProgramVersion: null,
+        tongTinChi: customCredits,
+        tinChiTichLuy: customCredits, // đủ tín chỉ
+      }) as any
+    );
+    vi.mocked(prisma.studentConductRecord.findFirst).mockResolvedValue({ conductScore: 80 } as any);
+    vi.mocked(prisma.thesisProject.findFirst).mockResolvedValue(null);
+    vi.mocked(prisma.foreignLanguageCert.findFirst).mockResolvedValue({ id: 'cert-001' } as any);
+
+    const result = await runGraduationEngine('hv-001');
+
+    expect(result!.requiredCredits).toBe(customCredits);
+    expect(result!.graduationEligible).toBe(true);
+  });
+
+  // ── Student status guard: SUSPENDED / DROPPED_OUT ────────────────────────
+
+  it('FAIL – học viên SUSPENDED: trả ngay với STUDENT_STATUS_INELIGIBLE, không gọi DB rèn luyện/thesis/cert', async () => {
+    vi.mocked(prisma.hocVien.findFirst).mockResolvedValue(
+      makeStudent({ currentStatus: 'SUSPENDED' }) as any
+    );
+
+    const result = await runGraduationEngine('hv-001');
+
+    expect(result).not.toBeNull();
+    expect(result!.graduationEligible).toBe(false);
+    expect(result!.failureReasonsJson).toHaveLength(1);
+    expect(result!.failureReasonsJson![0].code).toBe('STUDENT_STATUS_INELIGIBLE');
+
+    // Engine phải early-return: không được query conduct/thesis/cert
+    expect(vi.mocked(prisma.studentConductRecord.findFirst)).not.toHaveBeenCalled();
+    expect(vi.mocked(prisma.thesisProject.findFirst)).not.toHaveBeenCalled();
+    expect(vi.mocked(prisma.foreignLanguageCert.findFirst)).not.toHaveBeenCalled();
+  });
+
+  it('FAIL – học viên DROPPED_OUT: trả ngay với STUDENT_STATUS_INELIGIBLE', async () => {
+    vi.mocked(prisma.hocVien.findFirst).mockResolvedValue(
+      makeStudent({ currentStatus: 'DROPPED_OUT' }) as any
+    );
+
+    const result = await runGraduationEngine('hv-001');
+
+    expect(result!.graduationEligible).toBe(false);
+    expect(result!.failureReasonsJson![0].code).toBe('STUDENT_STATUS_INELIGIBLE');
+    expect(vi.mocked(prisma.studentConductRecord.findFirst)).not.toHaveBeenCalled();
+  });
+
+  it('PASS – học viên ACTIVE không bị chặn bởi status guard', async () => {
+    // Đảm bảo ACTIVE không trigger guard và engine chạy toàn bộ rules
+    setupAllEligible(); // makeStudent mặc định currentStatus = 'ACTIVE'
+
+    const result = await runGraduationEngine('hv-001');
+
+    expect(result!.graduationEligible).toBe(true);
+    // Xác nhận tất cả DB calls đã được thực hiện (engine không early-return)
+    expect(vi.mocked(prisma.studentConductRecord.findFirst)).toHaveBeenCalledTimes(1);
+    expect(vi.mocked(prisma.thesisProject.findFirst)).toHaveBeenCalledTimes(1);
+    expect(vi.mocked(prisma.foreignLanguageCert.findFirst)).toHaveBeenCalledTimes(1);
   });
 });

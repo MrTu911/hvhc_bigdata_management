@@ -25,7 +25,9 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const positionId = searchParams.get('positionId');
 
-    const where = positionId ? { positionId } : {};
+    const where = positionId
+      ? { positionId, isActive: true }
+      : { isActive: true };
 
     const assignments = await prisma.positionFunction.findMany({
       where,
@@ -69,9 +71,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Quyền đã được gán' }, { status: 400 });
     }
 
-    const functionScope = scope?.toUpperCase() === 'SELF' ? 'SELF' 
-      : scope?.toUpperCase() === 'ACADEMY' ? 'ACADEMY' 
-      : 'UNIT';
+    const validScopes = ['SELF', 'UNIT', 'DEPARTMENT', 'ACADEMY'];
+    const normalizedScope = scope?.toUpperCase();
+    const functionScope = validScopes.includes(normalizedScope) ? normalizedScope : 'UNIT';
 
     const assignment = await prisma.positionFunction.create({
       data: {

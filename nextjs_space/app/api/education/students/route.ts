@@ -5,11 +5,17 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
 import { requireFunction } from '@/lib/rbac/middleware';
 import { EDUCATION } from '@/lib/rbac/function-codes';
 import { logAudit } from '@/lib/audit';
-import { getItemByCode } from '@/lib/master-data-cache';
+import {
+  listStudents,
+  createStudent,
+  ServiceValidationError,
+  ServiceConflictError,
+  type ListStudentsParams,
+  type UserScopeContext,
+} from '@/lib/services/education/student-profile.service';
 
 export async function GET(req: NextRequest) {
   try {
@@ -18,119 +24,42 @@ export async function GET(req: NextRequest) {
     const { user, authResult } = auth;
 
     const { searchParams } = new URL(req.url);
-    const search       = searchParams.get('search') || '';
-    const currentStatus = searchParams.get('currentStatus');
-    const lop          = searchParams.get('lop');
-    const khoaHoc      = searchParams.get('khoaHoc');
-    const nganh        = searchParams.get('nganh');
-    const studyMode    = searchParams.get('studyMode');
-    const trainingSystemUnitId = searchParams.get('trainingSystemUnitId');
-    const battalionUnitId      = searchParams.get('battalionUnitId');
-    const heDaoTaoFilter       = searchParams.get('heDaoTao');
-    // 'military' = khoaQuanLy NOT NULL; 'civil' = khoaQuanLy IS NULL; null = no filter
-    const studentType  = searchParams.get('studentType');
-    const page         = Math.max(1, parseInt(searchParams.get('page') || '1'));
-    const limit        = Math.min(100, parseInt(searchParams.get('limit') || '20'));
-
-    const where: any = {
-      deletedAt: null,
+    const params: ListStudentsParams = {
+      page:                 Math.max(1, parseInt(searchParams.get('page') || '1')),
+      limit:                Math.min(100, parseInt(searchParams.get('limit') || '20')),
+      search:               searchParams.get('search') || undefined,
+      studentType:          (searchParams.get('studentType') || undefined) as 'civil' | 'military' | undefined,
+      currentStatus:        searchParams.get('currentStatus') || undefined,
+      lop:                  searchParams.get('lop') || undefined,
+      khoaHoc:              searchParams.get('khoaHoc') || undefined,
+      nganh:                searchParams.get('nganh') || undefined,
+      studyMode:            searchParams.get('studyMode') || undefined,
+      trainingSystemUnitId: searchParams.get('trainingSystemUnitId') || undefined,
+      battalionUnitId:      searchParams.get('battalionUnitId') || undefined,
+      heDaoTao:             searchParams.get('heDaoTao') || undefined,
     };
 
-    if (search) {
-      where.OR = [
-        { hoTen: { contains: search, mode: 'insensitive' } },
-        { maHocVien: { contains: search, mode: 'insensitive' } },
-        { email: { contains: search, mode: 'insensitive' } },
-      ];
-    }
-    if (currentStatus) where.currentStatus = currentStatus;
-    if (lop) where.lop = lop;
-    if (khoaHoc) where.khoaHoc = khoaHoc;
-    if (nganh) where.nganh = nganh;
-    if (studyMode) where.studyMode = studyMode;
-    if (trainingSystemUnitId) where.trainingSystemUnitId = trainingSystemUnitId;
-    if (battalionUnitId) where.battalionUnitId = battalionUnitId;
-    if (heDaoTaoFilter) where.heDaoTao = heDaoTaoFilter;
-    // studentType: 'military' → has khoaQuanLy (military unit structure)
-    //              'civil'    → no khoaQuanLy
-    if (studentType === 'military') where.khoaQuanLy = { not: null };
-    else if (studentType === 'civil') where.khoaQuanLy = null;
+    const scopeCtx: UserScopeContext = user
+      ? { userId: user.id, unitId: user.unitId, scope: authResult?.scope ?? 'SELF' }
+      : { userId: '' };
 
-    // Scope enforcement theo vai trò chỉ huy quản lý học viên
-    if (user) {
-      const userUnit = user.unitId
-        ? await prisma.unit.findUnique({ where: { id: user.unitId }, select: { id: true, type: true } })
-        : null;
+    const result = await listStudents(params, scopeCtx);
 
-      if (userUnit?.type === 'HE') {
-        // CHI_HUY_HE: chỉ thấy học viên thuộc Hệ mình (trừ khi đã filter cụ thể hơn)
-        if (!trainingSystemUnitId && !battalionUnitId) {
-          where.trainingSystemUnitId = userUnit.id;
-        }
-      } else if (userUnit?.type === 'TIEUDOAN') {
-        // CHI_HUY_TIEU_DOAN: chỉ thấy học viên thuộc Tiểu đoàn mình
-        if (!battalionUnitId) {
-          where.battalionUnitId = userUnit.id;
-        }
-      } else {
-        // Scope SELF: giảng viên chỉ xem học viên mình cố vấn (giangVienHuongDanId)
-        // Scope UNIT/DEPARTMENT/ACADEMY: không lọc thêm (function-code guard đã đủ)
-        const scope = authResult?.scope ?? 'SELF';
-        if (scope === 'SELF') {
-          const facultyProfile = await prisma.facultyProfile.findUnique({
-            where: { userId: user.id },
-            select: { id: true },
-          });
-          if (facultyProfile) {
-            where.giangVienHuongDanId = facultyProfile.id;
-          }
-        }
-      }
-    }
-
-    const [data, total] = await Promise.all([
-      prisma.hocVien.findMany({
-        where,
-        select: {
-          id: true,
-          maHocVien: true,
-          hoTen: true,
-          ngaySinh: true,
-          gioiTinh: true,
-          lop: true,
-          khoaHoc: true,
-          nganh: true,
-          currentStatus: true,
-          studyMode: true,
-          heDaoTao: true,
-          diemTrungBinh: true,
-          tinChiTichLuy: true,
-          ngayNhapHoc: true,
-          createdAt: true,
-          currentProgramVersion: {
-            select: { id: true, versionCode: true, effectiveFromCohort: true },
-          },
-          giangVienHuongDan: {
-            select: { id: true, user: { select: { name: true } } },
-          },
-          trainingSystemUnit: {
-            select: { id: true, code: true, name: true },
-          },
-          battalionUnit: {
-            select: { id: true, code: true, name: true },
-          },
-        },
-        orderBy: { maHocVien: 'asc' },
-        skip: (page - 1) * limit,
-        take: limit,
-      }),
-      prisma.hocVien.count({ where }),
-    ]);
+    const byStatus = result.statusGroups.reduce<Record<string, number>>((acc, g) => {
+      acc[g.currentStatus] = g._count.id;
+      return acc;
+    }, {});
 
     return NextResponse.json({
       success: true,
-      data,
-      meta: { total, page, limit, totalPages: Math.ceil(total / limit) },
+      data: result.students,
+      meta: {
+        total:      result.total,
+        page:       params.page,
+        limit:      params.limit,
+        totalPages: Math.ceil(result.total / params.limit),
+      },
+      aggregateStats: { byStatus, lowGpaCount: result.lowGpaCount, warningCount: result.warningCount },
     });
   } catch (error: any) {
     console.error('GET /api/education/students error:', error);
@@ -145,89 +74,24 @@ export async function POST(req: NextRequest) {
     const { user } = auth;
 
     const body = await req.json();
-    const {
-      maHocVien, hoTen, ngaySinh, gioiTinh,
-      lop, khoaHoc, nganh,
-      studyMode, heDaoTao,
-      khoaQuanLy, trungDoi, daiDoi,
-      currentProgramVersionId,
-      giangVienHuongDanId,
-      email, dienThoai, diaChi,
-      cohortId, classId, majorId, userId,
-      ngayNhapHoc,
-    } = body;
-
-    if (!maHocVien || !hoTen) {
-      return NextResponse.json(
-        { success: false, error: 'maHocVien và hoTen là bắt buộc' },
-        { status: 400 }
-      );
-    }
-
-    // Validate studyMode theo M19 lookup MD_STUDY_MODE
-    if (studyMode) {
-      const validItem = await getItemByCode('MD_STUDY_MODE', studyMode);
-      if (!validItem) {
-        const validItems = await import('@/lib/master-data-cache').then(m =>
-          m.getItemsByCategory('MD_STUDY_MODE', true)
-        );
-        const validCodes = validItems.map((i: any) => i.code).join(', ');
-        return NextResponse.json(
-          { success: false, error: `studyMode '${studyMode}' không hợp lệ. Giá trị cho phép: ${validCodes}` },
-          { status: 400 }
-        );
-      }
-    }
-
-    const existing = await prisma.hocVien.findUnique({ where: { maHocVien } });
-    if (existing) {
-      return NextResponse.json(
-        { success: false, error: `Học viên ${maHocVien} đã tồn tại` },
-        { status: 409 }
-      );
-    }
-
-    const hocVien = await prisma.hocVien.create({
-      data: {
-        maHocVien,
-        hoTen,
-        ngaySinh: ngaySinh ? new Date(ngaySinh) : null,
-        gioiTinh,
-        lop,
-        khoaHoc,
-        nganh,
-        studyMode: studyMode || null,
-        heDaoTao: heDaoTao || null,
-        khoaQuanLy: khoaQuanLy || null,
-        trungDoi: trungDoi || null,
-        daiDoi: daiDoi || null,
-        currentStatus: 'ACTIVE',
-        currentProgramVersionId: currentProgramVersionId || null,
-        giangVienHuongDanId: giangVienHuongDanId || null,
-        email: email || null,
-        dienThoai: dienThoai || null,
-        diaChi: diaChi || null,
-        cohortId: cohortId || null,
-        classId: classId || null,
-        majorId: majorId || null,
-        userId: userId || null,
-        ngayNhapHoc: ngayNhapHoc ? new Date(ngayNhapHoc) : null,
-      },
-    });
+    const hocVien = await createStudent(body);
 
     await logAudit({
-      userId: user!.id,
+      userId:       user!.id,
       functionCode: EDUCATION.CREATE_STUDENT,
-      action: 'CREATE',
+      action:       'CREATE',
       resourceType: 'HOC_VIEN',
-      resourceId: hocVien.id,
-      newValue: { maHocVien, hoTen },
-      result: 'SUCCESS',
-      ipAddress: req.headers.get('x-forwarded-for') || 'unknown',
+      resourceId:   hocVien.id,
+      newValue:     { maHocVien: hocVien.maHocVien, hoTen: hocVien.hoTen },
+      result:       'SUCCESS',
+      ipAddress:    req.headers.get('x-forwarded-for') || 'unknown',
     });
 
     return NextResponse.json({ success: true, data: hocVien }, { status: 201 });
   } catch (error: any) {
+    if (error instanceof ServiceValidationError || error instanceof ServiceConflictError) {
+      return NextResponse.json({ success: false, error: error.message }, { status: error.statusCode });
+    }
     console.error('POST /api/education/students error:', error);
     return NextResponse.json({ success: false, error: 'Failed to create student' }, { status: 500 });
   }

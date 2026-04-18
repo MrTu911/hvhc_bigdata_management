@@ -169,6 +169,34 @@ model User {
   workflowActions                     WorkflowAction[]           @relation("WorkflowActionActor")
   dashboardLayouts                    DashboardUserLayout[]      @relation("UserDashboardLayouts")
   dashboardAccessLogs                 DashboardAccessLog[]       @relation("UserDashboardAccessLogs")
+  // Phase 6: Lifecycle NCKH back-relations
+  nckhProposalsAsPI                   NckhProposal[]             @relation("NckhProposalPI")
+  nckhProposalsApproved               NckhProposal[]             @relation("NckhProposalApprover")
+  nckhProposalReviews                 NckhProposalReview[]       @relation("NckhProposalReviewer")
+  nckhProgressReportsSubmitted        NckhProgressReport[]       @relation("NckhReportSubmitter")
+  nckhProgressReportsReviewed         NckhProgressReport[]       @relation("NckhReportReviewer")
+  nckhMidtermReviewsApproved          NckhMidtermReview[]        @relation("NckhMidtermApprover")
+  nckhExtensionsRequested             NckhExtension[]            @relation("NckhExtensionRequester")
+  nckhExtensionsApproved              NckhExtension[]            @relation("NckhExtensionApprover")
+  nckhClosures                        NckhClosure[]              @relation("NckhClosureBy")
+  nckhLessonsLearned                  NckhLessonLearned[]        @relation("NckhLessonAuthor")
+  nckhAcceptances                     NckhAcceptance[]           @relation("NckhAcceptanceBy")
+  nckhCouncilMeetingsCreated          NckhCouncilMeeting[]       @relation("NckhMeetingCreator")
+  // Phase 7: Finance back-relations
+  nckhPurchaseOrdersApproved          NckhPurchaseOrder[]        @relation("NckhPOApprover")
+  nckhPurchaseOrdersCreated           NckhPurchaseOrder[]        @relation("NckhPOCreator")
+  nckhInvoicesPaid                    NckhInvoice[]              @relation("NckhInvoicePayer")
+  nckhInvoicesCreated                 NckhInvoice[]              @relation("NckhInvoiceCreator")
+  nckhExpensesSubmitted               NckhExpense[]              @relation("NckhExpenseSubmitter")
+  nckhExpensesApproved                NckhExpense[]              @relation("NckhExpenseApprover")
+  nckhGrantsCreated                   NckhGrant[]                @relation("NckhGrantCreator")
+  // Phase 8: Chat + Collaboration back-relations
+  nckhChatParticipations              NckhChatParticipant[]      @relation("NckhChatParticipant")
+  nckhChatMessagesSent                NckhChatMessage[]          @relation("NckhChatSender")
+  nckhCollaborationsCreated           NckhCollaboration[]        @relation("NckhCollabCreator")
+  nckhCollaborationParticipations     NckhCollaborationParticipant[] @relation("NckhCollabParticipant")
+  nckhCollaborationDocsUploaded       NckhCollaborationDocument[] @relation("NckhCollabDocUploader")
+  scienceAttachmentsUploaded          ScienceAttachment[]         @relation("ScienceAttachmentUploader")
 
   @@index([email])
   @@index([role])
@@ -818,6 +846,7 @@ model Unit {
   labs              Lab[]
   learningMaterials LearningMaterial[]
   nckhProjects      NckhProject[]       @relation("NckhProjectUnit")
+  nckhProposals     NckhProposal[]      @relation("NckhProposalUnit")
   PartyOrganization PartyOrganization[]
   personnelMembers  Personnel[]         @relation("PersonnelUnit")
   PolicyRecord      PolicyRecord[]
@@ -4482,6 +4511,22 @@ model NckhProject {
   workflowLogs            NckhProjectWorkflowLog[]
   // Sprint 02 additive – nullable until M13 wiring is live (Sprint 03)
   workflowInstanceId      String? // FK → WorkflowInstance.id (plain string, no Prisma relation yet)
+  // Phase 6: Lifecycle NCKH
+  proposal                NckhProposal?
+  progressReports         NckhProgressReport[]       @relation("NckhProjectReports")
+  midtermReview           NckhMidtermReview?         @relation("NckhMidtermReview")
+  extensions              NckhExtension[]            @relation("NckhProjectExtensions")
+  closure                 NckhClosure?               @relation("NckhClosure")
+  lessonsLearned          NckhLessonLearned[]        @relation("NckhLessonsLearned")
+  acceptance              NckhAcceptance?            @relation("NckhAcceptance")
+  // Phase 7: Finance granular
+  purchaseOrders          NckhPurchaseOrder[]        @relation("NckhProjectPOs")
+  invoices                NckhInvoice[]              @relation("NckhProjectInvoices")
+  expenses                NckhExpense[]              @relation("NckhProjectExpenses")
+  grants                  NckhGrant[]                @relation("NckhProjectGrants")
+  // Phase 8: Chat + Collaboration
+  chatRoom                NckhChatRoom?              @relation("NckhProjectChat")
+  collaborations          NckhCollaboration[]        @relation("NckhProjectCollabs")
 
   @@index([principalInvestigatorId])
   @@index([submittedBy])
@@ -6966,6 +7011,10 @@ model ScientificCouncil {
   updatedAt          DateTime                  @updatedAt
   members            ScientificCouncilMember[]
   reviews            ScientificCouncilReview[]
+  // Phase 6 additive
+  meetings           NckhCouncilMeeting[]       @relation("NckhCouncilMeetings")
+  acceptances        NckhAcceptance[]           @relation("NckhAcceptanceCouncil")
+  midtermReviews     NckhMidtermReview[]        @relation("NckhMidtermCouncil")
 
   @@index([projectId])
   @@index([type])
@@ -7100,4 +7149,715 @@ model DashboardAccessLog {
   @@index([action])
   @@index([createdAt])
   @@map("dashboard_access_logs")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CSDL-KHQL – Phase 6: Enums mới cho Lifecycle NCKH
+// ─────────────────────────────────────────────────────────────────────────────
+
+enum NckhProposalStatus {
+  DRAFT
+  SUBMITTED
+  REVIEWING
+  APPROVED
+  REJECTED
+  REVISION_REQUESTED
+}
+
+enum NckhReportType {
+  MONTHLY
+  QUARTERLY
+  ANNUAL
+}
+
+enum NckhReportStatus {
+  DRAFT
+  SUBMITTED
+  REVIEWED
+  APPROVED
+}
+
+enum NckhMidtermRecommendation {
+  CONTINUE
+  ADJUST
+  TERMINATE
+}
+
+enum NckhExtensionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum NckhClosureType {
+  COMPLETED
+  TERMINATED
+  TRANSFERRED
+}
+
+enum NckhImpactLevel {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum NckhAcceptanceType {
+  PRELIMINARY
+  FINAL
+}
+
+enum NckhAcceptanceResult {
+  PASS
+  FAIL
+  CONDITIONAL
+}
+
+enum NckhVoteResult {
+  APPROVE
+  REJECT
+  ABSTAIN
+}
+
+enum NckhPoStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+  RECEIVED
+  CANCELLED
+}
+
+enum NckhInvoiceStatus {
+  PENDING
+  APPROVED
+  PAID
+  DISPUTED
+  CANCELLED
+}
+
+enum NckhExpenseStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+  REJECTED
+  REIMBURSED
+}
+
+enum NckhExpenseCategory {
+  PERSONNEL
+  EQUIPMENT
+  TRAVEL
+  OVERHEAD
+  PRINTING
+  OTHER
+}
+
+enum NckhGrantStatus {
+  PENDING
+  ACTIVE
+  COMPLETED
+  TERMINATED
+}
+
+enum NckhCollaborationType {
+  INTERNAL
+  EXTERNAL
+  INTERNATIONAL
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CSDL-KHQL – Phase 6: Lifecycle NCKH (Proposal → Closure)
+// Additive – không sửa NckhProject, ScientificCouncil
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Đề xuất NCKH chính thức — có workflow phê duyệt trước khi thành NckhProject.
+model NckhProposal {
+  id              String             @id @default(cuid())
+  title           String
+  titleEn         String?
+  abstract        String?
+  keywords        String[]
+  researchType    NckhType
+  category        NckhCategory
+  field           NckhField
+  budgetRequested Float
+  durationMonths  Int
+  piId            String
+  pi              User               @relation("NckhProposalPI", fields: [piId], references: [id])
+  unitId          String?
+  unit            Unit?              @relation("NckhProposalUnit", fields: [unitId], references: [id])
+  status          NckhProposalStatus @default(DRAFT)
+  submittedAt     DateTime?
+  reviewDeadline  DateTime?
+  approvedAt      DateTime?
+  approvedById    String?
+  approvedBy      User?              @relation("NckhProposalApprover", fields: [approvedById], references: [id])
+  rejectedAt      DateTime?
+  rejectReason    String?
+  projectId       String?            @unique // set khi approve → NckhProject được tạo
+  project         NckhProject?       @relation(fields: [projectId], references: [id])
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+  reviews         NckhProposalReview[]
+
+  @@index([piId])
+  @@index([unitId])
+  @@index([status])
+  @@index([submittedAt])
+  @@map("nckh_proposals")
+}
+
+/// Chấm điểm đề xuất NCKH bởi hội đồng thẩm định.
+model NckhProposalReview {
+  id             String         @id @default(cuid())
+  proposalId     String
+  proposal       NckhProposal   @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+  reviewerId     String
+  reviewer       User           @relation("NckhProposalReviewer", fields: [reviewerId], references: [id])
+  score          Float?
+  comment        String?
+  recommendation String         // APPROVE|REJECT|REVISE
+  reviewedAt     DateTime       @default(now())
+  createdAt      DateTime       @default(now())
+
+  @@unique([proposalId, reviewerId])
+  @@index([proposalId])
+  @@index([reviewerId])
+  @@map("nckh_proposal_reviews")
+}
+
+/// Báo cáo tiến độ định kỳ của đề tài NCKH.
+model NckhProgressReport {
+  id                String           @id @default(cuid())
+  projectId         String
+  project           NckhProject      @relation("NckhProjectReports", fields: [projectId], references: [id], onDelete: Cascade)
+  reportPeriod      String           // VD: "Q1-2025", "T01/2025"
+  reportType        NckhReportType
+  status            NckhReportStatus @default(DRAFT)
+  content           String?
+  completionPercent Float            @default(0)
+  issues            String?
+  nextSteps         String?
+  attachmentUrl     String?
+  submittedById     String
+  submittedBy       User             @relation("NckhReportSubmitter", fields: [submittedById], references: [id])
+  submittedAt       DateTime?
+  reviewedAt        DateTime?
+  reviewNote        String?
+  reviewedById      String?
+  reviewedBy        User?            @relation("NckhReportReviewer", fields: [reviewedById], references: [id])
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+
+  @@index([projectId])
+  @@index([status])
+  @@index([reportType])
+  @@map("nckh_progress_reports")
+}
+
+/// Đánh giá giữa kỳ chính thức — có form điểm số từng tiêu chí.
+model NckhMidtermReview {
+  id                  String                    @id @default(cuid())
+  projectId           String                    @unique
+  project             NckhProject               @relation("NckhMidtermReview", fields: [projectId], references: [id], onDelete: Cascade)
+  councilId           String?
+  council             ScientificCouncil?        @relation("NckhMidtermCouncil", fields: [councilId], references: [id])
+  reviewDate          DateTime
+  overallScore        Float?
+  scientificScore     Float?
+  progressScore       Float?
+  budgetScore         Float?
+  recommendation      NckhMidtermRecommendation
+  adjustmentRequired  Boolean                   @default(false)
+  adjustmentNote      String?
+  conclusionText      String?
+  approvedById        String?
+  approvedBy          User?                     @relation("NckhMidtermApprover", fields: [approvedById], references: [id])
+  createdAt           DateTime                  @default(now())
+  updatedAt           DateTime                  @updatedAt
+
+  @@index([projectId])
+  @@index([councilId])
+  @@map("nckh_midterm_reviews")
+}
+
+/// Yêu cầu gia hạn đề tài — có workflow phê duyệt.
+model NckhExtension {
+  id               String              @id @default(cuid())
+  projectId        String
+  project          NckhProject         @relation("NckhProjectExtensions", fields: [projectId], references: [id], onDelete: Cascade)
+  originalEndDate  DateTime
+  requestedEndDate DateTime
+  extensionMonths  Int
+  reason           String
+  status           NckhExtensionStatus @default(PENDING)
+  requestedById    String
+  requestedBy      User                @relation("NckhExtensionRequester", fields: [requestedById], references: [id])
+  approvedById     String?
+  approvedBy       User?               @relation("NckhExtensionApprover", fields: [approvedById], references: [id])
+  approvedAt       DateTime?
+  rejectReason     String?
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+
+  @@index([projectId])
+  @@index([status])
+  @@map("nckh_extensions")
+}
+
+/// Đóng đề tài chính thức (hoàn thành, dừng, hoặc chuyển giao).
+model NckhClosure {
+  id              String          @id @default(cuid())
+  projectId       String          @unique
+  project         NckhProject     @relation("NckhClosure", fields: [projectId], references: [id], onDelete: Cascade)
+  closureType     NckhClosureType
+  closureDate     DateTime
+  finalScore      Float?
+  finalGrade      String?
+  archiveLocation String?
+  notes           String?
+  closedById      String
+  closedBy        User            @relation("NckhClosureBy", fields: [closedById], references: [id])
+  createdAt       DateTime        @default(now())
+
+  @@index([projectId])
+  @@index([closureType])
+  @@map("nckh_closures")
+}
+
+/// Bài học kinh nghiệm từ đề tài — knowledge base tích lũy theo thời gian.
+model NckhLessonLearned {
+  id             String          @id @default(cuid())
+  projectId      String
+  project        NckhProject     @relation("NckhLessonsLearned", fields: [projectId], references: [id], onDelete: Cascade)
+  category       String          // MANAGEMENT|TECHNICAL|FINANCIAL|COLLABORATION|OTHER
+  title          String
+  description    String
+  impact         NckhImpactLevel
+  recommendation String?
+  addedById      String
+  addedBy        User            @relation("NckhLessonAuthor", fields: [addedById], references: [id])
+  createdAt      DateTime        @default(now())
+
+  @@index([projectId])
+  @@index([impact])
+  @@map("nckh_lessons_learned")
+}
+
+/// Nghiệm thu chính thức đề tài — chi tiết hơn NckhReview.
+model NckhAcceptance {
+  id               String               @id @default(cuid())
+  projectId        String               @unique
+  project          NckhProject          @relation("NckhAcceptance", fields: [projectId], references: [id], onDelete: Cascade)
+  councilId        String?
+  council          ScientificCouncil?   @relation("NckhAcceptanceCouncil", fields: [councilId], references: [id])
+  acceptanceDate   DateTime
+  acceptanceType   NckhAcceptanceType
+  finalScore       Float?
+  grade            String?
+  result           NckhAcceptanceResult
+  conditions       String?
+  signedMinutesUrl String?
+  acceptedById     String
+  acceptedBy       User                 @relation("NckhAcceptanceBy", fields: [acceptedById], references: [id])
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+  scores           NckhAcceptanceScore[]
+
+  @@index([projectId])
+  @@index([result])
+  @@map("nckh_acceptances")
+}
+
+/// Điểm chấm chi tiết của từng thành viên hội đồng nghiệm thu.
+model NckhAcceptanceScore {
+  id           String         @id @default(cuid())
+  acceptanceId String
+  acceptance   NckhAcceptance @relation(fields: [acceptanceId], references: [id], onDelete: Cascade)
+  memberId     String         // FK → ScientificCouncilMember.id
+  criteria     String         // SCIENTIFIC_VALUE|FEASIBILITY|OUTCOMES|BUDGET|TEAM
+  score        Float
+  comment      String?
+  createdAt    DateTime       @default(now())
+
+  @@index([acceptanceId])
+  @@map("nckh_acceptance_scores")
+}
+
+/// Phiên họp hội đồng KH — 1 hội đồng có thể họp nhiều phiên.
+model NckhCouncilMeeting {
+  id              String            @id @default(cuid())
+  councilId       String
+  council         ScientificCouncil @relation("NckhCouncilMeetings", fields: [councilId], references: [id], onDelete: Cascade)
+  meetingDate     DateTime
+  location        String?
+  agenda          String?
+  minutesContent  String?
+  minutesUrl      String?
+  attendanceCount Int               @default(0)
+  createdById     String
+  createdBy       User              @relation("NckhMeetingCreator", fields: [createdById], references: [id])
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  votes           NckhMeetingVote[]
+
+  @@index([councilId])
+  @@index([meetingDate])
+  @@map("nckh_council_meetings")
+}
+
+/// Phiếu bầu chi tiết theo phiên họp — chỉ CHAIRMAN + ADMIN được tổng hợp.
+model NckhMeetingVote {
+  id        String             @id @default(cuid())
+  meetingId String
+  meeting   NckhCouncilMeeting @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  memberId  String             // FK → ScientificCouncilMember.id
+  voteType  String             // APPROVAL|SCORE|RECOMMENDATION
+  vote      NckhVoteResult
+  score     Float?
+  comment   String?
+  votedAt   DateTime           @default(now())
+
+  @@unique([meetingId, memberId, voteType])
+  @@index([meetingId])
+  @@map("nckh_meeting_votes")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CSDL-KHQL – Phase 7: Tài chính Granular (PO, Invoice, Expense, Grant)
+// Bổ sung cho ResearchBudget hiện có — không thay thế.
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Đề nghị mua sắm theo đề tài NCKH.
+model NckhPurchaseOrder {
+  id           String                  @id @default(cuid())
+  projectId    String
+  project      NckhProject             @relation("NckhProjectPOs", fields: [projectId], references: [id], onDelete: Cascade)
+  poNumber     String                  @unique // auto: PO-{YEAR}-{SEQ:04d}
+  vendor       String
+  orderDate    DateTime                @default(now())
+  totalAmount  BigInt
+  currency     String                  @default("VND")
+  status       NckhPoStatus            @default(DRAFT)
+  approvedById String?
+  approvedBy   User?                   @relation("NckhPOApprover", fields: [approvedById], references: [id])
+  approvedAt   DateTime?
+  notes        String?
+  createdById  String
+  createdBy    User                    @relation("NckhPOCreator", fields: [createdById], references: [id])
+  createdAt    DateTime                @default(now())
+  updatedAt    DateTime                @updatedAt
+  items        NckhPurchaseOrderItem[]
+  invoices     NckhInvoice[]
+
+  @@index([projectId])
+  @@index([status])
+  @@index([orderDate])
+  @@map("nckh_purchase_orders")
+}
+
+model NckhPurchaseOrderItem {
+  id        String              @id @default(cuid())
+  poId      String
+  po        NckhPurchaseOrder   @relation(fields: [poId], references: [id], onDelete: Cascade)
+  itemName  String
+  quantity  Float
+  unitPrice BigInt
+  amount    BigInt
+  category  NckhExpenseCategory
+  unit      String?             // đơn vị tính: cái, bộ, tháng...
+  notes     String?
+
+  @@index([poId])
+  @@map("nckh_purchase_order_items")
+}
+
+/// Hóa đơn gắn với đề tài (có thể liên kết với PO hoặc độc lập).
+model NckhInvoice {
+  id            String            @id @default(cuid())
+  projectId     String
+  project       NckhProject       @relation("NckhProjectInvoices", fields: [projectId], references: [id], onDelete: Cascade)
+  poId          String?
+  po            NckhPurchaseOrder? @relation(fields: [poId], references: [id])
+  invoiceNumber String            @unique
+  vendor        String
+  invoiceDate   DateTime
+  dueDate       DateTime?
+  totalAmount   BigInt
+  currency      String            @default("VND")
+  status        NckhInvoiceStatus @default(PENDING)
+  paidAt        DateTime?
+  paidById      String?
+  paidBy        User?             @relation("NckhInvoicePayer", fields: [paidById], references: [id])
+  notes         String?
+  createdById   String
+  createdBy     User              @relation("NckhInvoiceCreator", fields: [createdById], references: [id])
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  items         NckhInvoiceItem[]
+
+  @@index([projectId])
+  @@index([poId])
+  @@index([status])
+  @@map("nckh_invoices")
+}
+
+model NckhInvoiceItem {
+  id          String              @id @default(cuid())
+  invoiceId   String
+  invoice     NckhInvoice         @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  description String
+  quantity    Float
+  unitPrice   BigInt
+  amount      BigInt
+  category    NckhExpenseCategory
+
+  @@index([invoiceId])
+  @@map("nckh_invoice_items")
+}
+
+/// Chi tiêu thực tế của đề tài — có workflow duyệt/hoàn tiền.
+model NckhExpense {
+  id            String              @id @default(cuid())
+  projectId     String
+  project       NckhProject         @relation("NckhProjectExpenses", fields: [projectId], references: [id], onDelete: Cascade)
+  expenseDate   DateTime
+  category      NckhExpenseCategory
+  amount        BigInt
+  description   String
+  receiptUrl    String?
+  status        NckhExpenseStatus   @default(DRAFT)
+  submittedById String
+  submittedBy   User                @relation("NckhExpenseSubmitter", fields: [submittedById], references: [id])
+  approvedById  String?
+  approvedBy    User?               @relation("NckhExpenseApprover", fields: [approvedById], references: [id])
+  approvedAt    DateTime?
+  rejectReason  String?
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+
+  @@index([projectId])
+  @@index([status])
+  @@index([category])
+  @@index([expenseDate])
+  @@map("nckh_expenses")
+}
+
+/// Tài trợ / grant ngoài ngân sách nhà nước.
+model NckhGrant {
+  id             String                  @id @default(cuid())
+  projectId      String
+  project        NckhProject             @relation("NckhProjectGrants", fields: [projectId], references: [id], onDelete: Cascade)
+  grantNumber    String                  @unique
+  grantor        String                  // tên tổ chức tài trợ
+  grantorType    String                  @default("DOMESTIC") // DOMESTIC|INTERNATIONAL|INDUSTRY
+  amount         BigInt
+  currency       String                  @default("VND")
+  startDate      DateTime
+  endDate        DateTime
+  conditions     String?
+  status         NckhGrantStatus         @default(ACTIVE)
+  reportDeadline DateTime?
+  createdById    String
+  createdBy      User                    @relation("NckhGrantCreator", fields: [createdById], references: [id])
+  createdAt      DateTime                @default(now())
+  updatedAt      DateTime                @updatedAt
+  disbursements  NckhGrantDisbursement[]
+
+  @@index([projectId])
+  @@index([status])
+  @@map("nckh_grants")
+}
+
+model NckhGrantDisbursement {
+  id               String    @id @default(cuid())
+  grantId          String
+  grant            NckhGrant @relation(fields: [grantId], references: [id], onDelete: Cascade)
+  disbursementDate DateTime
+  amount           BigInt
+  description      String?
+  receiptUrl       String?
+  createdAt        DateTime  @default(now())
+
+  @@index([grantId])
+  @@map("nckh_grant_disbursements")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CSDL-KHQL – Phase 8: Chat Nhóm Dự án & Hợp tác Nghiên cứu
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Phòng chat gắn 1-1 với NckhProject — tạo tự động khi project được tạo.
+model NckhChatRoom {
+  id           String                @id @default(cuid())
+  projectId    String                @unique
+  project      NckhProject           @relation("NckhProjectChat", fields: [projectId], references: [id], onDelete: Cascade)
+  name         String
+  createdAt    DateTime              @default(now())
+  participants NckhChatParticipant[]
+  messages     NckhChatMessage[]
+
+  @@map("nckh_chat_rooms")
+}
+
+model NckhChatParticipant {
+  id         String       @id @default(cuid())
+  roomId     String
+  room       NckhChatRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User         @relation("NckhChatParticipant", fields: [userId], references: [id])
+  joinedAt   DateTime     @default(now())
+  lastReadAt DateTime?
+
+  @@unique([roomId, userId])
+  @@index([roomId])
+  @@index([userId])
+  @@map("nckh_chat_participants")
+}
+
+model NckhChatMessage {
+  id        String       @id @default(cuid())
+  roomId    String
+  room      NckhChatRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  senderId  String
+  sender    User         @relation("NckhChatSender", fields: [senderId], references: [id])
+  content   String
+  fileUrl   String?
+  isEdited  Boolean      @default(false)
+  isDeleted Boolean      @default(false)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  @@index([roomId, createdAt])
+  @@index([senderId])
+  @@map("nckh_chat_messages")
+}
+
+/// Hợp tác nghiên cứu liên đơn vị hoặc quốc tế.
+model NckhCollaboration {
+  id              String                       @id @default(cuid())
+  projectId       String
+  project         NckhProject                  @relation("NckhProjectCollabs", fields: [projectId], references: [id], onDelete: Cascade)
+  type            NckhCollaborationType
+  partnerName     String
+  partnerCountry  String?
+  partnerUnit     String?
+  agreementNumber String?
+  startDate       DateTime
+  endDate         DateTime?
+  status          String                       @default("ACTIVE") // ACTIVE|COMPLETED|TERMINATED
+  notes           String?
+  createdById     String
+  createdBy       User                         @relation("NckhCollabCreator", fields: [createdById], references: [id])
+  createdAt       DateTime                     @default(now())
+  updatedAt       DateTime                     @updatedAt
+  participants    NckhCollaborationParticipant[]
+  documents       NckhCollaborationDocument[]
+
+  @@index([projectId])
+  @@index([type])
+  @@map("nckh_collaborations")
+}
+
+model NckhCollaborationParticipant {
+  id              String            @id @default(cuid())
+  collaborationId String
+  collaboration   NckhCollaboration @relation(fields: [collaborationId], references: [id], onDelete: Cascade)
+  userId          String?
+  user            User?             @relation("NckhCollabParticipant", fields: [userId], references: [id])
+  name            String            // tên đối tác ngoài (khi không có user trong hệ thống)
+  institution     String?
+  role            String?
+  createdAt       DateTime          @default(now())
+
+  @@index([collaborationId])
+  @@map("nckh_collaboration_participants")
+}
+
+model NckhCollaborationDocument {
+  id              String            @id @default(cuid())
+  collaborationId String
+  collaboration   NckhCollaboration @relation(fields: [collaborationId], references: [id], onDelete: Cascade)
+  title           String
+  fileUrl         String
+  docType         String            // AGREEMENT|REPORT|CORRESPONDENCE|OTHER
+  uploadedById    String
+  uploadedBy      User              @relation("NckhCollabDocUploader", fields: [uploadedById], references: [id])
+  createdAt       DateTime          @default(now())
+
+  @@index([collaborationId])
+  @@map("nckh_collaboration_documents")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CSDL-KHQL – Phase 6: File Minh Chứng Đính Kèm (Science Attachments)
+// Polymorphic attachment model — một bảng dùng cho toàn bộ module khoa học.
+// Reuse MinIO pipeline từ library.service.ts, bucket: hvhc-science-attachments
+// ─────────────────────────────────────────────────────────────────────────────
+
+enum ScienceAttachmentCategory {
+  // Đề xuất / Proposal
+  THUYET_MINH_DE_TAI      // Thuyết minh đề tài (bắt buộc khi nộp)
+  CV_CHU_NHIEM            // CV chủ nhiệm đề tài
+  THU_GIOI_THIEU          // Thư giới thiệu / hỗ trợ
+
+  // Đề tài / Project
+  HOP_DONG_NGHIEN_CUU     // Hợp đồng nghiên cứu
+  QUYET_DINH_PHE_DUYET    // Quyết định phê duyệt
+
+  // Tiến độ / Progress
+  BAO_CAO_TIEN_DO         // Báo cáo tiến độ định kỳ
+  MINH_CHUNG_MILESTONE    // Minh chứng hoàn thành milestone
+
+  // Nghiệm thu / Kết thúc
+  BAO_CAO_TONG_KET        // Báo cáo tổng kết
+  BIEN_BAN_NGHIEM_THU     // Biên bản nghiệm thu
+
+  // Công bố / Sáng kiến
+  BAN_THAO_CONG_BO        // Bản thảo bài báo / công bố
+  GIAY_CHAP_NHAN_XUAT_BAN // Giấy chấp nhận xuất bản
+  BANG_CHUNG_SANG_KIEN    // Bằng chứng sáng kiến (pubType=SANG_KIEN)
+  BANG_DOC_QUYEN          // Bằng độc quyền sáng chế (PATENT)
+
+  // Tài chính
+  HOA_DON_CHI_TIEU        // Hóa đơn / chứng từ chi tiêu
+  BIEN_LAI_THU_CHI        // Biên lai thu chi (grant disbursement)
+
+  // Hội đồng
+  BIEN_BAN_HOI_DONG       // Biên bản họp hội đồng
+  PHIEU_DANH_GIA          // Phiếu đánh giá thành viên hội đồng
+
+  // Chung
+  TAI_LIEU_KHAC           // Tài liệu khác
+}
+
+/// File minh chứng đính kèm cho bất kỳ entity khoa học nào.
+/// entityType: "PROPOSAL"|"PROJECT"|"PUBLICATION"|"MILESTONE"|"PROGRESS_REPORT"
+///           | "EXPENSE"|"GRANT_DISBURSEMENT"|"ACCEPTANCE"|"COUNCIL_MEETING"
+///           | "CLOSURE"|"MIDTERM_REVIEW"
+/// filePath = MinIO object key: science-attachments/{entityType}/{uuid}.{ext}
+model ScienceAttachment {
+  id             String                    @id @default(cuid())
+  entityType     String                    // tên loại entity (xem enum trên)
+  entityId       String                    // id của entity tương ứng
+  docCategory    ScienceAttachmentCategory
+  title          String                    // tên tài liệu hiển thị
+  description    String?
+  filePath       String                    // MinIO object key
+  fileSize       BigInt
+  mimeType       String
+  checksumSha256 String
+  sensitivity    String                    @default("NORMAL") // NORMAL|CONFIDENTIAL|SECRET
+  version        Int                       @default(1)
+  isLatest       Boolean                   @default(true)
+  uploadedById   String
+  uploadedBy     User                      @relation("ScienceAttachmentUploader", fields: [uploadedById], references: [id])
+  isDeleted      Boolean                   @default(false)
+  deletedById    String?
+  createdAt      DateTime                  @default(now())
+  updatedAt      DateTime                  @updatedAt
+
+  @@index([entityType, entityId])
+  @@index([uploadedById])
+  @@index([createdAt])
+  @@map("science_attachments")
 }

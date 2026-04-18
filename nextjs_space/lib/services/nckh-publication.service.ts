@@ -23,6 +23,7 @@ import {
   type PublicationExportRow,
 } from '@/lib/utils/publication-exporter'
 import { scientistProfileService } from './scientist-profile.service'
+import { onPublicationPublished } from './science/eis-publication-hook.service'
 
 class NckhPublicationServiceClass extends BaseService {
   protected readonly resourceType = 'NCKH_PUBLICATION'
@@ -158,6 +159,13 @@ class NckhPublicationServiceClass extends BaseService {
         publishedAt: fields.publishedAt ? new Date(fields.publishedAt) : undefined,
         patentGrantDate: fields.patentGrantDate ? new Date(fields.patentGrantDate) : undefined,
       })
+
+      // Fire-and-forget EIS update when status transitions to PUBLISHED
+      if (fields.status === 'PUBLISHED' && pub.status !== 'PUBLISHED') {
+        void onPublicationPublished(id, pub.authorId).catch((err) =>
+          console.error('[NckhPublicationService] EIS hook failed:', err)
+        )
+      }
 
       // Nếu có danh sách tác giả mới → thay thế toàn bộ
       if (publicationAuthors !== undefined) {

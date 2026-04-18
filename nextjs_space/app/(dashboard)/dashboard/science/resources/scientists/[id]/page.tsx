@@ -14,7 +14,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   ArrowLeft, GraduationCap, Briefcase, Award,
   BookOpen, FlaskConical, User, ExternalLink,
-  RefreshCw, Globe,
+  RefreshCw, Globe, UserSquare2,
 } from 'lucide-react';
 
 const DEGREE_COLORS: Record<string, string> = {
@@ -190,7 +190,13 @@ export default function ScientistDetailPage() {
                 {u.email && <span>{u.email}</span>}
               </div>
             </div>
-            <div className="flex gap-2 flex-shrink-0">
+            <div className="flex gap-2 flex-shrink-0 flex-wrap">
+              <Link href={`/dashboard/personnel/${profile.userId}`}>
+                <Button variant="outline" size="sm" className="gap-1">
+                  <UserSquare2 className="h-3.5 w-3.5" />
+                  Hồ sơ nhân sự
+                </Button>
+              </Link>
               {profile.orcidId && (
                 <Button variant="outline" size="sm" onClick={handleSyncOrcid} disabled={syncing} className="gap-1">
                   {syncing ? <RefreshCw className="h-3.5 w-3.5 animate-spin" /> : <Globe className="h-3.5 w-3.5" />}

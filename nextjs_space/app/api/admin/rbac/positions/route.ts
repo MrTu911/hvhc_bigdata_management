@@ -67,24 +67,26 @@ export async function POST(request: NextRequest) {
 
   try {
     const data = await request.json();
-    const { code, name, description, scope } = data;
+    const { code, name, description, scope, positionScope: positionScopeField, level, isActive } = data;
 
     if (!code || !name) {
       return NextResponse.json({ error: 'code và name là bắt buộc' }, { status: 400 });
     }
 
-    // Map scope to enum
-    const positionScope = scope?.toUpperCase() === 'SELF' ? 'SELF'
-      : scope?.toUpperCase() === 'ACADEMY' ? 'ACADEMY'
-      : scope?.toUpperCase() === 'DEPARTMENT' ? 'DEPARTMENT'
-      : 'UNIT';
+    // Accept both positionScope (from UI form) and scope (legacy)
+    const rawScope = positionScopeField || scope;
+    const validScopes = ['SELF', 'UNIT', 'DEPARTMENT', 'ACADEMY'];
+    const normalizedScope = rawScope?.toUpperCase();
+    const positionScope = validScopes.includes(normalizedScope) ? normalizedScope : 'UNIT';
 
     const position = await prisma.position.create({
       data: {
         code: code.toUpperCase(),
         name,
         description,
-        positionScope,
+        positionScope: positionScope as any,
+        level: typeof level === 'number' ? level : 0,
+        isActive: isActive !== undefined ? isActive : true,
       }
     });
 
@@ -118,7 +120,7 @@ export async function PUT(request: NextRequest) {
 
   try {
     const data = await request.json();
-    const { id, code, name, description, scope, isActive } = data;
+    const { id, code, name, description, scope, positionScope: positionScopeField, isActive, level } = data;
 
     if (!id) {
       return NextResponse.json({ error: 'id là bắt buộc' }, { status: 400 });
@@ -132,11 +134,13 @@ export async function PUT(request: NextRequest) {
     if (name !== undefined) updateData.name = name;
     if (description !== undefined) updateData.description = description;
     if (isActive !== undefined) updateData.isActive = isActive;
-    if (scope !== undefined) {
-      updateData.positionScope = scope.toUpperCase() === 'SELF' ? 'SELF'
-        : scope.toUpperCase() === 'ACADEMY' ? 'ACADEMY'
-        : scope.toUpperCase() === 'DEPARTMENT' ? 'DEPARTMENT'
-        : 'UNIT';
+    if (level !== undefined) updateData.level = typeof level === 'number' ? level : 0;
+    // Accept both positionScope (from UI form) and scope (legacy)
+    const rawScope = positionScopeField ?? scope;
+    if (rawScope !== undefined) {
+      const validScopes = ['SELF', 'UNIT', 'DEPARTMENT', 'ACADEMY'];
+      const normalizedScope = rawScope.toUpperCase();
+      updateData.positionScope = validScopes.includes(normalizedScope) ? normalizedScope : 'UNIT';
     }
 
     const position = await prisma.position.update({

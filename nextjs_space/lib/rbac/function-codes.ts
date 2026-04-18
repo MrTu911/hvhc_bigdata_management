@@ -582,6 +582,11 @@ export const SCIENCE = {
   COUNCIL_SUBMIT_REVIEW:    'SUBMIT_REVIEW',         // Nộp phản biện (REVIEWER role)
   COUNCIL_FINALIZE:         'FINALIZE_ACCEPTANCE',  // Kết luận nghiệm thu
 
+  // M06b – File minh chứng đính kèm (Phase 6)
+  ATTACHMENT_UPLOAD: 'UPLOAD_SCIENCE_ATTACHMENT',  // Upload file minh chứng
+  ATTACHMENT_VIEW:   'VIEW_SCIENCE_ATTACHMENT',    // Xem / tải file minh chứng
+  ATTACHMENT_DELETE: 'DELETE_SCIENCE_ATTACHMENT',  // Xóa file minh chứng
+
   // M09/M11/M12/M14 – Dashboard, Tìm kiếm, AI, Báo cáo
   DASHBOARD_VIEW:    'VIEW_SCIENCE_DASHBOARD',      // Xem dashboard KHQL
   DATA_QUALITY_VIEW: 'VIEW_SCIENCE_DATA_QUALITY',   // Xem báo cáo chất lượng dữ liệu KH

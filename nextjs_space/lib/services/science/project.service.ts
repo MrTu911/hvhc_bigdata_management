@@ -7,10 +7,12 @@
  *   - alerts: deadline < 30 ngày
  */
 import 'server-only'
+import prisma from '@/lib/db'
 import { projectRepo, milestoneRepo, acceptanceRepo } from '@/lib/repositories/science/project.repo'
 import { scienceCatalogRepo } from '@/lib/repositories/science/catalog.repo'
 import { logAudit } from '@/lib/audit'
 import { scienceWorkflowAdapter } from '@/lib/integrations/science/workflow-adapter'
+import { WorkflowNotificationService, WF_EVENT } from '@/lib/services/workflow/workflow-notification.service'
 import type { AuthUser } from '@/lib/rbac/types'
 import {
   VALID_STATUS_TRANSITIONS,
@@ -23,7 +25,6 @@ import {
   type MilestoneUpdateInput,
   type AcceptanceSubmitInput,
 } from '@/lib/validations/science-project'
-import prisma from '@/lib/db'
 
 // ─── Code generation ──────────────────────────────────────────────────────────
 
@@ -105,14 +106,20 @@ export const projectService = {
       metadata: { projectCode },
     })
 
-    // Khởi tạo M13 approval workflow (graceful fallback nếu template chưa PUBLISHED)
+    // Khởi tạo M13 approval workflow và lưu workflowInstanceId vào project
     if (actor) {
-      await scienceWorkflowAdapter.tryStartApprovalWorkflow(
+      const wf = await scienceWorkflowAdapter.tryStartApprovalWorkflow(
         created.id,
         projectCode,
         input.title,
         actor,
       )
+      if (wf?.workflowInstanceId) {
+        await prisma.nckhProject.update({
+          where: { id: created.id },
+          data: { workflowInstanceId: wf.workflowInstanceId },
+        })
+      }
     }
 
     return { success: true as const, data: created }
@@ -214,6 +221,9 @@ export const projectService = {
         input.comment,
       )
     }
+
+    // In-app notifications cho PI khi trạng thái quan trọng thay đổi
+    await sendProjectTransitionNotification(id, project, currentStatus, input.toStatus, input.comment)
 
     return { success: true as const, data: updated }
   },
@@ -423,4 +433,65 @@ export const projectService = {
 
     return { success: true as const, data: archived }
   },
+}
+
+// ─── Internal: In-app notification khi project chuyển trạng thái ──────────────
+
+const NOTIFY_STATUS: Record<string, { event: string; titleFn: (code: string) => string; messageFn: (code: string, comment?: string) => string }> = {
+  APPROVED: {
+    event: WF_EVENT.APPROVED,
+    titleFn: (code) => `Đề tài ${code} đã được phê duyệt`,
+    messageFn: (code, comment) => `Đề tài ${code} đã được phê duyệt và chuyển sang giai đoạn triển khai.${comment ? ` Ghi chú: ${comment}` : ''}`,
+  },
+  REJECTED: {
+    event: WF_EVENT.REJECTED,
+    titleFn: (code) => `Đề tài ${code} bị từ chối`,
+    messageFn: (code, comment) => `Đề tài ${code} không được phê duyệt.${comment ? ` Lý do: ${comment}` : ''}`,
+  },
+  UNDER_REVIEW: {
+    event: WF_EVENT.NEW_TASK,
+    titleFn: (code) => `Đề tài ${code} đang được thẩm định`,
+    messageFn: (code) => `Đề tài ${code} đã được tiếp nhận và đang trong quá trình thẩm định.`,
+  },
+  COMPLETED: {
+    event: WF_EVENT.APPROVED,
+    titleFn: (code) => `Đề tài ${code} hoàn thành`,
+    messageFn: (code) => `Đề tài ${code} đã được nghiệm thu và công nhận hoàn thành.`,
+  },
+}
+
+async function sendProjectTransitionNotification(
+  projectId: string,
+  project: { projectCode: string; principalInvestigator: { id: string } },
+  fromStatus: string,
+  toStatus: string,
+  comment?: string,
+) {
+  const cfg = NOTIFY_STATUS[toStatus]
+  if (!cfg) return
+
+  // Lấy workflowInstanceId từ project (nếu có)
+  const projectWithWf = await prisma.nckhProject.findUnique({
+    where: { id: projectId },
+    select: { workflowInstanceId: true },
+  })
+
+  // Cần workflowInstanceId cho WorkflowNotificationService
+  if (!projectWithWf?.workflowInstanceId) {
+    // Log nhưng không crash
+    console.info(`[ProjectService] Bỏ qua notification ${toStatus} cho ${project.projectCode} — chưa có workflowInstanceId`)
+    return
+  }
+
+  await WorkflowNotificationService.send({
+    workflowInstanceId: projectWithWf.workflowInstanceId,
+    recipientId: project.principalInvestigator.id,
+    eventType: cfg.event as any,
+    title: cfg.titleFn(project.projectCode),
+    message: cfg.messageFn(project.projectCode, comment),
+    payloadJson: { projectId, fromStatus, toStatus },
+  }).catch((err: unknown) => {
+    // Không để notification failure block business operation
+    console.error(`[ProjectService] Notification failed for ${project.projectCode}:`, err)
+  })
 }

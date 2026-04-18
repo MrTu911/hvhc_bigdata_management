@@ -45,6 +45,7 @@ export async function runGraduationEngine(hocVienId: string): Promise<Graduation
     where: { id: hocVienId, deletedAt: null },
     select: {
       id: true,
+      currentStatus: true,
       diemTrungBinh: true,
       tinChiTichLuy: true,
       tongTinChi: true,
@@ -54,6 +55,25 @@ export async function runGraduationEngine(hocVienId: string): Promise<Graduation
   });
 
   if (!hocVien) return null;
+
+  // Guard: học viên SUSPENDED / DROPPED_OUT không đủ điều kiện xét tốt nghiệp
+  const INELIGIBLE_STATUSES = ['SUSPENDED', 'DROPPED_OUT'];
+  if (INELIGIBLE_STATUSES.includes(hocVien.currentStatus ?? '')) {
+    return {
+      hocVienId,
+      gpa: hocVien.diemTrungBinh ?? 0,
+      totalCreditsEarned: hocVien.tinChiTichLuy ?? 0,
+      requiredCredits: hocVien.currentProgramVersion?.totalCredits ?? hocVien.tongTinChi ?? DEFAULT_REQUIRED_CREDITS,
+      conductEligible: false,
+      thesisEligible: false,
+      languageEligible: false,
+      graduationEligible: false,
+      failureReasonsJson: [{
+        code: 'STUDENT_STATUS_INELIGIBLE',
+        message: `Học viên đang ở trạng thái ${hocVien.currentStatus} — không đủ điều kiện xét tốt nghiệp`,
+      }],
+    };
+  }
 
   const requiredCredits =
     hocVien.currentProgramVersion?.totalCredits ?? hocVien.tongTinChi ?? DEFAULT_REQUIRED_CREDITS;

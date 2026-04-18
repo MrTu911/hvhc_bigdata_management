@@ -8,7 +8,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { logAudit } from '@/lib/audit';
-import { requireFunction } from '@/lib/rbac/middleware';
+import { requireFunction, requireAnyFunction } from '@/lib/rbac/middleware';
 import { SYSTEM } from '@/lib/rbac/function-codes';
 
 export const dynamic = 'force-dynamic';
@@ -33,8 +33,12 @@ const MODULE_LABELS: Record<string, string> = {
 
 // GET: Lấy danh sách functions
 export async function GET(request: NextRequest) {
-  // RBAC Check: MANAGE_FUNCTIONS
-  const authResult = await requireFunction(request, SYSTEM.MANAGE_FUNCTIONS);
+  // Đọc function list chỉ cần VIEW_RBAC (xem ma trận), MANAGE_RBAC hoặc MANAGE_FUNCTIONS đều hợp lệ
+  const authResult = await requireAnyFunction(request, [
+    SYSTEM.VIEW_RBAC,
+    SYSTEM.MANAGE_RBAC,
+    SYSTEM.MANAGE_FUNCTIONS,
+  ]);
   if (!authResult.allowed) {
     return authResult.response!;
   }

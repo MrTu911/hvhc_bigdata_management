@@ -181,6 +181,7 @@ export default function RBACManagementPage() {
   const { refreshAll } = usePermissionRefresh();
   const [activeTab, setActiveTab] = useState('overview');
   const [loading, setLoading] = useState(true);
+  const [functionsError, setFunctionsError] = useState(false);
 
   // ── Core data ──
   const [positions, setPositions] = useState<Position[]>([]);
@@ -233,7 +234,13 @@ export default function RBACManagementPage() {
 
   const fetchFunctions = useCallback(async () => {
     const res = await fetch('/api/admin/rbac/functions').catch(() => null);
-    if (res?.ok) { const d = await res.json(); setFunctions(d.functions || []); }
+    if (res?.ok) {
+      const d = await res.json();
+      setFunctions(d.functions || []);
+      setFunctionsError(false);
+    } else {
+      setFunctionsError(true);
+    }
   }, []);
 
   const fetchPositionFunctions = useCallback(async (posId?: string) => {
@@ -948,6 +955,17 @@ export default function RBACManagementPage() {
 
                 {/* RIGHT: Matrix panel */}
                 <div className="col-span-12 lg:col-span-9">
+                  {functionsError && (
+                    <div className="rounded-lg bg-red-50 border border-red-200 p-4 mb-4 flex items-start gap-3 text-red-700 text-sm">
+                      <AlertTriangle className="h-5 w-5 flex-shrink-0 mt-0.5" />
+                      <div>
+                        <p className="font-semibold">Không thể tải danh sách chức năng</p>
+                        <p className="text-xs mt-0.5">Tài khoản của bạn cần có quyền <code className="bg-red-100 px-1 rounded">VIEW_RBAC</code>, <code className="bg-red-100 px-1 rounded">MANAGE_RBAC</code> hoặc <code className="bg-red-100 px-1 rounded">MANAGE_FUNCTIONS</code> để xem ma trận.</p>
+                        <button type="button" onClick={fetchFunctions} className="mt-1.5 text-xs underline hover:no-underline">Thử lại</button>
+                      </div>
+                    </div>
+                  )}
+
                   {!selectedPositionId ? (
                     <Card className="shadow-sm">
                       <CardContent className="flex flex-col items-center justify-center py-24 text-slate-400">
@@ -1098,7 +1116,21 @@ export default function RBACManagementPage() {
                                 </TableRow>
                               </TableHeader>
                               <TableBody>
-                                {moduleFunctions.length === 0 ? (
+                                {functions.length === 0 && !functionsError ? (
+                                  <TableRow>
+                                    <TableCell colSpan={5} className="text-center py-10 text-slate-400">
+                                      <RefreshCw className="h-8 w-8 mx-auto mb-2 opacity-30 animate-spin" />
+                                      <p className="text-sm">Đang tải danh sách chức năng...</p>
+                                    </TableCell>
+                                  </TableRow>
+                                ) : functions.length === 0 && functionsError ? (
+                                  <TableRow>
+                                    <TableCell colSpan={5} className="text-center py-10 text-red-400">
+                                      <AlertTriangle className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                                      <p className="text-sm font-medium">Không thể tải chức năng — thiếu quyền VIEW_RBAC</p>
+                                    </TableCell>
+                                  </TableRow>
+                                ) : moduleFunctions.length === 0 ? (
                                   <TableRow>
                                     <TableCell colSpan={5} className="text-center py-10 text-slate-400">
                                       <Search className="h-8 w-8 mx-auto mb-2 opacity-30" />

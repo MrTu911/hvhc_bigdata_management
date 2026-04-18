@@ -72,7 +72,7 @@ interface ReviewRecord {
   comments?: string;
 }
 
-type PanelMode = 'history' | 'archive' | null;
+type PanelMode = 'history' | 'formal' | 'archive' | null;
 
 export default function AcceptancePage() {
   const router = useRouter();
@@ -194,6 +194,14 @@ export default function AcceptancePage() {
                         Lịch sử NT
                       </Button>
                       <Button
+                        variant="outline" size="sm"
+                        onClick={() => toggleExpand(p.id, 'formal')}
+                        className="gap-1 text-emerald-600 border-emerald-200 hover:bg-emerald-50"
+                      >
+                        <ClipboardCheck className="h-3.5 w-3.5" />
+                        NT Chính thức
+                      </Button>
+                      <Button
                         size="sm"
                         onClick={() => toggleExpand(p.id, 'archive')}
                         className="gap-1 bg-violet-600 hover:bg-violet-700"
@@ -208,6 +216,12 @@ export default function AcceptancePage() {
                     <div className="mt-3 pt-3 border-t border-gray-100">
                       {panelMode === 'history' && (
                         <AcceptanceHistoryPanel
+                          projectId={p.id}
+                          onClose={() => { setExpandedId(null); setPanelMode(null); }}
+                        />
+                      )}
+                      {panelMode === 'formal' && (
+                        <FormalAcceptancePanel
                           projectId={p.id}
                           onClose={() => { setExpandedId(null); setPanelMode(null); }}
                         />
@@ -288,6 +302,208 @@ function AcceptanceHistoryPanel({ projectId, onClose }: { projectId: string; onC
               </div>
             </div>
           ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Formal Acceptance Panel (NckhAcceptance) ─────────────────────────────────
+
+interface FormalAcceptance {
+  id: string;
+  acceptanceDate: string;
+  acceptanceType: string;
+  result: string;
+  finalScore?: number | null;
+  grade?: string | null;
+  conditions?: string | null;
+  signedMinutesUrl?: string | null;
+  createdAt: string;
+  acceptedBy: { id: string; fullName: string };
+  council?: { id: string; type: string } | null;
+}
+
+const ACCEPTANCE_TYPE_LABELS: Record<string, string> = {
+  PRELIMINARY: 'Sơ bộ',
+  FINAL:       'Chính thức',
+};
+
+const ACCEPTANCE_RESULT_LABELS: Record<string, string> = {
+  PASS:        'Đạt',
+  FAIL:        'Không đạt',
+  CONDITIONAL: 'Đạt có điều kiện',
+};
+
+const ACCEPTANCE_RESULT_BADGE: Record<string, string> = {
+  PASS:        'bg-emerald-100 text-emerald-700',
+  FAIL:        'bg-red-100 text-red-700',
+  CONDITIONAL: 'bg-amber-100 text-amber-700',
+};
+
+function FormalAcceptancePanel({ projectId, onClose }: { projectId: string; onClose: () => void }) {
+  const [record, setRecord]       = useState<FormalAcceptance | null | undefined>(undefined);
+  const [loading, setLoading]     = useState(true);
+  const [showForm, setShowForm]   = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [form, setForm] = useState({
+    acceptanceDate:  new Date().toISOString().split('T')[0],
+    acceptanceType:  'FINAL',
+    result:          'PASS',
+    finalScore:      '',
+    grade:           '',
+    conditions:      '',
+  });
+
+  useEffect(() => {
+    setLoading(true);
+    fetch(`/api/science/projects/${projectId}/formal-acceptance`)
+      .then(r => r.json())
+      .then((res) => setRecord(res.success ? res.data : null))
+      .catch(() => toast.error('Lỗi tải nghiệm thu chính thức'))
+      .finally(() => setLoading(false));
+  }, [projectId]);
+
+  const handleSubmit = async () => {
+    if (!form.acceptanceDate || !form.result) { toast.error('Vui lòng điền đầy đủ thông tin bắt buộc'); return; }
+    setSubmitting(true);
+    try {
+      const body: Record<string, unknown> = {
+        acceptanceDate: form.acceptanceDate,
+        acceptanceType: form.acceptanceType,
+        result:         form.result,
+        grade:          form.grade || undefined,
+        conditions:     form.conditions || undefined,
+      };
+      if (form.finalScore) body.finalScore = Number(form.finalScore);
+
+      const res = await fetch(`/api/science/projects/${projectId}/formal-acceptance`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      }).then(r => r.json());
+      if (!res.success) throw new Error(typeof res.error === 'string' ? res.error : 'Lỗi ghi nhận');
+      toast.success('Đã ghi nhận nghiệm thu chính thức');
+      setRecord(res.data);
+      setShowForm(false);
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : 'Lỗi không xác định');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center justify-between">
+        <span className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+          <ClipboardCheck className="h-4 w-4 text-emerald-600" /> Nghiệm thu chính thức
+        </span>
+        <Button size="sm" variant="ghost" onClick={onClose} className="text-xs">Đóng</Button>
+      </div>
+
+      {loading ? (
+        <div className="flex justify-center py-4">
+          <div className="animate-spin h-5 w-5 border-2 border-emerald-400 border-t-transparent rounded-full" />
+        </div>
+      ) : record ? (
+        // Show existing formal acceptance
+        <div className="bg-white border border-gray-100 rounded-md p-4 space-y-2">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className={`text-sm font-semibold px-2.5 py-1 rounded-full ${ACCEPTANCE_RESULT_BADGE[record.result] ?? 'bg-gray-100 text-gray-700'}`}>
+              {ACCEPTANCE_RESULT_LABELS[record.result] ?? record.result}
+            </span>
+            <span className="text-xs text-gray-500">
+              {ACCEPTANCE_TYPE_LABELS[record.acceptanceType] ?? record.acceptanceType}
+            </span>
+            {record.finalScore != null && (
+              <span className="text-xs font-medium text-gray-700">Điểm: {record.finalScore}/10</span>
+            )}
+            {record.grade && (
+              <span className="text-xs font-medium text-gray-700">Xếp loại: {record.grade}</span>
+            )}
+          </div>
+          <p className="text-xs text-gray-400">
+            Ngày nghiệm thu: {new Date(record.acceptanceDate).toLocaleDateString('vi-VN')} · Người duyệt: {record.acceptedBy.fullName}
+          </p>
+          {record.conditions && (
+            <p className="text-xs text-amber-700 bg-amber-50 rounded px-2 py-1">
+              <strong>Điều kiện:</strong> {record.conditions}
+            </p>
+          )}
+          {record.signedMinutesUrl && (
+            <a href={record.signedMinutesUrl} target="_blank" rel="noopener noreferrer"
+              className="text-xs text-violet-600 hover:underline">
+              Xem biên bản ký
+            </a>
+          )}
+        </div>
+      ) : (
+        // No formal acceptance yet
+        <div className="text-center py-4">
+          <p className="text-sm text-gray-400 mb-3">Chưa có nghiệm thu chính thức.</p>
+          {!showForm && (
+            <Button size="sm" onClick={() => setShowForm(true)} className="gap-1 bg-emerald-600 hover:bg-emerald-700">
+              <ClipboardCheck className="h-3.5 w-3.5" /> Ghi nhận nghiệm thu
+            </Button>
+          )}
+        </div>
+      )}
+
+      {showForm && !record && (
+        <div className="bg-emerald-50 rounded-md p-3 space-y-3 border border-emerald-200">
+          <p className="text-xs font-medium text-emerald-700">Nghiệm thu chính thức</p>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-gray-600">Ngày nghiệm thu *</label>
+              <Input type="date" value={form.acceptanceDate} onChange={(e) => setForm({ ...form, acceptanceDate: e.target.value })} className="text-sm h-8" />
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-gray-600">Loại nghiệm thu</label>
+              <select
+                value={form.acceptanceType}
+                onChange={(e) => setForm({ ...form, acceptanceType: e.target.value })}
+                className="w-full text-sm h-8 rounded-md border border-gray-300 px-2 bg-white"
+              >
+                {Object.entries(ACCEPTANCE_TYPE_LABELS).map(([v, l]) => (
+                  <option key={v} value={v}>{l}</option>
+                ))}
+              </select>
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-gray-600">Kết quả *</label>
+              <select
+                value={form.result}
+                onChange={(e) => setForm({ ...form, result: e.target.value })}
+                className="w-full text-sm h-8 rounded-md border border-gray-300 px-2 bg-white"
+              >
+                {Object.entries(ACCEPTANCE_RESULT_LABELS).map(([v, l]) => (
+                  <option key={v} value={v}>{l}</option>
+                ))}
+              </select>
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-gray-600">Điểm (0–10)</label>
+              <Input type="number" min={0} max={10} step={0.1} value={form.finalScore} onChange={(e) => setForm({ ...form, finalScore: e.target.value })} placeholder="VD: 8.5" className="text-sm h-8" />
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-gray-600">Xếp loại</label>
+              <Input value={form.grade} onChange={(e) => setForm({ ...form, grade: e.target.value })} placeholder="VD: Khá, Giỏi..." className="text-sm h-8" />
+            </div>
+          </div>
+          {form.result === 'CONDITIONAL' && (
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-gray-600">Điều kiện bổ sung</label>
+              <Textarea value={form.conditions} onChange={(e) => setForm({ ...form, conditions: e.target.value })} rows={2} placeholder="Nêu rõ các điều kiện..." className="text-sm resize-none" />
+            </div>
+          )}
+          <div className="flex gap-2">
+            <Button size="sm" onClick={handleSubmit} disabled={submitting} className="bg-emerald-600 hover:bg-emerald-700 gap-1 text-xs">
+              {submitting ? <RefreshCw className="h-3 w-3 animate-spin" /> : <ClipboardCheck className="h-3 w-3" />}
+              Ghi nhận
+            </Button>
+            <Button size="sm" variant="ghost" onClick={() => setShowForm(false)} className="text-xs">Hủy</Button>
+          </div>
         </div>
       )}
     </div>

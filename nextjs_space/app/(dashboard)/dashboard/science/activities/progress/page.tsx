@@ -18,7 +18,7 @@ import { Textarea } from '@/components/ui/textarea';
 import {
   Search, FileText, RefreshCw, ChevronDown, ChevronUp,
   Plus, CheckCircle2, Clock, Circle, AlertCircle, ClipboardCheck,
-  Activity, Calendar,
+  Activity, Calendar, BarChart2,
 } from 'lucide-react';
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -73,7 +73,7 @@ interface Milestone {
   note?: string;
 }
 
-type PanelMode = 'milestones' | 'acceptance' | null;
+type PanelMode = 'milestones' | 'acceptance' | 'reports' | null;
 
 export default function ProgressPage() {
   const router = useRouter();
@@ -214,6 +214,14 @@ export default function ProgressPage() {
                         Mốc tiến độ
                       </Button>
                       <Button
+                        variant="outline" size="sm"
+                        onClick={() => toggleExpand(p.id, 'reports')}
+                        className="gap-1 text-blue-600 border-blue-200 hover:bg-blue-50"
+                      >
+                        <BarChart2 className="h-3.5 w-3.5" />
+                        Báo cáo
+                      </Button>
+                      <Button
                         size="sm"
                         onClick={() => toggleExpand(p.id, 'acceptance')}
                         className="gap-1 bg-emerald-600 hover:bg-emerald-700"
@@ -229,6 +237,12 @@ export default function ProgressPage() {
                     <div className="mt-3 pt-3 border-t border-gray-100">
                       {panelMode === 'milestones' && (
                         <MilestonesPanel
+                          projectId={p.id}
+                          onDone={() => { setExpandedId(null); setPanelMode(null); }}
+                        />
+                      )}
+                      {panelMode === 'reports' && (
+                        <ReportsPanel
                           projectId={p.id}
                           onDone={() => { setExpandedId(null); setPanelMode(null); }}
                         />
@@ -425,6 +439,219 @@ function MilestonesPanel({ projectId, onDone }: { projectId: string; onDone: () 
               </div>
             );
           })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Reports Panel ─────────────────────────────────────────────────────────────
+
+interface ProgressReport {
+  id: string;
+  reportPeriod: string;
+  reportType: string;
+  content?: string | null;
+  completionPercent: number;
+  issues?: string | null;
+  nextSteps?: string | null;
+  attachmentUrl?: string | null;
+  createdAt: string;
+  submittedBy: { id: string; fullName: string };
+  reviewedBy?: { id: string; fullName: string } | null;
+}
+
+const REPORT_TYPE_LABELS: Record<string, string> = {
+  MONTHLY:   'Hàng tháng',
+  QUARTERLY: 'Hàng quý',
+  ANNUAL:    'Hàng năm',
+  ADHOC:     'Đột xuất',
+};
+
+function ReportsPanel({ projectId, onDone }: { projectId: string; onDone: () => void }) {
+  const [reports, setReports] = useState<ProgressReport[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showAdd, setShowAdd] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [form, setForm] = useState({
+    reportPeriod: '',
+    reportType: 'MONTHLY',
+    content: '',
+    completionPercent: '',
+    issues: '',
+    nextSteps: '',
+  });
+
+  const fetchReports = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/science/projects/${projectId}/reports`).then(r => r.json());
+      setReports(res.success ? (res.data ?? []) : []);
+    } catch {
+      toast.error('Lỗi tải báo cáo tiến độ');
+    } finally {
+      setLoading(false);
+    }
+  }, [projectId]);
+
+  useEffect(() => { fetchReports(); }, [fetchReports]);
+
+  const handleSubmit = async () => {
+    if (!form.reportPeriod.trim()) { toast.error('Cần nhập kỳ báo cáo'); return; }
+    setSubmitting(true);
+    try {
+      const body: Record<string, unknown> = {
+        reportPeriod: form.reportPeriod,
+        reportType:   form.reportType,
+        content:      form.content    || undefined,
+        issues:       form.issues     || undefined,
+        nextSteps:    form.nextSteps  || undefined,
+      };
+      if (form.completionPercent) body.completionPercent = Number(form.completionPercent);
+
+      const res = await fetch(`/api/science/projects/${projectId}/reports`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      }).then(r => r.json());
+      if (!res.success) throw new Error(typeof res.error === 'string' ? res.error : 'Lỗi nộp báo cáo');
+      toast.success('Đã nộp báo cáo tiến độ');
+      setShowAdd(false);
+      setForm({ reportPeriod: '', reportType: 'MONTHLY', content: '', completionPercent: '', issues: '', nextSteps: '' });
+      await fetchReports();
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : 'Lỗi không xác định');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  if (loading) return (
+    <div className="flex justify-center py-4">
+      <div className="animate-spin h-5 w-5 border-2 border-blue-400 border-t-transparent rounded-full" />
+    </div>
+  );
+
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center justify-between">
+        <span className="text-sm font-semibold text-gray-700">Báo cáo tiến độ ({reports.length})</span>
+        <div className="flex gap-2">
+          <Button size="sm" variant="outline" onClick={() => setShowAdd(!showAdd)} className="gap-1 text-xs text-blue-600 border-blue-200 hover:bg-blue-50">
+            <Plus className="h-3 w-3" /> Nộp báo cáo
+          </Button>
+          <Button size="sm" variant="ghost" onClick={onDone} className="text-xs">Đóng</Button>
+        </div>
+      </div>
+
+      {showAdd && (
+        <div className="bg-blue-50 rounded-md p-3 space-y-3 border border-blue-200">
+          <p className="text-xs font-medium text-blue-700">Báo cáo tiến độ mới</p>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-gray-600">Kỳ báo cáo *</label>
+              <Input
+                placeholder="VD: Tháng 4/2026"
+                value={form.reportPeriod}
+                onChange={(e) => setForm({ ...form, reportPeriod: e.target.value })}
+                className="text-sm h-8"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-gray-600">Loại báo cáo</label>
+              <select
+                value={form.reportType}
+                onChange={(e) => setForm({ ...form, reportType: e.target.value })}
+                className="w-full text-sm h-8 rounded-md border border-gray-300 px-2 bg-white"
+              >
+                {Object.entries(REPORT_TYPE_LABELS).map(([v, l]) => (
+                  <option key={v} value={v}>{l}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="space-y-1">
+            <label className="text-xs font-medium text-gray-600">% Hoàn thành</label>
+            <Input
+              type="number" min={0} max={100}
+              placeholder="0 – 100"
+              value={form.completionPercent}
+              onChange={(e) => setForm({ ...form, completionPercent: e.target.value })}
+              className="text-sm h-8 max-w-[120px]"
+            />
+          </div>
+          <div className="space-y-1">
+            <label className="text-xs font-medium text-gray-600">Nội dung báo cáo</label>
+            <Textarea
+              placeholder="Mô tả kết quả đạt được trong kỳ..."
+              value={form.content}
+              onChange={(e) => setForm({ ...form, content: e.target.value })}
+              rows={3} className="text-sm resize-none"
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-gray-600">Khó khăn / vấn đề</label>
+              <Textarea
+                placeholder="Các vướng mắc gặp phải..."
+                value={form.issues}
+                onChange={(e) => setForm({ ...form, issues: e.target.value })}
+                rows={2} className="text-sm resize-none"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-gray-600">Kế hoạch tiếp theo</label>
+              <Textarea
+                placeholder="Công việc sẽ thực hiện..."
+                value={form.nextSteps}
+                onChange={(e) => setForm({ ...form, nextSteps: e.target.value })}
+                rows={2} className="text-sm resize-none"
+              />
+            </div>
+          </div>
+          <div className="flex gap-2">
+            <Button size="sm" onClick={handleSubmit} disabled={submitting} className="bg-blue-600 hover:bg-blue-700 gap-1 text-xs">
+              {submitting ? <RefreshCw className="h-3 w-3 animate-spin" /> : <BarChart2 className="h-3 w-3" />}
+              Nộp báo cáo
+            </Button>
+            <Button size="sm" variant="ghost" onClick={() => setShowAdd(false)} className="text-xs">Hủy</Button>
+          </div>
+        </div>
+      )}
+
+      {reports.length === 0 ? (
+        <p className="text-sm text-gray-400 text-center py-4">Chưa có báo cáo tiến độ nào.</p>
+      ) : (
+        <div className="space-y-2">
+          {reports.map((r) => (
+            <div key={r.id} className="bg-white rounded border border-gray-100 px-3 py-2.5 space-y-1.5">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium text-gray-800">{r.reportPeriod}</span>
+                  <span className="text-xs px-1.5 py-0.5 rounded bg-blue-100 text-blue-700">
+                    {REPORT_TYPE_LABELS[r.reportType] ?? r.reportType}
+                  </span>
+                  {r.completionPercent > 0 && (
+                    <span className="text-xs text-emerald-600 font-medium">{r.completionPercent}%</span>
+                  )}
+                </div>
+                <span className="text-xs text-gray-400">
+                  {r.submittedBy.fullName} · {new Date(r.createdAt).toLocaleDateString('vi-VN')}
+                </span>
+              </div>
+              {r.content && <p className="text-xs text-gray-600 line-clamp-2">{r.content}</p>}
+              {r.issues && (
+                <p className="text-xs text-amber-700 bg-amber-50 rounded px-2 py-1">
+                  <strong>Khó khăn:</strong> {r.issues}
+                </p>
+              )}
+              {r.nextSteps && (
+                <p className="text-xs text-blue-700 bg-blue-50 rounded px-2 py-1">
+                  <strong>Kế hoạch:</strong> {r.nextSteps}
+                </p>
+              )}
+            </div>
+          ))}
         </div>
       )}
     </div>

@@ -121,6 +121,8 @@ export const projectRepo = {
       where: { id },
       select: {
         ...PROJECT_SELECT,
+        submittedAt: true,
+        submittedBy: true,
         workflowLogs: {
           orderBy: { actedAt: 'desc' as const },
           select: {
@@ -132,6 +134,27 @@ export const projectRepo = {
             comment: true,
             actedAt: true,
             actionBy: { select: { id: true, name: true } },
+          },
+        },
+        milestones: {
+          orderBy: { dueDate: 'asc' as const },
+          select: {
+            id: true,
+            title: true,
+            dueDate: true,
+            status: true,
+            completedAt: true,
+            note: true,
+          },
+        },
+        acceptance: {
+          select: {
+            id: true,
+            acceptanceDate: true,
+            acceptanceType: true,
+            result: true,
+            finalScore: true,
+            grade: true,
           },
         },
       },

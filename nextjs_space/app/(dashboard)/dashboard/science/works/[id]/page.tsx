@@ -8,8 +8,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   BookOpen, ArrowLeft, Shield, ShieldAlert, ShieldCheck,
-  User, ExternalLink, Trash2, Pencil,
+  User, ExternalLink, Trash2, Pencil, Paperclip,
 } from 'lucide-react';
+import { ScienceAttachmentPanel } from '@/components/science/ScienceAttachmentPanel';
 
 // ─── Constants ─────────────────────────────────────────────────────────────────
 
@@ -274,6 +275,23 @@ export default function WorkDetailPage() {
               ))}
             </ol>
           )}
+        </CardContent>
+      </Card>
+
+      {/* Tài liệu đính kèm (bản thảo, giấy chấp nhận, bằng sáng kiến...) */}
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base flex items-center gap-2">
+            <Paperclip className="h-4 w-4" /> Tài liệu đính kèm
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ScienceAttachmentPanel
+            entityType="PUBLICATION"
+            entityId={id}
+            allowUpload
+            allowDelete
+          />
         </CardContent>
       </Card>
     </div>

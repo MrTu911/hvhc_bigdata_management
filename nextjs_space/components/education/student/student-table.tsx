@@ -6,26 +6,11 @@ import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { ChevronLeft, ChevronRight, Eye, GraduationCap, Users } from 'lucide-react';
 import Link from 'next/link';
+import { STATUS_LABELS, STATUS_VARIANTS } from '@/constants/education-student';
+import type { HocVienListItem } from '@/types/education';
 
-export const STATUS_LABELS: Record<string, string> = {
-  ACTIVE: 'Đang học',
-  TEMP_SUSPENDED: 'Tạm ngưng',
-  STUDY_DELAY: 'Bảo lưu',
-  REPEATING: 'Học lại',
-  DROPPED_OUT: 'Thôi học',
-  GRADUATED: 'Tốt nghiệp',
-  RESERVED: 'Dự bị',
-};
-
-export const STATUS_VARIANTS: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
-  ACTIVE: 'default',
-  TEMP_SUSPENDED: 'secondary',
-  STUDY_DELAY: 'secondary',
-  REPEATING: 'outline',
-  DROPPED_OUT: 'destructive',
-  GRADUATED: 'secondary',
-  RESERVED: 'outline',
-};
+// Re-export constants for backwards compatibility with other consumers
+export { STATUS_LABELS, STATUS_VARIANTS };
 
 type Meta = { total: number; totalPages: number };
 
@@ -36,7 +21,7 @@ export function StudentTable({
   page,
   onPageChange,
 }: {
-  students: any[];
+  students: HocVienListItem[];
   loading: boolean;
   meta: Meta;
   page: number;
@@ -75,7 +60,7 @@ export function StudentTable({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {students.map((s: any) => (
+              {students.map((s) => (
                 <TableRow key={s.id}>
                   <TableCell className="font-mono text-sm font-semibold">{s.maHocVien}</TableCell>
                   <TableCell>

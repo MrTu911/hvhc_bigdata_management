@@ -21,6 +21,7 @@ import { Textarea } from '@/components/ui/textarea';
 import {
   ArrowLeft, RefreshCw, AlertTriangle, CheckCircle2,
   TrendingUp, Wallet, Edit2, Save, X, Plus, Trash2,
+  ShoppingCart, Receipt, Landmark,
 } from 'lucide-react';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -70,7 +71,7 @@ interface BudgetDetail {
   lineItems: LineItem[];
 }
 
-type TabKey = 'plan' | 'approval' | 'disbursement' | 'tracking';
+type TabKey = 'plan' | 'approval' | 'disbursement' | 'tracking' | 'purchase-orders' | 'expenses' | 'grants';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -99,20 +100,25 @@ function Row({ label, value }: { label: string; value: string }) {
 // ─── Tab navigation ───────────────────────────────────────────────────────────
 
 function Tabs({ active, onChange }: { active: TabKey; onChange: (t: TabKey) => void }) {
-  const items: { key: TabKey; label: string }[] = [
-    { key: 'plan',        label: 'Dự toán' },
-    { key: 'approval',    label: 'Phê duyệt' },
-    { key: 'disbursement',label: 'Giải ngân' },
-    { key: 'tracking',    label: 'Theo dõi' },
+  const items: { key: TabKey; label: string; icon?: React.ReactNode }[] = [
+    { key: 'plan',           label: 'Dự toán' },
+    { key: 'approval',       label: 'Phê duyệt' },
+    { key: 'disbursement',   label: 'Giải ngân' },
+    { key: 'tracking',       label: 'Theo dõi' },
+    { key: 'purchase-orders',label: 'Mua sắm',  icon: <ShoppingCart className="h-3.5 w-3.5" /> },
+    { key: 'expenses',       label: 'Chi tiêu',  icon: <Receipt className="h-3.5 w-3.5" /> },
+    { key: 'grants',         label: 'Tài trợ',   icon: <Landmark className="h-3.5 w-3.5" /> },
   ];
   return (
-    <div className="flex gap-1 border-b border-gray-200 pb-1">
+    <div className="flex gap-1 border-b border-gray-200 pb-1 overflow-x-auto">
       {items.map((item) => (
         <button key={item.key} onClick={() => onChange(item.key)}
-          className={`px-4 py-1.5 text-sm rounded-t-md font-medium transition-colors ${
+          className={`flex items-center gap-1.5 px-4 py-1.5 text-sm rounded-t-md font-medium transition-colors whitespace-nowrap ${
             active === item.key ? 'bg-violet-600 text-white' : 'text-gray-500 hover:text-gray-800 hover:bg-gray-100'
           }`}
-        >{item.label}</button>
+        >
+          {item.icon}{item.label}
+        </button>
       ))}
     </div>
   );
@@ -646,6 +652,294 @@ function TrackingTab({ budget }: { budget: BudgetDetail }) {
   );
 }
 
+// ─── Tab 5: Mua sắm (Purchase Orders) ────────────────────────────────────────
+
+interface PurchaseOrder {
+  id: string;
+  poNumber: string;
+  vendor: string;
+  description?: string | null;
+  totalAmount: string;
+  status: string;
+  createdAt: string;
+}
+
+const PO_STATUS_LABELS: Record<string, string> = {
+  DRAFT:     'Dự thảo',
+  SUBMITTED: 'Đã nộp',
+  APPROVED:  'Đã duyệt',
+  RECEIVED:  'Đã nhận',
+  CANCELLED: 'Huỷ',
+};
+
+const PO_STATUS_BADGE: Record<string, string> = {
+  DRAFT:     'bg-gray-100 text-gray-600',
+  SUBMITTED: 'bg-blue-100 text-blue-700',
+  APPROVED:  'bg-emerald-100 text-emerald-700',
+  RECEIVED:  'bg-violet-100 text-violet-700',
+  CANCELLED: 'bg-red-100 text-red-600',
+};
+
+function PurchaseOrdersTab({ projectId }: { projectId: string }) {
+  const [orders, setOrders] = useState<PurchaseOrder[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    fetch(`/api/science/finance/purchase-orders?projectId=${projectId}&pageSize=50`)
+      .then(r => r.json())
+      .then((res) => setOrders(res.success ? (res.data?.items ?? res.data ?? []) : []))
+      .catch(() => toast.error('Lỗi tải đơn mua sắm'))
+      .finally(() => setLoading(false));
+  }, [projectId]);
+
+  if (loading) return <div className="flex justify-center py-8 text-gray-400 text-sm">Đang tải...</div>;
+
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-gray-500">{orders.length > 0 ? `${orders.length} đơn mua sắm` : 'Chưa có đơn mua sắm'}</p>
+        <Link href={`/dashboard/science/finance/purchase-orders/new?projectId=${projectId}`}
+          className="text-xs text-violet-600 hover:underline flex items-center gap-1">
+          <Plus className="h-3 w-3" /> Tạo đơn mới
+        </Link>
+      </div>
+      {orders.length === 0 ? (
+        <div className="flex flex-col items-center py-10 text-gray-400 gap-2">
+          <ShoppingCart className="h-8 w-8 opacity-30" />
+          <p className="text-sm">Chưa có đơn mua sắm nào cho đề tài này.</p>
+        </div>
+      ) : (
+        <Card>
+          <CardContent className="p-0">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b bg-gray-50">
+                  <th className="text-left px-4 py-2.5 font-medium text-gray-600">Số PO</th>
+                  <th className="text-left px-4 py-2.5 font-medium text-gray-600">Nhà cung cấp</th>
+                  <th className="text-left px-4 py-2.5 font-medium text-gray-600">Mô tả</th>
+                  <th className="text-right px-4 py-2.5 font-medium text-gray-600">Giá trị</th>
+                  <th className="text-center px-4 py-2.5 font-medium text-gray-600">Trạng thái</th>
+                </tr>
+              </thead>
+              <tbody>
+                {orders.map((po) => (
+                  <tr key={po.id} className="border-b last:border-0 hover:bg-gray-50">
+                    <td className="px-4 py-2.5 font-mono text-xs text-violet-700 font-medium">{po.poNumber}</td>
+                    <td className="px-4 py-2.5 text-gray-800">{po.vendor}</td>
+                    <td className="px-4 py-2.5 text-gray-500 text-xs max-w-[200px] truncate">{po.description ?? '—'}</td>
+                    <td className="px-4 py-2.5 text-right font-medium">{formatVND(po.totalAmount)}</td>
+                    <td className="px-4 py-2.5 text-center">
+                      <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${PO_STATUS_BADGE[po.status] ?? 'bg-gray-100 text-gray-600'}`}>
+                        {PO_STATUS_LABELS[po.status] ?? po.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </CardContent>
+        </Card>
+      )}
+    </div>
+  );
+}
+
+// ─── Tab 6: Chi tiêu (Expenses) ───────────────────────────────────────────────
+
+interface Expense {
+  id: string;
+  title: string;
+  category: string;
+  amount: string;
+  status: string;
+  expenseDate: string;
+}
+
+const EXPENSE_STATUS_LABELS: Record<string, string> = {
+  DRAFT:      'Dự thảo',
+  SUBMITTED:  'Đã nộp',
+  APPROVED:   'Đã duyệt',
+  REJECTED:   'Từ chối',
+  REIMBURSED: 'Đã hoàn trả',
+};
+
+const EXPENSE_STATUS_BADGE: Record<string, string> = {
+  DRAFT:      'bg-gray-100 text-gray-600',
+  SUBMITTED:  'bg-blue-100 text-blue-700',
+  APPROVED:   'bg-emerald-100 text-emerald-700',
+  REJECTED:   'bg-red-100 text-red-600',
+  REIMBURSED: 'bg-violet-100 text-violet-700',
+};
+
+const EXPENSE_CATEGORY_LABELS: Record<string, string> = {
+  PERSONNEL: 'Nhân công',
+  EQUIPMENT: 'Thiết bị',
+  TRAVEL:    'Đi lại',
+  OVERHEAD:  'Chi phí chung',
+  PRINTING:  'In ấn',
+  OTHER:     'Khác',
+};
+
+function ExpensesTab({ projectId }: { projectId: string }) {
+  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    fetch(`/api/science/finance/expenses?projectId=${projectId}&pageSize=50`)
+      .then(r => r.json())
+      .then((res) => setExpenses(res.success ? (res.data?.items ?? res.data ?? []) : []))
+      .catch(() => toast.error('Lỗi tải chi tiêu'))
+      .finally(() => setLoading(false));
+  }, [projectId]);
+
+  const totalApproved = expenses
+    .filter((e) => ['APPROVED', 'REIMBURSED'].includes(e.status))
+    .reduce((s, e) => s + Number(e.amount), 0);
+
+  if (loading) return <div className="flex justify-center py-8 text-gray-400 text-sm">Đang tải...</div>;
+
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-gray-500">
+          {expenses.length > 0 ? `${expenses.length} khoản chi tiêu` : 'Chưa có khoản chi tiêu'}
+          {totalApproved > 0 && <span className="ml-2 text-emerald-600 font-medium">· Đã duyệt: {formatVND(totalApproved)}</span>}
+        </p>
+        <Link href={`/dashboard/science/finance/expenses?projectId=${projectId}`}
+          className="text-xs text-violet-600 hover:underline flex items-center gap-1">
+          Xem tất cả →
+        </Link>
+      </div>
+      {expenses.length === 0 ? (
+        <div className="flex flex-col items-center py-10 text-gray-400 gap-2">
+          <Receipt className="h-8 w-8 opacity-30" />
+          <p className="text-sm">Chưa có khoản chi tiêu nào cho đề tài này.</p>
+        </div>
+      ) : (
+        <Card>
+          <CardContent className="p-0">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b bg-gray-50">
+                  <th className="text-left px-4 py-2.5 font-medium text-gray-600">Tiêu đề</th>
+                  <th className="text-left px-4 py-2.5 font-medium text-gray-600">Hạng mục</th>
+                  <th className="text-left px-4 py-2.5 font-medium text-gray-600">Ngày</th>
+                  <th className="text-right px-4 py-2.5 font-medium text-gray-600">Số tiền</th>
+                  <th className="text-center px-4 py-2.5 font-medium text-gray-600">Trạng thái</th>
+                </tr>
+              </thead>
+              <tbody>
+                {expenses.map((e) => (
+                  <tr key={e.id} className="border-b last:border-0 hover:bg-gray-50">
+                    <td className="px-4 py-2.5 text-gray-800">{e.title}</td>
+                    <td className="px-4 py-2.5 text-xs text-gray-500">{EXPENSE_CATEGORY_LABELS[e.category] ?? e.category}</td>
+                    <td className="px-4 py-2.5 text-xs text-gray-400">{new Date(e.expenseDate).toLocaleDateString('vi-VN')}</td>
+                    <td className="px-4 py-2.5 text-right font-medium">{formatVND(e.amount)}</td>
+                    <td className="px-4 py-2.5 text-center">
+                      <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${EXPENSE_STATUS_BADGE[e.status] ?? 'bg-gray-100 text-gray-600'}`}>
+                        {EXPENSE_STATUS_LABELS[e.status] ?? e.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </CardContent>
+        </Card>
+      )}
+    </div>
+  );
+}
+
+// ─── Tab 7: Tài trợ (Grants) ──────────────────────────────────────────────────
+
+interface Grant {
+  id: string;
+  grantCode: string;
+  grantor: string;
+  title: string;
+  amount: string;
+  disbursedAmount: string;
+  status: string;
+}
+
+const GRANT_STATUS_LABELS: Record<string, string> = {
+  PENDING:   'Chờ duyệt',
+  ACTIVE:    'Đang hoạt động',
+  CLOSED:    'Đã đóng',
+  CANCELLED: 'Huỷ',
+};
+
+const GRANT_STATUS_BADGE: Record<string, string> = {
+  PENDING:   'bg-amber-100 text-amber-700',
+  ACTIVE:    'bg-emerald-100 text-emerald-700',
+  CLOSED:    'bg-gray-100 text-gray-600',
+  CANCELLED: 'bg-red-100 text-red-600',
+};
+
+function GrantsTab({ projectId }: { projectId: string }) {
+  const [grants, setGrants] = useState<Grant[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    fetch(`/api/science/finance/grants?projectId=${projectId}&pageSize=50`)
+      .then(r => r.json())
+      .then((res) => setGrants(res.success ? (res.data?.items ?? res.data ?? []) : []))
+      .catch(() => toast.error('Lỗi tải tài trợ'))
+      .finally(() => setLoading(false));
+  }, [projectId]);
+
+  if (loading) return <div className="flex justify-center py-8 text-gray-400 text-sm">Đang tải...</div>;
+
+  return (
+    <div className="space-y-3">
+      <p className="text-sm text-gray-500">{grants.length > 0 ? `${grants.length} khoản tài trợ` : 'Chưa có khoản tài trợ'}</p>
+      {grants.length === 0 ? (
+        <div className="flex flex-col items-center py-10 text-gray-400 gap-2">
+          <Landmark className="h-8 w-8 opacity-30" />
+          <p className="text-sm">Chưa có khoản tài trợ nào cho đề tài này.</p>
+        </div>
+      ) : (
+        <Card>
+          <CardContent className="p-0">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b bg-gray-50">
+                  <th className="text-left px-4 py-2.5 font-medium text-gray-600">Mã tài trợ</th>
+                  <th className="text-left px-4 py-2.5 font-medium text-gray-600">Nhà tài trợ</th>
+                  <th className="text-left px-4 py-2.5 font-medium text-gray-600">Tên gói</th>
+                  <th className="text-right px-4 py-2.5 font-medium text-gray-600">Tổng trị giá</th>
+                  <th className="text-right px-4 py-2.5 font-medium text-gray-600">Đã giải ngân</th>
+                  <th className="text-center px-4 py-2.5 font-medium text-gray-600">Trạng thái</th>
+                </tr>
+              </thead>
+              <tbody>
+                {grants.map((g) => (
+                  <tr key={g.id} className="border-b last:border-0 hover:bg-gray-50">
+                    <td className="px-4 py-2.5 font-mono text-xs text-violet-700 font-medium">{g.grantCode}</td>
+                    <td className="px-4 py-2.5 text-gray-800">{g.grantor}</td>
+                    <td className="px-4 py-2.5 text-gray-600 text-xs max-w-[200px] truncate">{g.title}</td>
+                    <td className="px-4 py-2.5 text-right font-medium">{formatVND(g.amount)}</td>
+                    <td className="px-4 py-2.5 text-right text-emerald-700">{formatVND(g.disbursedAmount)}</td>
+                    <td className="px-4 py-2.5 text-center">
+                      <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${GRANT_STATUS_BADGE[g.status] ?? 'bg-gray-100 text-gray-600'}`}>
+                        {GRANT_STATUS_LABELS[g.status] ?? g.status}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </CardContent>
+        </Card>
+      )}
+    </div>
+  );
+}
+
 function KPICard({ label, value, color }: { label: string; value: string; color: string }) {
   const colorClass =
     color === 'violet'  ? 'text-violet-700' :
@@ -726,10 +1020,13 @@ export default function BudgetDetailPage() {
       <Tabs active={activeTab} onChange={setActiveTab} />
 
       <div className="pt-1">
-        {activeTab === 'plan'         && <PlanTab         budget={budget} onRefresh={loadBudget} />}
-        {activeTab === 'approval'     && <ApprovalTab     budget={budget} onRefresh={loadBudget} />}
-        {activeTab === 'disbursement' && <DisbursementTab budget={budget} onRefresh={loadBudget} />}
-        {activeTab === 'tracking'     && <TrackingTab     budget={budget} />}
+        {activeTab === 'plan'           && <PlanTab           budget={budget} onRefresh={loadBudget} />}
+        {activeTab === 'approval'       && <ApprovalTab       budget={budget} onRefresh={loadBudget} />}
+        {activeTab === 'disbursement'   && <DisbursementTab   budget={budget} onRefresh={loadBudget} />}
+        {activeTab === 'tracking'       && <TrackingTab       budget={budget} />}
+        {activeTab === 'purchase-orders'&& <PurchaseOrdersTab projectId={budget.project.id} />}
+        {activeTab === 'expenses'       && <ExpensesTab       projectId={budget.project.id} />}
+        {activeTab === 'grants'         && <GrantsTab         projectId={budget.project.id} />}
       </div>
     </div>
   );

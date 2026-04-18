@@ -106,6 +106,10 @@ import {
   Target,
   ShieldCheck,
   Swords,
+  Receipt,
+  Wallet,
+  ShoppingCart,
+  HandCoins,
 } from 'lucide-react';
 
 import {
@@ -993,13 +997,70 @@ export const MENU_CONFIG: MenuGroup[] = [
         functions: [SCIENCE.PROJECT_CREATE, SCIENCE.PROJECT_APPROVE_DEPT, SCIENCE.PROJECT_APPROVE_ACADEMY],
       },
       {
+        name: 'nav.scienceExtensions',
+        href: '/dashboard/science/activities/extensions',
+        icon: Target,
+        gradient: 'from-orange-500 to-amber-600',
+        functions: [SCIENCE.PROJECT_APPROVE_DEPT, SCIENCE.PROJECT_APPROVE_ACADEMY],
+      },
+      {
+        name: 'nav.scienceMidterm',
+        href: '/dashboard/science/activities/midterm',
+        icon: FileCheck2,
+        gradient: 'from-indigo-500 to-blue-600',
+        functions: [SCIENCE.PROJECT_APPROVE_DEPT, SCIENCE.PROJECT_APPROVE_ACADEMY, SCIENCE.COUNCIL_FINALIZE],
+      },
+      {
+        name: 'nav.scienceLessons',
+        href: '/dashboard/science/activities/lessons',
+        icon: BookUser,
+        gradient: 'from-teal-500 to-cyan-600',
+        functions: [SCIENCE.PROJECT_CREATE, SCIENCE.SCIENTIST_VIEW, SCIENCE.DASHBOARD_VIEW],
+      },
+      {
         name: 'nav.scienceScientists',
         href: '/dashboard/science/resources/scientists',
         icon: Users,
         gradient: 'from-amber-500 to-orange-600',
         functions: [SCIENCE.SCIENTIST_VIEW],
       },
-      // -- Quản trị & Tài chính --
+      // -- Tài chính Granular (Phase 7) --
+      {
+        name: 'nav.scienceFinance',
+        href: '/dashboard/science/finance',
+        icon: Wallet,
+        gradient: 'from-emerald-600 to-teal-700',
+        functions: [SCIENCE.BUDGET_MANAGE, SCIENCE.BUDGET_VIEW_FINANCE, SCIENCE.BUDGET_APPROVE],
+      },
+      {
+        name: 'nav.scienceFinancePO',
+        href: '/dashboard/science/finance/purchase-orders',
+        icon: ShoppingCart,
+        gradient: 'from-teal-500 to-emerald-600',
+        functions: [SCIENCE.BUDGET_MANAGE, SCIENCE.BUDGET_APPROVE],
+      },
+      {
+        name: 'nav.scienceFinanceInvoices',
+        href: '/dashboard/science/finance/invoices',
+        icon: Receipt,
+        gradient: 'from-cyan-500 to-teal-600',
+        functions: [SCIENCE.BUDGET_MANAGE, SCIENCE.BUDGET_APPROVE, SCIENCE.BUDGET_VIEW_FINANCE],
+      },
+      {
+        name: 'nav.scienceFinanceExpenses',
+        href: '/dashboard/science/finance/expenses',
+        icon: Coins,
+        gradient: 'from-amber-500 to-yellow-600',
+        functions: [SCIENCE.BUDGET_MANAGE, SCIENCE.BUDGET_APPROVE, SCIENCE.PROJECT_CREATE],
+      },
+      {
+        name: 'nav.scienceFinanceGrants',
+        href: '/dashboard/science/finance/grants',
+        icon: HandCoins,
+        gradient: 'from-green-500 to-emerald-600',
+        functions: [SCIENCE.BUDGET_MANAGE, SCIENCE.BUDGET_APPROVE, SCIENCE.BUDGET_VIEW_FINANCE],
+      },
+      // -- Quản trị & Tài chính cũ --
       {
         name: 'nav.scienceCouncils',
         href: '/dashboard/science/councils',
@@ -1050,6 +1111,14 @@ export const MENU_CONFIG: MenuGroup[] = [
         icon: BookMarked,
         gradient: 'from-slate-500 to-gray-600',
         functions: [SCIENCE.CATALOG_VIEW],
+      },
+      // -- Hợp tác nghiên cứu --
+      {
+        name: 'nav.scienceCollaborations',
+        href: '/dashboard/science/collaborations',
+        icon: Globe,
+        gradient: 'from-teal-500 to-emerald-600',
+        functions: [SCIENCE.PROJECT_CREATE, SCIENCE.PROJECT_APPROVE_DEPT, SCIENCE.PROJECT_APPROVE_ACADEMY],
       },
       // -- M26 Search / AI / Reports --
       {
