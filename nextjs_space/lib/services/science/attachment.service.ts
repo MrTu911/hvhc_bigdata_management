@@ -10,7 +10,7 @@
 import 'server-only'
 import crypto from 'crypto'
 import { v4 as uuidv4 } from 'uuid'
-import { prisma } from '@/lib/prisma'
+import prisma from '@/lib/db'
 import { scanBuffer } from '@/lib/integrations/clamav'
 import { logAudit } from '@/lib/audit'
 import {

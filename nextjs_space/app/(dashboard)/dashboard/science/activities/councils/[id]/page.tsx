@@ -1080,7 +1080,7 @@ export default function CouncilDetailPage() {
         {activeTab === 'conclusion' && <ConclusionTab council={council} onFinalized={loadCouncil} />}
         {activeTab === 'documents'  && (
           <ScienceAttachmentPanel
-            entityType="COUNCIL_MEETING"
+            entityType="COUNCIL"
             entityId={council.id}
             allowUpload
             allowDelete

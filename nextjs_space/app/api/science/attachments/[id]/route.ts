@@ -10,12 +10,13 @@ import { NextRequest, NextResponse } from 'next/server'
 import { requireFunction } from '@/lib/rbac/middleware'
 import { SCIENCE } from '@/lib/rbac/function-codes'
 import { attachmentService } from '@/lib/services/science/attachment.service'
-import { prisma } from '@/lib/prisma'
+import prisma from '@/lib/db'
 
 export async function DELETE(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  // Bước 1: xác thực session — dùng VIEW để verify auth, ownership sẽ check ở bước sau
   const auth = await requireFunction(req, SCIENCE.ATTACHMENT_VIEW)
   if (!auth.allowed) return auth.response!
 

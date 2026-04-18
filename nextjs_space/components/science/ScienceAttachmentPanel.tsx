@@ -338,7 +338,8 @@ export function ScienceAttachmentPanel({
         <div className="space-y-2">
           {items.map(item => {
             const badge = getSensitivityBadge(item.sensitivity)
-            const canDelete = allowDelete && (currentUserId === item.uploadedBy.id || allowDelete)
+            const isOwner = !!currentUserId && currentUserId === item.uploadedBy.id
+            const canDelete = allowDelete && isOwner
             return (
               <div
                 key={item.id}
