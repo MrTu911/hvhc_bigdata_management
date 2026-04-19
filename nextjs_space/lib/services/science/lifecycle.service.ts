@@ -1,6 +1,11 @@
 import 'server-only'
 import prisma from '@/lib/db'
 import { NckhProposalStatus, NckhExtensionStatus, NckhReportStatus } from '@prisma/client'
+import { notifyProposalEvent } from './proposal-notification.service'
+
+// Trạng thái cho phép reviewer/approver tác động
+const REVIEWABLE_STATUSES = ['SUBMITTED', 'REVIEWING'] as const
+const APPROVABLE_STATUSES = ['SUBMITTED', 'REVIEWING', 'UNIT_APPROVED', 'DEPT_APPROVED'] as const
 
 // ─── Proposal ────────────────────────────────────────────────────────────────
 
@@ -48,9 +53,11 @@ export async function getProposal(id: string) {
   return prisma.nckhProposal.findUnique({
     where: { id },
     include: {
-      pi: { select: { id: true, fullName: true } },
+      pi: { select: { id: true, fullName: true, email: true } },
       unit: { select: { id: true, name: true } },
       approvedBy: { select: { id: true, fullName: true } },
+      unitApprovedBy: { select: { id: true, fullName: true } },
+      deptApprovedBy: { select: { id: true, fullName: true } },
       reviews: {
         include: {
           reviewer: { select: { id: true, fullName: true } },
@@ -112,13 +119,43 @@ export async function updateProposal(
 }
 
 export async function submitProposal(id: string) {
+  const proposal = await prisma.nckhProposal.findUniqueOrThrow({
+    where: { id },
+    include: { pi: { select: { id: true, email: true, fullName: true } } },
+  })
+  if (proposal.status !== 'DRAFT' && proposal.status !== 'REVISION_REQUESTED') {
+    throw new Error('Chỉ đề xuất ở trạng thái DRAFT hoặc REVISION_REQUESTED mới có thể nộp')
+  }
+  const updated = await prisma.nckhProposal.update({
+    where: { id },
+    data: { status: 'SUBMITTED', submittedAt: new Date(), currentLevel: 'UNIT' },
+  })
+
+  // Notify: tìm user có quyền duyệt cấp UNIT trong cùng unit
+  await notifyProposalEvent('SUBMITTED', updated, proposal.unitId ?? null).catch(() => {})
+
+  return updated
+}
+
+// REVISION flow: PI nộp lại sau khi được yêu cầu sửa
+export async function resubmitProposal(id: string, piId: string) {
   const proposal = await prisma.nckhProposal.findUniqueOrThrow({ where: { id } })
-  if (proposal.status !== 'DRAFT') {
-    throw new Error('Chỉ đề xuất ở trạng thái DRAFT mới có thể nộp')
+  if (proposal.status !== 'REVISION_REQUESTED') {
+    throw new Error('Chỉ đề xuất ở trạng thái REVISION_REQUESTED mới có thể nộp lại')
+  }
+  if (proposal.piId !== piId) {
+    throw new Error('Chỉ PI của đề xuất mới có thể nộp lại')
   }
   return prisma.nckhProposal.update({
     where: { id },
-    data: { status: 'SUBMITTED', submittedAt: new Date() },
+    data: {
+      status: 'SUBMITTED',
+      submittedAt: new Date(),
+      revisionCount: { increment: 1 },
+      revisedAt: new Date(),
+      currentLevel: 'UNIT',
+      revisionNote: null, // Xóa note cũ sau khi nộp lại
+    },
   })
 }
 
@@ -130,8 +167,21 @@ export async function reviewProposal(data: {
   recommendation: 'APPROVE' | 'REJECT' | 'REVISE'
 }) {
   const proposal = await prisma.nckhProposal.findUniqueOrThrow({ where: { id: data.proposalId } })
-  if (!['SUBMITTED', 'REVIEWING'].includes(proposal.status)) {
-    throw new Error('Đề xuất chưa được nộp hoặc không ở trạng thái phù hợp')
+  if (!(REVIEWABLE_STATUSES as readonly string[]).includes(proposal.status)) {
+    throw new Error('Đề xuất không ở trạng thái có thể nhận xét')
+  }
+
+  // Khi reviewer yêu cầu sửa: chuyển sang REVISION_REQUESTED, lưu note
+  if (data.recommendation === 'REVISE') {
+    const updated = await prisma.nckhProposal.update({
+      where: { id: data.proposalId },
+      data: {
+        status: 'REVISION_REQUESTED',
+        revisionNote: data.comment ?? null,
+      },
+    })
+    await notifyProposalEvent('REVISION_REQUESTED', updated, null).catch(() => {})
+    return updated
   }
 
   const review = await prisma.nckhProposalReview.upsert({
@@ -151,7 +201,6 @@ export async function reviewProposal(data: {
     },
   })
 
-  // Chuyển proposal sang REVIEWING nếu chưa
   if (proposal.status === 'SUBMITTED') {
     await prisma.nckhProposal.update({
       where: { id: data.proposalId },
@@ -162,69 +211,141 @@ export async function reviewProposal(data: {
   return review
 }
 
+// Multi-level approval:
+// SUBMITTED/REVIEWING  → (DEPT approver) → UNIT_APPROVED  (currentLevel: UNIT→DEPT)
+// UNIT_APPROVED        → (DEPT approver) → DEPT_APPROVED  (currentLevel: DEPT→ACADEMY)
+// DEPT_APPROVED        → (ACADEMY approver) → APPROVED → tạo NckhProject + M07 ResearchProject
+// Bất kỳ cấp nào cũng có thể REJECT
 export async function approveProposal(data: {
   proposalId: string
   approverId: string
+  approverLevel: 'DEPT' | 'ACADEMY' // map từ function code của caller
   rejectReason?: string
   action: 'APPROVE' | 'REJECT'
 }) {
   const proposal = await prisma.nckhProposal.findUniqueOrThrow({
     where: { id: data.proposalId },
+    include: { pi: { select: { id: true, email: true, fullName: true, facultyProfile: true } } },
   })
 
-  if (!['SUBMITTED', 'REVIEWING'].includes(proposal.status)) {
+  if (!(APPROVABLE_STATUSES as readonly string[]).includes(proposal.status)) {
     throw new Error('Đề xuất không ở trạng thái có thể phê duyệt')
   }
 
   if (data.action === 'REJECT') {
-    return prisma.nckhProposal.update({
+    const updated = await prisma.nckhProposal.update({
       where: { id: data.proposalId },
-      data: {
-        status: 'REJECTED',
-        rejectedAt: new Date(),
-        rejectReason: data.rejectReason,
-      },
+      data: { status: 'REJECTED', rejectedAt: new Date(), rejectReason: data.rejectReason },
     })
+    await notifyProposalEvent('REJECTED', updated, null).catch(() => {})
+    return updated
   }
 
-  // APPROVE → tạo NckhProject trong transaction
-  const year = new Date().getFullYear()
-  const result = await prisma.$transaction(async (tx) => {
-    const seq = await tx.scienceIdSequence.upsert({
-      where: { entityType_year: { entityType: 'PROJECT', year } },
-      create: { entityType: 'PROJECT', year, lastSeq: 1 },
-      update: { lastSeq: { increment: 1 } },
-    })
-    const projectCode = `HVHC-${year}-PRJ-${String(seq.lastSeq).padStart(3, '0')}`
+  const now = new Date()
+  const currentLevel = proposal.currentLevel ?? 'UNIT'
 
-    const project = await tx.nckhProject.create({
-      data: {
-        projectCode,
-        title: proposal.title,
-        type: proposal.researchType,
-        category: proposal.category,
-        field: proposal.field,
-        principalInvestigatorId: proposal.piId,
-        unitId: proposal.unitId,
-        startDate: new Date(),
-        status: 'ACTIVE',
-      },
-    })
-
-    await tx.nckhProposal.update({
+  // Cấp 1: UNIT (Trưởng Bộ môn, cần DEPT function code)
+  if ((currentLevel === 'UNIT') && data.approverLevel === 'DEPT' &&
+      (REVIEWABLE_STATUSES as readonly string[]).includes(proposal.status)) {
+    const updated = await prisma.nckhProposal.update({
       where: { id: data.proposalId },
       data: {
-        status: 'APPROVED',
-        approvedAt: new Date(),
-        approvedById: data.approverId,
-        projectId: project.id,
+        status: 'UNIT_APPROVED',
+        currentLevel: 'DEPT',
+        unitApprovedAt: now,
+        unitApprovedById: data.approverId,
       },
     })
+    await notifyProposalEvent('UNIT_APPROVED', updated, null).catch(() => {})
+    return updated
+  }
 
-    return project
-  })
+  // Cấp 2: DEPT (Trưởng Khoa, cần DEPT function code)
+  if (currentLevel === 'DEPT' && data.approverLevel === 'DEPT' && proposal.status === 'UNIT_APPROVED') {
+    const updated = await prisma.nckhProposal.update({
+      where: { id: data.proposalId },
+      data: {
+        status: 'DEPT_APPROVED',
+        currentLevel: 'ACADEMY',
+        deptApprovedAt: now,
+        deptApprovedById: data.approverId,
+      },
+    })
+    await notifyProposalEvent('DEPT_APPROVED', updated, null).catch(() => {})
+    return updated
+  }
 
-  return result
+  // Cấp 3: ACADEMY (Ban Giám hiệu, cần ACADEMY function code) → APPROVED + tạo project
+  if (currentLevel === 'ACADEMY' && data.approverLevel === 'ACADEMY' && proposal.status === 'DEPT_APPROVED') {
+    const year = now.getFullYear()
+
+    const result = await prisma.$transaction(async (tx) => {
+      const seq = await tx.scienceIdSequence.upsert({
+        where: { entityType_year: { entityType: 'PROJECT', year } },
+        create: { entityType: 'PROJECT', year, lastSeq: 1 },
+        update: { lastSeq: { increment: 1 } },
+      })
+      const projectCode = `HVHC-${year}-PRJ-${String(seq.lastSeq).padStart(3, '0')}`
+
+      const project = await tx.nckhProject.create({
+        data: {
+          projectCode,
+          title: proposal.title,
+          researchType: proposal.researchType,
+          category: proposal.category,
+          field: proposal.field,
+          principalInvestigatorId: proposal.piId,
+          unitId: proposal.unitId,
+          startDate: now,
+          status: 'ACTIVE' as never,
+        },
+      })
+
+      await tx.nckhProposal.update({
+        where: { id: data.proposalId },
+        data: {
+          status: 'APPROVED',
+          approvedAt: now,
+          approvedById: data.approverId,
+          projectId: project.id,
+        },
+      })
+
+      // P5: Auto-create M07 ResearchProject nếu PI có FacultyProfile
+      const facultyProfile = proposal.pi?.facultyProfile
+      if (facultyProfile) {
+        await tx.researchProject.create({
+          data: {
+            facultyId: facultyProfile.id,
+            projectName: project.title,
+            projectCode: project.projectCode,
+            level: mapNckhCategoryToLevel(proposal.category as string),
+            status: 'Đang thực hiện',
+            workflowStatus: 'APPROVED' as never,
+            nckhProjectId: project.id,
+          },
+        })
+      }
+
+      return project
+    })
+
+    await notifyProposalEvent('APPROVED', await prisma.nckhProposal.findUniqueOrThrow({ where: { id: data.proposalId } }), null).catch(() => {})
+    return result
+  }
+
+  throw new Error(`Không thể phê duyệt: level hiện tại=${currentLevel}, approverLevel=${data.approverLevel}, status=${proposal.status}`)
+}
+
+function mapNckhCategoryToLevel(category: string): string {
+  const map: Record<string, string> = {
+    CAP_HOC_VIEN: 'HVHC',
+    CAP_TONG_CUC: 'BQP',
+    CAP_BO_QUOC_PHONG: 'BQP',
+    CAP_NHA_NUOC: 'Nhà nước',
+    SANG_KIEN_CO_SO: 'HVHC',
+  }
+  return map[category] ?? 'HVHC'
 }
 
 // ─── Progress Reports ─────────────────────────────────────────────────────────
@@ -631,6 +752,7 @@ export const lifecycleService = {
   createProposal,
   updateProposal,
   submitProposal,
+  resubmitProposal,
   reviewProposal,
   approveProposal,
   // Progress Reports

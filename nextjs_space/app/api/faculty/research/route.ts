@@ -5,34 +5,48 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
-import { requireFunction } from '@/lib/rbac/middleware';
+import { requireFunction, requireAuth } from '@/lib/rbac/middleware';
 import { RESEARCH } from '@/lib/rbac/function-codes';
 import { logAudit } from '@/lib/audit';
 
-// GET: Lấy danh sách đề tài nghiên cứu
+async function getFacultyProfileForUser(userId: string) {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    include: { facultyProfile: true }
+  });
+  return user?.facultyProfile ?? null;
+}
+
+// GET: Lấy danh sách đề tài nghiên cứu (có pagination)
 export async function GET(req: NextRequest) {
   try {
-    // Function-based RBAC check: VIEW_RESEARCH
     const auth = await requireFunction(req, RESEARCH.VIEW);
     if (!auth.allowed) {
       return auth.response!;
     }
-    
-    const { user } = auth;
 
+    const { user } = auth;
     const { searchParams } = new URL(req.url);
     const facultyId = searchParams.get('facultyId');
+    const page = Math.max(1, parseInt(searchParams.get('page') ?? '1', 10));
+    const pageSize = Math.min(100, Math.max(1, parseInt(searchParams.get('pageSize') ?? '20', 10)));
 
     if (!facultyId) {
       return NextResponse.json({ error: 'Faculty ID required' }, { status: 400 });
     }
 
-    const projects = await prisma.researchProject.findMany({
-      where: { facultyId },
-      orderBy: { createdAt: 'desc' }
-    });
+    const where = { facultyId, isDeleted: false };
 
-    // Audit log
+    const [projects, total] = await prisma.$transaction([
+      prisma.researchProject.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        skip: (page - 1) * pageSize,
+        take: pageSize
+      }),
+      prisma.researchProject.count({ where })
+    ]);
+
     await logAudit({
       userId: user!.id,
       functionCode: RESEARCH.VIEW,
@@ -43,7 +57,10 @@ export async function GET(req: NextRequest) {
       ipAddress: req.headers.get('x-forwarded-for') || 'unknown'
     });
 
-    return NextResponse.json({ projects });
+    return NextResponse.json({
+      projects,
+      pagination: { page, pageSize, total, totalPages: Math.ceil(total / pageSize) }
+    });
   } catch (error: any) {
     console.error('Error fetching research projects:', error);
     return NextResponse.json(
@@ -56,13 +73,18 @@ export async function GET(req: NextRequest) {
 // POST: Thêm đề tài nghiên cứu mới
 export async function POST(req: NextRequest) {
   try {
-    // Function-based RBAC check: CREATE_RESEARCH
     const auth = await requireFunction(req, RESEARCH.CREATE);
     if (!auth.allowed) {
       return auth.response!;
     }
-    
+
     const { user } = auth;
+
+    // Verify user chỉ tạo đề tài cho chính mình
+    const ownProfile = await getFacultyProfileForUser(user!.id);
+    if (!ownProfile) {
+      return NextResponse.json({ error: 'Faculty profile not found for current user' }, { status: 404 });
+    }
 
     const body = await req.json();
     const {
@@ -87,15 +109,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Verify faculty profile exists
-    const facultyProfile = await prisma.facultyProfile.findUnique({
-      where: { id: facultyId }
-    });
-
-    if (!facultyProfile) {
+    if (facultyId !== ownProfile.id) {
       return NextResponse.json(
-        { error: 'Faculty profile not found' },
-        { status: 404 }
+        { error: 'Forbidden: cannot create project for another faculty' },
+        { status: 403 }
       );
     }
 
@@ -116,7 +133,6 @@ export async function POST(req: NextRequest) {
       }
     });
 
-    // Audit log for CREATE
     await logAudit({
       userId: user!.id,
       functionCode: RESEARCH.CREATE,
@@ -141,43 +157,56 @@ export async function POST(req: NextRequest) {
 // PUT: Cập nhật đề tài nghiên cứu
 export async function PUT(req: NextRequest) {
   try {
-    // Function-based RBAC check: UPDATE_RESEARCH
     const auth = await requireFunction(req, RESEARCH.UPDATE);
     if (!auth.allowed) {
       return auth.response!;
     }
-    
+
     const { user } = auth;
+
+    const ownProfile = await getFacultyProfileForUser(user!.id);
+    if (!ownProfile) {
+      return NextResponse.json({ error: 'Faculty profile not found' }, { status: 404 });
+    }
 
     const body = await req.json();
     const { id, ...updateData } = body;
 
     if (!id) {
-      return NextResponse.json(
-        { error: 'Project ID is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Project ID is required' }, { status: 400 });
     }
 
-    // Get old data for audit
-    const oldProject = await prisma.researchProject.findUnique({
+    const existingProject = await prisma.researchProject.findUnique({
       where: { id }
     });
 
+    if (!existingProject || existingProject.isDeleted) {
+      return NextResponse.json({ error: 'Project not found' }, { status: 404 });
+    }
+
+    if (existingProject.facultyId !== ownProfile.id) {
+      return NextResponse.json(
+        { error: 'Forbidden: cannot update project of another faculty' },
+        { status: 403 }
+      );
+    }
+
+    // Không cho phép client tự set soft-delete fields qua PUT
+    const { isDeleted, deletedAt, deletedBy, ...safeUpdateData } = updateData;
+
     const project = await prisma.researchProject.update({
       where: { id },
-      data: updateData
+      data: safeUpdateData
     });
 
-    // Audit log for UPDATE
     await logAudit({
       userId: user!.id,
       functionCode: RESEARCH.UPDATE,
       action: 'UPDATE',
       resourceType: 'RESEARCH_PROJECT',
       resourceId: id,
-      oldValue: oldProject,
-      newValue: updateData,
+      oldValue: existingProject,
+      newValue: safeUpdateData,
       result: 'SUCCESS',
       ipAddress: req.headers.get('x-forwarded-for') || 'unknown'
     });
@@ -192,51 +221,59 @@ export async function PUT(req: NextRequest) {
   }
 }
 
-// DELETE: Xóa đề tài nghiên cứu
+// DELETE: Soft delete đề tài nghiên cứu
 export async function DELETE(req: NextRequest) {
   try {
-    // Function-based RBAC check: DELETE_RESEARCH (sensitive operation)
     const auth = await requireFunction(req, RESEARCH.DELETE);
     if (!auth.allowed) {
       return auth.response!;
     }
-    
+
     const { user } = auth;
+
+    const ownProfile = await getFacultyProfileForUser(user!.id);
+    if (!ownProfile) {
+      return NextResponse.json({ error: 'Faculty profile not found' }, { status: 404 });
+    }
 
     const { searchParams } = new URL(req.url);
     const id = searchParams.get('id');
 
     if (!id) {
-      return NextResponse.json(
-        { error: 'Project ID is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Project ID is required' }, { status: 400 });
     }
 
-    // Get project info before delete for audit
-    const projectToDelete = await prisma.researchProject.findUnique({
+    const existingProject = await prisma.researchProject.findUnique({
       where: { id }
     });
 
-    if (!projectToDelete) {
+    if (!existingProject || existingProject.isDeleted) {
+      return NextResponse.json({ error: 'Project not found' }, { status: 404 });
+    }
+
+    if (existingProject.facultyId !== ownProfile.id) {
       return NextResponse.json(
-        { error: 'Project not found' },
-        { status: 404 }
+        { error: 'Forbidden: cannot delete project of another faculty' },
+        { status: 403 }
       );
     }
 
-    await prisma.researchProject.delete({
-      where: { id }
+    await prisma.researchProject.update({
+      where: { id },
+      data: {
+        isDeleted: true,
+        deletedAt: new Date(),
+        deletedBy: user!.id
+      }
     });
 
-    // Audit log for DELETE (critical operation)
     await logAudit({
       userId: user!.id,
       functionCode: RESEARCH.DELETE,
       action: 'DELETE',
       resourceType: 'RESEARCH_PROJECT',
       resourceId: id,
-      oldValue: projectToDelete,
+      oldValue: existingProject,
       result: 'SUCCESS',
       ipAddress: req.headers.get('x-forwarded-for') || 'unknown'
     });

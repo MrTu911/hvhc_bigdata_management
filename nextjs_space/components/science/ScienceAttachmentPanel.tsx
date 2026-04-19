@@ -21,6 +21,7 @@ import {
   ATTACHMENT_CATEGORIES,
   CATEGORY_LABELS,
   ENTITY_ALLOWED_CATEGORIES,
+  PREVIEWABLE_MIME_TYPES,
 } from '@/lib/validations/science-attachment'
 import type { ScienceEntityType, AttachmentCategory } from '@/lib/validations/science-attachment'
 
@@ -64,7 +65,12 @@ function getMimeIcon(mimeType: string): string {
   if (mimeType.includes('excel') || mimeType.includes('spreadsheet')) return '📊'
   if (mimeType.includes('powerpoint') || mimeType.includes('presentation')) return '📊'
   if (mimeType.includes('image')) return '🖼️'
+  if (mimeType.includes('video')) return '🎬'
   return '📎'
+}
+
+function canPreview(mimeType: string): boolean {
+  return PREVIEWABLE_MIME_TYPES.has(mimeType)
 }
 
 function getSensitivityBadge(sensitivity: string) {
@@ -126,21 +132,39 @@ export function ScienceAttachmentPanel({
     fetchAttachments()
   }, [fetchAttachments])
 
+  async function getPresignedUrl(itemId: string): Promise<string | null> {
+    try {
+      const res = await fetch(`/api/science/attachments/${itemId}/download`)
+      const json = await res.json()
+      if (json.success) return json.data.url
+      alert(json.error ?? 'Không thể lấy link file')
+      return null
+    } catch {
+      alert('Lỗi kết nối khi lấy link file')
+      return null
+    }
+  }
+
+  async function handlePreview(item: AttachmentItem) {
+    setDownloadingId(item.id)
+    const url = await getPresignedUrl(item.id)
+    setDownloadingId(null)
+    if (url) window.open(url, '_blank', 'noopener')
+  }
+
   async function handleDownload(item: AttachmentItem) {
     setDownloadingId(item.id)
-    try {
-      const res = await fetch(`/api/science/attachments/${item.id}/download`)
-      const json = await res.json()
-      if (json.success) {
-        window.open(json.data.url, '_blank', 'noopener')
-      } else {
-        alert(json.error ?? 'Không thể tải file')
-      }
-    } catch {
-      alert('Lỗi kết nối khi tải file')
-    } finally {
-      setDownloadingId(null)
-    }
+    const url = await getPresignedUrl(item.id)
+    setDownloadingId(null)
+    if (!url) return
+    // Force download bằng cách tạo anchor với download attribute
+    const a = document.createElement('a')
+    a.href = url
+    a.download = item.title
+    a.rel = 'noopener'
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
   }
 
   async function handleDelete(item: AttachmentItem) {
@@ -194,7 +218,16 @@ export function ScienceAttachmentPanel({
         setUploadForm(f => ({ ...f, title: '', description: '' }))
         if (fileInputRef.current) fileInputRef.current.value = ''
       } else {
-        setUploadError(typeof json.error === 'string' ? json.error : 'Upload thất bại')
+        if (typeof json.error === 'string') {
+          setUploadError(json.error)
+        } else if (json.error && typeof json.error === 'object') {
+          const msgs = Object.entries(json.error as Record<string, string[]>)
+            .map(([field, errs]) => `${field}: ${(errs as string[]).join(', ')}`)
+            .join('; ')
+          setUploadError(msgs || 'Upload thất bại')
+        } else {
+          setUploadError('Upload thất bại')
+        }
       }
     } catch {
       setUploadError('Lỗi kết nối khi upload')
@@ -293,12 +326,12 @@ export function ScienceAttachmentPanel({
               <div>
                 <label className="block text-xs font-medium text-gray-700 mb-1">
                   Chọn file <span className="text-red-500">*</span>
-                  <span className="ml-1 text-gray-400">(PDF, Word, Excel, PowerPoint, ảnh — tối đa 100MB)</span>
+                  <span className="ml-1 text-gray-400">(PDF, Word, Excel, PowerPoint, ảnh, video — tối đa 100MB)</span>
                 </label>
                 <input
                   ref={fileInputRef}
                   type="file"
-                  accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.jpg,.jpeg,.png,.webp"
+                  accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.jpg,.jpeg,.png,.webp,.mp4,.webm"
                   className="w-full text-sm"
                 />
               </div>
@@ -368,9 +401,21 @@ export function ScienceAttachmentPanel({
                     {badge.label}
                   </span>
 
+                  {canPreview(item.mimeType) && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      disabled={downloadingId === item.id}
+                      onClick={() => handlePreview(item)}
+                      className="h-7 text-xs"
+                    >
+                      {downloadingId === item.id ? '...' : 'Xem'}
+                    </Button>
+                  )}
+
                   <Button
                     size="sm"
-                    variant="outline"
+                    variant={canPreview(item.mimeType) ? 'ghost' : 'outline'}
                     disabled={downloadingId === item.id}
                     onClick={() => handleDownload(item)}
                     className="h-7 text-xs"

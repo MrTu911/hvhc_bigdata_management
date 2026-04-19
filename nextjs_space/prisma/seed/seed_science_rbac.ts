@@ -1,10 +1,10 @@
 /**
  * seed_science_rbac.ts
  *
- * Seeds ALL 25 SCIENCE function codes (Phases 1–8) và cấp quyền theo chức vụ.
+ * Seeds ALL 28 SCIENCE function codes (Phases 1–8 + Attachments) và cấp quyền theo chức vụ.
  *
  * Chức năng:
- *   1. Upsert 25 Function records cho module SCIENCE
+ *   1. Upsert 28 Function records cho module SCIENCE
  *   2. Upsert PositionFunction links cho từng chức vụ liên quan
  *   3. Cấp toàn quyền SCIENCE cho SYSTEM_ADMIN + GIAM_DOC
  *
@@ -69,6 +69,11 @@ const SCIENCE_FUNCTIONS: FnDef[] = [
   // ── AI (Phase 8) ─────────────────────────────────────────────────────────
   { code: 'USE_AI_SCIENCE',       name: 'Sử dụng AI trợ lý KHQL (chatbot, tìm kiếm)',        actionType: 'VIEW'   },
   { code: 'USE_AI_SCIENCE_ADMIN', name: 'Quản trị AI KHQL (config, quality monitoring)',      actionType: 'UPDATE', isCritical: false },
+
+  // ── File Minh Chứng / Attachments (Phase 6) ──────────────────────────────
+  { code: 'VIEW_SCIENCE_ATTACHMENT',   name: 'Xem tài liệu minh chứng đề tài/công bố',       actionType: 'VIEW'   },
+  { code: 'UPLOAD_SCIENCE_ATTACHMENT', name: 'Tải lên tài liệu minh chứng đề tài/công bố',   actionType: 'CREATE' },
+  { code: 'DELETE_SCIENCE_ATTACHMENT', name: 'Xóa tài liệu minh chứng đề tài/công bố',       actionType: 'DELETE', isCritical: false },
 ]
 
 // ─── 2. Position → function grant mapping ─────────────────────────────────────
@@ -104,6 +109,7 @@ function buildGrants(): Grant[] {
   const truongPhongAccess = all.filter(
     (c) => !['DOWNLOAD_LIBRARY_SECRET', 'USE_AI_SCIENCE_ADMIN', 'APPROVE_RESEARCH_ACADEMY'].includes(c),
   )
+  // Note: VIEW/UPLOAD/DELETE_SCIENCE_ATTACHMENT are included in `all`, so academy/truong_phong get them automatically
 
   // PHO_TRUONG_PHONG: như TRUONG_PHONG nhưng không quản lý danh mục
   const phoTruongPhongAccess = truongPhongAccess.filter((c) => c !== 'MANAGE_SCIENCE_CATALOG')
@@ -128,6 +134,9 @@ function buildGrants(): Grant[] {
     'USE_SCIENCE_SEARCH',
     'EXPORT_SCIENCE_REPORT',
     'USE_AI_SCIENCE',
+    'VIEW_SCIENCE_ATTACHMENT',
+    'UPLOAD_SCIENCE_ATTACHMENT',
+    'DELETE_SCIENCE_ATTACHMENT',
   ]
 
   // PHO_TRUONG_KHOA: như TRUONG_KHOA nhưng không FINALIZE_ACCEPTANCE
@@ -140,7 +149,7 @@ function buildGrants(): Grant[] {
     'MANAGE_SCIENTIST_PROFILE',
     'SYNC_ORCID',
     'CREATE_RESEARCH_PROJECT',
-    'APPROVE_RESEARCH_DEPT',   // phê duyệt sơ bộ trong bộ môn
+    'APPROVE_RESEARCH_DEPT',
     'CREATE_SCIENTIFIC_WORK',
     'IMPORT_FROM_CROSSREF',
     'UPLOAD_LIBRARY',
@@ -153,6 +162,9 @@ function buildGrants(): Grant[] {
     'USE_SCIENCE_SEARCH',
     'EXPORT_SCIENCE_REPORT',
     'USE_AI_SCIENCE',
+    'VIEW_SCIENCE_ATTACHMENT',
+    'UPLOAD_SCIENCE_ATTACHMENT',
+    'DELETE_SCIENCE_ATTACHMENT',
   ]
 
   // PHO_CHU_NHIEM_BM: hỗ trợ bộ môn (không APPROVE_DEPT, không MANAGE_COUNCIL)
@@ -171,6 +183,8 @@ function buildGrants(): Grant[] {
     'VIEW_SCIENCE_DASHBOARD',
     'USE_SCIENCE_SEARCH',
     'USE_AI_SCIENCE',
+    'VIEW_SCIENCE_ATTACHMENT',
+    'UPLOAD_SCIENCE_ATTACHMENT',
   ]
 
   // GIANG_VIEN_CHINH: nghiên cứu viên chính — SELF scope cho profile/project/work
@@ -189,6 +203,8 @@ function buildGrants(): Grant[] {
     'VIEW_SCIENCE_DASHBOARD',
     'USE_SCIENCE_SEARCH',
     'USE_AI_SCIENCE',
+    'VIEW_SCIENCE_ATTACHMENT',
+    'UPLOAD_SCIENCE_ATTACHMENT',
   ]
 
   // GIANG_VIEN: cơ bản
@@ -206,6 +222,8 @@ function buildGrants(): Grant[] {
     'VIEW_SCIENCE_DASHBOARD',
     'USE_SCIENCE_SEARCH',
     'USE_AI_SCIENCE',
+    'VIEW_SCIENCE_ATTACHMENT',
+    'UPLOAD_SCIENCE_ATTACHMENT',
   ]
 
   // TRO_GIANG: view + search chỉ
@@ -216,6 +234,7 @@ function buildGrants(): Grant[] {
     'VIEW_SCIENCE_DASHBOARD',
     'USE_SCIENCE_SEARCH',
     'USE_AI_SCIENCE',
+    'VIEW_SCIENCE_ATTACHMENT',
   ]
 
   // NGHIEN_CUU_VIEN: chuyên nghiên cứu
@@ -235,6 +254,8 @@ function buildGrants(): Grant[] {
     'USE_SCIENCE_SEARCH',
     'EXPORT_SCIENCE_REPORT',
     'USE_AI_SCIENCE',
+    'VIEW_SCIENCE_ATTACHMENT',
+    'UPLOAD_SCIENCE_ATTACHMENT',
   ]
 
   // CAN_BO_THU_VIEN: thư viện
@@ -245,6 +266,7 @@ function buildGrants(): Grant[] {
     'DOWNLOAD_LIBRARY_NORMAL',
     'VIEW_SCIENCE_DASHBOARD',
     'USE_SCIENCE_SEARCH',
+    'VIEW_SCIENCE_ATTACHMENT',
   ]
 
   // TRO_LY / NHAN_VIEN: hỗ trợ nghiệp vụ, view only
@@ -254,6 +276,7 @@ function buildGrants(): Grant[] {
     'DOWNLOAD_LIBRARY_NORMAL',
     'VIEW_SCIENCE_DASHBOARD',
     'USE_SCIENCE_SEARCH',
+    'VIEW_SCIENCE_ATTACHMENT',
   ]
 
   const grants: Grant[] = []

@@ -36,30 +36,44 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
     )
   }
 
+  // Xác định approverLevel từ function codes của user
+  const userFunctions = auth.userFunctions as string[] ?? []
+  const hasAcademy = userFunctions.includes(SCIENCE.PROJECT_APPROVE_ACADEMY)
+  const approverLevel: 'DEPT' | 'ACADEMY' = hasAcademy ? 'ACADEMY' : 'DEPT'
+
   try {
     const result = await lifecycleService.approveProposal({
       proposalId: id,
       approverId: auth.user!.id,
+      approverLevel,
       action,
       rejectReason,
     })
 
+    const auditFunctionCode = hasAcademy ? SCIENCE.PROJECT_APPROVE_ACADEMY : SCIENCE.PROJECT_APPROVE_DEPT
     const auditAction = action === 'APPROVE' ? 'APPROVE' : 'REJECT'
     await logAudit({
       userId: auth.user!.id,
-      functionCode: SCIENCE.PROJECT_APPROVE_ACADEMY,
+      functionCode: auditFunctionCode,
       action: auditAction,
       resourceType: 'NckhProposal',
       resourceId: id,
       result: 'SUCCESS',
+      metadata: { approverLevel },
       ipAddress: req.headers.get('x-forwarded-for') ?? undefined,
     })
 
+    const messages: Record<string, string> = {
+      APPROVE_DEPT:    'Đề xuất đã được duyệt, chờ cấp tiếp theo',
+      APPROVE_ACADEMY: 'Đề xuất đã được phê duyệt chính thức và đề tài được tạo tự động',
+      REJECT:          'Đề xuất đã bị từ chối',
+    }
+    const msgKey = action === 'REJECT' ? 'REJECT' : `APPROVE_${approverLevel}`
     return NextResponse.json({
       success: true,
       data: result,
       error: null,
-      message: action === 'APPROVE' ? 'Đề xuất đã được phê duyệt và đề tài được tạo tự động' : 'Đề xuất đã bị từ chối',
+      message: messages[msgKey],
     })
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Lỗi không xác định'

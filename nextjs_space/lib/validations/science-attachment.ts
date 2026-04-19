@@ -22,7 +22,19 @@ export const ATTACHMENT_ALLOWED_MIME_TYPES = [
   'image/jpeg',
   'image/png',
   'image/webp',
+  'video/mp4',
+  'video/webm',
 ] as const
+
+/** MIME types có thể preview trực tiếp trong trình duyệt */
+export const PREVIEWABLE_MIME_TYPES = new Set([
+  'application/pdf',
+  'image/jpeg',
+  'image/png',
+  'image/webp',
+  'video/mp4',
+  'video/webm',
+])
 
 export const SCIENCE_ENTITY_TYPES = [
   'PROPOSAL',

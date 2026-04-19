@@ -2,8 +2,8 @@
 
 /**
  * M20 — Science Activities: Proposals
- * Hiển thị đề tài DRAFT và REJECTED — PI view.
- * PI có thể nộp (DRAFT→SUBMITTED) hoặc xem lý do từ chối.
+ * Hiển thị đề tài DRAFT/REJECTED (NckhProject) và
+ * đề xuất REVISION_REQUESTED/UNIT_APPROVED/DEPT_APPROVED (NckhProposal).
  */
 
 import { useState, useEffect, useCallback } from 'react';
@@ -13,16 +13,28 @@ import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
-import { Plus, Search, Send, FileEdit, RefreshCw } from 'lucide-react';
+import { Plus, Search, Send, FileEdit, RefreshCw, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 const STATUS_LABELS: Record<string, string> = {
-  DRAFT:    'Nháp',
-  REJECTED: 'Bị từ chối',
+  DRAFT:              'Nháp',
+  REJECTED:           'Bị từ chối',
+  SUBMITTED:          'Đã nộp',
+  REVIEWING:          'Đang xét duyệt',
+  REVISION_REQUESTED: 'Cần chỉnh sửa',
+  UNIT_APPROVED:      'Bộ môn đã duyệt',
+  DEPT_APPROVED:      'Khoa đã duyệt',
+  APPROVED:           'Đã phê duyệt',
 };
 
 const STATUS_STYLE: Record<string, string> = {
-  DRAFT:    'bg-gray-100 text-gray-600',
-  REJECTED: 'bg-red-100 text-red-600',
+  DRAFT:              'bg-gray-100 text-gray-600',
+  REJECTED:           'bg-red-100 text-red-600',
+  SUBMITTED:          'bg-blue-100 text-blue-600',
+  REVIEWING:          'bg-yellow-100 text-yellow-700',
+  REVISION_REQUESTED: 'bg-orange-100 text-orange-700',
+  UNIT_APPROVED:      'bg-teal-100 text-teal-700',
+  DEPT_APPROVED:      'bg-indigo-100 text-indigo-700',
+  APPROVED:           'bg-green-100 text-green-700',
 };
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -46,45 +58,65 @@ interface Project {
   updatedAt: string;
 }
 
+// NckhProposal — đề xuất trong luồng mới
+interface Proposal {
+  id: string;
+  title: string;
+  status: string;
+  category: string;
+  currentLevel: string;
+  revisionNote?: string | null;
+  revisionCount: number;
+  pi: { id: string; fullName: string };
+  unit?: { name: string } | null;
+  updatedAt: string;
+  _type: 'proposal';
+}
+
+type AnyItem = (Project & { _type: 'project' }) | Proposal;
+
 export default function ProposalsPage() {
   const router = useRouter();
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [items, setItems] = useState<AnyItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState<string | null>(null);
   const [keyword, setKeyword] = useState('');
-  const [statusFilter, setStatusFilter] = useState<'DRAFT' | 'REJECTED' | ''>('');
-  const [meta, setMeta] = useState({ total: 0, page: 1, pageSize: 20, totalPages: 0 });
+  const [statusFilter, setStatusFilter] = useState<string>('');
 
-  const fetchProjects = useCallback(async () => {
+  const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const params = new URLSearchParams({ page: '1', pageSize: '20' });
-      // Fetch both DRAFT and REJECTED by requesting each; consolidate client-side
-      // Alternatively use keyword+status filter
-      if (statusFilter) params.set('status', statusFilter);
-      if (keyword) params.set('keyword', keyword);
+      // NckhProject: DRAFT + REJECTED (hệ thống cũ)
+      const [r1, r2, r3, r4] = await Promise.all([
+        fetch(`/api/science/projects?status=DRAFT&pageSize=50`).then(r => r.json()),
+        fetch(`/api/science/projects?status=REJECTED&pageSize=50`).then(r => r.json()),
+        // NckhProposal: REVISION_REQUESTED + UNIT_APPROVED + DEPT_APPROVED (luồng mới)
+        fetch(`/api/science/proposals?status=REVISION_REQUESTED&pageSize=50`).then(r => r.json()),
+        fetch(`/api/science/proposals?status=UNIT_APPROVED&pageSize=50`).then(r => r.json()),
+      ]);
 
-      // We'll make two requests if no status filter selected, then merge
-      if (!statusFilter) {
-        const [r1, r2] = await Promise.all([
-          fetch(`/api/science/projects?status=DRAFT&pageSize=50`).then(r => r.json()),
-          fetch(`/api/science/projects?status=REJECTED&pageSize=50`).then(r => r.json()),
-        ]);
-        const merged = [
-          ...(r1.success ? r1.data : []),
-          ...(r2.success ? r2.data : []),
-        ].filter((p: Project) =>
-          !keyword || p.title.toLowerCase().includes(keyword.toLowerCase()) || p.projectCode.includes(keyword)
+      const projects: AnyItem[] = [
+        ...(r1.success ? r1.data : []),
+        ...(r2.success ? r2.data : []),
+      ].map((p: Project) => ({ ...p, _type: 'project' as const }));
+
+      const proposals: AnyItem[] = [
+        ...(r3.success ? (r3.items ?? []) : []),
+        ...(r4.success ? (r4.items ?? []) : []),
+      ].map((p: Omit<Proposal, '_type'>) => ({ ...p, _type: 'proposal' as const }));
+
+      let merged = [...proposals, ...projects];
+
+      if (keyword) {
+        merged = merged.filter(item =>
+          item.title.toLowerCase().includes(keyword.toLowerCase())
         );
-        setProjects(merged);
-        setMeta({ total: merged.length, page: 1, pageSize: 20, totalPages: 1 });
-      } else {
-        const res = await fetch(`/api/science/projects?${params}`);
-        const data = await res.json();
-        if (!data.success) throw new Error(data.error);
-        setProjects(data.data);
-        setMeta(data.meta ?? { total: 0, page: 1, pageSize: 20, totalPages: 0 });
       }
+      if (statusFilter) {
+        merged = merged.filter(item => item.status === statusFilter);
+      }
+
+      setItems(merged);
     } catch (err: any) {
       toast.error(err.message ?? 'Lỗi tải dữ liệu');
     } finally {
@@ -92,10 +124,10 @@ export default function ProposalsPage() {
     }
   }, [keyword, statusFilter]);
 
-  useEffect(() => { fetchProjects(); }, [fetchProjects]);
+  useEffect(() => { fetchData(); }, [fetchData]);
 
-  const handleSubmit = useCallback(async (projectId: string) => {
-    if (!confirm('Xác nhận nộp đề xuất? Sau khi nộp, đề tài sẽ chuyển sang hàng chờ tiếp nhận.')) return;
+  const handleSubmitProject = useCallback(async (projectId: string) => {
+    if (!confirm('Xác nhận nộp đề xuất? Sau khi nộp sẽ chuyển sang hàng chờ tiếp nhận.')) return;
     setSubmitting(projectId);
     try {
       const res = await fetch(`/api/science/projects/${projectId}/workflow`, {
@@ -106,13 +138,29 @@ export default function ProposalsPage() {
       const data = await res.json();
       if (!data.success) throw new Error(typeof data.error === 'string' ? data.error : 'Nộp thất bại');
       toast.success('Đã nộp đề xuất thành công');
-      await fetchProjects();
+      await fetchData();
     } catch (err: any) {
       toast.error(err.message);
     } finally {
       setSubmitting(null);
     }
-  }, [fetchProjects]);
+  }, [fetchData]);
+
+  const handleResubmitProposal = useCallback(async (proposalId: string) => {
+    if (!confirm('Xác nhận nộp lại đề xuất sau khi chỉnh sửa?')) return;
+    setSubmitting(proposalId);
+    try {
+      const res = await fetch(`/api/science/proposals/${proposalId}/resubmit`, { method: 'POST' });
+      const data = await res.json();
+      if (!data.success) throw new Error(data.error ?? 'Nộp lại thất bại');
+      toast.success(data.message ?? 'Đã nộp lại đề xuất');
+      await fetchData();
+    } catch (err: any) {
+      toast.error(err.message);
+    } finally {
+      setSubmitting(null);
+    }
+  }, [fetchData]);
 
   return (
     <div className="space-y-6">
@@ -121,7 +169,7 @@ export default function ProposalsPage() {
         <div>
           <h1 className="text-xl font-bold text-gray-900">Đề xuất đề tài</h1>
           <p className="text-sm text-gray-500 mt-0.5">
-            Đề tài đang soạn thảo (Nháp) và bị từ chối — chủ nhiệm có thể nộp hoặc chỉnh sửa lại.
+            Đề tài nháp, bị từ chối, cần chỉnh sửa, chờ duyệt cấp tiếp theo.
           </p>
         </div>
         <Link href="/dashboard/science/projects/new">
@@ -145,8 +193,15 @@ export default function ProposalsPage() {
             className="pl-9 h-9 text-sm"
           />
         </div>
-        <div className="flex gap-1">
-          {([['', 'Tất cả'], ['DRAFT', 'Nháp'], ['REJECTED', 'Bị từ chối']] as const).map(([v, l]) => (
+        <div className="flex gap-1 flex-wrap">
+          {([
+            ['', 'Tất cả'],
+            ['DRAFT', 'Nháp'],
+            ['REJECTED', 'Từ chối'],
+            ['REVISION_REQUESTED', 'Cần sửa'],
+            ['UNIT_APPROVED', 'Bộ môn duyệt'],
+            ['DEPT_APPROVED', 'Khoa duyệt'],
+          ] as const).map(([v, l]) => (
             <button
               key={v}
               onClick={() => setStatusFilter(v)}
@@ -174,60 +229,73 @@ export default function ProposalsPage() {
         </div>
       ) : (
         <div className="space-y-2">
-          {projects.map((p) => (
-            <Card key={p.id} className="hover:border-violet-200 transition-colors">
-              <CardContent className="p-4 flex items-center gap-4">
+          {items.map((item) => (
+            <Card
+              key={`${item._type}-${item.id}`}
+              className={`hover:border-violet-200 transition-colors ${
+                item.status === 'REVISION_REQUESTED' ? 'border-orange-300 bg-orange-50/30' : ''
+              }`}
+            >
+              <CardContent className="p-4 flex items-start gap-4">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1 flex-wrap">
-                    <span className="font-mono text-xs text-violet-600 font-semibold">{p.projectCode}</span>
-                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${STATUS_STYLE[p.status]}`}>
-                      {STATUS_LABELS[p.status] ?? p.status}
+                    {item._type === 'project' && (
+                      <span className="font-mono text-xs text-violet-600 font-semibold">{item.projectCode}</span>
+                    )}
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${STATUS_STYLE[item.status] ?? 'bg-gray-100 text-gray-600'}`}>
+                      {STATUS_LABELS[item.status] ?? item.status}
                     </span>
-                    <span className="text-xs text-gray-400">{CATEGORY_LABELS[p.category] ?? p.category}</span>
+                    <span className="text-xs text-gray-400">{CATEGORY_LABELS[item.category] ?? item.category}</span>
+                    {item._type === 'proposal' && item.revisionCount > 0 && (
+                      <span className="text-xs text-orange-500">Sửa lần {item.revisionCount}</span>
+                    )}
                   </div>
-                  <div
-                    className="text-sm font-semibold text-gray-900 truncate cursor-pointer hover:text-violet-700"
-                    onClick={() => router.push(`/dashboard/science/projects/${p.id}`)}
-                  >
-                    {p.title}
-                  </div>
+                  <div className="text-sm font-semibold text-gray-900 truncate">{item.title}</div>
                   <div className="text-xs text-gray-400 mt-0.5">
-                    {p.principalInvestigator.name}
-                    {p.unit && ` · ${p.unit.name}`}
-                    {' · '}Cập nhật: {new Date(p.updatedAt).toLocaleDateString('vi-VN')}
+                    {item._type === 'project' ? item.principalInvestigator.name : item.pi.fullName}
+                    {item.unit && ` · ${item.unit.name}`}
+                    {' · '}Cập nhật: {new Date(item.updatedAt).toLocaleDateString('vi-VN')}
                   </div>
+                  {/* Hiển thị revisionNote nếu là proposal cần sửa */}
+                  {item._type === 'proposal' && item.status === 'REVISION_REQUESTED' && item.revisionNote && (
+                    <div className="mt-2 flex items-start gap-1.5 bg-orange-100 rounded p-2">
+                      <AlertCircle className="h-3.5 w-3.5 text-orange-600 mt-0.5 flex-shrink-0" />
+                      <p className="text-xs text-orange-700">{item.revisionNote}</p>
+                    </div>
+                  )}
+                  {/* Hiển thị approval progress nếu UNIT/DEPT_APPROVED */}
+                  {item._type === 'proposal' && ['UNIT_APPROVED', 'DEPT_APPROVED'].includes(item.status) && (
+                    <div className="mt-2 flex items-center gap-1.5 text-xs text-teal-700">
+                      <CheckCircle2 className="h-3.5 w-3.5" />
+                      <span>
+                        {item.status === 'UNIT_APPROVED' ? 'Đã duyệt cấp Bộ môn — chờ Khoa xét duyệt' : 'Đã duyệt cấp Khoa — chờ Học viện phê duyệt'}
+                      </span>
+                    </div>
+                  )}
                 </div>
                 <div className="flex items-center gap-2 flex-shrink-0">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => router.push(`/dashboard/science/projects/${p.id}`)}
-                    className="gap-1"
-                  >
-                    <FileEdit className="h-3.5 w-3.5" /> Chi tiết
-                  </Button>
-                  {p.status === 'DRAFT' && (
-                    <Button
-                      size="sm"
-                      disabled={submitting === p.id}
-                      onClick={() => handleSubmit(p.id)}
-                      className="gap-1"
-                    >
-                      {submitting === p.id
-                        ? <RefreshCw className="h-3.5 w-3.5 animate-spin" />
-                        : <Send className="h-3.5 w-3.5" />
-                      }
-                      Nộp đề xuất
-                    </Button>
+                  {item._type === 'project' && (
+                    <>
+                      <Button variant="outline" size="sm" onClick={() => router.push(`/dashboard/science/projects/${item.id}`)} className="gap-1">
+                        <FileEdit className="h-3.5 w-3.5" /> Chi tiết
+                      </Button>
+                      {item.status === 'DRAFT' && (
+                        <Button size="sm" disabled={submitting === item.id} onClick={() => handleSubmitProject(item.id)} className="gap-1">
+                          {submitting === item.id ? <RefreshCw className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
+                          Nộp
+                        </Button>
+                      )}
+                    </>
                   )}
-                  {p.status === 'REJECTED' && (
+                  {item._type === 'proposal' && item.status === 'REVISION_REQUESTED' && (
                     <Button
-                      variant="outline"
                       size="sm"
-                      onClick={() => router.push(`/dashboard/science/projects/${p.id}`)}
-                      className="gap-1 border-orange-200 text-orange-700 hover:bg-orange-50"
+                      disabled={submitting === item.id}
+                      onClick={() => handleResubmitProposal(item.id)}
+                      className="gap-1 bg-orange-600 hover:bg-orange-700"
                     >
-                      <RefreshCw className="h-3.5 w-3.5" /> Xem & chỉnh sửa
+                      {submitting === item.id ? <RefreshCw className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
+                      Nộp lại
                     </Button>
                   )}
                 </div>
@@ -237,7 +305,7 @@ export default function ProposalsPage() {
         </div>
       )}
 
-      <div className="text-xs text-gray-400">{meta.total} đề tài</div>
+      <div className="text-xs text-gray-400">{items.length} mục</div>
     </div>
   );
 }

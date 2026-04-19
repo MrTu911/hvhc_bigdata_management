@@ -89,19 +89,25 @@ export async function POST(req: NextRequest) {
   const buffer = Buffer.from(await file.arrayBuffer())
   const ipAddress = req.headers.get('x-forwarded-for') ?? req.headers.get('x-real-ip') ?? undefined
 
-  const result = await attachmentService.uploadAttachment(
-    buffer,
-    file.name,
-    file.type,
-    metaParsed.data,
-    auth.user!.id,
-    ipAddress
-  )
+  try {
+    const result = await attachmentService.uploadAttachment(
+      buffer,
+      file.name,
+      file.type,
+      metaParsed.data,
+      auth.user!.id,
+      ipAddress
+    )
 
-  if (!result.success) {
-    const status = result.error.includes('ClamAV') ? 422 : 400
-    return NextResponse.json({ success: false, error: result.error }, { status })
+    if (!result.success) {
+      const status = result.error.includes('ClamAV') ? 422 : 400
+      return NextResponse.json({ success: false, error: result.error }, { status })
+    }
+
+    return NextResponse.json({ success: true, data: result.data }, { status: 201 })
+  } catch (err) {
+    console.error('[POST /api/science/attachments] Unhandled error:', err)
+    const msg = err instanceof Error ? err.message : String(err)
+    return NextResponse.json({ success: false, error: `Lỗi server khi upload: ${msg}` }, { status: 500 })
   }
-
-  return NextResponse.json({ success: true, data: result.data }, { status: 201 })
 }

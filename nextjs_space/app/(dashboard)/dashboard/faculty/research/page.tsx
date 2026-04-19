@@ -10,8 +10,9 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, FlaskConical, Plus, Edit, Trash2, Search, TrendingUp } from 'lucide-react';
+import { Loader2, FlaskConical, Plus, Edit, Trash2, Search, TrendingUp, ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
 import { useLanguage } from '@/components/providers/language-provider';
+import { toast } from 'sonner';
 
 interface ResearchProject {
   id: string;
@@ -24,9 +25,11 @@ interface ResearchProject {
   startYear?: string;
   endYear?: string;
   status: string;
+  workflowStatus: string;
   description?: string;
   outcomes?: string;
   publications: number;
+  nckhProjectId?: string | null;  // Liên kết với NckhProject chính thức
   createdAt: string;
   updatedAt: string;
 }
@@ -42,6 +45,37 @@ interface FacultyProfile {
   };
 }
 
+interface Pagination {
+  page: number;
+  pageSize: number;
+  total: number;
+  totalPages: number;
+}
+
+const WORKFLOW_STATUS_LABELS: Record<string, string> = {
+  DRAFT: 'Nháp',
+  SUBMITTED: 'Đã nộp',
+  UNDER_REVIEW: 'Đang xét duyệt',
+  PENDING_REVIEW: 'Chờ xét duyệt',
+  APPROVED: 'Đã duyệt',
+  REJECTED: 'Bị từ chối',
+  IN_PROGRESS: 'Đang thực hiện',
+  COMPLETED: 'Hoàn thành',
+  CANCELLED: 'Đã hủy',
+};
+
+const WORKFLOW_STATUS_COLORS: Record<string, string> = {
+  DRAFT: 'bg-gray-100 text-gray-700',
+  SUBMITTED: 'bg-blue-100 text-blue-700',
+  UNDER_REVIEW: 'bg-yellow-100 text-yellow-700',
+  PENDING_REVIEW: 'bg-orange-100 text-orange-700',
+  APPROVED: 'bg-green-100 text-green-700',
+  REJECTED: 'bg-red-100 text-red-700',
+  IN_PROGRESS: 'bg-indigo-100 text-indigo-700',
+  COMPLETED: 'bg-emerald-100 text-emerald-700',
+  CANCELLED: 'bg-slate-100 text-slate-500',
+};
+
 export default function ResearchProjectsPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -50,13 +84,15 @@ export default function ResearchProjectsPage() {
   const [loading, setLoading] = useState(true);
   const [projects, setProjects] = useState<ResearchProject[]>([]);
   const [facultyProfile, setFacultyProfile] = useState<FacultyProfile | null>(null);
+  const [pagination, setPagination] = useState<Pagination>({ page: 1, pageSize: 20, total: 0, totalPages: 1 });
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedLevel, setSelectedLevel] = useState<string>('all');
   const [selectedStatus, setSelectedStatus] = useState<string>('all');
+  const [nckhFilter, setNckhFilter] = useState<'all' | 'official' | 'self'>('all');
 
-  // Dialog states
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<ResearchProject | null>(null);
+  const [submitting, setSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     projectName: '',
     projectCode: '',
@@ -75,35 +111,45 @@ export default function ResearchProjectsPage() {
     if (status === 'unauthenticated') {
       router.push('/login');
     } else if (status === 'authenticated') {
-      loadData();
+      loadProfile();
     }
   }, [status, router]);
 
-  const loadData = async () => {
+  const loadProfile = async () => {
     try {
-      setLoading(true);
-
-      // Get faculty profile
       const profileRes = await fetch('/api/faculty/profile');
-      if (!profileRes.ok) {
-        throw new Error('Failed to load profile');
-      }
+      if (!profileRes.ok) throw new Error('Failed to load profile');
       const profileData = await profileRes.json();
       setFacultyProfile(profileData.profile);
-
-      // Get research projects
       if (profileData.profile?.id) {
-        const projectsRes = await fetch(`/api/faculty/research?facultyId=${profileData.profile.id}`);
-        if (projectsRes.ok) {
-          const projectsData = await projectsRes.json();
-          setProjects(projectsData.projects || []);
-        }
+        await loadProjects(profileData.profile.id, 1);
+      } else {
+        setLoading(false);
       }
-    } catch (err) {
-      console.error('Error loading data:', err);
+    } catch {
+      toast.error('Không thể tải hồ sơ giảng viên');
+      setLoading(false);
+    }
+  };
+
+  const loadProjects = async (facultyId: string, page: number) => {
+    try {
+      setLoading(true);
+      const res = await fetch(`/api/faculty/research?facultyId=${facultyId}&page=${page}&pageSize=20`);
+      if (!res.ok) throw new Error('Failed to load projects');
+      const data = await res.json();
+      setProjects(data.projects || []);
+      if (data.pagination) setPagination(data.pagination);
+    } catch {
+      toast.error('Không thể tải danh sách đề tài');
     } finally {
       setLoading(false);
     }
+  };
+
+  const handlePageChange = (newPage: number) => {
+    if (!facultyProfile?.id) return;
+    loadProjects(facultyProfile.id, newPage);
   };
 
   const handleOpenDialog = (project?: ResearchProject) => {
@@ -150,14 +196,14 @@ export default function ResearchProjectsPage() {
     e.preventDefault();
 
     if (!facultyProfile?.id) {
-      alert('Không tìm thấy hồ sơ giảng viên');
+      toast.error('Không tìm thấy hồ sơ giảng viên');
       return;
     }
 
+    setSubmitting(true);
     try {
       const url = '/api/faculty/research';
       const method = editingProject ? 'PUT' : 'POST';
-
       const payload = editingProject
         ? { id: editingProject.id, ...formData }
         : { facultyId: facultyProfile.id, ...formData };
@@ -169,14 +215,17 @@ export default function ResearchProjectsPage() {
       });
 
       if (!res.ok) {
-        throw new Error('Failed to save project');
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || 'Failed to save project');
       }
 
+      toast.success(editingProject ? 'Cập nhật đề tài thành công' : 'Thêm đề tài thành công');
       handleCloseDialog();
-      loadData();
-    } catch (err) {
-      console.error('Error saving project:', err);
-      alert('Lỗi khi lưu đề tài');
+      await loadProjects(facultyProfile.id, pagination.page);
+    } catch (err: any) {
+      toast.error(err.message || 'Lỗi khi lưu đề tài');
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -186,30 +235,31 @@ export default function ResearchProjectsPage() {
     try {
       const res = await fetch(`/api/faculty/research?id=${id}`, { method: 'DELETE' });
       if (!res.ok) {
-        throw new Error('Failed to delete project');
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || 'Failed to delete project');
       }
-      loadData();
-    } catch (err) {
-      console.error('Error deleting project:', err);
-      alert('Lỗi khi xóa đề tài');
+      toast.success('Đã xóa đề tài');
+      if (facultyProfile?.id) await loadProjects(facultyProfile.id, pagination.page);
+    } catch (err: any) {
+      toast.error(err.message || 'Lỗi khi xóa đề tài');
     }
   };
 
-  // Filter projects
   const filteredProjects = projects.filter(project => {
     const matchSearch = project.projectName.toLowerCase().includes(searchTerm.toLowerCase()) ||
                        project.projectCode?.toLowerCase().includes(searchTerm.toLowerCase()) ||
                        project.field?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchLevel = selectedLevel === 'all' || project.level === selectedLevel;
     const matchStatus = selectedStatus === 'all' || project.status === selectedStatus;
-    return matchSearch && matchLevel && matchStatus;
+    const matchNckh = nckhFilter === 'all'
+      || (nckhFilter === 'official' && !!project.nckhProjectId)
+      || (nckhFilter === 'self' && !project.nckhProjectId);
+    return matchSearch && matchLevel && matchStatus && matchNckh;
   });
 
-  // Get unique levels and statuses
   const levels = Array.from(new Set(projects.map(p => p.level).filter(Boolean)));
   const statuses = Array.from(new Set(projects.map(p => p.status).filter(Boolean)));
 
-  // Calculate stats
   const totalFunding = projects.reduce((sum, p) => sum + p.fundingAmount, 0);
   const totalPublications = projects.reduce((sum, p) => sum + p.publications, 0);
 
@@ -240,7 +290,7 @@ export default function ResearchProjectsPage() {
             Quản lý Đề tài Nghiên cứu
           </h1>
           <p className="text-muted-foreground mt-1">
-            {facultyProfile?.user?.name} - Tổng số: {projects.length} đề tài
+            {facultyProfile?.user?.name} — Tổng số: {pagination.total} đề tài
           </p>
         </div>
         <Button onClick={() => handleOpenDialog()} className="flex items-center gap-2">
@@ -253,7 +303,7 @@ export default function ResearchProjectsPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>
           <CardHeader className="pb-3">
-            <CardDescription>Tổng kinh phí</CardDescription>
+            <CardDescription>Tổng kinh phí (trang này)</CardDescription>
             <CardTitle className="text-2xl">
               {totalFunding.toLocaleString('vi-VN')} VNĐ
             </CardTitle>
@@ -261,7 +311,7 @@ export default function ResearchProjectsPage() {
         </Card>
         <Card>
           <CardHeader className="pb-3">
-            <CardDescription>Công bố khoa học</CardDescription>
+            <CardDescription>Công bố khoa học (trang này)</CardDescription>
             <CardTitle className="text-2xl">{totalPublications}</CardTitle>
           </CardHeader>
         </Card>
@@ -316,12 +366,26 @@ export default function ResearchProjectsPage() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Tất cả trạng thái</SelectItem>
-                  {statuses.map(status => (
-                    <SelectItem key={status} value={status!}>{status}</SelectItem>
+                  {statuses.map(s => (
+                    <SelectItem key={s} value={s!}>{s}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
+          </div>
+          {/* Filter nguồn gốc */}
+          <div className="flex gap-2 pt-2 border-t">
+            {([['all', 'Tất cả'], ['official', 'NCKH chính thức'], ['self', 'Tự khai']] as const).map(([v, l]) => (
+              <button
+                key={v}
+                onClick={() => setNckhFilter(v)}
+                className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
+                  nckhFilter === v ? 'bg-violet-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }`}
+              >
+                {l}
+              </button>
+            ))}
           </div>
         </CardContent>
       </Card>
@@ -364,6 +428,22 @@ export default function ResearchProjectsPage() {
                   <Badge className={getStatusColor(project.status)}>
                     {project.status}
                   </Badge>
+                  {project.workflowStatus && project.workflowStatus !== 'DRAFT' && (
+                    <Badge className={WORKFLOW_STATUS_COLORS[project.workflowStatus] ?? 'bg-gray-100 text-gray-700'}>
+                      {WORKFLOW_STATUS_LABELS[project.workflowStatus] ?? project.workflowStatus}
+                    </Badge>
+                  )}
+                  {project.nckhProjectId && (
+                    <a
+                      href={`/dashboard/science/projects/${project.nckhProjectId}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-violet-100 text-violet-700 hover:bg-violet-200 transition-colors"
+                    >
+                      <ExternalLink className="h-3 w-3" />
+                      NCKH chính thức
+                    </a>
+                  )}
                   {project.level && <Badge variant="outline">{project.level}</Badge>}
                   {project.field && <Badge variant="secondary">{project.field}</Badge>}
                 </div>
@@ -405,12 +485,41 @@ export default function ResearchProjectsPage() {
           <CardContent className="py-12 text-center">
             <FlaskConical className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
             <p className="text-muted-foreground">
-              {projects.length === 0
+              {pagination.total === 0
                 ? 'Chưa có đề tài nghiên cứu nào. Nhấn "Thêm đề tài" để bắt đầu.'
                 : 'Không tìm thấy đề tài phù hợp với bộ lọc.'}
             </p>
           </CardContent>
         </Card>
+      )}
+
+      {/* Pagination */}
+      {pagination.totalPages > 1 && (
+        <div className="flex items-center justify-between">
+          <p className="text-sm text-muted-foreground">
+            Trang {pagination.page}/{pagination.totalPages} — {pagination.total} đề tài
+          </p>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={pagination.page <= 1}
+              onClick={() => handlePageChange(pagination.page - 1)}
+            >
+              <ChevronLeft className="h-4 w-4" />
+              Trước
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={pagination.page >= pagination.totalPages}
+              onClick={() => handlePageChange(pagination.page + 1)}
+            >
+              Tiếp
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
       )}
 
       {/* Add/Edit Dialog */}
@@ -560,10 +669,11 @@ export default function ResearchProjectsPage() {
             </div>
 
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={handleCloseDialog}>
+              <Button type="button" variant="outline" onClick={handleCloseDialog} disabled={submitting}>
                 Hủy
               </Button>
-              <Button type="submit">
+              <Button type="submit" disabled={submitting}>
+                {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 {editingProject ? 'Cập nhật' : 'Thêm mới'}
               </Button>
             </DialogFooter>

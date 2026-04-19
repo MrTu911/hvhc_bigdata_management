@@ -936,12 +936,19 @@ model ResearchProject {
   submittedAt    DateTime?
   submittedBy    String?
   workflowStatus ResearchWorkflowStatus @default(DRAFT)
+  isDeleted      Boolean                @default(false)
+  deletedAt      DateTime?
+  deletedBy      String?
+  // Link optional tới NckhProject chính thức (set khi đề xuất NCKH được duyệt)
+  nckhProjectId  String?                @unique
+  nckhProject    NckhProject?           @relation("ResearchProjectNckh", fields: [nckhProjectId], references: [id])
   faculty        FacultyProfile         @relation(fields: [facultyId], references: [id], onDelete: Cascade)
 
   @@index([facultyId])
   @@index([status])
   @@index([level])
   @@index([workflowStatus])
+  @@index([isDeleted])
 }
 
 model HocVien {
@@ -4527,6 +4534,8 @@ model NckhProject {
   // Phase 8: Chat + Collaboration
   chatRoom                NckhChatRoom?              @relation("NckhProjectChat")
   collaborations          NckhCollaboration[]        @relation("NckhProjectCollabs")
+  // M07 back-relation: M07 ResearchProject tự khai của giảng viên liên kết tới đây
+  facultyResearchProject  ResearchProject?           @relation("ResearchProjectNckh")
 
   @@index([principalInvestigatorId])
   @@index([submittedBy])
@@ -7159,6 +7168,8 @@ enum NckhProposalStatus {
   DRAFT
   SUBMITTED
   REVIEWING
+  UNIT_APPROVED
+  DEPT_APPROVED
   APPROVED
   REJECTED
   REVISION_REQUESTED
@@ -7288,11 +7299,27 @@ model NckhProposal {
   status          NckhProposalStatus @default(DRAFT)
   submittedAt     DateTime?
   reviewDeadline  DateTime?
+
+  // Multi-level approval
+  currentLevel    String             @default("UNIT") // "UNIT" | "DEPT" | "ACADEMY"
+  unitApprovedAt  DateTime?
+  unitApprovedById String?
+  unitApprovedBy  User?              @relation("NckhProposalUnitApprover", fields: [unitApprovedById], references: [id])
+  deptApprovedAt  DateTime?
+  deptApprovedById String?
+  deptApprovedBy  User?              @relation("NckhProposalDeptApprover", fields: [deptApprovedById], references: [id])
+
   approvedAt      DateTime?
   approvedById    String?
   approvedBy      User?              @relation("NckhProposalApprover", fields: [approvedById], references: [id])
   rejectedAt      DateTime?
   rejectReason    String?
+
+  // REVISION flow
+  revisionNote    String?
+  revisionCount   Int                @default(0)
+  revisedAt       DateTime?
+
   projectId       String?            @unique // set khi approve → NckhProject được tạo
   project         NckhProject?       @relation(fields: [projectId], references: [id])
   createdAt       DateTime           @default(now())
@@ -7302,6 +7329,7 @@ model NckhProposal {
   @@index([piId])
   @@index([unitId])
   @@index([status])
+  @@index([currentLevel])
   @@index([submittedAt])
   @@map("nckh_proposals")
 }

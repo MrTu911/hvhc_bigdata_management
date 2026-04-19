@@ -33,7 +33,9 @@ import {
   Link2,
   Star,
   Quote,
+  Paperclip,
 } from 'lucide-react';
+import { ScienceAttachmentPanel } from '@/components/science/ScienceAttachmentPanel';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -454,6 +456,23 @@ export default function PublicationDetailPage() {
           )}
         </div>
       </div>
+
+      {/* Tài liệu minh chứng */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-sm flex items-center gap-2">
+            <Paperclip className="h-4 w-4" /> Tài liệu minh chứng
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ScienceAttachmentPanel
+            entityType="PUBLICATION"
+            entityId={id}
+            allowUpload={false}
+            allowDelete={false}
+          />
+        </CardContent>
+      </Card>
 
       {/* Delete confirm */}
       <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
