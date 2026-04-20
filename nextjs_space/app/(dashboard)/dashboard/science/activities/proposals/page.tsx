@@ -101,8 +101,8 @@ export default function ProposalsPage() {
       ].map((p: Project) => ({ ...p, _type: 'project' as const }));
 
       const proposals: AnyItem[] = [
-        ...(r3.success ? (r3.items ?? []) : []),
-        ...(r4.success ? (r4.items ?? []) : []),
+        ...(r3.success ? (r3.data?.items ?? []) : []),
+        ...(r4.success ? (r4.data?.items ?? []) : []),
       ].map((p: Omit<Proposal, '_type'>) => ({ ...p, _type: 'proposal' as const }));
 
       let merged = [...proposals, ...projects];
@@ -222,7 +222,7 @@ export default function ProposalsPage() {
         <div className="flex justify-center py-12">
           <div className="animate-spin h-7 w-7 border-2 border-violet-500 border-t-transparent rounded-full" />
         </div>
-      ) : projects.length === 0 ? (
+      ) : items.length === 0 ? (
         <div className="py-16 text-center text-gray-400">
           <FileEdit className="h-10 w-10 mx-auto mb-3 opacity-40" />
           <p className="text-sm">Không có đề xuất nào. Hãy tạo đề xuất mới!</p>

@@ -193,6 +193,7 @@ export const RESEARCH = {
   PUB_DELETE: 'DELETE_RESEARCH_PUB', // Xóa công bố
   PUB_IMPORT: 'IMPORT_RESEARCH_PUB', // Import BibTeX/Excel
   PUB_EXPORT: 'EXPORT_RESEARCH_PUB', // Export danh mục
+  PUB_REVIEW: 'REVIEW_RESEARCH_PUB', // Phòng KH duyệt/từ chối công bố cá nhân
   // UC-47: Hồ sơ nhà khoa học
   SCIENTIST_VIEW:   'VIEW_RESEARCH_SCIENTIST',   // Xem hồ sơ nhà khoa học
   SCIENTIST_UPDATE: 'UPDATE_RESEARCH_SCIENTIST', // Cập nhật hồ sơ nhà khoa học
@@ -596,6 +597,32 @@ export const SCIENCE = {
   REPORT_EXPORT:     'EXPORT_SCIENCE_REPORT',        // Xuất báo cáo BQP
 } as const;
 
+// ===== MODULE: PERSONAL (Tài khoản cá nhân — SELF scope mặc định) =====
+export const PERSONAL = {
+  // Tầng 0: Mọi người dùng
+  MANAGE_PROFILE:       'MANAGE_MY_PROFILE',        // Xem/cập nhật hồ sơ cá nhân
+  VIEW_NOTIFICATIONS:   'VIEW_MY_NOTIFICATIONS',    // Xem thông báo cá nhân
+  VIEW_DASHBOARD:       'VIEW_MY_DASHBOARD',        // Xem trang tổng quan cá nhân
+  VIEW_TASKS:           'VIEW_MY_TASKS',            // Xem công việc đang thực hiện
+  MANAGE_SECURITY:      'MANAGE_MY_SECURITY',       // Quản lý bảo mật tài khoản
+  VIEW_CAREER_HISTORY:  'VIEW_MY_CAREER_HISTORY',   // Xem quá trình công tác
+  REQUEST_INFO_UPDATE:  'REQUEST_MY_INFO_UPDATE',   // Gửi yêu cầu cập nhật thông tin
+  VIEW_POLICY:          'VIEW_MY_POLICY',           // Xem chính sách/chế độ của tôi
+  VIEW_INSURANCE:       'VIEW_MY_INSURANCE',        // Xem thông tin bảo hiểm
+  VIEW_AWARD:           'VIEW_MY_AWARD',            // Xem khen thưởng/kỷ luật
+  // Tầng 1: Giảng viên / Nghiên cứu viên
+  VIEW_RESEARCH:        'VIEW_MY_RESEARCH',         // Xem đề tài NCKH của tôi
+  VIEW_PUBLICATIONS:    'VIEW_MY_PUBLICATIONS',     // Xem công bố khoa học của tôi
+  SUBMIT_PUBLICATION:   'SUBMIT_MY_PUBLICATION',    // Tự đăng + nộp công bố để phòng KH duyệt
+  MANAGE_SCIENTIFIC_CV: 'MANAGE_MY_SCIENTIFIC_CV',  // Quản lý lý lịch khoa học
+  VIEW_GRADE_SUBMISSIONS: 'VIEW_MY_GRADE_SUBMISSIONS', // Xem lịch sử điểm đã trình duyệt
+  // Tầng 2: Học viên / Sinh viên
+  VIEW_GRADE:           'VIEW_MY_GRADE',            // Xem điểm học tập của tôi
+  VIEW_CONDUCT:         'VIEW_MY_CONDUCT',          // Xem điểm rèn luyện của tôi
+  VIEW_SCHEDULE:        'VIEW_MY_SCHEDULE',         // Xem thời khóa biểu
+  VIEW_GRADUATION:      'VIEW_MY_GRADUATION',       // Xem trạng thái xét tốt nghiệp
+} as const;
+
 // ===== ALL FUNCTION CODES (for seeding) =====
 export const ALL_FUNCTION_CODES = {
   ...PERSONNEL,
@@ -630,6 +657,7 @@ export const ALL_FUNCTION_CODES = {
   ...DIGITAL_DOCS,
   ...TEMPLATES,
   ...SCIENCE,
+  ...PERSONAL,
 } as const;
 
 // ===== FUNCTION_CODES (grouped by module) =====
@@ -667,6 +695,7 @@ export const FUNCTION_CODES = {
   DIGITAL_DOCS,
   TEMPLATES,
   SCIENCE,
+  PERSONAL,
 } as const;
 
 // Type for all function codes

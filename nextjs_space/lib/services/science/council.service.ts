@@ -126,6 +126,35 @@ export const councilService = {
   },
 
   async createCouncil(input: CouncilCreateInput, userId: string, ipAddress?: string) {
+    // ─── Guard: validate trạng thái đề tài phù hợp với loại hội đồng ─────
+    const project = await prisma.nckhProject.findUnique({
+      where: { id: input.projectId },
+      select: { status: true, projectCode: true },
+    })
+
+    if (!project) {
+      return { success: false as const, error: 'Đề tài không tồn tại' }
+    }
+
+    const ALLOWED_STATUS: Record<string, string[]> = {
+      REVIEW:     ['SUBMITTED', 'UNDER_REVIEW'],
+      ACCEPTANCE: ['IN_PROGRESS', 'PAUSED', 'COMPLETED'],
+      FINAL:      ['COMPLETED'],
+    }
+
+    const allowed = ALLOWED_STATUS[input.type]
+    if (allowed && !allowed.includes(project.status)) {
+      const typeLabel: Record<string, string> = {
+        REVIEW:     'Thẩm định đề cương',
+        ACCEPTANCE: 'Nghiệm thu kết quả',
+        FINAL:      'Kết luận cuối cùng',
+      }
+      return {
+        success: false as const,
+        error: `Không thể lập hội đồng "${typeLabel[input.type] ?? input.type}" cho đề tài ${project.projectCode} đang ở trạng thái "${project.status}". Trạng thái hợp lệ: ${allowed.join(', ')}.`,
+      }
+    }
+
     // Chairman và Secretary phải nằm trong danh sách members (hoặc tự động thêm)
     const memberIds = new Set(input.members.map((m) => m.userId))
     if (!memberIds.has(input.chairmanId)) {

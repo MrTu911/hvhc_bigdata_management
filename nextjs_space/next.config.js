@@ -10,6 +10,8 @@ const ContentSecurityPolicy = `
   img-src 'self' blob: data:;
   font-src 'self';
   connect-src 'self';
+  frame-src 'self' blob:;
+  object-src 'self' blob:;
   frame-ancestors 'none';
 `.replace(/\n/g, ' ');
 

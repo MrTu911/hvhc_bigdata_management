@@ -11,8 +11,8 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { requireFunction, sessionToAuthUser } from '@/lib/rbac/middleware';
-import { WORKFLOW } from '@/lib/rbac/function-codes';
+import { requireAnyFunction, sessionToAuthUser } from '@/lib/rbac/middleware';
+import { WORKFLOW, PERSONAL } from '@/lib/rbac/function-codes';
 import { WorkflowDashboardService } from '@/lib/services/workflow/workflow-dashboard.service';
 import { WorkflowNotificationService } from '@/lib/services/workflow/workflow-notification.service';
 import { getServerSession } from 'next-auth';
@@ -21,7 +21,8 @@ import { authOptions } from '@/lib/auth';
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
-  const auth = await requireFunction(request, WORKFLOW.VIEW);
+  // Cho phép: quản lý có WORKFLOW.VIEW hoặc mọi người dùng có VIEW_MY_TASKS
+  const auth = await requireAnyFunction(request, [WORKFLOW.VIEW, PERSONAL.VIEW_TASKS]);
   if (!auth.allowed) return auth.response!;
 
   const { searchParams } = new URL(request.url);

@@ -17,7 +17,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import {
   Search, PlayCircle, CheckCircle2, PauseCircle, RefreshCw,
-  FileText, Milestone, Clock, Activity,
+  FileText, Milestone, Clock, Activity, GavelIcon,
 } from 'lucide-react';
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -218,6 +218,7 @@ export default function ExecutionPage() {
                     onCommentChange={setComment}
                     onConfirm={handleAction}
                     onCancel={() => { setAction(null); setComment(''); }}
+                    onCouncil={() => router.push(`/dashboard/science/activities/councils/new?projectId=${p.id}&type=ACCEPTANCE`)}
                     vnd={vnd}
                     daysLeft={daysLeft}
                     availableActions={['pause', 'complete']}
@@ -244,6 +245,7 @@ export default function ExecutionPage() {
 function ProjectRow({
   project, action, comment, processing,
   onView, onAction, onCommentChange, onConfirm, onCancel,
+  onCouncil,
   vnd, daysLeft, availableActions,
 }: {
   project: Project;
@@ -255,6 +257,7 @@ function ProjectRow({
   onCommentChange: (v: string) => void;
   onConfirm: () => void;
   onCancel: () => void;
+  onCouncil?: () => void;
   vnd: (n?: number | null) => string | null;
   daysLeft: (d?: string) => number | null;
   availableActions: ActionType[];
@@ -309,10 +312,20 @@ function ProjectRow({
               )}
             </div>
           </div>
-          <div className="flex items-center gap-2 flex-shrink-0">
+          <div className="flex items-center gap-2 flex-shrink-0 flex-wrap justify-end">
             <Button variant="outline" size="sm" onClick={onView} className="gap-1">
               <FileText className="h-3.5 w-3.5" /> Xem
             </Button>
+            {onCouncil && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={onCouncil}
+                className="gap-1 border-violet-300 text-violet-700 hover:bg-violet-50"
+              >
+                <GavelIcon className="h-3.5 w-3.5" /> Lập HĐ nghiệm thu
+              </Button>
+            )}
             {availableActions.includes('activate') && (
               <Button size="sm" onClick={() => onAction('activate')} className="gap-1 bg-violet-600 hover:bg-violet-700">
                 <PlayCircle className="h-3.5 w-3.5" /> Kích hoạt

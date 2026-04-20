@@ -9,7 +9,7 @@ function scope(auth: Awaited<ReturnType<typeof requireFunction>>): FunctionScope
 }
 
 // GET /api/research/publications
-// Filter: keyword, pubType, year, unitId, projectId, ranking, isISI, isScopus, page, limit
+// Filter: keyword, pubType, status, year, unitId, projectId, ranking, isISI, isScopus, page, limit
 export async function GET(req: NextRequest) {
   const auth = await requireFunction(req, RESEARCH.PUB_VIEW)
   if (!auth.allowed) return auth.response!
@@ -18,6 +18,7 @@ export async function GET(req: NextRequest) {
   const params = {
     keyword: searchParams.get('keyword') ?? undefined,
     pubType: searchParams.get('pubType') ?? undefined,
+    status: searchParams.get('status') ?? undefined,
     year: searchParams.get('year') ? Number(searchParams.get('year')) : undefined,
     unitId: searchParams.get('unitId') ?? undefined,
     projectId: searchParams.get('projectId') ?? undefined,

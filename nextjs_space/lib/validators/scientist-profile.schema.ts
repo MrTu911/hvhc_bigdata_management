@@ -7,9 +7,9 @@ import { z } from 'zod'
 
 export const scientistProfileUpdateSchema = z.object({
   // Thông tin học thuật (tự nhập hoặc sync từ FacultyProfile)
-  academicRank:       z.string().max(100).optional(),
-  degree:             z.string().max(100).optional(),
-  specialization:     z.string().max(200).optional(),
+  academicRank:       z.string().max(100).nullable().optional(),
+  degree:             z.string().max(100).nullable().optional(),
+  specialization:     z.string().max(200).nullable().optional(),
 
   // Lĩnh vực và từ khóa
   researchFields:     z.array(z.string().max(100)).optional(),

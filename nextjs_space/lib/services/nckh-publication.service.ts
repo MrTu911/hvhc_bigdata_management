@@ -35,6 +35,7 @@ class NckhPublicationServiceClass extends BaseService {
     params: {
       keyword?: string
       pubType?: string
+      status?: string
       year?: number
       unitId?: string
       projectId?: string
@@ -51,6 +52,7 @@ class NckhPublicationServiceClass extends BaseService {
       const result = await nckhPublicationRepo.findMany({
         ...params,
         pubType: params.pubType as NckhPublicationFilter['pubType'],
+        status: params.status as NckhPublicationFilter['status'],
         ...scopeFilter,
         page: params.page ?? 1,
         limit: params.limit ?? 20,

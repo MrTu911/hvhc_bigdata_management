@@ -18,7 +18,7 @@ import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeft, ArrowRight, Check, Search, Plus, X, Users, CalendarDays } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, Search, X, Users, CalendarDays } from 'lucide-react';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -50,6 +50,14 @@ interface ScientistItem {
   degree?: string;
   primaryField?: string;
   user: { id: string; name: string; rank?: string | null; academicTitle?: string | null; unitRelation?: { name: string } | null };
+}
+
+interface UserItem {
+  id: string;
+  name: string;
+  rank?: string | null;
+  department?: string | null;
+  unit?: string | null;
 }
 
 interface SelectedMember {
@@ -94,11 +102,13 @@ function Step1({
   projectId, setProjectId,
   councilType, setCouncilType,
   meetingDate, setMeetingDate,
+  prefilledProjectTitle,
   onNext,
 }: {
   projectId: string; setProjectId: (v: string) => void;
   councilType: string; setCouncilType: (v: string) => void;
   meetingDate: string; setMeetingDate: (v: string) => void;
+  prefilledProjectTitle?: string;
   onNext: () => void;
 }) {
   const [projects, setProjects] = useState<ProjectItem[]>([]);
@@ -129,6 +139,16 @@ function Step1({
       {/* Loại HĐ */}
       <div className="space-y-2">
         <label className="text-sm font-medium text-gray-700">Loại hội đồng *</label>
+        {councilType === 'REVIEW' && (
+          <p className="text-xs text-violet-600 bg-violet-50 rounded px-2 py-1">
+            Hội đồng thẩm định đề cương — dành cho đề tài đang trong giai đoạn xét duyệt.
+          </p>
+        )}
+        {councilType === 'ACCEPTANCE' && (
+          <p className="text-xs text-emerald-600 bg-emerald-50 rounded px-2 py-1">
+            Hội đồng nghiệm thu kết quả — dành cho đề tài đang thực hiện hoặc hoàn thành.
+          </p>
+        )}
         <div className="grid grid-cols-3 gap-2">
           {COUNCIL_TYPES.map((t) => (
             <button
@@ -163,6 +183,25 @@ function Step1({
       {/* Chọn đề tài */}
       <div className="space-y-2">
         <label className="text-sm font-medium text-gray-700">Đề tài *</label>
+
+        {/* Hiển thị đề tài đã được pre-fill từ URL */}
+        {prefilledProjectTitle && projectId && (
+          <div className="flex items-center gap-2 px-3 py-2 bg-violet-50 border border-violet-200 rounded-lg text-sm">
+            <span className="text-violet-500">✓</span>
+            <span className="font-medium text-violet-800 flex-1 truncate">{prefilledProjectTitle}</span>
+            <button
+              type="button"
+              onClick={() => setProjectId('')}
+              className="text-violet-400 hover:text-violet-700 text-xs underline shrink-0"
+            >
+              Đổi đề tài
+            </button>
+          </div>
+        )}
+
+        {/* Ẩn search khi đã pre-fill và chưa muốn đổi */}
+        {(!prefilledProjectTitle || !projectId) && (
+        <>
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
           <Input
@@ -194,10 +233,12 @@ function Step1({
             </button>
           ))}
         </div>
-        {projectId && (
+        {projectId && !prefilledProjectTitle && (
           <p className="text-xs text-emerald-600">
             ✓ Đã chọn: {projects.find(p => p.id === projectId)?.title}
           </p>
+        )}
+        </>
         )}
       </div>
 
@@ -214,10 +255,68 @@ function Step1({
   );
 }
 
+// ─── Slot badge ───────────────────────────────────────────────────────────────
+
+function SlotBadge({ label, filled, required, count, minCount }: {
+  label: string; filled: boolean; required: boolean; count: number; minCount?: number;
+}) {
+  const ok = filled || (!required && (minCount === undefined || count >= minCount));
+  return (
+    <span className={`inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full border font-medium ${
+      ok ? 'bg-emerald-50 border-emerald-300 text-emerald-700'
+         : 'bg-amber-50 border-amber-300 text-amber-700'
+    }`}>
+      {ok ? '✓' : '○'} {label}{count > 1 || minCount ? ` (${count})` : ''}
+    </span>
+  );
+}
+
+// ─── Member slot card ─────────────────────────────────────────────────────────
+
+function MemberSlotCard({ label, color, member, onRemove, initials }: {
+  label: string;
+  color: 'violet' | 'blue';
+  member?: SelectedMember;
+  onRemove: (id: string) => void;
+  initials: (name: string) => string;
+}) {
+  const colorMap = {
+    violet: { bg: 'bg-violet-100', text: 'text-violet-700', badge: 'bg-violet-100 text-violet-700', header: 'bg-violet-50 border-violet-200', empty: 'text-violet-300' },
+    blue:   { bg: 'bg-blue-100',   text: 'text-blue-700',   badge: 'bg-blue-100 text-blue-700',     header: 'bg-blue-50 border-blue-200',     empty: 'text-blue-300' },
+  }[color];
+
+  return (
+    <div className={`border rounded-lg overflow-hidden ${member ? colorMap.header : 'border-gray-200'}`}>
+      <div className={`px-3 py-1.5 flex items-center justify-between border-b ${member ? colorMap.header : 'bg-gray-50 border-gray-200'}`}>
+        <span className={`text-xs font-semibold ${member ? colorMap.text : 'text-gray-500'}`}>{label}</span>
+        {member
+          ? <span className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${colorMap.badge}`}>Đã chọn ✓</span>
+          : <span className="text-xs text-gray-400">Bắt buộc</span>
+        }
+      </div>
+      {member ? (
+        <div className="flex items-center gap-2.5 px-3 py-2.5">
+          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${colorMap.bg} ${colorMap.text}`}>
+            {initials(member.userName)}
+          </div>
+          <span className="flex-1 text-sm font-medium text-gray-800 truncate">{member.userName}</span>
+          <button type="button" onClick={() => onRemove(member.userId)} className="text-gray-300 hover:text-red-400 transition-colors" title="Xóa">
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+      ) : (
+        <div className="px-3 py-3 text-center text-xs text-gray-400">
+          Chọn từ danh sách bên trái
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── Step 2: Thành viên ───────────────────────────────────────────────────────
 
 function Step2({
-  projectId,
+  projectId: _projectId,
   members,
   setMembers,
   onBack,
@@ -229,167 +328,198 @@ function Step2({
   onBack: () => void;
   onNext: () => void;
 }) {
-  const [scientists, setScientists] = useState<ScientistItem[]>([]);
+  const [allUsers,   setAllUsers]   = useState<UserItem[]>([]);
   const [keyword,    setKeyword]    = useState('');
   const [loading,    setLoading]    = useState(false);
-  const [addingRole, setAddingRole] = useState<SelectedMember['role']>('REVIEWER');
 
-  const searchScientists = useCallback(async () => {
+  // Tải toàn bộ danh sách nhân sự một lần duy nhất
+  useEffect(() => {
     setLoading(true);
-    try {
-      const params = new URLSearchParams({ pageSize: '100', page: '1' });
-      if (keyword) params.set('keyword', keyword);
-      const res = await fetch(`/api/science/scientists?${params}`);
-      const json = await res.json();
-      setScientists(json.data ?? []);
-    } catch {
-      toast.error('Lỗi tải danh sách nhà khoa học');
-    } finally {
-      setLoading(false);
-    }
-  }, [keyword]);
+    fetch('/api/users?limit=500&page=1')
+      .then((r) => r.json())
+      .then((json) => {
+        if (json.success) setAllUsers(json.data ?? []);
+        else toast.error('Không tải được danh sách nhân sự');
+      })
+      .catch(() => toast.error('Lỗi kết nối khi tải nhân sự'))
+      .finally(() => setLoading(false));
+  }, []);
 
-  useEffect(() => { searchScientists(); }, [searchScientists]);
+  // Lọc phía client theo keyword
+  const filtered = keyword.trim()
+    ? allUsers.filter((u) => {
+        const q = keyword.toLowerCase();
+        return (
+          u.name.toLowerCase().includes(q) ||
+          (u.rank ?? '').toLowerCase().includes(q) ||
+          (u.unit ?? '').toLowerCase().includes(q) ||
+          (u.department ?? '').toLowerCase().includes(q)
+        );
+      })
+    : allUsers;
 
-  const addMember = (scientist: ScientistItem) => {
-    const userId = scientist.user.id;
-    // Một user chỉ được ở một vai trò
-    if (members.some((m) => m.userId === userId)) {
+  const addMember = (user: UserItem, role: SelectedMember['role']) => {
+    if (members.some((m) => m.userId === user.id)) {
       toast.error('Thành viên này đã được chọn');
       return;
     }
-    setMembers([...members, {
-      userId,
-      userName: scientist.user.name,
-      role: addingRole,
-    }]);
+    if ((role === 'CHAIRMAN' || role === 'SECRETARY') && members.some((m) => m.role === role)) {
+      toast.error(`Đã có ${role === 'CHAIRMAN' ? 'Chủ tịch' : 'Thư ký'} — xóa người cũ trước`);
+      return;
+    }
+    setMembers([...members, { userId: user.id, userName: user.name, role }]);
   };
 
-  const removeMember = (userId: string) => {
-    setMembers(members.filter((m) => m.userId !== userId));
-  };
+  const removeMember = (userId: string) => setMembers(members.filter((m) => m.userId !== userId));
 
-  const changeRole = (userId: string, role: SelectedMember['role']) => {
-    setMembers(members.map((m) => m.userId === userId ? { ...m, role } : m));
-  };
-
-  const hasChairman  = members.some((m) => m.role === 'CHAIRMAN');
-  const hasSecretary = members.some((m) => m.role === 'SECRETARY');
+  const chairman  = members.find((m) => m.role === 'CHAIRMAN');
+  const secretary = members.find((m) => m.role === 'SECRETARY');
+  const reviewers = members.filter((m) => m.role === 'REVIEWER' || m.role === 'EXPERT');
+  const hasChairman  = !!chairman;
+  const hasSecretary = !!secretary;
   const canNext = hasChairman && hasSecretary && members.length >= 3;
 
+  const initials = (name: string) =>
+    name.trim().split(' ').map((w) => w[0]).slice(-2).join('').toUpperCase();
+
+  const statusMsg = !hasChairman ? '⚠ Chưa có Chủ tịch'
+    : !hasSecretary ? '⚠ Chưa có Thư ký'
+    : members.length < 3 ? `⚠ Cần ít nhất 3 thành viên (hiện có ${members.length})`
+    : '';
+
   return (
-    <div className="space-y-5">
-      {/* Selected members */}
-      <div className="space-y-2">
-        <div className="flex items-center justify-between">
-          <label className="text-sm font-medium text-gray-700 flex items-center gap-1.5">
-            <Users className="h-4 w-4 text-gray-400" /> Thành viên đã chọn ({members.length})
-          </label>
-          {!hasChairman  && <span className="text-xs text-amber-600">⚠ Chưa có Chủ tịch</span>}
-          {!hasSecretary && <span className="text-xs text-amber-600">⚠ Chưa có Thư ký</span>}
-        </div>
-        {members.length === 0 ? (
-          <div className="rounded-lg border border-dashed p-4 text-center text-sm text-gray-400">
-            Chưa chọn thành viên nào
+    <div className="space-y-4">
+      {/* Slot status bar */}
+      <div className="flex flex-wrap items-center gap-2 px-3 py-2.5 bg-gray-50 rounded-lg border">
+        <span className="text-xs text-gray-500 font-medium mr-1">Yêu cầu:</span>
+        <SlotBadge label="Chủ tịch"  filled={hasChairman}  required count={hasChairman ? 1 : 0} />
+        <SlotBadge label="Thư ký"    filled={hasSecretary} required count={hasSecretary ? 1 : 0} />
+        <SlotBadge label="Phản biện / Chuyên gia" filled={reviewers.length >= 1} required={false} count={reviewers.length} minCount={1} />
+        <span className={`ml-auto text-xs font-medium ${canNext ? 'text-emerald-600' : 'text-amber-600'}`}>
+          {canNext ? '✓ Đủ thành viên' : statusMsg}
+        </span>
+      </div>
+
+      {/* Two-column: left = danh sách nhân sự, right = thành viên đã chọn */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+
+        {/* LEFT — Danh sách nhân sự */}
+        <div className="space-y-2">
+          <p className="text-sm font-medium text-gray-700 flex items-center gap-1.5">
+            <Search className="h-4 w-4 text-gray-400" />
+            Chọn nhân sự
+            {!loading && <span className="text-xs font-normal text-gray-400">({filtered.length}/{allUsers.length})</span>}
+          </p>
+          <div className="relative">
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
+            <Input
+              placeholder="Lọc theo tên, cấp bậc, đơn vị..."
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+              className="pl-8 text-sm h-8"
+            />
           </div>
-        ) : (
-          <div className="border rounded-lg overflow-hidden">
-            {members.map((m) => (
-              <div key={m.userId} className="flex items-center gap-3 px-3 py-2 border-b last:border-0 bg-white">
-                <span className="flex-1 text-sm font-medium text-gray-800">{m.userName}</span>
-                <select
-                  value={m.role}
-                  onChange={(e) => changeRole(m.userId, e.target.value as SelectedMember['role'])}
-                  className="text-xs border border-gray-200 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-violet-400"
-                >
-                  {MEMBER_ROLES.map((r) => (
-                    <option key={r.value} value={r.value}>{r.label}</option>
-                  ))}
-                </select>
-                <button
-                  type="button"
-                  onClick={() => removeMember(m.userId)}
-                  className="text-gray-300 hover:text-red-400 transition-colors"
-                >
-                  <X className="h-4 w-4" />
-                </button>
+
+          <div className="border rounded-lg overflow-y-auto" style={{ maxHeight: '420px' }}>
+            {loading ? (
+              <div className="p-6 text-center text-sm text-gray-400">Đang tải danh sách nhân sự...</div>
+            ) : filtered.length === 0 ? (
+              <div className="p-6 text-center text-sm text-gray-400">
+                {allUsers.length === 0 ? 'Không có nhân sự trong hệ thống' : 'Không tìm thấy kết quả phù hợp'}
               </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Vai trò khi thêm */}
-      <div className="flex items-center gap-2">
-        <span className="text-xs text-gray-500">Thêm với vai trò:</span>
-        {MEMBER_ROLES.map((r) => (
-          <button
-            key={r.value}
-            type="button"
-            onClick={() => setAddingRole(r.value as SelectedMember['role'])}
-            className={`text-xs px-2.5 py-1 rounded-full border transition-colors ${
-              addingRole === r.value
-                ? 'bg-violet-600 text-white border-violet-600'
-                : 'border-gray-200 text-gray-500 hover:border-violet-300'
-            }`}
-          >
-            {r.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Search scientists */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-gray-700">Tìm nhà khoa học</label>
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input
-            placeholder="Tìm theo tên, lĩnh vực..."
-            value={keyword}
-            onChange={(e) => setKeyword(e.target.value)}
-            className="pl-9 text-sm"
-          />
-        </div>
-        <div className="border rounded-lg overflow-hidden max-h-52 overflow-y-auto">
-          {loading ? (
-            <div className="p-3 text-center text-sm text-gray-400">Đang tải...</div>
-          ) : scientists.length === 0 ? (
-            <div className="p-3 text-center text-sm text-gray-400">Không tìm thấy</div>
-          ) : scientists.map((s) => {
-            const alreadyAdded = members.some((m) => m.userId === s.user.id);
-            return (
-              <div key={s.id} className={`flex items-center gap-3 px-3 py-2 border-b last:border-0 ${alreadyAdded ? 'bg-gray-50' : 'hover:bg-violet-50'}`}>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-800 truncate">
-                    {s.user.rank ? `${s.user.rank} ` : ''}{s.user.name}
-                  </p>
-                  <p className="text-xs text-gray-400 truncate">
-                    {s.degree ?? ''} {s.primaryField ? `• ${s.primaryField}` : ''} {s.user.unitRelation ? `• ${s.user.unitRelation.name}` : ''}
-                  </p>
+            ) : filtered.map((u) => {
+              const alreadyAdded = members.some((m) => m.userId === u.id);
+              const info = [u.rank, u.department ?? u.unit].filter(Boolean).join(' • ');
+              return (
+                <div
+                  key={u.id}
+                  className={`flex items-start gap-2.5 px-3 py-2.5 border-b last:border-0 transition-colors ${
+                    alreadyAdded ? 'bg-emerald-50' : 'hover:bg-violet-50/60'
+                  }`}
+                >
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mt-0.5 ${
+                    alreadyAdded ? 'bg-emerald-200 text-emerald-800' : 'bg-violet-100 text-violet-700'
+                  }`}>
+                    {initials(u.name)}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-gray-800 truncate leading-tight">{u.name}</p>
+                    {info && <p className="text-xs text-gray-400 truncate mt-0.5">{info}</p>}
+                    {alreadyAdded ? (
+                      <span className="text-xs text-emerald-600 mt-1 inline-block">✓ Đã thêm vào hội đồng</span>
+                    ) : (
+                      <div className="flex flex-wrap gap-1 mt-1.5">
+                        <button type="button" disabled={hasChairman}  onClick={() => addMember(u, 'CHAIRMAN')}
+                          className="text-xs px-2 py-0.5 rounded border border-violet-300 text-violet-700 hover:bg-violet-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors">
+                          + Chủ tịch
+                        </button>
+                        <button type="button" disabled={hasSecretary} onClick={() => addMember(u, 'SECRETARY')}
+                          className="text-xs px-2 py-0.5 rounded border border-blue-300 text-blue-700 hover:bg-blue-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors">
+                          + Thư ký
+                        </button>
+                        <button type="button" onClick={() => addMember(u, 'REVIEWER')}
+                          className="text-xs px-2 py-0.5 rounded border border-orange-300 text-orange-700 hover:bg-orange-50 transition-colors">
+                          + Phản biện
+                        </button>
+                        <button type="button" onClick={() => addMember(u, 'EXPERT')}
+                          className="text-xs px-2 py-0.5 rounded border border-teal-300 text-teal-700 hover:bg-teal-50 transition-colors">
+                          + Chuyên gia
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={alreadyAdded}
-                  onClick={() => addMember(s)}
-                  className="gap-1 shrink-0"
-                >
-                  <Plus className="h-3.5 w-3.5" />
-                  {alreadyAdded ? 'Đã thêm' : 'Thêm'}
-                </Button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* RIGHT — Thành viên đã chọn */}
+        <div className="space-y-2">
+          <p className="text-sm font-medium text-gray-700 flex items-center gap-1.5">
+            <Users className="h-4 w-4 text-gray-400" /> Thành viên đã chọn
+            <span className="text-xs font-normal text-gray-400">({members.length})</span>
+          </p>
+
+          <MemberSlotCard label="Chủ tịch" color="violet" member={chairman}  onRemove={removeMember} initials={initials} />
+          <MemberSlotCard label="Thư ký"   color="blue"   member={secretary} onRemove={removeMember} initials={initials} />
+
+          <div className="border rounded-lg overflow-hidden">
+            <div className="px-3 py-1.5 bg-gray-50 border-b flex items-center justify-between">
+              <span className="text-xs font-semibold text-gray-600">Phản biện & Chuyên gia</span>
+              <span className={`text-xs font-medium ${reviewers.length >= 1 ? 'text-emerald-600' : 'text-gray-400'}`}>
+                {reviewers.length} người
+              </span>
+            </div>
+            {reviewers.length === 0 ? (
+              <div className="px-3 py-4 text-center text-xs text-gray-400">
+                Nhấn "+ Phản biện" hoặc "+ Chuyên gia" ở cột trái
               </div>
-            );
-          })}
+            ) : (
+              <div className="divide-y">
+                {reviewers.map((m) => (
+                  <div key={m.userId} className="flex items-center gap-2.5 px-3 py-2">
+                    <div className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center text-xs font-bold text-gray-600 shrink-0">
+                      {initials(m.userName)}
+                    </div>
+                    <span className="flex-1 text-sm text-gray-800 truncate">{m.userName}</span>
+                    <span className={`text-xs px-1.5 py-0.5 rounded-full font-medium shrink-0 ${
+                      m.role === 'REVIEWER' ? 'bg-orange-100 text-orange-700' : 'bg-teal-100 text-teal-700'
+                    }`}>
+                      {m.role === 'REVIEWER' ? 'Phản biện' : 'Chuyên gia'}
+                    </span>
+                    <button type="button" onClick={() => removeMember(m.userId)} className="text-gray-300 hover:text-red-400 transition-colors">
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
-      {!canNext && members.length > 0 && (
-        <p className="text-xs text-amber-600">
-          Cần ít nhất: 1 Chủ tịch, 1 Thư ký, và tối thiểu 3 thành viên
-        </p>
-      )}
-
-      <div className="flex justify-between">
+      <div className="flex justify-between pt-1">
         <Button variant="outline" onClick={onBack} className="gap-1.5">
           <ArrowLeft className="h-4 w-4" /> Quay lại
         </Button>
@@ -514,19 +644,34 @@ function Row({ label, value }: { label: string; value: string }) {
 export default function NewCouncilPage() {
   const router       = useRouter();
   const searchParams = useSearchParams();
-  const preExpertUserId = searchParams.get('expertUserId');
+  const preExpertUserId   = searchParams.get('expertUserId');
+  const preProjectId      = searchParams.get('projectId') ?? '';
+  const preType           = searchParams.get('type') ?? '';
 
   const [step,        setStep]        = useState<Step>(1);
-  const [projectId,   setProjectId]   = useState('');
-  const [councilType, setCouncilType] = useState('');
+  const [projectId,   setProjectId]   = useState(preProjectId);
+  const [councilType, setCouncilType] = useState(preType);
   const [meetingDate, setMeetingDate] = useState('');
   const [members,     setMembers]     = useState<SelectedMember[]>([]);
   const [submitting,  setSubmitting]  = useState(false);
+  const [prefilledProjectTitle, setPrefilledProjectTitle] = useState('');
+
+  // Fetch tên đề tài khi được pre-fill từ URL
+  useEffect(() => {
+    if (!preProjectId) return;
+    fetch(`/api/science/projects/${preProjectId}`)
+      .then((r) => r.json())
+      .then((json) => {
+        if (json.success && json.data?.title) {
+          setPrefilledProjectTitle(json.data.title);
+        }
+      })
+      .catch(() => {/* ignore */});
+  }, [preProjectId]);
 
   // Pre-load expert if navigated from experts page
   useEffect(() => {
     if (!preExpertUserId) return;
-    // Fetch scientist profile to get name, then pre-add as REVIEWER
     fetch(`/api/science/scientists?userId=${preExpertUserId}&pageSize=1`)
       .then((r) => r.json())
       .then((json) => {
@@ -534,7 +679,7 @@ export default function NewCouncilPage() {
         if (!s) return;
         setMembers([{ userId: s.user.id, userName: s.user.name, role: 'REVIEWER' }]);
       })
-      .catch(() => {/* ignore — user can add manually */});
+      .catch(() => {/* ignore */});
   }, [preExpertUserId]);
 
   const handleSubmit = async () => {
@@ -579,7 +724,7 @@ export default function NewCouncilPage() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-4">
+    <div className="max-w-5xl mx-auto space-y-4">
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-sm text-gray-500">
         <Link href="/dashboard/science/activities/councils" className="hover:text-violet-600 flex items-center gap-1">
@@ -600,6 +745,7 @@ export default function NewCouncilPage() {
               projectId={projectId}   setProjectId={setProjectId}
               councilType={councilType} setCouncilType={setCouncilType}
               meetingDate={meetingDate} setMeetingDate={setMeetingDate}
+              prefilledProjectTitle={prefilledProjectTitle}
               onNext={() => setStep(2)}
             />
           )}

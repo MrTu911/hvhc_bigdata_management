@@ -126,6 +126,7 @@ model User {
   nckhProjectsAsPI                    NckhProject[]              @relation("NckhPI")
   nckhPublicationAuthorEntries        NckhPublicationAuthor[]    @relation("NckhPubAuthorEntry")
   nckhPublications                    NckhPublication[]          @relation("NckhPubAuthor")
+  nckhPublicationsReviewed            NckhPublication[]          @relation("NckhPubReviewer")
   nckhScientistProfile                NckhScientistProfile?      @relation("NckhScientist")
   scienceCatalogsCreated              ScienceCatalog[]           @relation("ScienceCatalogCreator")
   partyMeetingsCreated                PartyMeeting[]             @relation("PartyMeetingCreator")
@@ -171,6 +172,8 @@ model User {
   dashboardAccessLogs                 DashboardAccessLog[]       @relation("UserDashboardAccessLogs")
   // Phase 6: Lifecycle NCKH back-relations
   nckhProposalsAsPI                   NckhProposal[]             @relation("NckhProposalPI")
+  nckhProposalsUnitApproved           NckhProposal[]             @relation("NckhProposalUnitApprover")
+  nckhProposalsDeptApproved           NckhProposal[]             @relation("NckhProposalDeptApprover")
   nckhProposalsApproved               NckhProposal[]             @relation("NckhProposalApprover")
   nckhProposalReviews                 NckhProposalReview[]       @relation("NckhProposalReviewer")
   nckhProgressReportsSubmitted        NckhProgressReport[]       @relation("NckhReportSubmitter")
@@ -197,6 +200,8 @@ model User {
   nckhCollaborationParticipations     NckhCollaborationParticipant[] @relation("NckhCollabParticipant")
   nckhCollaborationDocsUploaded       NckhCollaborationDocument[] @relation("NckhCollabDocUploader")
   scienceAttachmentsUploaded          ScienceAttachment[]         @relation("ScienceAttachmentUploader")
+  personalUpdateRequests              PersonalUpdateRequest[]     @relation("PersonalUpdateRequestUser")
+  personalUpdateRequestsReviewed      PersonalUpdateRequest[]     @relation("PersonalUpdateRequestReviewer")
 
   @@index([email])
   @@index([role])
@@ -4630,6 +4635,10 @@ model NckhPublication {
   citationCount      Int                     @default(0)
   fullTextUrl        String?
   status             NckhPublicationStatus   @default(DRAFT)
+  submittedAt        DateTime?
+  reviewNote         String?
+  reviewedAt         DateTime?
+  reviewedById       String?
   unitId             String?
   createdAt          DateTime                @default(now())
   updatedAt          DateTime                @updatedAt
@@ -4647,6 +4656,7 @@ model NckhPublication {
   storageLocation    String?
   publicationAuthors NckhPublicationAuthor[]
   author             User                    @relation("NckhPubAuthor", fields: [authorId], references: [id])
+  reviewedBy         User?                   @relation("NckhPubReviewer", fields: [reviewedById], references: [id])
   project            NckhProject?            @relation(fields: [projectId], references: [id])
 
   @@index([authorId])
@@ -4656,6 +4666,8 @@ model NckhPublication {
   @@index([isISI])
   @@index([isScopus])
   @@index([unitId])
+  @@index([status])
+  @@index([reviewedById])
   @@map("nckh_publications")
 }
 
@@ -7888,4 +7900,26 @@ model ScienceAttachment {
   @@index([uploadedById])
   @@index([createdAt])
   @@map("science_attachments")
+}
+
+// Yêu cầu cập nhật thông tin cá nhân (tự gửi, admin duyệt)
+// Dùng cho function code REQUEST_MY_INFO_UPDATE — trường nhạy cảm không ghi thẳng vào User
+model PersonalUpdateRequest {
+  id             String    @id @default(cuid())
+  userId         String
+  fieldName      String                        // tên trường cần thay đổi, vd: "permanentAddress"
+  currentValue   String?                       // giá trị hiện tại (để admin so sánh)
+  requestedValue String                        // giá trị người dùng muốn đổi
+  status         String    @default("PENDING") // PENDING | APPROVED | REJECTED
+  reviewedById   String?
+  reviewedAt     DateTime?
+  reviewNote     String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  user           User      @relation("PersonalUpdateRequestUser", fields: [userId], references: [id], onDelete: Cascade)
+  reviewedBy     User?     @relation("PersonalUpdateRequestReviewer", fields: [reviewedById], references: [id])
+
+  @@index([userId, status])
+  @@index([status, createdAt])
+  @@map("personal_update_requests")
 }

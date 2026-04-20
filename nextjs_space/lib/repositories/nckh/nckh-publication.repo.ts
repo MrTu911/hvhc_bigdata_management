@@ -12,6 +12,7 @@ import type { NckhPublicationType, NckhPublicationStatus } from '@prisma/client'
 export interface NckhPublicationFilter {
   keyword?: string
   pubType?: NckhPublicationType
+  status?: NckhPublicationStatus
   year?: number
   unitId?: string
   projectId?: string
@@ -41,6 +42,7 @@ const publicationListSelect = {
   journal: true,
   citationCount: true,
   status: true,
+  submittedAt: true,
   unitId: true,
   authorId: true,
   authorsText: true,
@@ -49,7 +51,7 @@ const publicationListSelect = {
   createdAt: true,
   updatedAt: true,
   author: {
-    select: { id: true, name: true, rank: true, militaryId: true },
+    select: { id: true, name: true, username: true, rank: true, militaryId: true, unit: true },
   },
   project: {
     select: { id: true, projectCode: true, title: true },
@@ -143,6 +145,7 @@ export const nckhPublicationRepo = {
     const {
       keyword,
       pubType,
+      status,
       year,
       unitId,
       projectId,
@@ -168,6 +171,7 @@ export const nckhPublicationRepo = {
     }
 
     if (pubType) where.pubType = pubType
+    if (status) where.status = status
     if (year) where.publishedYear = year
     if (unitId) where.unitId = unitId
     if (projectId) where.projectId = projectId

@@ -25,6 +25,13 @@ import {
 } from '@/lib/validations/science-attachment'
 import type { AttachmentUploadMeta, ScienceEntityType } from '@/lib/validations/science-attachment'
 
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+/** Chuyển BigInt fileSize → number để JSON.stringify không lỗi */
+function serializeAttachment<T extends { fileSize: bigint }>(a: T): Omit<T, 'fileSize'> & { fileSize: number } {
+  return { ...a, fileSize: Number(a.fileSize) }
+}
+
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const ATTACHMENT_BUCKET = process.env.ATTACHMENT_MINIO_BUCKET ?? 'hvhc-science-attachments'
@@ -41,7 +48,7 @@ export const attachmentService = {
       include: { uploadedBy: { select: { id: true, name: true } } },
       orderBy: { createdAt: 'asc' },
     })
-    return { success: true as const, data: items }
+    return { success: true as const, data: items.map(serializeAttachment) }
   },
 
   async uploadAttachment(
@@ -133,7 +140,7 @@ export const attachmentService = {
       metadata: { objectKey, checksum, entityType: meta.entityType, entityId: meta.entityId, category: meta.docCategory },
     })
 
-    return { success: true as const, data: attachment }
+    return { success: true as const, data: serializeAttachment(attachment) }
   },
 
   async getDownloadUrl(

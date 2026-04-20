@@ -16,7 +16,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import {
   Search, Microscope, CheckCircle2, XCircle, RefreshCw, FileText, Users,
-  ShieldAlert, ShieldCheck,
+  ShieldAlert, ShieldCheck, GavelIcon,
 } from 'lucide-react';
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -190,7 +190,7 @@ export default function ReviewPage() {
                       )}
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 flex-shrink-0">
+                  <div className="flex items-center gap-2 flex-shrink-0 flex-wrap justify-end">
                     <Button
                       variant="outline"
                       size="sm"
@@ -198,6 +198,14 @@ export default function ReviewPage() {
                       className="gap-1"
                     >
                       <FileText className="h-3.5 w-3.5" /> Xem hồ sơ
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => router.push(`/dashboard/science/activities/councils/new?projectId=${p.id}&type=REVIEW`)}
+                      className="gap-1 border-violet-300 text-violet-700 hover:bg-violet-50"
+                    >
+                      <GavelIcon className="h-3.5 w-3.5" /> Lập HĐ thẩm định
                     </Button>
                     <Button
                       variant="destructive"

@@ -25,10 +25,30 @@ const translations = {
     'nav.dashboardManagement': 'Quản lý Widgets',
     'nav.masterData': 'Danh mục Dùng chung (MDM)',
 
-    // 2. Hồ sơ cá nhân
-    'nav.personalProfile': 'Hồ sơ Cá nhân',
-    'nav.myProfile': 'Hồ sơ của tôi',
-    'nav.scientificCV': 'Lý lịch Khoa học',
+    // 2. Không gian Cá nhân (Tier 0 - MỌI user)
+    'nav.personalSpace':      'Không gian Cá nhân',
+    'nav.personalProfile':    'Hồ sơ Cá nhân',
+    'nav.myProfile':          'Hồ sơ của tôi',
+    'nav.myTasks':            'Công việc của tôi',
+    'nav.myCareer':           'Quá trình công tác',
+    'nav.myPolicy':           'Chính sách của tôi',
+    'nav.myInsurance':        'Bảo hiểm của tôi',
+    'nav.myAward':            'Khen thưởng của tôi',
+    'nav.mySecurity':         'Bảo mật tài khoản',
+    'nav.personalHub':        'Trung tâm Cá nhân',
+    // 3. Học tập của tôi (Tier 2 - Học viên)
+    'nav.myLearning':         'Học tập của tôi',
+    'nav.myGrade':            'Điểm học tập',
+    'nav.myConduct':          'Điểm rèn luyện',
+    'nav.mySchedule':         'Thời khóa biểu',
+    'nav.myGraduation':       'Xét tốt nghiệp',
+    // 4. Nghiên cứu cá nhân (Tier 1 - Giảng viên)
+    'nav.myResearchSpace':    'Nghiên cứu cá nhân',
+    'nav.myResearch':         'Đề tài NCKH của tôi',
+    'nav.myPublications':     'Công bố của tôi',
+    'nav.scientificCV':       'Lý lịch Khoa học',
+
+    // 5. CSDL Nhân sự (alias giữ nguyên)
 
     // 3. CSDL Nhân sự
     'nav.personnelDatabase': 'CSDL Cán bộ, Quân nhân',
@@ -62,6 +82,9 @@ const translations = {
     'nav.partyDisciplines': 'Kỷ luật Đảng',
     'nav.partyTransfers': 'Chuyển sinh hoạt Đảng',
     'nav.partyInspections': 'Kiểm tra, giám sát UBKT',
+
+    // 7. Chính sách, BHXH & Thi đua (merged group)
+    'nav.policyWelfareAwards': 'Chính sách, BHXH & Thi đua',
 
     // 4. CSDL Chính sách
     'nav.policyDatabase': 'CSDL Chính sách',
@@ -463,10 +486,30 @@ const translations = {
     'nav.dashboardManagement': 'Widget Manager',
     'nav.masterData': 'Master Data (MDM)',
 
-    // 2. Personal Profile
-    'nav.personalProfile': 'Personal Profile',
-    'nav.myProfile': 'My Profile',
-    'nav.scientificCV': 'Scientific CV',
+    // 2. Personal Space (Tier 0 - ALL users)
+    'nav.personalSpace':      'Personal Space',
+    'nav.personalProfile':    'Personal Profile',
+    'nav.myProfile':          'My Profile',
+    'nav.myTasks':            'My Tasks',
+    'nav.myCareer':           'My Career History',
+    'nav.myPolicy':           'My Policy & Benefits',
+    'nav.myInsurance':        'My Insurance',
+    'nav.myAward':            'My Awards',
+    'nav.mySecurity':         'Account Security',
+    'nav.personalHub':        'Personal Hub',
+    // 3. My Learning (Tier 2 - Students)
+    'nav.myLearning':         'My Learning',
+    'nav.myGrade':            'My Grades',
+    'nav.myConduct':          'My Conduct Score',
+    'nav.mySchedule':         'My Schedule',
+    'nav.myGraduation':       'Graduation Status',
+    // 4. My Research (Tier 1 - Faculty)
+    'nav.myResearchSpace':    'My Research',
+    'nav.myResearch':         'My Research Projects',
+    'nav.myPublications':     'My Publications',
+    'nav.scientificCV':       'Scientific CV',
+    // 7. Merged management group
+    'nav.policyWelfareAwards': 'Policy, Insurance & Awards',
 
     // 3. Personnel Database
     'nav.personnelDatabase': 'Personnel Database',

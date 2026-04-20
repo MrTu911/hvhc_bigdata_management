@@ -7,15 +7,19 @@ import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { requireAuth } from '@/lib/rbac/middleware';
+import { authorize } from '@/lib/rbac/authorize';
+import { PERSONAL } from '@/lib/rbac/function-codes';
 
 export async function GET(request: NextRequest) {
   try {
-    // Check authentication
     const authResult = await requireAuth(request);
-    if (!authResult.allowed) {
-      return authResult.response!;
-    }
+    if (!authResult.allowed) return authResult.response!;
     const user = authResult.user!;
+
+    const perm = await authorize(user, PERSONAL.MANAGE_PROFILE, {});
+    if (!perm.allowed) {
+      return NextResponse.json({ error: perm.deniedReason ?? 'Không có quyền xem hồ sơ cá nhân' }, { status: 403 });
+    }
 
     const userData = await prisma.user.findUnique({
       where: { id: user.id },
@@ -144,12 +148,14 @@ export async function GET(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
-    // Check authentication
     const authResult = await requireAuth(request);
-    if (!authResult.allowed) {
-      return authResult.response!;
-    }
+    if (!authResult.allowed) return authResult.response!;
     const user = authResult.user!;
+
+    const perm = await authorize(user, PERSONAL.MANAGE_PROFILE, {});
+    if (!perm.allowed) {
+      return NextResponse.json({ error: perm.deniedReason ?? 'Không có quyền cập nhật hồ sơ cá nhân' }, { status: 403 });
+    }
 
     const body = await request.json();
     

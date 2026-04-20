@@ -7,21 +7,27 @@
  * 3. Sidebar sẽ dùng filterMenu để lọc theo permissions
  * 4. Không dùng string literal cho function codes
  *
- * CẤU TRÚC NHÓM CHỨC NĂNG (14 nhóm):
+ * CẤU TRÚC NHÓM CHỨC NĂNG (19 nhóm):
  *  1. Tổng quan
- *  2. Hồ sơ cá nhân
- *  3. CSDL Nhân sự
- *  4. CSDL Chính trị (Đảng viên)
- *  5. CSDL Chính sách
- *  6. CSDL Bảo hiểm Xã hội
- *  7. Thi đua Khen thưởng
- *  8. Giáo dục & Đào tạo
- *  9. Nghiên cứu Khoa học
- * 10. Mẫu biểu & Xuất dữ liệu (M18/M19)
- * 11. AI & Phân tích
- * 12. Hạ tầng & Dữ liệu
- * 13. Quản trị Hệ thống
- * 14. Cài đặt cá nhân
+ *  2. Không gian Cá nhân (Tier 0 — MỌI user)
+ *  3. Học tập của tôi (Tier 2 — Học viên/Sinh viên)
+ *  4. Nghiên cứu cá nhân (Tier 1 — Giảng viên/NCV)
+ * --- QUẢN LÝ NGHIỆP VỤ ---
+ *  5. CSDL Nhân sự
+ *  6. CSDL Đảng viên
+ *  7. Chính sách, BHXH & Thi đua (merged)
+ *  8. Tổng quan Đào tạo
+ *  9. Quản lý Giảng viên
+ * 10. Hệ đào tạo & Tiểu đoàn
+ * 11. Quản lý Người học
+ * 12. Chương trình & Vận hành
+ * 13. CSDL Nghiên cứu Khoa học
+ * 14. CSDL Khoa học Quản lý
+ * 15. Mẫu biểu & Xuất dữ liệu (M18/M19)
+ * 16. Phân tích & Báo cáo
+ * 17. Hạ tầng & Dữ liệu
+ * 18. Quản trị Hệ thống
+ * 19. Cài đặt cá nhân
  */
 
 import {
@@ -142,6 +148,7 @@ import {
   ETL,
   DEPARTMENT,
   SCIENCE,
+  PERSONAL,
 } from '@/lib/rbac/function-codes';
 
 export interface MenuItem {
@@ -219,9 +226,9 @@ export const MENU_CONFIG: MenuGroup[] = [
     ],
   },
 
-  // ========== 2. HỒ SƠ CÁ NHÂN ==========
+  // ========== 2. KHÔNG GIAN CÁ NHÂN (Tier 0 — MỌI user) ==========
   {
-    title: 'nav.personalProfile',
+    title: 'nav.personalSpace',
     items: [
       {
         name: 'nav.myProfile',
@@ -229,7 +236,119 @@ export const MENU_CONFIG: MenuGroup[] = [
         icon: Users,
         gradient: 'from-cyan-500 to-cyan-600',
         badge: '📝',
-        functions: [], // Luôn hiển thị
+        functions: [],
+      },
+      {
+        name: 'nav.myTasks',
+        href: '/dashboard/workflow/my-work',
+        icon: ClipboardList,
+        gradient: 'from-violet-500 to-purple-600',
+        functions: [PERSONAL.VIEW_TASKS],
+      },
+      {
+        name: 'nav.notifications',
+        href: '/dashboard/notifications/history',
+        icon: Bell,
+        gradient: 'from-indigo-500 to-indigo-600',
+        functions: [],
+      },
+      {
+        name: 'nav.myCareer',
+        href: '/dashboard/personal/my-career',
+        icon: Briefcase,
+        gradient: 'from-blue-500 to-indigo-600',
+        functions: [PERSONAL.VIEW_CAREER_HISTORY],
+      },
+      {
+        name: 'nav.myPolicy',
+        href: '/dashboard/personal/my-policy',
+        icon: FileText,
+        gradient: 'from-amber-500 to-orange-600',
+        functions: [PERSONAL.VIEW_POLICY],
+      },
+      {
+        name: 'nav.myInsurance',
+        href: '/dashboard/personal/my-insurance',
+        icon: Heart,
+        gradient: 'from-teal-500 to-cyan-600',
+        functions: [PERSONAL.VIEW_INSURANCE],
+      },
+      {
+        name: 'nav.myAward',
+        href: '/dashboard/personal/my-awards',
+        icon: Award,
+        gradient: 'from-yellow-500 to-amber-600',
+        functions: [PERSONAL.VIEW_AWARD],
+      },
+      {
+        name: 'nav.mySecurity',
+        href: '/dashboard/settings/security',
+        icon: ShieldCheck,
+        gradient: 'from-green-500 to-emerald-600',
+        functions: [PERSONAL.MANAGE_SECURITY],
+      },
+      {
+        name: 'nav.personalHub',
+        href: '/dashboard/personal',
+        icon: UserCog,
+        gradient: 'from-pink-500 to-rose-600',
+        functions: [],
+      },
+    ],
+  },
+
+  // ========== 3. HỌC TẬP CỦA TÔI (Tier 2 — Học viên/Sinh viên) ==========
+  {
+    title: 'nav.myLearning',
+    items: [
+      {
+        name: 'nav.myGrade',
+        href: '/dashboard/personal/my-grade',
+        icon: ClipboardList,
+        gradient: 'from-blue-500 to-indigo-600',
+        functions: [PERSONAL.VIEW_GRADE],
+      },
+      {
+        name: 'nav.myConduct',
+        href: '/dashboard/personal/my-conduct',
+        icon: Award,
+        gradient: 'from-teal-500 to-emerald-600',
+        functions: [PERSONAL.VIEW_CONDUCT],
+      },
+      {
+        name: 'nav.mySchedule',
+        href: '/dashboard/personal/my-schedule',
+        icon: Calendar,
+        gradient: 'from-purple-500 to-violet-600',
+        functions: [PERSONAL.VIEW_SCHEDULE],
+      },
+      {
+        name: 'nav.myGraduation',
+        href: '/dashboard/personal/my-graduation',
+        icon: GraduationCap,
+        gradient: 'from-green-600 to-emerald-700',
+        functions: [PERSONAL.VIEW_GRADUATION],
+      },
+    ],
+  },
+
+  // ========== 4. NGHIÊN CỨU CÁ NHÂN (Tier 1 — Giảng viên/NCV) ==========
+  {
+    title: 'nav.myResearchSpace',
+    items: [
+      {
+        name: 'nav.myResearch',
+        href: '/dashboard/personal/my-research',
+        icon: FlaskConical,
+        gradient: 'from-indigo-500 to-violet-600',
+        functions: [PERSONAL.VIEW_RESEARCH],
+      },
+      {
+        name: 'nav.myPublications',
+        href: '/dashboard/personal/my-publications',
+        icon: LibraryBig,
+        gradient: 'from-blue-500 to-indigo-600',
+        functions: [PERSONAL.VIEW_PUBLICATIONS],
       },
       {
         name: 'nav.scientificCV',
@@ -237,19 +356,12 @@ export const MENU_CONFIG: MenuGroup[] = [
         icon: BookUser,
         gradient: 'from-violet-500 to-purple-600',
         badge: '🎓',
-        functions: [RESEARCH.VIEW, FACULTY.VIEW],
-      },
-      {
-        name: 'nav.notifications',
-        href: '/dashboard/notifications/history',
-        icon: Bell,
-        gradient: 'from-indigo-500 to-indigo-600',
-        functions: [], // Notifications cho tất cả user
+        functions: [PERSONAL.MANAGE_SCIENTIFIC_CV, RESEARCH.VIEW, FACULTY.VIEW],
       },
     ],
   },
 
-  // ========== 3. CSDL NHÂN SỰ ==========
+  // ========== 5. CSDL NHÂN SỰ ==========
   {
     title: 'nav.personnelDatabase',
     items: [
@@ -462,10 +574,11 @@ export const MENU_CONFIG: MenuGroup[] = [
     ],
   },
 
-  // ========== 5. CSDL CHÍNH SÁCH ==========
+  // ========== 7. CHÍNH SÁCH, BHXH & THI ĐUA (Quản lý) ==========
   {
-    title: 'nav.policyDatabase',
+    title: 'nav.policyWelfareAwards',
     items: [
+      // -- Chính sách --
       {
         name: 'nav.policyOverview',
         href: '/dashboard/policy',
@@ -523,13 +636,7 @@ export const MENU_CONFIG: MenuGroup[] = [
         gradient: 'from-teal-500 to-cyan-600',
         functions: [POLICY.CREATE, POLICY.CREATE_REQUEST],
       },
-    ],
-  },
-
-  // ========== 6. CSDL BẢO HIỂM XÃ HỘI ==========
-  {
-    title: 'nav.insuranceDatabase',
-    items: [
+      // -- BHXH --
       {
         name: 'nav.insuranceOverview',
         href: '/dashboard/insurance',
@@ -579,13 +686,7 @@ export const MENU_CONFIG: MenuGroup[] = [
         gradient: 'from-emerald-500 to-teal-600',
         functions: [INSURANCE.CREATE],
       },
-    ],
-  },
-
-  // ========== 7. THI ĐUA KHEN THƯỞNG ==========
-  {
-    title: 'nav.awardsDatabase',
-    items: [
+      // -- Thi đua Khen thưởng --
       {
         name: 'nav.awardsOverview',
         href: '/dashboard/emulation',

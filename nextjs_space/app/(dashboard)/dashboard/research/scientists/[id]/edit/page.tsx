@@ -10,9 +10,16 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { ArrowLeft, Save, Loader2, Plus, X, RefreshCw } from 'lucide-react'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
+
+interface MasterDataOption {
+  code: string
+  nameVi: string
+  shortName?: string | null
+}
 
 interface ProfileForm {
   academicRank: string
@@ -111,6 +118,19 @@ export default function ScientistEditPage() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [refreshing, setRefreshing] = useState(false)
+  const [academicTitleOptions, setAcademicTitleOptions] = useState<MasterDataOption[]>([])
+  const [academicDegreeOptions, setAcademicDegreeOptions] = useState<MasterDataOption[]>([])
+
+  // Load M19 options for học hàm / học vị
+  useEffect(() => {
+    Promise.all([
+      fetch('/api/admin/master-data/MD_ACADEMIC_TITLE/items').then(r => r.json()),
+      fetch('/api/admin/master-data/MD_ACADEMIC_DEGREE/items').then(r => r.json()),
+    ]).then(([titles, degrees]) => {
+      if (Array.isArray(titles)) setAcademicTitleOptions(titles)
+      if (Array.isArray(degrees)) setAcademicDegreeOptions(degrees)
+    }).catch(() => {/* silently ignore — user can still type if M19 unavailable */})
+  }, [])
 
   // Load profile
   useEffect(() => {
@@ -159,9 +179,9 @@ export default function ScientistEditPage() {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          academicRank: form.academicRank || undefined,
-          degree: form.degree || undefined,
-          specialization: form.specialization || undefined,
+          academicRank: form.academicRank || null,
+          degree: form.degree || null,
+          specialization: form.specialization || null,
           researchFields: form.researchFields,
           researchKeywords: form.researchKeywords,
           hIndex: form.hIndex ? Number(form.hIndex) : undefined,
@@ -177,6 +197,7 @@ export default function ScientistEditPage() {
       const json = await res.json()
       if (!json.success) { toast.error(json.error ?? 'Lưu thất bại'); return }
       toast.success('Đã lưu hồ sơ')
+      router.refresh()
       router.push(`/dashboard/research/scientists/${userId}`)
     } catch {
       toast.error('Lỗi kết nối')
@@ -244,22 +265,42 @@ export default function ScientistEditPage() {
         </CardHeader>
         <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="academicRank">Học hàm</Label>
-            <Input
-              id="academicRank"
-              value={form.academicRank}
-              onChange={(e) => set('academicRank', e.target.value)}
-              placeholder="GS, PGS..."
-            />
+            <Label>Học hàm</Label>
+            <Select
+              value={form.academicRank || '__NONE__'}
+              onValueChange={(v) => set('academicRank', v === '__NONE__' ? '' : v)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Không có học hàm" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="__NONE__">— Không có học hàm —</SelectItem>
+                {academicTitleOptions.map((opt) => (
+                  <SelectItem key={opt.code} value={opt.nameVi}>
+                    {opt.nameVi}{opt.shortName ? ` (${opt.shortName})` : ''}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="degree">Học vị</Label>
-            <Input
-              id="degree"
-              value={form.degree}
-              onChange={(e) => set('degree', e.target.value)}
-              placeholder="TS, ThS, TSKH..."
-            />
+            <Label>Học vị</Label>
+            <Select
+              value={form.degree || '__NONE__'}
+              onValueChange={(v) => set('degree', v === '__NONE__' ? '' : v)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Không có học vị" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="__NONE__">— Không có học vị —</SelectItem>
+                {academicDegreeOptions.map((opt) => (
+                  <SelectItem key={opt.code} value={opt.nameVi}>
+                    {opt.nameVi}{opt.shortName ? ` (${opt.shortName})` : ''}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
           <div className="space-y-2">
             <Label htmlFor="specialization">Chuyên ngành</Label>
