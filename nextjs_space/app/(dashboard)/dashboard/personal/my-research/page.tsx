@@ -227,7 +227,7 @@ function ProjectCard({ project, role }: { project: ProjectBase; role: 'pi' | 'me
           </div>
           <div className="flex items-center gap-2 flex-shrink-0">
             {hasInlineAction && (
-              <Link href={`/dashboard/science/activities/proposals?edit=${project.id}`}>
+              <Link href={`/dashboard/science/projects/${project.id}/edit`}>
                 <Button size="sm" variant={isDraft ? 'default' : 'outline'} className="h-7 text-xs gap-1 px-2.5">
                   <FilePen className="w-3 h-3" />
                   {isDraft ? 'Tiếp tục soạn' : 'Chỉnh sửa lại'}

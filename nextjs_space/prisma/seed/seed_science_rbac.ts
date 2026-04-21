@@ -295,9 +295,15 @@ function buildGrants(): Grant[] {
   add('PHO_GIAM_DOC', academyFullAccess, 'ACADEMY')
   add('CHINH_UY',     academyFullAccess, 'ACADEMY')
 
-  // Phòng KHCN
-  add('TRUONG_PHONG',     truongPhongAccess,    'DEPARTMENT')
-  add('PHO_TRUONG_PHONG', phoTruongPhongAccess, 'DEPARTMENT')
+  // Phòng KHCN (multiple Truong Phong codes in DB)
+  add('TRUONG_PHONG_KHOA_HOC', truongPhongAccess,    'DEPARTMENT')
+  add('B1_TRUONG_PHONG',        truongPhongAccess,    'DEPARTMENT')
+  add('B2_TRUONG_PHÒNG',        truongPhongAccess,    'DEPARTMENT')
+  add('TRUONG_PHONG_DAO_TAO',   truongPhongAccess,    'DEPARTMENT')
+  add('TRUONG_PHONG_NHAN_SU',   truongPhongAccess,    'DEPARTMENT')
+  add('TRUONG_PHONG_CHINH_SACH',truongPhongAccess,    'DEPARTMENT')
+  add('TRUONG_PHONG_DANG',      truongPhongAccess,    'DEPARTMENT')
+  add('PHO_TRUONG_PHONG',       phoTruongPhongAccess, 'DEPARTMENT')
 
   // Khoa/Phòng (faculty)
   add('TRUONG_KHOA',     truongKhoaAccess,    'DEPARTMENT')

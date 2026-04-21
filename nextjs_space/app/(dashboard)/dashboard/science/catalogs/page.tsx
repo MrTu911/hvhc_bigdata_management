@@ -88,7 +88,8 @@ function CreateModal({ onClose, onDone }: { onClose: () => void; onDone: () => v
       });
       if (!res.ok) {
         const j = await res.json();
-        throw new Error(j.error ?? 'Tạo thất bại');
+        const msg = typeof j.error === 'string' ? j.error : j.message ?? 'Tạo thất bại';
+        throw new Error(msg);
       }
       toast.success('Đã tạo danh mục mới');
       onDone();

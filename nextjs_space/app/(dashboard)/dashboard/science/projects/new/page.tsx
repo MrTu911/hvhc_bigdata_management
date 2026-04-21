@@ -624,7 +624,7 @@ export default function NewProjectPage() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         // API không trả id — fallback về danh sách
-        router.push('/dashboard/science/activities/proposals');
+        router.push('/dashboard/personal/my-research');
       }
     } catch {
       toast.error('Lỗi kết nối, vui lòng thử lại');
@@ -972,7 +972,7 @@ export default function NewProjectPage() {
       {step === 'attachments' && createdProjectId && (
         <AttachmentStep
           projectId={createdProjectId}
-          onFinish={() => router.push('/dashboard/science/activities/proposals')}
+          onFinish={() => router.push('/dashboard/personal/my-research')}
         />
       )}
     </div>

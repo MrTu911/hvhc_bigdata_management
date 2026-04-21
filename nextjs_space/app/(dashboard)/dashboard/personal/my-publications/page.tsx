@@ -10,7 +10,7 @@ import { useEffect, useState, useMemo, useCallback, useRef } from 'react';
 import {
   BookOpen, Plus, ExternalLink, FilePen, Trash2, Send,
   AlertCircle, Loader2, CheckCircle2, Clock, FileText,
-  Search, Star, XCircle, Paperclip, Upload, Eye, Download, X,
+  Search, Star, XCircle, Paperclip, Upload, Eye, Download, X, Undo2,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -399,6 +399,11 @@ function AttachmentSection({
 
 // ─── Create Modal ─────────────────────────────────────────────────────────────
 
+interface StagedFile {
+  id: string;       // local uuid for key
+  file: File;
+}
+
 interface CreateModalProps {
   open: boolean;
   onClose: () => void;
@@ -412,16 +417,50 @@ function CreatePublicationModal({ open, onClose, onCreated }: CreateModalProps) 
   const [year, setYear] = useState('');
   const [doi, setDoi] = useState('');
   const [abstract, setAbstract] = useState('');
+  const [stagedFiles, setStagedFiles] = useState<StagedFile[]>([]);
+  const [dragOver, setDragOver] = useState(false);
   const [saving, setSaving] = useState(false);
-  // After save: show upload step
-  const [savedPub, setSavedPub] = useState<PublicationItem | null>(null);
+  const [uploadingFiles, setUploadingFiles] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const reset = () => {
     setTitle(''); setPubType(''); setJournal(''); setYear('');
-    setDoi(''); setAbstract(''); setSavedPub(null);
+    setDoi(''); setAbstract(''); setStagedFiles([]);
   };
 
   const handleClose = () => { reset(); onClose(); };
+
+  const stageFiles = (files: FileList | null) => {
+    if (!files) return;
+    const newFiles: StagedFile[] = Array.from(files).map((f) => ({
+      id: `${Date.now()}-${Math.random()}`,
+      file: f,
+    }));
+    setStagedFiles((prev) => [...prev, ...newFiles]);
+  };
+
+  const removeStagedFile = (id: string) => {
+    setStagedFiles((prev) => prev.filter((f) => f.id !== id));
+  };
+
+  const uploadStagedFiles = async (pubId: string) => {
+    if (stagedFiles.length === 0) return;
+    setUploadingFiles(true);
+    let failed = 0;
+    for (const staged of stagedFiles) {
+      const form = new FormData();
+      form.append('file', staged.file);
+      form.append('title', staged.file.name);
+      const res = await fetch(`/api/personal/my-publications/${pubId}/attachments`, {
+        method: 'POST',
+        body: form,
+      });
+      if (!res.ok) failed++;
+    }
+    setUploadingFiles(false);
+    if (failed > 0) toast.error(`${failed} file upload thất bại — có thể thêm lại trong phần chỉnh sửa`);
+    else if (stagedFiles.length > 0) toast.success(`Đã upload ${stagedFiles.length} file minh chứng`);
+  };
 
   const handleSave = async () => {
     if (!title.trim() || !pubType) {
@@ -447,95 +486,142 @@ function CreatePublicationModal({ open, onClose, onCreated }: CreateModalProps) 
         toast.error(json.error ?? 'Tạo công bố thất bại');
         return;
       }
-      toast.success('Đã tạo công bố (Bản nháp)');
-      onCreated(json.data as PublicationItem);
-      setSavedPub(json.data as PublicationItem);
+      const pub = json.data as PublicationItem;
+      await uploadStagedFiles(pub.id);
+      toast.success('Đã lưu bản nháp');
+      onCreated(pub);
+      handleClose();
     } finally {
       setSaving(false);
     }
   };
+
+  const isBusy = saving || uploadingFiles;
 
   return (
     <Dialog open={open} onOpenChange={(v) => !v && handleClose()}>
       <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <BookOpen className="w-4 h-4" />
-            {savedPub ? 'Thêm file minh chứng' : 'Đăng công bố mới'}
+            <BookOpen className="w-4 h-4" /> Đăng công bố mới
           </DialogTitle>
         </DialogHeader>
 
-        {!savedPub ? (
-          <>
-            <div className="space-y-4 py-2">
-              <div className="space-y-1.5">
-                <Label>Tiêu đề <span className="text-destructive">*</span></Label>
-                <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Tên bài báo, sách, patent..." />
-              </div>
+        <div className="space-y-4 py-2">
+          {/* ── Thông tin cơ bản ── */}
+          <div className="space-y-1.5">
+            <Label>Tiêu đề <span className="text-destructive">*</span></Label>
+            <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Tên bài báo, sách, patent..." />
+          </div>
 
-              <div className="space-y-1.5">
-                <Label>Loại công bố <span className="text-destructive">*</span></Label>
-                <Select value={pubType} onValueChange={setPubType}>
-                  <SelectTrigger><SelectValue placeholder="Chọn loại..." /></SelectTrigger>
-                  <SelectContent>
-                    {Object.entries(PUB_TYPE_LABEL).map(([k, v]) => (
-                      <SelectItem key={k} value={k}>{v}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+          <div className="space-y-1.5">
+            <Label>Loại công bố <span className="text-destructive">*</span></Label>
+            <Select value={pubType} onValueChange={setPubType}>
+              <SelectTrigger><SelectValue placeholder="Chọn loại..." /></SelectTrigger>
+              <SelectContent>
+                {Object.entries(PUB_TYPE_LABEL).map(([k, v]) => (
+                  <SelectItem key={k} value={k}>{v}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-1.5">
-                  <Label>Tạp chí / Nhà xuất bản</Label>
-                  <Input value={journal} onChange={(e) => setJournal(e.target.value)} placeholder="Tên tạp chí..." />
-                </div>
-                <div className="space-y-1.5">
-                  <Label>Năm xuất bản</Label>
-                  <Input value={year} onChange={(e) => setYear(e.target.value)} type="number" placeholder={String(new Date().getFullYear())} />
-                </div>
-              </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1.5">
+              <Label>Tạp chí / Nhà xuất bản</Label>
+              <Input value={journal} onChange={(e) => setJournal(e.target.value)} placeholder="Tên tạp chí..." />
+            </div>
+            <div className="space-y-1.5">
+              <Label>Năm xuất bản</Label>
+              <Input value={year} onChange={(e) => setYear(e.target.value)} type="number" placeholder={String(new Date().getFullYear())} />
+            </div>
+          </div>
 
-              <div className="space-y-1.5">
-                <Label>DOI</Label>
-                <Input value={doi} onChange={(e) => setDoi(e.target.value)} placeholder="10.xxxx/..." />
-              </div>
+          <div className="space-y-1.5">
+            <Label>DOI</Label>
+            <Input value={doi} onChange={(e) => setDoi(e.target.value)} placeholder="10.xxxx/..." />
+          </div>
 
-              <div className="space-y-1.5">
-                <Label>Tóm tắt</Label>
-                <Textarea value={abstract} onChange={(e) => setAbstract(e.target.value)} rows={3} placeholder="Tóm tắt ngắn gọn (tùy chọn)..." />
-              </div>
+          <div className="space-y-1.5">
+            <Label>Tóm tắt</Label>
+            <Textarea value={abstract} onChange={(e) => setAbstract(e.target.value)} rows={3} placeholder="Tóm tắt ngắn gọn (tùy chọn)..." />
+          </div>
+
+          <Separator />
+
+          {/* ── File minh chứng ── */}
+          <div className="space-y-2">
+            <Label className="flex items-center gap-1.5">
+              <Paperclip className="w-3.5 h-3.5 text-muted-foreground" />
+              File minh chứng
+              <span className="text-xs font-normal text-muted-foreground">(tùy chọn)</span>
+            </Label>
+
+            {/* Drop zone */}
+            <div
+              onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+              onDragLeave={() => setDragOver(false)}
+              onDrop={(e) => { e.preventDefault(); setDragOver(false); stageFiles(e.dataTransfer.files); }}
+              onClick={() => fileInputRef.current?.click()}
+              className={`border-2 border-dashed rounded-lg p-4 text-center cursor-pointer transition-colors ${
+                dragOver
+                  ? 'border-primary bg-primary/5'
+                  : 'border-border hover:border-primary/50 hover:bg-muted/40'
+              }`}
+            >
+              <input
+                ref={fileInputRef}
+                type="file"
+                multiple
+                accept={ACCEPTED_MIME}
+                className="hidden"
+                onChange={(e) => stageFiles(e.target.files)}
+              />
+              <Upload className="w-5 h-5 mx-auto mb-1.5 text-muted-foreground" />
+              <p className="text-xs text-muted-foreground">
+                Kéo thả hoặc <span className="text-primary font-medium">chọn file</span>
+              </p>
+              <p className="text-xs text-muted-foreground/60 mt-0.5">
+                PDF · Word · Excel · Ảnh &nbsp;·&nbsp; Tối đa 100MB/file
+              </p>
             </div>
 
-            <DialogFooter className="gap-2">
-              <Button variant="outline" onClick={handleClose} disabled={saving}>Hủy</Button>
-              <Button onClick={handleSave} disabled={saving}>
-                {saving && <Loader2 className="w-4 h-4 animate-spin mr-1.5" />}
-                Lưu bản nháp
-              </Button>
-            </DialogFooter>
-          </>
-        ) : (
-          <>
-            <div className="py-2 space-y-4">
-              <div className="flex items-start gap-2 p-3 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800">
-                <CheckCircle2 className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
-                <div className="min-w-0">
-                  <p className="text-xs font-medium text-green-700 dark:text-green-300">Đã lưu bản nháp</p>
-                  <p className="text-xs text-green-600 dark:text-green-400 truncate">{savedPub.title}</p>
-                </div>
+            {/* Staged file list */}
+            {stagedFiles.length > 0 && (
+              <div className="space-y-1.5">
+                {stagedFiles.map((staged) => (
+                  <div
+                    key={staged.id}
+                    className="flex items-center gap-2.5 px-3 py-2 rounded-lg bg-muted/50 border border-border/50"
+                  >
+                    <span className="text-base flex-shrink-0 leading-none">{fileIcon(staged.file.type)}</span>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs font-medium text-foreground truncate">{staged.file.name}</p>
+                      <p className="text-xs text-muted-foreground">{formatBytes(staged.file.size)}</p>
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="h-6 w-6 p-0 text-muted-foreground hover:text-destructive flex-shrink-0"
+                      onClick={() => removeStagedFile(staged.id)}
+                      disabled={isBusy}
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </Button>
+                  </div>
+                ))}
               </div>
+            )}
+          </div>
+        </div>
 
-              <AttachmentSection pubId={savedPub.id} editable />
-            </div>
-
-            <DialogFooter>
-              <Button onClick={handleClose} className="gap-1.5">
-                <CheckCircle2 className="w-4 h-4" /> Hoàn thành
-              </Button>
-            </DialogFooter>
-          </>
-        )}
+        <DialogFooter className="gap-2">
+          <Button variant="outline" onClick={handleClose} disabled={isBusy}>Hủy</Button>
+          <Button onClick={handleSave} disabled={isBusy}>
+            {isBusy && <Loader2 className="w-4 h-4 animate-spin mr-1.5" />}
+            {uploadingFiles ? `Đang upload ${stagedFiles.length} file…` : 'Lưu bản nháp'}
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
@@ -566,16 +652,19 @@ function ReviewNoteDialog({ note, open, onClose }: { note: string | null; open: 
 interface PubCardProps {
   pub: PublicationItem;
   onSubmit: (id: string) => void;
+  onRecall: (id: string) => void;
   onDelete: (id: string) => void;
   onEdit: (pub: PublicationItem) => void;
   onViewNote: (note: string | null) => void;
   submitting: string | null;
+  recalling: string | null;
 }
 
-function PublicationCard({ pub, onSubmit, onDelete, onEdit, onViewNote, submitting }: PubCardProps) {
+function PublicationCard({ pub, onSubmit, onRecall, onDelete, onEdit, onViewNote, submitting, recalling }: PubCardProps) {
   const c = cfg(pub.status);
   const myAuthor = pub.publicationAuthors[0];
   const isSubmitting = submitting === pub.id;
+  const isRecalling = recalling === pub.id;
   const canEdit = pub.status === 'DRAFT' || pub.status === 'REJECTED';
 
   return (
@@ -647,10 +736,23 @@ function PublicationCard({ pub, onSubmit, onDelete, onEdit, onViewNote, submitti
           )}
 
           {pub.status === 'SUBMITTED' && (
-            <span className="flex items-center gap-1.5 text-xs text-yellow-600 dark:text-yellow-400">
-              <Clock className="w-3.5 h-3.5" />
-              Đang chờ phòng khoa học xét duyệt
-            </span>
+            <>
+              <span className="flex items-center gap-1.5 text-xs text-yellow-600 dark:text-yellow-400">
+                <Clock className="w-3.5 h-3.5" />
+                Đang chờ phòng khoa học xét duyệt
+              </span>
+              <Button
+                size="sm"
+                variant="outline"
+                className="h-7 text-xs gap-1 px-2.5 text-muted-foreground"
+                onClick={() => onRecall(pub.id)}
+                disabled={isRecalling}
+                title="Rút lại để chỉnh sửa"
+              >
+                {isRecalling ? <Loader2 className="w-3 h-3 animate-spin" /> : <Undo2 className="w-3 h-3" />}
+                Rút lại
+              </Button>
+            </>
           )}
 
           {pub.status === 'REJECTED' && (
@@ -699,6 +801,7 @@ export default function MyPublicationsPage() {
   const [createOpen, setCreateOpen] = useState(false);
   const [editTarget, setEditTarget] = useState<PublicationItem | null>(null);
   const [submitting, setSubmitting] = useState<string | null>(null);
+  const [recalling, setRecalling] = useState<string | null>(null);
   const [noteDialog, setNoteDialog] = useState<string | null>(null);
 
   const load = useCallback(() => {
@@ -764,6 +867,22 @@ export default function MyPublicationsPage() {
     }
     toast.success('Đã xóa');
     setPubs((prev) => prev.filter((p) => p.id !== id));
+  };
+
+  const handleRecall = async (id: string) => {
+    setRecalling(id);
+    try {
+      const res = await fetch(`/api/personal/my-publications/${id}/recall`, { method: 'POST' });
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        toast.error(json.error ?? 'Rút lại thất bại');
+        return;
+      }
+      toast.success('Đã rút lại — công bố trở về Bản nháp, bạn có thể chỉnh sửa');
+      setPubs((prev) => prev.map((p) => p.id === id ? { ...p, status: 'DRAFT' } : p));
+    } finally {
+      setRecalling(null);
+    }
   };
 
   const handleEdit = (pub: PublicationItem) => setEditTarget(pub);
@@ -867,10 +986,12 @@ export default function MyPublicationsPage() {
               key={pub.id}
               pub={pub}
               onSubmit={handleSubmit}
+              onRecall={handleRecall}
               onDelete={handleDelete}
               onEdit={handleEdit}
               onViewNote={(note) => setNoteDialog(note)}
               submitting={submitting}
+              recalling={recalling}
             />
           ))}
         </div>
