@@ -10,8 +10,21 @@ import { requireFunction } from '@/lib/rbac/middleware';
 import { SYSTEM } from '@/lib/rbac/function-codes';
 import prisma from '@/lib/db';
 import { logAudit } from '@/lib/audit';
+import { clearPermissionCache } from '@/lib/rbac/policy';
 
 export const dynamic = 'force-dynamic';
+
+/** Invalidate permission cache cho tất cả users đang giữ positionId này */
+async function invalidateCacheForPosition(positionId: string): Promise<number> {
+  const affected = await prisma.userPosition.findMany({
+    where: { positionId, isActive: true },
+    select: { userId: true },
+  });
+  for (const { userId } of affected) {
+    clearPermissionCache(userId);
+  }
+  return affected.length;
+}
 
 // GET: Lấy danh sách assignments
 export async function GET(request: NextRequest) {
@@ -101,7 +114,9 @@ export async function POST(request: NextRequest) {
       result: 'SUCCESS'
     });
 
-    return NextResponse.json({ assignment, message: 'Gán quyền thành công' });
+    const cacheInvalidated = await invalidateCacheForPosition(positionId);
+
+    return NextResponse.json({ assignment, message: 'Gán quyền thành công', cacheInvalidated });
   } catch (error) {
     console.error('Error creating position-function:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
@@ -166,9 +181,12 @@ export async function PATCH(request: NextRequest) {
       result: 'SUCCESS'
     });
 
-    return NextResponse.json({ 
-      assignment: updated, 
-      message: `Đã cập nhật scope từ ${oldScope} → ${normalizedScope}` 
+    const cacheInvalidated = await invalidateCacheForPosition(existing.positionId);
+
+    return NextResponse.json({
+      assignment: updated,
+      message: `Đã cập nhật scope từ ${oldScope} → ${normalizedScope}`,
+      cacheInvalidated,
     });
   } catch (error) {
     console.error('Error updating position-function scope:', error);
@@ -205,6 +223,8 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'Không tìm thấy quyền' }, { status: 404 });
     }
 
+    const affectedPositionId = existing.positionId;
+
     await prisma.positionFunction.delete({
       where: { id: existing.id }
     });
@@ -222,7 +242,9 @@ export async function DELETE(request: NextRequest) {
       result: 'SUCCESS'
     });
 
-    return NextResponse.json({ message: 'Hủy gán quyền thành công' });
+    const cacheInvalidated = await invalidateCacheForPosition(affectedPositionId);
+
+    return NextResponse.json({ message: 'Hủy gán quyền thành công', cacheInvalidated });
   } catch (error) {
     console.error('Error deleting position-function:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });

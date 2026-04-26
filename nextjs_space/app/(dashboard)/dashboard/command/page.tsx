@@ -16,6 +16,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
+import { AutoDashboard } from '@/components/dashboard/auto-dashboard';
 
 // ── Config ─────────────────────────────────────────────────────────────────
 
@@ -614,6 +615,14 @@ export default function CommandDashboard() {
               </Link>
             </div>
           </div>
+        </div>
+
+        {/* Dynamic RBAC Widgets */}
+        <div className="px-6 pb-6">
+          <AutoDashboard
+            title="Thống kê theo phân quyền"
+            description="Widget hiển thị tự động theo chức năng được gán trong ma trận phân quyền RBAC"
+          />
         </div>
 
         {/* footer */}

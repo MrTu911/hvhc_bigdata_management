@@ -18,28 +18,46 @@ import type { DashboardRoleKey } from '@prisma/client'
 
 export const dynamic = 'force-dynamic'
 
-/** Map UserRole → DashboardRoleKey */
-function resolveDashboardRoleKey(userRole: string): DashboardRoleKey {
-  switch (userRole) {
-    case 'CHI_HUY_HOC_VIEN':
-    case 'ADMIN':
-    case 'QUAN_TRI_HE_THONG':
-      return 'EXECUTIVE'
-    case 'CHI_HUY_KHOA_PHONG':
-    case 'CHI_HUY_HE':
-    case 'CHI_HUY_TIEU_DOAN':
-    case 'CHI_HUY_BAN':
-    case 'CHU_NHIEM_BO_MON':
-      return 'DEPARTMENT'
-    case 'GIANG_VIEN':
-    case 'NGHIEN_CUU_VIEN':
-      return 'FACULTY'
-    case 'HOC_VIEN':
-    case 'HOC_VIEN_SINH_VIEN':
-      return 'STUDENT'
-    default:
-      return 'DEPARTMENT'
+const EXECUTIVE_POSITIONS = new Set([
+  'PHO_GIAM_DOC', 'GIAM_DOC', 'CHINH_UY', 'PHO_CHINH_UY', 'SYSTEM_ADMIN',
+  // legacy role strings (backward compat)
+  'CHI_HUY_HOC_VIEN', 'ADMIN', 'QUAN_TRI_HE_THONG',
+])
+
+const DEPARTMENT_POSITIONS = new Set([
+  'TRUONG_KHOA', 'PHO_TRUONG_KHOA', 'CHI_HUY_HE', 'CHI_HUY_TIEU_DOAN',
+  'CHI_HUY_BAN', 'CHU_NHIEM_BO_MON',
+  // legacy role strings
+  'CHI_HUY_KHOA_PHONG',
+])
+
+const FACULTY_POSITIONS = new Set([
+  'GIANG_VIEN', 'NGHIEN_CUU_VIEN', 'NHAN_VIEN',
+])
+
+const STUDENT_POSITIONS = new Set([
+  'HOC_VIEN_QUAN_SU', 'SINH_VIEN_DAN_SU',
+  // legacy role strings
+  'HOC_VIEN', 'HOC_VIEN_SINH_VIEN',
+])
+
+/** Map primaryPositionCode → DashboardRoleKey (ưu tiên positionCode, fallback về legacy role) */
+function resolveDashboardRoleKey(primaryPositionCode: string | null | undefined, legacyRole?: string): DashboardRoleKey {
+  const code = primaryPositionCode ?? legacyRole ?? ''
+
+  if (EXECUTIVE_POSITIONS.has(code)) return 'EXECUTIVE'
+  if (DEPARTMENT_POSITIONS.has(code)) return 'DEPARTMENT'
+  if (FACULTY_POSITIONS.has(code)) return 'FACULTY'
+  if (STUDENT_POSITIONS.has(code)) return 'STUDENT'
+
+  // Fallback nếu không map được: thử legacyRole
+  if (primaryPositionCode && legacyRole) {
+    if (EXECUTIVE_POSITIONS.has(legacyRole)) return 'EXECUTIVE'
+    if (FACULTY_POSITIONS.has(legacyRole)) return 'FACULTY'
+    if (STUDENT_POSITIONS.has(legacyRole)) return 'STUDENT'
   }
+
+  return 'DEPARTMENT'
 }
 
 /** Map DashboardRoleKey → frontend route */
@@ -58,7 +76,7 @@ export async function GET(request: NextRequest) {
     if (!authResult.allowed) return authResult.response!
 
     const user = authResult.user!
-    const dashboardKey = resolveDashboardRoleKey(user.role)
+    const dashboardKey = resolveDashboardRoleKey(user.primaryPositionCode, user.role)
 
     // Layout ưu tiên: user layout → role template → generated default
     const [template, userLayout] = await Promise.all([

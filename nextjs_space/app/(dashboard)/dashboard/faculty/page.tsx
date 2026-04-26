@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { AutoDashboard } from "@/components/dashboard/auto-dashboard";
 import {
   BarChart,
   Bar,
@@ -478,6 +479,12 @@ export default function FacultyManagementPage() {
           />
         </CardContent>
       </Card>
+
+      {/* Dynamic RBAC Widgets */}
+      <AutoDashboard
+        title="Thống kê theo phân quyền"
+        description="Widget hiển thị tự động theo chức năng được gán trong ma trận phân quyền RBAC"
+      />
 
       {/* Quick Navigation */}
       <div>

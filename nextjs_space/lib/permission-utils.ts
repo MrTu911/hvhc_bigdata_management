@@ -1,56 +1,47 @@
 /**
  * Permission Utilities - Các hàm tiện ích cho RBAC
  *
- * v8.5 UPDATE:
- * - invalidatePermissionCache: Xóa SWR cache sau khi thay đổi quyền
- * - forceRefreshPermissions: Xóa cache + trigger session.update() (JWT refresh)
- * - usePermissionRefresh: React hook kết hợp cả hai
+ * v8.9 UPDATE:
+ * - usePermissionRefresh: hook dùng useSession().update() thực sự trigger JWT refresh
+ * - invalidatePermissionCache: xóa SWR cache sau khi thay đổi quyền
  */
 
 import { mutate } from 'swr';
+import { useSession } from 'next-auth/react';
 
 /**
  * Invalidate SWR permission cache phía client.
- * Gọi sau khi cập nhật RBAC (position, function, user-position).
- * Sidebar sẽ tự re-render với permissions mới từ API.
+ * Gọi sau khi cập nhật RBAC để sidebar re-fetch permissions mới từ API.
  */
 export async function invalidatePermissionCache(): Promise<void> {
   await mutate('/api/me/permissions', undefined, { revalidate: true });
 }
 
 /**
- * React hook: Refresh cả JWT token lẫn SWR cache.
- * Dùng trong các component sau khi thay đổi RBAC để cập nhật ngay lập tức.
+ * React hook: Refresh JWT token + SWR cache sau khi thay đổi RBAC.
+ *
+ * Cách hoạt động:
+ * 1. session.update() → trigger JWT callback với trigger='update'
+ *    → auth.ts re-load functionCodes từ DB → ghi vào token mới
+ * 2. mutate('/api/me/permissions') → SWR re-fetch → usePermissions trả data mới
  *
  * @example
  *   const { refreshAll } = usePermissionRefresh();
  *   await handleSave();
- *   await refreshAll(); // JWT + SWR đều refresh
+ *   refreshAll(); // không cần await — fire-and-forget để không block UI
  */
 export function usePermissionRefresh() {
-  // Dynamic import để tránh lỗi server-side
-  const refreshAll = async () => {
-    // 1. Invalidate SWR cache → sidebar dùng API data sẽ tự cập nhật
-    await invalidatePermissionCache();
+  const { update: updateSession } = useSession();
 
-    // 2. Trigger session.update() để refresh JWT token
-    // Dùng dynamic import tránh lỗi SSR
+  const refreshAll = async () => {
     try {
-      const { getSession } = await import('next-auth/react');
-      const session = await getSession();
-      if (session) {
-        // Gọi fetch để trigger jwt callback với trigger='update'
-        await fetch('/api/auth/session', {
-          method: 'GET',
-          headers: { 'X-Permission-Refresh': '1' },
-          cache: 'no-store',
-        });
-        // Re-invalidate SWR sau JWT update
-        await mutate('/api/me/permissions', undefined, { revalidate: true });
-      }
+      // Bước 1: Trigger JWT callback với trigger='update' — auth.ts sẽ re-query DB
+      await updateSession();
     } catch {
-      // Ignore - SWR invalidation already done above
+      // updateSession không critical — SWR vẫn đủ để update permissions
     }
+    // Bước 2: Force SWR re-fetch /api/me/permissions → usePermissions nhận data mới
+    await mutate('/api/me/permissions', undefined, { revalidate: true });
   };
 
   return { refreshAll, invalidate: invalidatePermissionCache };

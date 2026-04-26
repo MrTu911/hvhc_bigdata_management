@@ -48,25 +48,25 @@ export function usePermissions() {
   const sessionUnitId = session?.user?.unitId || null;
   const sessionPrimaryPosition = session?.user?.primaryPositionCode || null;
   
-  // v8.3: Secondary source - từ API (lazy load for scopeByFunction & positions)
-  // Chỉ fetch khi cần scope/positions details, không block UI
+  // v8.3: Secondary source - từ API (real-time, luôn fresh từ DB)
   const { data: apiData, error, isLoading: apiLoading, mutate } = useSWR<UserPermissions>(
     status === 'authenticated' ? '/api/me/permissions' : null,
     fetcher,
     {
-      revalidateOnFocus: false,
+      revalidateOnFocus: true,    // Re-fetch khi user quay lại tab (pick up RBAC changes)
       revalidateOnReconnect: true,
-      dedupingInterval: 30000, // 30 giây (tăng vì session đã có data)
+      dedupingInterval: 10000,    // 10s — đủ ngắn để nhận thay đổi RBAC kịp thời
+      refreshInterval: 60000,     // Poll mỗi 60s để tự động cập nhật khi admin đổi quyền
     }
   );
 
-  // Optimize: Convert array to Set for O(1) lookup
-  // Ưu tiên session data (instant), fallback to API data
+  // Ưu tiên API data (luôn fresh từ DB), fallback về JWT chỉ khi API chưa load
+  // Đây là điểm quan trọng: JWT là snapshot lúc login, API mới phản ánh RBAC thực tế
   const functionCodeSet = useMemo(() => {
-    const codes = sessionFunctionCodes.length > 0 
-      ? sessionFunctionCodes 
-      : (apiData?.functionCodes || []);
-    return new Set(codes);
+    if (apiData?.functionCodes !== undefined) {
+      return new Set(apiData.functionCodes); // API wins khi đã load (dù rỗng)
+    }
+    return new Set(sessionFunctionCodes); // JWT fallback chỉ khi API chưa về
   }, [sessionFunctionCodes, apiData?.functionCodes]);
 
   // v8.3: User's unitId từ session (instant)
@@ -85,15 +85,13 @@ export function usePermissions() {
     return false;
   }, [sessionPrimaryPosition, apiData?.positions]);
 
-  // v8.3: Loading state - chỉ true nếu chưa có session
-  // Nếu session có data thì không cần chờ API
+  // Loading = true khi chưa có data nào hết (cả API lẫn JWT đều chưa có)
   const isLoading = useMemo(() => {
     if (status === 'loading') return true;
-    // Nếu session có functionCodes → không cần chờ API
-    if (sessionFunctionCodes.length > 0) return false;
-    // Nếu session không có data → chờ API
+    if (apiData !== undefined) return false; // API đã trả về → dùng được
+    if (sessionFunctionCodes.length > 0) return false; // JWT có data → fallback tạm
     return apiLoading;
-  }, [status, sessionFunctionCodes.length, apiLoading]);
+  }, [status, apiData, sessionFunctionCodes.length, apiLoading]);
 
   // Kiểm tra xem user có quyền nào đó không
   const hasPermission = useCallback((functionCode: string): boolean => {
@@ -233,10 +231,11 @@ export function usePermissions() {
     // Core data
     permissions,
     functionCodeSet,
-    userUnitId, // v8.3: Expose unitId directly
-    
+    userUnitId,
+
     // Status
     isLoading,
+    isApiLoaded: apiData !== undefined, // true khi API đã trả về (dù rỗng)
     isAuthenticated: status === 'authenticated',
     error,
     
@@ -296,7 +295,7 @@ export function useHasRole(allowedRoles: string[]) {
  * Hook: Lấy tất cả quyền (alias)
  * @param fetchAll - nếu true thì load tất cả permissions từ system (cho admin)
  */
-export function useAllPermissions(fetchAll: boolean = false) {
+export function useAllPermissions(_fetchAll: boolean = false) {
   const result = usePermissions();
   return {
     ...result,

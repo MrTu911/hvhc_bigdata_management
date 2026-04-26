@@ -133,6 +133,23 @@ const DEMO_ACCOUNTS: DemoAccount[] = [
   },
 ];
 
+// Map positionCode → legacy role string (backward compat với session.user.role)
+const POSITION_TO_LEGACY_ROLE: Record<string, string> = {
+  'SYSTEM_ADMIN':      'QUAN_TRI_HE_THONG',
+  'PHO_GIAM_DOC':      'CHI_HUY_HOC_VIEN',
+  'GIAM_DOC':          'CHI_HUY_HOC_VIEN',
+  'CHINH_UY':          'CHI_HUY_HOC_VIEN',
+  'TRUONG_KHOA':       'CHI_HUY_KHOA_PHONG',
+  'PHO_TRUONG_KHOA':   'CHI_HUY_KHOA_PHONG',
+  'CHU_NHIEM_BO_MON':  'CHU_NHIEM_BO_MON',
+  'GIANG_VIEN':        'GIANG_VIEN',
+  'NGHIEN_CUU_VIEN':   'NGHIEN_CUU_VIEN',
+  'NHAN_VIEN':         'KY_THUAT_VIEN',
+  'KY_THUAT_VIEN':     'KY_THUAT_VIEN',
+  'HOC_VIEN_QUAN_SU':  'HOC_VIEN_SINH_VIEN',
+  'SINH_VIEN_DAN_SU':  'HOC_VIEN_SINH_VIEN',
+};
+
 // ─── Position-Function Seeder (từ seed_positions_rbac.ts) ─────────────────────
 
 type SeedFunction = {
@@ -325,6 +342,8 @@ async function ensureUnit(code: string) {
 }
 
 async function upsertDemoUser(account: DemoAccount, hashedPassword: string) {
+  const legacyRole = POSITION_TO_LEGACY_ROLE[account.positionCode] ?? 'GIANG_VIEN';
+
   const existing = await prisma.user.findUnique({ where: { email: account.email } });
   if (existing) {
     await prisma.user.update({
@@ -335,9 +354,10 @@ async function upsertDemoUser(account: DemoAccount, hashedPassword: string) {
         rank: account.rank,
         militaryId: account.militaryId,
         status: UserStatus.ACTIVE,
-      },
+        role: legacyRole,
+      } as any,
     });
-    console.log(`  ⏩ Updated: ${account.email}`);
+    console.log(`  ⏩ Updated: ${account.email} | role=${legacyRole}`);
     return existing.id;
   }
 
@@ -351,9 +371,10 @@ async function upsertDemoUser(account: DemoAccount, hashedPassword: string) {
       department: account.unitCode,
       unit: account.unitCode,
       status: UserStatus.ACTIVE,
+      role: legacyRole,
     } as any,
   });
-  console.log(`  ✅ Created: ${account.email} | ${account.name}`);
+  console.log(`  ✅ Created: ${account.email} | ${account.name} | role=${legacyRole}`);
   return user.id;
 }
 

@@ -1753,6 +1753,28 @@ export const MENU_CONFIG: MenuGroup[] = [
 /**
  * Lọc menu theo danh sách functionCodes của user
  */
+/** Filter đệ quy một menu item và các children của nó theo functionSet */
+function filterMenuItem(item: MenuItem, functionSet: Set<string>, seenHrefs: Set<string>): MenuItem | null {
+  // Loại bỏ item trùng href
+  if (item.href && seenHrefs.has(item.href)) return null;
+  if (item.href) seenHrefs.add(item.href);
+
+  // Kiểm tra quyền của item này
+  const allowed = !item.functions || item.functions.length === 0
+    || item.functions.some(f => functionSet.has(f));
+  if (!allowed) return null;
+
+  // Nếu có children, filter đệ quy
+  if (item.children && item.children.length > 0) {
+    const filteredChildren = item.children
+      .map(child => filterMenuItem(child, functionSet, seenHrefs))
+      .filter((c): c is MenuItem => c !== null);
+    return { ...item, children: filteredChildren };
+  }
+
+  return item;
+}
+
 export function filterMenu(
   menu: MenuGroup[],
   userFunctions: Set<string> | string[],
@@ -1772,18 +1794,9 @@ export function filterMenu(
   return menu
     .map(group => ({
       ...group,
-      items: group.items.filter(item => {
-        // Loại bỏ item trùng href (guard chống lỗi data)
-        if (item.href && seenHrefs.has(item.href)) return false;
-        if (item.href) seenHrefs.add(item.href);
-
-        // Menu không yêu cầu quyền → luôn hiện
-        if (!item.functions || item.functions.length === 0) {
-          return true;
-        }
-        // Có ít nhất 1 quyền trong danh sách → hiện
-        return item.functions.some(f => functionSet.has(f));
-      }),
+      items: group.items
+        .map(item => filterMenuItem(item, functionSet, seenHrefs))
+        .filter((item): item is MenuItem => item !== null),
     }))
     .filter(group => group.items.length > 0);
 }

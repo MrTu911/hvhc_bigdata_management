@@ -46,8 +46,7 @@ export function DashboardSidebarEnhanced() {
   const sessionFunctionCodes = session?.user?.functionCodes || [];
   const sessionPrimaryPosition = session?.user?.primaryPositionCode;
   
-  // usePermissions() bổ sung thêm data (scope, positions) - lazy load
-  const { isAdmin, permissions, isLoading } = usePermissions();
+  const { isAdmin, permissions, isLoading, isApiLoaded } = usePermissions();
   
   // Sidebar collapse state
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -164,9 +163,9 @@ export function DashboardSidebarEnhanced() {
   }, []);
 
   // ============================================================================
-  // v8.3 CRITICAL: Lọc menu theo quyền
-  // - Ưu tiên session.user.functionCodes (instant từ JWT)
-  // - Fallback to permissions từ API nếu cần
+  // Lọc menu theo quyền — v8.9
+  // - Ưu tiên API data (isApiLoaded=true): phản ánh RBAC thực tế sau mọi thay đổi
+  // - Fallback JWT chỉ khi API chưa load lần đầu
   // ============================================================================
   const filteredNavigationGroups = useMemo(() => {
     // Case 1: Chưa đăng nhập → chỉ hiện trang chủ
@@ -183,11 +182,11 @@ export function DashboardSidebarEnhanced() {
     }
 
     // Case 3: User bình thường
-    // v8.5: Ưu tiên API data (luôn cập nhật sau RBAC changes) khi đã load xong
-    // Dùng session data làm skeleton trong khi API đang tải
-    const functionCodes = (permissions?.functionCodes && permissions.functionCodes.length > 0)
-      ? permissions.functionCodes   // API data: phản ánh thay đổi RBAC real-time
-      : sessionFunctionCodes;       // Session data: fallback khi API chưa load
+    // Khi API đã load (isApiLoaded=true): dùng API data kể cả khi rỗng (permissions bị thu hồi)
+    // Khi API chưa load: dùng JWT session làm placeholder tạm thời
+    const functionCodes = isApiLoaded
+      ? (permissions?.functionCodes || [])  // API wins — phản ánh RBAC thực tế
+      : sessionFunctionCodes;               // JWT fallback chỉ khi API chưa về
     
     // Nếu không có functionCodes và đang loading → menu tối thiểu
     if (functionCodes.length === 0 && isLoading) {
@@ -206,7 +205,7 @@ export function DashboardSidebarEnhanced() {
     // Filter theo functionCodes
     const userFunctions = new Set(functionCodes);
     return filterMenu(MENU_CONFIG, userFunctions, false);
-  }, [status, session?.user, sessionPrimaryPosition, sessionFunctionCodes, isAdmin, permissions?.functionCodes, isLoading]);
+  }, [status, session?.user, sessionPrimaryPosition, sessionFunctionCodes, isAdmin, permissions?.functionCodes, isLoading, isApiLoaded]);
 
   // Collapse all groups - định nghĩa sau filteredNavigationGroups
   const collapseAllGroups = useCallback(() => {

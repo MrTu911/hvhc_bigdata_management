@@ -19,6 +19,7 @@ import {
   Award
 } from 'lucide-react';
 import { useLanguage } from '@/components/providers/language-provider';
+import { AutoDashboard } from '@/components/dashboard/auto-dashboard';
 
 interface Overview {
   enrolledCourses: number;
@@ -422,6 +423,12 @@ export default function StudentDashboard() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Dynamic RBAC Widgets */}
+      <AutoDashboard
+        title="Chức năng được phân quyền"
+        description="Widget hiển thị tự động theo chức năng được gán trong ma trận phân quyền RBAC"
+      />
     </div>
   );
 }

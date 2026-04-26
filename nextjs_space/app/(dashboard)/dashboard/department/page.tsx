@@ -19,6 +19,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { toast } from 'sonner'
+import { AutoDashboard } from '@/components/dashboard/auto-dashboard'
 
 const POLL_INTERVAL_MS = 30_000
 
@@ -273,6 +274,12 @@ export default function DepartmentDashboardPage() {
           ))}
         </div>
       </div>
+
+      {/* Dynamic RBAC Widgets */}
+      <AutoDashboard
+        title="Thống kê theo phân quyền"
+        description="Widget hiển thị tự động theo chức năng được gán trong ma trận phân quyền RBAC"
+      />
 
       {/* Status footer */}
       <div className="flex items-center gap-2 text-xs text-muted-foreground pt-2 border-t">

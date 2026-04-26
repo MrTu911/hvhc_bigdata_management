@@ -1,9 +1,11 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { signOut } from 'next-auth/react';
+import useSWR from 'swr';
 import { useLanguage } from '@/components/providers/language-provider';
 import { StatsCard3D } from '@/components/dashboard/stats-card-3d';
 import { ServiceStatusChart } from '@/components/dashboard/service-status-chart';
@@ -13,7 +15,7 @@ import DashboardHeader from '@/components/dashboard/dashboard-header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Server, Users, AlertCircle, Activity, TrendingUp, Database, Cpu, HardDrive, User, Mail, Shield, Building2, Calendar, ArrowRight } from 'lucide-react';
+import { Server, Users, AlertCircle, Activity, TrendingUp, Cpu, HardDrive, User, Mail, Shield, ArrowRight, RefreshCw, LogOut } from 'lucide-react';
 
 interface DashboardData {
   services: {
@@ -40,63 +42,122 @@ interface DashboardData {
   recentLogs: any[];
 }
 
-// Map role to Vietnamese display name
-const roleDisplayNames: Record<string, string> = {
+// Map positionCode/role → tên hiển thị tiếng Việt
+const positionDisplayNames: Record<string, string> = {
+  // New position codes
+  'SYSTEM_ADMIN':      'Quản trị Hệ thống',
+  'PHO_GIAM_DOC':      'Phó Giám đốc Học viện',
+  'GIAM_DOC':          'Giám đốc Học viện',
+  'CHINH_UY':          'Chính ủy',
+  'TRUONG_KHOA':       'Trưởng Khoa',
+  'CHU_NHIEM_BO_MON':  'Chủ nhiệm Bộ môn',
+  'GIANG_VIEN':        'Giảng viên',
+  'NGHIEN_CUU_VIEN':   'Nghiên cứu viên',
+  'NHAN_VIEN':         'Nhân viên',
+  'HOC_VIEN_QUAN_SU':  'Học viên Quân sự',
+  'SINH_VIEN_DAN_SU':  'Sinh viên Dân sự',
+  // Legacy role strings (backward compat)
   'QUAN_TRI_HE_THONG': 'Quản trị Hệ thống',
-  'CHI_HUY_HOC_VIEN': 'Chỉ huy Học viện',
-  'CHI_HUY_KHOA_PHONG': 'Chỉ huy Khoa/Phòng',
-  'CHU_NHIEM_BO_MON': 'Chủ nhiệm Bộ môn',
-  'GIANG_VIEN': 'Giảng viên',
-  'NGHIEN_CUU_VIEN': 'Nghiên cứu viên',
-  'HOC_VIEN_SINH_VIEN': 'Học viên/Sinh viên',
-  'KY_THUAT_VIEN': 'Kỹ thuật viên',
-  'ADMIN': 'Quản trị viên',
+  'CHI_HUY_HOC_VIEN':  'Chỉ huy Học viện',
+  'CHI_HUY_KHOA_PHONG':'Chỉ huy Khoa/Phòng',
+  'HOC_VIEN_SINH_VIEN':'Học viên/Sinh viên',
+  'KY_THUAT_VIEN':     'Kỹ thuật viên',
+  'ADMIN':             'Quản trị viên',
 };
 
-// Map role to dashboard route
-const roleRoutes: Record<string, string> = {
-  'QUAN_TRI_HE_THONG': '/dashboard/admin',
-  'CHI_HUY_HOC_VIEN': '/dashboard/command',
-  'CHI_HUY_KHOA_PHONG': '/dashboard/faculty',
-  'CHU_NHIEM_BO_MON': '/dashboard/department-head',
-  'GIANG_VIEN': '/dashboard/instructor',
-  'NGHIEN_CUU_VIEN': '/dashboard/research',
-  'HOC_VIEN_SINH_VIEN': '/dashboard/student',
-  'KY_THUAT_VIEN': '/dashboard/admin',
-  'ADMIN': '/dashboard/admin',
-};
+const swrFetcher = (url: string) => fetch(url).then(r => r.json());
+
+// Position codes có quyền xem trang system overview này
+const ADMIN_POSITIONS = new Set([
+  'SYSTEM_ADMIN', 'PHO_GIAM_DOC', 'GIAM_DOC', 'CHINH_UY', 'PHO_CHINH_UY',
+  // legacy role strings
+  'ADMIN', 'QUAN_TRI_HE_THONG', 'CHI_HUY_HOC_VIEN',
+]);
+
+// Map positionCode → route dashboard chuyên biệt (dùng session trực tiếp, không cần API)
+function resolveRedirectFromSession(positionCode: string | null | undefined, legacyRole?: string): string | null {
+  const code = positionCode ?? legacyRole ?? '';
+  if (!code) return null;
+  if (['TRUONG_KHOA', 'PHO_TRUONG_KHOA', 'CHU_NHIEM_BO_MON', 'GIANG_VIEN', 'NGHIEN_CUU_VIEN',
+       'CHI_HUY_KHOA_PHONG', 'CHI_HUY_HE', 'CHI_HUY_TIEU_DOAN', 'CHI_HUY_BAN'].includes(code)) {
+    return '/dashboard/faculty';
+  }
+  if (['HOC_VIEN_QUAN_SU', 'SINH_VIEN_DAN_SU', 'HOC_VIEN', 'HOC_VIEN_SINH_VIEN'].includes(code)) {
+    return '/dashboard/student';
+  }
+  if (['NHAN_VIEN', 'KY_THUAT_VIEN'].includes(code)) return '/dashboard/personal';
+  return null;
+}
+
+type FetchStatus = 'loading' | 'ok' | 'forbidden' | 'error';
 
 export default function DashboardPageEnhanced() {
-  const { data: session } = useSession() || {};
+  const { data: session, update: updateSession } = useSession() || {};
   const router = useRouter();
   const { t, language } = useLanguage();
   const [data, setData] = useState<DashboardData | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [fetchStatus, setFetchStatus] = useState<FetchStatus>('loading');
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
-  // NO auto-redirect - show profile info first
+  // Dùng để lấy redirectTo khi cần (ví dụ: khi forbidden, hiển thị nút "Đi đến dashboard của tôi")
+  const { data: dashboardMe } = useSWR('/api/dashboard/me', swrFetcher);
 
+  // Early redirect: non-admin users không nên ở trang system overview này
+  // Dùng session.user.primaryPositionCode (sync, không cần API call)
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('/api/dashboard/stats');
-        if (response.ok) {
-          const result = await response.json();
-          setData(result.data);
-        }
-      } catch (error) {
-        console.error('Failed to fetch dashboard data:', error);
-      } finally {
-        setIsLoading(false);
+    if (!session?.user) return;
+    const posCode = session.user.primaryPositionCode;
+    const legacyRole = session.user.role;
+    // Nếu là admin/executive → ở lại trang này
+    if (ADMIN_POSITIONS.has(posCode ?? '') || ADMIN_POSITIONS.has(legacyRole ?? '')) return;
+    // Các role khác → redirect ngay
+    const target = resolveRedirectFromSession(posCode, legacyRole);
+    if (target) {
+      router.replace(target);
+    }
+  }, [session?.user, router]);
+
+  const fetchStats = useCallback(async () => {
+    try {
+      const response = await fetch('/api/dashboard/stats');
+      if (response.ok) {
+        const result = await response.json();
+        setData(result.data);
+        setFetchStatus('ok');
+      } else if (response.status === 403 || response.status === 401) {
+        setFetchStatus('forbidden');
+      } else {
+        setFetchStatus('error');
       }
-    };
-
-    fetchData();
-    const interval = setInterval(fetchData, 30000);
-
-    return () => clearInterval(interval);
+    } catch {
+      setFetchStatus('error');
+    }
   }, []);
 
-  if (isLoading) {
+  // Chỉ fetch stats khi session đã load và user là admin/executive
+  useEffect(() => {
+    if (!session?.user) return;
+    const posCode = session.user.primaryPositionCode;
+    const legacyRole = session.user.role;
+    if (!ADMIN_POSITIONS.has(posCode ?? '') && !ADMIN_POSITIONS.has(legacyRole ?? '')) return;
+
+    fetchStats();
+    const interval = setInterval(fetchStats, 30000);
+    return () => clearInterval(interval);
+  }, [session?.user, fetchStats]);
+
+  const handleRefreshSession = async () => {
+    if (isRefreshing) return;
+    setIsRefreshing(true);
+    try {
+      await updateSession();
+      await fetchStats();
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
+
+  if (fetchStatus === 'loading') {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center">
@@ -110,20 +171,67 @@ export default function DashboardPageEnhanced() {
     );
   }
 
-  if (!data) {
+  if (fetchStatus === 'forbidden') {
+    const targetDashboard = dashboardMe?.data?.redirectTo;
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="text-center">
-          <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-          <p className="text-muted-foreground">{t('common.error')}</p>
+        <div className="text-center max-w-md">
+          <AlertCircle className="h-12 w-12 text-amber-500 mx-auto mb-4" />
+          <h3 className="text-lg font-semibold mb-2">Phiên làm việc cần cập nhật quyền</h3>
+          <p className="text-muted-foreground text-sm mb-6">
+            Quyền truy cập của bạn đã được cập nhật nhưng phiên làm việc hiện tại chưa được đồng bộ.
+            Vui lòng thử làm mới phiên hoặc đăng nhập lại.
+          </p>
+          <div className="flex gap-3 justify-center flex-wrap">
+            <Button
+              onClick={handleRefreshSession}
+              disabled={isRefreshing}
+              className="gap-2"
+            >
+              <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+              {isRefreshing ? 'Đang làm mới...' : 'Làm mới phiên'}
+            </Button>
+            {targetDashboard && (
+              <Button variant="outline" onClick={() => router.push(targetDashboard)} className="gap-2">
+                Đi đến Dashboard của tôi
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            )}
+            <Button
+              variant="ghost"
+              onClick={() => signOut({ callbackUrl: '/login' })}
+              className="gap-2 text-destructive hover:text-destructive"
+            >
+              <LogOut className="h-4 w-4" />
+              Đăng nhập lại
+            </Button>
+          </div>
         </div>
       </div>
     );
   }
 
-  const userRole = session?.user?.role || '';
-  const targetDashboard = roleRoutes[userRole] || '/dashboard';
-  const roleDisplayName = roleDisplayNames[userRole] || userRole;
+  if (fetchStatus === 'error' || !data) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="text-center">
+          <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+          <p className="text-muted-foreground">{t('common.error')}</p>
+          <Button variant="outline" onClick={fetchStats} className="mt-4 gap-2">
+            <RefreshCw className="h-4 w-4" />
+            Thử lại
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  // Ưu tiên redirectTo từ API (dùng primaryPositionCode), fallback về personal
+  const targetDashboard = dashboardMe?.data?.redirectTo || '/dashboard/personal';
+
+  // Hiển thị tên chức vụ: ưu tiên primaryPositionCode mới, fallback về legacy role
+  const positionCode = session?.user?.primaryPositionCode || session?.user?.role || '';
+  const roleDisplayName = positionDisplayNames[positionCode] || positionCode || 'Người dùng';
 
   return (
     <div className="space-y-6">

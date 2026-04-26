@@ -9,6 +9,7 @@ import { requireFunction } from '@/lib/rbac/middleware';
 import { SYSTEM } from '@/lib/rbac/function-codes';
 import prisma from '@/lib/db';
 import { logAudit } from '@/lib/audit';
+import { clearPermissionCache } from '@/lib/rbac/policy';
 
 export const dynamic = 'force-dynamic';
 
@@ -112,9 +113,21 @@ export async function POST(request: NextRequest) {
       result: 'SUCCESS'
     });
 
+    // Invalidate permission cache cho tất cả users đang giữ position này
+    const affectedUsers = await prisma.userPosition.findMany({
+      where: { positionId, isActive: true },
+      select: { userId: true },
+    });
+    let cacheInvalidated = 0;
+    for (const { userId } of affectedUsers) {
+      clearPermissionCache(userId);
+      cacheInvalidated++;
+    }
+
     return NextResponse.json({
       message: `Đã cập nhật: +${results.granted} quyền, -${results.revoked} quyền, ~${results.updated} scope`,
-      results
+      results,
+      cacheInvalidated,
     });
   } catch (error) {
     console.error('Error batch updating position-functions:', error);
