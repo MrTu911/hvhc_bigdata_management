@@ -268,19 +268,41 @@ export function DashboardSidebarEnhanced() {
   
   // Color accent per group
   const GROUP_ACCENTS: Record<string, { dot: string; text: string; bg: string }> = {
-    'nav.overview':          { dot: 'bg-violet-500',  text: 'text-violet-600',  bg: 'hover:bg-violet-50/60' },
-    'nav.personnelDatabase': { dot: 'bg-blue-500',    text: 'text-blue-600',    bg: 'hover:bg-blue-50/60' },
-    'nav.partyDatabase':     { dot: 'bg-red-500',     text: 'text-red-600',     bg: 'hover:bg-red-50/60' },
-    'nav.policyDatabase':    { dot: 'bg-orange-500',  text: 'text-orange-600',  bg: 'hover:bg-orange-50/60' },
-    'nav.insuranceDatabase': { dot: 'bg-teal-500',    text: 'text-teal-600',    bg: 'hover:bg-teal-50/60' },
-    'nav.awardsDatabase':    { dot: 'bg-amber-500',   text: 'text-amber-600',   bg: 'hover:bg-amber-50/60' },
-    'nav.educationModule':   { dot: 'bg-emerald-500', text: 'text-emerald-600', bg: 'hover:bg-emerald-50/60' },
-    'nav.researchDatabase':  { dot: 'bg-cyan-500',    text: 'text-cyan-600',    bg: 'hover:bg-cyan-50/60' },
-    'nav.scienceDatabase':   { dot: 'bg-violet-500',  text: 'text-violet-600',  bg: 'hover:bg-violet-50/60' },
-    'nav.analyticsReports':  { dot: 'bg-indigo-500',  text: 'text-indigo-600',  bg: 'hover:bg-indigo-50/60' },
-    'nav.dataManagement':    { dot: 'bg-slate-500',   text: 'text-slate-600',   bg: 'hover:bg-slate-100/60' },
-    'nav.systemAdmin':       { dot: 'bg-rose-500',    text: 'text-rose-600',    bg: 'hover:bg-rose-50/60' },
-    'nav.settings':          { dot: 'bg-gray-400',    text: 'text-gray-500',    bg: 'hover:bg-gray-100/60' },
+    // Tổng quan
+    'nav.overview':               { dot: 'bg-violet-500',  text: 'text-violet-600',  bg: 'hover:bg-violet-50/60' },
+    // Cá nhân
+    'nav.personalSpace':          { dot: 'bg-cyan-500',    text: 'text-cyan-600',    bg: 'hover:bg-cyan-50/60' },
+    'nav.myLearning':             { dot: 'bg-blue-400',    text: 'text-blue-500',    bg: 'hover:bg-blue-50/60' },
+    'nav.myResearchSpace':        { dot: 'bg-indigo-400',  text: 'text-indigo-500',  bg: 'hover:bg-indigo-50/60' },
+    // Nghiệp vụ
+    'nav.personnelDatabase':      { dot: 'bg-blue-500',    text: 'text-blue-600',    bg: 'hover:bg-blue-50/60' },
+    'nav.partyDatabase':          { dot: 'bg-red-500',     text: 'text-red-600',     bg: 'hover:bg-red-50/60' },
+    'nav.policyDatabase':         { dot: 'bg-orange-500',  text: 'text-orange-600',  bg: 'hover:bg-orange-50/60' },
+    'nav.policyWelfareAwards':    { dot: 'bg-amber-500',   text: 'text-amber-600',   bg: 'hover:bg-amber-50/60' },
+    'nav.insuranceDatabase':      { dot: 'bg-teal-500',    text: 'text-teal-600',    bg: 'hover:bg-teal-50/60' },
+    'nav.awardsDatabase':         { dot: 'bg-amber-500',   text: 'text-amber-600',   bg: 'hover:bg-amber-50/60' },
+    // Giáo dục - Đào tạo
+    'nav.educationModule':        { dot: 'bg-emerald-500', text: 'text-emerald-600', bg: 'hover:bg-emerald-50/60' },
+    'nav.educationOverviewGroup': { dot: 'bg-blue-500',    text: 'text-blue-600',    bg: 'hover:bg-blue-50/60' },
+    'nav.facultyManagementGroup': { dot: 'bg-violet-500',  text: 'text-violet-600',  bg: 'hover:bg-violet-50/60' },
+    'nav.trainingSystemGroup':    { dot: 'bg-indigo-500',  text: 'text-indigo-600',  bg: 'hover:bg-indigo-50/60' },
+    'nav.studentManagementGroup': { dot: 'bg-sky-500',     text: 'text-sky-600',     bg: 'hover:bg-sky-50/60' },
+    'nav.educationProgramGroup':  { dot: 'bg-purple-500',  text: 'text-purple-600',  bg: 'hover:bg-purple-50/60' },
+    // Nghiên cứu
+    'nav.researchDatabase':       { dot: 'bg-cyan-500',    text: 'text-cyan-600',    bg: 'hover:bg-cyan-50/60' },
+    'nav.scienceDatabase':        { dot: 'bg-violet-500',  text: 'text-violet-600',  bg: 'hover:bg-violet-50/60' },
+    // Mẫu biểu & Xuất
+    'nav.templateExport':         { dot: 'bg-blue-400',    text: 'text-blue-500',    bg: 'hover:bg-blue-50/60' },
+    // AI & Phân tích
+    'nav.analyticsReports':       { dot: 'bg-indigo-500',  text: 'text-indigo-600',  bg: 'hover:bg-indigo-50/60' },
+    // Hạ tầng & Dữ liệu (tách 3 nhóm)
+    'nav.dataManagement':         { dot: 'bg-slate-500',   text: 'text-slate-600',   bg: 'hover:bg-slate-100/60' },
+    'nav.infrastructureGroup':    { dot: 'bg-slate-600',   text: 'text-slate-700',   bg: 'hover:bg-slate-100/60' },
+    'nav.workflowDocGroup':       { dot: 'bg-violet-400',  text: 'text-violet-500',  bg: 'hover:bg-violet-50/60' },
+    'nav.securityGovernanceGroup':{ dot: 'bg-rose-500',    text: 'text-rose-600',    bg: 'hover:bg-rose-50/60' },
+    // Quản trị & Cài đặt
+    'nav.systemAdmin':            { dot: 'bg-rose-500',    text: 'text-rose-600',    bg: 'hover:bg-rose-50/60' },
+    'nav.settings':               { dot: 'bg-gray-400',    text: 'text-gray-500',    bg: 'hover:bg-gray-100/60' },
   };
 
   // Render group header with collapse toggle

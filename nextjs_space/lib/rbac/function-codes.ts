@@ -413,6 +413,26 @@ export const AI = {
   SUMMARIZE: 'SUMMARIZE_AI',                  // Tóm tắt nội dung
 } as const;
 
+// ===== MODULE: INFRA (M12 – QUẢN LÝ DỮ LIỆU & HẠ TẦNG) =====
+export const INFRA = {
+  VIEW:              'INFRA.VIEW',              // Xem tổng quan hạ tầng
+  PIPELINE_VIEW:     'INFRA.PIPELINE_VIEW',     // Xem pipeline definitions và runs
+  PIPELINE_MANAGE:   'INFRA.PIPELINE_MANAGE',   // Trigger, disable pipeline
+  STORAGE_VIEW:      'INFRA.STORAGE_VIEW',      // Xem bucket config và usage
+  STORAGE_MANAGE:    'INFRA.STORAGE_MANAGE',    // Sửa lifecycle/retention policy
+  DATA_QUALITY_VIEW: 'INFRA.DATA_QUALITY_VIEW', // Xem DQ rules và results
+  DATA_QUALITY_MANAGE: 'INFRA.DATA_QUALITY_MANAGE', // Tạo/sửa DQ rules
+  BACKUP_VIEW:       'INFRA.BACKUP_VIEW',       // Xem backup jobs và artifacts
+  BACKUP_MANAGE:     'INFRA.BACKUP_MANAGE',     // Trigger backup thủ công
+  RESTORE_REQUEST:   'INFRA.RESTORE_REQUEST',   // Yêu cầu restore
+  RESTORE_MANAGE:    'INFRA.RESTORE_MANAGE',    // Approve/verify restore (cấp cao hơn)
+  DR_VIEW:           'INFRA.DR_VIEW',           // Xem DR plans và exercises
+  DR_MANAGE:         'INFRA.DR_MANAGE',         // Tạo DR plan, ghi kết quả diễn tập
+  ALERT_VIEW:        'INFRA.ALERT_VIEW',        // Xem metric threshold policies
+  ALERT_MANAGE:      'INFRA.ALERT_MANAGE',      // Sửa ngưỡng cảnh báo
+  ADMIN:             'INFRA.ADMIN',             // Toàn quyền module hạ tầng
+} as const;
+
 // ===== MODULE: MONITORING (GIÁM SÁT HỆ THỐNG) =====
 export const MONITORING = {
   VIEW_ALERTS: 'VIEW_MONITORING_ALERTS',      // Xem cảnh báo
@@ -643,6 +663,7 @@ export const ALL_FUNCTION_CODES = {
   ...SYSTEM,
   ...DASHBOARD,
   ...AI,
+  ...INFRA,
   ...MONITORING,
   ...AUDIT,
   ...ML,
@@ -681,6 +702,7 @@ export const FUNCTION_CODES = {
   SYSTEM,
   DASHBOARD,
   AI,
+  INFRA,
   MONITORING,
   AUDIT,
   ML,

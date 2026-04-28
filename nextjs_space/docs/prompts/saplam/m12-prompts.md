@@ -1,4 +1,4 @@
-6) docs/prompts/m12-prompts.md
+1) docs/prompts/m12-prompts.md
 M12 Prompt Pack
 Prompt 1 – Analyze module M12
 
@@ -23,6 +23,7 @@ tách rõ các tầng dữ liệu Hot/Warm/Cold/Archive/Cache
 xác định abstraction layer nào module nghiệp vụ phải dùng
 đề xuất Phase 1 an toàn nhất
 chỉ ra rủi ro vận hành và dữ liệu quan trọng nhất
+
 Prompt 2 – Design schema/config for M12
 
 Đọc toàn bộ design docs M12.

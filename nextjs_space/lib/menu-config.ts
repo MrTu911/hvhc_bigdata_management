@@ -149,6 +149,7 @@ import {
   DEPARTMENT,
   SCIENCE,
   PERSONAL,
+  INFRA,
 } from '@/lib/rbac/function-codes';
 
 export interface MenuItem {
@@ -1406,11 +1407,18 @@ export const MENU_CONFIG: MenuGroup[] = [
     ],
   },
 
-  // ========== 12. HẠ TẦNG & DỮ LIỆU ==========
+  // ========== 12a. HẠ TẦNG & DỮ LIỆU (M12) ==========
   {
-    title: 'nav.dataManagement',
+    title: 'nav.infrastructureGroup',
     items: [
-      // -- Datalake & ETL --
+      {
+        name: 'nav.infrastructureAdmin',
+        href: '/dashboard/infrastructure',
+        icon: HardDrive,
+        gradient: 'from-slate-600 to-gray-700',
+        badge: 'M12',
+        functions: [INFRA.VIEW, INFRA.PIPELINE_VIEW, INFRA.BACKUP_VIEW, INFRA.DR_VIEW],
+      },
       {
         name: 'nav.datalake',
         href: '/dashboard/datalake',
@@ -1454,7 +1462,13 @@ export const MENU_CONFIG: MenuGroup[] = [
         gradient: 'from-amber-500 to-yellow-600',
         functions: [DATA.VIEW],
       },
-      // -- Workflow & Văn bản số --
+    ],
+  },
+
+  // ========== 12b. QUY TRÌNH & VĂN BẢN SỐ ==========
+  {
+    title: 'nav.workflowDocGroup',
+    items: [
       {
         name: 'nav.workflowDashboard',
         href: '/dashboard/workflow',
@@ -1488,7 +1502,7 @@ export const MENU_CONFIG: MenuGroup[] = [
         name: 'nav.documentRegistry',
         href: '/dashboard/documents',
         icon: FileText,
-        gradient: 'from-violet-500 to-purple-600',
+        gradient: 'from-indigo-500 to-blue-600',
         badge: '📄',
         functions: [DIGITAL_DOCS.VIEW],
       },
@@ -1496,38 +1510,43 @@ export const MENU_CONFIG: MenuGroup[] = [
         name: 'nav.documentOCR',
         href: '/dashboard/documents/ocr',
         icon: ScanText,
-        gradient: 'from-violet-500 to-purple-600',
+        gradient: 'from-indigo-500 to-blue-600',
         badge: 'OCR',
         functions: [DIGITAL_DOCS.OCR],
       },
-      // -- Quản trị dữ liệu --
+    ],
+  },
+
+  // ========== 12c. BẢO MẬT & QUẢN TRỊ DỮ LIỆU ==========
+  {
+    title: 'nav.securityGovernanceGroup',
+    items: [
       {
         name: 'nav.governanceCompliance',
         href: '/dashboard/governance/compliance',
         icon: Scale,
-        gradient: 'from-violet-500 to-purple-600',
+        gradient: 'from-rose-500 to-red-600',
         functions: [GOVERNANCE.VIEW_COMPLIANCE],
       },
       {
         name: 'nav.governanceLineage',
         href: '/dashboard/governance/lineage',
         icon: GitMerge,
-        gradient: 'from-violet-500 to-purple-600',
+        gradient: 'from-rose-500 to-red-600',
         functions: [GOVERNANCE.VIEW_LINEAGE],
       },
       {
         name: 'nav.governanceRetention',
         href: '/dashboard/governance/retention',
         icon: Hourglass,
-        gradient: 'from-violet-500 to-purple-600',
+        gradient: 'from-rose-500 to-red-600',
         functions: [GOVERNANCE.VIEW_RETENTION],
       },
-      // -- Bảo mật --
       {
         name: 'nav.securityAudit',
         href: '/dashboard/security/audit',
         icon: ShieldBan,
-        gradient: 'from-violet-500 to-purple-600',
+        gradient: 'from-red-600 to-rose-700',
         functions: [AUDIT.VIEW_SUSPICIOUS, SECURITY.VIEW_POLICY],
       },
       {
@@ -1541,7 +1560,7 @@ export const MENU_CONFIG: MenuGroup[] = [
         name: 'nav.securityPolicy',
         href: '/dashboard/security/policy',
         icon: Shield,
-        gradient: 'from-violet-500 to-purple-600',
+        gradient: 'from-red-600 to-rose-700',
         functions: [SECURITY.MANAGE_POLICY],
       },
     ],

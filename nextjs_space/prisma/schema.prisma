@@ -5310,6 +5310,102 @@ enum HealthStatus {
   UNKNOWN
 }
 
+// ===== MODULE M12 ENUMS =====
+
+enum PipelineDefType {
+  ETL_PG_TO_CLICKHOUSE
+  DATA_QUALITY
+  BACKUP
+  AI_REFRESH
+  CUSTOM
+}
+
+enum PipelineRunStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum PipelineTrigger {
+  MANUAL
+  SCHEDULED
+  API
+  EVENT
+}
+
+enum DataQualityRuleType {
+  COMPLETENESS
+  UNIQUENESS
+  FK_INTEGRITY
+  VALID_RANGE
+  TIMELINESS
+  CONSISTENCY
+}
+
+enum DQSeverity {
+  INFO
+  WARNING
+  ERROR
+  CRITICAL
+}
+
+enum WarehouseSyncMode {
+  FULL
+  INCREMENTAL
+}
+
+enum WarehoueSyncStatus {
+  IDLE
+  RUNNING
+  COMPLETED
+  FAILED
+}
+
+enum StorageAccessTier {
+  HOT
+  COLD
+  ARCHIVE
+}
+
+enum BackupType {
+  POSTGRESQL_FULL
+  POSTGRESQL_INCREMENTAL
+  MINIO_CONFIG
+  AIRFLOW_DAGS
+  GRAFANA
+}
+
+enum BackupJobStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+}
+
+enum RestoreJobStatus {
+  REQUESTED
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum RestoreVerifyStatus {
+  NOT_VERIFIED
+  VERIFIED_OK
+  VERIFIED_FAILED
+}
+
+enum DRExerciseOutcome {
+  PASS
+  PARTIAL
+  FAIL
+}
+
+// ===== END M12 ENUMS =====
+
 enum CareerEventType {
   ENLISTMENT
   PROMOTION
@@ -7901,6 +7997,281 @@ model ScienceAttachment {
   @@index([createdAt])
   @@map("science_attachments")
 }
+
+// =============================================================================
+// MODULE M12 – DATA MANAGEMENT & INFRASTRUCTURE
+// =============================================================================
+
+// --- Pipeline Definition (tái sử dụng: DataPipeline hiện tại = run record) ---
+// Định nghĩa pipeline tách khỏi run. Mỗi definition có thể chạy nhiều lần.
+model PipelineDefinition {
+  id              String             @id @default(cuid())
+  name            String
+  description     String?
+  pipelineType    PipelineDefType    // ETL_PG_TO_CLICKHOUSE | DATA_QUALITY | BACKUP | AI_REFRESH | CUSTOM
+  sourceDataset   String             // tên table/collection nguồn
+  targetDataset   String?            // tên table/dataset đích
+  scheduleCron    String?            // cron expression, null = chỉ trigger manual
+  isActive        Boolean            @default(true)
+  steps           Json               // mảng bước thực thi: [{name, type, config}]
+  parameters      Json?              // tham số cấu hình thêm
+  lastRunAt       DateTime?
+  lastRunStatus   PipelineRunStatus?
+  createdById     String
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+  runs            PipelineRun[]
+
+  @@index([pipelineType])
+  @@index([isActive])
+  @@index([lastRunAt])
+  @@map("pipeline_definitions")
+}
+
+// Run của một pipeline definition. Ghi nhận kết quả từng lần chạy.
+model PipelineRun {
+  id               String            @id @default(cuid())
+  definitionId     String
+  triggeredBy      PipelineTrigger   // MANUAL | SCHEDULED | API | EVENT
+  triggeredById    String?           // user id nếu manual
+  status           PipelineRunStatus @default(PENDING)
+  startedAt        DateTime?
+  completedAt      DateTime?
+  durationMs       Int?
+  recordsRead      Int?
+  recordsWritten   Int?
+  recordsSkipped   Int?
+  errorCount       Int?              @default(0)
+  errorMessage     String?
+  logPath          String?           // đường dẫn log file trên MinIO hoặc hệ thống
+  metadata         Json?             // step-level details nếu cần
+  definition       PipelineDefinition @relation(fields: [definitionId], references: [id])
+  qualityResults   DataQualityResult[]
+
+  @@index([definitionId])
+  @@index([status])
+  @@index([startedAt])
+  @@index([triggeredBy])
+  @@map("pipeline_runs")
+}
+
+// --- Data Quality ---
+// Định nghĩa một quy tắc kiểm tra chất lượng dữ liệu.
+model DataQualityRule {
+  id           String            @id @default(cuid())
+  ruleCode     String            @unique // vd: DQ_STUDENT_NULL_NAME, DQ_SCORE_RANGE
+  name         String
+  description  String?
+  ruleType     DataQualityRuleType // COMPLETENESS | UNIQUENESS | FK_INTEGRITY | VALID_RANGE | TIMELINESS | CONSISTENCY
+  targetTable  String             // tên bảng cần kiểm tra
+  targetColumn String?            // cột cụ thể, null = check toàn bảng
+  ruleConfig   Json               // ngưỡng, điều kiện, SQL snippet tham chiếu
+  severity     DQSeverity         // INFO | WARNING | ERROR | CRITICAL
+  isActive     Boolean            @default(true)
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  results      DataQualityResult[]
+
+  @@index([ruleType])
+  @@index([targetTable])
+  @@index([severity])
+  @@index([isActive])
+  @@map("data_quality_rules")
+}
+
+// Kết quả mỗi lần chạy kiểm tra chất lượng cho một rule.
+model DataQualityResult {
+  id            String          @id @default(cuid())
+  ruleId        String
+  pipelineRunId String?         // liên kết nếu chạy trong pipeline
+  checkedAt     DateTime        @default(now())
+  passed        Boolean
+  totalChecked  Int
+  failedRows    Int             @default(0)
+  failRate      Float?          // failedRows / totalChecked
+  severity      DQSeverity
+  sampleData    Json?           // sample rows lỗi để debug
+  note          String?
+  rule          DataQualityRule @relation(fields: [ruleId], references: [id])
+  pipelineRun   PipelineRun?    @relation(fields: [pipelineRunId], references: [id])
+
+  @@index([ruleId])
+  @@index([checkedAt])
+  @@index([passed])
+  @@index([pipelineRunId])
+  @@map("data_quality_results")
+}
+
+// --- Warehouse Sync ---
+// Theo dõi trạng thái đồng bộ từ PostgreSQL sang ClickHouse.
+// Không lưu business data, chỉ lưu metadata trạng thái.
+model WarehouseSyncJob {
+  id            String            @id @default(cuid())
+  sourceTable   String            // tên bảng PG nguồn
+  targetDataset String            // tên dataset ClickHouse đích
+  syncMode      WarehouseSyncMode // FULL | INCREMENTAL
+  status        WarehoueSyncStatus @default(IDLE)
+  lastSyncAt    DateTime?
+  lastSyncRowCount Int?
+  lastSyncDurationMs Int?
+  watermarkField String?          // field dùng để incremental sync (vd: updatedAt)
+  watermarkValue String?          // giá trị watermark lần cuối
+  errorMessage  String?
+  isActive      Boolean           @default(true)
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  @@index([sourceTable])
+  @@index([status])
+  @@index([lastSyncAt])
+  @@map("warehouse_sync_jobs")
+}
+
+// --- Storage Bucket Config ---
+// Chiến lược bucket MinIO theo module/domain. Không lưu objects.
+model StorageBucketConfig {
+  id              String    @id @default(cuid())
+  bucketName      String    @unique
+  moduleDomain    String    // vd: M02_PERSONNEL, M10_EDUCATION, M18_EXPORT, ARCHIVE
+  description     String?
+  retentionDays   Int?      // null = vĩnh viễn
+  accessTier      StorageAccessTier // HOT | COLD | ARCHIVE
+  lifecyclePolicy Json?     // MinIO lifecycle rule config
+  maxSizeGb       Int?      // giới hạn kích thước bucket
+  isActive        Boolean   @default(true)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([moduleDomain])
+  @@index([accessTier])
+  @@map("storage_bucket_configs")
+}
+
+// --- Backup ---
+// Ghi nhận mỗi lần chạy backup job.
+model BackupJob {
+  id           String          @id @default(cuid())
+  backupType   BackupType      // POSTGRESQL_FULL | POSTGRESQL_INCREMENTAL | MINIO_CONFIG | AIRFLOW_DAGS | GRAFANA
+  status       BackupJobStatus @default(PENDING)
+  targetPath   String          // đường dẫn trên MinIO backup bucket
+  triggeredBy  PipelineTrigger // MANUAL | SCHEDULED | API | EVENT
+  requestedById String?        // user id nếu manual
+  startedAt    DateTime?
+  completedAt  DateTime?
+  durationMs   Int?
+  sizeBytes    BigInt?
+  errorMessage String?
+  artifacts    BackupArtifact[]
+  restoreJobs  RestoreJob[]
+
+  @@index([backupType])
+  @@index([status])
+  @@index([startedAt])
+  @@index([triggeredBy])
+  @@map("backup_jobs")
+}
+
+// Artifact vật lý của một backup job (file cụ thể trên MinIO).
+model BackupArtifact {
+  id            String     @id @default(cuid())
+  jobId         String
+  storagePath   String     // full path trên MinIO
+  sizeBytes     BigInt
+  checksumHash  String?    // sha256 để verify
+  isVerified    Boolean    @default(false)
+  verifiedAt    DateTime?
+  retentionUntil DateTime? // null = giữ mãi
+  metadata      Json?
+  job           BackupJob  @relation(fields: [jobId], references: [id])
+
+  @@index([jobId])
+  @@index([retentionUntil])
+  @@map("backup_artifacts")
+}
+
+// --- Restore ---
+// Ghi nhận yêu cầu và kết quả restore từ backup.
+model RestoreJob {
+  id                 String            @id @default(cuid())
+  backupJobId        String            // backup job nguồn
+  targetEnvironment  String            // PRODUCTION | STAGING | DR_TEST
+  requestedById      String            // bắt buộc — restore là thao tác nhạy cảm
+  status             RestoreJobStatus  @default(REQUESTED)
+  startedAt          DateTime?
+  completedAt        DateTime?
+  verificationStatus RestoreVerifyStatus @default(NOT_VERIFIED)
+  verificationNote   String?
+  errorMessage       String?
+  notes              String?
+  backupJob          BackupJob         @relation(fields: [backupJobId], references: [id])
+
+  @@index([backupJobId])
+  @@index([status])
+  @@index([requestedById])
+  @@index([startedAt])
+  @@map("restore_jobs")
+}
+
+// --- Disaster Recovery ---
+// Runbook DR và lịch diễn tập.
+model DisasterRecoveryPlan {
+  id           String                    @id @default(cuid())
+  name         String
+  description  String?
+  rtoTargetMin Int                       // RTO mục tiêu tính bằng phút
+  rpoTargetMin Int                       // RPO mục tiêu tính bằng phút
+  runbookPath  String?                   // path file runbook (MinIO hoặc nội bộ)
+  isActive     Boolean                   @default(true)
+  createdById  String
+  createdAt    DateTime                  @default(now())
+  updatedAt    DateTime                  @updatedAt
+  exercises    DisasterRecoveryExercise[]
+
+  @@index([isActive])
+  @@map("disaster_recovery_plans")
+}
+
+// Ghi nhận kết quả từng lần diễn tập DR.
+model DisasterRecoveryExercise {
+  id             String               @id @default(cuid())
+  planId         String
+  exercisedAt    DateTime
+  conductedById  String               // người điều hành diễn tập
+  outcome        DRExerciseOutcome    // PASS | PARTIAL | FAIL
+  rtoAchievedMin Int?                 // RTO thực tế đạt được
+  rpoAchievedMin Int?                 // RPO thực tế đạt được
+  findings       String?              // nhận xét, điểm cần cải thiện
+  nextReviewDate DateTime?
+  plan           DisasterRecoveryPlan @relation(fields: [planId], references: [id])
+
+  @@index([planId])
+  @@index([exercisedAt])
+  @@index([outcome])
+  @@map("disaster_recovery_exercises")
+}
+
+// --- Alert Threshold Policy ---
+// Ngưỡng cảnh báo cấu hình được theo metric — tách khỏi ServiceAlert hard-code.
+model MetricThresholdPolicy {
+  id               String        @id @default(cuid())
+  metricName       String        @unique // vd: pg_connection_pct, minio_disk_pct, api_p95_ms
+  displayName      String
+  description      String?
+  warningThreshold Float
+  criticalThreshold Float
+  unit             String?       // %, ms, MB, connections...
+  autoAction       String?       // mô tả action tự động khi vượt ngưỡng
+  isActive         Boolean       @default(true)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  @@index([isActive])
+  @@map("metric_threshold_policies")
+}
+
+// =============================================================================
+// END MODULE M12
+// =============================================================================
 
 // Yêu cầu cập nhật thông tin cá nhân (tự gửi, admin duyệt)
 // Dùng cho function code REQUEST_MY_INFO_UPDATE — trường nhạy cảm không ghi thẳng vào User

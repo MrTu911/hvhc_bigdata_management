@@ -257,6 +257,15 @@ const translations = {
     // M18/M19. Mẫu biểu & Xuất dữ liệu
     'nav.templateExport': 'Mẫu biểu & Xuất dữ liệu',
 
+    // Groups còn thiếu translation
+    'nav.policyWelfareAwards':    'Chính sách, BHXH & Thi đua',
+    'nav.educationOverviewGroup': 'Tổng quan Đào tạo',
+    'nav.facultyManagementGroup': 'Quản lý Giảng viên',
+    'nav.trainingSystemGroup':    'Hệ đào tạo & Tiểu đoàn',
+    'nav.studentManagementGroup': 'Quản lý Người học',
+    'nav.educationProgramGroup':  'Chương trình & Vận hành',
+    'nav.myResearchSpace':        'Nghiên cứu cá nhân',
+
     // W. Quy trình nghiệp vụ (M13)
     'nav.workflowModule': 'Quy trình nghiệp vụ',
     'nav.workflowDashboard': 'Tổng quan Quy trình',
@@ -316,6 +325,10 @@ const translations = {
 
     // 11. Hạ tầng & Dịch vụ
     'nav.infrastructure': 'Hạ tầng & Dịch vụ',
+    'nav.infrastructureAdmin': 'Hạ tầng & Dữ liệu (M12)',
+    'nav.infrastructureGroup': 'Hạ tầng & Dữ liệu',
+    'nav.workflowDocGroup': 'Quy trình & Văn bản',
+    'nav.securityGovernanceGroup': 'Bảo mật & Quản trị DL',
     'nav.services': 'Dịch vụ',
     'nav.apiGateway': 'Cổng API',
     'nav.infrastructureManagement': 'Cấu hình Hạ tầng',
@@ -765,11 +778,24 @@ const translations = {
 
     // 11. Infrastructure & Services
     'nav.infrastructure': 'Infrastructure',
+    'nav.infrastructureAdmin': 'Infrastructure & Data (M12)',
+    'nav.infrastructureGroup': 'Infrastructure & Data',
+    'nav.workflowDocGroup': 'Workflow & Documents',
+    'nav.securityGovernanceGroup': 'Security & Data Governance',
     'nav.services': 'Services',
     'nav.apiGateway': 'API Gateway',
     'nav.infrastructureManagement': 'Infrastructure Config',
     'nav.acceptanceDocs': 'Acceptance Documents',
     'nav.projectReport': 'Project Report',
+
+    // Missing group title keys (EN)
+    'nav.policyWelfareAwards':    'Policy, Insurance & Awards',
+    'nav.educationOverviewGroup': 'Education Overview',
+    'nav.facultyManagementGroup': 'Faculty Management',
+    'nav.trainingSystemGroup':    'Training System & Battalion',
+    'nav.studentManagementGroup': 'Student Management',
+    'nav.educationProgramGroup':  'Programs & Operations',
+    'nav.myResearchSpace':        'My Research',
 
     // 12. Monitoring & Security
     'nav.monitoringSecurity': 'Monitoring & Security',
