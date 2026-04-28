@@ -1722,7 +1722,7 @@ export const MENU_CONFIG: MenuGroup[] = [
       },
       {
         name: 'nav.aiSettings',
-        href: '/admin/ai-settings',
+        href: '/dashboard/admin/ai-settings',
         icon: Brain,
         gradient: 'from-violet-500 to-violet-600',
         badge: 'AI',

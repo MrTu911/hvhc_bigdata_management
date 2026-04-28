@@ -37,15 +37,14 @@ export async function GET(request: NextRequest) {
       }
     });
 
-    // Mask sensitive data
-    const safeConfigs = configs.map(config => ({
+    const safeConfigs = configs.map(({ _count, passwordHash: _pw, ...config }) => ({
       ...config,
-      passwordHash: config.passwordHash ? '********' : null,
-      username: config.username ? config.username.substring(0, 2) + '***' : null,
-      totalSyncs: config._count.syncLogs
+      // Show only first char + asterisks to confirm username is set without leaking it
+      username: config.username ? config.username[0] + '*'.repeat(Math.min(config.username.length - 1, 5)) : null,
+      totalSyncs: _count.syncLogs,
     }));
 
-    return NextResponse.json({ configs: safeConfigs });
+    return NextResponse.json({ success: true, configs: safeConfigs });
   } catch (error) {
     console.error('Error fetching infrastructure configs:', error);
     return NextResponse.json({ error: 'Lỗi server' }, { status: 500 });
@@ -126,7 +125,8 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    return NextResponse.json({ success: true, config: { ...config, passwordHash: undefined } });
+    const { passwordHash: _pw, ...safeConfig } = config;
+    return NextResponse.json({ success: true, config: safeConfig });
   } catch (error) {
     console.error('Error creating infrastructure config:', error);
     return NextResponse.json({ error: 'Lỗi server' }, { status: 500 });
@@ -176,7 +176,8 @@ export async function PUT(request: NextRequest) {
       },
     });
 
-    return NextResponse.json({ success: true, config: { ...config, passwordHash: undefined } });
+    const { passwordHash: _pw2, ...safeUpdated } = config;
+    return NextResponse.json({ success: true, config: safeUpdated });
   } catch (error) {
     console.error('Error updating infrastructure config:', error);
     return NextResponse.json({ error: 'Lỗi server' }, { status: 500 });

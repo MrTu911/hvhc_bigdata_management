@@ -1,20 +1,44 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireFunction } from '@/lib/rbac/middleware';
 import { SYSTEM } from '@/lib/rbac/function-codes';
+import fs from 'fs';
+import path from 'path';
+
+function resolveApiKey(provider: string, requestApiKey?: string): string | null {
+  if (requestApiKey) return requestApiKey;
+
+  // Fall back to saved key in .env
+  const envPath = path.join(process.cwd(), '.env');
+  if (!fs.existsSync(envPath)) return null;
+
+  const envContent = fs.readFileSync(envPath, 'utf-8');
+  if (provider === 'openai') {
+    return envContent.match(/OPENAI_API_KEY=([^\n\r]+)/)?.[1]?.trim() || null;
+  }
+  if (provider === 'abacusai') {
+    return envContent.match(/ABACUSAI_API_KEY=([^\n\r]+)/)?.[1]?.trim() || null;
+  }
+  return null;
+}
 
 // POST: Test AI connection
 export async function POST(req: NextRequest) {
   try {
     const authResult = await requireFunction(req, SYSTEM.MANAGE_AI_CONFIG);
     if (!authResult.allowed) {
-      return NextResponse.json({ error: authResult.authResult?.deniedReason || 'Không có quyền' || 'Forbidden' }, { status: 403 });
+      return NextResponse.json({ error: authResult.authResult?.deniedReason || 'Forbidden' }, { status: 403 });
     }
 
     const body = await req.json();
-    const { provider, apiKey } = body;
+    const { provider, apiKey: requestApiKey } = body;
 
-    if (!provider || !apiKey) {
-      return NextResponse.json({ error: 'Provider and API key required' }, { status: 400 });
+    if (!provider) {
+      return NextResponse.json({ error: 'Provider is required' }, { status: 400 });
+    }
+
+    const apiKey = resolveApiKey(provider, requestApiKey);
+    if (!apiKey) {
+      return NextResponse.json({ error: 'API key not found — vui lòng cấu hình hoặc nhập API key để test' }, { status: 400 });
     }
 
     // Test connection
