@@ -141,16 +141,18 @@ export default function HeSoMonHocPage() {
       });
 
       if (response.ok) {
-        toast.success(editingItem ? 'Cập nhật thành công' : 'Tạo mới thành công');
+        toast.success(editingItem ? 'Cập nhật hệ số thành công' : 'Tạo hệ số môn học thành công');
         setDialogOpen(false);
         fetchHeSoList();
       } else {
-        const errorData = await response.json();
-        toast.error(errorData.error || 'Lỗi khi lưu dữ liệu');
+        const errorData = await response.json().catch(() => ({}));
+        toast.error(errorData.error || errorData.message || 'Không thể lưu hệ số môn học', {
+          description: response.status >= 500 ? `Lỗi hệ thống (${response.status})` : `HTTP ${response.status}`,
+        });
       }
     } catch (error) {
       console.error('Error saving:', error);
-      toast.error('Lỗi kết nối');
+      toast.error('Lỗi kết nối', { description: 'Không thể lưu hệ số môn học.' });
     }
   };
 
@@ -163,14 +165,17 @@ export default function HeSoMonHocPage() {
       });
 
       if (response.ok) {
-        toast.success('Xóa thành công');
+        toast.success('Đã xóa hệ số môn học');
         fetchHeSoList();
       } else {
-        toast.error('Không thể xóa');
+        const errorData = await response.json().catch(() => ({}));
+        toast.error(errorData.error || errorData.message || 'Không thể xóa hệ số môn học', {
+          description: `HTTP ${response.status}`,
+        });
       }
     } catch (error) {
       console.error('Error deleting:', error);
-      toast.error('Lỗi kết nối');
+      toast.error('Lỗi kết nối', { description: 'Không thể xóa hệ số môn học.' });
     }
   };
 

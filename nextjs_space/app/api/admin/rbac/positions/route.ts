@@ -127,6 +127,17 @@ export async function PUT(request: NextRequest) {
     }
 
     const oldPosition = await prisma.position.findUnique({ where: { id } });
+    if (!oldPosition) {
+      return NextResponse.json({ error: 'Chức vụ không tồn tại' }, { status: 404 });
+    }
+
+    // Kiểm tra trùng code nếu code thay đổi
+    if (code !== undefined && code.toUpperCase() !== oldPosition.code) {
+      const existing = await prisma.position.findUnique({ where: { code: code.toUpperCase() } });
+      if (existing) {
+        return NextResponse.json({ error: `Mã chức vụ "${code.toUpperCase()}" đã được dùng bởi chức vụ "${existing.name}"` }, { status: 409 });
+      }
+    }
 
     // Build update payload — only include fields that were explicitly provided
     const updateData: Record<string, unknown> = {};
@@ -160,8 +171,11 @@ export async function PUT(request: NextRequest) {
     });
 
     return NextResponse.json({ position, message: 'Cập nhật chức vụ thành công' });
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error updating position:', error);
+    if (error && typeof error === 'object' && 'code' in error && error.code === 'P2002') {
+      return NextResponse.json({ error: 'Mã chức vụ đã tồn tại, vui lòng chọn mã khác' }, { status: 409 });
+    }
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

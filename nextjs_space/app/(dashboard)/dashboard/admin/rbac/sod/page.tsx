@@ -103,10 +103,12 @@ export default function SoDManagementPage() {
         resetForm();
         fetchRules();
       } else {
-        toast.error(data.error || 'Lỗi tạo rule');
+        toast.error(data.error || data.message || 'Không thể tạo rule SoD', {
+          description: !res.ok ? `HTTP ${res.status}` : undefined,
+        });
       }
     } catch (error) {
-      toast.error('Lỗi kết nối');
+      toast.error('Lỗi kết nối', { description: 'Không thể tạo rule SoD. Kiểm tra kết nối mạng.' });
     }
   };
 
@@ -119,16 +121,18 @@ export default function SoDManagementPage() {
       const res = await fetch(`/api/admin/rbac/sod?id=${rule.id}`, {
         method: 'DELETE',
       });
-      
+
       const data = await res.json();
       if (data.success) {
-        toast.success('Đã xóa rule SoD');
+        toast.success('Đã xóa rule SoD', { description: `${rule.functionCodeA} ↔ ${rule.functionCodeB}` });
         fetchRules();
       } else {
-        toast.error(data.error || 'Lỗi xóa rule');
+        toast.error(data.error || data.message || 'Không thể xóa rule SoD', {
+          description: !res.ok ? `HTTP ${res.status}` : undefined,
+        });
       }
     } catch (error) {
-      toast.error('Lỗi kết nối');
+      toast.error('Lỗi kết nối', { description: 'Không thể xóa rule SoD. Kiểm tra kết nối mạng.' });
     }
   };
 

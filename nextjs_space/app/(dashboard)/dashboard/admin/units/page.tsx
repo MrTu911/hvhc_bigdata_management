@@ -298,12 +298,17 @@ export default function UnitsManagementPage() {
         fetchUnits();
         resetForm();
       } else if (res.status === 409) {
-        toast.error(`Mã đơn vị "${formData.code}" đã tồn tại!`, { duration: 5000 });
+        toast.error(`Mã đơn vị "${formData.code}" đã tồn tại`, {
+          description: 'Vui lòng chọn mã khác.',
+          duration: 5000,
+        });
       } else {
-        toast.error(data.error || 'Không thể tạo đơn vị');
+        toast.error(data.error || data.message || 'Không thể tạo đơn vị', {
+          description: res.status >= 500 ? `Lỗi hệ thống (${res.status})` : `HTTP ${res.status}`,
+        });
       }
     } catch {
-      toast.error('Lỗi khi tạo đơn vị');
+      toast.error('Lỗi kết nối', { description: 'Không thể tạo đơn vị. Kiểm tra kết nối mạng.' });
     }
   };
 
@@ -326,10 +331,14 @@ export default function UnitsManagementPage() {
         setIsEditOpen(false);
         fetchUnits();
       } else {
-        toast.error(data.error || 'Không thể cập nhật đơn vị');
+        toast.error(data.error || data.message || 'Không thể cập nhật đơn vị', {
+          description: res.status === 409 ? 'Mã đơn vị đã tồn tại'
+            : res.status >= 500 ? `Lỗi hệ thống (${res.status})`
+            : `HTTP ${res.status}`,
+        });
       }
     } catch {
-      toast.error('Lỗi khi cập nhật đơn vị');
+      toast.error('Lỗi kết nối', { description: 'Không thể cập nhật đơn vị. Kiểm tra kết nối mạng.' });
     }
   };
 
@@ -345,11 +354,13 @@ export default function UnitsManagementPage() {
           setPersonnel([]);
         }
       } else {
-        const data = await res.json();
-        toast.error(data.error || 'Không thể vô hiệu hóa đơn vị');
+        const data = await res.json().catch(() => ({}));
+        toast.error(data.error || data.message || 'Không thể vô hiệu hóa đơn vị', {
+          description: res.status >= 500 ? `Lỗi hệ thống (${res.status})` : `HTTP ${res.status}`,
+        });
       }
     } catch {
-      toast.error('Lỗi khi vô hiệu hóa đơn vị');
+      toast.error('Lỗi kết nối', { description: 'Không thể vô hiệu hóa đơn vị. Kiểm tra kết nối mạng.' });
     }
   };
 

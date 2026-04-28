@@ -302,9 +302,35 @@ function getFunctionAllowPredicate(positionCode: string): (fn: SeedFunction) => 
     return (fn) => allowed.has(fn.module.toUpperCase());
   }
 
+  // ── Nhóm A0: Giám đốc Học viện — VIEW ALL + APPROVE cấp học viện ────
+  // GIAM_DOC có quyền phê duyệt các nghiệp vụ cấp học viện (tốt nghiệp, NCKH,
+  // khen thưởng, kỷ luật, đảng vụ). Không có CRUD để tránh chồng chức năng phòng ban.
+  if (positionCode === 'GIAM_DOC') {
+    const viewActions = new Set(['VIEW', 'EXPORT', 'DOWNLOAD']);
+    // Modules được phép phê duyệt ở cấp học viện
+    const approveModules = new Set(['RESEARCH', 'SCIENCE', 'EDUCATION', 'AWARDS', 'POLICY', 'PARTY', 'WORKFLOW']);
+    return (fn) => {
+      const m = fn.module.toUpperCase();
+      if (m === 'SYSTEM') return fn.actionType === 'VIEW';
+      if (m === 'DASHBOARD') return fn.code === 'VIEW_DASHBOARD' || fn.code === 'VIEW_DASHBOARD_COMMAND';
+      if (m === 'PERSONAL') return true;
+      // Cho phép VIEW/EXPORT mọi module
+      if (viewActions.has(fn.actionType)) return true;
+      // Cho phép APPROVE/REJECT/FINALIZE trong các module nghiệp vụ cấp HV
+      if (approveModules.has(m) && ['APPROVE', 'REJECT'].includes(fn.actionType)) return true;
+      // Các quyền đặc thù của GĐ theo function code cụ thể
+      const directorCodes = new Set([
+        'FINALIZE_ACCEPTANCE',   // Kết luận nghiệm thu hội đồng KH
+        'WF.OVERRIDE',           // Force action workflow (đặc quyền GĐ)
+        'EVALUATE_RESEARCH',     // Đánh giá đề tài NCKH
+      ]);
+      return directorCodes.has(fn.code);
+    };
+  }
+
   // ── Nhóm A: Chỉ huy Học viện — VIEW ALL ───────────────────
-  // GIAM_DOC, CHINH_UY, PHO_CHINH_UY, PHO_GIAM_DOC: xem toàn bộ CSDL
-  if (['GIAM_DOC', 'CHINH_UY', 'PHO_CHINH_UY', 'PHO_GIAM_DOC'].includes(positionCode)) {
+  // CHINH_UY, PHO_CHINH_UY, PHO_GIAM_DOC: xem toàn bộ CSDL (không APPROVE)
+  if (['CHINH_UY', 'PHO_CHINH_UY', 'PHO_GIAM_DOC'].includes(positionCode)) {
     const viewActions = new Set(['VIEW', 'EXPORT', 'DOWNLOAD']);
     return (fn) => {
       const m = fn.module.toUpperCase();

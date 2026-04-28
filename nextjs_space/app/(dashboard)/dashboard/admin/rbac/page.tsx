@@ -408,7 +408,7 @@ export default function RBACManagementPage() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ positionId: selectedPositionId, functionId: func.id, scope: 'ACADEMY' }),
         });
-        if (!res.ok) { const e = await res.json(); throw new Error(e.error); }
+        if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.error || e.message || `Lỗi ${res.status}`); }
         toast({ title: 'Đã gán quyền', description: func.name });
       } else {
         const res = await fetch('/api/admin/rbac/position-functions', {
@@ -416,14 +416,14 @@ export default function RBACManagementPage() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ positionId: selectedPositionId, functionId: func.id }),
         });
-        if (!res.ok) { const e = await res.json(); throw new Error(e.error); }
+        if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.error || e.message || `Lỗi ${res.status}`); }
         toast({ title: 'Đã gỡ quyền', description: func.name });
       }
       await fetchPositionFunctions(selectedPositionId);
       await fetchPositions();
       refreshAll();
     } catch (err: any) {
-      toast({ title: 'Lỗi', description: err.message, variant: 'destructive' });
+      toast({ title: 'Không thể thay đổi quyền', description: err.message, variant: 'destructive' });
     } finally {
       setSavingFuncId(null);
     }
@@ -436,12 +436,12 @@ export default function RBACManagementPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: assignmentId, scope: newScope }),
       });
-      if (!res.ok) { const e = await res.json(); throw new Error(e.error); }
-      toast({ title: 'Cập nhật phạm vi', description: `${funcName} → ${SCOPE_CONFIG[newScope]?.label}` });
+      if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.error || e.message || `Lỗi ${res.status}`); }
+      toast({ title: 'Đã cập nhật phạm vi', description: `${funcName} → ${SCOPE_CONFIG[newScope]?.label}` });
       fetchPositionFunctions(selectedPositionId);
       refreshAll();
     } catch (err: any) {
-      toast({ title: 'Lỗi', description: err.message, variant: 'destructive' });
+      toast({ title: 'Không thể cập nhật phạm vi', description: err.message, variant: 'destructive' });
     }
   };
 
@@ -463,21 +463,27 @@ export default function RBACManagementPage() {
     });
     const data = await res.json();
     if (res.ok) {
-      toast({ title: 'Đã gán chức vụ' });
+      toast({ title: 'Đã gán chức vụ', description: 'Cập nhật RBAC thành công' });
       setAssignDialogOpen(false);
       setAssignForm({ userId: '', positionId: '', unitId: '', isPrimary: false, startDate: new Date().toISOString().split('T')[0] });
       fetchUserPositions();
       refreshAll();
     } else {
-      toast({ title: 'Lỗi', description: data.error, variant: 'destructive' });
+      toast({ title: `Không thể gán chức vụ (${res.status})`, description: data.error || data.message || 'Vui lòng thử lại', variant: 'destructive' });
     }
   };
 
   const handleDeleteUserPosition = async () => {
     if (!deleteUpId) return;
     const res = await fetch(`/api/admin/rbac/user-positions?id=${deleteUpId}`, { method: 'DELETE' });
-    if (res.ok) { toast({ title: 'Đã xóa gán chức vụ' }); fetchUserPositions(); refreshAll(); }
-    else { toast({ title: 'Lỗi', variant: 'destructive' }); }
+    if (res.ok) {
+      toast({ title: 'Đã xóa gán chức vụ' });
+      fetchUserPositions();
+      refreshAll();
+    } else {
+      const e = await res.json().catch(() => ({}));
+      toast({ title: `Không thể xóa (${res.status})`, description: e.error || e.message || 'Vui lòng thử lại', variant: 'destructive' });
+    }
     setDeleteUpId(null);
   };
 
@@ -505,11 +511,11 @@ export default function RBACManagementPage() {
     });
     const data = await res.json();
     if (res.ok) {
-      toast({ title: editingPosition ? 'Đã cập nhật' : 'Đã tạo', description: positionForm.name });
+      toast({ title: editingPosition ? 'Cập nhật thành công' : 'Tạo mới thành công', description: positionForm.name });
       setPositionDialogOpen(false);
       fetchPositions();
     } else {
-      toast({ title: 'Lỗi', description: data.error, variant: 'destructive' });
+      toast({ title: `Lỗi ${res.status}`, description: data.error || data.message || 'Không thể lưu chức vụ', variant: 'destructive' });
     }
   };
 
@@ -518,11 +524,11 @@ export default function RBACManagementPage() {
     const res = await fetch(`/api/admin/rbac/positions?id=${deletePositionId}`, { method: 'DELETE' });
     const data = await res.json();
     if (res.ok) {
-      toast({ title: 'Đã xóa chức vụ' });
+      toast({ title: 'Đã xóa chức vụ', description: data.message });
       if (selectedPositionId === deletePositionId) setSelectedPositionId('');
       fetchPositions();
     } else {
-      toast({ title: 'Không thể xóa', description: data.error, variant: 'destructive' });
+      toast({ title: `Không thể xóa (${res.status})`, description: data.error || data.message || 'Vui lòng thử lại', variant: 'destructive' });
     }
     setDeletePositionId(null);
   };

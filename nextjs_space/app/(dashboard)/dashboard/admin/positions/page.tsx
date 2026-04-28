@@ -4,7 +4,7 @@
 
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -30,7 +30,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import {
   Shield, Plus, Trash2, Search, RefreshCw, Edit, Users, Key,
-  Building2, Globe, User, AlertTriangle, ArrowLeft, CheckCircle, XCircle,
+  Building2, Globe, User, AlertTriangle, ArrowLeft, CheckCircle, Info,
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -45,6 +45,15 @@ interface Position {
   isActive: boolean;
   _count?: { positionFunctions: number; userPositions?: number };
 }
+
+const LEVEL_OPTIONS = [
+  { value: 0, label: 'Cấp 0 — Mặc định' },
+  { value: 1, label: 'Cấp 1 — Chiến sĩ / Học viên' },
+  { value: 2, label: 'Cấp 2 — Cán bộ cơ sở' },
+  { value: 3, label: 'Cấp 3 — Cán bộ trung cấp' },
+  { value: 4, label: 'Cấp 4 — Cán bộ cao cấp' },
+  { value: 5, label: 'Cấp 5 — Lãnh đạo' },
+];
 
 const SCOPE_OPTIONS = [
   { value: 'SELF', label: 'Cá nhân (SELF)', description: 'Chỉ ảnh hưởng đến bản thân', icon: User, color: 'text-slate-500', bg: 'bg-slate-100 text-slate-700' },
@@ -66,6 +75,7 @@ export default function PositionManagementPage() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState<Position | null>(null);
   const [saving, setSaving] = useState(false);
+  const selectedPositionRef = useRef<Position | null>(null);
 
   const [formData, setFormData] = useState({
     code: '', name: '', description: '', scope: 'UNIT', level: 0, isActive: true
@@ -92,12 +102,14 @@ export default function PositionManagementPage() {
 
   const handleOpenCreate = () => {
     setSelectedPosition(null);
+    selectedPositionRef.current = null;
     setFormData({ code: '', name: '', description: '', scope: 'UNIT', level: 0, isActive: true });
     setDialogOpen(true);
   };
 
   const handleOpenEdit = (position: Position) => {
     setSelectedPosition(position);
+    selectedPositionRef.current = position;
     setFormData({
       code: position.code,
       name: position.name,
@@ -119,22 +131,25 @@ export default function PositionManagementPage() {
       toast({ title: 'Lỗi', description: 'Vui lòng nhập mã và tên chức vụ', variant: 'destructive' });
       return;
     }
+    // Dùng ref để tránh mất giá trị khi dialog bị close bởi Select portal event
+    const currentPosition = selectedPositionRef.current;
     setSaving(true);
     try {
       const url = '/api/admin/rbac/positions';
-      const method = selectedPosition ? 'PUT' : 'POST';
-      const body = selectedPosition ? { id: selectedPosition.id, ...formData } : formData;
+      const method = currentPosition ? 'PUT' : 'POST';
+      const body = currentPosition ? { id: currentPosition.id, ...formData } : formData;
       const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
       const data = await res.json();
       if (res.ok) {
-        toast({ title: 'Thành công', description: data.message });
+        toast({ title: 'Thành công', description: currentPosition ? 'Cập nhật chức vụ thành công' : 'Tạo chức vụ thành công' });
         setDialogOpen(false);
         fetchPositions(true);
       } else {
-        toast({ title: 'Lỗi', description: data.error, variant: 'destructive' });
+        toast({ title: `Lỗi ${res.status}`, description: data.error || data.message || 'Lỗi không xác định', variant: 'destructive' });
       }
-    } catch {
-      toast({ title: 'Lỗi', description: 'Không thể lưu chức vụ', variant: 'destructive' });
+    } catch (err) {
+      console.error('handleSave error:', err);
+      toast({ title: 'Lỗi kết nối', description: 'Không thể lưu chức vụ', variant: 'destructive' });
     } finally {
       setSaving(false);
     }
@@ -150,10 +165,10 @@ export default function PositionManagementPage() {
         setDeleteDialogOpen(false);
         fetchPositions(true);
       } else {
-        toast({ title: 'Lỗi', description: data.error, variant: 'destructive' });
+        toast({ title: `Không thể xóa (${res.status})`, description: data.error || data.message || 'Vui lòng thử lại', variant: 'destructive' });
       }
     } catch {
-      toast({ title: 'Lỗi', description: 'Không thể xóa chức vụ', variant: 'destructive' });
+      toast({ title: 'Lỗi kết nối', description: 'Không thể xóa chức vụ. Kiểm tra kết nối mạng.', variant: 'destructive' });
     }
   };
 
@@ -164,9 +179,15 @@ export default function PositionManagementPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: position.id, isActive: !position.isActive })
       });
-      if (res.ok) { toast({ title: 'Đã cập nhật trạng thái' }); fetchPositions(true); }
+      if (res.ok) {
+        toast({ title: 'Đã cập nhật trạng thái', description: `${position.name}: ${position.isActive ? 'Tắt' : 'Bật'}` });
+        fetchPositions(true);
+      } else {
+        const data = await res.json().catch(() => ({}));
+        toast({ title: `Lỗi ${res.status}`, description: data.error || data.message || 'Không thể đổi trạng thái', variant: 'destructive' });
+      }
     } catch {
-      toast({ title: 'Lỗi', variant: 'destructive' });
+      toast({ title: 'Lỗi kết nối', description: 'Không thể đổi trạng thái chức vụ', variant: 'destructive' });
     }
   };
 
@@ -383,7 +404,7 @@ export default function PositionManagementPage() {
       </div>
 
       {/* Create/Edit Dialog */}
-      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+      <Dialog open={dialogOpen} onOpenChange={(open) => { if (!saving) setDialogOpen(open); }}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
@@ -394,17 +415,38 @@ export default function PositionManagementPage() {
               {selectedPosition ? 'Cập nhật thông tin chức vụ' : 'Tạo một chức vụ mới trong hệ thống'}
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 py-4">
+          <div className="space-y-4 py-2">
+            {/* Warning khi sửa mã chức vụ đang có user/quyền */}
+            {selectedPosition && (
+              ((selectedPosition._count?.positionFunctions || 0) > 0 || (selectedPosition._count?.userPositions || 0) > 0) ? (
+                <div className="flex gap-2.5 rounded-lg border border-amber-200 bg-amber-50 p-3">
+                  <AlertTriangle className="h-4 w-4 text-amber-600 mt-0.5 flex-shrink-0" />
+                  <p className="text-xs text-amber-700">
+                    Chức vụ này đang được gán cho <strong>{selectedPosition._count?.userPositions || 0} người dùng</strong> và có <strong>{selectedPosition._count?.positionFunctions || 0} quyền</strong>. Nếu đổi mã chức vụ, các liên kết RBAC vẫn giữ nguyên nhưng mã mới sẽ được dùng trong log/audit.
+                  </p>
+                </div>
+              ) : (
+                <div className="flex gap-2.5 rounded-lg border border-blue-200 bg-blue-50 p-3">
+                  <Info className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                  <p className="text-xs text-blue-700">Mã chức vụ có thể chỉnh sửa. Chức vụ này chưa được gán cho người dùng nào.</p>
+                </div>
+              )
+            )}
+
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="code">Mã chức vụ *</Label>
+                <Label htmlFor="code">
+                  Mã chức vụ *
+                  {selectedPosition && <span className="ml-1.5 text-xs text-slate-400 font-normal">(có thể sửa)</span>}
+                </Label>
                 <Input
                   id="code"
                   placeholder="VD: GIAM_DOC"
                   value={formData.code}
                   onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase().replace(/\s+/g, '_') })}
-                  disabled={!!selectedPosition}
+                  className="font-mono"
                 />
+                <p className="text-xs text-slate-400">Chỉ dùng CHỮ HOA và dấu gạch dưới</p>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="scope">Phạm vi *</Label>
@@ -425,6 +467,7 @@ export default function PositionManagementPage() {
                 </Select>
               </div>
             </div>
+
             <div className="space-y-2">
               <Label htmlFor="name">Tên chức vụ *</Label>
               <Input
@@ -434,6 +477,33 @@ export default function PositionManagementPage() {
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               />
             </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="level">Cấp độ</Label>
+                <Select
+                  value={String(formData.level)}
+                  onValueChange={(v) => setFormData({ ...formData, level: Number(v) })}
+                >
+                  <SelectTrigger id="level"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    {LEVEL_OPTIONS.map(opt => (
+                      <SelectItem key={opt.value} value={String(opt.value)}>{opt.label}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex items-end pb-0.5">
+                <div className="flex items-center justify-between rounded-lg border w-full p-3 bg-slate-50 h-[38px]">
+                  <Label className="cursor-pointer select-none">Kích hoạt</Label>
+                  <Switch
+                    checked={formData.isActive}
+                    onCheckedChange={(v) => setFormData({ ...formData, isActive: v })}
+                  />
+                </div>
+              </div>
+            </div>
+
             <div className="space-y-2">
               <Label htmlFor="description">Mô tả</Label>
               <Textarea
@@ -441,17 +511,7 @@ export default function PositionManagementPage() {
                 placeholder="Mô tả chi tiết về chức vụ này..."
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                rows={3}
-              />
-            </div>
-            <div className="flex items-center justify-between rounded-lg border p-3 bg-slate-50">
-              <div>
-                <Label>Kích hoạt</Label>
-                <p className="text-xs text-slate-500 mt-0.5">Chức vụ sẽ có hiệu lực trong hệ thống</p>
-              </div>
-              <Switch
-                checked={formData.isActive}
-                onCheckedChange={(v) => setFormData({ ...formData, isActive: v })}
+                rows={2}
               />
             </div>
           </div>

@@ -140,14 +140,14 @@ export default function AdminSessionsPage() {
       });
       const json = await res.json();
       if (json.success) {
-        toast({ title: 'Đã thu hồi phiên đăng nhập' });
+        toast({ title: 'Đã thu hồi phiên đăng nhập', description: revokeTarget?.user?.email });
         setRevokeTarget(null);
         fetchSessions();
       } else {
-        toast({ title: json.error || 'Lỗi thu hồi', variant: 'destructive' });
+        toast({ title: `Không thể thu hồi (${res.status})`, description: json.error || json.message || 'Vui lòng thử lại', variant: 'destructive' });
       }
     } catch {
-      toast({ title: 'Lỗi kết nối', variant: 'destructive' });
+      toast({ title: 'Lỗi kết nối', description: 'Không thể thu hồi phiên đăng nhập', variant: 'destructive' });
     } finally {
       setIsRevoking(false);
     }

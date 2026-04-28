@@ -240,7 +240,7 @@ export default function PermissionGrantsPage() {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error);
+      if (!res.ok) throw new Error(data.error || data.message || `Lỗi ${res.status}`);
 
       toast.success('Cấp quyền thành công');
       setFormOpen(false);
@@ -248,7 +248,7 @@ export default function PermissionGrantsPage() {
       fetchGrants();
       fetchStats();
     } catch (error: any) {
-      toast.error(error.message);
+      toast.error('Không thể cấp quyền', { description: error.message });
     } finally {
       setLoading(false);
     }
@@ -270,7 +270,7 @@ export default function PermissionGrantsPage() {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error);
+      if (!res.ok) throw new Error(data.error || data.message || `Lỗi ${res.status}`);
 
       toast.success('Thu hồi quyền thành công');
       setRevokeDialogOpen(false);
@@ -279,7 +279,7 @@ export default function PermissionGrantsPage() {
       fetchGrants();
       fetchStats();
     } catch (error: any) {
-      toast.error(error.message);
+      toast.error('Không thể thu hồi quyền', { description: error.message });
     } finally {
       setLoading(false);
     }
