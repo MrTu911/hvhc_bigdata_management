@@ -121,9 +121,24 @@ export default function UnitsManagementPage() {
     description: '',
   });
 
+  const [unitTypes, setUnitTypes] = useState<{ code: string; nameVi: string; shortName?: string }[]>([]);
+
   useEffect(() => {
     fetchUnits();
+    fetchUnitTypes();
   }, []);
+
+  const fetchUnitTypes = async () => {
+    try {
+      const res = await fetch('/api/master-data/MD_UNIT_TYPE');
+      const json = await res.json();
+      if (res.ok && json.data?.items) {
+        setUnitTypes(json.data.items);
+      }
+    } catch {
+      console.error('Không thể tải danh sách loại đơn vị');
+    }
+  };
 
   const fetchUnits = async () => {
     try {
@@ -476,8 +491,10 @@ export default function UnitsManagementPage() {
           <Select value={formData.type} onValueChange={(v) => setFormData({ ...formData, type: v })}>
             <SelectTrigger><SelectValue placeholder="Chọn loại" /></SelectTrigger>
             <SelectContent>
-              {['Học viện', 'Khoa', 'Phòng', 'Ban', 'Bộ môn', 'Trung tâm', 'Tiểu đoàn', 'Đại đội', 'Tổ'].map(t => (
-                <SelectItem key={t} value={t}>{t}</SelectItem>
+              {unitTypes.map(t => (
+                <SelectItem key={t.code} value={t.nameVi}>
+                  {t.nameVi}{t.shortName ? ` (${t.shortName})` : ''}
+                </SelectItem>
               ))}
             </SelectContent>
           </Select>

@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HVHC Big Data - Báo cáo Sáng kiến v21.0</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Be Vietnam Pro', 'sans-serif'] },
+                    colors: {
+                        hvhc: {
+                            red:    '#C8102E',
+                            gold:   '#C9A84C',
+                            navy:   '#0A1628',
+                            dark:   '#060F1E',
+                            blue:   '#1A3A6B',
+                            accent: '#007AFF',
+                        }
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* ─── Base ─────────────────────────────────────────── */
+        * { box-sizing: border-box; }
+        body { overflow: hidden; font-family: 'Be Vietnam Pro', sans-serif; }
+
+        /* ─── Slide Engine ──────────────────────────────────── */
+        #slide-viewport {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+            background: #0A1628;
+        }
+        .slide-track {
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.75s cubic-bezier(0.77,0,0.175,1);
+            will-change: transform;
+        }
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ─── HVHC Logo SVG colors ──────────────────────────── */
+        .logo-ring { stroke: #C9A84C; }
+        .logo-star { fill: #C8102E; }
+        .logo-text-inner { fill: #C9A84C; }
+
+        /* ─── Slide Nav ─────────────────────────────────────── */
+        #slide-nav {
+            position: fixed;
+            right: 28px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .nav-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        .nav-dot.active {
+            background: #C9A84C;
+            border-color: rgba(201,168,76,0.4);
+            width: 12px; height: 12px;
+        }
+        .nav-dot:hover { background: rgba(255,255,255,0.6); }
+
+        /* ─── Progress Bar ──────────────────────────────────── */
+        #progress-bar {
+            position: fixed;
+            top: 0; left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #C9A84C, #C8102E);
+            transition: width 0.4s ease;
+            z-index: 200;
+        }
+
+        /* ─── Slide Controls ────────────────────────────────── */
+        #slide-controls {
+            position: fixed;
+            bottom: 28px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(10,22,40,0.8);
+            backdrop-filter: blur(12px);
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        #slide-controls button {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: #fff;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s;
+            font-size: 12px;
+        }
+        #slide-controls button:hover { background: rgba(201,168,76,0.3); border-color: #C9A84C; }
+        #slide-counter { color: rgba(255,255,255,0.5); font-size: 12px; font-weight: 600; letter-spacing: 0.1em; min-width: 50px; text-align: center; }
+
+        /* ─── Slide Header Bar ──────────────────────────────── */
+        .slide-header-bar {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 5px;
+        }
+
+        /* ─── Section label ────────────────────────────────── */
+        .section-tag {
+            display: inline-block;
+            background: rgba(201,168,76,0.15);
+            border: 1px solid rgba(201,168,76,0.4);
+            color: #C9A84C;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            padding: 4px 14px;
+            border-radius: 50px;
+        }
+
+        /* ─── Cover Slide ───────────────────────────────────── */
+        .slide-cover {
+            background:
+                linear-gradient(160deg, rgba(10,22,40,0.97) 0%, rgba(6,15,30,0.98) 100%),
+                url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=2072');
+            background-size: cover; background-position: center;
+        }
+
+        /* ─── Content slides ────────────────────────────────── */
+        .slide-dark  { background: linear-gradient(135deg, #0A1628 0%, #060F1E 100%); }
+        .slide-light { background: linear-gradient(135deg, #f0f4ff 0%, #e8edf8 100%); color: #1a2340; }
+        .slide-navy  { background: linear-gradient(135deg, #0D1F3C 0%, #091628 100%); }
+
+        /* ─── Bento Card ─────────────────────────────────────── */
+        .bento {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            backdrop-filter: blur(4px);
+        }
+        .bento-light {
+            background: rgba(255,255,255,0.85);
+            border: 1px solid rgba(26,58,107,0.1);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        /* ─── Flow diagram ──────────────────────────────────── */
+        .flow-node {
+            background: rgba(255,255,255,0.05);
+            border: 1.5px solid rgba(255,255,255,0.12);
+            border-radius: 12px;
+            padding: 14px 10px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 700;
+            color: #fff;
+        }
+        .flow-node.active-node {
+            background: rgba(0,122,255,0.15);
+            border-color: #007AFF;
+            color: #60b0ff;
+        }
+
+        /* ─── Module btn ────────────────────────────────────── */
+        .mod-btn {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px;
+            padding: 10px 14px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 700;
+            color: rgba(255,255,255,0.6);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex; align-items: center; gap: 10px;
+            width: 100%;
+        }
+        .mod-btn:hover { background: rgba(255,255,255,0.08); color: #fff; }
+        .mod-btn.active { background: rgba(0,122,255,0.15); border-color: #007AFF; color: #60b0ff; }
+
+        /* ─── KPI Card ──────────────────────────────────────── */
+        .kpi-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+        }
+        .kpi-number { font-size: 2.5rem; font-weight: 900; line-height: 1; }
+        .kpi-label  { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.55; margin-top: 6px; }
+
+        /* ─── Chat UI ────────────────────────────────────────── */
+        .chat-bubble { max-width: 85%; border-radius: 16px; padding: 10px 16px; font-size: 13px; line-height: 1.6; }
+        .chat-user { background: #007AFF; color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+        .chat-ai   { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); color: #e2e8f0; align-self: flex-start; border-bottom-left-radius: 4px; }
+
+        /* ─── Scrollbar ──────────────────────────────────────── */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
+
+        /* ─── AI Modal ──────────────────────────────────────── */
+        .modal-overlay { position: fixed; inset: 0; z-index: 500; background: rgba(6,15,30,0.8); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; }
+        .modal-overlay.open { display: flex; }
+
+        /* ─── Slide number badge ────────────────────────────── */
+        .slide-num-badge {
+            position: absolute;
+            top: 24px; left: 28px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 4px 12px;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.15em;
+            color: rgba(255,255,255,0.35);
+            text-transform: uppercase;
+        }
+
+        /* ─── Animations ─────────────────────────────────────── */
+        @keyframes fadeUp { from { opacity:0; transform: translateY(24px); } to { opacity:1; transform: translateY(0); } }
+        .fade-up { animation: fadeUp 0.7s ease forwards; }
+        .delay-1 { animation-delay: 0.15s; opacity: 0; }
+        .delay-2 { animation-delay: 0.3s;  opacity: 0; }
+        .delay-3 { animation-delay: 0.45s; opacity: 0; }
+        .delay-4 { animation-delay: 0.6s;  opacity: 0; }
+
+        @keyframes pulseRing { 0%{transform:scale(1);opacity:.7} 100%{transform:scale(1.6);opacity:0} }
+        .pulse-ring::after { content:''; position:absolute; inset:0; border-radius:50%; border:2px solid rgba(201,168,76,0.5); animation: pulseRing 2.5s ease-out infinite; }
+
+        /* ─── Accent line ────────────────────────────────────── */
+        .accent-line { width: 48px; height: 4px; background: linear-gradient(90deg,#C9A84C,#C8102E); border-radius: 2px; }
+    </style>
+</head>
+<body>
+
+<!-- ░░░░ PROGRESS BAR ░░░░ -->
+<div id="progress-bar" style="width:12.5%"></div>
+
+<!-- ░░░░ SLIDE NAV DOTS ░░░░ -->
+<div id="slide-nav"></div>
+
+<!-- ░░░░ SLIDE CONTROLS ░░░░ -->
+<div id="slide-controls">
+    <button id="btn-prev"><i class="fas fa-chevron-up"></i></button>
+    <span id="slide-counter">1 / 8</span>
+    <button id="btn-next"><i class="fas fa-chevron-down"></i></button>
+    <div style="width:1px;height:20px;background:rgba(255,255,255,0.12);margin:0 4px;"></div>
+    <button id="btn-open-settings" title="Cấu hình AI"><i class="fas fa-robot" style="color:#C9A84C;"></i></button>
+    <button id="btn-tts-global" title="Thuyết minh tự động"><i class="fas fa-play-circle"></i></button>
+</div>
+
+<!-- ░░░░ SLIDE VIEWPORT ░░░░ -->
+<div id="slide-viewport">
+<div class="slide-track" id="track">
+
+<!-- ══════════════════════════════════════════════
+     SLIDE 0 — TRANG BÌA
+══════════════════════════════════════════════ -->
+<div class="slide slide-cover" id="slide-0">
+    <!-- decorative grid -->
+    <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:60px 60px;"></div>
+    <!-- glow -->
+    <div style="position:absolute;top:-10%;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(201,168,76,0.12),transparent 70%);"></div>
+
+    <div style="position:absolute;top:24px;left:0;right:0;display:flex;justify-content:center;align-items:center;gap:16px;padding:0 40px;">
+        <div style="height:1px;flex:1;background:linear-gradient(90deg,transparent,rgba(201,168,76,0.4));"></div>
+        <span style="font-size:11px;font-weight:800;letter-spacing:0.3em;color:rgba(201,168,76,0.7);text-transform:uppercase;">BỘ QUỐC PHÒNG · HỌC VIỆN HẬU CẦN</span>
+        <div style="height:1px;flex:1;background:linear-gradient(90deg,rgba(201,168,76,0.4),transparent);"></div>
+    </div>
+
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;gap:32px;">
+
+        <!-- HVHC Official Logo -->
+        <div class="fade-up" style="position:relative;">
+            <div class="pulse-ring" style="position:relative;width:120px;height:120px;border-radius:50%;">
+                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="width:120px;height:120px;">
+                    <!-- Outer ring -->
+                    <circle cx="100" cy="100" r="95" fill="none" stroke="#C9A84C" stroke-width="4"/>
+                    <circle cx="100" cy="100" r="88" fill="none" stroke="#C9A84C" stroke-width="1.5" stroke-dasharray="4 4"/>
+                    <!-- Background fill -->
+                    <circle cx="100" cy="100" r="86" fill="#0A1628"/>
+                    <!-- Red star at top -->
+                    <polygon points="100,22 105.9,39.1 124,39.1 109.5,49.8 115.5,67 100,56.3 84.5,67 90.5,49.8 76,39.1 94.1,39.1" fill="#C8102E"/>
+                    <!-- Wheat stalks -->
+                    <g stroke="#C9A84C" stroke-width="1.8" fill="none">
+                        <path d="M60,155 Q55,130 58,110 Q56,100 54,90" />
+                        <path d="M54,90 Q50,83 46,78 M54,90 Q51,83 50,76 M54,90 Q53,83 54,76"/>
+                        <path d="M58,110 Q53,104 50,98 M58,110 Q55,103 55,97 M58,110 Q57,103 59,97"/>
+                        <path d="M60,130 Q55,124 53,117 M60,130 Q57,123 57,117 M60,130 Q60,123 63,117"/>
+                        <path d="M140,155 Q145,130 142,110 Q144,100 146,90" />
+                        <path d="M146,90 Q150,83 154,78 M146,90 Q149,83 150,76 M146,90 Q147,83 146,76"/>
+                        <path d="M142,110 Q147,104 150,98 M142,110 Q145,103 145,97 M142,110 Q143,103 141,97"/>
+                        <path d="M140,130 Q145,124 147,117 M140,130 Q143,123 143,117 M140,130 Q140,123 137,117"/>
+                    </g>
+                    <!-- Gear / cog symbol -->
+                    <circle cx="100" cy="118" r="22" fill="none" stroke="#C9A84C" stroke-width="2.5"/>
+                    <circle cx="100" cy="118" r="10" fill="none" stroke="#C9A84C" stroke-width="2"/>
+                    <g stroke="#C9A84C" stroke-width="3" stroke-linecap="round">
+                        <line x1="100" y1="91" x2="100" y2="86"/>
+                        <line x1="100" y1="145" x2="100" y2="150"/>
+                        <line x1="73" y1="118" x2="68" y2="118"/>
+                        <line x1="127" y1="118" x2="132" y2="118"/>
+                        <line x1="81" y1="99" x2="77" y2="95"/>
+                        <line x1="119" y1="137" x2="123" y2="141"/>
+                        <line x1="119" y1="99" x2="123" y2="95"/>
+                        <line x1="81" y1="137" x2="77" y2="141"/>
+                    </g>
+                    <!-- Bottom text arc -->
+                    <path id="arc-bottom" d="M 22,100 A 78,78 0 0,0 178,100" fill="none"/>
+                    <text font-size="11" font-weight="800" fill="#C9A84C" letter-spacing="3">
+                        <textPath href="#arc-bottom" startOffset="8%">HỌC VIỆN HẬU CẦN</textPath>
+                    </text>
+                    <!-- Bottom border bar -->
+                    <rect x="40" y="158" width="120" height="3" rx="1.5" fill="#C8102E"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Title block -->
+        <div class="fade-up delay-1" style="text-align:center;max-width:860px;">
+            <div class="section-tag" style="margin-bottom:20px;">THUYẾT MINH SÁNG KIẾN · NĂM 2026</div>
+            <h1 style="font-size:clamp(1.6rem,4vw,3rem);font-weight:900;color:#fff;line-height:1.2;text-transform:uppercase;letter-spacing:0.02em;margin-bottom:16px;">
+                Xây dựng Cơ sở Dữ liệu Lớn<br>
+                <span style="color:#C9A84C;">Phục vụ Huấn luyện & Nghiên cứu</span><br>
+                Khoa học Hậu cần Quân sự
+            </h1>
+            <div class="accent-line" style="margin:20px auto;"></div>
+        </div>
+
+        <!-- Meta info -->
+        <div class="fade-up delay-2" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:680px;width:100%;">
+            <div class="bento" style="padding:16px 20px;">
+                <div style="font-size:9px;font-weight:800;letter-spacing:0.2em;color:#C9A84C;text-transform:uppercase;margin-bottom:6px;">Đơn vị chủ trì</div>
+                <div style="font-size:13px;font-weight:700;color:#fff;">Viện NCKH Hậu cần Quân sự</div>
+            </div>
+            <div class="bento" style="padding:16px 20px;">
+                <div style="font-size:9px;font-weight:800;letter-spacing:0.2em;color:#C9A84C;text-transform:uppercase;margin-bottom:6px;">Chủ nhiệm</div>
+                <div style="font-size:13px;font-weight:700;color:#fff;">Trung tá, TS. Nguyễn Đức Tú</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom hint -->
+    <div style="text-align:center;padding-bottom:80px;color:rgba(255,255,255,0.3);font-size:11px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;">
+        <i class="fas fa-chevron-down" style="display:block;font-size:16px;margin-bottom:6px;animation:bounce 2s infinite;"></i>
+        Nhấn phím ↓ hoặc nút điều hướng để tiếp tục
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SLIDE 1 — BỐI CẢNH
+══════════════════════════════════════════════ -->
+<div class="slide slide-dark" id="slide-1">
+    <div class="slide-num-badge">Phần I · Bối cảnh</div>
+    <div style="position:absolute;top:0;right:0;width:400px;height:400px;background:radial-gradient(circle,rgba(200,16,46,0.08),transparent 70%);pointer-events:none;"></div>
+
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:60px 80px;max-width:1400px;margin:0 auto;width:100%;gap:32px;">
+
+        <div class="fade-up">
+            <div class="section-tag">I. Bối cảnh chiến lược</div>
+            <h2 style="font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:900;color:#fff;margin-top:12px;line-height:1.2;">
+                Thực trạng <span style="color:#C9A84C;">"Ốc đảo dữ liệu"</span><br>& Mục tiêu Chuyển đổi số
+            </h2>
+            <div class="accent-line" style="margin-top:16px;"></div>
+        </div>
+
+        <div class="fade-up delay-1" style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+            <!-- Pain point -->
+            <div class="bento" style="padding:28px;">
+                <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+                    <div style="width:44px;height:44px;border-radius:12px;background:rgba(200,16,46,0.15);border:1px solid rgba(200,16,46,0.3);display:flex;align-items:center;justify-content:center;">
+                        <i class="fas fa-exclamation-triangle" style="color:#C8102E;font-size:18px;"></i>
+                    </div>
+                    <h3 style="font-size:15px;font-weight:800;color:#fff;">Điểm nghẽn hiện tại</h3>
+                </div>
+                <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;">
+                    <li style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:rgba(255,255,255,0.7);">
+                        <i class="fas fa-times-circle" style="color:#C8102E;margin-top:2px;flex-shrink:0;"></i>
+                        Dữ liệu phân tán <strong style="color:#fff;">17 phòng ban</strong>, không liên thông
+                    </li>
+                    <li style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:rgba(255,255,255,0.7);">
+                        <i class="fas fa-times-circle" style="color:#C8102E;margin-top:2px;flex-shrink:0;"></i>
+                        Tra cứu thủ công mất <strong style="color:#fff;">3–5 ngày</strong> per báo cáo
+                    </li>
+                    <li style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:rgba(255,255,255,0.7);">
+                        <i class="fas fa-times-circle" style="color:#C8102E;margin-top:2px;flex-shrink:0;"></i>
+                        Thiếu <strong style="color:#fff;">"nhiên liệu sạch"</strong> để triển khai AI
+                    </li>
+                    <li style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:rgba(255,255,255,0.7);">
+                        <i class="fas fa-times-circle" style="color:#C8102E;margin-top:2px;flex-shrink:0;"></i>
+                        Nguy cơ <strong style="color:#fff;">mất an toàn thông tin</strong> cao
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Solution -->
+            <div class="bento" style="padding:28px;border-color:rgba(201,168,76,0.2);background:rgba(201,168,76,0.04);">
+                <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+                    <div style="width:44px;height:44px;border-radius:12px;background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.3);display:flex;align-items:center;justify-content:center;">
+                        <i class="fas fa-database" style="color:#C9A84C;font-size:18px;"></i>
+                    </div>
+                    <h3 style="font-size:15px;font-weight:800;color:#fff;">Giải pháp HVHC BigData</h3>
+                </div>
+                <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;">
+                    <li style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:rgba(255,255,255,0.7);">
+                        <i class="fas fa-check-circle" style="color:#C9A84C;margin-top:2px;flex-shrink:0;"></i>
+                        <strong style="color:#fff;">88 Use Cases</strong> liên thông 17 Module
+                    </li>
+                    <li style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:rgba(255,255,255,0.7);">
+                        <i class="fas fa-check-circle" style="color:#C9A84C;margin-top:2px;flex-shrink:0;"></i>
+                        Tra cứu từ <strong style="color:#fff;">60 phút</strong> → dưới <strong style="color:#C9A84C;">5 giây</strong>
+                    </li>
+                    <li style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:rgba(255,255,255,0.7);">
+                        <i class="fas fa-check-circle" style="color:#C9A84C;margin-top:2px;flex-shrink:0;"></i>
+                        Hồ dữ liệu tập trung <strong style="color:#fff;">Data Lake</strong>
+                    </li>
+                    <li style="display:flex;gap:10px;align-items:flex-start;font-size:13px;color:rgba(255,255,255,0.7);">
+                        <i class="fas fa-check-circle" style="color:#C9A84C;margin-top:2px;flex-shrink:0;"></i>
+                        Mô hình <strong style="color:#fff;">"Nhà trường thông minh"</strong>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Legal basis -->
+        <div class="fade-up delay-2 bento" style="padding:18px 24px;display:flex;align-items:center;gap:16px;">
+            <i class="fas fa-gavel" style="color:#C9A84C;font-size:22px;flex-shrink:0;"></i>
+            <p style="font-size:13px;color:rgba(255,255,255,0.7);margin:0;line-height:1.7;">
+                Căn cứ <strong style="color:#fff;">Nghị quyết số 3488-NQ/QUTW</strong> của Quân ủy Trung ương về phát triển Big Data và AI — động lực cốt lõi xây dựng Quân đội tinh, gọn, mạnh.
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SLIDE 2 — HẠ TẦNG LÕI
+══════════════════════════════════════════════ -->
+<div class="slide slide-navy" id="slide-2">
+    <div class="slide-num-badge">Phần II · Hạ tầng Lõi</div>
+    <div style="position:absolute;bottom:0;left:0;width:500px;height:500px;background:radial-gradient(circle,rgba(0,122,255,0.08),transparent 70%);pointer-events:none;"></div>
+
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:50px 80px;max-width:1400px;margin:0 auto;width:100%;gap:24px;">
+        <div class="fade-up">
+            <div class="section-tag">II. Hạ tầng Lõi (Core Platform)</div>
+            <h2 style="font-size:clamp(1.6rem,3vw,2.5rem);font-weight:900;color:#fff;margin-top:12px;line-height:1.2;">
+                5 Module Nền tảng &<br><span style="color:#60b0ff;">Bảo mật RBAC 4 Cấp độ</span>
+            </h2>
+            <div class="accent-line" style="margin-top:16px;"></div>
+        </div>
+
+        <div class="fade-up delay-1" style="display:grid;grid-template-columns:2fr 1fr;gap:20px;flex:1;min-height:0;">
+            <!-- Module explorer -->
+            <div style="display:grid;grid-template-columns:180px 1fr;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:16px;overflow:hidden;">
+                <div id="core-list" style="background:rgba(0,0,0,0.2);border-right:1px solid rgba(255,255,255,0.07);padding:12px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;"></div>
+                <div id="core-detail" style="padding:24px;overflow-y:auto;"></div>
+            </div>
+
+            <!-- RBAC 4 levels -->
+            <div style="display:flex;flex-direction:column;gap:12px;">
+                <div class="bento" style="padding:16px;flex:1;">
+                    <div style="font-size:10px;font-weight:800;letter-spacing:0.15em;color:#60b0ff;text-transform:uppercase;margin-bottom:14px;">
+                        <i class="fas fa-shield-halved" style="margin-right:6px;"></i>Kiểm soát Phạm vi (Scope)
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:8px;">
+                        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(0,122,255,0.12);border:1px solid rgba(0,122,255,0.2);border-radius:8px;">
+                            <i class="fas fa-building-columns" style="color:#60b0ff;font-size:13px;width:18px;text-align:center;"></i>
+                            <div><div style="font-size:11px;font-weight:800;color:#fff;">ACADEMY</div><div style="font-size:10px;color:rgba(255,255,255,0.4);">Toàn Học viện</div></div>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;">
+                            <i class="fas fa-layer-group" style="color:#C9A84C;font-size:13px;width:18px;text-align:center;"></i>
+                            <div><div style="font-size:11px;font-weight:800;color:#fff;">DEPARTMENT</div><div style="font-size:10px;color:rgba(255,255,255,0.4);">Phòng / Hệ</div></div>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;">
+                            <i class="fas fa-users" style="color:#34d399;font-size:13px;width:18px;text-align:center;"></i>
+                            <div><div style="font-size:11px;font-weight:800;color:#fff;">UNIT</div><div style="font-size:10px;color:rgba(255,255,255,0.4);">Khoa / Ban</div></div>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;">
+                            <i class="fas fa-user" style="color:#a78bfa;font-size:13px;width:18px;text-align:center;"></i>
+                            <div><div style="font-size:11px;font-weight:800;color:#fff;">INDIVIDUAL</div><div style="font-size:10px;color:rgba(255,255,255,0.4);">Cá nhân</div></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bento" style="padding:16px;">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                        <i class="fas fa-history" style="color:#34d399;font-size:13px;"></i>
+                        <span style="font-size:11px;font-weight:800;color:#34d399;text-transform:uppercase;letter-spacing:0.1em;">Audit Trail Vĩnh viễn</span>
+                    </div>
+                    <p style="font-size:11px;color:rgba(255,255,255,0.55);margin:0;line-height:1.6;">Ghi nhận 100% hành vi thao tác. Xác thực MFA/OTP chuẩn quân sự.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SLIDE 3 — HỆ SINH THÁI NGHIỆP VỤ
+══════════════════════════════════════════════ -->
+<div class="slide slide-dark" id="slide-3">
+    <div class="slide-num-badge">Phần III · Nghiệp vụ</div>
+    <div style="position:absolute;top:0;right:0;width:450px;height:450px;background:radial-gradient(circle,rgba(201,168,76,0.07),transparent 70%);pointer-events:none;"></div>
+
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:50px 80px;max-width:1400px;margin:0 auto;width:100%;gap:24px;">
+        <div class="fade-up">
+            <div class="section-tag">III. Hệ sinh thái Nghiệp vụ</div>
+            <h2 style="font-size:clamp(1.6rem,3vw,2.5rem);font-weight:900;color:#fff;margin-top:12px;line-height:1.2;">
+                17 CSDL Nghiệp vụ &<br><span style="color:#C9A84C;">Chân dung Cán bộ 360°</span>
+            </h2>
+            <div class="accent-line" style="margin-top:16px;"></div>
+        </div>
+
+        <div class="fade-up delay-1" style="display:grid;grid-template-columns:2fr 1fr;gap:20px;flex:1;min-height:0;">
+            <div style="display:grid;grid-template-columns:180px 1fr;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:16px;overflow:hidden;">
+                <div id="biz-list" style="background:rgba(0,0,0,0.2);border-right:1px solid rgba(255,255,255,0.07);padding:12px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;"></div>
+                <div id="biz-detail" style="padding:24px;overflow-y:auto;"></div>
+            </div>
+
+            <!-- 360 Feature -->
+            <div class="bento" style="padding:24px;display:flex;flex-direction:column;gap:16px;background:linear-gradient(135deg,rgba(0,122,255,0.12),rgba(16,185,129,0.06));border-color:rgba(0,122,255,0.2);">
+                <div style="display:flex;align-items:center;gap:12px;">
+                    <div style="width:44px;height:44px;border-radius:50%;background:rgba(0,122,255,0.2);border:2px solid rgba(0,122,255,0.4);display:flex;align-items:center;justify-content:center;">
+                        <i class="fas fa-street-view" style="color:#60b0ff;font-size:18px;"></i>
+                    </div>
+                    <div>
+                        <div style="font-size:14px;font-weight:800;color:#fff;">Chân Dung 360°</div>
+                        <div style="font-size:10px;color:rgba(255,255,255,0.4);margin-top:2px;">Hồ sơ sĩ quan toàn diện</div>
+                    </div>
+                </div>
+                <p style="font-size:12px;color:rgba(255,255,255,0.6);line-height:1.7;margin:0;">
+                    Hồ sơ gốc <strong style="color:#60b0ff;">(M02)</strong> tự động tổng hợp từ:<br>
+                    Đảng phí <strong style="color:#fff;">(M03)</strong> · Khen thưởng <strong style="color:#fff;">(M05)</strong> · Tải giảng <strong style="color:#fff;">(M07)</strong> · Đề tài NCKH <strong style="color:#fff;">(M09)</strong>
+                </p>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                    <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px;text-align:center;">
+                        <div style="font-size:18px;font-weight:900;color:#60b0ff;">100%</div>
+                        <div style="font-size:10px;color:rgba(255,255,255,0.4);margin-top:2px;">Liên thông</div>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px;text-align:center;">
+                        <div style="font-size:18px;font-weight:900;color:#34d399;">Real-time</div>
+                        <div style="font-size:10px;color:rgba(255,255,255,0.4);margin-top:2px;">Đồng bộ</div>
+                    </div>
+                </div>
+                <div style="background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.2);border-radius:10px;padding:12px;">
+                    <p style="font-size:11px;color:rgba(201,168,76,0.9);margin:0;line-height:1.6;font-style:italic;">
+                        "Một click — thấy toàn bộ năng lực sĩ quan không cần gọi điện hỏi từng phòng ban."
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SLIDE 4 — PHÂN HỆ ĐÀO TẠO M10
+══════════════════════════════════════════════ -->
+<div class="slide slide-navy" id="slide-4">
+    <div class="slide-num-badge">Phần V · Đào tạo M10</div>
+    <div style="position:absolute;top:0;right:0;width:350px;height:350px;background:radial-gradient(circle,rgba(16,185,129,0.1),transparent 70%);pointer-events:none;"></div>
+
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:50px 80px;max-width:1400px;margin:0 auto;width:100%;gap:24px;">
+        <div class="fade-up">
+            <div class="section-tag" style="background:rgba(16,185,129,0.12);border-color:rgba(16,185,129,0.3);color:#34d399;">Chuyên đề Xương sống · Phân hệ M10</div>
+            <h2 style="font-size:clamp(1.6rem,3vw,2.5rem);font-weight:900;color:#fff;margin-top:12px;line-height:1.2;">
+                Đào tạo & Huấn luyện <span style="color:#34d399;">(M10)</span><br>
+                <span style="font-size:60%;font-weight:700;color:rgba(255,255,255,0.5);">12 Use Cases · 17 Data Modules · AI Analytics</span>
+            </h2>
+            <div class="accent-line" style="margin-top:16px;background:linear-gradient(90deg,#34d399,#059669);"></div>
+        </div>
+
+        <!-- Highlights row -->
+        <div class="fade-up delay-1" style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">
+            <div class="bento" style="padding:18px;border-color:rgba(16,185,129,0.2);">
+                <div style="width:36px;height:36px;border-radius:10px;background:rgba(16,185,129,0.15);display:flex;align-items:center;justify-content:center;margin-bottom:10px;">
+                    <i class="fas fa-shield-halved" style="color:#34d399;font-size:15px;"></i>
+                </div>
+                <div style="font-size:12px;font-weight:800;color:#fff;margin-bottom:6px;">Toàn vẹn Dữ liệu</div>
+                <p style="font-size:11px;color:rgba(255,255,255,0.55);margin:0;line-height:1.6;">
+                    <code style="background:rgba(255,255,255,0.08);padding:1px 5px;border-radius:4px;font-size:10px;">ProgramVersion</code> chống vỡ CTĐT &
+                    <code style="background:rgba(255,255,255,0.08);padding:1px 5px;border-radius:4px;font-size:10px;">ScoreHistory</code> chống gian lận điểm
+                </p>
+            </div>
+            <div class="bento" style="padding:18px;border-color:rgba(251,191,36,0.2);background:rgba(251,191,36,0.04);">
+                <div style="width:36px;height:36px;border-radius:10px;background:rgba(251,191,36,0.15);display:flex;align-items:center;justify-content:center;margin-bottom:10px;">
+                    <i class="fas fa-brain" style="color:#fbbf24;font-size:15px;"></i>
+                </div>
+                <div style="font-size:12px;font-weight:800;color:#fff;margin-bottom:6px;">Academic Warning AI</div>
+                <p style="font-size:11px;color:rgba(255,255,255,0.55);margin:0;line-height:1.6;">Dự báo rủi ro GPA từ <strong style="color:#fbbf24;">giữa kỳ</strong> để can thiệp sớm. Cảnh báo học viên tụt hậu tự động.</p>
+            </div>
+            <div class="bento" style="padding:18px;border-color:rgba(96,176,255,0.2);">
+                <div style="width:36px;height:36px;border-radius:10px;background:rgba(96,176,255,0.15);display:flex;align-items:center;justify-content:center;margin-bottom:10px;">
+                    <i class="fas fa-cogs" style="color:#60b0ff;font-size:15px;"></i>
+                </div>
+                <div style="font-size:12px;font-weight:800;color:#fff;margin-bottom:6px;">Conflict Engine</div>
+                <p style="font-size:11px;color:rgba(255,255,255,0.55);margin:0;line-height:1.6;">Phát hiện <strong style="color:#60b0ff;">100%</strong> xung đột lịch học trước khi lưu. Báo cáo tự động trong <strong style="color:#60b0ff;">&lt;5 phút</strong>.</p>
+            </div>
+        </div>
+
+        <!-- Flow diagram -->
+        <div class="fade-up delay-2" style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:20px 24px;">
+            <div style="font-size:9px;font-weight:800;letter-spacing:0.2em;color:rgba(255,255,255,0.35);text-transform:uppercase;margin-bottom:14px;">Luồng xử lý thông minh M10</div>
+            <div style="display:flex;align-items:center;gap:8px;">
+                <div class="flow-node" style="flex:1;">
+                    <i class="fas fa-database" style="font-size:18px;opacity:0.5;display:block;margin-bottom:6px;"></i>
+                    <div style="font-size:11px;font-weight:700;">Dữ liệu Đầu vào</div>
+                    <div style="font-size:10px;opacity:0.5;margin-top:3px;">Điểm · Chuyên cần · CTĐT</div>
+                </div>
+                <i class="fas fa-arrow-right" style="color:rgba(255,255,255,0.2);font-size:12px;flex-shrink:0;"></i>
+                <div class="flow-node active-node" style="flex:1;">
+                    <i class="fas fa-microchip" style="font-size:18px;display:block;margin-bottom:6px;"></i>
+                    <div style="font-size:11px;font-weight:700;">ML Rule Engines</div>
+                    <div style="font-size:10px;opacity:0.7;margin-top:3px;">Conflict · Graduation · Warning</div>
+                </div>
+                <i class="fas fa-arrow-right" style="color:rgba(255,255,255,0.2);font-size:12px;flex-shrink:0;"></i>
+                <div class="flow-node" style="flex:1;border-color:rgba(251,191,36,0.3);background:rgba(251,191,36,0.08);color:#fbbf24;">
+                    <i class="fas fa-exclamation-triangle" style="font-size:18px;display:block;margin-bottom:6px;"></i>
+                    <div style="font-size:11px;font-weight:700;">Academic Warning</div>
+                    <div style="font-size:10px;opacity:0.7;margin-top:3px;">Dự báo nguy cơ GPA</div>
+                </div>
+                <i class="fas fa-arrow-right" style="color:rgba(255,255,255,0.2);font-size:12px;flex-shrink:0;"></i>
+                <div class="flow-node" style="flex:1;border-color:rgba(16,185,129,0.3);background:rgba(16,185,129,0.08);color:#34d399;">
+                    <i class="fas fa-user-graduate" style="font-size:18px;display:block;margin-bottom:6px;"></i>
+                    <div style="font-size:11px;font-weight:700;">Ra Quyết định</div>
+                    <div style="font-size:10px;opacity:0.7;margin-top:3px;">Bồi dưỡng · Duyệt TN</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SLIDE 5 — NGHIÊN CỨU KHOA HỌC M09
+══════════════════════════════════════════════ -->
+<div class="slide slide-dark" id="slide-5">
+    <div class="slide-num-badge">Phần VI · NCKH M09</div>
+    <div style="position:absolute;top:0;left:0;width:450px;height:450px;background:radial-gradient(circle,rgba(201,168,76,0.07),transparent 70%);pointer-events:none;"></div>
+
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:50px 80px;max-width:1400px;margin:0 auto;width:100%;gap:24px;">
+        <div class="fade-up">
+            <div class="section-tag" style="background:rgba(201,168,76,0.12);border-color:rgba(201,168,76,0.3);color:#C9A84C;">Chuyên đề Xương sống · Phân hệ M09</div>
+            <h2 style="font-size:clamp(1.6rem,3vw,2.5rem);font-weight:900;color:#fff;margin-top:12px;line-height:1.2;">
+                Nghiên cứu Khoa học <span style="color:#C9A84C;">(M09)</span><br>
+                <span style="font-size:60%;font-weight:700;color:rgba(255,255,255,0.5);">5 Use Cases (UC-45→UC-49) · Đồng bộ &gt;98% Cục KHQS</span>
+            </h2>
+            <div class="accent-line" style="margin-top:16px;background:linear-gradient(90deg,#C9A84C,#C8102E);"></div>
+        </div>
+
+        <div class="fade-up delay-1" style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">
+            <div class="bento" style="padding:18px;border-color:rgba(201,168,76,0.2);background:rgba(201,168,76,0.04);">
+                <div style="width:36px;height:36px;border-radius:10px;background:rgba(201,168,76,0.15);display:flex;align-items:center;justify-content:center;margin-bottom:10px;">
+                    <i class="fas fa-brain" style="color:#C9A84C;font-size:15px;"></i>
+                </div>
+                <div style="font-size:12px;font-weight:800;color:#fff;margin-bottom:6px;">Similarity AI (NLP)</div>
+                <p style="font-size:11px;color:rgba(255,255,255,0.55);margin:0;line-height:1.6;">Phát hiện trùng lặp đề tài <strong style="color:#C9A84C;">&gt;90%</strong> (so với ~20% dùng trí nhớ hội đồng cũ). Ngăn thất thoát ngân sách.</p>
+            </div>
+            <div class="bento" style="padding:18px;border-color:rgba(96,176,255,0.2);">
+                <div style="width:36px;height:36px;border-radius:10px;background:rgba(96,176,255,0.15);display:flex;align-items:center;justify-content:center;margin-bottom:10px;">
+                    <i class="fas fa-id-badge" style="color:#60b0ff;font-size:15px;"></i>
+                </div>
+                <div style="font-size:12px;font-weight:800;color:#fff;margin-bottom:6px;">Scientist CV Tự động</div>
+                <p style="font-size:11px;color:rgba(255,255,255,0.55);margin:0;line-height:1.6;">Hồ sơ Nhà KH tự cập nhật thành tích. Tính chỉ số <strong style="color:#60b0ff;">H-index</strong> theo quý không cần nhập tay.</p>
+            </div>
+            <div class="bento" style="padding:18px;border-color:rgba(16,185,129,0.2);">
+                <div style="width:36px;height:36px;border-radius:10px;background:rgba(16,185,129,0.15);display:flex;align-items:center;justify-content:center;margin-bottom:10px;">
+                    <i class="fas fa-chart-line" style="color:#34d399;font-size:15px;"></i>
+                </div>
+                <div style="font-size:12px;font-weight:800;color:#fff;margin-bottom:6px;">KPI Dashboard</div>
+                <p style="font-size:11px;color:rgba(255,255,255,0.55);margin:0;line-height:1.6;">Báo cáo định kỳ từ <strong style="color:#C8102E;">3–5 ngày</strong> → <strong style="color:#34d399;">&lt;30 phút</strong>. Giảm 80% thời gian tổng hợp.</p>
+            </div>
+        </div>
+
+        <!-- Flow M09 -->
+        <div class="fade-up delay-2" style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:20px 24px;">
+            <div style="font-size:9px;font-weight:800;letter-spacing:0.2em;color:rgba(255,255,255,0.35);text-transform:uppercase;margin-bottom:14px;">Luồng kiểm soát tính mới Đề tài</div>
+            <div style="display:flex;align-items:center;gap:8px;">
+                <div class="flow-node" style="flex:1;">
+                    <i class="fas fa-file-alt" style="font-size:18px;opacity:0.5;display:block;margin-bottom:6px;"></i>
+                    <div style="font-size:11px;font-weight:700;">Đề xuất Mới</div>
+                    <div style="font-size:10px;opacity:0.5;margin-top:3px;">Abstract từ Nhà KH</div>
+                </div>
+                <i class="fas fa-arrow-right" style="color:rgba(255,255,255,0.2);font-size:12px;flex-shrink:0;"></i>
+                <div class="flow-node" style="flex:1;border-color:rgba(201,168,76,0.3);background:rgba(201,168,76,0.08);color:#C9A84C;">
+                    <i class="fas fa-brain" style="font-size:18px;display:block;margin-bottom:6px;"></i>
+                    <div style="font-size:11px;font-weight:700;">Similarity AI</div>
+                    <div style="font-size:10px;opacity:0.7;margin-top:3px;">Semantic Search · NLP</div>
+                </div>
+                <i class="fas fa-arrow-right" style="color:rgba(255,255,255,0.2);font-size:12px;flex-shrink:0;"></i>
+                <div class="flow-node" style="flex:1;border-color:rgba(200,16,46,0.3);background:rgba(200,16,46,0.08);color:#f87171;">
+                    <i class="fas fa-shield-cat" style="font-size:18px;display:block;margin-bottom:6px;"></i>
+                    <div style="font-size:11px;font-weight:700;">Kiểm tra Trùng lặp</div>
+                    <div style="font-size:10px;opacity:0.7;margin-top:3px;">Cảnh báo &gt;90%</div>
+                </div>
+                <i class="fas fa-arrow-right" style="color:rgba(255,255,255,0.2);font-size:12px;flex-shrink:0;"></i>
+                <div class="flow-node" style="flex:1;border-color:rgba(96,176,255,0.3);background:rgba(96,176,255,0.08);color:#60b0ff;">
+                    <i class="fas fa-id-badge" style="font-size:18px;display:block;margin-bottom:6px;"></i>
+                    <div style="font-size:11px;font-weight:700;">Hồ sơ Khoa học</div>
+                    <div style="font-size:10px;opacity:0.7;margin-top:3px;">Cập nhật thành tích TĐ</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SLIDE 6 — HIỆU QUẢ KINH TẾ & LỘ TRÌNH
+══════════════════════════════════════════════ -->
+<div class="slide slide-navy" id="slide-6">
+    <div class="slide-num-badge">Phần IV · Hiệu quả & Lộ trình</div>
+
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:50px 80px;max-width:1400px;margin:0 auto;width:100%;gap:24px;">
+        <div class="fade-up">
+            <div class="section-tag">IV. Đánh giá Hiệu quả & Lộ trình</div>
+            <h2 style="font-size:clamp(1.6rem,3vw,2.5rem);font-weight:900;color:#fff;margin-top:12px;line-height:1.2;">
+                Tối ưu Kinh tế (CBA) &<br><span style="color:#C9A84C;">Lộ trình Triển khai 3 Giai đoạn</span>
+            </h2>
+            <div class="accent-line" style="margin-top:16px;"></div>
+        </div>
+
+        <div class="fade-up delay-1" style="display:grid;grid-template-columns:1fr 1.4fr;gap:20px;flex:1;min-height:0;">
+            <!-- KPI Cards -->
+            <div style="display:flex;flex-direction:column;gap:12px;">
+                <div style="font-size:10px;font-weight:800;letter-spacing:0.15em;color:rgba(255,255,255,0.35);text-transform:uppercase;margin-bottom:4px;">Phân tích Chi phí – Lợi ích (CBA)</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:1;">
+                    <div class="kpi-card" style="background:rgba(201,168,76,0.08);border-color:rgba(201,168,76,0.2);">
+                        <div class="kpi-number" style="color:#C9A84C;">1.247</div>
+                        <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:4px;">Tỷ VNĐ</div>
+                        <div class="kpi-label">Tổng đầu tư</div>
+                    </div>
+                    <div class="kpi-card" style="background:rgba(255,255,255,0.03);">
+                        <div class="kpi-number" style="color:#fff;">478</div>
+                        <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:4px;">Ngày công</div>
+                        <div class="kpi-label">Phát triển</div>
+                    </div>
+                    <div class="kpi-card" style="background:rgba(16,185,129,0.08);border-color:rgba(16,185,129,0.2);">
+                        <div class="kpi-number" style="color:#34d399;">739</div>
+                        <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:4px;">Tr/năm</div>
+                        <div class="kpi-label">Tiết kiệm NSNN</div>
+                    </div>
+                    <div class="kpi-card" style="background:rgba(96,176,255,0.08);border-color:rgba(96,176,255,0.2);">
+                        <div class="kpi-number" style="color:#60b0ff;">5.7</div>
+                        <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:4px;">Tháng</div>
+                        <div class="kpi-label">Hoàn vốn (ROI 108%)</div>
+                    </div>
+                </div>
+                <div class="bento" style="padding:12px 16px;">
+                    <div style="font-size:9px;font-weight:700;letter-spacing:0.12em;color:rgba(255,255,255,0.35);text-transform:uppercase;margin-bottom:8px;">Phân bổ ngày công theo module</div>
+                    <div style="height:80px;"><canvas id="budgetChart"></canvas></div>
+                </div>
+            </div>
+
+            <!-- Roadmap -->
+            <div style="display:flex;flex-direction:column;gap:12px;">
+                <div style="font-size:10px;font-weight:800;letter-spacing:0.15em;color:rgba(255,255,255,0.35);text-transform:uppercase;margin-bottom:4px;">Lộ trình Triển khai</div>
+                <div style="display:flex;flex-direction:column;gap:10px;flex:1;">
+                    <div class="bento" style="padding:18px;display:flex;gap:16px;align-items:center;border-color:rgba(96,176,255,0.2);background:rgba(96,176,255,0.06);">
+                        <div style="width:44px;height:44px;border-radius:50%;background:#007AFF;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#fff;flex-shrink:0;">1</div>
+                        <div style="flex:1;">
+                            <div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">Thí điểm & Core <span style="font-weight:600;color:rgba(255,255,255,0.4);">(2026)</span></div>
+                            <p style="font-size:11px;color:rgba(255,255,255,0.5);margin:0;line-height:1.6;">5 Module Nền tảng (M01–M19) + CSDL Đào tạo, NCKH</p>
+                        </div>
+                        <span style="background:rgba(0,122,255,0.15);border:1px solid rgba(0,122,255,0.3);color:#60b0ff;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:800;white-space:nowrap;">~600 Tr</span>
+                    </div>
+                    <div class="bento" style="padding:18px;display:flex;gap:16px;align-items:center;border-color:rgba(201,168,76,0.3);background:rgba(201,168,76,0.06);">
+                        <div style="width:44px;height:44px;border-radius:50%;background:#C9A84C;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#0A1628;flex-shrink:0;">2</div>
+                        <div style="flex:1;">
+                            <div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">Triển khai Toàn diện <span style="font-weight:600;color:rgba(255,255,255,0.4);">(2026–2027)</span></div>
+                            <p style="font-size:11px;color:rgba(255,255,255,0.5);margin:0;line-height:1.6;">Mở rộng 17 Module. Nâng cấp thành <strong style="color:#C9A84C;">Dự án CNTT chính thức</strong></p>
+                        </div>
+                        <span style="background:rgba(201,168,76,0.15);border:1px solid rgba(201,168,76,0.3);color:#C9A84C;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:800;white-space:nowrap;">Cấp HV</span>
+                    </div>
+                    <div class="bento" style="padding:18px;display:flex;gap:16px;align-items:center;opacity:0.7;">
+                        <div style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:rgba(255,255,255,0.4);flex-shrink:0;">3</div>
+                        <div style="flex:1;">
+                            <div style="font-size:13px;font-weight:800;color:rgba(255,255,255,0.7);margin-bottom:4px;">Nhân rộng Toàn quân <span style="font-weight:600;color:rgba(255,255,255,0.3);">(2028+)</span></div>
+                            <p style="font-size:11px;color:rgba(255,255,255,0.4);margin:0;line-height:1.6;">Chia sẻ mã nguồn, nâng cấp AI — CĐS Quốc phòng</p>
+                        </div>
+                        <span style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.3);padding:4px 10px;border-radius:20px;font-size:10px;font-weight:800;white-space:nowrap;">QP</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     SLIDE 7 — LIVE AI LAB
+══════════════════════════════════════════════ -->
+<div class="slide slide-dark" id="slide-7" style="background:linear-gradient(135deg,#060F1E 0%,#0D1F3C 100%);">
+    <div class="slide-num-badge" style="color:rgba(52,211,153,0.5);">✨ Live AI Demo</div>
+    <div style="position:absolute;top:0;right:0;width:600px;height:600px;background:radial-gradient(circle,rgba(16,185,129,0.12),transparent 70%);pointer-events:none;"></div>
+
+    <div style="flex:1;display:flex;gap:0;overflow:hidden;padding:60px 80px 80px;max-width:1400px;margin:0 auto;width:100%;">
+        <!-- Left: AI Lab -->
+        <div style="flex:1;display:flex;flex-direction:column;gap:20px;padding-right:40px;border-right:1px solid rgba(255,255,255,0.07);">
+            <div class="fade-up">
+                <div class="section-tag" style="background:rgba(16,185,129,0.12);border-color:rgba(16,185,129,0.3);color:#34d399;">✨ Live AI Testing Lab</div>
+                <h2 style="font-size:clamp(1.4rem,2.5vw,2rem);font-weight:900;color:#fff;margin-top:12px;">Trợ lý AI Bảo vệ Sáng kiến</h2>
+                <p style="font-size:12px;color:rgba(255,255,255,0.45);margin-top:6px;">Mô phỏng thuật toán AI tích hợp trong Sáng kiến (M09, M10)</p>
+            </div>
+
+            <!-- Tabs -->
+            <div style="display:flex;gap:8px;">
+                <button id="tab-ai-m09" class="px-4 py-2 rounded-full text-xs font-bold transition-all" style="background:#34d399;color:#060F1E;border:none;cursor:pointer;padding:8px 16px;">✨ M09 – Tính mới Đề tài</button>
+                <button id="tab-ai-m10" class="px-4 py-2 rounded-full text-xs font-bold transition-all" style="background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.5);border:1px solid rgba(255,255,255,0.1);cursor:pointer;padding:8px 16px;">✨ M10 – Rủi ro Học tập</button>
+            </div>
+
+            <!-- Input -->
+            <div style="background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px;">
+                <label id="ai-lab-label" style="font-size:10px;font-weight:800;letter-spacing:0.15em;color:#34d399;text-transform:uppercase;">Nhập Tóm tắt Đề tài Nghiên cứu:</label>
+                <textarea id="ai-lab-input" rows="3" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px;color:#fff;font-size:13px;font-family:inherit;resize:none;outline:none;" placeholder="Ví dụ: Nghiên cứu ứng dụng AI trong quản lý kho đạn dược..."></textarea>
+                <button id="btn-run-ai-lab" style="background:#007AFF;color:#fff;border:none;border-radius:10px;padding:10px 20px;font-weight:800;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;display:flex;align-items:center;gap:8px;align-self:flex-start;">
+                    <i class="fas fa-bolt" style="color:#C9A84C;"></i> Phân tích bằng AI
+                </button>
+            </div>
+
+            <!-- Result -->
+            <div id="ai-lab-output-container" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px;display:none;overflow-y:auto;flex:1;">
+                <div id="ai-lab-loading" style="display:none;text-align:center;padding:16px;">
+                    <i class="fas fa-atom fa-spin" style="font-size:28px;color:#34d399;"></i>
+                    <p style="font-size:10px;font-weight:800;letter-spacing:0.15em;color:#34d399;text-transform:uppercase;margin-top:8px;">AI đang phân tích...</p>
+                </div>
+                <div id="ai-lab-result" style="font-size:13px;color:#e2e8f0;line-height:1.7;"></div>
+            </div>
+        </div>
+
+        <!-- Right: Chatbot -->
+        <div style="width:340px;display:flex;flex-direction:column;gap:16px;padding-left:40px;">
+            <div style="font-size:10px;font-weight:800;letter-spacing:0.15em;color:rgba(255,255,255,0.35);text-transform:uppercase;">
+                <i class="fas fa-robot" style="color:#60b0ff;margin-right:6px;"></i>Cố vấn AI – Hỏi đáp
+            </div>
+            <div id="chat-messages" style="flex:1;display:flex;flex-direction:column;gap:8px;overflow-y:auto;min-height:0;max-height:calc(100vh - 320px);"></div>
+            <div id="chat-loading" style="display:none;padding:4px 0;">
+                <span style="font-size:10px;font-weight:800;color:#60b0ff;letter-spacing:0.1em;text-transform:uppercase;animation:pulse 1.5s infinite;">
+                    <i class="fas fa-spinner fa-spin" style="margin-right:4px;"></i>AI đang phân tích...
+                </span>
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;">
+                <button class="quick-action-btn" style="background:rgba(96,176,255,0.1);border:1px solid rgba(96,176,255,0.2);color:#60b0ff;padding:5px 10px;border-radius:20px;font-size:10px;font-weight:700;cursor:pointer;">Tính mới M09?</button>
+                <button class="quick-action-btn" style="background:rgba(96,176,255,0.1);border:1px solid rgba(96,176,255,0.2);color:#60b0ff;padding:5px 10px;border-radius:20px;font-size:10px;font-weight:700;cursor:pointer;">Tính mới M10?</button>
+                <button class="quick-action-btn" style="background:rgba(96,176,255,0.1);border:1px solid rgba(96,176,255,0.2);color:#60b0ff;padding:5px 10px;border-radius:20px;font-size:10px;font-weight:700;cursor:pointer;">Dự toán bao nhiêu?</button>
+            </div>
+            <div style="display:flex;gap:8px;">
+                <input type="text" id="chat-input" placeholder="Hỏi AI bất kỳ điều gì..." style="flex:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 14px;color:#fff;font-size:12px;font-family:inherit;outline:none;">
+                <button id="send-chat" style="width:38px;height:38px;border-radius:10px;background:#007AFF;border:none;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+                    <i class="fas fa-paper-plane" style="font-size:12px;"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div><!-- end track -->
+</div><!-- end viewport -->
+
+<!-- ░░░░ API CONFIG MODAL ░░░░ -->
+<div id="api-modal" class="modal-overlay">
+    <div style="background:#0D1F3C;border:1px solid rgba(201,168,76,0.2);border-radius:20px;padding:32px;max-width:420px;width:calc(100% - 40px);">
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
+            <div style="width:44px;height:44px;border-radius:12px;background:rgba(0,122,255,0.15);display:flex;align-items:center;justify-content:center;">
+                <i class="fas fa-key" style="color:#60b0ff;font-size:18px;"></i>
+            </div>
+            <div>
+                <h3 style="font-size:16px;font-weight:800;color:#fff;margin:0;">Cấu hình Trí tuệ Nhân tạo</h3>
+                <p style="font-size:10px;font-weight:800;letter-spacing:0.15em;color:#34d399;text-transform:uppercase;margin:4px 0 0;">Gemini 2.5 Flash API</p>
+            </div>
+        </div>
+        <p style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:20px;line-height:1.7;">Nhập Gemini API Key để sử dụng Trợ lý AI bảo vệ báo cáo. Mã được <strong style="color:#fff;">lưu cục bộ</strong> trên trình duyệt.</p>
+        <input type="password" id="api-key-input" placeholder="AIzaSy..." style="width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:12px 16px;color:#fff;font-size:13px;font-family:monospace;outline:none;margin-bottom:16px;">
+        <div style="display:flex;justify-content:flex-end;gap:10px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.07);">
+            <button id="btn-close-modal" style="padding:10px 18px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);font-size:12px;font-weight:700;cursor:pointer;">Đóng</button>
+            <button id="btn-save-key" style="padding:10px 18px;border-radius:10px;background:#007AFF;border:none;color:#fff;font-size:12px;font-weight:800;cursor:pointer;">Lưu Cấu hình</button>
+        </div>
+    </div>
+</div>
+
+<style>
+@keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    // ─── API Key ───────────────────────────────────────────
+    let apiKey = localStorage.getItem('gemini_api_key_hvhc') || "";
+    const model    = "gemini-2.5-flash-preview-09-2025";
+    const ttsModel = "gemini-2.5-flash-preview-tts";
+
+    // ─── Knowledge Base ────────────────────────────────────
+    const SYSTEM_KNOWLEDGE = `
+        THÔNG TIN CỐT LÕI SÁNG KIẾN BIG DATA HVHC:
+        - Tên đề tài: Xây dựng cơ sở dữ liệu lớn phục vụ huấn luyện và NCKH tại Học viện Hậu cần.
+        - Chủ nhiệm: Trung tá, TS. Nguyễn Đức Tú (Viện NCKH Hậu cần Quân sự).
+        - Ngân sách: 1.247 tỷ VNĐ. Tổng ngày công: 478 ngày. ROI 108%. Hoàn vốn 5.7 tháng.
+        - Tiết kiệm: 739 triệu VNĐ/năm. NPV 5 năm: 3.89 tỷ đồng.
+        - Kiến trúc: 4 lớp (Thu thập đa phương thức, Lưu trữ MinIO/PostgreSQL, ETL Apache Airflow, 305 API Endpoints).
+        - Bảo mật RBAC 4 cấp: Individual, Unit, Department, Academy + Audit Trail vĩnh viễn.
+
+        M10 (Đào tạo): 12 Use Cases, 17 Data Modules. ProgramVersion + ScoreHistory. Academic Warning AI dự báo GPA. Conflict Engine phát hiện 100% trùng lịch. Báo cáo tự động < 5 phút.
+        M09 (NCKH): 5 Use Cases (UC-45→UC-49). Similarity AI NLP phát hiện trùng lặp >90%. Scientist CV tự cập nhật H-index theo quý. Báo cáo định kỳ từ 3-5 ngày → < 30 phút. Đồng bộ >98% Cục KHQS.
+    `;
+
+    // ─── Slide Engine ───────────────────────────────────────
+    const track      = document.getElementById("track");
+    const slides     = document.querySelectorAll(".slide");
+    const counter    = document.getElementById("slide-counter");
+    const progressEl = document.getElementById("progress-bar");
+    const navEl      = document.getElementById("slide-nav");
+    let   current    = 0;
+    const total      = slides.length;
+
+    // Build nav dots
+    slides.forEach(function(_, i) {
+        const dot = document.createElement("div");
+        dot.className = "nav-dot" + (i === 0 ? " active" : "");
+        dot.title = "Slide " + (i + 1);
+        dot.onclick = function() { goTo(i); };
+        navEl.appendChild(dot);
+    });
+
+    function goTo(n) {
+        if (n < 0 || n >= total) return;
+        current = n;
+        track.style.transform = "translateY(-" + (n * 100) + "vh)";
+        counter.textContent = (n + 1) + " / " + total;
+        progressEl.style.width = ((n + 1) / total * 100) + "%";
+        document.querySelectorAll(".nav-dot").forEach(function(d, i) {
+            d.classList.toggle("active", i === n);
+        });
+    }
+
+    document.getElementById("btn-prev").onclick = function() { goTo(current - 1); };
+    document.getElementById("btn-next").onclick = function() { goTo(current + 1); };
+
+    window.addEventListener("keydown", function(e) {
+        if (e.key === "ArrowDown" || e.key === "PageDown" || e.key === " ") { e.preventDefault(); goTo(current + 1); }
+        if (e.key === "ArrowUp"   || e.key === "PageUp"                    ) { e.preventDefault(); goTo(current - 1); }
+    });
+
+    // Swipe support
+    let touchY = null;
+    document.addEventListener("touchstart", function(e) { touchY = e.touches[0].clientY; });
+    document.addEventListener("touchend", function(e) {
+        if (touchY === null) return;
+        const dy = touchY - e.changedTouches[0].clientY;
+        if (Math.abs(dy) > 50) { goTo(current + (dy > 0 ? 1 : -1)); }
+        touchY = null;
+    });
+
+    // ─── Module Data ────────────────────────────────────────
+    const coreModulesData = [
+        { id: "M01", icon: "fa-shield-halved", color: "#60b0ff", title: "Bảo mật & RBAC",    desc: "Gatekeeper của hệ thống. Phân quyền động dựa trên 88+ mã chức năng kết hợp Scope 4 cấp.", feats: ["Xác thực MFA/OTP chuẩn quân sự", "Audit Trail vĩnh viễn", "Scope: Individual→Academy"] },
+        { id: "M02", icon: "fa-id-card",       color: "#C9A84C", title: "Định danh Cán bộ", desc: "Identity Provider duy nhất. Số hóa hồ sơ 2A-LLDV của BQP cho 100% sĩ quan Học viện.", feats: ["Dữ liệu gốc cho 16 module còn lại", "Tra cứu full-text đa chiều", "Cảnh báo thăng hàm tự động"] },
+        { id: "M13", icon: "fa-project-diagram", color: "#34d399", title: "Workflow Engine",  desc: "Số hóa luồng phê duyệt nhiều cấp bằng kỹ thuật State Machine.", feats: ["Tích hợp chữ ký số PKI", "Thiết kế luồng linh hoạt", "Real-time Notifications"] },
+        { id: "M18", icon: "fa-file-invoice",  color: "#fbbf24", title: "Template Engine",   desc: "Single Source of Truth cho báo cáo. Render tự động 22 mẫu BQP.", feats: ["Xuất Batch 500 hồ sơ < 3 phút", "DOCX, PDF, XLSX"] },
+        { id: "M19", icon: "fa-sitemap",       color: "#f87171", title: "Master Data (MDM)", desc: "Xương sống ngôn ngữ dữ liệu. Thống nhất 68 bảng danh mục chuẩn Học viện và BQP.", feats: ["Đồng bộ API Cục Quân lực", "No Duplicate Data", "Cache Redis siêu tốc"] }
+    ];
+
+    const bizModulesData = [
+        { id: "M10", icon: "fa-graduation-cap", color: "#34d399", title: "Huấn luyện ĐT",   desc: "12 Use Cases, 17 Data Modules. ProgramVersion + ScoreHistory + AI Engine.", feats: ["Academic Warning AI", "Conflict Engine 100%", "Báo cáo < 5 phút"] },
+        { id: "M09", icon: "fa-flask",          color: "#C9A84C", title: "Nghiên cứu KH",   desc: "5 Use Cases UC-45→UC-49. Quản lý 78+ đề tài và Scientist CV.", feats: ["Similarity AI NLP >90%", "Giảm 80% tgian báo cáo", "Đồng bộ >98% Cục KHQS"] },
+        { id: "M03", icon: "fa-flag",           color: "#f87171", title: "Công tác Đảng",   desc: "Số hóa hồ sơ 251+ đảng viên và quy trình sinh hoạt chi bộ số.", feats: ["Thu đảng phí tự động", "Nhắc lịch kết nạp số"] },
+        { id: "M17", icon: "fa-truck-ramp-box", color: "#60b0ff", title: "Hậu cần 4.0",     desc: "Quản lý vật tư, trang bị HCKT. Dự báo AI vào Hậu cần quân sự.", feats: ["Kiểm kê mã vạch/QR", "Bảo trì dự báo (Predictive AI)"] }
+    ];
+
+    function renderModuleExplorer(data, listId, detailId) {
+        const listEl   = document.getElementById(listId);
+        const detailEl = document.getElementById(detailId);
+        if (!listEl || !detailEl) return;
+
+        listEl.innerHTML = "";
+        data.forEach(function(mod, idx) {
+            const btn = document.createElement("button");
+            btn.className = "mod-btn";
+            btn.innerHTML = "<i class='fas " + mod.icon + "' style='color:" + mod.color + ";font-size:14px;flex-shrink:0;'></i><span style='font-size:11px;text-transform:uppercase;'>" + mod.id + "</span>";
+            btn.title = mod.title;
+            btn.onclick = function() {
+                Array.from(listEl.children).forEach(function(b) { b.classList.remove("active"); });
+                btn.classList.add("active");
+                const featsHtml = mod.feats.map(function(f) {
+                    return "<li style='display:flex;gap:8px;align-items:flex-start;font-size:11px;color:rgba(255,255,255,0.65);margin-bottom:6px;'><i class='fas fa-check-circle' style='color:" + mod.color + ";margin-top:2px;flex-shrink:0;'></i>" + f + "</li>";
+                }).join("");
+                detailEl.innerHTML = "<div style='display:flex;align-items:center;gap:12px;margin-bottom:14px;'><div style='width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;'><i class='fas " + mod.icon + "' style='color:" + mod.color + ";font-size:16px;'></i></div><div><div style='font-size:12px;font-weight:800;color:#fff;text-transform:uppercase;'>" + mod.id + " – " + mod.title + "</div></div></div><p style='font-size:11px;color:rgba(255,255,255,0.5);line-height:1.7;margin-bottom:14px;font-style:italic;border-left:3px solid " + mod.color + ";padding-left:10px;'>" + mod.desc + "</p><ul style='list-style:none;padding:0;margin:0;'>" + featsHtml + "</ul>";
+            };
+            listEl.appendChild(btn);
+            if (idx === 0) btn.click();
+        });
+    }
+
+    renderModuleExplorer(coreModulesData, "core-list", "core-detail");
+    renderModuleExplorer(bizModulesData,  "biz-list",  "biz-detail");
+
+    // ─── Chart ──────────────────────────────────────────────
+    const ctx = document.getElementById("budgetChart");
+    if (ctx) {
+        new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: ["Admin/RBAC", "AI Engine", "Đào tạo", "GV-HV", "Dashboard", "Cán bộ", "Khác"],
+                datasets: [{ data: [61, 48, 53, 46, 44, 37, 189], backgroundColor: "#C9A84C", borderRadius: 4 }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { display: false },
+                    x: { grid: { display: false }, ticks: { color: "rgba(255,255,255,0.35)", font: { size: 9, weight: "bold" }, family: "'Be Vietnam Pro',sans-serif" } }
+                }
+            }
+        });
+    }
+
+    // ─── Modal ──────────────────────────────────────────────
+    function openModal()  { document.getElementById("api-modal").classList.add("open"); document.getElementById("api-key-input").value = apiKey; }
+    function closeModal() { document.getElementById("api-modal").classList.remove("open"); }
+
+    document.getElementById("btn-open-settings").onclick = openModal;
+    document.getElementById("btn-close-modal").onclick   = closeModal;
+    document.getElementById("btn-save-key").onclick      = function() {
+        apiKey = document.getElementById("api-key-input").value.trim();
+        localStorage.setItem("gemini_api_key_hvhc", apiKey);
+        closeModal();
+    };
+
+    // ─── AI Utils ───────────────────────────────────────────
+    async function callGemini(prompt, sys) {
+        if (!apiKey) { openModal(); return "Vui lòng cung cấp API Key."; }
+        const url = "https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent?key=" + apiKey;
+        const body = { contents: [{ parts: [{ text: prompt }] }], systemInstruction: { parts: [{ text: sys }] } };
+        let delay = 1000;
+        for (let i = 0; i < 4; i++) {
+            try {
+                const res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+                if (!res.ok) return "Lỗi API (status " + res.status + "). Kiểm tra lại API Key.";
+                const data = await res.json();
+                return data?.candidates?.[0]?.content?.parts?.[0]?.text || "Không nhận được phản hồi.";
+            } catch(e) {
+                if (i === 3) return "Không thể kết nối.";
+                await new Promise(function(r) { setTimeout(r, delay); });
+                delay *= 2;
+            }
+        }
+    }
+
+    function parseToHtml(text) {
+        if (!text) return "";
+        let h = text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+        h = h.replace(/\n\n/g, "</p><p style='margin-top:8px;'>").replace(/\n/g, "<br>");
+        h = h.replace(/^- (.*)$/gm, "<li style='margin-left:16px;list-style:disc;margin-bottom:4px;'>$1</li>");
+        return "<p>" + h + "</p>";
+    }
+
+    // ─── AI Lab ─────────────────────────────────────────────
+    const aiPrompts = {
+        m09: { label: "Nhập Tóm tắt Đề tài NCKH:", ph: "Nghiên cứu ứng dụng AI trong...", sys: "Bạn là AI đánh giá tính mới M09. Dùng tri thức:\n\n" + SYSTEM_KNOWLEDGE + "\n\nPhân tích khả năng trùng lặp, đề xuất ngách mới. Trả lời dưới 120 chữ." },
+        m10: { label: "Nhập Dữ liệu Học tập:",    ph: "Học viên A, GPA 2.2, vắng 3 buổi...", sys: "Bạn là AI Cảnh báo Học thuật M10. Dùng tri thức:\n\n" + SYSTEM_KNOWLEDGE + "\n\nPhân loại rủi ro, đề xuất can thiệp sớm. Dưới 120 chữ." }
+    };
+    let currentTab = "m09";
+
+    function switchTab(tab) {
+        currentTab = tab;
+        ["m09","m10"].forEach(function(t) {
+            const btn = document.getElementById("tab-ai-" + t);
+            if (!btn) return;
+            if (t === tab) {
+                btn.style.background = "#34d399";
+                btn.style.color = "#060F1E";
+                btn.style.border = "none";
+            } else {
+                btn.style.background = "rgba(255,255,255,0.06)";
+                btn.style.color = "rgba(255,255,255,0.5)";
+                btn.style.border = "1px solid rgba(255,255,255,0.1)";
+            }
+        });
+        const lbl = document.getElementById("ai-lab-label");
+        const inp = document.getElementById("ai-lab-input");
+        if (lbl) lbl.textContent = aiPrompts[tab].label;
+        if (inp) inp.placeholder = aiPrompts[tab].ph;
+        const out = document.getElementById("ai-lab-output-container");
+        if (out) out.style.display = "none";
+    }
+
+    document.getElementById("tab-ai-m09").onclick = function() { switchTab("m09"); };
+    document.getElementById("tab-ai-m10").onclick = function() { switchTab("m10"); };
+
+    document.getElementById("btn-run-ai-lab").onclick = async function() {
+        const inp = document.getElementById("ai-lab-input");
+        if (!inp || !inp.value.trim()) return;
+        const container = document.getElementById("ai-lab-output-container");
+        const loading   = document.getElementById("ai-lab-loading");
+        const result    = document.getElementById("ai-lab-result");
+        container.style.display = "block";
+        loading.style.display   = "block";
+        result.innerHTML        = "";
+        const reply = await callGemini(inp.value.trim(), aiPrompts[currentTab].sys);
+        loading.style.display = "none";
+        result.innerHTML = parseToHtml(reply);
+    };
+
+    // ─── Chatbot ────────────────────────────────────────────
+    const chatMsgs  = document.getElementById("chat-messages");
+    const chatInput = document.getElementById("chat-input");
+    const chatLoad  = document.getElementById("chat-loading");
+
+    // Init message
+    if (chatMsgs) {
+        const d = document.createElement("div");
+        d.className = "chat-bubble chat-ai";
+        d.innerHTML = "<strong>Xin chào Thủ trưởng!</strong> Tôi là Trợ lý AI sáng kiến Big Data HVHC. Cần hỏi gì ạ?";
+        chatMsgs.appendChild(d);
+    }
+
+    async function handleChat(msg) {
+        if (!msg || !chatMsgs) return;
+        const u = document.createElement("div"); u.className = "chat-bubble chat-user"; u.textContent = msg;
+        chatMsgs.appendChild(u); chatMsgs.scrollTop = chatMsgs.scrollHeight;
+        chatLoad.style.display = "block";
+        const sys = "Bạn là AI bảo vệ sáng kiến Big Data HVHC do TS Nguyễn Đức Tú chủ nhiệm. Tri thức:\n\n" + SYSTEM_KNOWLEDGE + "\n\nTrả lời chuyên nghiệp, xưng 'tôi', gọi người dùng là 'Thủ trưởng'. Dưới 80 chữ.";
+        const reply = await callGemini(msg, sys);
+        chatLoad.style.display = "none";
+        const a = document.createElement("div"); a.className = "chat-bubble chat-ai"; a.innerHTML = parseToHtml(reply);
+        chatMsgs.appendChild(a); chatMsgs.scrollTop = chatMsgs.scrollHeight;
+    }
+
+    document.getElementById("send-chat").onclick = function() {
+        if (chatInput && chatInput.value.trim()) { handleChat(chatInput.value.trim()); chatInput.value = ""; }
+    };
+    if (chatInput) chatInput.onkeypress = function(e) { if (e.key === "Enter" && chatInput.value.trim()) { handleChat(chatInput.value.trim()); chatInput.value = ""; } };
+    document.querySelectorAll(".quick-action-btn").forEach(function(btn) { btn.onclick = function() { handleChat(btn.textContent.trim()); }; });
+
+    // ─── TTS Auto Presentation ──────────────────────────────
+    let isPlaying = false;
+    let curAudio  = null;
+    const ttsSteps = [
+        { slide: 0, text: "Kính thưa Thủ trưởng và toàn thể Hội đồng. Tôi là Trung tá, Tiến sĩ Nguyễn Đức Tú. Thay mặt nhóm nghiên cứu, tôi xin báo cáo sáng kiến Xây dựng cơ sở dữ liệu lớn phục vụ huấn luyện và nghiên cứu khoa học hậu cần quân sự." },
+        { slide: 1, text: "Thực trạng đau điểm: dữ liệu phân tán 17 phòng ban, tra cứu thủ công mất 3 đến 5 ngày và thiếu nhiên liệu sạch để triển khai AI. Sáng kiến nhằm tạo Hồ dữ liệu tập trung, giảm thời gian tra cứu từ 60 phút xuống dưới 5 giây." },
+        { slide: 2, text: "Về kiến trúc hạ tầng lõi, chúng tôi xây dựng 5 phân hệ nền tảng. Đặc biệt là bảo mật RBAC phân quyền động 4 cấp và Nhật ký Audit Trail vĩnh viễn, đảm bảo an toàn tuyệt đối cho dữ liệu quân sự." },
+        { slide: 3, text: "17 phân hệ nghiệp vụ giúp quản lý chân dung cán bộ toàn diện 360 độ. Chỉ huy nắm bắt được toàn bộ hồ sơ sĩ quan chỉ với một cú nhấn chuột." },
+        { slide: 4, text: "Điểm đột phá thứ nhất: Phân hệ Đào tạo M10 tích hợp 3 engine AI: Academic Warning dự báo rủi ro GPA, Conflict Engine phát hiện 100 phần trăm trùng lịch, và Graduation Engine tự động duyệt tốt nghiệp." },
+        { slide: 5, text: "Điểm đột phá thứ hai: Phân hệ NCKH M09 ứng dụng NLP phát hiện trùng lặp đề tài với độ chính xác trên 90 phần trăm, giảm 80 phần trăm thời gian tổng hợp báo cáo từ 3 ngày xuống dưới 30 phút." },
+        { slide: 6, text: "Về hiệu quả kinh tế: tổng đầu tư 1 phẩy 247 tỷ đồng, tiết kiệm 739 triệu đồng mỗi năm, hoàn vốn trong 5 phẩy 7 tháng với ROI 108 phần trăm. Kính đề nghị Hội đồng xem xét phê duyệt. Xin trân trọng cảm ơn!" }
+    ];
+
+    document.getElementById("btn-tts-global").onclick = async function() {
+        const btn = document.getElementById("btn-tts-global");
+        if (!apiKey) { openModal(); return; }
+        if (isPlaying) {
+            isPlaying = false;
+            if (curAudio) curAudio.pause();
+            btn.innerHTML = '<i class="fas fa-play-circle"></i>';
+            return;
+        }
+        isPlaying = true;
+        btn.innerHTML = '<i class="fas fa-stop-circle" style="color:#C8102E;"></i>';
+        for (let i = 0; i < ttsSteps.length; i++) {
+            if (!isPlaying) break;
+            goTo(ttsSteps[i].slide);
+            try {
+                const url = "https://generativelanguage.googleapis.com/v1beta/models/" + ttsModel + ":generateContent?key=" + apiKey;
+                const payload = { contents: [{ parts: [{ text: "Đọc dõng dạc, tự tin, giọng nam: " + ttsSteps[i].text }] }], generationConfig: { responseModalities: ["AUDIO"], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Puck" } } } } };
+                const res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data?.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data) {
+                        const pcm = Uint8Array.from(atob(data.candidates[0].content.parts[0].inlineData.data), function(c) { return c.charCodeAt(0); });
+                        const hdr = new ArrayBuffer(44); const v = new DataView(hdr);
+                        function ws(val, off, str) { for (let j = 0; j < str.length; j++) v.setUint8(off+j, str.charCodeAt(j)); }
+                        ws(v,0,"RIFF"); v.setUint32(4,36+pcm.length,true); ws(v,8,"WAVE"); ws(v,12,"fmt ");
+                        v.setUint32(16,16,true); v.setUint16(20,1,true); v.setUint16(22,1,true);
+                        v.setUint32(24,24000,true); v.setUint32(28,48000,true); v.setUint16(32,2,true); v.setUint16(34,16,true);
+                        ws(v,36,"data"); v.setUint32(40,pcm.length,true);
+                        curAudio = new Audio(URL.createObjectURL(new Blob([hdr,pcm],{type:"audio/wav"})));
+                        await new Promise(function(resolve) { curAudio.onended = resolve; curAudio.play(); });
+                    }
+                }
+            } catch(e) { console.error("TTS error:", e); }
+            if (isPlaying && i < ttsSteps.length - 1) await new Promise(function(r) { setTimeout(r, 1200); });
+        }
+        isPlaying = false;
+        btn.innerHTML = '<i class="fas fa-play-circle"></i>';
+    };
+
+}); // END DOMContentLoaded
+</script>
+</body>
+</html>

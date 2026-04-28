@@ -47,9 +47,30 @@ const nextConfig = {
   },
   images: { unoptimized: true },
   async headers() {
-    return [
+    // Headers cho baocao.html cho phép nhúng iframe trong cùng origin
+    const iframeEmbedHeaders = [
+      { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+      { key: 'X-Content-Type-Options', value: 'nosniff' },
+      { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
       {
-        source: '/(.*)',
+        key: 'Content-Security-Policy',
+        value: `default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; font-src 'self' data:; connect-src 'self'; frame-ancestors 'self';`,
+      },
+    ];
+
+    return [
+      // Exception: baocao.html cần được nhúng vào iframe trong cùng origin
+      {
+        source: '/baocao.html',
+        headers: iframeEmbedHeaders,
+      },
+      {
+        source: '/reports/baocao.html',
+        headers: iframeEmbedHeaders,
+      },
+      // Default: security headers cho tất cả paths còn lại
+      {
+        source: '/((?!baocao\\.html|reports/baocao\\.html).*)',
         headers: securityHeaders,
       },
     ];

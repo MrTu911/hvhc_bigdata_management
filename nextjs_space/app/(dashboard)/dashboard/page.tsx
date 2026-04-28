@@ -67,26 +67,39 @@ const positionDisplayNames: Record<string, string> = {
 
 const swrFetcher = (url: string) => fetch(url).then(r => r.json());
 
-// Position codes có quyền xem trang system overview này
+// Chỉ dùng primaryPositionCode (từ UserPosition) — KHÔNG dùng legacyRole
+// Tránh bug: role legacy trong session có thể là 'CHI_HUY_HOC_VIEN' nhưng user thực tế
+// không có UserPosition → fetchStats chạy nhưng server trả 403 do không có VIEW_DASHBOARD
 const ADMIN_POSITIONS = new Set([
   'SYSTEM_ADMIN', 'PHO_GIAM_DOC', 'GIAM_DOC', 'CHINH_UY', 'PHO_CHINH_UY',
-  // legacy role strings
-  'ADMIN', 'QUAN_TRI_HE_THONG', 'CHI_HUY_HOC_VIEN',
+  'PHO_GIAM_DOC_KH', 'PHO_GIAM_DOC_HC_HCKT',
 ]);
 
-// Map positionCode → route dashboard chuyên biệt (dùng session trực tiếp, không cần API)
-function resolveRedirectFromSession(positionCode: string | null | undefined, legacyRole?: string): string | null {
-  const code = positionCode ?? legacyRole ?? '';
-  if (!code) return null;
-  if (['TRUONG_KHOA', 'PHO_TRUONG_KHOA', 'CHU_NHIEM_BO_MON', 'GIANG_VIEN', 'NGHIEN_CUU_VIEN',
-       'CHI_HUY_KHOA_PHONG', 'CHI_HUY_HE', 'CHI_HUY_TIEU_DOAN', 'CHI_HUY_BAN'].includes(code)) {
+// Map positionCode → route dashboard chuyên biệt (chỉ dùng primaryPositionCode)
+// Fallback: '/dashboard/auto' cho mọi position không được map rõ ràng
+function resolveRedirectFromSession(positionCode: string | null | undefined): string {
+  const code = positionCode ?? '';
+
+  if (['TRUONG_KHOA', 'PHO_TRUONG_KHOA', 'CHU_NHIEM_BO_MON', 'PHO_CHU_NHIEM_BM',
+       'GIANG_VIEN', 'GIANG_VIEN_CHINH', 'TRO_GIANG', 'NGHIEN_CUU_VIEN',
+       'CHI_HUY_KHOA_PHONG', 'CHI_HUY_KHOA', 'CHI_HUY_PHONG',
+       'CHI_HUY_HE', 'CHI_HUY_TIEU_DOAN', 'CHI_HUY_BAN', 'CHI_HUY_BO_MON',
+       'B3_PCNCT_BT', 'B3_CNCT'].includes(code)) {
     return '/dashboard/faculty';
   }
-  if (['HOC_VIEN_QUAN_SU', 'SINH_VIEN_DAN_SU', 'HOC_VIEN', 'HOC_VIEN_SINH_VIEN'].includes(code)) {
+  if (['HOC_VIEN_QUAN_SU', 'HOC_VIEN_CAO_HOC', 'SINH_VIEN_DAN_SU',
+       'HOC_VIEN', 'HOC_VIEN_SINH_VIEN', 'SINH_VIEN'].includes(code)) {
     return '/dashboard/student';
   }
-  if (['NHAN_VIEN', 'KY_THUAT_VIEN'].includes(code)) return '/dashboard/personal';
-  return null;
+  if (['NHAN_VIEN', 'KY_THUAT_VIEN', 'TRO_LY', 'CHUYEN_VIEN',
+       'CAN_BO_THU_VIEN', 'CAN_BO_TAI_CHINH', 'CAN_BO_TO_CHUC', 'CAN_BO_DANG',
+       'TRUONG_PHONG_NHAN_SU', 'TRUONG_PHONG_DAO_TAO', 'TRUONG_PHONG_KHOA_HOC',
+       'TRUONG_PHONG_DANG', 'TRUONG_PHONG_CHINH_SACH',
+       'B1_TRUONG_PHONG', 'B2_TRUONG_PHÒNG', 'PHO_TRUONG_PHONG'].includes(code)) {
+    return '/dashboard/personal';
+  }
+  // Mọi position chưa được map → auto dashboard (tự render theo quyền thực tế từ DB)
+  return '/dashboard/auto';
 }
 
 type FetchStatus = 'loading' | 'ok' | 'forbidden' | 'error';
@@ -99,22 +112,18 @@ export default function DashboardPageEnhanced() {
   const [fetchStatus, setFetchStatus] = useState<FetchStatus>('loading');
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  // Dùng để lấy redirectTo khi cần (ví dụ: khi forbidden, hiển thị nút "Đi đến dashboard của tôi")
-  const { data: dashboardMe } = useSWR('/api/dashboard/me', swrFetcher);
+  // Chỉ gọi /api/dashboard/me khi user thực sự là admin (tránh 403 spam cho non-admin)
+  const sessionPosCode = session?.user?.primaryPositionCode;
+  const isAdminSession = ADMIN_POSITIONS.has(sessionPosCode ?? '');
+  const { data: dashboardMe } = useSWR(isAdminSession ? '/api/dashboard/me' : null, swrFetcher);
 
-  // Early redirect: non-admin users không nên ở trang system overview này
-  // Dùng session.user.primaryPositionCode (sync, không cần API call)
+  // Early redirect: chỉ dùng primaryPositionCode (từ UserPosition) — không dùng legacyRole
+  // vì legacyRole là legacy field, có thể không phản ánh đúng quyền DB hiện tại
   useEffect(() => {
     if (!session?.user) return;
     const posCode = session.user.primaryPositionCode;
-    const legacyRole = session.user.role;
-    // Nếu là admin/executive → ở lại trang này
-    if (ADMIN_POSITIONS.has(posCode ?? '') || ADMIN_POSITIONS.has(legacyRole ?? '')) return;
-    // Các role khác → redirect ngay
-    const target = resolveRedirectFromSession(posCode, legacyRole);
-    if (target) {
-      router.replace(target);
-    }
+    if (ADMIN_POSITIONS.has(posCode ?? '')) return;
+    router.replace(resolveRedirectFromSession(posCode));
   }, [session?.user, router]);
 
   const fetchStats = useCallback(async () => {
@@ -134,12 +143,10 @@ export default function DashboardPageEnhanced() {
     }
   }, []);
 
-  // Chỉ fetch stats khi session đã load và user là admin/executive
+  // Chỉ fetch stats khi user thực sự là admin — chỉ dùng primaryPositionCode
   useEffect(() => {
     if (!session?.user) return;
-    const posCode = session.user.primaryPositionCode;
-    const legacyRole = session.user.role;
-    if (!ADMIN_POSITIONS.has(posCode ?? '') && !ADMIN_POSITIONS.has(legacyRole ?? '')) return;
+    if (!ADMIN_POSITIONS.has(session.user.primaryPositionCode ?? '')) return;
 
     fetchStats();
     const interval = setInterval(fetchStats, 30000);

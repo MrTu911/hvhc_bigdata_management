@@ -55,7 +55,7 @@ export function WidgetRenderer({ widget, isEditing, onRemove, className }: Widge
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(widget.apiEndpoint);
+      const res = await fetch(widget.apiEndpoint, { credentials: 'include' });
       if (!res.ok) {
         throw new Error(`API Error: ${res.status}`);
       }

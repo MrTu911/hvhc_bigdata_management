@@ -406,7 +406,7 @@ export default function RBACManagementPage() {
         const res = await fetch('/api/admin/rbac/position-functions', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ positionId: selectedPositionId, functionId: func.id, scope: 'UNIT' }),
+          body: JSON.stringify({ positionId: selectedPositionId, functionId: func.id, scope: 'ACADEMY' }),
         });
         if (!res.ok) { const e = await res.json(); throw new Error(e.error); }
         toast({ title: 'Đã gán quyền', description: func.name });

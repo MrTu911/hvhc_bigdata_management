@@ -21,7 +21,7 @@ const publicRoutes = ['/', '/login', '/signup', '/forgot-password', '/reset-pass
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  
+
   // 1. Kiểm tra có phải protected route không
   const isProtectedRoute = protectedPrefixes.some(prefix => pathname.startsWith(prefix));
   const isPublicRoute = publicRoutes.includes(pathname) || pathname.startsWith('/api/');
@@ -68,7 +68,8 @@ export const config = {
      * - _next/image (image optimization)
      * - favicon.ico
      * - public assets
+     * - baocao.html (static report embedded via iframe, headers handled by next.config.js)
      */
-    '/((?!api|_next/static|_next/image|favicon.ico|public).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|public|baocao\\.html|reports/baocao\\.html).*)',
   ],
 };

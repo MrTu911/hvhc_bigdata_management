@@ -24,7 +24,7 @@ import {
 } from '@/lib/dashboard/widget-registry';
 import { WidgetRenderer } from './widget-renderer';
 import { DashboardBuilder } from './dashboard-builder';
-import { LayoutDashboard, Sparkles, Settings } from 'lucide-react';
+import { LayoutDashboard, Sparkles, Settings, RefreshCw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 
@@ -39,7 +39,7 @@ export function AutoDashboard({
   title = 'Dashboard Tổng quan',
   description = 'Tổng hợp thống kê các CSDL bạn có quyền truy cập',
 }: AutoDashboardProps) {
-  const { permissions, isAdmin, isLoading, isAuthenticated } = usePermissions();
+  const { permissions, isAdmin, isLoading, isAuthenticated, isApiLoaded, refresh, error: permError } = usePermissions();
   const { currentLayout, initializeLayout } = useDashboardStore();
 
   // Lấy danh sách function codes
@@ -85,14 +85,24 @@ export function AutoDashboard({
     );
   }
 
-  // No permissions
+  // API not loaded yet — show skeleton to avoid false "no permission" flash
+  // But don't show skeleton forever if API errored (permError set)
+  if (availableWidgets.length === 0 && !isApiLoaded && !permError) {
+    return <DashboardSkeleton />;
+  }
+
+  // No permissions (API has confirmed empty)
   if (availableWidgets.length === 0) {
     return (
       <Card className="border-dashed">
         <CardContent className="flex flex-col items-center justify-center py-12">
           <LayoutDashboard className="h-12 w-12 text-muted-foreground mb-4" />
           <p className="text-muted-foreground mb-2">Chưa có quyền xem CSDL nào</p>
-          <p className="text-sm text-muted-foreground">Liên hệ Quản trị viên để được cấp quyền</p>
+          <p className="text-sm text-muted-foreground mb-4">Liên hệ Quản trị viên để được cấp quyền, sau đó làm mới trang</p>
+          <Button variant="outline" size="sm" onClick={() => refresh()}>
+            <RefreshCw className="h-4 w-4 mr-2" />
+            Làm mới quyền
+          </Button>
         </CardContent>
       </Card>
     );

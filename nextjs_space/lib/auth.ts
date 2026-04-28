@@ -25,6 +25,14 @@ async function loadUserPermissionData(userId: string): Promise<{
   primaryPositionCode: string | null;
 }> {
   try {
+    // Query User.unitId separately — UserPosition.unitId is the position's unit,
+    // not the user's org unit. Data models (FacultyProfile, InsuranceInfo, etc.)
+    // all reference User.unitId for scope filtering.
+    const userRecord = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { unitId: true },
+    });
+
     // Query user positions với functions
     const userPositions = await prisma.userPosition.findMany({
       where: {
@@ -69,7 +77,7 @@ async function loadUserPermissionData(userId: string): Promise<{
     }
 
     return {
-      unitId: primaryPosition.unitId,
+      unitId: userRecord?.unitId ?? primaryPosition.unitId,
       functionCodes: Array.from(functionCodes),
       primaryPositionCode: primaryPosition.position.code,
     };

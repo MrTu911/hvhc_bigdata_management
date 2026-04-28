@@ -22,7 +22,8 @@ export default function ProjectReportPage() {
   const reload = () => setIframeKey(k => k + 1);
 
   return (
-    <div className={`flex flex-col ${isExpanded ? 'fixed inset-0 z-50 bg-white dark:bg-slate-900' : 'h-[calc(100vh-5rem)]'} p-0`}>
+    // Thoát khỏi padding của dashboard layout container để iframe chiếm full width/height
+    <div className={`flex flex-col ${isExpanded ? 'fixed inset-0 z-50 bg-white dark:bg-slate-900' : '-mx-4 md:-mx-6 lg:-mx-8 -my-4 md:-my-6 lg:-my-8 h-[calc(100vh-4rem)]'} p-0`}>
 
       {/* ── Toolbar ─────────────────────────────── */}
       <div className="flex items-center justify-between gap-4 px-5 py-3 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 flex-shrink-0">
