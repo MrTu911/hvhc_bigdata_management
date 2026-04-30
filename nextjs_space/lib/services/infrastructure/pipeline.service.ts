@@ -9,6 +9,7 @@
  */
 
 import prisma from '@/lib/db';
+import { triggerDag } from '@/lib/integrations/airflow';
 import type {
   PipelineDefinition,
   PipelineRun,
@@ -36,6 +37,20 @@ export interface TriggerRunInput {
   triggeredBy:    PipelineTrigger;
   triggeredById?: string;
   metadata?:      object;
+}
+
+export interface TriggerWithAirflowInput {
+  definitionId:   string;
+  dagId:          string;
+  triggeredBy:    PipelineTrigger;
+  triggeredById?: string;
+  dagConf?:       Record<string, unknown>;
+}
+
+export interface TriggerWithAirflowResult {
+  run:        PipelineRun;
+  dagRunId:   string;
+  mockMode:   boolean;
 }
 
 export interface CompleteRunInput {
@@ -248,4 +263,73 @@ export async function getPipelineRunSummary(definitionId: string) {
   ]);
 
   return { totalRuns, successRuns, failedRuns, lastRun };
+}
+
+export async function getPipelineRunDetail(runId: string): Promise<PipelineRun & {
+  definition: Pick<PipelineDefinition, 'id' | 'name' | 'pipelineType'>;
+} | null> {
+  return prisma.pipelineRun.findUnique({
+    where:   { id: runId },
+    include: { definition: { select: { id: true, name: true, pipelineType: true } } },
+  }) as Promise<any>;
+}
+
+// ─── Airflow integration ──────────────────────────────────────────────────────
+
+/**
+ * Tạo PipelineRun record rồi trigger Airflow DAG tương ứng.
+ * Nếu Airflow chưa config (AIRFLOW_BASE_URL không set), trigger vẫn thành công
+ * với mockMode=true — app ghi nhận run nhưng không gửi lệnh thực.
+ *
+ * dagRunId được lưu trong metadata để Airflow callback có thể tra lại runId.
+ */
+export async function triggerWithAirflow(
+  input: TriggerWithAirflowInput,
+): Promise<TriggerWithAirflowResult> {
+  const definition = await prisma.pipelineDefinition.findUnique({
+    where: { id: input.definitionId },
+  });
+  if (!definition) throw new Error(`Pipeline definition ${input.definitionId} not found`);
+  if (!definition.isActive) throw new Error(`Pipeline ${definition.name} is disabled`);
+
+  const running = await prisma.pipelineRun.findFirst({
+    where: { definitionId: input.definitionId, status: 'RUNNING' },
+  });
+  if (running) {
+    throw new Error(`Pipeline ${definition.name} is already running (runId: ${running.id})`);
+  }
+
+  // Tạo run record trước — Airflow callback sẽ dùng runId này
+  const run = await prisma.pipelineRun.create({
+    data: {
+      definitionId:  input.definitionId,
+      triggeredBy:   input.triggeredBy,
+      triggeredById: input.triggeredById,
+      status:        'PENDING',
+      metadata:      { dagId: input.dagId, dagConf: input.dagConf ?? {} },
+    },
+  });
+
+  // Gửi trigger tới Airflow, truyền runId vào conf để DAG biết gọi về đâu
+  const airflowResult = await triggerDag({
+    dagId:     input.dagId,
+    dagRunId:  `hvhc_${run.id}`,
+    conf: {
+      ...input.dagConf,
+      hvhc_run_id:         run.id,
+      hvhc_definition_id:  input.definitionId,
+    },
+  });
+
+  // Nếu trigger thành công, lưu dagRunId vào metadata để tracking
+  await prisma.pipelineRun.update({
+    where: { id: run.id },
+    data:  { metadata: { dagId: input.dagId, dagRunId: airflowResult.dagRunId, dagConf: input.dagConf ?? {}, mockMode: airflowResult.mockMode } },
+  });
+
+  console.log(
+    `[pipeline] triggered run=${run.id} dag=${input.dagId} dagRunId=${airflowResult.dagRunId} mock=${airflowResult.mockMode}`,
+  );
+
+  return { run, dagRunId: airflowResult.dagRunId, mockMode: airflowResult.mockMode };
 }

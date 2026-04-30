@@ -312,19 +312,35 @@ export async function recordDRExercise(
   });
 }
 
-export async function getDRReadiness(): Promise<{
-  planCount:        number;
-  lastExercisedAt:  Date | null;
-  lastOutcome:      DRExerciseOutcome | null;
-  rtoGap:           number | null;
-  rpoGap:           number | null;
-}> {
-  const plans = await prisma.disasterRecoveryPlan.findMany({
-    where:   { isActive: true },
-    include: {
-      exercises: { orderBy: { exercisedAt: 'desc' }, take: 1 },
-    },
-  });
+// Backup quá 2 giờ không có bản mới → không đạt freshness (theo design doc)
+const BACKUP_FRESHNESS_THRESHOLD_MIN = 120;
+
+export interface DRReadiness {
+  overallStatus:        'HEALTHY' | 'DEGRADED' | 'CRITICAL' | 'UNKNOWN';
+  planCount:            number;
+  lastExercisedAt:      Date | null;
+  lastOutcome:          DRExerciseOutcome | null;
+  rtoGap:               number | null;   // >0 = vượt target, <0 = còn dư margin
+  rpoGap:               number | null;
+  backupFreshnessOk:    boolean;
+  backupAgeMinutes:     number | null;
+  lastRestoreVerifiedAt: Date | null;
+  exerciseDaysAgo:      number | null;   // Số ngày kể từ lần diễn tập cuối
+}
+
+export async function getDRReadiness(): Promise<DRReadiness> {
+  const [plans, backupFreshness, lastVerifiedRestore] = await Promise.all([
+    prisma.disasterRecoveryPlan.findMany({
+      where:   { isActive: true },
+      include: { exercises: { orderBy: { exercisedAt: 'desc' }, take: 1 } },
+    }),
+    getBackupFreshnessMinutes('POSTGRESQL_FULL'),
+    prisma.restoreJob.findFirst({
+      where:   { verificationStatus: 'VERIFIED_OK', status: 'COMPLETED' },
+      orderBy: { completedAt: 'desc' },
+      select:  { completedAt: true },
+    }),
+  ]);
 
   let lastExercisedAt: Date | null = null;
   let lastOutcome: DRExerciseOutcome | null = null;
@@ -342,5 +358,41 @@ export async function getDRReadiness(): Promise<{
     }
   }
 
-  return { planCount: plans.length, lastExercisedAt, lastOutcome, rtoGap, rpoGap };
+  const backupAgeMinutes      = backupFreshness;
+  const backupFreshnessOk     = backupAgeMinutes !== null && backupAgeMinutes <= BACKUP_FRESHNESS_THRESHOLD_MIN;
+  const lastRestoreVerifiedAt = lastVerifiedRestore?.completedAt ?? null;
+
+  const exerciseDaysAgo = lastExercisedAt
+    ? Math.floor((Date.now() - lastExercisedAt.getTime()) / (1000 * 60 * 60 * 24))
+    : null;
+
+  // Đánh giá overallStatus
+  const exerciseStale  = exerciseDaysAgo === null || exerciseDaysAgo > 90;  // > 3 tháng
+  const rtoBreached    = rtoGap !== null && rtoGap > 0;
+  const rpoBreached    = rpoGap !== null && rpoGap > 0;
+  const lastFailed     = lastOutcome === 'FAIL';
+
+  let overallStatus: DRReadiness['overallStatus'];
+  if (plans.length === 0) {
+    overallStatus = 'UNKNOWN';
+  } else if (!backupFreshnessOk || lastFailed || (rtoBreached && rpoBreached)) {
+    overallStatus = 'CRITICAL';
+  } else if (exerciseStale || rtoBreached || rpoBreached) {
+    overallStatus = 'DEGRADED';
+  } else {
+    overallStatus = 'HEALTHY';
+  }
+
+  return {
+    overallStatus,
+    planCount:             plans.length,
+    lastExercisedAt,
+    lastOutcome,
+    rtoGap,
+    rpoGap,
+    backupFreshnessOk,
+    backupAgeMinutes,
+    lastRestoreVerifiedAt,
+    exerciseDaysAgo,
+  };
 }

@@ -5,7 +5,9 @@ import {
   listQualityResults,
   recordQualityResult,
   getLatestResultPerRule,
+  getQualitySummaryByTable,
 } from '@/lib/services/infrastructure/data-quality.service';
+import type { DQSeverity } from '@prisma/client';
 
 export async function GET(req: NextRequest) {
   const auth = await requireFunction(req, INFRA.DATA_QUALITY_VIEW);
@@ -15,6 +17,44 @@ export async function GET(req: NextRequest) {
   const view = searchParams.get('view');
 
   try {
+    if (view === 'dashboard') {
+      const [latestPerRule, summaryByTable] = await Promise.all([
+        getLatestResultPerRule(),
+        getQualitySummaryByTable(),
+      ]);
+
+      const totalRules     = latestPerRule.length;
+      const failingTotal   = latestPerRule.filter((r) => !r.passed).length;
+      const failingCritical = latestPerRule.filter(
+        (r) => !r.passed && r.severity === 'CRITICAL',
+      ).length;
+      const failingError = latestPerRule.filter(
+        (r) => !r.passed && r.severity === 'ERROR',
+      ).length;
+
+      const overallStatus =
+        failingCritical > 0 ? 'CRITICAL'
+        : failingError  > 0 ? 'ERROR'
+        : failingTotal  > 0 ? 'WARNING'
+        : 'HEALTHY';
+
+      return NextResponse.json({
+        success: true,
+        data: {
+          overallStatus,
+          counts: {
+            totalRules,
+            failingTotal,
+            failingCritical,
+            failingError,
+            passing: totalRules - failingTotal,
+          },
+          summaryByTable,
+          latestPerRule,
+        },
+      });
+    }
+
     if (view === 'latest') {
       const latest = await getLatestResultPerRule();
       return NextResponse.json({ success: true, data: latest });
@@ -25,13 +65,14 @@ export async function GET(req: NextRequest) {
       targetTable: searchParams.get('targetTable') ?? undefined,
       passed:      searchParams.get('passed') === 'true'
                    ? true : searchParams.get('passed') === 'false' ? false : undefined,
-      severity:    (searchParams.get('severity') as any) ?? undefined,
+      severity:    (searchParams.get('severity') as DQSeverity) ?? undefined,
       page:        Number(searchParams.get('page')     ?? 1),
       pageSize:    Number(searchParams.get('pageSize') ?? 30),
     });
     return NextResponse.json({ success: true, data: result });
-  } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
+    return NextResponse.json({ success: false, error: message }, { status: 500 });
   }
 }
 

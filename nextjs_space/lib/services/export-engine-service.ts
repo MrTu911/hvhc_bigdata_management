@@ -4,7 +4,11 @@
  */
 
 import prisma from '@/lib/db';
-import { uploadFileToMinio, getPresignedUrl, downloadFileFromMinio } from '@/lib/minio-client';
+import {
+  uploadObject,
+  getPresignedDownloadUrl,
+  downloadObject,
+} from '@/lib/services/infrastructure/storage.service';
 import { resolveEntityData, EntityType, getMissingFields } from './data-resolver-service';
 import { TEMPLATE_BUCKET } from './template-service';
 import ExcelJS from 'exceljs';
@@ -83,15 +87,20 @@ export async function exportSingle(req: ExportRequest): Promise<{
       req.outputFormat
     );
 
-    // Upload to MinIO
+    // Upload to MinIO via storageService
     const outputKey = `exports/${job.id}/output.${ext}`;
-    await uploadFileToMinio(TEMPLATE_BUCKET, outputKey, buffer, {
-      'Content-Type': contentType,
-      jobId: job.id,
+    await uploadObject('M18_EXPORT', outputKey, buffer, {
+      module:         'M18',
+      'entity-type':  'export-job',
+      'entity-id':    job.id,
+      'uploaded-by':  req.requestedBy,
+      classification: 'INTERNAL',
+      'content-type': contentType,
+      jobId:          job.id,
     });
 
     // Generate signed URL (24h)
-    const signedUrl = await getPresignedUrl(TEMPLATE_BUCKET, outputKey, EXPORT_URL_TTL);
+    const signedUrl = await getPresignedDownloadUrl('M18_EXPORT', outputKey, { expirySeconds: EXPORT_URL_TTL });
     const urlExpiresAt = new Date(Date.now() + EXPORT_URL_TTL * 1000);
 
     // Update job as COMPLETED
@@ -271,7 +280,7 @@ async function renderDocx(
   templateFileKey: string,
   resolvedData: Record<string, unknown>,
 ): Promise<{ buffer: Buffer; ext: string; contentType: string }> {
-  const templateBuffer = await downloadFileFromMinio(TEMPLATE_BUCKET, templateFileKey);
+  const templateBuffer = await downloadObject('M18_TEMPLATE', templateFileKey);
 
   const zip = new PizZip(templateBuffer);
   const doc = new Docxtemplater(zip, {
@@ -417,7 +426,7 @@ export async function getJobStatus(jobId: string, requestedBy: string) {
     const now = new Date();
     const expiresAt = job.urlExpiresAt;
     if (!expiresAt || expiresAt.getTime() - now.getTime() < 3600000) {
-      const newUrl = await getPresignedUrl(TEMPLATE_BUCKET, job.outputKey, EXPORT_URL_TTL);
+      const newUrl = await getPresignedDownloadUrl('M18_EXPORT', job.outputKey, { expirySeconds: EXPORT_URL_TTL });
       const newExpiry = new Date(Date.now() + EXPORT_URL_TTL * 1000);
       await prisma.exportJob.update({
         where: { id: jobId },

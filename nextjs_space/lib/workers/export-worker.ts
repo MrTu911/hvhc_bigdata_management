@@ -17,8 +17,10 @@ import { EXPORT_QUEUE_NAME, BatchExportJobData, getRedisConnection } from '@/lib
 import prisma from '@/lib/db';
 import { resolveEntityData } from '@/lib/services/data-resolver-service';
 import { renderFile } from '@/lib/services/export-engine-service';
-import { uploadFileToMinio, getPresignedUrl } from '@/lib/minio-client';
-import { TEMPLATE_BUCKET } from '@/lib/services/template-service';
+import {
+  uploadObject,
+  getPresignedDownloadUrl,
+} from '@/lib/services/infrastructure/storage.service';
 import JSZip from 'jszip';
 
 const EXPORT_URL_TTL = 86400; // 24h
@@ -143,7 +145,14 @@ async function processBatchExportJob(job: Job<BatchExportJobData>): Promise<void
 
   if (buffers.length === 1) {
     outputKey = `exports/${exportJobId}/output.${buffers[0].ext}`;
-    await uploadFileToMinio(TEMPLATE_BUCKET, outputKey, buffers[0].buffer, { jobId: exportJobId });
+    await uploadObject('M18_EXPORT', outputKey, buffers[0].buffer, {
+      module:         'M18',
+      'entity-type':  'export-job',
+      'entity-id':    exportJobId,
+      'uploaded-by':  'system:export-worker',
+      classification: 'INTERNAL',
+      jobId:          exportJobId,
+    });
   } else {
     const zip = new JSZip();
     for (const { entityId, buffer, ext } of buffers) {
@@ -156,13 +165,18 @@ async function processBatchExportJob(job: Job<BatchExportJobData>): Promise<void
       await zip.generateAsync({ type: 'nodebuffer', compression: 'DEFLATE' }),
     );
     outputKey = `exports/${exportJobId}/${request.zipName || 'batch_export'}.zip`;
-    await uploadFileToMinio(TEMPLATE_BUCKET, outputKey, zipBuffer, {
-      jobId: exportJobId,
-      'Content-Type': 'application/zip',
+    await uploadObject('M18_EXPORT', outputKey, zipBuffer, {
+      module:         'M18',
+      'entity-type':  'export-job',
+      'entity-id':    exportJobId,
+      'uploaded-by':  'system:export-worker',
+      classification: 'INTERNAL',
+      'content-type': 'application/zip',
+      jobId:          exportJobId,
     });
   }
 
-  const signedUrl = await getPresignedUrl(TEMPLATE_BUCKET, outputKey, EXPORT_URL_TTL);
+  const signedUrl = await getPresignedDownloadUrl('M18_EXPORT', outputKey, { expirySeconds: EXPORT_URL_TTL });
   const urlExpiresAt = new Date(Date.now() + EXPORT_URL_TTL * 1000);
 
   await prisma.exportJob.update({

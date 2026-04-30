@@ -7,12 +7,16 @@
  */
 
 import prisma from '@/lib/db';
+import { raiseAlert, resolveAlert } from '@/lib/services/infrastructure/alert.service';
 import type {
   DataQualityRule,
   DataQualityResult,
   DataQualityRuleType,
   DQSeverity,
 } from '@prisma/client';
+
+// DQ alert title prefix — dùng để dedup và auto-resolve
+const DQ_ALERT_PREFIX = '[DQ]';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -86,11 +90,81 @@ export async function updateRuleConfig(id: string, ruleConfig: object): Promise<
   await prisma.dataQualityRule.update({ where: { id }, data: { ruleConfig } });
 }
 
+// ─── Alert sync ───────────────────────────────────────────────────────────────
+
+/**
+ * Lookup serviceId để gắn DQ alert.
+ * Ưu tiên AIRFLOW (DQ chạy qua DAG), fallback về POSTGRESQL.
+ * Cache trong module scope — đủ cho dev, production nên restart khi thay đổi.
+ */
+let _dqServiceId: string | null | undefined = undefined;
+
+async function resolveDqServiceId(): Promise<string | null> {
+  if (_dqServiceId !== undefined) return _dqServiceId;
+
+  const svc = await prisma.bigDataService.findFirst({
+    where:   { type: 'AIRFLOW', status: { not: 'UNKNOWN' } },
+    orderBy: { createdAt: 'asc' },
+    select:  { id: true },
+  }) ?? await prisma.bigDataService.findFirst({
+    where:   { type: 'POSTGRESQL', status: { not: 'UNKNOWN' } },
+    orderBy: { createdAt: 'asc' },
+    select:  { id: true },
+  });
+
+  _dqServiceId = svc?.id ?? null;
+  return _dqServiceId;
+}
+
+/**
+ * Raise alert khi DQ rule CRITICAL/ERROR fail.
+ * Auto-resolve khi rule pass lại.
+ * Dedup bằng (serviceId + title) — giống pattern của health.service.
+ */
+async function syncDqAlert(
+  rule:   Pick<DataQualityRule, 'ruleCode' | 'name' | 'severity'>,
+  passed: boolean,
+  failedRows: number,
+  totalChecked: number,
+): Promise<void> {
+  // Chỉ raise alert cho CRITICAL và ERROR severity
+  if (rule.severity === 'WARNING' || rule.severity === 'INFO') return;
+
+  const serviceId = await resolveDqServiceId();
+  if (!serviceId) return;
+
+  const alertTitle   = `${DQ_ALERT_PREFIX} ${rule.ruleCode} thất bại`;
+  const alertSeverity = rule.severity === 'CRITICAL' ? 'CRITICAL' : 'ERROR';
+
+  if (!passed) {
+    const failPct = totalChecked > 0
+      ? ((failedRows / totalChecked) * 100).toFixed(1)
+      : '?';
+    await raiseAlert({
+      serviceId,
+      title:    alertTitle,
+      message:  `Rule "${rule.name}" (${rule.ruleCode}): ${failedRows}/${totalChecked} rows failed (${failPct}%). Cần kiểm tra và xử lý dữ liệu.`,
+      severity: alertSeverity as 'CRITICAL' | 'ERROR',
+      metadata: { ruleCode: rule.ruleCode, failedRows, totalChecked, source: 'data-quality' },
+    });
+  } else {
+    // Passed → resolve alert đang active nếu có
+    const existing = await prisma.serviceAlert.findFirst({
+      where:  { serviceId, title: alertTitle, status: { in: ['ACTIVE', 'ACKNOWLEDGED'] } },
+      select: { id: true },
+    });
+    if (existing) {
+      await resolveAlert(existing.id, 'system:dq-auto-resolve');
+    }
+  }
+}
+
 // ─── Result recording ─────────────────────────────────────────────────────────
 
 /**
  * Lưu kết quả một lần kiểm tra.
- * Caller là Airflow worker hoặc API trigger — không phải UI trực tiếp.
+ * Caller là Airflow worker hoặc API callback — không phải UI trực tiếp.
+ * Tự động raise/resolve ServiceAlert với rule CRITICAL/ERROR.
  */
 export async function recordQualityResult(
   input: RecordQualityResultInput,
@@ -100,7 +174,12 @@ export async function recordQualityResult(
       ? input.failedRows / input.totalChecked
       : 0;
 
-  return prisma.dataQualityResult.create({
+  const rule = await prisma.dataQualityRule.findUnique({
+    where:  { id: input.ruleId },
+    select: { ruleCode: true, name: true, severity: true },
+  });
+
+  const result = await prisma.dataQualityResult.create({
     data: {
       ruleId:        input.ruleId,
       pipelineRunId: input.pipelineRunId,
@@ -113,14 +192,24 @@ export async function recordQualityResult(
       note:          input.note,
     },
   });
+
+  // Alert sync non-blocking — lỗi alert không ảnh hưởng ghi result
+  if (rule) {
+    syncDqAlert(rule, input.passed, input.failedRows, input.totalChecked).catch((err) =>
+      console.warn('[data-quality] alert sync failed:', err),
+    );
+  }
+
+  return result;
 }
 
 /**
- * Bulk record — dùng khi một pipeline run có nhiều DQ rules.
+ * Bulk record — dùng khi một pipeline run có nhiều DQ rules cùng lúc.
+ * Raise alert cho bất kỳ CRITICAL/ERROR rule nào fail.
  */
 export async function recordQualityResults(
   inputs: RecordQualityResultInput[],
-): Promise<number> {
+): Promise<{ count: number; alertsRaised: number }> {
   const data = inputs.map((input) => ({
     ruleId:        input.ruleId,
     pipelineRunId: input.pipelineRunId,
@@ -134,7 +223,29 @@ export async function recordQualityResults(
   }));
 
   const created = await prisma.dataQualityResult.createMany({ data });
-  return created.count;
+
+  // Sync alerts cho từng rule có CRITICAL/ERROR fail
+  const rules = await prisma.dataQualityRule.findMany({
+    where:  { id: { in: inputs.map((i) => i.ruleId) } },
+    select: { id: true, ruleCode: true, name: true, severity: true },
+  });
+
+  const ruleMap = new Map(rules.map((r) => [r.id, r]));
+  let alertsRaised = 0;
+
+  await Promise.allSettled(
+    inputs.map(async (input) => {
+      const rule = ruleMap.get(input.ruleId);
+      if (!rule) return;
+      const before = alertsRaised;
+      await syncDqAlert(rule, input.passed, input.failedRows, input.totalChecked);
+      if (!input.passed && (rule.severity === 'CRITICAL' || rule.severity === 'ERROR')) {
+        alertsRaised = before + 1;
+      }
+    }),
+  );
+
+  return { count: created.count, alertsRaised };
 }
 
 // ─── Queries ──────────────────────────────────────────────────────────────────

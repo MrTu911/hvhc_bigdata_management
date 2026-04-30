@@ -14,19 +14,14 @@ import { embedText } from '@/lib/integrations/embeddings'
 import { enqueueLibraryIndex } from '@/lib/queue/science-queue'
 import { logAudit } from '@/lib/audit'
 import {
-  minioClient,
-  getPresignedUrl,
-  uploadFileToMinio,
-  deleteFileFromMinio,
-  ensureBucketExists,
-} from '@/lib/minio-client'
+  uploadObject,
+  getPresignedDownloadUrl,
+} from '@/lib/services/infrastructure/storage.service'
 import type { LibraryListFilter, LibraryUploadMeta, SemanticSearchInput } from '@/lib/validations/science-library'
 import { ALLOWED_MIME_TYPES, MAX_FILE_SIZE_BYTES } from '@/lib/validations/science-library'
 import { isInternalIp } from '@/lib/security/ip-guard'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
-
-const LIBRARY_BUCKET = process.env.LIBRARY_MINIO_BUCKET ?? 'hvhc-library'
 
 /** Expiry presigned URL: 15 phút */
 const PRESIGNED_EXPIRY_SECONDS = 15 * 60
@@ -94,11 +89,17 @@ export const libraryService = {
     const ext = filename.split('.').pop() ?? 'bin'
     const objectKey = `library/${meta.sensitivity.toLowerCase()}/${uuidv4()}.${ext}`
 
-    await ensureBucketExists(LIBRARY_BUCKET)
-    await uploadFileToMinio(LIBRARY_BUCKET, objectKey, file, {
-      'x-meta-title': meta.title,
+    await uploadObject('M25_SCIENCE_LIBRARY', objectKey, file, {
+      module:         'M25',
+      'entity-type':  'library-item',
+      'entity-id':    meta.workId ?? 'unknown',
+      'uploaded-by':  userId,
+      classification: meta.sensitivity === 'SECRET' ? 'SECRET'
+                    : meta.sensitivity === 'CONFIDENTIAL' ? 'CONFIDENTIAL'
+                    : 'INTERNAL',
+      'x-meta-title':       meta.title,
       'x-meta-sensitivity': meta.sensitivity,
-      'x-meta-checksum': checksum,
+      'x-meta-checksum':    checksum,
     })
 
     // 6. Tạo DB record
@@ -175,7 +176,7 @@ export const libraryService = {
     }
 
     // Pre-signed URL 15 phút
-    const presignedUrl = await getPresignedUrl(LIBRARY_BUCKET, item.filePath, PRESIGNED_EXPIRY_SECONDS)
+    const presignedUrl = await getPresignedDownloadUrl('M25_SCIENCE_LIBRARY', item.filePath, { expirySeconds: PRESIGNED_EXPIRY_SECONDS })
 
     // Ghi access log + tăng counter song song
     await Promise.all([

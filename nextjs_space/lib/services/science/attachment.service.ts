@@ -14,10 +14,9 @@ import prisma from '@/lib/db'
 import { scanBuffer } from '@/lib/integrations/clamav'
 import { logAudit } from '@/lib/audit'
 import {
-  getPresignedUrl,
-  uploadFileToMinio,
-  ensureBucketExists,
-} from '@/lib/minio-client'
+  uploadObject,
+  getPresignedDownloadUrl,
+} from '@/lib/services/infrastructure/storage.service'
 import {
   MAX_ATTACHMENT_SIZE_BYTES,
   ATTACHMENT_ALLOWED_MIME_TYPES,
@@ -33,8 +32,6 @@ function serializeAttachment<T extends { fileSize: bigint }>(a: T): Omit<T, 'fil
 }
 
 // ─── Constants ────────────────────────────────────────────────────────────────
-
-const ATTACHMENT_BUCKET = process.env.ATTACHMENT_MINIO_BUCKET ?? 'hvhc-science-attachments'
 
 /** Presigned URL expiry: 15 phút */
 const PRESIGNED_EXPIRY_SECONDS = 15 * 60
@@ -101,14 +98,17 @@ export const attachmentService = {
     const ext = filename.includes('.') ? filename.split('.').pop()! : 'bin'
     const objectKey = `science-attachments/${meta.entityType.toLowerCase()}/${uuidv4()}.${ext}`
 
-    await ensureBucketExists(ATTACHMENT_BUCKET)
-    await uploadFileToMinio(ATTACHMENT_BUCKET, objectKey, file, {
-      'x-meta-title': meta.title,
-      'x-meta-entity-type': meta.entityType,
-      'x-meta-entity-id': meta.entityId,
-      'x-meta-category': meta.docCategory,
-      'x-meta-sensitivity': meta.sensitivity,
-      'x-meta-checksum': checksum,
+    await uploadObject('M09_RESEARCH', objectKey, file, {
+      module:           'M09',
+      'entity-type':    meta.entityType,
+      'entity-id':      meta.entityId,
+      'uploaded-by':    userId,
+      classification:   meta.sensitivity === 'SECRET' ? 'SECRET'
+                      : meta.sensitivity === 'CONFIDENTIAL' ? 'CONFIDENTIAL'
+                      : 'INTERNAL',
+      'x-meta-title':        meta.title,
+      'x-meta-category':     meta.docCategory,
+      'x-meta-checksum':     checksum,
     })
 
     // 7. Tạo DB record
@@ -163,7 +163,7 @@ export const attachmentService = {
       return { success: false as const, error: 'Không có quyền tải tài liệu TỐI MẬT' }
     }
 
-    const presignedUrl = await getPresignedUrl(ATTACHMENT_BUCKET, item.filePath, PRESIGNED_EXPIRY_SECONDS)
+    const presignedUrl = await getPresignedDownloadUrl('M09_RESEARCH', item.filePath, { expirySeconds: PRESIGNED_EXPIRY_SECONDS })
 
     await logAudit({
       userId,

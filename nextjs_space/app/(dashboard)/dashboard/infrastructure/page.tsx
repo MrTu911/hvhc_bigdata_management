@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Activity, Database, HardDrive, Shield, AlertTriangle,
   CheckCircle2, XCircle, RefreshCw, Clock, Server, Bell, Heart,
+  Zap, TrendingUp, Layers, Archive, Play, Pause,
 } from 'lucide-react';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -91,51 +92,147 @@ interface AlertSummary {
   active: number; acknowledged: number; critical: number; warning: number;
 }
 
-// ─── Status helpers ───────────────────────────────────────────────────────────
+// ─── Design tokens ────────────────────────────────────────────────────────────
 
-function StatusBadge({ status }: { status: string }) {
-  const map: Record<string, string> = {
-    COMPLETED:    'bg-green-100 text-green-800',
-    RUNNING:      'bg-blue-100 text-blue-800',
-    FAILED:       'bg-red-100 text-red-800',
-    PENDING:      'bg-yellow-100 text-yellow-800',
-    CANCELLED:    'bg-gray-100 text-gray-700',
-    PASS:         'bg-green-100 text-green-800',
-    PARTIAL:      'bg-yellow-100 text-yellow-800',
-    FAIL:         'bg-red-100 text-red-800',
-    ACTIVE:       'bg-red-100 text-red-800',
-    ACKNOWLEDGED: 'bg-yellow-100 text-yellow-800',
-    RESOLVED:     'bg-green-100 text-green-800',
-  };
+const STATUS_STYLES: Record<string, { bg: string; text: string; dot: string }> = {
+  COMPLETED:    { bg: 'bg-emerald-50',  text: 'text-emerald-700',  dot: 'bg-emerald-500'  },
+  RUNNING:      { bg: 'bg-blue-50',     text: 'text-blue-700',     dot: 'bg-blue-500'     },
+  FAILED:       { bg: 'bg-red-50',      text: 'text-red-700',      dot: 'bg-red-500'      },
+  PENDING:      { bg: 'bg-amber-50',    text: 'text-amber-700',    dot: 'bg-amber-500'    },
+  CANCELLED:    { bg: 'bg-slate-100',   text: 'text-slate-600',    dot: 'bg-slate-400'    },
+  PASS:         { bg: 'bg-emerald-50',  text: 'text-emerald-700',  dot: 'bg-emerald-500'  },
+  PARTIAL:      { bg: 'bg-amber-50',    text: 'text-amber-700',    dot: 'bg-amber-500'    },
+  FAIL:         { bg: 'bg-red-50',      text: 'text-red-700',      dot: 'bg-red-500'      },
+  ACTIVE:       { bg: 'bg-red-50',      text: 'text-red-700',      dot: 'bg-red-500'      },
+  ACKNOWLEDGED: { bg: 'bg-amber-50',    text: 'text-amber-700',    dot: 'bg-amber-500'    },
+  RESOLVED:     { bg: 'bg-emerald-50',  text: 'text-emerald-700',  dot: 'bg-emerald-500'  },
+  IDLE:         { bg: 'bg-slate-100',   text: 'text-slate-600',    dot: 'bg-slate-400'    },
+  REQUESTED:    { bg: 'bg-violet-50',   text: 'text-violet-700',   dot: 'bg-violet-500'   },
+  IN_PROGRESS:  { bg: 'bg-blue-50',     text: 'text-blue-700',     dot: 'bg-blue-500'     },
+  VERIFIED_OK:  { bg: 'bg-emerald-50',  text: 'text-emerald-700',  dot: 'bg-emerald-500'  },
+  VERIFIED_FAILED: { bg: 'bg-red-50',   text: 'text-red-700',      dot: 'bg-red-500'      },
+  NOT_VERIFIED: { bg: 'bg-slate-100',   text: 'text-slate-600',    dot: 'bg-slate-400'    },
+};
+
+const HEALTH_STYLES: Record<HealthLevel, { card: string; text: string; badge: string; icon: string }> = {
+  OK:       { card: 'border-emerald-200 bg-emerald-50/60', text: 'text-emerald-700', badge: 'bg-emerald-100 text-emerald-800', icon: 'text-emerald-600' },
+  WARNING:  { card: 'border-amber-200 bg-amber-50/60',    text: 'text-amber-700',   badge: 'bg-amber-100 text-amber-800',    icon: 'text-amber-600'   },
+  CRITICAL: { card: 'border-red-200 bg-red-50/60',        text: 'text-red-700',     badge: 'bg-red-100 text-red-800',        icon: 'text-red-600'     },
+  UNKNOWN:  { card: 'border-slate-200 bg-slate-50/60',    text: 'text-slate-500',   badge: 'bg-slate-100 text-slate-600',    icon: 'text-slate-400'   },
+};
+
+const SEVERITY_STYLES: Record<string, { bg: string; text: string; border: string }> = {
+  CRITICAL: { bg: 'bg-red-100',    text: 'text-red-800',    border: 'border-red-300'    },
+  ERROR:    { bg: 'bg-orange-100', text: 'text-orange-800', border: 'border-orange-300' },
+  WARNING:  { bg: 'bg-amber-100',  text: 'text-amber-800',  border: 'border-amber-300'  },
+  INFO:     { bg: 'bg-sky-100',    text: 'text-sky-800',    border: 'border-sky-300'    },
+};
+
+const TIER_STYLES: Record<string, { bg: string; text: string; icon: string }> = {
+  HOT:     { bg: 'bg-orange-100', text: 'text-orange-800', icon: '🔥' },
+  COLD:    { bg: 'bg-sky-100',    text: 'text-sky-800',    icon: '❄️' },
+  ARCHIVE: { bg: 'bg-slate-100',  text: 'text-slate-700',  icon: '📦' },
+};
+
+// ─── Shared components ────────────────────────────────────────────────────────
+
+function StatusBadge({ status, label }: { status: string; label?: string }) {
+  const s = STATUS_STYLES[status] ?? { bg: 'bg-slate-100', text: 'text-slate-600', dot: 'bg-slate-400' };
   return (
-    <span className={`inline-flex px-2 py-0.5 rounded text-xs font-medium ${map[status] ?? 'bg-gray-100 text-gray-700'}`}>
-      {status}
+    <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium ${s.bg} ${s.text}`}>
+      <span className={`h-1.5 w-1.5 rounded-full ${s.dot}`} />
+      {label ?? status}
     </span>
   );
 }
 
-function HealthLevelBadge({ level }: { level: HealthLevel }) {
-  const map: Record<HealthLevel, string> = {
-    OK:       'bg-green-100 text-green-800',
-    WARNING:  'bg-yellow-100 text-yellow-800',
-    CRITICAL: 'bg-red-100 text-red-800',
-    UNKNOWN:  'bg-gray-100 text-gray-600',
-  };
+function HealthBadge({ level }: { level: HealthLevel }) {
+  const s = HEALTH_STYLES[level];
   return (
-    <span className={`inline-flex px-2 py-0.5 rounded text-xs font-semibold ${map[level]}`}>
+    <span className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold ${s.badge}`}>
       {level}
     </span>
   );
 }
 
-function FreshnessAlert({ minutes }: { minutes: number | null }) {
-  if (minutes === null) return <span className="text-red-600 text-sm font-medium">Chưa có backup</span>;
-  if (minutes > 90) return <span className="text-red-600 text-sm font-medium">{minutes} phút — CRITICAL</span>;
-  if (minutes > 60) return <span className="text-yellow-600 text-sm font-medium">{minutes} phút — WARNING</span>;
-  return <span className="text-green-600 text-sm font-medium">{minutes} phút — OK</span>;
+function FreshnessIndicator({ minutes }: { minutes: number | null }) {
+  if (minutes === null) return (
+    <div className="flex items-center gap-2 text-red-600">
+      <XCircle className="h-4 w-4" />
+      <span className="text-sm font-medium">Chưa có backup</span>
+    </div>
+  );
+  if (minutes > 90) return (
+    <div className="flex items-center gap-2 text-red-600">
+      <AlertTriangle className="h-4 w-4" />
+      <span className="text-sm font-medium">{minutes} phút — CRITICAL</span>
+    </div>
+  );
+  if (minutes > 60) return (
+    <div className="flex items-center gap-2 text-amber-600">
+      <Clock className="h-4 w-4" />
+      <span className="text-sm font-medium">{minutes} phút — WARNING</span>
+    </div>
+  );
+  return (
+    <div className="flex items-center gap-2 text-emerald-600">
+      <CheckCircle2 className="h-4 w-4" />
+      <span className="text-sm font-medium">{minutes} phút — OK</span>
+    </div>
+  );
 }
 
-// ─── Section components ───────────────────────────────────────────────────────
+function SectionCard({ title, icon: Icon, children, className = '' }: {
+  title: string; icon: React.ElementType; children: React.ReactNode; className?: string;
+}) {
+  return (
+    <Card className={`shadow-sm ${className}`}>
+      <CardHeader className="pb-3 border-b bg-slate-50/50 rounded-t-xl">
+        <CardTitle className="text-sm font-semibold flex items-center gap-2 text-slate-700">
+          <Icon className="h-4 w-4 text-slate-500" />
+          {title}
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="pt-4">{children}</CardContent>
+    </Card>
+  );
+}
+
+// ─── KPI Card ─────────────────────────────────────────────────────────────────
+
+function KpiCard({
+  label, value, icon: Icon, iconColor, valueColor, subtitle,
+}: {
+  label: string; value: React.ReactNode; icon: React.ElementType;
+  iconColor?: string; valueColor?: string; subtitle?: string;
+}) {
+  return (
+    <Card className="shadow-sm hover:shadow-md transition-shadow">
+      <CardContent className="pt-5 pb-4">
+        <div className="flex items-start justify-between">
+          <div className="flex-1">
+            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">{label}</p>
+            <p className={`text-2xl font-bold mt-1.5 ${valueColor ?? 'text-slate-800'}`}>{value}</p>
+            {subtitle && <p className="text-xs text-slate-400 mt-1">{subtitle}</p>}
+          </div>
+          <div className={`p-2.5 rounded-xl ${iconColor ?? 'bg-slate-100'}`}>
+            <Icon className="h-5 w-5 text-white" />
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+// ─── Pipelines Tab ────────────────────────────────────────────────────────────
+
+const PIPELINE_TYPE_LABELS: Record<string, { label: string; color: string }> = {
+  ETL_PG_TO_CLICKHOUSE: { label: 'ETL → CH',     color: 'bg-violet-100 text-violet-800' },
+  DATA_QUALITY:         { label: 'Data Quality',  color: 'bg-sky-100 text-sky-800'       },
+  BACKUP:               { label: 'Backup',        color: 'bg-emerald-100 text-emerald-800' },
+  AI_REFRESH:           { label: 'AI Refresh',    color: 'bg-pink-100 text-pink-800'     },
+  CUSTOM:               { label: 'Custom',        color: 'bg-slate-100 text-slate-700'   },
+};
 
 function PipelinesTab({
   pipelines, onRefresh,
@@ -143,248 +240,473 @@ function PipelinesTab({
   const [triggering, setTriggering] = useState<string | null>(null);
   const [toggling,   setToggling]   = useState<string | null>(null);
 
-  const triggerRun = async (definitionId: string) => {
-    setTriggering(definitionId);
+  const triggerRun = async (id: string) => {
+    setTriggering(id);
     try {
       const res  = await fetch('/api/infrastructure/pipelines', {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ action: 'trigger', definitionId }),
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'trigger', definitionId: id }),
       });
       const data = await res.json();
       if (!data.success) alert(data.error);
       else onRefresh();
-    } finally {
-      setTriggering(null);
-    }
+    } finally { setTriggering(null); }
   };
 
   const toggleActive = async (id: string, currentActive: boolean) => {
     setToggling(id);
     try {
       const res  = await fetch('/api/infrastructure/pipelines', {
-        method:  'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ id, isActive: !currentActive }),
+        method: 'PATCH', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, isActive: !currentActive }),
       });
       const data = await res.json();
       if (!data.success) alert(data.error);
       else onRefresh();
-    } finally {
-      setToggling(null);
-    }
+    } finally { setToggling(null); }
   };
 
+  const active   = pipelines.filter((p) => p.isActive).length;
+  const inactive = pipelines.length - active;
+
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full text-sm">
-        <thead>
-          <tr className="border-b text-left text-muted-foreground">
-            <th className="pb-2 pr-4">Tên</th>
-            <th className="pb-2 pr-4">Loại</th>
-            <th className="pb-2 pr-4">Trạng thái lần cuối</th>
-            <th className="pb-2 pr-4">Chạy lần cuối</th>
-            <th className="pb-2">Hành động</th>
-          </tr>
-        </thead>
-        <tbody>
-          {pipelines.length === 0 && (
-            <tr><td colSpan={5} className="py-6 text-center text-muted-foreground">Chưa có pipeline nào</td></tr>
-          )}
-          {pipelines.map((p) => (
-            <tr key={p.id} className={`border-b last:border-0 ${!p.isActive ? 'opacity-50' : ''}`}>
-              <td className="py-2 pr-4 font-medium">
-                {p.name}
-                {!p.isActive && <span className="ml-2 text-xs text-muted-foreground">(disabled)</span>}
-              </td>
-              <td className="py-2 pr-4 text-muted-foreground">{p.pipelineType}</td>
-              <td className="py-2 pr-4">
-                {p.lastRunStatus ? <StatusBadge status={p.lastRunStatus} /> : <span className="text-muted-foreground">—</span>}
-              </td>
-              <td className="py-2 pr-4 text-muted-foreground">
-                {p.lastRunAt ? new Date(p.lastRunAt).toLocaleString('vi-VN') : '—'}
-              </td>
-              <td className="py-2 flex gap-2">
+    <div className="space-y-5">
+      <div className="flex items-center gap-4 text-sm text-slate-500">
+        <span className="flex items-center gap-1.5">
+          <span className="h-2 w-2 rounded-full bg-emerald-500" />
+          {active} active
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="h-2 w-2 rounded-full bg-slate-300" />
+          {inactive} paused
+        </span>
+      </div>
+
+      <div className="space-y-2">
+        {pipelines.length === 0 && (
+          <div className="text-center py-12 text-slate-400">
+            <Layers className="h-10 w-10 mx-auto mb-2 opacity-40" />
+            <p className="text-sm">Chưa có pipeline nào</p>
+          </div>
+        )}
+        {pipelines.map((p) => {
+          const typeInfo = PIPELINE_TYPE_LABELS[p.pipelineType] ?? { label: p.pipelineType, color: 'bg-slate-100 text-slate-700' };
+          const isBusy = triggering === p.id || toggling === p.id;
+          return (
+            <div
+              key={p.id}
+              className={`flex items-center gap-4 rounded-xl border px-4 py-3 transition-colors ${
+                p.isActive ? 'bg-white hover:bg-slate-50/80' : 'bg-slate-50/60 opacity-70'
+              }`}
+            >
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap mb-0.5">
+                  <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${typeInfo.color}`}>
+                    {typeInfo.label}
+                  </span>
+                  <span className="font-medium text-sm text-slate-800 truncate">{p.name}</span>
+                  {!p.isActive && (
+                    <span className="text-xs text-slate-400">(paused)</span>
+                  )}
+                </div>
+                <div className="flex items-center gap-3 text-xs text-slate-400 mt-1">
+                  <span>Chạy lần cuối: {p.lastRunAt ? new Date(p.lastRunAt).toLocaleString('vi-VN') : '—'}</span>
+                  {p.lastRunStatus && <StatusBadge status={p.lastRunStatus} />}
+                </div>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
                 {p.isActive && (
                   <Button
                     size="sm" variant="outline"
-                    disabled={triggering === p.id || toggling === p.id}
+                    disabled={isBusy}
                     onClick={() => triggerRun(p.id)}
+                    className="h-7 text-xs gap-1 border-slate-200 hover:border-blue-300 hover:text-blue-700"
                   >
-                    {triggering === p.id ? <RefreshCw className="h-3 w-3 animate-spin" /> : 'Chạy'}
+                    {triggering === p.id
+                      ? <RefreshCw className="h-3 w-3 animate-spin" />
+                      : <Play className="h-3 w-3" />
+                    }
+                    Chạy
                   </Button>
                 )}
                 <Button
-                  size="sm"
-                  variant={p.isActive ? 'destructive' : 'outline'}
-                  disabled={toggling === p.id || triggering === p.id}
+                  size="sm" variant="ghost"
+                  disabled={isBusy}
                   onClick={() => toggleActive(p.id, p.isActive)}
-                  title={p.isActive ? 'Disable pipeline (emergency stop)' : 'Enable pipeline'}
+                  className={`h-7 text-xs gap-1 ${
+                    p.isActive
+                      ? 'text-red-600 hover:bg-red-50 hover:text-red-700'
+                      : 'text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700'
+                  }`}
                 >
                   {toggling === p.id
                     ? <RefreshCw className="h-3 w-3 animate-spin" />
-                    : p.isActive ? 'Disable' : 'Enable'
+                    : p.isActive ? <Pause className="h-3 w-3" /> : <Play className="h-3 w-3" />
                   }
+                  {p.isActive ? 'Pause' : 'Resume'}
                 </Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-}
-
-function WarehouseTab({
-  status, jobs,
-}: { status: WarehouseStatus | null; jobs: SyncJob[] }) {
-  const syncStatusColor: Record<string, string> = {
-    IDLE:      'bg-gray-100 text-gray-700',
-    RUNNING:   'bg-blue-100 text-blue-800',
-    COMPLETED: 'bg-green-100 text-green-800',
-    FAILED:    'bg-red-100 text-red-800',
-  };
-
-  return (
-    <div className="space-y-6">
-      {status && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <div className="rounded border p-3">
-            <p className="text-xs text-muted-foreground">Tổng sync job</p>
-            <p className="text-xl font-bold mt-1">{status.totalActive}</p>
-          </div>
-          <div className="rounded border p-3">
-            <p className="text-xs text-muted-foreground">Đang chạy</p>
-            <p className={`text-xl font-bold mt-1 ${status.running > 0 ? 'text-blue-600' : ''}`}>
-              {status.running}
-            </p>
-          </div>
-          <div className="rounded border p-3">
-            <p className="text-xs text-muted-foreground">Lỗi</p>
-            <p className={`text-xl font-bold mt-1 ${status.failed > 0 ? 'text-red-600' : 'text-green-600'}`}>
-              {status.failed}
-            </p>
-          </div>
-          <div className="rounded border p-3">
-            <p className="text-xs text-muted-foreground">Stale (≥2h)</p>
-            <p className={`text-xl font-bold mt-1 ${status.staleCount > 0 ? 'text-yellow-600' : ''}`}>
-              {status.staleCount}
-            </p>
-          </div>
-        </div>
-      )}
-
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b text-left text-muted-foreground">
-              <th className="pb-2 pr-4">Bảng nguồn (PG)</th>
-              <th className="pb-2 pr-4">Dataset đích (CH)</th>
-              <th className="pb-2 pr-4">Mode</th>
-              <th className="pb-2 pr-4">Trạng thái</th>
-              <th className="pb-2 pr-4">Sync lần cuối</th>
-              <th className="pb-2">Rows</th>
-            </tr>
-          </thead>
-          <tbody>
-            {jobs.length === 0 && (
-              <tr>
-                <td colSpan={6} className="py-6 text-center text-muted-foreground">
-                  Chưa có sync job nào
-                </td>
-              </tr>
-            )}
-            {jobs.map((j) => (
-              <tr key={j.id} className={`border-b last:border-0 ${!j.isActive ? 'opacity-50' : ''}`}>
-                <td className="py-2 pr-4 font-medium font-mono text-xs">{j.sourceTable}</td>
-                <td className="py-2 pr-4 text-muted-foreground font-mono text-xs">{j.targetDataset}</td>
-                <td className="py-2 pr-4">
-                  <span className="text-xs px-1.5 py-0.5 rounded bg-slate-100 text-slate-700">{j.syncMode}</span>
-                </td>
-                <td className="py-2 pr-4">
-                  <span className={`inline-flex px-2 py-0.5 rounded text-xs font-medium ${syncStatusColor[j.status] ?? 'bg-gray-100 text-gray-700'}`}>
-                    {j.status}
-                  </span>
-                  {j.errorMessage && (
-                    <p className="text-xs text-red-600 mt-0.5 max-w-[160px] truncate" title={j.errorMessage}>
-                      {j.errorMessage}
-                    </p>
-                  )}
-                </td>
-                <td className="py-2 pr-4 text-muted-foreground text-xs">
-                  {j.lastSyncAt ? new Date(j.lastSyncAt).toLocaleString('vi-VN') : '—'}
-                  {j.lastSyncDurationMs && (
-                    <span className="ml-1 text-muted-foreground">
-                      ({(j.lastSyncDurationMs / 1000).toFixed(1)}s)
-                    </span>
-                  )}
-                </td>
-                <td className="py-2 text-muted-foreground">
-                  {j.lastSyncRowCount?.toLocaleString() ?? '—'}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
 }
 
-function HealthTab({ snapshot }: { snapshot: HealthSnapshot | null }) {
-  const levelBorder: Record<HealthLevel, string> = {
-    OK:       'border-green-200 bg-green-50',
-    WARNING:  'border-yellow-200 bg-yellow-50',
-    CRITICAL: 'border-red-200 bg-red-50',
-    UNKNOWN:  'border-gray-200 bg-gray-50',
-  };
+// ─── Warehouse Tab ────────────────────────────────────────────────────────────
 
-  const valueColor: Record<HealthLevel, string> = {
-    OK:       'text-green-700',
-    WARNING:  'text-yellow-700',
-    CRITICAL: 'text-red-700',
-    UNKNOWN:  'text-gray-500',
+function WarehouseTab({
+  status, jobs,
+}: { status: WarehouseStatus | null; jobs: SyncJob[] }) {
+  const SYNC_STATUS_STYLES: Record<string, { bg: string; text: string; dot: string }> = {
+    IDLE:      { bg: 'bg-slate-100',   text: 'text-slate-600',   dot: 'bg-slate-400'   },
+    RUNNING:   { bg: 'bg-blue-100',    text: 'text-blue-800',    dot: 'bg-blue-500'    },
+    COMPLETED: { bg: 'bg-emerald-100', text: 'text-emerald-800', dot: 'bg-emerald-500' },
+    FAILED:    { bg: 'bg-red-100',     text: 'text-red-800',     dot: 'bg-red-500'     },
   };
-
-  if (!snapshot) {
-    return <p className="text-muted-foreground text-sm py-6 text-center">Đang tải health metrics...</p>;
-  }
 
   return (
-    <div className="space-y-4">
-      {/* Overall */}
-      <div className={`flex items-center gap-3 rounded border px-4 py-3 ${levelBorder[snapshot.overall]}`}>
-        <Heart className={`h-5 w-5 ${valueColor[snapshot.overall]}`} />
-        <div>
-          <p className="text-sm font-semibold">Tổng quan hệ thống</p>
-          <div className="flex items-center gap-2 mt-0.5">
-            <HealthLevelBadge level={snapshot.overall} />
-            <span className="text-xs text-muted-foreground">
+    <div className="space-y-5">
+      {status && (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {[
+            { label: 'Tổng sync jobs',  value: status.totalActive, color: 'text-slate-800' },
+            { label: 'Đang chạy',       value: status.running,     color: status.running > 0 ? 'text-blue-600' : 'text-slate-800' },
+            { label: 'Lỗi',            value: status.failed,      color: status.failed > 0  ? 'text-red-600'  : 'text-emerald-600' },
+            { label: 'Stale ≥ 2h',     value: status.staleCount,  color: status.staleCount > 0 ? 'text-amber-600' : 'text-slate-800' },
+          ].map((item) => (
+            <div key={item.label} className="rounded-xl border bg-white px-4 py-3">
+              <p className="text-xs text-slate-400 font-medium">{item.label}</p>
+              <p className={`text-2xl font-bold mt-1 ${item.color}`}>{item.value}</p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="space-y-2">
+        {jobs.length === 0 && (
+          <div className="text-center py-12 text-slate-400">
+            <Database className="h-10 w-10 mx-auto mb-2 opacity-40" />
+            <p className="text-sm">Chưa có sync job nào</p>
+          </div>
+        )}
+        {jobs.map((j) => {
+          const s = SYNC_STATUS_STYLES[j.status] ?? { bg: 'bg-slate-100', text: 'text-slate-600', dot: 'bg-slate-400' };
+          return (
+            <div
+              key={j.id}
+              className={`rounded-xl border px-4 py-3 ${j.isActive ? 'bg-white' : 'bg-slate-50/60 opacity-60'}`}
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="font-mono text-xs font-semibold text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded">
+                      {j.sourceTable}
+                    </span>
+                    <span className="text-slate-400 text-xs">→</span>
+                    <span className="font-mono text-xs text-violet-700 bg-violet-50 px-1.5 py-0.5 rounded">
+                      {j.targetDataset}
+                    </span>
+                    <span className="text-xs px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">{j.syncMode}</span>
+                    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${s.bg} ${s.text}`}>
+                      <span className={`h-1.5 w-1.5 rounded-full ${s.dot} ${j.status === 'RUNNING' ? 'animate-pulse' : ''}`} />
+                      {j.status}
+                    </span>
+                  </div>
+                  {j.errorMessage && (
+                    <p className="text-xs text-red-600 mt-1.5 bg-red-50 px-2 py-1 rounded">
+                      {j.errorMessage}
+                    </p>
+                  )}
+                </div>
+                <div className="text-right shrink-0 text-xs text-slate-400">
+                  {j.lastSyncAt && (
+                    <p>{new Date(j.lastSyncAt).toLocaleString('vi-VN')}</p>
+                  )}
+                  <div className="flex items-center justify-end gap-3 mt-0.5">
+                    {j.lastSyncRowCount != null && (
+                      <span className="text-slate-600 font-medium">
+                        {j.lastSyncRowCount.toLocaleString()} rows
+                      </span>
+                    )}
+                    {j.lastSyncDurationMs && (
+                      <span>{(j.lastSyncDurationMs / 1000).toFixed(1)}s</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ─── Health Tab ───────────────────────────────────────────────────────────────
+
+function HealthTab({ snapshot }: { snapshot: HealthSnapshot | null }) {
+  if (!snapshot) {
+    return (
+      <div className="text-center py-12 text-slate-400">
+        <Activity className="h-10 w-10 mx-auto mb-2 opacity-40 animate-pulse" />
+        <p className="text-sm">Đang tải health metrics...</p>
+      </div>
+    );
+  }
+
+  const overallStyle = HEALTH_STYLES[snapshot.overall];
+
+  return (
+    <div className="space-y-5">
+      <div className={`flex items-center gap-4 rounded-xl border-2 px-5 py-4 ${overallStyle.card}`}>
+        <Heart className={`h-6 w-6 ${overallStyle.icon} flex-shrink-0`} />
+        <div className="flex-1">
+          <p className="text-sm font-semibold text-slate-700">Tổng quan hệ thống</p>
+          <div className="flex items-center gap-3 mt-1">
+            <HealthBadge level={snapshot.overall} />
+            <span className="text-xs text-slate-400">
               Cập nhật: {new Date(snapshot.checkedAt).toLocaleString('vi-VN')}
             </span>
           </div>
         </div>
       </div>
 
-      {/* Metric cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {snapshot.metrics.map((m) => (
-          <div key={m.metricName} className={`rounded border p-4 ${levelBorder[m.level]}`}>
-            <div className="flex items-center justify-between mb-2">
-              <p className="text-sm font-medium">{m.displayName}</p>
-              <HealthLevelBadge level={m.level} />
-            </div>
-            <p className={`text-2xl font-bold ${valueColor[m.level]}`}>
-              {m.value !== null ? `${m.value}${m.unit ?? ''}` : '—'}
-            </p>
-            {m.threshold && (
-              <p className="text-xs text-muted-foreground mt-1">
-                Warning ≥ {m.threshold.warning}{m.unit ?? ''} · Critical ≥ {m.threshold.critical}{m.unit ?? ''}
+        {snapshot.metrics.map((m) => {
+          const s = HEALTH_STYLES[m.level];
+          const pct = m.threshold && m.value !== null
+            ? Math.min(100, (m.value / m.threshold.critical) * 100)
+            : null;
+
+          return (
+            <div key={m.metricName} className={`rounded-xl border-2 p-4 ${s.card}`}>
+              <div className="flex items-center justify-between mb-3">
+                <p className="text-sm font-semibold text-slate-700">{m.displayName}</p>
+                <HealthBadge level={m.level} />
+              </div>
+              <p className={`text-3xl font-bold ${s.text}`}>
+                {m.value !== null ? `${m.value}${m.unit ?? ''}` : '—'}
               </p>
-            )}
-            {m.value === null && (
-              <p className="text-xs text-muted-foreground mt-1">Không lấy được metric</p>
-            )}
+              {pct !== null && (
+                <div className="mt-3">
+                  <div className="h-1.5 rounded-full bg-white/60 overflow-hidden">
+                    <div
+                      className={`h-full rounded-full transition-all ${
+                        m.level === 'CRITICAL' ? 'bg-red-500' :
+                        m.level === 'WARNING'  ? 'bg-amber-500' : 'bg-emerald-500'
+                      }`}
+                      style={{ width: `${pct}%` }}
+                    />
+                  </div>
+                </div>
+              )}
+              {m.threshold && (
+                <p className="text-xs text-slate-400 mt-2">
+                  ⚠️ Warning ≥ {m.threshold.warning}{m.unit ?? ''} · 🔴 Critical ≥ {m.threshold.critical}{m.unit ?? ''}
+                </p>
+              )}
+              {m.value === null && (
+                <p className="text-xs text-slate-400 mt-2">Không lấy được metric</p>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ─── Alerts Tab ───────────────────────────────────────────────────────────────
+
+function AlertsTab({
+  alerts, summary, onRefresh,
+}: { alerts: InfraAlert[]; summary: AlertSummary | null; onRefresh: () => void }) {
+  const [acking, setAcking] = useState<string | null>(null);
+
+  const acknowledge = async (alertId: string) => {
+    setAcking(alertId);
+    try {
+      const res = await fetch(`/api/infrastructure/alerts/${alertId}/ack`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'acknowledge' }),
+      });
+      const data = await res.json();
+      if (!data.success) alert(data.error); else onRefresh();
+    } finally { setAcking(null); }
+  };
+
+  const resolve = async (alertId: string) => {
+    setAcking(alertId);
+    try {
+      const res = await fetch(`/api/infrastructure/alerts/${alertId}/ack`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'resolve' }),
+      });
+      const data = await res.json();
+      if (!data.success) alert(data.error); else onRefresh();
+    } finally { setAcking(null); }
+  };
+
+  return (
+    <div className="space-y-5">
+      {summary && (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {[
+            { label: 'Đang active',      value: summary.active,       color: summary.active > 0 ? 'text-red-600' : 'text-emerald-600' },
+            { label: 'Acknowledged',     value: summary.acknowledged, color: 'text-amber-600' },
+            { label: 'Critical',         value: summary.critical,     color: summary.critical > 0 ? 'text-red-700' : 'text-slate-400' },
+            { label: 'Warning',          value: summary.warning,      color: summary.warning > 0  ? 'text-amber-700' : 'text-slate-400' },
+          ].map((item) => (
+            <div key={item.label} className="rounded-xl border bg-white px-4 py-3">
+              <p className="text-xs text-slate-400 font-medium">{item.label}</p>
+              <p className={`text-2xl font-bold mt-1 ${item.color}`}>{item.value}</p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {alerts.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-14 text-slate-400 gap-2">
+          <div className="p-4 rounded-full bg-emerald-50">
+            <CheckCircle2 className="h-8 w-8 text-emerald-500" />
+          </div>
+          <p className="text-sm font-medium text-slate-600">Không có cảnh báo active</p>
+          <p className="text-xs">Hệ thống đang hoạt động bình thường</p>
+        </div>
+      ) : (
+        <div className="space-y-2">
+          {alerts.map((a) => {
+            const sv = SEVERITY_STYLES[a.severity] ?? { bg: 'bg-slate-100', text: 'text-slate-700', border: 'border-slate-200' };
+            return (
+              <div
+                key={a.id}
+                className={`rounded-xl border px-4 py-3 flex items-start justify-between gap-4 bg-white ${
+                  a.status === 'RESOLVED' ? 'opacity-60' : ''
+                }`}
+              >
+                <div className="flex items-start gap-3 flex-1 min-w-0">
+                  <div className={`mt-0.5 flex-shrink-0 p-1.5 rounded-lg ${sv.bg}`}>
+                    <AlertTriangle className={`h-3.5 w-3.5 ${sv.text}`} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap mb-1">
+                      <span className={`text-xs px-2 py-0.5 rounded-full font-semibold border ${sv.bg} ${sv.text} ${sv.border}`}>
+                        {a.severity}
+                      </span>
+                      <StatusBadge status={a.status} />
+                      {a.service && (
+                        <span className="text-xs text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">
+                          {a.service.name}
+                        </span>
+                      )}
+                    </div>
+                    <p className="font-semibold text-sm text-slate-800">{a.title}</p>
+                    <p className="text-xs text-slate-500 mt-0.5 line-clamp-2">{a.message}</p>
+                    <p className="text-xs text-slate-400 mt-1.5">
+                      {new Date(a.triggeredAt).toLocaleString('vi-VN')}
+                      {a.acknowledgedAt && (
+                        <span className="ml-2">· Acked {new Date(a.acknowledgedAt).toLocaleString('vi-VN')}</span>
+                      )}
+                    </p>
+                  </div>
+                </div>
+                {a.status !== 'RESOLVED' && (
+                  <div className="flex gap-2 shrink-0">
+                    {a.status === 'ACTIVE' && (
+                      <Button
+                        size="sm" variant="outline"
+                        disabled={acking === a.id}
+                        onClick={() => acknowledge(a.id)}
+                        className="h-7 text-xs border-amber-200 text-amber-700 hover:bg-amber-50"
+                      >
+                        {acking === a.id ? <RefreshCw className="h-3 w-3 animate-spin" /> : 'Ack'}
+                      </Button>
+                    )}
+                    <Button
+                      size="sm" variant="outline"
+                      disabled={acking === a.id}
+                      onClick={() => resolve(a.id)}
+                      className="h-7 text-xs border-emerald-200 text-emerald-700 hover:bg-emerald-50"
+                    >
+                      {acking === a.id ? <RefreshCw className="h-3 w-3 animate-spin" /> : 'Resolve'}
+                    </Button>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Data Quality Tab ─────────────────────────────────────────────────────────
+
+function DataQualityTab({ summary }: { summary: DQTableSummary[] }) {
+  const total    = summary.length;
+  const passing  = summary.filter((s) => s.failingRules === 0).length;
+  const failing  = total - passing;
+
+  return (
+    <div className="space-y-5">
+      {total > 0 && (
+        <div className="flex items-center gap-4 p-4 rounded-xl bg-slate-50 border">
+          <div className="flex-1">
+            <div className="flex justify-between text-xs text-slate-500 mb-1.5">
+              <span>Bảng đạt chuẩn</span>
+              <span>{passing}/{total}</span>
+            </div>
+            <div className="h-2 rounded-full bg-slate-200 overflow-hidden">
+              <div
+                className="h-full rounded-full bg-emerald-500 transition-all"
+                style={{ width: total ? `${(passing / total) * 100}%` : '0%' }}
+              />
+            </div>
+          </div>
+          <div className="flex gap-4 text-sm shrink-0">
+            <span className="text-emerald-600 font-semibold">{passing} OK</span>
+            {failing > 0 && <span className="text-red-600 font-semibold">{failing} lỗi</span>}
+          </div>
+        </div>
+      )}
+
+      {summary.length === 0 && (
+        <div className="text-center py-12 text-slate-400">
+          <Database className="h-10 w-10 mx-auto mb-2 opacity-40" />
+          <p className="text-sm">Chưa có data quality rules</p>
+        </div>
+      )}
+      <div className="space-y-2">
+        {summary.map((s) => (
+          <div
+            key={s.targetTable}
+            className={`flex items-center justify-between rounded-xl border px-4 py-3 ${
+              s.failingRules > 0 ? 'bg-red-50/60 border-red-200' : 'bg-white'
+            }`}
+          >
+            <div>
+              <p className="font-semibold text-sm text-slate-800 font-mono">{s.targetTable}</p>
+              <p className="text-xs text-slate-400 mt-0.5">
+                {s.totalRules} rules · Kiểm tra:{' '}
+                {s.lastCheckedAt ? new Date(s.lastCheckedAt).toLocaleString('vi-VN') : 'Chưa có'}
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              {s.failingRules === 0 ? (
+                <div className="flex items-center gap-1.5 text-emerald-600">
+                  <CheckCircle2 className="h-4 w-4" />
+                  <span className="text-xs font-semibold">Đạt</span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-1.5 text-red-600">
+                  <XCircle className="h-4 w-4" />
+                  <span className="text-xs font-semibold">{s.failingRules} rule lỗi</span>
+                </div>
+              )}
+            </div>
           </div>
         ))}
       </div>
@@ -392,225 +714,81 @@ function HealthTab({ snapshot }: { snapshot: HealthSnapshot | null }) {
   );
 }
 
-function AlertsTab({
-  alerts, summary, onRefresh,
-}: { alerts: InfraAlert[]; summary: AlertSummary | null; onRefresh: () => void }) {
-  const [acking, setAcking] = useState<string | null>(null);
+// ─── Backups Tab ──────────────────────────────────────────────────────────────
 
-  const severityColor: Record<string, string> = {
-    CRITICAL: 'bg-red-100 text-red-800',
-    ERROR:    'bg-orange-100 text-orange-800',
-    WARNING:  'bg-yellow-100 text-yellow-800',
-    INFO:     'bg-blue-100 text-blue-800',
-  };
-
-  const acknowledge = async (alertId: string) => {
-    setAcking(alertId);
-    try {
-      const res  = await fetch(`/api/infrastructure/alerts/${alertId}/ack`, {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ action: 'acknowledge' }),
-      });
-      const data = await res.json();
-      if (!data.success) alert(data.error);
-      else onRefresh();
-    } finally {
-      setAcking(null);
-    }
-  };
-
-  const resolve = async (alertId: string) => {
-    setAcking(alertId);
-    try {
-      const res  = await fetch(`/api/infrastructure/alerts/${alertId}/ack`, {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ action: 'resolve' }),
-      });
-      const data = await res.json();
-      if (!data.success) alert(data.error);
-      else onRefresh();
-    } finally {
-      setAcking(null);
-    }
-  };
-
-  return (
-    <div className="space-y-4">
-      {/* Summary */}
-      {summary && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <div className="rounded border p-3">
-            <p className="text-xs text-muted-foreground">Active</p>
-            <p className={`text-xl font-bold mt-1 ${summary.active > 0 ? 'text-red-600' : 'text-green-600'}`}>
-              {summary.active}
-            </p>
-          </div>
-          <div className="rounded border p-3">
-            <p className="text-xs text-muted-foreground">Đã acknowledge</p>
-            <p className="text-xl font-bold mt-1 text-yellow-600">{summary.acknowledged}</p>
-          </div>
-          <div className="rounded border p-3">
-            <p className="text-xs text-muted-foreground">Critical</p>
-            <p className={`text-xl font-bold mt-1 ${summary.critical > 0 ? 'text-red-700' : ''}`}>
-              {summary.critical}
-            </p>
-          </div>
-          <div className="rounded border p-3">
-            <p className="text-xs text-muted-foreground">Warning</p>
-            <p className={`text-xl font-bold mt-1 ${summary.warning > 0 ? 'text-yellow-700' : ''}`}>
-              {summary.warning}
-            </p>
-          </div>
-        </div>
-      )}
-
-      {/* Alert list */}
-      {alerts.length === 0 ? (
-        <div className="flex items-center justify-center py-10 text-muted-foreground gap-2">
-          <CheckCircle2 className="h-5 w-5 text-green-600" />
-          <span>Không có cảnh báo nào đang active</span>
-        </div>
-      ) : (
-        <div className="space-y-2">
-          {alerts.map((a) => (
-            <div key={a.id} className="rounded border px-4 py-3 flex items-start justify-between gap-4">
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap mb-1">
-                  <span className={`text-xs px-2 py-0.5 rounded font-medium ${severityColor[a.severity] ?? 'bg-gray-100 text-gray-700'}`}>
-                    {a.severity}
-                  </span>
-                  <StatusBadge status={a.status} />
-                  {a.service && (
-                    <span className="text-xs text-muted-foreground">{a.service.name}</span>
-                  )}
-                </div>
-                <p className="font-medium text-sm">{a.title}</p>
-                <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{a.message}</p>
-                <p className="text-xs text-muted-foreground mt-1">
-                  {new Date(a.triggeredAt).toLocaleString('vi-VN')}
-                  {a.acknowledgedAt && (
-                    <span className="ml-2">· Acknowledged {new Date(a.acknowledgedAt).toLocaleString('vi-VN')}</span>
-                  )}
-                </p>
-              </div>
-              {a.status !== 'RESOLVED' && (
-                <div className="flex gap-2 shrink-0">
-                  {a.status === 'ACTIVE' && (
-                    <Button
-                      size="sm" variant="outline"
-                      disabled={acking === a.id}
-                      onClick={() => acknowledge(a.id)}
-                    >
-                      {acking === a.id ? <RefreshCw className="h-3 w-3 animate-spin" /> : 'Ack'}
-                    </Button>
-                  )}
-                  <Button
-                    size="sm" variant="outline"
-                    disabled={acking === a.id}
-                    onClick={() => resolve(a.id)}
-                    className="text-green-700 hover:text-green-800"
-                  >
-                    {acking === a.id ? <RefreshCw className="h-3 w-3 animate-spin" /> : 'Resolve'}
-                  </Button>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
-function DataQualityTab({ summary }: { summary: DQTableSummary[] }) {
-  return (
-    <div className="space-y-3">
-      {summary.length === 0 && (
-        <p className="text-center text-muted-foreground py-6">Chưa có data quality rules</p>
-      )}
-      {summary.map((s) => (
-        <div key={s.targetTable} className="flex items-center justify-between rounded border px-4 py-3">
-          <div>
-            <p className="font-medium text-sm">{s.targetTable}</p>
-            <p className="text-xs text-muted-foreground">
-              {s.totalRules} rules · Kiểm tra lần cuối:{' '}
-              {s.lastCheckedAt ? new Date(s.lastCheckedAt).toLocaleString('vi-VN') : 'Chưa có'}
-            </p>
-          </div>
-          <div className="flex items-center gap-2">
-            {s.failingRules === 0
-              ? <CheckCircle2 className="h-4 w-4 text-green-600" />
-              : <XCircle      className="h-4 w-4 text-red-600" />
-            }
-            <span className={`text-sm font-medium ${s.failingRules > 0 ? 'text-red-600' : 'text-green-600'}`}>
-              {s.failingRules === 0 ? 'OK' : `${s.failingRules} rule lỗi`}
-            </span>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
+const BACKUP_TYPE_LABELS: Record<string, string> = {
+  POSTGRESQL_FULL:        'PG Full',
+  POSTGRESQL_INCREMENTAL: 'PG Incr.',
+  MINIO_CONFIG:           'MinIO Cfg',
+  AIRFLOW_DAGS:           'Airflow DAGs',
+  GRAFANA:                'Grafana',
+};
 
 function BackupsTab({
   jobs, freshness, restoreJobs,
 }: { jobs: BackupJob[]; freshness: BackupFreshness; restoreJobs: RestoreJob[] }) {
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-3 rounded border px-4 py-3 bg-muted/30">
-        <Clock className="h-5 w-5 text-muted-foreground" />
+      <div className="flex items-center gap-4 rounded-xl border bg-slate-50/60 px-5 py-4">
+        <div className="p-2.5 rounded-xl bg-blue-100">
+          <Clock className="h-5 w-5 text-blue-600" />
+        </div>
         <div>
-          <p className="text-sm font-medium">Backup gần nhất (PostgreSQL Full)</p>
-          <FreshnessAlert minutes={freshness.freshnessMinutes} />
+          <p className="text-xs font-medium text-slate-500">Backup gần nhất (PostgreSQL Full)</p>
+          <div className="mt-1">
+            <FreshnessIndicator minutes={freshness.freshnessMinutes} />
+          </div>
         </div>
       </div>
 
       <div>
-        <h4 className="text-sm font-semibold mb-2">Backup Jobs gần đây</h4>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b text-left text-muted-foreground">
-                <th className="pb-2 pr-4">Loại</th>
-                <th className="pb-2 pr-4">Trạng thái</th>
-                <th className="pb-2 pr-4">Bắt đầu</th>
-                <th className="pb-2">Kích thước</th>
-              </tr>
-            </thead>
-            <tbody>
-              {jobs.length === 0 && (
-                <tr><td colSpan={4} className="py-4 text-center text-muted-foreground">Chưa có backup job</td></tr>
-              )}
-              {jobs.map((j) => (
-                <tr key={j.id} className="border-b last:border-0">
-                  <td className="py-2 pr-4">{j.backupType}</td>
-                  <td className="py-2 pr-4"><StatusBadge status={j.status} /></td>
-                  <td className="py-2 pr-4 text-muted-foreground">
+        <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-3">Backup Jobs gần đây</p>
+        <div className="space-y-2">
+          {jobs.length === 0 && (
+            <div className="text-center py-8 text-slate-400 text-sm">Chưa có backup job</div>
+          )}
+          {jobs.map((j) => (
+            <div key={j.id} className="flex items-center justify-between rounded-xl border px-4 py-3 bg-white">
+              <div className="flex items-center gap-3">
+                <div className="p-1.5 rounded-lg bg-slate-100">
+                  <HardDrive className="h-3.5 w-3.5 text-slate-500" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-slate-700">
+                    {BACKUP_TYPE_LABELS[j.backupType] ?? j.backupType}
+                  </p>
+                  <p className="text-xs text-slate-400">
                     {j.startedAt ? new Date(j.startedAt).toLocaleString('vi-VN') : '—'}
-                  </td>
-                  <td className="py-2 text-muted-foreground">
-                    {j.sizeBytes ? `${(Number(j.sizeBytes) / 1024 / 1024).toFixed(1)} MB` : '—'}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                {j.sizeBytes && (
+                  <span className="text-xs text-slate-500">
+                    {(Number(j.sizeBytes) / 1024 / 1024 / 1024).toFixed(1)} GB
+                  </span>
+                )}
+                <StatusBadge status={j.status} />
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 
       {restoreJobs.length > 0 && (
         <div>
-          <h4 className="text-sm font-semibold mb-2">Restore Jobs</h4>
+          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-3">Restore Jobs</p>
           <div className="space-y-2">
             {restoreJobs.map((r) => (
-              <div key={r.id} className="flex items-center justify-between rounded border px-4 py-2 text-sm">
+              <div key={r.id} className="flex items-center justify-between rounded-xl border px-4 py-3 bg-white">
                 <div>
-                  <span className="font-medium">{r.targetEnvironment}</span>
-                  <span className="text-muted-foreground ml-2">← {r.backupJob.backupType}</span>
+                  <p className="text-sm font-medium text-slate-700">{r.targetEnvironment}</p>
+                  <p className="text-xs text-slate-400">
+                    ← {r.backupJob.backupType}
+                    {r.startedAt && <span> · {new Date(r.startedAt).toLocaleString('vi-VN')}</span>}
+                  </p>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex items-center gap-2">
                   <StatusBadge status={r.status} />
                   <StatusBadge status={r.verificationStatus} />
                 </div>
@@ -623,8 +801,15 @@ function BackupsTab({
   );
 }
 
+// ─── DR Tab ───────────────────────────────────────────────────────────────────
+
 function DRTab({ readiness }: { readiness: DRReadiness | null }) {
-  if (!readiness) return <p className="text-muted-foreground text-sm">Đang tải...</p>;
+  if (!readiness) return (
+    <div className="text-center py-12 text-slate-400">
+      <Shield className="h-10 w-10 mx-auto mb-2 opacity-40 animate-pulse" />
+      <p className="text-sm">Đang tải...</p>
+    </div>
+  );
 
   const rtoOk = readiness.rtoGap === null || readiness.rtoGap <= 0;
   const rpoOk = readiness.rpoGap === null || readiness.rpoGap <= 0;
@@ -632,17 +817,20 @@ function DRTab({ readiness }: { readiness: DRReadiness | null }) {
   return (
     <div className="space-y-4">
       <div className="grid grid-cols-2 gap-4">
-        <div className="rounded border p-4">
-          <p className="text-xs text-muted-foreground">DR Plans đang active</p>
-          <p className="text-2xl font-bold mt-1">{readiness.planCount}</p>
+        <div className="rounded-xl border bg-white px-4 py-4">
+          <p className="text-xs font-medium text-slate-400 uppercase tracking-wide">DR Plans Active</p>
+          <p className="text-3xl font-bold text-slate-800 mt-1">{readiness.planCount}</p>
         </div>
-        <div className="rounded border p-4">
-          <p className="text-xs text-muted-foreground">Kết quả diễn tập gần nhất</p>
-          {readiness.lastOutcome
-            ? <StatusBadge status={readiness.lastOutcome} />
-            : <p className="text-sm text-muted-foreground mt-1">Chưa diễn tập</p>}
+        <div className="rounded-xl border bg-white px-4 py-4">
+          <p className="text-xs font-medium text-slate-400 uppercase tracking-wide">Diễn tập gần nhất</p>
+          <div className="mt-2">
+            {readiness.lastOutcome
+              ? <StatusBadge status={readiness.lastOutcome} />
+              : <p className="text-sm text-slate-400">Chưa diễn tập</p>
+            }
+          </div>
           {readiness.lastExercisedAt && (
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-xs text-slate-400 mt-1">
               {new Date(readiness.lastExercisedAt).toLocaleDateString('vi-VN')}
             </p>
           )}
@@ -650,47 +838,112 @@ function DRTab({ readiness }: { readiness: DRReadiness | null }) {
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <div className={`rounded border p-4 ${rtoOk ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'}`}>
-          <p className="text-xs text-muted-foreground">RTO Gap</p>
-          <p className={`text-xl font-bold mt-1 ${rtoOk ? 'text-green-700' : 'text-red-700'}`}>
-            {readiness.rtoGap === null ? '—' : readiness.rtoGap > 0 ? `+${readiness.rtoGap} phút` : `${readiness.rtoGap} phút`}
+        <div className={`rounded-xl border-2 px-4 py-4 ${rtoOk ? 'border-emerald-200 bg-emerald-50/60' : 'border-red-200 bg-red-50/60'}`}>
+          <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">RTO Gap</p>
+          <p className={`text-2xl font-bold mt-1.5 ${rtoOk ? 'text-emerald-700' : 'text-red-700'}`}>
+            {readiness.rtoGap === null ? '—'
+              : readiness.rtoGap > 0 ? `+${readiness.rtoGap} min`
+              : `${Math.abs(readiness.rtoGap)} min buffer`}
           </p>
-          <p className="text-xs text-muted-foreground">{rtoOk ? 'Đạt mục tiêu' : 'Vượt mục tiêu'}</p>
+          <p className={`text-xs mt-1 font-medium ${rtoOk ? 'text-emerald-600' : 'text-red-600'}`}>
+            {rtoOk ? '✓ Đạt mục tiêu' : '✗ Vượt mục tiêu'}
+          </p>
         </div>
-        <div className={`rounded border p-4 ${rpoOk ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'}`}>
-          <p className="text-xs text-muted-foreground">RPO Gap</p>
-          <p className={`text-xl font-bold mt-1 ${rpoOk ? 'text-green-700' : 'text-red-700'}`}>
-            {readiness.rpoGap === null ? '—' : readiness.rpoGap > 0 ? `+${readiness.rpoGap} phút` : `${readiness.rpoGap} phút`}
+        <div className={`rounded-xl border-2 px-4 py-4 ${rpoOk ? 'border-emerald-200 bg-emerald-50/60' : 'border-red-200 bg-red-50/60'}`}>
+          <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">RPO Gap</p>
+          <p className={`text-2xl font-bold mt-1.5 ${rpoOk ? 'text-emerald-700' : 'text-red-700'}`}>
+            {readiness.rpoGap === null ? '—'
+              : readiness.rpoGap > 0 ? `+${readiness.rpoGap} min`
+              : `${Math.abs(readiness.rpoGap)} min buffer`}
           </p>
-          <p className="text-xs text-muted-foreground">{rpoOk ? 'Đạt mục tiêu' : 'Vượt mục tiêu'}</p>
+          <p className={`text-xs mt-1 font-medium ${rpoOk ? 'text-emerald-600' : 'text-red-600'}`}>
+            {rpoOk ? '✓ Đạt mục tiêu' : '✗ Vượt mục tiêu'}
+          </p>
         </div>
       </div>
     </div>
   );
 }
 
+// ─── Storage Tab ──────────────────────────────────────────────────────────────
+
 function StorageTab({ buckets }: { buckets: StorageBucket[] }) {
-  const tierColor: Record<string, string> = {
-    HOT:     'bg-orange-100 text-orange-800',
-    COLD:    'bg-blue-100 text-blue-800',
-    ARCHIVE: 'bg-gray-100 text-gray-700',
+  const grouped = {
+    HOT:     buckets.filter((b) => b.accessTier === 'HOT'),
+    COLD:    buckets.filter((b) => b.accessTier === 'COLD'),
+    ARCHIVE: buckets.filter((b) => b.accessTier === 'ARCHIVE'),
   };
+
+  return (
+    <div className="space-y-5">
+      {(['HOT', 'COLD', 'ARCHIVE'] as const).map((tier) => {
+        const list = grouped[tier];
+        if (!list.length) return null;
+        const s = TIER_STYLES[tier];
+        return (
+          <div key={tier}>
+            <div className="flex items-center gap-2 mb-2">
+              <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${s.bg} ${s.text}`}>
+                {s.icon} {tier} — {list.length} buckets
+              </span>
+            </div>
+            <div className="space-y-2">
+              {list.map((b) => (
+                <div key={b.id} className="flex items-center justify-between rounded-xl border px-4 py-3 bg-white">
+                  <div>
+                    <p className="text-sm font-semibold text-slate-800 font-mono">{b.bucketName}</p>
+                    <p className="text-xs text-slate-400 mt-0.5">{b.moduleDomain}</p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs text-slate-400">
+                      Retention: {b.retentionDays ? `${b.retentionDays}d` : '∞'}
+                    </span>
+                    {!b.isActive && <Badge variant="secondary" className="text-xs">Inactive</Badge>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+      {buckets.length === 0 && (
+        <div className="text-center py-12 text-slate-400">
+          <Archive className="h-10 w-10 mx-auto mb-2 opacity-40" />
+          <p className="text-sm">Chưa có storage bucket nào</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Thresholds Tab ───────────────────────────────────────────────────────────
+
+function ThresholdsTab({ policies }: { policies: ThresholdPolicy[] }) {
   return (
     <div className="space-y-2">
-      {buckets.map((b) => (
-        <div key={b.id} className="flex items-center justify-between rounded border px-4 py-3">
+      {policies.map((p) => (
+        <div key={p.id} className="flex items-center justify-between rounded-xl border px-4 py-3 bg-white">
           <div>
-            <p className="font-medium text-sm">{b.bucketName}</p>
-            <p className="text-xs text-muted-foreground">{b.moduleDomain}</p>
+            <p className="text-sm font-semibold text-slate-800">{p.displayName}</p>
+            <p className="text-xs text-slate-400 font-mono">{p.metricName}</p>
+            {p.autoAction && (
+              <p className="text-xs text-slate-500 mt-1 max-w-sm">{p.autoAction}</p>
+            )}
           </div>
-          <div className="flex items-center gap-3">
-            <span className={`text-xs px-2 py-0.5 rounded font-medium ${tierColor[b.accessTier] ?? 'bg-gray-100'}`}>
-              {b.accessTier}
-            </span>
-            <span className="text-xs text-muted-foreground">
-              {b.retentionDays ? `${b.retentionDays}d` : 'Vĩnh viễn'}
-            </span>
-            {!b.isActive && <Badge variant="secondary">Inactive</Badge>}
+          <div className="flex items-center gap-3 shrink-0">
+            <div className="text-center">
+              <p className="text-xs text-slate-400">Warning</p>
+              <p className="text-sm font-bold text-amber-600">
+                {p.warningThreshold}{p.unit ?? ''}
+              </p>
+            </div>
+            <div className="h-8 w-px bg-slate-200" />
+            <div className="text-center">
+              <p className="text-xs text-slate-400">Critical</p>
+              <p className="text-sm font-bold text-red-600">
+                {p.criticalThreshold}{p.unit ?? ''}
+              </p>
+            </div>
           </div>
         </div>
       ))}
@@ -698,41 +951,7 @@ function StorageTab({ buckets }: { buckets: StorageBucket[] }) {
   );
 }
 
-function ThresholdsTab({ policies }: { policies: ThresholdPolicy[] }) {
-  return (
-    <div className="overflow-x-auto">
-      <table className="w-full text-sm">
-        <thead>
-          <tr className="border-b text-left text-muted-foreground">
-            <th className="pb-2 pr-4">Metric</th>
-            <th className="pb-2 pr-4">Warning</th>
-            <th className="pb-2 pr-4">Critical</th>
-            <th className="pb-2">Hành động tự động</th>
-          </tr>
-        </thead>
-        <tbody>
-          {policies.map((p) => (
-            <tr key={p.id} className="border-b last:border-0">
-              <td className="py-2 pr-4">
-                <p className="font-medium">{p.displayName}</p>
-                <p className="text-xs text-muted-foreground">{p.metricName}</p>
-              </td>
-              <td className="py-2 pr-4 text-yellow-700 font-medium">
-                {p.warningThreshold}{p.unit ?? ''}
-              </td>
-              <td className="py-2 pr-4 text-red-700 font-medium">
-                {p.criticalThreshold}{p.unit ?? ''}
-              </td>
-              <td className="py-2 text-muted-foreground text-xs">{p.autoAction ?? '—'}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-}
-
-// ─── Main page ────────────────────────────────────────────────────────────────
+// ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function InfrastructureDashboardPage() {
   const [pipelines,       setPipelines]       = useState<PipelineSummary[]>([]);
@@ -750,6 +969,7 @@ export default function InfrastructureDashboardPage() {
   const [alertSummary,    setAlertSummary]    = useState<AlertSummary | null>(null);
   const [isLoading,       setIsLoading]       = useState(true);
   const [error,           setError]           = useState<string | null>(null);
+  const [lastRefreshed,   setLastRefreshed]   = useState<Date | null>(null);
 
   const fetchAll = useCallback(async () => {
     setIsLoading(true);
@@ -783,19 +1003,20 @@ export default function InfrastructureDashboardPage() {
         hlRes.json(), alRes.json(), alSumRes.json(),
       ]);
 
-      if (pl.success)    setPipelines(pl.data);
-      if (dq.success)    setDqSummary(dq.data);
-      if (bk.success)    setBackupJobs(bk.data.jobs);
-      if (rs.success)    setRestoreJobs(rs.data.jobs);
-      if (fr.success)    setFreshness(fr.data);
-      if (dr.success)    setDrReadiness(dr.data);
-      if (st.success)    setBuckets(st.data);
-      if (th.success)    setThresholds(th.data);
-      if (whSt.success)  setWarehouseStatus(whSt.data);
+      if (pl.success)     setPipelines(pl.data);
+      if (dq.success)     setDqSummary(dq.data);
+      if (bk.success)     setBackupJobs(bk.data.jobs);
+      if (rs.success)     setRestoreJobs(rs.data.jobs);
+      if (fr.success)     setFreshness(fr.data);
+      if (dr.success)     setDrReadiness(dr.data);
+      if (st.success)     setBuckets(st.data);
+      if (th.success)     setThresholds(th.data);
+      if (whSt.success)   setWarehouseStatus(whSt.data);
       if (whJobs.success) setWarehouseJobs(whJobs.data.jobs);
-      if (hl.success)    setHealthSnapshot(hl.data);
-      if (al.success)    setAlerts(al.data.alerts);
-      if (alSum.success) setAlertSummary(alSum.data);
+      if (hl.success)     setHealthSnapshot(hl.data);
+      if (al.success)     setAlerts(al.data.alerts);
+      if (alSum.success)  setAlertSummary(alSum.data);
+      setLastRefreshed(new Date());
     } catch {
       setError('Không thể tải dữ liệu hạ tầng');
     } finally {
@@ -806,211 +1027,212 @@ export default function InfrastructureDashboardPage() {
   useEffect(() => { fetchAll(); }, [fetchAll]);
 
   const failingDQTables  = dqSummary.filter((s) => s.failingRules > 0).length;
-  const failedBackups    = backupJobs.filter((j) => j.status === 'FAILED').length;
   const activeAlertCount = alertSummary?.active ?? 0;
+  const criticalCount    = alertSummary?.critical ?? 0;
+
+  const overallHealth = healthSnapshot?.overall ?? 'UNKNOWN';
+  const healthColorMap: Record<HealthLevel, string> = {
+    OK:       'bg-emerald-500',
+    WARNING:  'bg-amber-500',
+    CRITICAL: 'bg-red-500',
+    UNKNOWN:  'bg-slate-400',
+  };
 
   return (
-    <div className="space-y-6 p-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6 p-6 max-w-[1400px] mx-auto">
+      {/* Header */}
+      <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Hạ tầng & Dữ liệu</h1>
-          <p className="text-muted-foreground text-sm mt-1">M12 – Observability, Pipeline, Backup & DR</p>
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-xl bg-gradient-to-br from-slate-700 to-slate-900">
+              <Server className="h-5 w-5 text-white" />
+            </div>
+            <div>
+              <h1 className="text-xl font-bold text-slate-800">Hạ tầng & Dữ liệu</h1>
+              <p className="text-xs text-slate-400 mt-0.5">M12 — Observability · Pipeline · Backup · Disaster Recovery</p>
+            </div>
+          </div>
         </div>
-        <Button variant="outline" size="sm" onClick={fetchAll} disabled={isLoading}>
-          <RefreshCw className={`h-4 w-4 mr-1 ${isLoading ? 'animate-spin' : ''}`} />
-          Làm mới
-        </Button>
+        <div className="flex items-center gap-3">
+          {lastRefreshed && (
+            <p className="text-xs text-slate-400 hidden md:block">
+              Cập nhật: {lastRefreshed.toLocaleTimeString('vi-VN')}
+            </p>
+          )}
+          <Button
+            variant="outline" size="sm"
+            onClick={fetchAll}
+            disabled={isLoading}
+            className="gap-1.5 border-slate-200 hover:border-slate-300"
+          >
+            <RefreshCw className={`h-3.5 w-3.5 ${isLoading ? 'animate-spin' : ''}`} />
+            Làm mới
+          </Button>
+        </div>
       </div>
 
       {error && (
-        <div className="rounded border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 flex items-center gap-2">
-          <AlertTriangle className="h-4 w-4" />{error}
+        <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 flex items-center gap-2">
+          <AlertTriangle className="h-4 w-4 flex-shrink-0" />{error}
         </div>
       )}
 
-      {/* KPI row */}
+      {/* KPI Row */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="pt-4">
-            <div className="flex items-center gap-3">
-              <Activity className="h-5 w-5 text-blue-600" />
-              <div>
-                <p className="text-xs text-muted-foreground">Pipelines active</p>
-                <p className="text-xl font-bold">{pipelines.filter((p) => p.isActive).length}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-4">
-            <div className="flex items-center gap-3">
-              <Database className={`h-5 w-5 ${failingDQTables > 0 ? 'text-red-600' : 'text-green-600'}`} />
-              <div>
-                <p className="text-xs text-muted-foreground">DQ Bảng lỗi</p>
-                <p className={`text-xl font-bold ${failingDQTables > 0 ? 'text-red-600' : 'text-green-600'}`}>
-                  {failingDQTables}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-4">
-            <div className="flex items-center gap-3">
-              <Heart className={`h-5 w-5 ${healthSnapshot?.overall === 'CRITICAL' ? 'text-red-600' : healthSnapshot?.overall === 'WARNING' ? 'text-yellow-600' : 'text-green-600'}`} />
-              <div>
-                <p className="text-xs text-muted-foreground">System Health</p>
-                <p className={`text-xl font-bold ${healthSnapshot?.overall === 'CRITICAL' ? 'text-red-600' : healthSnapshot?.overall === 'WARNING' ? 'text-yellow-600' : ''}`}>
-                  {healthSnapshot?.overall ?? '—'}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="pt-4">
-            <div className="flex items-center gap-3">
-              <Bell className={`h-5 w-5 ${activeAlertCount > 0 ? 'text-red-600' : 'text-green-600'}`} />
-              <div>
-                <p className="text-xs text-muted-foreground">Alerts active</p>
-                <p className={`text-xl font-bold ${activeAlertCount > 0 ? 'text-red-600' : 'text-green-600'}`}>
-                  {activeAlertCount}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <KpiCard
+          label="Pipelines Active"
+          value={pipelines.filter((p) => p.isActive).length}
+          subtitle={`/ ${pipelines.length} tổng`}
+          icon={Activity}
+          iconColor="bg-violet-500"
+          valueColor="text-violet-700"
+        />
+        <KpiCard
+          label="DQ Bảng lỗi"
+          value={failingDQTables}
+          subtitle={`/ ${dqSummary.length} bảng kiểm tra`}
+          icon={Database}
+          iconColor={failingDQTables > 0 ? 'bg-red-500' : 'bg-emerald-500'}
+          valueColor={failingDQTables > 0 ? 'text-red-600' : 'text-emerald-600'}
+        />
+        <KpiCard
+          label="System Health"
+          value={overallHealth}
+          icon={Heart}
+          iconColor={healthColorMap[overallHealth]}
+          valueColor={
+            overallHealth === 'CRITICAL' ? 'text-red-600' :
+            overallHealth === 'WARNING'  ? 'text-amber-600' :
+            overallHealth === 'OK'       ? 'text-emerald-600' : 'text-slate-500'
+          }
+        />
+        <KpiCard
+          label="Alerts Active"
+          value={activeAlertCount}
+          subtitle={criticalCount > 0 ? `${criticalCount} critical` : 'Không có critical'}
+          icon={Bell}
+          iconColor={activeAlertCount > 0 ? 'bg-red-500' : 'bg-emerald-500'}
+          valueColor={activeAlertCount > 0 ? 'text-red-600' : 'text-emerald-600'}
+        />
       </div>
 
-      {/* Main tabs */}
+      {/* Mini summary row */}
+      {warehouseStatus && (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="rounded-xl border bg-white px-4 py-3 flex items-center gap-3">
+            <TrendingUp className="h-4 w-4 text-blue-500 flex-shrink-0" />
+            <div>
+              <p className="text-xs text-slate-400">Warehouse jobs</p>
+              <p className="text-sm font-bold text-slate-700">{warehouseStatus.totalActive} active</p>
+            </div>
+          </div>
+          <div className="rounded-xl border bg-white px-4 py-3 flex items-center gap-3">
+            <Zap className={`h-4 w-4 flex-shrink-0 ${warehouseStatus.running > 0 ? 'text-blue-500' : 'text-slate-300'}`} />
+            <div>
+              <p className="text-xs text-slate-400">Đang sync</p>
+              <p className={`text-sm font-bold ${warehouseStatus.running > 0 ? 'text-blue-600' : 'text-slate-400'}`}>
+                {warehouseStatus.running} jobs
+              </p>
+            </div>
+          </div>
+          <div className="rounded-xl border bg-white px-4 py-3 flex items-center gap-3">
+            <HardDrive className="h-4 w-4 text-emerald-500 flex-shrink-0" />
+            <div>
+              <p className="text-xs text-slate-400">Storage buckets</p>
+              <p className="text-sm font-bold text-slate-700">{buckets.length} buckets</p>
+            </div>
+          </div>
+          <div className="rounded-xl border bg-white px-4 py-3 flex items-center gap-3">
+            <Shield className="h-4 w-4 text-violet-500 flex-shrink-0" />
+            <div>
+              <p className="text-xs text-slate-400">DR Plans</p>
+              <p className="text-sm font-bold text-slate-700">{drReadiness?.planCount ?? '—'} active</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Main Tabs */}
       <Tabs defaultValue="health">
-        <TabsList className="grid grid-cols-4 md:grid-cols-8 w-full max-w-4xl">
-          <TabsTrigger value="health">Health</TabsTrigger>
-          <TabsTrigger value="alerts" className="relative">
-            Alerts
-            {activeAlertCount > 0 && (
-              <span className="ml-1 text-xs bg-red-500 text-white rounded-full px-1">{activeAlertCount}</span>
-            )}
-          </TabsTrigger>
-          <TabsTrigger value="pipelines">Pipelines</TabsTrigger>
-          <TabsTrigger value="warehouse">Warehouse</TabsTrigger>
-          <TabsTrigger value="quality">Data Quality</TabsTrigger>
-          <TabsTrigger value="backup">Backup</TabsTrigger>
-          <TabsTrigger value="dr">DR</TabsTrigger>
-          <TabsTrigger value="storage">Storage</TabsTrigger>
+        <TabsList className="grid grid-cols-4 md:grid-cols-8 w-full h-auto bg-slate-100 p-1 rounded-xl gap-0.5">
+          {[
+            { value: 'health',    label: 'Health',    icon: Heart    },
+            { value: 'alerts',    label: 'Alerts',    icon: Bell, badge: activeAlertCount > 0 ? activeAlertCount : undefined },
+            { value: 'pipelines', label: 'Pipelines', icon: Activity },
+            { value: 'warehouse', label: 'Warehouse', icon: Database },
+            { value: 'quality',   label: 'DQ',        icon: CheckCircle2, badge: failingDQTables > 0 ? failingDQTables : undefined },
+            { value: 'backup',    label: 'Backup',    icon: HardDrive },
+            { value: 'dr',        label: 'DR',        icon: Shield   },
+            { value: 'storage',   label: 'Storage',   icon: Archive  },
+          ].map(({ value, label, icon: Icon, badge }) => (
+            <TabsTrigger
+              key={value}
+              value={value}
+              className="flex items-center gap-1 text-xs h-8 rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm relative"
+            >
+              <Icon className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">{label}</span>
+              {badge !== undefined && (
+                <span className="absolute -top-1 -right-1 h-4 min-w-[16px] px-0.5 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center">
+                  {badge}
+                </span>
+              )}
+            </TabsTrigger>
+          ))}
         </TabsList>
 
-        <TabsContent value="health">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base flex items-center gap-2">
-                <Heart className="h-4 w-4" />System Health Metrics
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
+        <div className="mt-4">
+          <TabsContent value="health">
+            <SectionCard title="System Health Metrics" icon={Heart}>
               <HealthTab snapshot={healthSnapshot} />
-            </CardContent>
-          </Card>
-        </TabsContent>
+            </SectionCard>
+          </TabsContent>
 
-        <TabsContent value="alerts">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base flex items-center gap-2">
-                <Bell className="h-4 w-4" />Infrastructure Alerts
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
+          <TabsContent value="alerts">
+            <SectionCard title="Infrastructure Alerts" icon={Bell}>
               <AlertsTab alerts={alerts} summary={alertSummary} onRefresh={fetchAll} />
-            </CardContent>
-          </Card>
-        </TabsContent>
+            </SectionCard>
+          </TabsContent>
 
-        <TabsContent value="pipelines">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base flex items-center gap-2">
-                <Server className="h-4 w-4" />Pipeline Definitions
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
+          <TabsContent value="pipelines">
+            <SectionCard title="Pipeline Definitions" icon={Activity}>
               <PipelinesTab pipelines={pipelines} onRefresh={fetchAll} />
-            </CardContent>
-          </Card>
-        </TabsContent>
+            </SectionCard>
+          </TabsContent>
 
-        <TabsContent value="warehouse">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base flex items-center gap-2">
-                <Database className="h-4 w-4" />Warehouse Sync Jobs (PG → ClickHouse)
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
+          <TabsContent value="warehouse">
+            <SectionCard title="Warehouse Sync Jobs  (PostgreSQL → ClickHouse)" icon={Database}>
               <WarehouseTab status={warehouseStatus} jobs={warehouseJobs} />
-            </CardContent>
-          </Card>
-        </TabsContent>
+            </SectionCard>
+          </TabsContent>
 
-        <TabsContent value="quality">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4" />Data Quality theo bảng
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
+          <TabsContent value="quality">
+            <SectionCard title="Data Quality theo bảng" icon={CheckCircle2}>
               <DataQualityTab summary={dqSummary} />
-            </CardContent>
-          </Card>
-        </TabsContent>
+            </SectionCard>
+          </TabsContent>
 
-        <TabsContent value="backup">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base flex items-center gap-2">
-                <HardDrive className="h-4 w-4" />Backup & Restore
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
+          <TabsContent value="backup">
+            <SectionCard title="Backup & Restore" icon={HardDrive}>
               <BackupsTab jobs={backupJobs} freshness={freshness} restoreJobs={restoreJobs} />
-            </CardContent>
-          </Card>
-        </TabsContent>
+            </SectionCard>
+          </TabsContent>
 
-        <TabsContent value="dr">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base flex items-center gap-2">
-                <Shield className="h-4 w-4" />Disaster Recovery Readiness
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
+          <TabsContent value="dr" className="space-y-4">
+            <SectionCard title="Disaster Recovery Readiness" icon={Shield}>
               <DRTab readiness={drReadiness} />
-            </CardContent>
-          </Card>
-          <Card className="mt-4">
-            <CardHeader>
-              <CardTitle className="text-base">Alert Thresholds</CardTitle>
-            </CardHeader>
-            <CardContent>
+            </SectionCard>
+            <SectionCard title="Alert Threshold Policies" icon={AlertTriangle}>
               <ThresholdsTab policies={thresholds} />
-            </CardContent>
-          </Card>
-        </TabsContent>
+            </SectionCard>
+          </TabsContent>
 
-        <TabsContent value="storage">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base flex items-center gap-2">
-                <HardDrive className="h-4 w-4" />Storage Buckets
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
+          <TabsContent value="storage">
+            <SectionCard title="Storage Buckets (MinIO)" icon={Archive}>
               <StorageTab buckets={buckets} />
-            </CardContent>
-          </Card>
-        </TabsContent>
+            </SectionCard>
+          </TabsContent>
+        </div>
       </Tabs>
     </div>
   );

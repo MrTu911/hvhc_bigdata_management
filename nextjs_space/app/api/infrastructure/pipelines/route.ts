@@ -6,6 +6,7 @@ import {
   createPipelineDefinition,
   listPipelineRuns,
   triggerPipelineRun,
+  triggerWithAirflow,
   togglePipelineActive,
 } from '@/lib/services/infrastructure/pipeline.service';
 import { logAudit, extractAuditContext } from '@/lib/audit-service';
@@ -41,7 +42,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const body = await req.json();
-    const action = body.action as 'create' | 'trigger';
+    const action = body.action as 'create' | 'trigger' | 'trigger-airflow';
 
     if (action === 'trigger') {
       if (!body.definitionId) {
@@ -58,6 +59,33 @@ export async function POST(req: NextRequest) {
         metadata: { operation: 'pipeline_trigger', runId: run.id, triggeredBy: 'MANUAL' },
       });
       return NextResponse.json({ success: true, data: run }, { status: 201 });
+    }
+
+    if (action === 'trigger-airflow') {
+      if (!body.definitionId || !body.dagId) {
+        return NextResponse.json(
+          { success: false, error: 'definitionId and dagId required' },
+          { status: 400 },
+        );
+      }
+      const result = await triggerWithAirflow({
+        definitionId:  body.definitionId,
+        dagId:         body.dagId,
+        triggeredBy:   'MANUAL',
+        triggeredById: auth.user?.id,
+        dagConf:       body.dagConf,
+      });
+      const ctx = extractAuditContext(auth.user!.id, auth.user!.role, req);
+      await logAudit(ctx, 'UPDATE', 'INFRASTRUCTURE', body.definitionId, {
+        metadata: {
+          operation: 'pipeline_trigger_airflow',
+          runId:     result.run.id,
+          dagId:     body.dagId,
+          dagRunId:  result.dagRunId,
+          mockMode:  result.mockMode,
+        },
+      });
+      return NextResponse.json({ success: true, data: result }, { status: 201 });
     }
 
     // action === 'create'

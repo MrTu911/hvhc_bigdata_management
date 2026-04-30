@@ -8,8 +8,10 @@
  */
 
 import prisma from '@/lib/db';
-import { uploadFileToMinio } from '@/lib/minio-client';
-import { TEMPLATE_BUCKET } from './template-service';
+import {
+  uploadObject,
+  buildObjectKey,
+} from '@/lib/services/infrastructure/storage.service';
 import { analyzeTemplateBuffer, validateUploadedFile } from '@/lib/integrations/render/template-analyzer';
 import { suggestMappings, SuggestedMapping } from '@/lib/integrations/ai/template-field-matcher';
 import { TEMPLATES } from '@/lib/rbac/function-codes';
@@ -71,10 +73,14 @@ export async function analyzeAndSave(
 
   // Upload lên MinIO
   const safeFileName = fileName.replace(/[^a-zA-Z0-9._-]/g, '_');
-  const fileKey = `imports/${Date.now()}_${safeFileName}`;
-  await uploadFileToMinio(TEMPLATE_BUCKET, fileKey, fileBuffer, {
-    'Content-Type': 'application/octet-stream',
-    requestedBy,
+  const fileKey = buildObjectKey('template-import', requestedBy, safeFileName);
+  await uploadObject('M18_TEMPLATE', fileKey, fileBuffer, {
+    module:         'M18',
+    'entity-type':  'template-import',
+    'entity-id':    requestedBy,
+    'uploaded-by':  requestedBy,
+    classification: 'INTERNAL',
+    'content-type': 'application/octet-stream',
   });
 
   // Phân tích buffer

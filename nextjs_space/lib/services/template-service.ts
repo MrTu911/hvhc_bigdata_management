@@ -4,7 +4,11 @@
  * DB queries đi qua template.repository, không gọi prisma trực tiếp ở đây.
  */
 
-import { uploadFileToMinio, getPresignedUrl } from '@/lib/minio-client';
+import {
+  uploadObject,
+  getPresignedDownloadUrl,
+  buildObjectKey,
+} from '@/lib/services/infrastructure/storage.service';
 import { parsePlaceholders as parsePlaceholdersFromFile } from '@/lib/integrations/render/placeholder-parser';
 import { v4 as uuidv4 } from 'uuid';
 import {
@@ -23,6 +27,8 @@ import {
 import prisma from '@/lib/db';
 import { ExportJobStatus } from '@prisma/client';
 
+// Kept for reference by export-engine-service (deprecated — use M18_TEMPLATE domain)
+/** @deprecated Dùng storageService với domain 'M18_TEMPLATE' thay vì TEMPLATE_BUCKET trực tiếp */
 export const TEMPLATE_BUCKET = 'hvhc-templates';
 
 export const TEMPLATE_CATEGORIES = {
@@ -211,7 +217,8 @@ export async function uploadTemplateFile(
 
   const ext = filename.split('.').pop() || format.toLowerCase();
   const newVersion = template.version + 1;
-  const fileKey = `templates/${id}/v${newVersion}_${uuidv4()}.${ext}`;
+  const versionedName = `v${newVersion}_${uuidv4()}.${ext}`;
+  const fileKey = buildObjectKey('template', id, versionedName);
 
   const contentTypeMap: Record<string, string> = {
     DOCX: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -219,10 +226,15 @@ export async function uploadTemplateFile(
     HTML: 'text/html',
   };
 
-  await uploadFileToMinio(TEMPLATE_BUCKET, fileKey, fileBuffer, {
-    'Content-Type': contentTypeMap[format],
-    templateId: id,
+  await uploadObject('M18_TEMPLATE', fileKey, fileBuffer, {
+    module:         'M18',
+    'entity-type':  'template',
+    'entity-id':    id,
+    'uploaded-by':  uploadedBy,
+    classification: 'INTERNAL',
+    'content-type': contentTypeMap[format],
     format,
+    templateId:     id,
   });
 
   const parseResult = await parsePlaceholdersFromFile(fileBuffer, format);
@@ -281,5 +293,5 @@ export async function uploadTemplateFile(
 export async function getTemplateDownloadUrl(id: string, expirySeconds = 3600) {
   const template = await findTemplateById(id);
   if (!template?.fileKey) throw new Error('Template chưa có file');
-  return getPresignedUrl(TEMPLATE_BUCKET, template.fileKey, expirySeconds);
+  return getPresignedDownloadUrl('M18_TEMPLATE', template.fileKey, { expirySeconds });
 }

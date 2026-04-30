@@ -34,7 +34,9 @@ export type StorageDomain =
   | 'M10_EDUCATION'
   | 'M12_BACKUP'
   | 'M12_ARCHIVE'
-  | 'M18_EXPORT';
+  | 'M18_EXPORT'
+  | 'M18_TEMPLATE'
+  | 'M25_SCIENCE_LIBRARY';
 
 export interface ObjectMetadata {
   module:         string;   // vd: M09, M18
@@ -70,14 +72,16 @@ export interface ObjectInfo {
 // Cache ngắn hạn để không query DB mỗi thao tác.
 // Nếu DB chưa có bucket config, fallback về tên bucket mặc định.
 const BUCKET_FALLBACK: Record<StorageDomain, string> = {
-  M02_PERSONNEL: 'hvhc-personnel',
-  M03_PARTY:     'hvhc-party',
-  M05_POLICY:    'hvhc-policy',
-  M09_RESEARCH:  'hvhc-research',
-  M10_EDUCATION: 'hvhc-education',
-  M12_BACKUP:    'hvhc-backups',
-  M12_ARCHIVE:   'hvhc-archive',
-  M18_EXPORT:    'hvhc-export',
+  M02_PERSONNEL:       'hvhc-personnel',
+  M03_PARTY:           'hvhc-party',
+  M05_POLICY:          'hvhc-policy',
+  M09_RESEARCH:        'hvhc-research',
+  M10_EDUCATION:       'hvhc-education',
+  M12_BACKUP:          'hvhc-backups',
+  M12_ARCHIVE:         'hvhc-archive',
+  M18_EXPORT:          'hvhc-exports',
+  M18_TEMPLATE:        'hvhc-templates',
+  M25_SCIENCE_LIBRARY: 'hvhc-science-works',
 };
 
 let bucketCache: Map<StorageDomain, string> | null = null;
