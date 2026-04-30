@@ -154,7 +154,7 @@ const FUNCTIONS = [
   { code: 'CREATE_DATA', name: 'Tạo/Upload dữ liệu', module: 'data', actionType: 'CREATE' as ActionType, isCritical: false },
   { code: 'UPDATE_DATA', name: 'Cập nhật dữ liệu', module: 'data', actionType: 'UPDATE' as ActionType, isCritical: false },
   { code: 'DELETE_DATA', name: 'Xóa dữ liệu', module: 'data', actionType: 'DELETE' as ActionType, isCritical: true },
-  { code: 'EXPORT_DATA', name: 'Xuất dữ liệu', module: 'data', actionType: 'EXPORT' as ActionType, isCritical: false },
+  { code: 'EXPORT_DATALAKE', name: 'Xuất dữ liệu', module: 'data', actionType: 'EXPORT' as ActionType, isCritical: false },
   { code: 'IMPORT_DATA', name: 'Nhập dữ liệu', module: 'data', actionType: 'IMPORT' as ActionType, isCritical: true },
   { code: 'QUERY_DATA', name: 'Truy vấn dữ liệu', module: 'data', actionType: 'VIEW' as ActionType, isCritical: false },
   
@@ -307,7 +307,7 @@ const POSITION_FUNCTION_MAPPINGS: { positionCode: string; functionCodes: { code:
       { code: 'CREATE_DATA', scope: 'ACADEMY' },
       { code: 'UPDATE_DATA', scope: 'ACADEMY' },
       { code: 'DELETE_DATA', scope: 'ACADEMY' },
-      { code: 'EXPORT_DATA', scope: 'ACADEMY' },
+      { code: 'EXPORT_DATALAKE', scope: 'ACADEMY' },
       { code: 'IMPORT_DATA', scope: 'ACADEMY' },
       { code: 'QUERY_DATA', scope: 'ACADEMY' },
     ],

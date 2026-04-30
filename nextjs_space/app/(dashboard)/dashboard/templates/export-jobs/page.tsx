@@ -133,8 +133,8 @@ function ExportJobsContent() {
         body: JSON.stringify({ retryFailedOnly: true }),
       });
       const json = await res.json();
-      if (!res.ok) throw new Error(json.error || 'Lỗi retry');
-      toast.success(`Đã tạo job retry mới (ID: ${json.data?.newJobId})`);
+      if (!res.ok || !json.success) throw new Error(json.error || 'Lỗi retry');
+      toast.success(`Đã tạo job retry mới (ID: ${json.data?.retryJobId})`);
       fetchJobs();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Lỗi retry');

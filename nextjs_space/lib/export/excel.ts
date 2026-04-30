@@ -1,4 +1,6 @@
 // lib/export/excel.ts
+// CLIENT-ONLY — dùng saveAs (browser API). Không import file này trong server code hoặc API routes.
+// Để xuất file từ backend, dùng export-engine-service.ts (M18).
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 

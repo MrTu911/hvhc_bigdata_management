@@ -18,7 +18,10 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
       select: { id: true, createdBy: true },
     });
     if (!schedule) {
-      return NextResponse.json({ error: 'Lịch xuất không tồn tại' }, { status: 404 });
+      return NextResponse.json(
+        { success: false, data: null, error: 'Lịch xuất không tồn tại' },
+        { status: 404 },
+      );
     }
 
     await prisma.templateSchedule.delete({ where: { id: params.id } });
@@ -33,11 +36,11 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
       ipAddress: request.headers.get('x-forwarded-for') || undefined,
     });
 
-    return NextResponse.json({ success: true, deletedAt: new Date().toISOString() });
+    return NextResponse.json({ success: true, data: { deletedAt: new Date().toISOString() }, error: null });
   } catch (error) {
     const msg = error instanceof Error ? error.message : 'Lỗi xóa lịch xuất';
     console.error('[DELETE /api/templates/schedules/[id]]', error);
-    return NextResponse.json({ error: msg }, { status: 500 });
+    return NextResponse.json({ success: false, data: null, error: msg }, { status: 500 });
   }
 }
 
@@ -61,6 +64,7 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
 
     return NextResponse.json({ success: true, data: schedule });
   } catch (error) {
-    return NextResponse.json({ error: 'Lỗi cập nhật lịch xuất' }, { status: 500 });
+    const msg = error instanceof Error ? error.message : 'Lỗi cập nhật lịch xuất';
+    return NextResponse.json({ success: false, data: null, error: msg }, { status: 500 });
   }
 }

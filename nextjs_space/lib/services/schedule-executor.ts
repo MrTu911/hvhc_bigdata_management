@@ -1,5 +1,5 @@
 /**
- * Schedule Executor Service – M19
+ * Schedule Executor Service – M18
  * Thực thi các lịch xuất định kỳ (TemplateSchedule) theo cron expression.
  *
  * - Khởi động qua instrumentation.ts khi server start
@@ -276,7 +276,7 @@ function buildEmailHtml(templateName: string, entityCount: number, jobId: string
       </p>
     </div>
     <div style="background:#f8fafc;padding:12px 24px;font-size:12px;color:#94a3b8">
-      Email tự động từ HVHC BigData M19 – Xuất định kỳ. Không trả lời email này.
+      Email tự động từ HVHC BigData M18 – Xuất định kỳ. Không trả lời email này.
     </div>
   </div>
 </body>
@@ -300,12 +300,12 @@ export function initScheduleCron(): void {
     try {
       const result = await runDueSchedules();
       if (result.ran > 0 || result.errors > 0) {
-        console.log(`[M19 ScheduleCron] Ran: ${result.ran}, Errors: ${result.errors}`);
+        console.log(`[M18 ScheduleCron] Ran: ${result.ran}, Errors: ${result.errors}`);
       }
     } catch (err) {
-      console.error('[M19 ScheduleCron] Uncaught error:', err);
+      console.error('[M18 ScheduleCron] Uncaught error:', err);
     }
   });
 
-  console.log('[M19 ScheduleCron] Initialized – checking schedules every minute.');
+  console.log('[M18 ScheduleCron] Initialized – checking schedules every minute.');
 }

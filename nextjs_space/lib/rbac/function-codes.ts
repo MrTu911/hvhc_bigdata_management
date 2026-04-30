@@ -328,7 +328,7 @@ export const DATA = {
   CREATE: 'CREATE_DATA',            // Tạo/upload dữ liệu
   UPDATE: 'UPDATE_DATA',            // Cập nhật dữ liệu
   DELETE: 'DELETE_DATA',            // Xóa dữ liệu
-  EXPORT: 'EXPORT_DATA',            // Xuất dữ liệu
+  EXPORT: 'EXPORT_DATALAKE',         // Xuất dữ liệu (data module – tránh trùng với M18 EXPORT_DATA)
   IMPORT: 'IMPORT_DATA',            // Nhập dữ liệu
   QUERY: 'QUERY_DATA',              // Truy vấn dữ liệu
 } as const;

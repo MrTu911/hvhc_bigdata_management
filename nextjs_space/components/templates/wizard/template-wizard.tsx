@@ -4,14 +4,15 @@
  * Template Wizard – M18
  * Multi-step wizard cho tạo và chỉnh sửa template.
  *
- * Step 1 – Thông tin cơ bản   → READY
- * Step 2 – Upload file        → READY (gọi /api/templates/[id]/upload)
- * Step 3 – Data Map           → SKELETON (Phase Data Map, chưa triển khai)
+ * Step 1 – Thông tin cơ bản
+ * Step 2 – Upload file mẫu
+ * Step 3 – Data Map (ánh xạ placeholder ↔ field)
  */
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
 import { CheckCircle, Upload, Map, ChevronRight, ChevronLeft, Loader2 } from 'lucide-react';
+import { DataMapEditor } from '@/components/templates/datamap/data-map-editor';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -109,6 +110,32 @@ export function TemplateWizard({
     reliable: boolean;
     note?: string;
   } | null>(null);
+
+  // Step 3 state
+  const [step3DataMap, setStep3DataMap] = useState<Record<string, string>>({});
+  const [step3Placeholders, setStep3Placeholders] = useState<string[]>([]);
+  const [step3EntityType, setStep3EntityType] = useState('personnel');
+  const [loadingStep3, setLoadingStep3] = useState(false);
+
+  // Khi bước 3 được mở, load datamap + placeholders từ template
+  const loadStep3 = useCallback(async (tplId: string) => {
+    setLoadingStep3(true);
+    try {
+      const res = await fetch(`/api/templates/${tplId}/datamap`);
+      const json = await res.json();
+      if (!res.ok || !json.success) return;
+      const { dataMap, placeholders } = json.data as {
+        dataMap: Record<string, string>;
+        placeholders: string[];
+      };
+      setStep3DataMap(dataMap ?? {});
+      setStep3Placeholders(placeholders ?? uploadResult?.placeholders ?? []);
+    } catch {
+      setStep3Placeholders(uploadResult?.placeholders ?? []);
+    } finally {
+      setLoadingStep3(false);
+    }
+  }, [uploadResult]);
 
   // ─── Step 1 handlers ──────────────────────────────────────────────────────
 
@@ -210,6 +237,7 @@ export function TemplateWizard({
         toast.warning(json.data.placeholderNote ?? 'Placeholder parse chưa chính xác');
       }
       setStep(3);
+      await loadStep3(resolvedTemplateId!);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Lỗi upload');
     } finally {
@@ -442,7 +470,13 @@ export function TemplateWizard({
               <ChevronLeft className="h-4 w-4 mr-1" />Quay lại
             </Button>
             <div className="flex gap-2">
-              <Button variant="ghost" onClick={() => setStep(3)}>
+              <Button
+                variant="ghost"
+                onClick={async () => {
+                  setStep(3);
+                  if (resolvedTemplateId) await loadStep3(resolvedTemplateId);
+                }}
+              >
                 Bỏ qua
               </Button>
               <Button onClick={handleStep2Submit} disabled={submitting || !uploadFile}>
@@ -455,48 +489,53 @@ export function TemplateWizard({
         </div>
       )}
 
-      {/* ── Step 3: Data Map (SKELETON) ──────────────────────────────────── */}
+      {/* ── Step 3: Data Map ─────────────────────────────────────────────── */}
       {step === 3 && (
         <div className="space-y-5">
           {uploadResult && (
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4 space-y-2">
-              <p className="text-sm font-medium text-green-800">
-                Upload thành công — v{uploadResult.version}
-              </p>
-              {uploadResult.placeholders.length > 0 ? (
-                <div>
-                  <p className="text-xs text-green-700 mb-2">
-                    Phát hiện {uploadResult.placeholders.length} placeholder
-                    {!uploadResult.reliable && (
-                      <span className="ml-1 text-amber-600">(kết quả ước tính)</span>
-                    )}
-                    :
-                  </p>
-                  <div className="flex flex-wrap gap-1">
-                    {uploadResult.placeholders.map((p) => (
-                      <Badge key={p} variant="outline" className="text-xs font-mono">
-                        {p}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              ) : (
-                <p className="text-xs text-green-700">Không phát hiện placeholder trong file.</p>
-              )}
+            <div className="bg-green-50 border border-green-200 rounded-lg p-3 flex items-center gap-2">
+              <CheckCircle className="h-4 w-4 text-green-600 shrink-0" />
+              <span className="text-sm text-green-800">
+                Upload thành công — v{uploadResult.version} ·{' '}
+                {uploadResult.placeholders.length} placeholder phát hiện
+                {!uploadResult.reliable && ' (ước tính)'}
+              </span>
             </div>
           )}
 
-          {/* Data Map skeleton */}
-          <div className="border rounded-lg p-6 text-center space-y-3 bg-gray-50">
-            <Map className="h-10 w-10 mx-auto text-gray-300" />
-            <p className="text-sm font-medium text-gray-600">Data Map</p>
-            <p className="text-xs text-gray-400 max-w-sm mx-auto">
-              Ánh xạ placeholder ↔ field dữ liệu từ module nguồn.
-              Tính năng này sẽ được triển khai trong Phase Data Map (UC-T03).
-            </p>
-            <Badge variant="outline" className="text-xs text-amber-600 border-amber-300">
-              Sắp có
-            </Badge>
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-medium">Ánh xạ placeholder ↔ field dữ liệu</p>
+              <select
+                className="text-xs border rounded px-2 py-1"
+                value={step3EntityType}
+                onChange={(e) => setStep3EntityType(e.target.value)}
+              >
+                <option value="personnel">Nhân sự</option>
+                <option value="student">Học viên</option>
+                <option value="party_member">Đảng viên</option>
+                <option value="faculty">Giảng viên</option>
+              </select>
+            </div>
+
+            {loadingStep3 ? (
+              <div className="flex items-center justify-center py-10 text-muted-foreground text-sm">
+                <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                Đang tải data map...
+              </div>
+            ) : resolvedTemplateId ? (
+              <DataMapEditor
+                templateId={resolvedTemplateId}
+                entityType={step3EntityType}
+                initialDataMap={step3DataMap}
+                initialPlaceholders={step3Placeholders}
+                onSaved={() => toast.success('Data map đã lưu — hoàn thành wizard')}
+              />
+            ) : (
+              <div className="text-sm text-muted-foreground text-center py-6">
+                Cần hoàn thành bước 1 trước
+              </div>
+            )}
           </div>
 
           <div className="flex justify-between pt-2">

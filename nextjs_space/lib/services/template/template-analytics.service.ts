@@ -368,7 +368,9 @@ export async function getTemplateAnalyticsDetail(
     .sort((a, b) => b.count - a.count);
 
   // Upsert TemplateAnalyticsDaily (lazy cache — non-blocking)
-  void upsertDailyCache(templateId, trendPoints).catch(() => {});
+  void upsertDailyCache(templateId, trendPoints).catch((err: unknown) => {
+    console.error('[M18 analytics cache] upsertDailyCache failed', { templateId, error: err });
+  });
 
   return {
     template,

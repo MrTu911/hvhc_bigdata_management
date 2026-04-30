@@ -17,6 +17,7 @@ import {
   Edit,
   Code,
   Layers,
+  Users,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -420,6 +421,13 @@ export default function TemplateDetailPage() {
           </div>
         </div>
         <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => router.push(`/dashboard/templates/batch?templateId=${id}`)}
+          >
+            <Users className="h-4 w-4 mr-1" />Xuất hàng loạt
+          </Button>
           <Button variant="outline" size="sm" onClick={() => setPreviewOpen(true)}>
             <Eye className="h-4 w-4 mr-1" />Preview
           </Button>

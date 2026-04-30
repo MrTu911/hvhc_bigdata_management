@@ -62,6 +62,6 @@ export async function GET(request: NextRequest) {
       pagination: { page, limit, total, totalPages: Math.ceil(total / limit) },
     });
   } catch (error) {
-    return NextResponse.json({ error: 'Lỗi lấy danh sách export jobs' }, { status: 500 });
+    return NextResponse.json({ success: false, data: null, error: 'Lỗi lấy danh sách export jobs' }, { status: 500 });
   }
 }

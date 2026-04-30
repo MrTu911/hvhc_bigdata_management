@@ -227,7 +227,7 @@ const ALL_FUNCTIONS: FunctionDef[] = [
   { code: 'CREATE_DATA',              name: 'Tải lên dữ liệu mới',                 description: 'Upload và tạo tập dữ liệu mới',                        module: 'DATA', actionType: 'CREATE' },
   { code: 'UPDATE_DATA',              name: 'Cập nhật dữ liệu',                    description: 'Chỉnh sửa và cập nhật tập dữ liệu',                   module: 'DATA', actionType: 'UPDATE' },
   { code: 'DELETE_DATA',              name: 'Xóa dữ liệu',                         description: 'Xóa tập dữ liệu khỏi kho BigData',                    module: 'DATA', actionType: 'DELETE', isCritical: true },
-  { code: 'EXPORT_DATA',              name: 'Xuất dữ liệu BigData',                description: 'Xuất tập dữ liệu ra file hoặc hệ thống ngoài',         module: 'DATA', actionType: 'EXPORT' },
+  { code: 'EXPORT_DATALAKE',          name: 'Xuất dữ liệu BigData',                description: 'Xuất tập dữ liệu ra file hoặc hệ thống ngoài',         module: 'DATA', actionType: 'EXPORT' },
   { code: 'IMPORT_DATA',              name: 'Nhập dữ liệu vào BigData',             description: 'Nhập dữ liệu từ nguồn bên ngoài vào kho',             module: 'DATA', actionType: 'IMPORT' },
   { code: 'QUERY_DATA',               name: 'Truy vấn dữ liệu BigData',             description: 'Chạy truy vấn phân tích trên kho dữ liệu',            module: 'DATA', actionType: 'VIEW' },
 

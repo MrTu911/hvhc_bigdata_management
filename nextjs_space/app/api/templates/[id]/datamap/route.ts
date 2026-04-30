@@ -7,10 +7,8 @@ import { requireScopedFunction } from '@/lib/rbac/middleware';
 import { TEMPLATES } from '@/lib/rbac/function-codes';
 import { logAudit } from '@/lib/audit';
 import prisma from '@/lib/db';
-import { TEMPLATE_BUCKET } from '@/lib/services/template-service';
 import { parsePlaceholders as parsePlaceholdersFromFile } from '@/lib/integrations/render/placeholder-parser';
-import { getFileInfo } from '@/lib/minio-client';
-import minioClient from '@/lib/minio-client';
+import { downloadObject } from '@/lib/services/infrastructure/storage.service';
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
@@ -24,19 +22,12 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     // Parse placeholders từ file nếu có
     if (template.fileKey) {
       try {
-        const chunks: Buffer[] = [];
-        const stream = await minioClient.getObject(TEMPLATE_BUCKET, template.fileKey);
-        await new Promise<void>((resolve, reject) => {
-          stream.on('data', (chunk: Buffer) => chunks.push(chunk));
-          stream.on('end', () => resolve());
-          stream.on('error', reject);
-        });
-        const buffer = Buffer.concat(chunks);
+        const buffer = await downloadObject('M18_TEMPLATE', template.fileKey);
         const format = template.fileKey.includes('.xlsx') ? 'XLSX' : template.fileKey.includes('.html') ? 'HTML' : 'DOCX';
         const parseResult = await parsePlaceholdersFromFile(buffer, format);
         placeholders = parseResult.placeholders;
       } catch {
-        // File might not exist in MinIO yet
+        // File chưa tồn tại trong MinIO hoặc lỗi download — trả placeholder rỗng
       }
     }
 
@@ -57,7 +48,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
       },
     });
   } catch (error) {
-    return NextResponse.json({ error: 'Lỗi lấy data map' }, { status: 500 });
+    return NextResponse.json({ success: false, data: null, error: 'Lỗi lấy data map' }, { status: 500 });
   }
 }
 
@@ -113,6 +104,6 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
       errors,
     });
   } catch (error) {
-    return NextResponse.json({ error: 'Lỗi lưu data map' }, { status: 500 });
+    return NextResponse.json({ success: false, data: null, error: 'Lỗi lưu data map' }, { status: 500 });
   }
 }

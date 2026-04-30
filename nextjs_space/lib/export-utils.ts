@@ -1,3 +1,5 @@
+// CLIENT-ONLY — dùng jsPDF + XLSX (browser APIs). Không import file này trong API routes.
+// Dùng M18 export-engine-service.ts cho xuất file từ backend.
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import * as XLSX from 'xlsx';

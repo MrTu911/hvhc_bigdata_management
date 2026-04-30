@@ -65,7 +65,7 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('[GET /api/templates/schedules]', error);
-    return NextResponse.json({ error: 'Lỗi lấy danh sách lịch xuất' }, { status: 500 });
+    return NextResponse.json({ success: false, data: null, error: 'Lỗi lấy danh sách lịch xuất' }, { status: 500 });
   }
 }
 
@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
     const validated = createScheduleSchema.safeParse(body);
     if (!validated.success) {
       return NextResponse.json(
-        { error: 'Dữ liệu không hợp lệ', details: validated.error.flatten() },
+        { success: false, data: null, error: 'Dữ liệu không hợp lệ', details: validated.error.flatten() },
         { status: 400 }
       );
     }
@@ -89,17 +89,17 @@ export async function POST(request: NextRequest) {
       select: { id: true, name: true, isActive: true },
     });
     if (!template) {
-      return NextResponse.json({ error: 'Template không tồn tại' }, { status: 404 });
+      return NextResponse.json({ success: false, data: null, error: 'Template không tồn tại' }, { status: 404 });
     }
     if (!template.isActive) {
-      return NextResponse.json({ error: 'Template đã bị vô hiệu hóa' }, { status: 400 });
+      return NextResponse.json({ success: false, data: null, error: 'Template đã bị vô hiệu hóa' }, { status: 400 });
     }
 
     // Validate cron expression (basic)
     const cronParts = validated.data.cronExpression.trim().split(/\s+/);
     if (cronParts.length !== 5 && cronParts.length !== 6) {
       return NextResponse.json(
-        { error: 'Cron expression không hợp lệ – cần 5 hoặc 6 phần (phút giờ ngày tháng thứ [năm])' },
+        { success: false, data: null, error: 'Cron expression không hợp lệ – cần 5 hoặc 6 phần (phút giờ ngày tháng thứ [năm])' },
         { status: 400 }
       );
     }
@@ -141,6 +141,6 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     const msg = error instanceof Error ? error.message : 'Lỗi tạo lịch xuất';
     console.error('[POST /api/templates/schedules]', error);
-    return NextResponse.json({ error: msg }, { status: 500 });
+    return NextResponse.json({ success: false, data: null, error: msg }, { status: 500 });
   }
 }

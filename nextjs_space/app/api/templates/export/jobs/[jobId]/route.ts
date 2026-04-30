@@ -35,8 +35,8 @@ export async function GET(
   } catch (error) {
     const msg = error instanceof Error ? error.message : 'Lỗi lấy job status';
     if (msg.includes('không tồn tại') || msg.includes('không có quyền')) {
-      return NextResponse.json({ error: msg }, { status: 404 });
+      return NextResponse.json({ success: false, data: null, error: msg }, { status: 404 });
     }
-    return NextResponse.json({ error: msg }, { status: 500 });
+    return NextResponse.json({ success: false, data: null, error: msg }, { status: 500 });
   }
 }

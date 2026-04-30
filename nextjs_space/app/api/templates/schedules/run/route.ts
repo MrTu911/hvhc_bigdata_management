@@ -1,5 +1,5 @@
 /**
- * M19 Template API – E4: POST /api/templates/schedules/run
+ * M18 Template API – E4: POST /api/templates/schedules/run
  * Trigger thủ công lịch xuất định kỳ (hoặc kiểm tra và chạy tất cả due schedules).
  *
  * POST body:
@@ -71,6 +71,6 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     const msg = error instanceof Error ? error.message : 'Lỗi thực thi lịch xuất';
     console.error('[POST /api/templates/schedules/run]', error);
-    return NextResponse.json({ error: msg }, { status: 500 });
+    return NextResponse.json({ success: false, data: null, error: msg }, { status: 500 });
   }
 }

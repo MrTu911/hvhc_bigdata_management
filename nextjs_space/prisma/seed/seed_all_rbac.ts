@@ -287,7 +287,7 @@ const FUNCTION_DEFS: Record<string, FDef> = {
   'CREATE_DATA':              { name: 'Tải lên dữ liệu mới',            module: 'DATA', actionType: 'CREATE' },
   'UPDATE_DATA':              { name: 'Cập nhật dữ liệu',               module: 'DATA', actionType: 'UPDATE' },
   'DELETE_DATA':              { name: 'Xóa dữ liệu',                    module: 'DATA', actionType: 'DELETE', isCritical: true },
-  'EXPORT_DATA':              { name: 'Xuất dữ liệu BigData',           module: 'DATA', actionType: 'EXPORT' },
+  'EXPORT_DATALAKE':          { name: 'Xuất dữ liệu BigData',           module: 'DATA', actionType: 'EXPORT' },
   'IMPORT_DATA':              { name: 'Nhập dữ liệu vào BigData',        module: 'DATA', actionType: 'IMPORT' },
   'QUERY_DATA':               { name: 'Truy vấn dữ liệu BigData',        module: 'DATA', actionType: 'VIEW' },
   'VIEW_ETL':                 { name: 'Xem ETL Workflow',               module: 'DATA', actionType: 'VIEW' },

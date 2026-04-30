@@ -18,15 +18,15 @@ export async function POST(request: NextRequest) {
     const { templateId, entityIds, entityType = 'personnel', outputFormat = 'PDF', zipName } = body;
 
     if (!templateId) {
-      return NextResponse.json({ error: 'templateId là bắt buộc' }, { status: 400 });
+      return NextResponse.json({ success: false, data: null, error: 'templateId là bắt buộc' }, { status: 400 });
     }
 
     if (!Array.isArray(entityIds) || entityIds.length === 0) {
-      return NextResponse.json({ error: 'entityIds phải là mảng không rỗng' }, { status: 400 });
+      return NextResponse.json({ success: false, data: null, error: 'entityIds phải là mảng không rỗng' }, { status: 400 });
     }
 
     if (entityIds.length > 500) {
-      return NextResponse.json({ error: 'Số lượng entity không được vượt quá 500' }, { status: 400 });
+      return NextResponse.json({ success: false, data: null, error: 'Số lượng entity không được vượt quá 500' }, { status: 400 });
     }
 
     const result = await startBatchExport({
@@ -59,6 +59,6 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     const msg = error instanceof Error ? error.message : 'Lỗi khởi động batch export';
-    return NextResponse.json({ error: msg }, { status: 500 });
+    return NextResponse.json({ success: false, data: null, error: msg }, { status: 500 });
   }
 }

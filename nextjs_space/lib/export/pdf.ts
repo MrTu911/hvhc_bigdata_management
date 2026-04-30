@@ -1,4 +1,6 @@
 // lib/export/pdf.ts
+// CLIENT-ONLY — dùng jsPDF (browser API). Không import file này trong server code hoặc API routes.
+// Để render PDF từ backend, dùng export-engine-service.ts (renderFile → Puppeteer).
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 

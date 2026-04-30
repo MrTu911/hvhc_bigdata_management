@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
     const { templateId, entityId, outputFormat = 'PDF', entityType = 'personnel', options } = body;
 
     if (!templateId || !entityId) {
-      return NextResponse.json({ error: 'templateId và entityId là bắt buộc' }, { status: 400 });
+      return NextResponse.json({ success: false, data: null, error: 'templateId và entityId là bắt buộc' }, { status: 400 });
     }
 
     const result = await exportSingle({
@@ -51,6 +51,6 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     const msg = error instanceof Error ? error.message : 'Lỗi xuất file';
     console.error('[POST /api/templates/export]', error);
-    return NextResponse.json({ error: msg }, { status: 500 });
+    return NextResponse.json({ success: false, data: null, error: msg }, { status: 500 });
   }
 }

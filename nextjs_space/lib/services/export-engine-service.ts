@@ -48,11 +48,18 @@ export async function exportSingle(req: ExportRequest): Promise<{
   downloadUrl: string;
   expiresIn: number;
 }> {
-  // Create job record
+  // Lấy template trước để gắn đúng version vào job record
+  const template = await prisma.reportTemplate.findUnique({
+    where: { id: req.templateId },
+  });
+  if (!template) throw new Error('Template không tồn tại');
+  if (!template.isActive) throw new Error('Template đã bị vô hiệu hóa');
+
+  // Create job record — templateVersion gắn version thực tại thời điểm render
   const job = await prisma.exportJob.create({
     data: {
       templateId: req.templateId,
-      templateVersion: 1,
+      templateVersion: template.version,
       requestedBy: req.requestedBy,
       entityIds: [req.entityId],
       entityType: req.entityType,
@@ -64,12 +71,6 @@ export async function exportSingle(req: ExportRequest): Promise<{
   });
 
   try {
-    // Get template
-    const template = await prisma.reportTemplate.findUnique({
-      where: { id: req.templateId },
-    });
-    if (!template) throw new Error('Template không tồn tại');
-    if (!template.isActive) throw new Error('Template đã bị vô hiệu hóa');
 
     // Resolve data
     const dataMap = (template.dataMap as Record<string, unknown>) || {};
