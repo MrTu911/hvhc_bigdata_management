@@ -7,27 +7,31 @@
  * 3. Sidebar sẽ dùng filterMenu để lọc theo permissions
  * 4. Không dùng string literal cho function codes
  *
- * CẤU TRÚC NHÓM CHỨC NĂNG (19 nhóm):
- *  1. Tổng quan
- *  2. Không gian Cá nhân (Tier 0 — MỌI user)
- *  3. Học tập của tôi (Tier 2 — Học viên/Sinh viên)
- *  4. Nghiên cứu cá nhân (Tier 1 — Giảng viên/NCV)
- * --- QUẢN LÝ NGHIỆP VỤ ---
- *  5. CSDL Nhân sự
- *  6. CSDL Đảng viên
- *  7. Chính sách, BHXH & Thi đua (merged)
- *  8. Tổng quan Đào tạo
- *  9. Quản lý Giảng viên
- * 10. Hệ đào tạo & Tiểu đoàn
- * 11. Quản lý Người học
- * 12. Chương trình & Vận hành
- * 13. CSDL Nghiên cứu Khoa học
- * 14. CSDL Khoa học Quản lý
- * 15. Mẫu biểu & Xuất dữ liệu (M18/M19)
- * 16. Phân tích & Báo cáo
- * 17. Hạ tầng & Dữ liệu
- * 18. Quản trị Hệ thống
- * 19. Cài đặt cá nhân
+ * CẤU TRÚC NHÓM CHỨC NĂNG (19 nhóm — 4 lớp):
+ * --- LỚP 1: TỔNG QUAN ---
+ *  1. Bảng điều khiển tổng hợp         nav.overview
+ *  2. Cảnh báo & Giám sát              nav.monitoringAlerts
+ * --- LỚP 2: QUẢN LÝ CSDL NGHIỆP VỤ ---
+ *  3. CSDL Nhân sự                     nav.personnelDatabase
+ *  4. CSDL Chính trị — Đảng viên       nav.partyDatabase
+ *  5. CSDL Chính sách & Chế độ         nav.policyDatabase
+ *  6. CSDL Bảo hiểm Xã hội             nav.insuranceDatabase
+ *  7. CSDL Thi đua — Khen thưởng       nav.awardsDatabase
+ *  8. CSDL Giáo dục — Đào tạo          nav.educationDatabase
+ *  9. CSDL Nghiên cứu Khoa học         nav.researchDatabase
+ * 10. CSDL Khoa học Quản lý            nav.scienceDatabase
+ * --- LỚP 3: NGHIỆP VỤ & HẠ TẦNG ĐƠN VỊ ---
+ * 11. Quy trình & Văn bản số           nav.workflowDocuments
+ * 12. Mẫu biểu & Xuất dữ liệu          nav.templateExport
+ * 13. Phân tích, Báo cáo & AI          nav.analyticsAI
+ * 14. Hạ tầng & Quản trị Dữ liệu       nav.infrastructureData
+ * --- LỚP 4: CÁ NHÂN ---
+ * 15. Không gian cá nhân               nav.personalSpace
+ * 16. Học tập của tôi                  nav.myLearning
+ * 17. Nghiên cứu cá nhân               nav.myResearchSpace
+ * --- QUẢN TRỊ ---
+ * 18. Quản trị Hệ thống                nav.systemAdmin
+ * 19. Cài đặt tài khoản                nav.settings
  */
 
 import {
@@ -150,6 +154,7 @@ import {
   SCIENCE,
   PERSONAL,
   INFRA,
+  PROMOTION,
 } from '@/lib/rbac/function-codes';
 
 export interface MenuItem {
@@ -169,11 +174,15 @@ export interface MenuGroup {
 
 // ============================================================================
 // MENU CONFIGURATION - Single Source of Truth
-// 14 nhóm chức năng theo luồng nghiệp vụ
+// 19 nhóm chức năng theo 4 lớp nghiệp vụ
 // ============================================================================
 export const MENU_CONFIG: MenuGroup[] = [
 
-  // ========== 1. TỔNG QUAN ==========
+  // ─────────────────────────────────────────────────────────────────────────
+  // LỚP 1: TỔNG QUAN
+  // ─────────────────────────────────────────────────────────────────────────
+
+  // ========== 1. BẢNG ĐIỀU KHIỂN TỔNG HỢP ==========
   {
     title: 'nav.overview',
     items: [
@@ -209,6 +218,13 @@ export const MENU_CONFIG: MenuGroup[] = [
         badge: '🎨',
         functions: [DASHBOARD.VIEW],
       },
+    ],
+  },
+
+  // ========== 2. CẢNH BÁO & GIÁM SÁT ==========
+  {
+    title: 'nav.monitoringAlerts',
+    items: [
       {
         name: 'nav.alerts',
         href: '/dashboard/alerts',
@@ -227,142 +243,11 @@ export const MENU_CONFIG: MenuGroup[] = [
     ],
   },
 
-  // ========== 2. KHÔNG GIAN CÁ NHÂN (Tier 0 — MỌI user) ==========
-  {
-    title: 'nav.personalSpace',
-    items: [
-      {
-        name: 'nav.myProfile',
-        href: '/dashboard/profile',
-        icon: Users,
-        gradient: 'from-cyan-500 to-cyan-600',
-        badge: '📝',
-        functions: [],
-      },
-      {
-        name: 'nav.myTasks',
-        href: '/dashboard/workflow/my-work',
-        icon: ClipboardList,
-        gradient: 'from-violet-500 to-purple-600',
-        functions: [PERSONAL.VIEW_TASKS],
-      },
-      {
-        name: 'nav.notifications',
-        href: '/dashboard/notifications/history',
-        icon: Bell,
-        gradient: 'from-indigo-500 to-indigo-600',
-        functions: [],
-      },
-      {
-        name: 'nav.myCareer',
-        href: '/dashboard/personal/my-career',
-        icon: Briefcase,
-        gradient: 'from-blue-500 to-indigo-600',
-        functions: [PERSONAL.VIEW_CAREER_HISTORY],
-      },
-      {
-        name: 'nav.myPolicy',
-        href: '/dashboard/personal/my-policy',
-        icon: FileText,
-        gradient: 'from-amber-500 to-orange-600',
-        functions: [PERSONAL.VIEW_POLICY],
-      },
-      {
-        name: 'nav.myInsurance',
-        href: '/dashboard/personal/my-insurance',
-        icon: Heart,
-        gradient: 'from-teal-500 to-cyan-600',
-        functions: [PERSONAL.VIEW_INSURANCE],
-      },
-      {
-        name: 'nav.myAward',
-        href: '/dashboard/personal/my-awards',
-        icon: Award,
-        gradient: 'from-yellow-500 to-amber-600',
-        functions: [PERSONAL.VIEW_AWARD],
-      },
-      {
-        name: 'nav.mySecurity',
-        href: '/dashboard/settings/security',
-        icon: ShieldCheck,
-        gradient: 'from-green-500 to-emerald-600',
-        functions: [PERSONAL.MANAGE_SECURITY],
-      },
-      {
-        name: 'nav.personalHub',
-        href: '/dashboard/personal',
-        icon: UserCog,
-        gradient: 'from-pink-500 to-rose-600',
-        functions: [],
-      },
-    ],
-  },
+  // ─────────────────────────────────────────────────────────────────────────
+  // LỚP 2: QUẢN LÝ CSDL NGHIỆP VỤ
+  // ─────────────────────────────────────────────────────────────────────────
 
-  // ========== 3. HỌC TẬP CỦA TÔI (Tier 2 — Học viên/Sinh viên) ==========
-  {
-    title: 'nav.myLearning',
-    items: [
-      {
-        name: 'nav.myGrade',
-        href: '/dashboard/personal/my-grade',
-        icon: ClipboardList,
-        gradient: 'from-blue-500 to-indigo-600',
-        functions: [PERSONAL.VIEW_GRADE],
-      },
-      {
-        name: 'nav.myConduct',
-        href: '/dashboard/personal/my-conduct',
-        icon: Award,
-        gradient: 'from-teal-500 to-emerald-600',
-        functions: [PERSONAL.VIEW_CONDUCT],
-      },
-      {
-        name: 'nav.mySchedule',
-        href: '/dashboard/personal/my-schedule',
-        icon: Calendar,
-        gradient: 'from-purple-500 to-violet-600',
-        functions: [PERSONAL.VIEW_SCHEDULE],
-      },
-      {
-        name: 'nav.myGraduation',
-        href: '/dashboard/personal/my-graduation',
-        icon: GraduationCap,
-        gradient: 'from-green-600 to-emerald-700',
-        functions: [PERSONAL.VIEW_GRADUATION],
-      },
-    ],
-  },
-
-  // ========== 4. NGHIÊN CỨU CÁ NHÂN (Tier 1 — Giảng viên/NCV) ==========
-  {
-    title: 'nav.myResearchSpace',
-    items: [
-      {
-        name: 'nav.myResearch',
-        href: '/dashboard/personal/my-research',
-        icon: FlaskConical,
-        gradient: 'from-indigo-500 to-violet-600',
-        functions: [PERSONAL.VIEW_RESEARCH],
-      },
-      {
-        name: 'nav.myPublications',
-        href: '/dashboard/personal/my-publications',
-        icon: LibraryBig,
-        gradient: 'from-blue-500 to-indigo-600',
-        functions: [PERSONAL.VIEW_PUBLICATIONS],
-      },
-      {
-        name: 'nav.scientificCV',
-        href: '/dashboard/profile/scientific-cv',
-        icon: BookUser,
-        gradient: 'from-violet-500 to-purple-600',
-        badge: '🎓',
-        functions: [PERSONAL.MANAGE_SCIENTIFIC_CV, RESEARCH.VIEW, FACULTY.VIEW],
-      },
-    ],
-  },
-
-  // ========== 5. CSDL NHÂN SỰ ==========
+  // ========== 3. CSDL NHÂN SỰ ==========
   {
     title: 'nav.personnelDatabase',
     items: [
@@ -397,18 +282,49 @@ export const MENU_CONFIG: MenuGroup[] = [
         functions: [PERSONNEL.VIEW],
       },
       {
+        name: 'nav.rankDeclarations',
+        href: '/dashboard/personnel/rank-declarations',
+        icon: Shield,
+        gradient: 'from-blue-600 to-indigo-600',
+        badge: 'QH',
+        functions: [PROMOTION.VIEW_OWN],
+      },
+      {
+        name: 'nav.rankDeclarationApproval',
+        href: '/dashboard/personnel/rank-declarations?status=PENDING_REVIEW',
+        icon: Shield,
+        gradient: 'from-orange-500 to-amber-600',
+        badge: 'Duyệt QH',
+        functions: [PROMOTION.APPROVE],
+      },
+      {
+        name: 'nav.promotionProposals',
+        href: '/dashboard/personnel/promotion-proposals',
+        icon: Shield,
+        gradient: 'from-teal-500 to-green-600',
+        badge: 'ĐN',
+        functions: [PROMOTION.VIEW_PROPOSALS],
+      },
+      {
+        name: 'nav.promotionHistory',
+        href: '/dashboard/personnel/promotion-history',
+        icon: TrendingUp,
+        gradient: 'from-violet-500 to-purple-600',
+        badge: 'LS QH',
+        functions: [PERSONNEL.VIEW],
+      },
+      {
         name: 'nav.personnelAdvancedSearch',
         href: '/dashboard/personnel/advanced-search',
         icon: UserSearch,
         gradient: 'from-indigo-500 to-violet-600',
-        badge: '🔍',
         functions: [PERSONNEL.VIEW],
       },
       {
-        name: 'nav.personnelSearch',
-        href: '/dashboard/personnel/search',
-        icon: Search,
-        gradient: 'from-blue-500 to-indigo-500',
+        name: 'nav.personnelRetirement',
+        href: '/dashboard/personnel/retirement',
+        icon: Hourglass,
+        gradient: 'from-slate-500 to-gray-600',
         functions: [PERSONNEL.VIEW],
       },
       {
@@ -443,7 +359,7 @@ export const MENU_CONFIG: MenuGroup[] = [
     ],
   },
 
-  // ========== 4. CSDL CHÍNH TRỊ (ĐẢNG VIÊN) ==========
+  // ========== 4. CSDL CHÍNH TRỊ — ĐẢNG VIÊN ==========
   {
     title: 'nav.partyDatabase',
     items: [
@@ -460,7 +376,6 @@ export const MENU_CONFIG: MenuGroup[] = [
         href: '/dashboard/party/dashboard',
         icon: PieChart,
         gradient: 'from-red-600 to-red-700',
-        badge: 'UC-72',
         functions: [PARTY.VIEW_DASHBOARD, PARTY.VIEW],
       },
       {
@@ -468,7 +383,6 @@ export const MENU_CONFIG: MenuGroup[] = [
         href: '/dashboard/party/orgs',
         icon: Network,
         gradient: 'from-rose-600 to-red-700',
-        badge: 'UC-64',
         functions: [PARTY.VIEW_ORG, PARTY.VIEW],
       },
       {
@@ -476,7 +390,6 @@ export const MENU_CONFIG: MenuGroup[] = [
         href: '/dashboard/party/recruitment',
         icon: Workflow,
         gradient: 'from-rose-600 to-pink-700',
-        badge: 'UC-65',
         functions: [PARTY.VIEW_ADMISSION, PARTY.VIEW],
       },
       {
@@ -547,7 +460,6 @@ export const MENU_CONFIG: MenuGroup[] = [
         href: '/dashboard/party/inspections',
         icon: ShieldBan,
         gradient: 'from-red-600 to-red-700',
-        badge: 'UC-71',
         functions: [PARTY.VIEW_INSPECTION, PARTY.MANAGE_INSPECTION, PARTY.VIEW],
       },
       {
@@ -575,11 +487,10 @@ export const MENU_CONFIG: MenuGroup[] = [
     ],
   },
 
-  // ========== 7. CHÍNH SÁCH, BHXH & THI ĐUA (Quản lý) ==========
+  // ========== 5. CSDL CHÍNH SÁCH & CHẾ ĐỘ ==========
   {
-    title: 'nav.policyWelfareAwards',
+    title: 'nav.policyDatabase',
     items: [
-      // -- Chính sách --
       {
         name: 'nav.policyOverview',
         href: '/dashboard/policy',
@@ -637,7 +548,13 @@ export const MENU_CONFIG: MenuGroup[] = [
         gradient: 'from-teal-500 to-cyan-600',
         functions: [POLICY.CREATE, POLICY.CREATE_REQUEST],
       },
-      // -- BHXH --
+    ],
+  },
+
+  // ========== 6. CSDL BẢO HIỂM XÃ HỘI ==========
+  {
+    title: 'nav.insuranceDatabase',
+    items: [
       {
         name: 'nav.insuranceOverview',
         href: '/dashboard/insurance',
@@ -653,6 +570,13 @@ export const MENU_CONFIG: MenuGroup[] = [
         functions: [INSURANCE.VIEW],
       },
       {
+        name: 'nav.insuranceClaims',
+        href: '/dashboard/insurance/claims',
+        icon: FileCheck2,
+        gradient: 'from-blue-500 to-indigo-600',
+        functions: [INSURANCE.VIEW],
+      },
+      {
         name: 'nav.insuranceContributions',
         href: '/dashboard/insurance/contributions',
         icon: Coins,
@@ -660,10 +584,10 @@ export const MENU_CONFIG: MenuGroup[] = [
         functions: [INSURANCE.VIEW],
       },
       {
-        name: 'nav.insuranceClaims',
-        href: '/dashboard/insurance/claims',
-        icon: FileCheck2,
-        gradient: 'from-blue-500 to-indigo-600',
+        name: 'nav.insuranceHistory',
+        href: '/dashboard/insurance/history',
+        icon: History,
+        gradient: 'from-indigo-500 to-violet-600',
         functions: [INSURANCE.VIEW],
       },
       {
@@ -681,13 +605,26 @@ export const MENU_CONFIG: MenuGroup[] = [
         functions: [INSURANCE.VIEW],
       },
       {
+        name: 'nav.insuranceStats',
+        href: '/dashboard/insurance/stats',
+        icon: BarChart3,
+        gradient: 'from-emerald-500 to-teal-600',
+        functions: [INSURANCE.VIEW],
+      },
+      {
         name: 'nav.insuranceCreate',
         href: '/dashboard/insurance/create',
         icon: UserPlus,
         gradient: 'from-emerald-500 to-teal-600',
         functions: [INSURANCE.CREATE],
       },
-      // -- Thi đua Khen thưởng --
+    ],
+  },
+
+  // ========== 7. CSDL THI ĐUA — KHEN THƯỞNG ==========
+  {
+    title: 'nav.awardsDatabase',
+    items: [
       {
         name: 'nav.awardsOverview',
         href: '/dashboard/emulation',
@@ -726,10 +663,11 @@ export const MENU_CONFIG: MenuGroup[] = [
     ],
   },
 
-  // ========== 8a. TỔNG QUAN ĐÀO TẠO ==========
+  // ========== 8. CSDL GIÁO DỤC — ĐÀO TẠO ==========
   {
-    title: 'nav.educationOverviewGroup',
+    title: 'nav.educationDatabase',
     items: [
+      // -- Tổng quan --
       {
         name: 'nav.educationOverview',
         href: '/dashboard/education',
@@ -738,19 +676,12 @@ export const MENU_CONFIG: MenuGroup[] = [
         badge: '📊',
         functions: [EDUCATION.VIEW_PROGRAM],
       },
-    ],
-  },
-
-  // ========== 8b. QUẢN LÝ GIẢNG VIÊN ==========
-  {
-    title: 'nav.facultyManagementGroup',
-    items: [
+      // -- Giảng viên --
       {
         name: 'nav.facultyOverview',
         href: '/dashboard/faculty',
         icon: Users,
         gradient: 'from-violet-600 to-purple-700',
-        badge: '👨‍🏫',
         functions: [FACULTY.VIEW],
       },
       {
@@ -796,34 +727,20 @@ export const MENU_CONFIG: MenuGroup[] = [
         gradient: 'from-emerald-500 to-teal-600',
         functions: [EDUCATION.VIEW_TERM, FACULTY.VIEW],
       },
-    ],
-  },
-
-  // ========== 8b2. HỆ ĐÀO TẠO & TIỂU ĐOÀN ==========
-  {
-    title: 'nav.trainingSystemGroup',
-    items: [
+      // -- Hệ đào tạo & Đơn vị học --
       {
         name: 'nav.trainingSystems',
         href: '/dashboard/education/training-systems',
         icon: Building2,
         gradient: 'from-indigo-600 to-blue-700',
-        badge: '🏛️',
         functions: [EDUCATION.VIEW_TRAINING_SYSTEM],
       },
-    ],
-  },
-
-  // ========== 8c. QUẢN LÝ NGƯỜI HỌC ==========
-  {
-    title: 'nav.studentManagementGroup',
-    items: [
+      // -- Người học --
       {
         name: 'nav.militaryStudents',
         href: '/dashboard/education/military-students',
         icon: ShieldCheck,
         gradient: 'from-green-700 to-emerald-700',
-        badge: '🎖️',
         functions: [EDUCATION.VIEW_STUDENT],
       },
       {
@@ -831,7 +748,6 @@ export const MENU_CONFIG: MenuGroup[] = [
         href: '/dashboard/education/civil-students',
         icon: GraduationCap,
         gradient: 'from-blue-600 to-sky-600',
-        badge: '🎓',
         functions: [EDUCATION.VIEW_STUDENT],
       },
       {
@@ -885,13 +801,7 @@ export const MENU_CONFIG: MenuGroup[] = [
         badge: '🎓',
         functions: [EDUCATION.VIEW_GRADUATION],
       },
-    ],
-  },
-
-  // ========== 8d. CHƯƠNG TRÌNH & VẬN HÀNH ==========
-  {
-    title: 'nav.educationProgramGroup',
-    items: [
+      // -- Chương trình & Vận hành --
       {
         name: 'nav.educationPrograms',
         href: '/dashboard/education/programs',
@@ -980,7 +890,7 @@ export const MENU_CONFIG: MenuGroup[] = [
     ],
   },
 
-  // ========== 9. NGHIÊN CỨU KHOA HỌC ==========
+  // ========== 9. CSDL NGHIÊN CỨU KHOA HỌC ==========
   {
     title: 'nav.researchDatabase',
     items: [
@@ -997,7 +907,6 @@ export const MENU_CONFIG: MenuGroup[] = [
         href: '/dashboard/research/projects',
         icon: FolderKanban,
         gradient: 'from-violet-500 to-purple-600',
-        badge: '🗂',
         functions: [RESEARCH.VIEW],
       },
       {
@@ -1013,7 +922,6 @@ export const MENU_CONFIG: MenuGroup[] = [
         href: '/dashboard/research/repository',
         icon: LibraryBig,
         gradient: 'from-violet-500 to-blue-600',
-        badge: '🔍',
         functions: [RESEARCH.VIEW],
       },
       {
@@ -1028,7 +936,6 @@ export const MENU_CONFIG: MenuGroup[] = [
         href: '/dashboard/research/scientists',
         icon: Users,
         gradient: 'from-amber-500 to-orange-600',
-        badge: '🎓',
         functions: [RESEARCH.VIEW],
       },
       {
@@ -1071,11 +978,10 @@ export const MENU_CONFIG: MenuGroup[] = [
     ],
   },
 
-  // ========== 9b. CSDL KHOA HỌC QUẢN LÝ (CSDL-KHQL) ==========
+  // ========== 10. CSDL KHOA HỌC QUẢN LÝ (M20–M26) ==========
   {
     title: 'nav.scienceDatabase',
     items: [
-      // -- Tổng quan --
       {
         name: 'nav.scienceDashboard',
         href: '/dashboard/science',
@@ -1083,7 +989,6 @@ export const MENU_CONFIG: MenuGroup[] = [
         gradient: 'from-violet-500 to-purple-600',
         functions: [SCIENCE.DASHBOARD_VIEW],
       },
-      // -- Đề tài & Nhân lực --
       {
         name: 'nav.scienceProjects',
         href: '/dashboard/science/projects',
@@ -1126,7 +1031,6 @@ export const MENU_CONFIG: MenuGroup[] = [
         gradient: 'from-amber-500 to-orange-600',
         functions: [SCIENCE.SCIENTIST_VIEW],
       },
-      // -- Tài chính Granular (Phase 7) --
       {
         name: 'nav.scienceFinance',
         href: '/dashboard/science/finance',
@@ -1162,7 +1066,6 @@ export const MENU_CONFIG: MenuGroup[] = [
         gradient: 'from-green-500 to-emerald-600',
         functions: [SCIENCE.BUDGET_MANAGE, SCIENCE.BUDGET_APPROVE, SCIENCE.BUDGET_VIEW_FINANCE],
       },
-      // -- Quản trị & Tài chính cũ --
       {
         name: 'nav.scienceCouncils',
         href: '/dashboard/science/councils',
@@ -1177,7 +1080,6 @@ export const MENU_CONFIG: MenuGroup[] = [
         gradient: 'from-emerald-500 to-teal-600',
         functions: [SCIENCE.BUDGET_MANAGE, SCIENCE.BUDGET_VIEW_FINANCE],
       },
-      // -- M22 Data Hub --
       {
         name: 'nav.scienceDataHubOverview',
         href: '/dashboard/science/database/overview',
@@ -1192,7 +1094,6 @@ export const MENU_CONFIG: MenuGroup[] = [
         gradient: 'from-indigo-600 to-violet-700',
         functions: [SCIENCE.SCIENTIST_VIEW],
       },
-      // -- Kho tri thức --
       {
         name: 'nav.scienceWorks',
         href: '/dashboard/science/works',
@@ -1214,7 +1115,6 @@ export const MENU_CONFIG: MenuGroup[] = [
         gradient: 'from-slate-500 to-gray-600',
         functions: [SCIENCE.CATALOG_VIEW],
       },
-      // -- Hợp tác nghiên cứu --
       {
         name: 'nav.scienceCollaborations',
         href: '/dashboard/science/collaborations',
@@ -1222,7 +1122,6 @@ export const MENU_CONFIG: MenuGroup[] = [
         gradient: 'from-teal-500 to-emerald-600',
         functions: [SCIENCE.PROJECT_CREATE, SCIENCE.PROJECT_APPROVE_DEPT, SCIENCE.PROJECT_APPROVE_ACADEMY],
       },
-      // -- M26 Search / AI / Reports --
       {
         name: 'nav.scienceSearch',
         href: '/dashboard/science/search',
@@ -1254,7 +1153,63 @@ export const MENU_CONFIG: MenuGroup[] = [
     ],
   },
 
-  // ========== 10. MẪU BIỂU & XUẤT DỮ LIỆU (M18/M19) ==========
+  // ─────────────────────────────────────────────────────────────────────────
+  // LỚP 3: NGHIỆP VỤ & HẠ TẦNG ĐƠN VỊ
+  // ─────────────────────────────────────────────────────────────────────────
+
+  // ========== 11. QUY TRÌNH & VĂN BẢN SỐ ==========
+  {
+    title: 'nav.workflowDocuments',
+    items: [
+      {
+        name: 'nav.workflowDashboard',
+        href: '/dashboard/workflow',
+        icon: Network,
+        gradient: 'from-violet-500 to-purple-600',
+        badge: '⚙️',
+        functions: [WORKFLOW.VIEW],
+      },
+      {
+        name: 'nav.workflowMyWork',
+        href: '/dashboard/workflow/my-work',
+        icon: ClipboardList,
+        gradient: 'from-violet-500 to-purple-600',
+        functions: [WORKFLOW.ACT, WORKFLOW.VIEW_DETAIL],
+      },
+      {
+        name: 'nav.workflowInstances',
+        href: '/dashboard/workflow/instances',
+        icon: Layers,
+        gradient: 'from-violet-500 to-purple-600',
+        functions: [WORKFLOW.VIEW_ALL_INSTANCES, WORKFLOW.MONITOR],
+      },
+      {
+        name: 'nav.workflowDesigner',
+        href: '/dashboard/workflow/designer',
+        icon: FolderKanban,
+        gradient: 'from-violet-500 to-purple-600',
+        functions: [WORKFLOW.DESIGN, WORKFLOW.OVERRIDE],
+      },
+      {
+        name: 'nav.documentRegistry',
+        href: '/dashboard/documents',
+        icon: FileText,
+        gradient: 'from-indigo-500 to-blue-600',
+        badge: '📄',
+        functions: [DIGITAL_DOCS.VIEW],
+      },
+      {
+        name: 'nav.documentOCR',
+        href: '/dashboard/documents/ocr',
+        icon: ScanText,
+        gradient: 'from-indigo-500 to-blue-600',
+        badge: 'OCR',
+        functions: [DIGITAL_DOCS.OCR],
+      },
+    ],
+  },
+
+  // ========== 12. MẪU BIỂU & XUẤT DỮ LIỆU ==========
   {
     title: 'nav.templateExport',
     items: [
@@ -1263,7 +1218,6 @@ export const MENU_CONFIG: MenuGroup[] = [
         href: '/dashboard/templates',
         icon: Archive,
         gradient: 'from-blue-500 to-indigo-600',
-        badge: 'M18',
         functions: [TEMPLATES.VIEW],
       },
       {
@@ -1279,15 +1233,14 @@ export const MENU_CONFIG: MenuGroup[] = [
         href: '/dashboard/templates/schedules',
         icon: CalendarRange,
         gradient: 'from-emerald-500 to-teal-600',
-        badge: 'M19',
         functions: [TEMPLATES.MANAGE_SCHEDULES],
       },
     ],
   },
 
-  // ========== 11. AI & PHÂN TÍCH ==========
+  // ========== 13. PHÂN TÍCH, BÁO CÁO & AI ==========
   {
-    title: 'nav.analyticsReports',
+    title: 'nav.analyticsAI',
     items: [
       // -- AI --
       {
@@ -1407,16 +1360,15 @@ export const MENU_CONFIG: MenuGroup[] = [
     ],
   },
 
-  // ========== 12a. HẠ TẦNG & DỮ LIỆU (M12) ==========
+  // ========== 14. HẠ TẦNG & QUẢN TRỊ DỮ LIỆU ==========
   {
-    title: 'nav.infrastructureGroup',
+    title: 'nav.infrastructureData',
     items: [
       {
         name: 'nav.infrastructureAdmin',
         href: '/dashboard/infrastructure',
         icon: HardDrive,
         gradient: 'from-slate-600 to-gray-700',
-        badge: 'M12',
         functions: [INFRA.VIEW, INFRA.PIPELINE_VIEW, INFRA.BACKUP_VIEW, INFRA.DR_VIEW],
       },
       {
@@ -1452,7 +1404,6 @@ export const MENU_CONFIG: MenuGroup[] = [
         href: '/dashboard/etl/automation',
         icon: Zap,
         gradient: 'from-yellow-500 to-orange-600',
-        badge: 'ETL',
         functions: [ETL.VIEW, ETL.EXECUTE],
       },
       {
@@ -1462,65 +1413,6 @@ export const MENU_CONFIG: MenuGroup[] = [
         gradient: 'from-amber-500 to-yellow-600',
         functions: [DATA.VIEW],
       },
-    ],
-  },
-
-  // ========== 12b. QUY TRÌNH & VĂN BẢN SỐ ==========
-  {
-    title: 'nav.workflowDocGroup',
-    items: [
-      {
-        name: 'nav.workflowDashboard',
-        href: '/dashboard/workflow',
-        icon: Network,
-        gradient: 'from-violet-500 to-purple-600',
-        badge: '⚙️',
-        functions: [WORKFLOW.VIEW],
-      },
-      {
-        name: 'nav.workflowMyWork',
-        href: '/dashboard/workflow/my-work',
-        icon: ClipboardList,
-        gradient: 'from-violet-500 to-purple-600',
-        functions: [WORKFLOW.ACT, WORKFLOW.VIEW_DETAIL],
-      },
-      {
-        name: 'nav.workflowInstances',
-        href: '/dashboard/workflow/instances',
-        icon: Layers,
-        gradient: 'from-violet-500 to-purple-600',
-        functions: [WORKFLOW.VIEW_ALL_INSTANCES, WORKFLOW.MONITOR],
-      },
-      {
-        name: 'nav.workflowDesigner',
-        href: '/dashboard/workflow/designer',
-        icon: FolderKanban,
-        gradient: 'from-violet-500 to-purple-600',
-        functions: [WORKFLOW.DESIGN, WORKFLOW.OVERRIDE],
-      },
-      {
-        name: 'nav.documentRegistry',
-        href: '/dashboard/documents',
-        icon: FileText,
-        gradient: 'from-indigo-500 to-blue-600',
-        badge: '📄',
-        functions: [DIGITAL_DOCS.VIEW],
-      },
-      {
-        name: 'nav.documentOCR',
-        href: '/dashboard/documents/ocr',
-        icon: ScanText,
-        gradient: 'from-indigo-500 to-blue-600',
-        badge: 'OCR',
-        functions: [DIGITAL_DOCS.OCR],
-      },
-    ],
-  },
-
-  // ========== 12c. BẢO MẬT & QUẢN TRỊ DỮ LIỆU ==========
-  {
-    title: 'nav.securityGovernanceGroup',
-    items: [
       {
         name: 'nav.governanceCompliance',
         href: '/dashboard/governance/compliance',
@@ -1566,7 +1458,150 @@ export const MENU_CONFIG: MenuGroup[] = [
     ],
   },
 
-  // ========== 13. QUẢN TRỊ HỆ THỐNG ==========
+  // ─────────────────────────────────────────────────────────────────────────
+  // LỚP 4: CÁ NHÂN
+  // ─────────────────────────────────────────────────────────────────────────
+
+  // ========== 15. KHÔNG GIAN CÁ NHÂN ==========
+  {
+    title: 'nav.personalSpace',
+    items: [
+      {
+        name: 'nav.myProfile',
+        href: '/dashboard/profile',
+        icon: Users,
+        gradient: 'from-cyan-500 to-cyan-600',
+        badge: '📝',
+        functions: [],
+      },
+      {
+        name: 'nav.myTasks',
+        href: '/dashboard/workflow/my-work',
+        icon: ClipboardList,
+        gradient: 'from-violet-500 to-purple-600',
+        functions: [PERSONAL.VIEW_TASKS],
+      },
+      {
+        name: 'nav.notifications',
+        href: '/dashboard/notifications/history',
+        icon: Bell,
+        gradient: 'from-indigo-500 to-indigo-600',
+        functions: [],
+      },
+      {
+        name: 'nav.myCareer',
+        href: '/dashboard/personal/my-career',
+        icon: Briefcase,
+        gradient: 'from-blue-500 to-indigo-600',
+        functions: [PERSONAL.VIEW_CAREER_HISTORY],
+      },
+      {
+        name: 'nav.myPolicy',
+        href: '/dashboard/personal/my-policy',
+        icon: FileText,
+        gradient: 'from-amber-500 to-orange-600',
+        functions: [PERSONAL.VIEW_POLICY],
+      },
+      {
+        name: 'nav.myInsurance',
+        href: '/dashboard/personal/my-insurance',
+        icon: Heart,
+        gradient: 'from-teal-500 to-cyan-600',
+        functions: [PERSONAL.VIEW_INSURANCE],
+      },
+      {
+        name: 'nav.myAward',
+        href: '/dashboard/personal/my-awards',
+        icon: Award,
+        gradient: 'from-yellow-500 to-amber-600',
+        functions: [PERSONAL.VIEW_AWARD],
+      },
+      {
+        name: 'nav.mySecurity',
+        href: '/dashboard/settings/security',
+        icon: ShieldCheck,
+        gradient: 'from-green-500 to-emerald-600',
+        functions: [PERSONAL.MANAGE_SECURITY],
+      },
+      {
+        name: 'nav.personalHub',
+        href: '/dashboard/personal',
+        icon: UserCog,
+        gradient: 'from-pink-500 to-rose-600',
+        functions: [],
+      },
+    ],
+  },
+
+  // ========== 16. HỌC TẬP CỦA TÔI (Học viên) ==========
+  {
+    title: 'nav.myLearning',
+    items: [
+      {
+        name: 'nav.myGrade',
+        href: '/dashboard/personal/my-grade',
+        icon: ClipboardList,
+        gradient: 'from-blue-500 to-indigo-600',
+        functions: [PERSONAL.VIEW_GRADE],
+      },
+      {
+        name: 'nav.myConduct',
+        href: '/dashboard/personal/my-conduct',
+        icon: Award,
+        gradient: 'from-teal-500 to-emerald-600',
+        functions: [PERSONAL.VIEW_CONDUCT],
+      },
+      {
+        name: 'nav.mySchedule',
+        href: '/dashboard/personal/my-schedule',
+        icon: Calendar,
+        gradient: 'from-purple-500 to-violet-600',
+        functions: [PERSONAL.VIEW_SCHEDULE],
+      },
+      {
+        name: 'nav.myGraduation',
+        href: '/dashboard/personal/my-graduation',
+        icon: GraduationCap,
+        gradient: 'from-green-600 to-emerald-700',
+        functions: [PERSONAL.VIEW_GRADUATION],
+      },
+    ],
+  },
+
+  // ========== 17. NGHIÊN CỨU CÁ NHÂN (Giảng viên/NCV) ==========
+  {
+    title: 'nav.myResearchSpace',
+    items: [
+      {
+        name: 'nav.myResearch',
+        href: '/dashboard/personal/my-research',
+        icon: FlaskConical,
+        gradient: 'from-indigo-500 to-violet-600',
+        functions: [PERSONAL.VIEW_RESEARCH],
+      },
+      {
+        name: 'nav.myPublications',
+        href: '/dashboard/personal/my-publications',
+        icon: LibraryBig,
+        gradient: 'from-blue-500 to-indigo-600',
+        functions: [PERSONAL.VIEW_PUBLICATIONS],
+      },
+      {
+        name: 'nav.scientificCV',
+        href: '/dashboard/profile/scientific-cv',
+        icon: BookUser,
+        gradient: 'from-violet-500 to-purple-600',
+        badge: '🎓',
+        functions: [PERSONAL.MANAGE_SCIENTIFIC_CV, RESEARCH.VIEW, FACULTY.VIEW],
+      },
+    ],
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // QUẢN TRỊ
+  // ─────────────────────────────────────────────────────────────────────────
+
+  // ========== 18. QUẢN TRỊ HỆ THỐNG ==========
   {
     title: 'nav.systemAdmin',
     items: [
@@ -1750,7 +1785,7 @@ export const MENU_CONFIG: MenuGroup[] = [
     ],
   },
 
-  // ========== 14. CÀI ĐẶT CÁ NHÂN ==========
+  // ========== 19. CÀI ĐẶT TÀI KHOẢN ==========
   {
     title: 'nav.settings',
     items: [

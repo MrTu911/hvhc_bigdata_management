@@ -84,6 +84,75 @@ interface RankItem { id: string; name: string; shortCode: string; category: stri
 interface EduLevelItem { id: string; name: string; shortName: string | null; }
 interface SimpleItem { id: string; name: string; }
 
+interface RankDeclaration {
+  id: string;
+  rankType: string;
+  promotionType: string;
+  previousRank: string | null;
+  newRank: string | null;
+  effectiveDate: string;
+  decisionNumber: string | null;
+  decisionDate: string | null;
+  previousPosition: string | null;
+  newPosition: string | null;
+  reason: string | null;
+  notes: string | null;
+  declarationStatus: string;
+  lockedAt: string | null;
+  declaredOnBehalfOf: boolean;
+  createdAt: string;
+}
+
+interface OfficerPromotionRecord {
+  id: string;
+  promotionType: string;
+  effectiveDate: string;
+  decisionNumber: string | null;
+  decisionDate: string | null;
+  previousRank: string | null;
+  newRank: string | null;
+  previousPosition: string | null;
+  newPosition: string | null;
+  reason: string | null;
+  notes: string | null;
+  createdAt: string;
+}
+
+const PROMOTION_TYPE_LABELS: Record<string, string> = {
+  THANG_CAP:   'Thăng cấp',
+  BO_NHIEM:    'Bổ nhiệm',
+  DIEU_DONG:   'Điều động',
+  LUAN_CHUYEN: 'Luân chuyển',
+  GIANG_CHUC:  'Giáng chức',
+  CACH_CHUC:   'Cách chức',
+  NGHI_HUU:    'Nghỉ hưu',
+  XUAT_NGU:    'Xuất ngũ',
+};
+
+const DECL_STATUS_CONFIG: Record<string, { label: string; variant: 'default' | 'secondary' | 'outline' | 'destructive' }> = {
+  DRAFT:          { label: 'Nháp',           variant: 'secondary' },
+  PENDING_REVIEW: { label: 'Chờ duyệt',      variant: 'outline' },
+  UNDER_REVIEW:   { label: 'Đang xét duyệt', variant: 'outline' },
+  APPROVED:       { label: 'Đã duyệt',       variant: 'default' },
+  REJECTED:       { label: 'Từ chối',        variant: 'destructive' },
+  RETURNED:       { label: 'Trả lại',        variant: 'destructive' },
+  CANCELLED:      { label: 'Đã hủy',         variant: 'secondary' },
+};
+
+const RANK_DECL_EMPTY = {
+  rankType:         'OFFICER',
+  promotionType:    '',
+  previousRank:     '',
+  newRank:          '',
+  effectiveDate:    '',
+  decisionNumber:   '',
+  decisionDate:     '',
+  previousPosition: '',
+  newPosition:      '',
+  reason:           '',
+  notes:            '',
+};
+
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 function fmtDate(d: string | null | undefined) {
   if (!d) return '—';
@@ -251,6 +320,43 @@ export default function MyProfilePage() {
   const [techEditing, setTechEditing]   = useState<TechCert | null>(null);
   const [techForm, setTechForm]         = useState<TechCert>(TECH_EMPTY);
   const [techDeleteId, setTechDeleteId] = useState<string | null>(null);
+
+  // Rank declarations + official promotion history
+  const [officerHistory, setOfficerHistory]     = useState<OfficerPromotionRecord[]>([]);
+  const [rankDecls, setRankDecls]               = useState<RankDeclaration[]>([]);
+  const [rankDeclsLoading, setRankDeclsLoading] = useState(false);
+  const [rankDeclOpen, setRankDeclOpen]         = useState(false);
+  const [rankDeclSaving, setRankDeclSaving]     = useState(false);
+  const [rankDeclForm, setRankDeclForm]         = useState({ ...RANK_DECL_EMPTY });
+  const [rankSubmittingId, setRankSubmittingId] = useState<string | null>(null);
+
+  const fetchRankDeclarations = useCallback(async () => {
+    if (!profile) return;
+    setRankDeclsLoading(true);
+    try {
+      const [histRes, declRes] = await Promise.all([
+        fetch(`/api/officer-career/promotions?personnelId=${profile.id}&limit=50`),
+        fetch(`/api/officer-career/rank-declarations?personnelId=${profile.id}&limit=50`),
+      ]);
+      const [histData, declData] = await Promise.all([histRes.json(), declRes.json()]);
+      if (histData.success) {
+        // Sort ASC so timeline reads from enlistment → present
+        const sorted = (histData.data || []).slice().sort(
+          (a: OfficerPromotionRecord, b: OfficerPromotionRecord) =>
+            new Date(a.effectiveDate).getTime() - new Date(b.effectiveDate).getTime(),
+        );
+        setOfficerHistory(sorted);
+      }
+      if (declData.success) {
+        // Only show non-approved declarations in the pending section
+        const pending = (declData.items || declData.data || []).filter(
+          (d: RankDeclaration) => d.declarationStatus !== 'APPROVED' && d.declarationStatus !== 'CANCELLED',
+        );
+        setRankDecls(pending);
+      }
+    } catch { /* silent */ }
+    finally { setRankDeclsLoading(false); }
+  }, [profile]);
 
   // ── Load profile + master data ─────────────────────────────────────────────
   const fetchProfile = useCallback(async () => {
@@ -675,7 +781,7 @@ export default function MyProfilePage() {
       </div>
 
       {/* ── Tabs ──────────────────────────────────────────────────────────── */}
-      <Tabs defaultValue="basic">
+      <Tabs defaultValue="basic" onValueChange={v => { if (v === 'rank') fetchRankDeclarations(); }}>
         <TabsList className="flex flex-wrap h-auto gap-1 p-1 rounded-xl bg-slate-100 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
           {([
             { value: 'basic',     label: 'Cơ bản',      Icon: User },
@@ -685,6 +791,7 @@ export default function MyProfilePage() {
             { value: 'techcert',  label: 'Chứng chỉ',   Icon: FileCheck },
             { value: 'awards',    label: 'Khen thưởng', Icon: Award },
             { value: 'party',     label: 'Đảng viên',   Icon: Star },
+            { value: 'rank',      label: 'Quân hàm',    Icon: Shield },
           ] as const).map(({ value, label, Icon }) => (
             <TabsTrigger key={value} value={value}
               className="flex items-center gap-1.5 text-xs rounded-lg data-[state=active]:bg-blue-700 data-[state=active]:text-white data-[state=active]:shadow-sm">
@@ -1380,6 +1487,274 @@ export default function MyProfilePage() {
               )}
             </CardContent>
           </Card>
+        </TabsContent>
+
+        {/* ═══════════════════════════════════════════════════════════════ */}
+        {/* TAB: Quân hàm */}
+        {/* ═══════════════════════════════════════════════════════════════ */}
+        <TabsContent value="rank" className="mt-4 space-y-4">
+
+          {/* ── SECTION A: Lịch sử chính thức ──────────────────────────────── */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <div>
+                  <CardTitle className="text-base flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                    Lịch sử quân hàm chính thức
+                  </CardTitle>
+                  <CardDescription>
+                    Toàn bộ quá trình quân hàm từ khi nhập ngũ — dữ liệu đã được cơ quan xác nhận và đưa vào CSDL.
+                  </CardDescription>
+                </div>
+                <Button
+                  size="sm"
+                  className="bg-blue-700 hover:bg-blue-800 text-white"
+                  onClick={() => { setRankDeclForm({ ...RANK_DECL_EMPTY }); setRankDeclOpen(true); }}
+                >
+                  <Plus className="h-3.5 w-3.5 mr-1" />Thêm mốc quân hàm
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              {rankDeclsLoading ? (
+                <div className="space-y-2">
+                  {[1, 2, 3].map(i => <Skeleton key={i} className="h-16 w-full rounded-xl" />)}
+                </div>
+              ) : officerHistory.length === 0 ? (
+                <EmptyState
+                  icon={CheckCircle2}
+                  title="Chưa có lịch sử quân hàm chính thức"
+                  sub="Nhấn 'Thêm mốc quân hàm' để khai báo từng mốc từ khi nhập ngũ đến hiện tại. Sau khi cơ quan duyệt, dữ liệu sẽ xuất hiện tại đây."
+                />
+              ) : (
+                <div className="relative">
+                  {/* Timeline line */}
+                  <div className="absolute left-5 top-0 bottom-0 w-px bg-slate-200 dark:bg-slate-700" />
+                  <div className="space-y-1">
+                    {officerHistory.map((rec, idx) => (
+                      <div key={rec.id} className="relative flex gap-4 pb-4">
+                        {/* Timeline dot */}
+                        <div className={`relative z-10 w-10 h-10 rounded-full flex items-center justify-center shrink-0 border-2 ${idx === officerHistory.length - 1 ? 'bg-emerald-600 border-emerald-600' : 'bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-600'}`}>
+                          <Shield className={`h-4 w-4 ${idx === officerHistory.length - 1 ? 'text-white' : 'text-slate-400'}`} />
+                        </div>
+                        <div className="flex-1 min-w-0 pt-1.5">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="font-semibold text-sm">
+                              {PROMOTION_TYPE_LABELS[rec.promotionType] || rec.promotionType}
+                            </span>
+                            {idx === officerHistory.length - 1 && (
+                              <Badge className="text-xs bg-emerald-600 text-white">Hiện tại</Badge>
+                            )}
+                          </div>
+                          <div className="mt-0.5 text-xs text-muted-foreground flex flex-wrap gap-x-4 gap-y-0.5">
+                            <span className="flex items-center gap-1">
+                              <Calendar className="h-3 w-3" />{fmtDate(rec.effectiveDate)}
+                            </span>
+                            {rec.previousRank && rec.newRank && (
+                              <span>{rec.previousRank} → <strong className="text-foreground">{rec.newRank}</strong></span>
+                            )}
+                            {rec.newRank && !rec.previousRank && (
+                              <span>Quân hàm: <strong className="text-foreground">{rec.newRank}</strong></span>
+                            )}
+                            {rec.newPosition && <span>Chức vụ: {rec.newPosition}</span>}
+                            {rec.decisionNumber && <span>QĐ: {rec.decisionNumber}</span>}
+                          </div>
+                          {rec.reason && (
+                            <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1 italic">{rec.reason}</p>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* ── SECTION B: Bản khai đang xử lý ─────────────────────────────── */}
+          {rankDecls.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-sm flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-amber-500" />
+                  Bản khai đang chờ xử lý ({rankDecls.length})
+                </CardTitle>
+                <CardDescription>
+                  Các bản khai chưa được cơ quan phê duyệt. Nộp bản khai để gửi lên{' '}
+                  {profile?.managementCategory === 'CAN_BO' ? 'Ban Cán bộ' : 'Ban Quân lực'} xét duyệt.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  {rankDecls.map(decl => {
+                    const statusCfg = DECL_STATUS_CONFIG[decl.declarationStatus] || { label: decl.declarationStatus, variant: 'secondary' as const };
+                    const canSubmit = decl.declarationStatus === 'DRAFT' || decl.declarationStatus === 'RETURNED';
+                    return (
+                      <div key={decl.id} className="flex items-center gap-3 p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/40">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="font-medium text-sm">
+                              {PROMOTION_TYPE_LABELS[decl.promotionType] || decl.promotionType}
+                            </span>
+                            <Badge variant={statusCfg.variant} className="text-xs">{statusCfg.label}</Badge>
+                          </div>
+                          <div className="mt-0.5 text-xs text-muted-foreground flex flex-wrap gap-x-3">
+                            <span>{fmtDate(decl.effectiveDate)}</span>
+                            {decl.previousRank && decl.newRank && <span>{decl.previousRank} → {decl.newRank}</span>}
+                            {decl.decisionNumber && <span>QĐ: {decl.decisionNumber}</span>}
+                          </div>
+                        </div>
+                        {canSubmit && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            disabled={rankSubmittingId === decl.id}
+                            className="shrink-0 text-xs"
+                            onClick={async () => {
+                              setRankSubmittingId(decl.id);
+                              try {
+                                const res = await fetch(`/api/officer-career/rank-declarations/${decl.id}/submit`, { method: 'POST' });
+                                const data = await res.json();
+                                if (data.success) {
+                                  toast.success('Đã nộp bản khai — chờ cơ quan xét duyệt');
+                                  fetchRankDeclarations();
+                                } else {
+                                  toast.error(data.error || 'Không thể nộp bản khai');
+                                }
+                              } catch { toast.error('Lỗi kết nối'); }
+                              finally { setRankSubmittingId(null); }
+                            }}
+                          >
+                            {rankSubmittingId === decl.id
+                              ? <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                              : <><ChevronRight className="h-3.5 w-3.5 mr-1" />Nộp</>
+                            }
+                          </Button>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Hướng dẫn */}
+          <div className="p-3 rounded-lg bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 text-xs text-blue-800 dark:text-blue-200">
+            <strong>Hướng dẫn khai báo lịch sử:</strong> Nhấn &quot;Thêm mốc quân hàm&quot; để khai báo từng sự kiện
+            (nhập ngũ, thăng cấp, bổ nhiệm, điều động…) theo thứ tự thời gian từ đầu đến nay.
+            Mỗi bản khai cần được{' '}
+            {profile?.managementCategory === 'CAN_BO' ? 'Ban Cán bộ' : 'Ban Quân lực'}{' '}
+            xác nhận trước khi vào CSDL chính thức.
+          </div>
+
+          {/* Create rank declaration dialog */}
+          <CrudDialog
+            open={rankDeclOpen}
+            onOpenChange={setRankDeclOpen}
+            title="Khai báo mốc quân hàm"
+            saving={rankDeclSaving}
+            onSave={async () => {
+              if (!profile) return;
+              if (!rankDeclForm.promotionType || !rankDeclForm.effectiveDate) {
+                toast.error('Vui lòng điền loại sự kiện và ngày hiệu lực');
+                return;
+              }
+              setRankDeclSaving(true);
+              try {
+                const res = await fetch('/api/officer-career/rank-declarations', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    personnelId:      profile.id,
+                    rankType:         rankDeclForm.rankType,
+                    promotionType:    rankDeclForm.promotionType,
+                    previousRank:     rankDeclForm.previousRank || null,
+                    newRank:          rankDeclForm.newRank || null,
+                    effectiveDate:    rankDeclForm.effectiveDate,
+                    decisionNumber:   rankDeclForm.decisionNumber || null,
+                    decisionDate:     rankDeclForm.decisionDate || null,
+                    previousPosition: rankDeclForm.previousPosition || null,
+                    newPosition:      rankDeclForm.newPosition || null,
+                    reason:           rankDeclForm.reason || null,
+                    notes:            rankDeclForm.notes || null,
+                    onBehalf:         false,
+                  }),
+                });
+                const data = await res.json();
+                if (data.success) {
+                  toast.success('Đã tạo bản khai. Nhấn "Nộp" để gửi cơ quan xét duyệt.');
+                  setRankDeclOpen(false);
+                  fetchRankDeclarations();
+                } else {
+                  toast.error(data.error || 'Không thể tạo bản khai');
+                }
+              } catch { toast.error('Lỗi kết nối'); }
+              finally { setRankDeclSaving(false); }
+            }}
+          >
+            <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-3">
+                <FieldGroup label="Diện quản lý">
+                  <Select value={rankDeclForm.rankType} onValueChange={v => setRankDeclForm({ ...rankDeclForm, rankType: v })}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="OFFICER">Sĩ quan / Cán bộ</SelectItem>
+                      <SelectItem value="SOLDIER">Quân nhân chuyên nghiệp</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FieldGroup>
+                <FieldGroup label="Loại sự kiện *">
+                  <Select value={rankDeclForm.promotionType} onValueChange={v => setRankDeclForm({ ...rankDeclForm, promotionType: v })}>
+                    <SelectTrigger><SelectValue placeholder="Chọn loại" /></SelectTrigger>
+                    <SelectContent>
+                      {Object.entries(PROMOTION_TYPE_LABELS).map(([k, v]) => (
+                        <SelectItem key={k} value={k}>{v}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FieldGroup>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <FieldGroup label="Quân hàm cũ">
+                  <Input value={rankDeclForm.previousRank} onChange={e => setRankDeclForm({ ...rankDeclForm, previousRank: e.target.value })} placeholder="VD: Đại úy" />
+                </FieldGroup>
+                <FieldGroup label="Quân hàm mới">
+                  <Input value={rankDeclForm.newRank} onChange={e => setRankDeclForm({ ...rankDeclForm, newRank: e.target.value })} placeholder="VD: Thiếu tá" />
+                </FieldGroup>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <FieldGroup label="Ngày hiệu lực *">
+                  <Input type="date" value={rankDeclForm.effectiveDate} onChange={e => setRankDeclForm({ ...rankDeclForm, effectiveDate: e.target.value })} />
+                </FieldGroup>
+                <FieldGroup label="Số quyết định">
+                  <Input value={rankDeclForm.decisionNumber} onChange={e => setRankDeclForm({ ...rankDeclForm, decisionNumber: e.target.value })} placeholder="VD: 123/QĐ-BQP" />
+                </FieldGroup>
+              </div>
+              <FieldGroup label="Ngày ban hành QĐ">
+                <Input type="date" value={rankDeclForm.decisionDate} onChange={e => setRankDeclForm({ ...rankDeclForm, decisionDate: e.target.value })} />
+              </FieldGroup>
+              <div className="grid grid-cols-2 gap-3">
+                <FieldGroup label="Chức vụ cũ">
+                  <Input value={rankDeclForm.previousPosition} onChange={e => setRankDeclForm({ ...rankDeclForm, previousPosition: e.target.value })} />
+                </FieldGroup>
+                <FieldGroup label="Chức vụ mới">
+                  <Input value={rankDeclForm.newPosition} onChange={e => setRankDeclForm({ ...rankDeclForm, newPosition: e.target.value })} />
+                </FieldGroup>
+              </div>
+              <FieldGroup label="Lý do / Căn cứ">
+                <Textarea rows={2} value={rankDeclForm.reason} onChange={e => setRankDeclForm({ ...rankDeclForm, reason: e.target.value })} placeholder="Theo Quyết định số... hoặc lý do thăng cấp" />
+              </FieldGroup>
+              <FieldGroup label="Ghi chú">
+                <Textarea rows={2} value={rankDeclForm.notes} onChange={e => setRankDeclForm({ ...rankDeclForm, notes: e.target.value })} />
+              </FieldGroup>
+              <p className="text-xs text-muted-foreground bg-blue-50 dark:bg-blue-950/30 p-2 rounded-lg">
+                Bản khai sẽ lưu ở trạng thái <strong>Nháp</strong>. Sau khi kiểm tra xong, nhấn &quot;Nộp&quot;
+                để gửi lên cơ quan xét duyệt. Có thể thêm nhiều mốc để khai báo toàn bộ lịch sử.
+              </p>
+            </div>
+          </CrudDialog>
         </TabsContent>
       </Tabs>
     </div>

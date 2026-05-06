@@ -1,5 +1,6 @@
 /**
  * API: Chi tiết / Cập nhật / Xóa quyết định thăng cấp
+ * GET    /api/officer-career/promotions/[id]
  * PATCH  /api/officer-career/promotions/[id]
  * DELETE /api/officer-career/promotions/[id]
  */
@@ -12,6 +13,49 @@ import { logAudit } from '@/lib/audit';
 import { PromotionType } from '@prisma/client';
 
 export const dynamic = 'force-dynamic';
+
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } },
+) {
+  try {
+    const authResult = await requireFunction(request, PERSONNEL.VIEW);
+    if (!authResult.allowed) {
+      return NextResponse.json(
+        { error: authResult.authResult?.deniedReason || 'Forbidden' },
+        { status: 403 },
+      );
+    }
+
+    const promotion = await prisma.officerPromotion.findUnique({
+      where: { id: params.id },
+      include: {
+        officerCareer: {
+          include: {
+            personnel: {
+              select: {
+                id: true,
+                fullName: true,
+                personnelCode: true,
+                militaryRank: true,
+                unit: { select: { id: true, name: true } },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!promotion) {
+      return NextResponse.json({ error: 'Not found' }, { status: 404 });
+    }
+
+    return NextResponse.json({ success: true, data: promotion });
+  } catch (error) {
+    console.error('Error fetching promotion detail:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}
 
 export async function PATCH(
   request: NextRequest,
