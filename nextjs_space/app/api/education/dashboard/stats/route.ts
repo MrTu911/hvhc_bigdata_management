@@ -98,6 +98,23 @@ export async function GET(req: NextRequest) {
     const totalWarnings = warningCritical + warningHigh + warningMedium + warningLow;
     const warningRate   = activeStudents > 0 ? Math.round((totalWarnings / activeStudents) * 100) : 0;
 
+    // Sinh viên dân sự (StudentProfile)
+    const [civilTotal, civilActive, civilByFaculty, civilGpaAgg] = await Promise.all([
+      prisma.studentProfile.count({ where: { deletedAt: null } }),
+      prisma.studentProfile.count({ where: { deletedAt: null, trangThai: 'DANG_HOC' } }),
+      prisma.studentProfile.groupBy({
+        by: ['khoaQuanLy'],
+        _count: { id: true },
+        where: { deletedAt: null },
+        orderBy: { _count: { id: 'desc' } },
+        take: 6,
+      }),
+      prisma.studentProfile.aggregate({
+        _avg: { diemTrungBinh: true },
+        where: { deletedAt: null, diemTrungBinh: { gt: 0 } },
+      }),
+    ]);
+
     return NextResponse.json({
       success: true,
       data: {
@@ -106,6 +123,17 @@ export async function GET(req: NextRequest) {
         students: {
           total:  totalStudents,
           active: activeStudents,
+        },
+        civilStudents: {
+          total:   civilTotal,
+          active:  civilActive,
+          avgGpa:  civilGpaAgg._avg.diemTrungBinh
+            ? Math.round(civilGpaAgg._avg.diemTrungBinh * 100) / 100
+            : null,
+          byFaculty: civilByFaculty.map((f) => ({
+            faculty: f.khoaQuanLy ?? 'Chưa phân khoa',
+            count:   f._count.id,
+          })),
         },
         warnings: {
           total:    totalWarnings,

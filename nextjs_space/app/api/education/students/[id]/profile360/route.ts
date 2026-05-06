@@ -95,9 +95,10 @@ export async function GET(req: NextRequest, { params }: Params) {
 
     const latestConduct = conductRecords[0] ?? null;
 
-    // Số môn đã học: ClassEnrollment (M10) + legacy nếu chưa có ClassEnrollment nào
     const m10SubjectCount = classEnrollments.length;
-    const legacySubjectCount = m10SubjectCount === 0 ? legacyGrades.length : 0;
+    const legacySubjectCount = legacyGrades.length;
+    // Tổng số môn: ưu tiên M10 nếu có, fallback sang legacy
+    const totalSubjectCount = m10SubjectCount > 0 ? m10SubjectCount : legacySubjectCount;
 
     // Placeholder cho các section chờ Phase 4
     const pendingIntegrations = {
@@ -116,7 +117,8 @@ export async function GET(req: NextRequest, { params }: Params) {
           currentGPA: hocVien.diemTrungBinh,
           conductGrade: latestConduct?.conductGrade ?? null,
           conductScore: latestConduct?.conductScore ?? null,
-          enrollmentCount: m10SubjectCount,
+          enrollmentCount: totalSubjectCount,
+          m10SubjectCount,
           legacySubjectCount,
         },
         // M10 backbone – write path chính thức

@@ -31,8 +31,9 @@ function InfoRow({ label, value }: { label: string; value: string }) {
 type Profile360 = {
   profile: any;
   summary: any;
-  ketQuaHocTap: any[];
+  legacyGrades?: any[];
   classEnrollments: any[];
+  conductRecords?: any[];
 };
 
 export function StudentProfileTabs({
@@ -42,7 +43,8 @@ export function StudentProfileTabs({
   studentId: string;
   profile360: Profile360;
 }) {
-  const { profile, ketQuaHocTap, classEnrollments } = profile360;
+  const { profile, legacyGrades, classEnrollments } = profile360;
+  const ketQuaHocTap = legacyGrades ?? [];
 
   const [conductRecords, setConductRecords] = useState<any[]>([]);
   const [conductLoading, setConductLoading] = useState(false);

@@ -1,21 +1,8 @@
-/**
- * Personnel Management Dashboard - Phase 2
- * Quản lý Hồ sơ Cán bộ theo chuẩn BQP
- * 
- * Features:
- * - Danh sách cán bộ với search/filter
- * - CRUD UI cho 4 CSDL (Career, Party, Insurance, Family)
- * - Scope-based access control
- * - Export Excel/PDF
- */
-
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import { useSession } from 'next-auth/react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { useRouter } from 'next/navigation';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -34,537 +21,606 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import {
   Users,
-  Briefcase,
   Shield,
-  Heart,
-  Users2,
+  Star,
   Search,
-  Plus,
-  FileText,
   Download,
   RefreshCw,
-  MoreHorizontal,
-  Edit,
-  Trash2,
   Eye,
-  Loader2,
   ChevronLeft,
   ChevronRight,
+  TrendingUp,
+  Award,
+  Building2,
+  UserCheck,
+  Filter,
+  X,
+  ChevronDown,
 } from 'lucide-react';
-import { CareerHistoryForm } from '@/components/personnel/career-history-form';
-import { FamilyForm } from '@/components/personnel/family-form';
-import { PartyMemberForm } from '@/components/personnel/party-member-form';
-import { InsuranceForm } from '@/components/personnel/insurance-form';
-import { CareerEventTypeLabels, FamilyRelationTypeLabels, PartyMemberStatusLabels } from '@/lib/validations/personnel';
 import toast from 'react-hot-toast';
-import { format } from 'date-fns';
-import { vi } from 'date-fns/locale';
 
-interface User {
+// ─── Types ───────────────────────────────────────────────────────────────────
+
+interface PersonnelItem {
   id: string;
-  fullName: string;
+  name: string;
   email: string;
+  employeeId?: string;
+  militaryId?: string;
   rank?: string;
   position?: string;
-  unit?: { name: string };
-}
-
-interface CareerHistory {
-  id: string;
-  userId: string;
-  eventType: string;
-  eventDate: string;
-  newPosition?: string;
-  newRank?: string;
-  newUnit?: string;
-  decisionNumber?: string;
-  notes?: string;
-}
-
-interface FamilyRelation {
-  id: string;
-  userId: string;
-  relation: string;
-  fullName: string;
+  phone?: string;
+  avatar?: string;
+  workStatus?: string;
+  personnelType?: string;
+  educationLevel?: string;
+  specialization?: string;
+  placeOfOrigin?: string;
   dateOfBirth?: string;
-  occupation?: string;
-  isDeceased: boolean;
+  gender?: string;
+  joinDate?: string;
+  startDate?: string;
+  unitId?: string;
+  unitRelation?: { id: string; name: string; code: string; type: string };
+  scientificProfile?: { id: string };
 }
 
-interface PartyMember {
-  id: string;
-  userId: string;
-  partyCardNumber?: string | null;
-  joinDate?: string | null;
-  officialDate?: string | null;
-  partyCell?: string | null;
-  partyCommittee?: string | null;
-  recommender1?: string | null;
-  recommender2?: string | null;
-  status: string;
-  statusChangeDate?: string | null;
-  statusChangeReason?: string | null;
+interface PersonnelStats {
+  summary: {
+    total: number;
+    active: number;
+    retired: number;
+    transferred: number;
+    officerCount: number;
+    soldierCount: number;
+    partyMemberCount: number;
+    totalUnits: number;
+  };
+  typeStats?: {
+    OFFICER: number;
+    SOLDIER: number;
+    CIVILIAN: number;
+    TOTAL: number;
+  };
 }
 
-interface InsuranceInfo {
-  id: string;
-  userId: string;
-  insuranceNumber?: string | null;
-  insuranceStartDate?: string | null;
-  insuranceEndDate?: string | null;
-  healthInsuranceNumber?: string | null;
-  healthInsuranceStartDate?: string | null;
-  healthInsuranceEndDate?: string | null;
-  healthInsuranceHospital?: string | null;
-  beneficiaryName?: string | null;
-  beneficiaryRelation?: string | null;
-  beneficiaryPhone?: string | null;
-  notes?: string | null;
+interface Pagination {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
 }
 
-export default function PersonnelDashboard() {
-  const { data: session } = useSession() || {};
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  
-  const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'list');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedUserId, setSelectedUserId] = useState<string | null>(
-    searchParams.get('userId') || null
+// ─── Constants ───────────────────────────────────────────────────────────────
+
+const WORK_STATUS_LABELS: Record<string, string> = {
+  ACTIVE: 'Đang công tác',
+  TRANSFERRED: 'Chuyển công tác',
+  RETIRED: 'Nghỉ hưu',
+  SUSPENDED: 'Tạm đình chỉ',
+  RESIGNED: 'Thôi việc',
+};
+
+const WORK_STATUS_STYLE: Record<string, string> = {
+  ACTIVE: 'bg-emerald-100 text-emerald-700 border-emerald-200',
+  TRANSFERRED: 'bg-blue-100 text-blue-700 border-blue-200',
+  RETIRED: 'bg-gray-100 text-gray-600 border-gray-200',
+  SUSPENDED: 'bg-orange-100 text-orange-700 border-orange-200',
+  RESIGNED: 'bg-red-100 text-red-600 border-red-200',
+};
+
+const PERSONNEL_TYPE_LABELS: Record<string, string> = {
+  CAN_BO_CHI_HUY: 'Sĩ quan',
+  GIANG_VIEN: 'Giảng viên',
+  NGHIEN_CUU_VIEN: 'NC viên',
+  QUAN_NHAN_CHUYEN_NGHIEP: 'QNCN',
+  CONG_NHAN_VIEN: 'CNV',
+  HOC_VIEN_QUAN_SU: 'Học viên',
+};
+
+const PERSONNEL_TYPE_STYLE: Record<string, string> = {
+  CAN_BO_CHI_HUY: 'bg-red-50 text-red-700 border-red-200',
+  GIANG_VIEN: 'bg-blue-50 text-blue-700 border-blue-200',
+  NGHIEN_CUU_VIEN: 'bg-purple-50 text-purple-700 border-purple-200',
+  QUAN_NHAN_CHUYEN_NGHIEP: 'bg-amber-50 text-amber-700 border-amber-200',
+  CONG_NHAN_VIEN: 'bg-teal-50 text-teal-700 border-teal-200',
+  HOC_VIEN_QUAN_SU: 'bg-indigo-50 text-indigo-700 border-indigo-200',
+};
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+function getInitials(name: string): string {
+  return name
+    .split(' ')
+    .filter(Boolean)
+    .slice(-2)
+    .map(w => w[0])
+    .join('')
+    .toUpperCase();
+}
+
+function getAvatarColor(name: string): string {
+  const colors = [
+    'from-red-500 to-red-600',
+    'from-blue-500 to-blue-600',
+    'from-emerald-500 to-emerald-600',
+    'from-purple-500 to-purple-600',
+    'from-amber-500 to-amber-600',
+    'from-teal-500 to-teal-600',
+    'from-indigo-500 to-indigo-600',
+    'from-rose-500 to-rose-600',
+  ];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  return colors[Math.abs(hash) % colors.length];
+}
+
+// ─── Sub-components ──────────────────────────────────────────────────────────
+
+function StatCard({
+  icon: Icon,
+  label,
+  value,
+  subLabel,
+  color,
+  loading,
+}: {
+  icon: React.ElementType;
+  label: string;
+  value: number | string;
+  subLabel?: string;
+  color: string;
+  loading?: boolean;
+}) {
+  return (
+    <Card className="relative overflow-hidden border-0 shadow-sm hover:shadow-md transition-shadow">
+      <div className={`absolute inset-0 opacity-5 ${color}`} />
+      <CardContent className="p-5">
+        <div className="flex items-start justify-between">
+          <div className="space-y-1">
+            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{label}</p>
+            {loading ? (
+              <Skeleton className="h-8 w-16" />
+            ) : (
+              <p className="text-3xl font-bold text-gray-900">{value}</p>
+            )}
+            {subLabel && !loading && (
+              <p className="text-xs text-gray-400">{subLabel}</p>
+            )}
+          </div>
+          <div className={`p-3 rounded-xl ${color} bg-opacity-10`}>
+            <Icon className={`h-5 w-5 ${color.replace('bg-', 'text-').replace('-600', '-500')}`} />
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   );
-  
-  // Data states
-  const [users, setUsers] = useState<User[]>([]);
-  const [careerHistory, setCareerHistory] = useState<CareerHistory[]>([]);
-  const [familyMembers, setFamilyMembers] = useState<FamilyRelation[]>([]);
-  const [partyMember, setPartyMember] = useState<PartyMember | null>(null);
-  const [insuranceInfo, setInsuranceInfo] = useState<InsuranceInfo | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [pagination, setPagination] = useState({ page: 1, limit: 20, total: 0 });
-  
-  // Form states
-  const [careerFormOpen, setCareerFormOpen] = useState(false);
-  const [familyFormOpen, setFamilyFormOpen] = useState(false);
-  const [partyFormOpen, setPartyFormOpen] = useState(false);
-  const [insuranceFormOpen, setInsuranceFormOpen] = useState(false);
-  const [editingCareer, setEditingCareer] = useState<CareerHistory | null>(null);
-  const [editingFamily, setEditingFamily] = useState<FamilyRelation | null>(null);
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [deletingItem, setDeletingItem] = useState<{ type: string; id: string } | null>(null);
+}
 
-  // Stats
-  const [stats, setStats] = useState({
-    totalPersonnel: 0,
-    totalPartyMembers: 0,
-    totalInsured: 0,
-    totalFamilyMembers: 0,
-  });
+function PersonnelAvatar({ name, avatar, size = 'md' }: { name: string; avatar?: string; size?: 'sm' | 'md' }) {
+  const sizeClass = size === 'sm' ? 'h-8 w-8 text-xs' : 'h-10 w-10 text-sm';
+  if (avatar) {
+    return <img src={avatar} alt={name} className={`${sizeClass} rounded-full object-cover`} />;
+  }
+  return (
+    <div className={`${sizeClass} rounded-full bg-gradient-to-br ${getAvatarColor(name)} flex items-center justify-center text-white font-semibold flex-shrink-0`}>
+      {getInitials(name)}
+    </div>
+  );
+}
 
-  // Fetch users list
-  const fetchUsers = useCallback(async () => {
-    setLoading(true);
-    try {
-      const params = new URLSearchParams({
-        page: String(pagination.page),
-        limit: String(pagination.limit),
-        ...(searchQuery && { q: searchQuery }),
-      });
-      
-      const res = await fetch(`/api/admin/rbac/users?${params}`);
-      if (res.ok) {
-        const data = await res.json();
-        setUsers(data.users || []);
-        setPagination(p => ({ ...p, total: data.total || 0 }));
-      }
-    } catch (error) {
-      console.error('Error fetching users:', error);
-    } finally {
-      setLoading(false);
-    }
-  }, [pagination.page, pagination.limit, searchQuery]);
+function TableRowSkeleton() {
+  return (
+    <TableRow>
+      {[1, 2, 3, 4, 5, 6].map(i => (
+        <TableCell key={i}>
+          <Skeleton className="h-4 w-full" />
+        </TableCell>
+      ))}
+    </TableRow>
+  );
+}
 
-  // Fetch career history for selected user
-  const fetchCareerHistory = useCallback(async () => {
-    if (!selectedUserId) return;
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/personnel/career-history?userId=${selectedUserId}`);
-      if (res.ok) {
-        const data = await res.json();
-        setCareerHistory(data.data || []);
-      }
-    } catch (error) {
-      console.error('Error fetching career history:', error);
-    } finally {
-      setLoading(false);
-    }
-  }, [selectedUserId]);
+// ─── Main Page ────────────────────────────────────────────────────────────────
 
-  // Fetch family members for selected user
-  const fetchFamilyMembers = useCallback(async () => {
-    if (!selectedUserId) return;
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/personnel/family?userId=${selectedUserId}`);
-      if (res.ok) {
-        const data = await res.json();
-        setFamilyMembers(data.data || []);
-      }
-    } catch (error) {
-      console.error('Error fetching family:', error);
-    } finally {
-      setLoading(false);
-    }
-  }, [selectedUserId]);
+export default function PersonnelPage() {
+  const router = useRouter();
 
-  // Fetch party member for selected user
-  const fetchPartyMember = useCallback(async () => {
-    if (!selectedUserId) return;
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/personnel/party-member?userId=${selectedUserId}`);
-      if (res.ok) {
-        const data = await res.json();
-        setPartyMember(data.data?.[0] || null);
-      }
-    } catch (error) {
-      console.error('Error fetching party member:', error);
-    } finally {
-      setLoading(false);
-    }
-  }, [selectedUserId]);
+  const [personnel, setPersonnel] = useState<PersonnelItem[]>([]);
+  const [stats, setStats] = useState<PersonnelStats | null>(null);
+  const [pagination, setPagination] = useState<Pagination>({ page: 1, limit: 20, total: 0, totalPages: 0 });
+  const [typeStats, setTypeStats] = useState<{ OFFICER: number; SOLDIER: number; CIVILIAN: number; TOTAL: number } | null>(null);
 
-  // Fetch insurance info for selected user
-  const fetchInsuranceInfo = useCallback(async () => {
-    if (!selectedUserId) return;
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/personnel/insurance?userId=${selectedUserId}`);
-      if (res.ok) {
-        const data = await res.json();
-        setInsuranceInfo(data.data?.[0] || null);
-      }
-    } catch (error) {
-      console.error('Error fetching insurance:', error);
-    } finally {
-      setLoading(false);
-    }
-  }, [selectedUserId]);
+  const [loading, setLoading] = useState(true);
+  const [statsLoading, setStatsLoading] = useState(true);
+  const [showFilters, setShowFilters] = useState(false);
 
-  // Fetch stats
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filterWorkStatus, setFilterWorkStatus] = useState('ALL');
+  const [filterType, setFilterType] = useState('ALL');
+
+  const searchTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // ── Fetch stats ──────────────────────────────────────────────────────────
   const fetchStats = useCallback(async () => {
+    setStatsLoading(true);
     try {
       const res = await fetch('/api/personnel/stats');
       if (res.ok) {
         const data = await res.json();
         setStats(data);
       }
-    } catch (error) {
-      console.error('Error fetching stats:', error);
+    } catch {
+      // stats non-critical
+    } finally {
+      setStatsLoading(false);
     }
   }, []);
 
-  // Load data on mount and when dependencies change
-  useEffect(() => {
-    fetchStats();
-  }, [fetchStats]);
-
-  useEffect(() => {
-    if (activeTab === 'list') {
-      fetchUsers();
-    }
-  }, [activeTab, fetchUsers]);
-
-  useEffect(() => {
-    if (selectedUserId && activeTab === 'career') {
-      fetchCareerHistory();
-    }
-  }, [selectedUserId, activeTab, fetchCareerHistory]);
-
-  useEffect(() => {
-    if (selectedUserId && activeTab === 'family') {
-      fetchFamilyMembers();
-    }
-  }, [selectedUserId, activeTab, fetchFamilyMembers]);
-
-  useEffect(() => {
-    if (selectedUserId && activeTab === 'party') {
-      fetchPartyMember();
-    }
-  }, [selectedUserId, activeTab, fetchPartyMember]);
-
-  useEffect(() => {
-    if (selectedUserId && activeTab === 'insurance') {
-      fetchInsuranceInfo();
-    }
-  }, [selectedUserId, activeTab, fetchInsuranceInfo]);
-
-  // Select user and switch tab
-  const handleSelectUser = (userId: string) => {
-    setSelectedUserId(userId);
-    setActiveTab('career');
-  };
-
-  // Delete handler
-  const handleDelete = async () => {
-    if (!deletingItem) return;
-    
+  // ── Fetch list ───────────────────────────────────────────────────────────
+  const fetchPersonnel = useCallback(async (page = 1) => {
+    setLoading(true);
     try {
-      let endpoint = '';
-      switch (deletingItem.type) {
-        case 'career':
-          endpoint = `/api/personnel/career-history?id=${deletingItem.id}`;
-          break;
-        case 'family':
-          endpoint = `/api/personnel/family?id=${deletingItem.id}`;
-          break;
-        case 'party':
-          endpoint = `/api/personnel/party-member?id=${deletingItem.id}`;
-          break;
-        case 'insurance':
-          endpoint = `/api/personnel/insurance?id=${deletingItem.id}`;
-          break;
-        default:
-          throw new Error('Loại dữ liệu không hợp lệ');
-      }
-        
-      const res = await fetch(endpoint, { method: 'DELETE' });
-      
+      const params = new URLSearchParams({
+        page: String(page),
+        limit: '20',
+        ...(searchQuery && { search: searchQuery }),
+        ...(filterWorkStatus !== 'ALL' && { workStatus: filterWorkStatus }),
+        ...(filterType !== 'ALL' && { type: filterType }),
+      });
+
+      const res = await fetch(`/api/personnel?${params}`);
       if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || 'Lỗi khi xóa');
+        const err = await res.json();
+        throw new Error(err.error || 'Lỗi tải danh sách');
       }
-      
-      toast.success('Xóa thành công');
-      
-      switch (deletingItem.type) {
-        case 'career':
-          fetchCareerHistory();
-          break;
-        case 'family':
-          fetchFamilyMembers();
-          break;
-        case 'party':
-          setPartyMember(null);
-          break;
-        case 'insurance':
-          setInsuranceInfo(null);
-          break;
-      }
-    } catch (error: any) {
-      toast.error(error.message);
+      const data = await res.json();
+      setPersonnel(data.data || []);
+      setPagination(data.pagination || { page, limit: 20, total: 0, totalPages: 0 });
+      if (data.typeStats) setTypeStats(data.typeStats);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Lỗi không xác định';
+      toast.error(msg);
     } finally {
-      setDeleteDialogOpen(false);
-      setDeletingItem(null);
+      setLoading(false);
     }
+  }, [searchQuery, filterWorkStatus, filterType]);
+
+  // ── Effects ──────────────────────────────────────────────────────────────
+  useEffect(() => { fetchStats(); }, [fetchStats]);
+
+  useEffect(() => {
+    if (searchTimer.current) clearTimeout(searchTimer.current);
+    searchTimer.current = setTimeout(() => fetchPersonnel(1), 350);
+    return () => { if (searchTimer.current) clearTimeout(searchTimer.current); };
+  }, [fetchPersonnel]);
+
+  // ── Handlers ─────────────────────────────────────────────────────────────
+  const handlePageChange = (newPage: number) => fetchPersonnel(newPage);
+
+  const handleClearFilters = () => {
+    setSearchQuery('');
+    setFilterWorkStatus('ALL');
+    setFilterType('ALL');
   };
 
-  // Get selected user info
-  const selectedUser = users.find(u => u.id === selectedUserId);
+  const hasActiveFilters = searchQuery || filterWorkStatus !== 'ALL' || filterType !== 'ALL';
+
+  // ── Derived stats for cards ───────────────────────────────────────────────
+  const summaryStats = stats?.summary;
 
   return (
-    <div className="space-y-6 p-6">
-      {/* Header */}
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-            Quản lý Hồ sơ Cán bộ
-          </h1>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            CSDL cán bộ theo QĐ 144/BQP - Phase 2
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" className="gap-2">
-            <Download className="h-4 w-4" />
-            Xuất Excel
-          </Button>
-        </div>
-      </div>
+    <TooltipProvider>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+        <div className="max-w-screen-2xl mx-auto p-6 space-y-6">
 
-      {/* Stats Cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Tổng Cán bộ</CardTitle>
-            <Users className="h-4 w-4 text-blue-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.totalPersonnel}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Đảng viên</CardTitle>
-            <Shield className="h-4 w-4 text-red-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.totalPartyMembers}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">BHXH/BHYT</CardTitle>
-            <Heart className="h-4 w-4 text-green-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.totalInsured}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Thân nhân</CardTitle>
-            <Users2 className="h-4 w-4 text-purple-500" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.totalFamilyMembers}</div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Selected User Info */}
-      {selectedUser && (
-        <Card className="bg-blue-50 dark:bg-blue-900/20 border-blue-200">
-          <CardContent className="py-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">
-                  {selectedUser.fullName?.charAt(0)}
-                </div>
-                <div>
-                  <p className="font-semibold">{selectedUser.fullName}</p>
-                  <p className="text-sm text-gray-500">
-                    {selectedUser.rank} - {selectedUser.position} - {selectedUser.unit?.name}
-                  </p>
-                </div>
+          {/* ── Header ── */}
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-gradient-to-br from-red-500 to-red-700 rounded-xl shadow-sm">
+                <Shield className="h-6 w-6 text-white" />
               </div>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">
+                  Quản lý Hồ sơ Cán bộ
+                </h1>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
+                  CSDL quân nhân theo QĐ 144/BQP
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
               <Button
-                variant="ghost"
+                variant="outline"
                 size="sm"
-                onClick={() => {
-                  setSelectedUserId(null);
-                  setActiveTab('list');
-                }}
+                className="gap-2 text-gray-600 border-gray-200 hover:bg-gray-100"
+                onClick={() => fetchPersonnel(pagination.page)}
               >
-                <ChevronLeft className="h-4 w-4 mr-1" />
-                Quay lại
+                <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+                Làm mới
+              </Button>
+              <Button
+                size="sm"
+                className="gap-2 bg-red-600 hover:bg-red-700 text-white shadow-sm"
+              >
+                <Download className="h-4 w-4" />
+                Xuất Excel
               </Button>
             </div>
-          </CardContent>
-        </Card>
-      )}
+          </div>
 
-      {/* Main Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="list" className="gap-2">
-            <Users className="h-4 w-4" />
-            Danh sách
-          </TabsTrigger>
-          <TabsTrigger value="career" className="gap-2" disabled={!selectedUserId}>
-            <Briefcase className="h-4 w-4" />
-            Quá trình CT
-          </TabsTrigger>
-          <TabsTrigger value="party" className="gap-2" disabled={!selectedUserId}>
-            <Shield className="h-4 w-4" />
-            Đảng viên
-          </TabsTrigger>
-          <TabsTrigger value="insurance" className="gap-2" disabled={!selectedUserId}>
-            <Heart className="h-4 w-4" />
-            BHXH/BHYT
-          </TabsTrigger>
-          <TabsTrigger value="family" className="gap-2" disabled={!selectedUserId}>
-            <Users2 className="h-4 w-4" />
-            Gia đình
-          </TabsTrigger>
-        </TabsList>
+          {/* ── Stats Grid ── */}
+          <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+            <StatCard
+              icon={Users}
+              label="Tổng cán bộ"
+              value={summaryStats?.total ?? 0}
+              subLabel={`${summaryStats?.totalUnits ?? 0} đơn vị`}
+              color="bg-blue-600"
+              loading={statsLoading}
+            />
+            <StatCard
+              icon={UserCheck}
+              label="Đang công tác"
+              value={summaryStats?.active ?? 0}
+              subLabel={summaryStats ? `${Math.round((summaryStats.active / Math.max(summaryStats.total, 1)) * 100)}% tổng số` : ''}
+              color="bg-emerald-600"
+              loading={statsLoading}
+            />
+            <StatCard
+              icon={Award}
+              label="Sĩ quan / HSQ-BS"
+              value={summaryStats ? `${summaryStats.officerCount} / ${summaryStats.soldierCount}` : '—'}
+              subLabel="Theo diện quản lý"
+              color="bg-red-600"
+              loading={statsLoading}
+            />
+            <StatCard
+              icon={Star}
+              label="Đảng viên"
+              value={summaryStats?.partyMemberCount ?? 0}
+              subLabel={summaryStats ? `${Math.round((summaryStats.partyMemberCount / Math.max(summaryStats.total, 1)) * 100)}% tổng số` : ''}
+              color="bg-purple-600"
+              loading={statsLoading}
+            />
+          </div>
 
-        {/* Users List Tab */}
-        <TabsContent value="list" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle>Danh sách Cán bộ</CardTitle>
-                  <CardDescription>Chọn cán bộ để xem chi tiết hồ sơ</CardDescription>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          {/* ── Type quick-filter chips (from typeStats) ── */}
+          {typeStats && (
+            <div className="flex flex-wrap gap-2">
+              {[
+                { key: 'ALL', label: 'Tất cả', count: typeStats.TOTAL, color: 'bg-gray-100 text-gray-700 hover:bg-gray-200' },
+                { key: 'OFFICER', label: 'Sĩ quan', count: typeStats.OFFICER, color: 'bg-red-50 text-red-700 hover:bg-red-100 border border-red-200' },
+                { key: 'SOLDIER', label: 'HSQ-BS', count: typeStats.SOLDIER, color: 'bg-amber-50 text-amber-700 hover:bg-amber-100 border border-amber-200' },
+                { key: 'CIVILIAN', label: 'Dân sự', count: typeStats.CIVILIAN, color: 'bg-teal-50 text-teal-700 hover:bg-teal-100 border border-teal-200' },
+              ].map(chip => (
+                <button
+                  key={chip.key}
+                  onClick={() => setFilterType(chip.key)}
+                  className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${chip.color} ${filterType === chip.key ? 'ring-2 ring-offset-1 ring-current' : ''}`}
+                >
+                  {chip.label}
+                  <span className="ml-1.5 font-bold">{chip.count}</span>
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* ── List Card ── */}
+          <Card className="border-0 shadow-sm overflow-hidden">
+            {/* Search & filter bar */}
+            <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-800">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex items-center gap-2 flex-1 max-w-md">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
                     <Input
-                      placeholder="Tìm theo tên, email..."
-                      className="pl-9 w-64"
+                      placeholder="Tìm theo tên, mã CB, số quân..."
+                      className="pl-9 bg-gray-50 border-gray-200 focus:bg-white text-sm"
                       value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
+                      onChange={e => setSearchQuery(e.target.value)}
                     />
+                    {searchQuery && (
+                      <button
+                        onClick={() => setSearchQuery('')}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    )}
                   </div>
                   <Button
                     variant="outline"
-                    size="icon"
-                    onClick={fetchUsers}
+                    size="sm"
+                    className={`gap-1.5 shrink-0 ${showFilters ? 'bg-gray-100' : ''}`}
+                    onClick={() => setShowFilters(v => !v)}
                   >
-                    <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+                    <Filter className="h-4 w-4" />
+                    Lọc
+                    <ChevronDown className={`h-3 w-3 transition-transform ${showFilters ? 'rotate-180' : ''}`} />
                   </Button>
+                  {hasActiveFilters && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-red-500 hover:text-red-600 shrink-0"
+                      onClick={handleClearFilters}
+                    >
+                      <X className="h-4 w-4 mr-1" />
+                      Xóa lọc
+                    </Button>
+                  )}
                 </div>
+                <p className="text-sm text-gray-500 shrink-0">
+                  <span className="font-semibold text-gray-700">{pagination.total}</span> cán bộ
+                </p>
               </div>
-            </CardHeader>
-            <CardContent>
+
+              {/* Expanded filters */}
+              {showFilters && (
+                <div className="mt-3 pt-3 border-t border-gray-100 flex flex-wrap gap-3">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-gray-500 shrink-0">Trạng thái:</span>
+                    <Select value={filterWorkStatus} onValueChange={setFilterWorkStatus}>
+                      <SelectTrigger className="h-8 w-44 text-xs bg-white">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="ALL">Tất cả trạng thái</SelectItem>
+                        {Object.entries(WORK_STATUS_LABELS).map(([v, l]) => (
+                          <SelectItem key={v} value={v}>{l}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Table */}
+            <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
-                  <TableRow>
-                    <TableHead>Họ tên</TableHead>
-                    <TableHead>Cấp bậc</TableHead>
-                    <TableHead>Chức vụ</TableHead>
-                    <TableHead>Đơn vị</TableHead>
-                    <TableHead className="text-right">Thao tác</TableHead>
+                  <TableRow className="bg-gray-50/80 dark:bg-gray-800/50 hover:bg-gray-50/80">
+                    <TableHead className="w-[280px] font-semibold text-gray-700 py-3">Cán bộ</TableHead>
+                    <TableHead className="font-semibold text-gray-700">Cấp bậc</TableHead>
+                    <TableHead className="font-semibold text-gray-700">Chức vụ</TableHead>
+                    <TableHead className="font-semibold text-gray-700">Đơn vị</TableHead>
+                    <TableHead className="font-semibold text-gray-700">Loại CB</TableHead>
+                    <TableHead className="font-semibold text-gray-700">Trạng thái</TableHead>
+                    <TableHead className="text-right font-semibold text-gray-700 pr-5">Thao tác</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {loading ? (
+                    Array.from({ length: 8 }).map((_, i) => <TableRowSkeleton key={i} />)
+                  ) : personnel.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={5} className="text-center py-8">
-                        <Loader2 className="h-6 w-6 animate-spin mx-auto" />
-                      </TableCell>
-                    </TableRow>
-                  ) : users.length === 0 ? (
-                    <TableRow>
-                      <TableCell colSpan={5} className="text-center py-8 text-gray-500">
-                        Không tìm thấy cán bộ
+                      <TableCell colSpan={7} className="py-20">
+                        <div className="flex flex-col items-center gap-3 text-gray-400">
+                          <div className="p-4 rounded-full bg-gray-100">
+                            <Users className="h-8 w-8" />
+                          </div>
+                          <div className="text-center">
+                            <p className="font-medium text-gray-500">Không tìm thấy cán bộ</p>
+                            <p className="text-sm mt-1">
+                              {hasActiveFilters ? 'Thử thay đổi điều kiện tìm kiếm' : 'Chưa có dữ liệu trong hệ thống'}
+                            </p>
+                          </div>
+                          {hasActiveFilters && (
+                            <Button variant="outline" size="sm" onClick={handleClearFilters}>
+                              Xóa bộ lọc
+                            </Button>
+                          )}
+                        </div>
                       </TableCell>
                     </TableRow>
                   ) : (
-                    users.map((user) => (
+                    personnel.map(person => (
                       <TableRow
-                        key={user.id}
-                        className="cursor-pointer hover:bg-slate-50/60 transition-colors dark:hover:bg-gray-800"
-                        onClick={() => handleSelectUser(user.id)}
+                        key={person.id}
+                        className="group cursor-pointer hover:bg-blue-50/40 dark:hover:bg-gray-800/50 transition-colors"
+                        onClick={() => router.push(`/dashboard/personnel/${person.id}`)}
                       >
-                        <TableCell className="font-medium">{user.fullName}</TableCell>
-                        <TableCell>{user.rank || '-'}</TableCell>
-                        <TableCell>{user.position || '-'}</TableCell>
-                        <TableCell>{user.unit?.name || '-'}</TableCell>
-                        <TableCell className="text-right">
-                          <Button size="sm" variant="ghost">
-                            <Eye className="h-4 w-4 mr-1" />
-                            Xem hồ sơ
+                        {/* Name + meta */}
+                        <TableCell className="py-3.5">
+                          <div className="flex items-center gap-3">
+                            <PersonnelAvatar name={person.name} avatar={person.avatar} />
+                            <div className="min-w-0">
+                              <p className="font-semibold text-gray-900 dark:text-gray-100 text-sm truncate group-hover:text-blue-700 transition-colors">
+                                {person.name}
+                              </p>
+                              <p className="text-xs text-gray-400 truncate">
+                                {[person.employeeId, person.militaryId].filter(Boolean).join(' · ') || person.email}
+                              </p>
+                            </div>
+                          </div>
+                        </TableCell>
+
+                        {/* Rank */}
+                        <TableCell>
+                          {person.rank ? (
+                            <span className="text-sm font-medium text-gray-700">{person.rank}</span>
+                          ) : (
+                            <span className="text-gray-300">—</span>
+                          )}
+                        </TableCell>
+
+                        {/* Position */}
+                        <TableCell>
+                          <Tooltip>
+                            <TooltipTrigger>
+                              <span className="text-sm text-gray-600 max-w-[180px] truncate block">
+                                {person.position || <span className="text-gray-300">—</span>}
+                              </span>
+                            </TooltipTrigger>
+                            {person.position && (
+                              <TooltipContent>
+                                <p>{person.position}</p>
+                              </TooltipContent>
+                            )}
+                          </Tooltip>
+                        </TableCell>
+
+                        {/* Unit */}
+                        <TableCell>
+                          {person.unitRelation ? (
+                            <div className="flex items-center gap-1.5">
+                              <Building2 className="h-3.5 w-3.5 text-gray-400 shrink-0" />
+                              <Tooltip>
+                                <TooltipTrigger>
+                                  <span className="text-sm text-gray-600 max-w-[160px] truncate block">
+                                    {person.unitRelation.name}
+                                  </span>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p>{person.unitRelation.name}</p>
+                                  <p className="text-xs opacity-70">{person.unitRelation.code}</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </div>
+                          ) : (
+                            <span className="text-gray-300 text-sm">—</span>
+                          )}
+                        </TableCell>
+
+                        {/* Personnel type */}
+                        <TableCell>
+                          {person.personnelType ? (
+                            <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium border ${PERSONNEL_TYPE_STYLE[person.personnelType] || 'bg-gray-50 text-gray-600 border-gray-200'}`}>
+                              {PERSONNEL_TYPE_LABELS[person.personnelType] || person.personnelType}
+                            </span>
+                          ) : (
+                            <span className="text-gray-300 text-sm">—</span>
+                          )}
+                        </TableCell>
+
+                        {/* Work status */}
+                        <TableCell>
+                          {person.workStatus ? (
+                            <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${WORK_STATUS_STYLE[person.workStatus] || 'bg-gray-100 text-gray-600 border-gray-200'}`}>
+                              <span className={`h-1.5 w-1.5 rounded-full ${person.workStatus === 'ACTIVE' ? 'bg-emerald-500' : 'bg-gray-400'}`} />
+                              {WORK_STATUS_LABELS[person.workStatus] || person.workStatus}
+                            </span>
+                          ) : (
+                            <span className="text-gray-300 text-sm">—</span>
+                          )}
+                        </TableCell>
+
+                        {/* Actions */}
+                        <TableCell className="text-right pr-5">
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="opacity-0 group-hover:opacity-100 transition-opacity gap-1.5 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                            onClick={e => { e.stopPropagation(); router.push(`/dashboard/personnel/${person.id}`); }}
+                          >
+                            <Eye className="h-4 w-4" />
+                            Hồ sơ
                           </Button>
                         </TableCell>
                       </TableRow>
@@ -572,539 +628,70 @@ export default function PersonnelDashboard() {
                   )}
                 </TableBody>
               </Table>
-              
-              {/* Pagination */}
-              <div className="flex items-center justify-between mt-4">
+            </div>
+
+            {/* Pagination */}
+            {!loading && pagination.totalPages > 1 && (
+              <div className="flex items-center justify-between px-5 py-3 border-t border-gray-100 dark:border-gray-800 bg-gray-50/50">
                 <p className="text-sm text-gray-500">
-                  Hiển thị {users.length} / {pagination.total} cán bộ
+                  Trang <span className="font-medium text-gray-700">{pagination.page}</span> / {pagination.totalPages}
+                  &nbsp;·&nbsp;
+                  Hiển thị <span className="font-medium text-gray-700">{personnel.length}</span> / {pagination.total} cán bộ
                 </p>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1">
                   <Button
                     variant="outline"
                     size="sm"
-                    disabled={pagination.page === 1}
-                    onClick={() => setPagination(p => ({ ...p, page: p.page - 1 }))}
+                    disabled={pagination.page <= 1}
+                    onClick={() => handlePageChange(pagination.page - 1)}
+                    className="h-8 w-8 p-0"
                   >
                     <ChevronLeft className="h-4 w-4" />
                   </Button>
-                  <span className="text-sm">Trang {pagination.page}</span>
+                  {/* Page number buttons */}
+                  {Array.from({ length: Math.min(pagination.totalPages, 5) }, (_, i) => {
+                    const start = Math.max(1, pagination.page - 2);
+                    const pageNum = start + i;
+                    if (pageNum > pagination.totalPages) return null;
+                    return (
+                      <Button
+                        key={pageNum}
+                        variant={pageNum === pagination.page ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => handlePageChange(pageNum)}
+                        className={`h-8 w-8 p-0 text-xs ${pageNum === pagination.page ? 'bg-red-600 hover:bg-red-700 border-red-600' : ''}`}
+                      >
+                        {pageNum}
+                      </Button>
+                    );
+                  })}
                   <Button
                     variant="outline"
                     size="sm"
-                    disabled={pagination.page * pagination.limit >= pagination.total}
-                    onClick={() => setPagination(p => ({ ...p, page: p.page + 1 }))}
+                    disabled={pagination.page >= pagination.totalPages}
+                    onClick={() => handlePageChange(pagination.page + 1)}
+                    className="h-8 w-8 p-0"
                   >
                     <ChevronRight className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
-            </CardContent>
+            )}
           </Card>
-        </TabsContent>
 
-        {/* Career History Tab */}
-        <TabsContent value="career" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle>Quá trình Công tác</CardTitle>
-                  <CardDescription>Lịch sử bổ nhiệm, điều động, thăng cấp</CardDescription>
-                </div>
-                <Button onClick={() => { setEditingCareer(null); setCareerFormOpen(true); }}>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Thêm mới
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Ngày</TableHead>
-                    <TableHead>Loại sự kiện</TableHead>
-                    <TableHead>Nội dung</TableHead>
-                    <TableHead>Số QĐ</TableHead>
-                    <TableHead className="text-right">Thao tác</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {loading ? (
-                    <TableRow>
-                      <TableCell colSpan={5} className="text-center py-8">
-                        <Loader2 className="h-6 w-6 animate-spin mx-auto" />
-                      </TableCell>
-                    </TableRow>
-                  ) : careerHistory.length === 0 ? (
-                    <TableRow>
-                      <TableCell colSpan={5} className="text-center py-8 text-gray-500">
-                        Chưa có dữ liệu quá trình công tác
-                      </TableCell>
-                    </TableRow>
-                  ) : (
-                    careerHistory.map((item) => (
-                      <TableRow key={item.id}>
-                        <TableCell>
-                          {format(new Date(item.eventDate), 'dd/MM/yyyy', { locale: vi })}
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="outline">
-                            {CareerEventTypeLabels[item.eventType] || item.eventType}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          {item.newPosition || item.newRank || item.newUnit || item.notes || '-'}
-                        </TableCell>
-                        <TableCell>{item.decisionNumber || '-'}</TableCell>
-                        <TableCell className="text-right">
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="icon">
-                                <MoreHorizontal className="h-4 w-4" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuItem
-                                onClick={() => {
-                                  setEditingCareer(item);
-                                  setCareerFormOpen(true);
-                                }}
-                              >
-                                <Edit className="h-4 w-4 mr-2" />
-                                Sửa
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                className="text-red-600"
-                                onClick={() => {
-                                  setDeletingItem({ type: 'career', id: item.id });
-                                  setDeleteDialogOpen(true);
-                                }}
-                              >
-                                <Trash2 className="h-4 w-4 mr-2" />
-                                Xóa
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  )}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        </TabsContent>
+          {/* ── Bottom meta row ── */}
+          {!loading && personnel.length > 0 && (
+            <div className="flex items-center justify-between text-xs text-gray-400 px-1">
+              <span className="flex items-center gap-1.5">
+                <TrendingUp className="h-3.5 w-3.5" />
+                Dữ liệu cập nhật theo thời gian thực
+              </span>
+              <span>CSDL cán bộ · QĐ 144/BQP</span>
+            </div>
+          )}
 
-        {/* Party Member Tab */}
-        <TabsContent value="party" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle className="flex items-center gap-2">
-                    <Shield className="h-5 w-5 text-red-600" />
-                    Hồ sơ Đảng viên
-                  </CardTitle>
-                  <CardDescription>Thông tin đảng viên và hoạt động Đảng</CardDescription>
-                </div>
-                {!partyMember && (
-                  <Button onClick={() => setPartyFormOpen(true)} className="bg-red-600 hover:bg-red-700">
-                    <Plus className="h-4 w-4 mr-2" />
-                    Thêm hồ sơ
-                  </Button>
-                )}
-              </div>
-            </CardHeader>
-            <CardContent>
-              {loading ? (
-                <div className="text-center py-8">
-                  <Loader2 className="h-8 w-8 animate-spin mx-auto text-red-500" />
-                </div>
-              ) : partyMember ? (
-                <div className="space-y-6">
-                  {/* Status Banner */}
-                  <div className={`p-4 rounded-lg ${partyMember.status === 'ACTIVE' ? 'bg-green-50 border border-green-200' : 'bg-orange-50 border border-orange-200'}`}>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <Badge variant={partyMember.status === 'ACTIVE' ? 'default' : 'secondary'} className={partyMember.status === 'ACTIVE' ? 'bg-green-600' : ''}>
-                          {PartyMemberStatusLabels?.[partyMember.status] || partyMember.status}
-                        </Badge>
-                        <span className="text-sm text-gray-600">
-                          Số thẻ: <strong>{partyMember.partyCardNumber || 'Chưa cập nhật'}</strong>
-                        </span>
-                      </div>
-                      <div className="flex gap-2">
-                        <Button variant="outline" size="sm" onClick={() => setPartyFormOpen(true)}>
-                          <Edit className="h-4 w-4 mr-1" />
-                          Sửa
-                        </Button>
-                        <Button variant="outline" size="sm" className="text-red-600 hover:bg-red-50" onClick={() => {
-                          setDeletingItem({ type: 'party', id: partyMember.id });
-                          setDeleteDialogOpen(true);
-                        }}>
-                          <Trash2 className="h-4 w-4 mr-1" />
-                          Xóa
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Party Info Grid */}
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    <div className="p-4 bg-gray-50 rounded-lg">
-                      <p className="text-xs text-gray-500 uppercase tracking-wide">Ngày vào Đảng</p>
-                      <p className="font-medium mt-1">
-                        {partyMember.joinDate ? format(new Date(partyMember.joinDate), 'dd/MM/yyyy') : '---'}
-                      </p>
-                    </div>
-                    <div className="p-4 bg-gray-50 rounded-lg">
-                      <p className="text-xs text-gray-500 uppercase tracking-wide">Ngày chính thức</p>
-                      <p className="font-medium mt-1">
-                        {partyMember.officialDate ? format(new Date(partyMember.officialDate), 'dd/MM/yyyy') : '---'}
-                      </p>
-                    </div>
-                    <div className="p-4 bg-gray-50 rounded-lg">
-                      <p className="text-xs text-gray-500 uppercase tracking-wide">Chi bộ</p>
-                      <p className="font-medium mt-1">{partyMember.partyCell || '---'}</p>
-                    </div>
-                    <div className="p-4 bg-gray-50 rounded-lg">
-                      <p className="text-xs text-gray-500 uppercase tracking-wide">Đảng ủy</p>
-                      <p className="font-medium mt-1">{partyMember.partyCommittee || '---'}</p>
-                    </div>
-                    <div className="p-4 bg-gray-50 rounded-lg">
-                      <p className="text-xs text-gray-500 uppercase tracking-wide">Người giới thiệu 1</p>
-                      <p className="font-medium mt-1">{partyMember.recommender1 || '---'}</p>
-                    </div>
-                    <div className="p-4 bg-gray-50 rounded-lg">
-                      <p className="text-xs text-gray-500 uppercase tracking-wide">Người giới thiệu 2</p>
-                      <p className="font-medium mt-1">{partyMember.recommender2 || '---'}</p>
-                    </div>
-                  </div>
-
-                  {partyMember.statusChangeReason && (
-                    <div className="p-4 bg-orange-50 rounded-lg border border-orange-200">
-                      <p className="text-xs text-orange-600 uppercase tracking-wide">Lý do thay đổi trạng thái</p>
-                      <p className="mt-1">{partyMember.statusChangeReason}</p>
-                      {partyMember.statusChangeDate && (
-                        <p className="text-sm text-gray-500 mt-1">
-                          Ngày thay đổi: {format(new Date(partyMember.statusChangeDate), 'dd/MM/yyyy')}
-                        </p>
-                      )}
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div className="text-center py-12 text-gray-500">
-                  <Shield className="h-16 w-16 mx-auto mb-4 opacity-30" />
-                  <p className="text-lg font-medium">Chưa có hồ sơ Đảng viên</p>
-                  <p className="text-sm mt-1">Nhấn &quot;Thêm hồ sơ&quot; để tạo mới</p>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* Insurance Tab */}
-        <TabsContent value="insurance" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle className="flex items-center gap-2">
-                    <Heart className="h-5 w-5 text-pink-600" />
-                    Thông tin BHXH/BHYT
-                  </CardTitle>
-                  <CardDescription>Bảo hiểm xã hội và bảo hiểm y tế</CardDescription>
-                </div>
-                {!insuranceInfo && (
-                  <Button onClick={() => setInsuranceFormOpen(true)} className="bg-pink-600 hover:bg-pink-700">
-                    <Plus className="h-4 w-4 mr-2" />
-                    Thêm thông tin
-                  </Button>
-                )}
-              </div>
-            </CardHeader>
-            <CardContent>
-              {loading ? (
-                <div className="text-center py-8">
-                  <Loader2 className="h-8 w-8 animate-spin mx-auto text-pink-500" />
-                </div>
-              ) : insuranceInfo ? (
-                <div className="space-y-6">
-                  {/* Actions */}
-                  <div className="flex justify-end gap-2">
-                    <Button variant="outline" size="sm" onClick={() => setInsuranceFormOpen(true)}>
-                      <Edit className="h-4 w-4 mr-1" />
-                      Sửa
-                    </Button>
-                    <Button variant="outline" size="sm" className="text-red-600 hover:bg-red-50" onClick={() => {
-                      setDeletingItem({ type: 'insurance', id: insuranceInfo.id });
-                      setDeleteDialogOpen(true);
-                    }}>
-                      <Trash2 className="h-4 w-4 mr-1" />
-                      Xóa
-                    </Button>
-                  </div>
-
-                  {/* BHXH Section */}
-                  <div className="border rounded-lg p-4 bg-blue-50/50">
-                    <h4 className="font-medium mb-4 text-blue-700 flex items-center gap-2">
-                      <Shield className="h-4 w-4" />
-                      Bảo hiểm Xã hội (BHXH)
-                    </h4>
-                    <div className="grid grid-cols-3 gap-4">
-                      <div>
-                        <p className="text-xs text-gray-500 uppercase tracking-wide">Số sổ BHXH</p>
-                        <p className="font-medium mt-1">{insuranceInfo.insuranceNumber || '---'}</p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-gray-500 uppercase tracking-wide">Ngày tham gia</p>
-                        <p className="font-medium mt-1">
-                          {insuranceInfo.insuranceStartDate ? format(new Date(insuranceInfo.insuranceStartDate), 'dd/MM/yyyy') : '---'}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-gray-500 uppercase tracking-wide">Ngày kết thúc</p>
-                        <p className="font-medium mt-1">
-                          {insuranceInfo.insuranceEndDate ? format(new Date(insuranceInfo.insuranceEndDate), 'dd/MM/yyyy') : '---'}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* BHYT Section */}
-                  <div className="border rounded-lg p-4 bg-green-50/50">
-                    <h4 className="font-medium mb-4 text-green-700 flex items-center gap-2">
-                      <Heart className="h-4 w-4" />
-                      Bảo hiểm Y tế (BHYT)
-                    </h4>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                      <div>
-                        <p className="text-xs text-gray-500 uppercase tracking-wide">Số thẻ BHYT</p>
-                        <p className="font-medium mt-1">{insuranceInfo.healthInsuranceNumber || '---'}</p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-gray-500 uppercase tracking-wide">Nơi KCB ban đầu</p>
-                        <p className="font-medium mt-1">{insuranceInfo.healthInsuranceHospital || '---'}</p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-gray-500 uppercase tracking-wide">Ngày bắt đầu</p>
-                        <p className="font-medium mt-1">
-                          {insuranceInfo.healthInsuranceStartDate ? format(new Date(insuranceInfo.healthInsuranceStartDate), 'dd/MM/yyyy') : '---'}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-gray-500 uppercase tracking-wide">Ngày hết hạn</p>
-                        <p className="font-medium mt-1">
-                          {insuranceInfo.healthInsuranceEndDate ? format(new Date(insuranceInfo.healthInsuranceEndDate), 'dd/MM/yyyy') : '---'}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Beneficiary Section */}
-                  {(insuranceInfo.beneficiaryName || insuranceInfo.beneficiaryRelation || insuranceInfo.beneficiaryPhone) && (
-                    <div className="border rounded-lg p-4 bg-orange-50/50">
-                      <h4 className="font-medium mb-4 text-orange-700">Người thụ hưởng</h4>
-                      <div className="grid grid-cols-3 gap-4">
-                        <div>
-                          <p className="text-xs text-gray-500 uppercase tracking-wide">Họ tên</p>
-                          <p className="font-medium mt-1">{insuranceInfo.beneficiaryName || '---'}</p>
-                        </div>
-                        <div>
-                          <p className="text-xs text-gray-500 uppercase tracking-wide">Quan hệ</p>
-                          <p className="font-medium mt-1">{insuranceInfo.beneficiaryRelation || '---'}</p>
-                        </div>
-                        <div>
-                          <p className="text-xs text-gray-500 uppercase tracking-wide">Số điện thoại</p>
-                          <p className="font-medium mt-1">{insuranceInfo.beneficiaryPhone || '---'}</p>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {insuranceInfo.notes && (
-                    <div className="p-4 bg-gray-50 rounded-lg">
-                      <p className="text-xs text-gray-500 uppercase tracking-wide">Ghi chú</p>
-                      <p className="mt-1">{insuranceInfo.notes}</p>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div className="text-center py-12 text-gray-500">
-                  <Heart className="h-16 w-16 mx-auto mb-4 opacity-30" />
-                  <p className="text-lg font-medium">Chưa có thông tin BHXH/BHYT</p>
-                  <p className="text-sm mt-1">Nhấn &quot;Thêm thông tin&quot; để tạo mới</p>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* Family Tab */}
-        <TabsContent value="family" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle>Quan hệ Gia đình</CardTitle>
-                  <CardDescription>Thông tin thân nhân của cán bộ</CardDescription>
-                </div>
-                <Button onClick={() => { setEditingFamily(null); setFamilyFormOpen(true); }}>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Thêm thân nhân
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Quan hệ</TableHead>
-                    <TableHead>Họ tên</TableHead>
-                    <TableHead>Năm sinh</TableHead>
-                    <TableHead>Nghề nghiệp</TableHead>
-                    <TableHead>Trạng thái</TableHead>
-                    <TableHead className="text-right">Thao tác</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {loading ? (
-                    <TableRow>
-                      <TableCell colSpan={6} className="text-center py-8">
-                        <Loader2 className="h-6 w-6 animate-spin mx-auto" />
-                      </TableCell>
-                    </TableRow>
-                  ) : familyMembers.length === 0 ? (
-                    <TableRow>
-                      <TableCell colSpan={6} className="text-center py-8 text-gray-500">
-                        Chưa có thông tin thân nhân
-                      </TableCell>
-                    </TableRow>
-                  ) : (
-                    familyMembers.map((member) => (
-                      <TableRow key={member.id}>
-                        <TableCell>
-                          <Badge variant="outline">
-                            {FamilyRelationTypeLabels[member.relation] || member.relation}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="font-medium">{member.fullName}</TableCell>
-                        <TableCell>
-                          {member.dateOfBirth 
-                            ? format(new Date(member.dateOfBirth), 'yyyy')
-                            : '-'
-                          }
-                        </TableCell>
-                        <TableCell>{member.occupation || '-'}</TableCell>
-                        <TableCell>
-                          {member.isDeceased ? (
-                            <Badge variant="secondary">Đã mất</Badge>
-                          ) : (
-                            <Badge variant="default" className="bg-green-500">Còn sống</Badge>
-                          )}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="icon">
-                                <MoreHorizontal className="h-4 w-4" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuItem
-                                onClick={() => {
-                                  setEditingFamily(member);
-                                  setFamilyFormOpen(true);
-                                }}
-                              >
-                                <Edit className="h-4 w-4 mr-2" />
-                                Sửa
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                className="text-red-600"
-                                onClick={() => {
-                                  setDeletingItem({ type: 'family', id: member.id });
-                                  setDeleteDialogOpen(true);
-                                }}
-                              >
-                                <Trash2 className="h-4 w-4 mr-2" />
-                                Xóa
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  )}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
-
-      {/* Career History Form */}
-      {selectedUserId && (
-        <CareerHistoryForm
-          open={careerFormOpen}
-          onOpenChange={setCareerFormOpen}
-          userId={selectedUserId}
-          initialData={editingCareer}
-          onSuccess={fetchCareerHistory}
-        />
-      )}
-
-      {/* Family Form */}
-      {selectedUserId && (
-        <FamilyForm
-          open={familyFormOpen}
-          onOpenChange={setFamilyFormOpen}
-          userId={selectedUserId}
-          initialData={editingFamily}
-          onSuccess={fetchFamilyMembers}
-        />
-      )}
-
-      {/* Party Member Form */}
-      {selectedUserId && (
-        <PartyMemberForm
-          open={partyFormOpen}
-          onOpenChange={setPartyFormOpen}
-          userId={selectedUserId}
-          initialData={partyMember}
-          onSuccess={fetchPartyMember}
-        />
-      )}
-
-      {/* Insurance Form */}
-      {selectedUserId && (
-        <InsuranceForm
-          open={insuranceFormOpen}
-          onOpenChange={setInsuranceFormOpen}
-          userId={selectedUserId}
-          initialData={insuranceInfo}
-          onSuccess={fetchInsuranceInfo}
-        />
-      )}
-
-      {/* Delete Confirmation */}
-      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Xác nhận xóa</AlertDialogTitle>
-            <AlertDialogDescription>
-              Bạn có chắc chắn muốn xóa bản ghi này? Thao tác này không thể hoàn tác.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Hủy</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete} className="bg-red-600 hover:bg-red-700">
-              Xóa
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </div>
+        </div>
+      </div>
+    </TooltipProvider>
   );
 }

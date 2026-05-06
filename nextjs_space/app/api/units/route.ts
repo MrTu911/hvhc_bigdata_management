@@ -18,6 +18,7 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const search = searchParams.get('search') || '';
+    const typeParam = searchParams.get('type') || '';
     const limit = parseInt(searchParams.get('limit') || '100');
 
     const where: any = { active: true };
@@ -26,6 +27,12 @@ export async function GET(request: NextRequest) {
         { name: { contains: search, mode: 'insensitive' } },
         { code: { contains: search, mode: 'insensitive' } },
       ];
+    }
+    if (typeParam) {
+      const types = typeParam.split(',').map(t => t.trim()).filter(Boolean);
+      if (types.length > 0) {
+        where.type = { in: types };
+      }
     }
 
     const units = await prisma.unit.findMany({

@@ -276,6 +276,10 @@ model FacultyProfile {
   teachingStart    DateTime?
   // M07 – Định mức giờ dạy/tuần (mặc định 16 giờ)
   weeklyHoursLimit Float     @default(16)
+  // M07 – Thỉnh giảng ngoài HV: đơn vị công tác gốc (null = cán bộ nội bộ)
+  homeInstitution  String?
+  // M07 – Thỉnh giảng ngoài HV: ngày hết hạn hợp đồng thỉnh giảng
+  contractEndDate  DateTime?
 
   researchProjectsList ResearchProject[]
   teachingSubjectsList TeachingSubject[]
