@@ -45,6 +45,7 @@ class FacultyServiceClass extends BaseService {
             { specialization: { contains: filters.search, mode: 'insensitive' } },
             { user: { name: { contains: filters.search, mode: 'insensitive' } } },
             { user: { email: { contains: filters.search, mode: 'insensitive' } } },
+            { user: { militaryId: { contains: filters.search, mode: 'insensitive' } } },
           ],
         }),
       };

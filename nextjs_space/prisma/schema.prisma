@@ -203,6 +203,9 @@ model User {
   scienceAttachmentsUploaded          ScienceAttachment[]         @relation("ScienceAttachmentUploader")
   personalUpdateRequests              PersonalUpdateRequest[]     @relation("PersonalUpdateRequestUser")
   personalUpdateRequestsReviewed      PersonalUpdateRequest[]     @relation("PersonalUpdateRequestReviewer")
+  rankDeclarationsCreated             RankDeclaration[]           @relation("RankDeclarationDeclarer")
+  declarationAmendmentsRequested      DeclarationAmendment[]      @relation("AmendmentRequester")
+  promotionProposalsCreated           PromotionProposal[]         @relation("PromotionProposalAuthor")
 
   @@index([email])
   @@index([role])
@@ -277,6 +280,10 @@ model FacultyProfile {
   teachingStart    DateTime?
   // M07 – Định mức giờ dạy/tuần (mặc định 16 giờ)
   weeklyHoursLimit Float     @default(16)
+  // M07 – Thỉnh giảng ngoài HV: đơn vị công tác gốc (null = cán bộ nội bộ)
+  homeInstitution  String?
+  // M07 – Thỉnh giảng ngoài HV: ngày hết hạn hợp đồng thỉnh giảng
+  contractEndDate  DateTime?
 
   researchProjectsList ResearchProject[]
   teachingSubjectsList TeachingSubject[]
@@ -866,6 +873,7 @@ model Unit {
   users             User[]
   studentsBySystem    HocVien[]         @relation("HocVienTrainingSystem")
   studentsByBattalion HocVien[]         @relation("HocVienBattalion")
+  promotionProposals  PromotionProposal[] @relation("UnitPromotionProposals")
 
   @@index([code])
   @@index([type])
@@ -2862,6 +2870,8 @@ model Personnel {
   familyRelations         FamilyRelation[]         @relation("FamilyRelationPersonnel")
   statusHistory           PersonnelStatusHistory[] @relation("StatusHistoryPersonnel")
   scientificProfile       ScientificProfile?       @relation("ScientificProfilePersonnel")
+  rankDeclarations        RankDeclaration[]        @relation("RankDeclarationPersonnel")
+  promotionProposals      PromotionProposal[]      @relation("PromotionProposalPersonnel")
 
   @@index([personnelCode])
   @@index([category])
@@ -3203,6 +3213,8 @@ model OfficerCareer {
   commandHistory       Json?
   trainingHistory      Json?
   awardHistory         Json?
+  lastRankDate         DateTime?
+  lastRankDecisionNo   String?
   createdAt            DateTime               @default(now())
   updatedAt            DateTime               @updatedAt
   createdBy            String?
@@ -8294,4 +8306,117 @@ model PersonalUpdateRequest {
   @@index([userId, status])
   @@index([status, createdAt])
   @@map("personal_update_requests")
+}
+
+// ─── Rank Declaration (Khai báo quá trình lên quân hàm) ──────────────────────
+
+model RankDeclaration {
+  id                       String                @id @default(cuid())
+  personnelId              String
+  rankType                 String                // "OFFICER" | "SOLDIER"
+  promotionType            PromotionType
+  previousRank             String?
+  newRank                  String?
+  effectiveDate            DateTime
+  decisionNumber           String?
+  decisionDate             DateTime?
+  previousPosition         String?
+  newPosition              String?
+  reason                   String?
+  notes                    String?
+  attachments              Json?
+  declarationStatus        RankDeclarationStatus @default(DRAFT)
+  workflowInstanceId       String?
+  lockedAt                 DateTime?
+  lockedBy                 String?
+  declaredBy               String
+  declaredOnBehalfOf       Boolean               @default(false)
+  committedPromotionId     String?
+  committedServiceRecordId String?
+  createdAt                DateTime              @default(now())
+  updatedAt                DateTime              @updatedAt
+  createdBy                String?
+  updatedBy                String?
+  personnel                Personnel             @relation("RankDeclarationPersonnel", fields: [personnelId], references: [id], onDelete: Cascade)
+  declarer                 User                  @relation("RankDeclarationDeclarer", fields: [declaredBy], references: [id])
+  amendments               DeclarationAmendment[]
+
+  @@index([personnelId])
+  @@index([declarationStatus])
+  @@index([workflowInstanceId])
+  @@index([rankType])
+  @@index([effectiveDate])
+  @@index([createdAt])
+  @@map("rank_declarations")
+}
+
+model DeclarationAmendment {
+  id                 String          @id @default(cuid())
+  declarationId      String
+  requestedChanges   Json
+  reason             String
+  amendmentStatus    AmendmentStatus @default(DRAFT)
+  workflowInstanceId String?
+  requestedBy        String
+  reviewedAt         DateTime?
+  reviewedBy         String?
+  reviewNote         String?
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+  declaration        RankDeclaration @relation(fields: [declarationId], references: [id], onDelete: Cascade)
+  requester          User            @relation("AmendmentRequester", fields: [requestedBy], references: [id])
+
+  @@index([declarationId])
+  @@index([amendmentStatus])
+  @@map("declaration_amendments")
+}
+
+model PromotionProposal {
+  id                 String                  @id @default(cuid())
+  personnelId        String
+  proposedById       String
+  proposingUnitId    String
+  proposedRank       String
+  justification      String
+  eligibilitySnap    Json?
+  status             PromotionProposalStatus @default(DRAFT)
+  workflowInstanceId String?
+  respondedAt        DateTime?
+  respondedBy        String?
+  responseNote       String?
+  createdAt          DateTime                @default(now())
+  updatedAt          DateTime                @updatedAt
+  personnel          Personnel               @relation("PromotionProposalPersonnel", fields: [personnelId], references: [id], onDelete: Cascade)
+  proposedBy         User                    @relation("PromotionProposalAuthor", fields: [proposedById], references: [id])
+  proposingUnit      Unit                    @relation("UnitPromotionProposals", fields: [proposingUnitId], references: [id])
+
+  @@index([personnelId])
+  @@index([proposingUnitId])
+  @@index([status])
+  @@map("promotion_proposals")
+}
+
+enum RankDeclarationStatus {
+  DRAFT
+  PENDING_REVIEW
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+  RETURNED
+  CANCELLED
+}
+
+enum AmendmentStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+  REJECTED
+}
+
+enum PromotionProposalStatus {
+  DRAFT
+  SUBMITTED
+  ACKNOWLEDGED
+  APPROVED
+  REJECTED
 }

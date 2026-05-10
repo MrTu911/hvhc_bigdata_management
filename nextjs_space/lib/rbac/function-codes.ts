@@ -643,6 +643,24 @@ export const PERSONAL = {
   VIEW_GRADUATION:      'VIEW_MY_GRADUATION',       // Xem trạng thái xét tốt nghiệp
 } as const;
 
+// ===== MODULE: PROMOTION (KHAI BÁO & DUYỆT THĂNG QUÂN HÀM) =====
+export const PROMOTION = {
+  VIEW_OWN:           'VIEW_OWN_RANK_DECLARATION',      // Cán bộ xem bản khai của mình
+  VIEW_UNIT:          'VIEW_UNIT_RANK_DECLARATIONS',    // HR/chỉ huy đơn vị xem bản khai trong đơn vị
+  VIEW_ORGAN:         'VIEW_ORGAN_RANK_DECLARATIONS',   // Cơ quan quản lý xem tất cả bản khai chờ duyệt
+  CREATE_SELF:        'CREATE_SELF_RANK_DECLARATION',   // Cán bộ tự khai báo lịch sử quân hàm
+  CREATE_ON_BEHALF:   'CREATE_RANK_DECLARATION_BEHALF', // HR khai hộ cán bộ
+  SUBMIT:             'SUBMIT_RANK_DECLARATION',        // Nộp bản khai lên cơ quan duyệt
+  APPROVE:            'APPROVE_RANK_DECLARATION',       // Cơ quan cán bộ/quân lực phê duyệt
+  REJECT:             'REJECT_RANK_DECLARATION',        // Cơ quan từ chối / trả lại bản khai
+  REQUEST_AMENDMENT:  'REQUEST_RANK_AMENDMENT',         // Đề nghị chỉnh sửa sau khi đã duyệt
+  APPROVE_AMENDMENT:  'APPROVE_RANK_AMENDMENT',         // Cơ quan duyệt yêu cầu chỉnh sửa
+  ADMIN_CREATE:       'ADMIN_CREATE_PROMOTION',         // Admin ghi trực tiếp (bypass workflow)
+  VIEW_PROPOSALS:     'VIEW_PROMOTION_PROPOSALS',       // Xem đề nghị thăng quân hàm
+  CREATE_PROPOSAL:    'CREATE_PROMOTION_PROPOSAL',      // Đơn vị tạo đề nghị thăng quân hàm
+  APPROVE_PROPOSAL:   'APPROVE_PROMOTION_PROPOSAL',     // Cơ quan phê duyệt đề nghị
+} as const;
+
 // ===== ALL FUNCTION CODES (for seeding) =====
 export const ALL_FUNCTION_CODES = {
   ...PERSONNEL,
@@ -679,6 +697,7 @@ export const ALL_FUNCTION_CODES = {
   ...TEMPLATES,
   ...SCIENCE,
   ...PERSONAL,
+  ...PROMOTION,
 } as const;
 
 // ===== FUNCTION_CODES (grouped by module) =====
@@ -718,6 +737,7 @@ export const FUNCTION_CODES = {
   TEMPLATES,
   SCIENCE,
   PERSONAL,
+  PROMOTION,
 } as const;
 
 // Type for all function codes
@@ -755,4 +775,5 @@ export const MODULE_NAMES: Record<string, string> = {
   workflow: 'Quy trình nghiệp vụ',
   digital_docs: 'Văn bản số',
   science: 'CSDL Khoa học Quản lý',
+  promotion: 'Khai báo & Duyệt Thăng Quân hàm',
 };

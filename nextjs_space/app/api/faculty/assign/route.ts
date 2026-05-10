@@ -2,19 +2,42 @@
  * API: Chỉ định cán bộ làm giảng viên
  * POST /api/faculty/assign
  *
- * Nghiệp vụ:
- *   - Giảng viên KHÔNG tạo mới — chọn từ danh sách cán bộ (User) hiện có
- *   - Tạo FacultyProfile liên kết với User đó
- *   - Nếu User đã có FacultyProfile → trả lỗi (dùng PATCH /api/faculty/[id] để cập nhật)
+ * Hỗ trợ 2 nhánh:
+ *   1. Cán bộ nội bộ: chọn từ User có sẵn (body.userId)
+ *   2. Thỉnh giảng ngoài HV: tạo User phantom (body.isExternalGuest = true)
  *
  * RBAC: FACULTY.CREATE — phòng đào tạo / ban quản lý nhân sự
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { createId } from '@paralleldrive/cuid2';
+import bcrypt from 'bcryptjs';
 import prisma from '@/lib/db';
 import { requireFunction } from '@/lib/rbac/middleware';
 import { FACULTY } from '@/lib/rbac/function-codes';
 import { logAudit } from '@/lib/audit';
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function buildProfileData(body: Record<string, unknown>, userId: string) {
+  return {
+    userId,
+    unitId: (body.unitId as string) || null,
+    academicRank: (body.academicRank as string) || null,
+    academicDegree: (body.academicDegree as string) || null,
+    specialization: (body.specialization as string) || null,
+    teachingExperience: parseInt(String(body.teachingExperience ?? 0)) || 0,
+    teachingPosition: (body.teachingPosition as string) || null,
+    weeklyHoursLimit: body.weeklyHoursLimit ? parseFloat(String(body.weeklyHoursLimit)) : 16,
+    teachingStart: body.teachingStart ? new Date(body.teachingStart as string) : null,
+    homeInstitution: (body.homeInstitution as string) || null,
+    contractEndDate: body.contractEndDate ? new Date(body.contractEndDate as string) : null,
+    isActive: true,
+    isPublic: false,
+  };
+}
+
+// ─── POST ─────────────────────────────────────────────────────────────────────
 
 export async function POST(req: NextRequest) {
   try {
@@ -23,20 +46,91 @@ export async function POST(req: NextRequest) {
     const { user } = authResult;
 
     const body = await req.json();
-    const {
-      userId,           // ID của User (cán bộ) sẽ được chỉ định làm giảng viên
-      unitId,           // Khoa/bộ môn phụ trách
-      academicRank,
-      academicDegree,
-      specialization,
-      teachingExperience,
-    } = body;
+    const { isExternalGuest } = body;
 
-    if (!userId) {
-      return NextResponse.json({ error: 'userId là bắt buộc' }, { status: 400 });
+    // ── Nhánh 1: Thỉnh giảng ngoài HV (tạo User phantom) ──────────────────────
+    if (isExternalGuest) {
+      const { externalName, externalEmail, externalPhone, homeInstitution } = body;
+
+      if (!externalName?.trim()) {
+        return NextResponse.json({ error: 'Họ tên giảng viên là bắt buộc' }, { status: 400 });
+      }
+      if (!homeInstitution?.trim()) {
+        return NextResponse.json({ error: 'Đơn vị công tác gốc là bắt buộc' }, { status: 400 });
+      }
+
+      // Nếu cung cấp email thật — kiểm tra trùng
+      if (externalEmail?.trim()) {
+        const existing = await prisma.user.findUnique({ where: { email: externalEmail.trim() } });
+        if (existing) {
+          return NextResponse.json(
+            { error: `Email ${externalEmail} đã tồn tại trong hệ thống` },
+            { status: 409 }
+          );
+        }
+      }
+
+      // Tạo phantom email duy nhất (không thể đăng nhập)
+      const phantomId = createId();
+      const phantomEmail = externalEmail?.trim() || `phantom-${phantomId}@external.hvhc.local`;
+      const phantomPassword = await bcrypt.hash(createId() + createId(), 10);
+
+      // Tạo User phantom + FacultyProfile trong transaction
+      const result = await prisma.$transaction(async (tx) => {
+        const phantomUser = await tx.user.create({
+          data: {
+            email: phantomEmail,
+            name: externalName.trim(),
+            password: phantomPassword,
+            role: 'GIANG_VIEN',
+            status: 'ACTIVE',
+            ...(externalPhone?.trim() && { phone: externalPhone.trim() }),
+          },
+        });
+
+        const profile = await tx.facultyProfile.create({
+          data: buildProfileData(body, phantomUser.id),
+          include: {
+            user: { select: { id: true, name: true, email: true, militaryId: true } },
+            unit: { select: { id: true, name: true } },
+          },
+        });
+
+        return { phantomUser, profile };
+      });
+
+      await logAudit({
+        userId: user!.id,
+        functionCode: FACULTY.CREATE,
+        action: 'CREATE',
+        resourceType: 'FACULTY_PROFILE',
+        resourceId: result.profile.id,
+        newValue: {
+          profileId: result.profile.id,
+          phantomUserId: result.phantomUser.id,
+          isExternalGuest: true,
+          homeInstitution,
+          assignedBy: user!.id,
+        },
+        result: 'SUCCESS',
+      });
+
+      return NextResponse.json(
+        { success: true, profile: result.profile, isExternalGuest: true },
+        { status: 201 }
+      );
     }
 
-    // Kiểm tra User tồn tại
+    // ── Nhánh 2: Cán bộ nội bộ (chọn User có sẵn) ────────────────────────────
+    const { userId } = body;
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'userId hoặc isExternalGuest là bắt buộc' },
+        { status: 400 }
+      );
+    }
+
     const targetUser = await prisma.user.findUnique({
       where: { id: userId },
       select: { id: true, name: true, email: true, militaryId: true, facultyProfile: { select: { id: true } } },
@@ -48,26 +142,13 @@ export async function POST(req: NextRequest) {
 
     if (targetUser.facultyProfile) {
       return NextResponse.json(
-        {
-          error: 'Cán bộ này đã có hồ sơ giảng viên',
-          facultyProfileId: targetUser.facultyProfile.id,
-        },
+        { error: 'Cán bộ này đã có hồ sơ giảng viên', facultyProfileId: targetUser.facultyProfile.id },
         { status: 409 }
       );
     }
 
-    // Tạo FacultyProfile
     const profile = await prisma.facultyProfile.create({
-      data: {
-        userId,
-        unitId: unitId || null,
-        academicRank: academicRank || null,
-        academicDegree: academicDegree || null,
-        specialization: specialization || null,
-        teachingExperience: teachingExperience || 0,
-        isActive: true,
-        isPublic: false,
-      },
+      data: buildProfileData(body, userId),
       include: {
         user: { select: { id: true, name: true, email: true, militaryId: true } },
         unit: { select: { id: true, name: true } },
@@ -85,13 +166,16 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({ success: true, profile }, { status: 201 });
-  } catch (error: any) {
+
+  } catch (error: unknown) {
     console.error('[Faculty Assign] Error:', error);
-    return NextResponse.json({ error: error.message || 'Lỗi hệ thống' }, { status: 500 });
+    const msg = error instanceof Error ? error.message : 'Lỗi hệ thống';
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }
 
-// GET: Tìm kiếm cán bộ chưa có hồ sơ giảng viên (dùng cho staff picker)
+// ─── GET: Tìm cán bộ nội bộ chưa có hồ sơ GV ────────────────────────────────
+
 export async function GET(req: NextRequest) {
   try {
     const authResult = await requireFunction(req, FACULTY.CREATE);
@@ -99,12 +183,16 @@ export async function GET(req: NextRequest) {
 
     const { searchParams } = new URL(req.url);
     const search = searchParams.get('search') || '';
-    const limit = Math.min(parseInt(searchParams.get('limit') || '20'), 50);
+    const limit = Math.min(parseInt(searchParams.get('limit') || '50'), 200);
 
     const staff = await prisma.user.findMany({
       where: {
-        facultyProfile: null, // chỉ cán bộ chưa được chỉ định làm giảng viên
-        isActive: true,
+        facultyProfile: null,
+        status: 'ACTIVE',
+        // Loại trừ học viên và phantom users
+        role: { notIn: ['HOC_VIEN', 'HOC_VIEN_SINH_VIEN'] },
+        // Loại trừ phantom users (email pattern nội bộ)
+        NOT: { email: { endsWith: '@external.hvhc.local' } },
         ...(search && {
           OR: [
             { name: { contains: search, mode: 'insensitive' } },
@@ -114,20 +202,24 @@ export async function GET(req: NextRequest) {
         }),
       },
       select: {
-        id: true,
-        name: true,
-        email: true,
-        militaryId: true,
-        rank: true,
-        unit: { select: { id: true, name: true } },
+        id: true, name: true, email: true,
+        militaryId: true, rank: true, role: true,
+        personnelType: true, unitId: true,
+        unitRelation: { select: { id: true, name: true } },
       },
-      orderBy: { name: 'asc' },
+      orderBy: [{ name: 'asc' }],
       take: limit,
     });
 
-    return NextResponse.json({ success: true, staff });
-  } catch (error: any) {
+    const normalized = staff.map(({ unitRelation, ...rest }) => ({
+      ...rest,
+      unit: unitRelation ?? null,
+    }));
+
+    return NextResponse.json({ success: true, staff: normalized });
+  } catch (error: unknown) {
     console.error('[Faculty Assign GET] Error:', error);
-    return NextResponse.json({ error: error.message || 'Lỗi hệ thống' }, { status: 500 });
+    const msg = error instanceof Error ? error.message : 'Lỗi hệ thống';
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }

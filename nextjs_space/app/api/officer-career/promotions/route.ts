@@ -24,16 +24,22 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
-    const page          = parseInt(searchParams.get('page')     || '1');
-    const limit         = parseInt(searchParams.get('limit')    || '20');
-    const search        = searchParams.get('search')            || '';
-    const promotionType = searchParams.get('promotionType')     || '';
-    const officerCareerId = searchParams.get('officerCareerId') || '';
+    const page            = parseInt(searchParams.get('page')          || '1');
+    const limit           = parseInt(searchParams.get('limit')         || '20');
+    const search          = searchParams.get('search')                 || '';
+    const promotionType   = searchParams.get('promotionType')          || '';
+    const officerCareerId = searchParams.get('officerCareerId')        || '';
+    const personnelId     = searchParams.get('personnelId')            || '';
 
     const where: any = {};
 
     if (officerCareerId) {
       where.officerCareerId = officerCareerId;
+    }
+
+    // Allow filtering by personnelId via the nested officerCareer relation
+    if (personnelId) {
+      where.officerCareer = { personnelId };
     }
 
     if (promotionType && promotionType !== 'ALL') {
@@ -42,6 +48,7 @@ export async function GET(request: NextRequest) {
 
     if (search) {
       where.officerCareer = {
+        ...where.officerCareer,
         personnel: {
           OR: [
             { fullName:      { contains: search, mode: 'insensitive' } },
@@ -93,13 +100,16 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const authResult = await requireFunction(request, PERSONNEL.UPDATE);
-    if (!authResult.allowed) {
+    // Direct write requires ADMIN_CREATE_PROMOTION — normal path goes through rank-declarations workflow
+    const { PROMOTION } = await import('@/lib/rbac/function-codes');
+    const adminAuth = await requireFunction(request, PROMOTION.ADMIN_CREATE);
+    if (!adminAuth.allowed) {
       return NextResponse.json(
-        { error: authResult.authResult?.deniedReason || 'Forbidden' },
+        { error: 'Ghi trực tiếp yêu cầu quyền ADMIN_CREATE_PROMOTION. Vui lòng dùng luồng khai báo quân hàm thông thường.' },
         { status: 403 },
       );
     }
+    const authResult = adminAuth;
     const { user } = authResult;
 
     const body = await request.json();
