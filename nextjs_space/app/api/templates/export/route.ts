@@ -8,6 +8,7 @@ import { TEMPLATES } from '@/lib/rbac/function-codes';
 import { logAudit } from '@/lib/audit';
 import { exportSingle } from '@/lib/services/export-engine-service';
 import { EntityType } from '@/lib/services/data-resolver-service';
+import { validateExportFields } from '@/lib/services/template/field-validator.service';
 
 export async function POST(request: NextRequest) {
   try {
@@ -20,6 +21,10 @@ export async function POST(request: NextRequest) {
     if (!templateId || !entityId) {
       return NextResponse.json({ success: false, data: null, error: 'templateId và entityId là bắt buộc' }, { status: 400 });
     }
+
+    // Pre-export validation — trả warnings nhưng không block
+    const validationResult = await validateExportFields(templateId, entityId, entityType).catch(() => null);
+    const exportWarnings = validationResult?.warnings ?? [];
 
     const result = await exportSingle({
       templateId,
@@ -46,6 +51,7 @@ export async function POST(request: NextRequest) {
         jobId: result.jobId,
         downloadUrl: result.downloadUrl,
         expiresIn: result.expiresIn,
+        warnings: exportWarnings.length > 0 ? exportWarnings : undefined,
       },
     });
   } catch (error) {

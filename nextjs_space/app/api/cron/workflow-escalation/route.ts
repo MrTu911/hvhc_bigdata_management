@@ -15,10 +15,9 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/lib/db';
-import { WorkflowNotificationService, WF_EVENT } from '@/lib/services/workflow/workflow-notification.service';
 import { logSecurityEvent } from '@/lib/audit';
 import { verifyCronSecret } from '@/lib/cron/verify-cron-secret';
+import { workflowEscalationWorker } from '@/lib/workers/workflow-escalation-worker';
 
 export const dynamic = 'force-dynamic';
 
@@ -33,72 +32,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
   }
 
-  const now = new Date();
+  const result = await workflowEscalationWorker.processExpiredSteps(100);
 
-  // Tìm instances còn đang chạy nhưng có step EXPIRED chưa được escalate
-  const expiredSteps = await prisma.workflowStepInstance.findMany({
-    where: {
-      status: 'EXPIRED',
-      // Chưa có escalation cho step này
-      workflowInstance: {
-        status: { in: ['PENDING', 'IN_PROGRESS'] },
-      },
-    },
-    include: {
-      workflowInstance: { select: { id: true, title: true, initiatorId: true } },
-      // Check escalations via raw query để tránh relation phức tạp Phase 1
-    },
-    take: 100,
-  });
-
-  let escalated = 0;
-  let alreadyEscalated = 0;
-
-  for (const step of expiredSteps) {
-    // Kiểm tra đã có escalation cho step này chưa
-    const existingEscalation = await prisma.workflowEscalation.findFirst({
-      where: {
-        workflowInstanceId: step.workflowInstanceId,
-        stepInstanceId: step.id,
-        escalatedBy: 'SYSTEM',
-      },
-      select: { id: true },
-    });
-
-    if (existingEscalation) {
-      alreadyEscalated++;
-      continue;
-    }
-
-    // Tạo escalation record
-    await prisma.workflowEscalation.create({
-      data: {
-        workflowInstanceId: step.workflowInstanceId,
-        stepInstanceId: step.id,
-        escalatedBy: 'SYSTEM',
-        reason: `Bước "${step.stepCode}" đã EXPIRED, chưa có người xử lý leo thang`,
-      },
-    });
-
-    // Thông báo cho initiator (Phase 2 sẽ thêm supervisor theo M02)
-    await WorkflowNotificationService.send({
-      workflowInstanceId: step.workflowInstanceId,
-      recipientId: step.workflowInstance.initiatorId,
-      eventType: WF_EVENT.ESCALATED,
-      title: 'Quy trình cần chú ý',
-      message: `Bước "${step.stepCode}" trong quy trình "${step.workflowInstance.title}" đã quá hạn và cần được xử lý hoặc leo thang.`,
-      payloadJson: { stepCode: step.stepCode, stepInstanceId: step.id },
-    });
-
-    escalated++;
-  }
-
-  return NextResponse.json({
-    success: true,
-    data: {
-      escalated,
-      alreadyEscalated,
-      runAt: now.toISOString(),
-    },
-  });
+  return NextResponse.json({ success: true, data: result });
 }

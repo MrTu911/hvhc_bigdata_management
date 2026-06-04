@@ -11,6 +11,7 @@ import { POLICY } from '@/lib/rbac/function-codes';
 import { requireFunction } from '@/lib/rbac/middleware';
 import { logAudit } from '@/lib/audit';
 import { PolicyRequestStatus, PolicyWorkflowAction } from '@prisma/client';
+import { submitToWorkflow } from '@/lib/services/policy-workflow-bridge.service';
 
 type ActionType = 'SUBMIT' | 'APPROVE' | 'REJECT' | 'CANCEL' | 'REVIEW';
 
@@ -198,6 +199,14 @@ export async function POST(
       newValue: JSON.stringify({ status: nextStatus }),
       result: 'SUCCESS',
     });
+
+    // Wire M13 workflow khi SUBMIT — opt-in, không block response nếu template chưa cấu hình
+    if (actionStr === 'SUBMIT') {
+      submitToWorkflow(
+        { id: params.id, title: existingRequest.title, requestNumber: existingRequest.requestNumber },
+        { id: session.user.id } as any
+      ).catch((err) => console.warn('[PolicyWorkflowBridge] submitToWorkflow skipped:', err?.message));
+    }
 
     return NextResponse.json({
       success: true,

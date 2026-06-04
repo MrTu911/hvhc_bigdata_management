@@ -1,58 +1,104 @@
 /**
  * HVHC BigData Management System
- * Rate Limiter - Giới hạn số request để chống brute force
+ * Rate Limiter — Canonical implementation (merged from lib/rate-limit.ts)
  * Backend: Redis (ưu tiên) → in-memory (fallback)
+ * Consumers: lib/security/index.ts, lib/rbac/middleware.ts, app/api routes
  */
 
+import { NextRequest, NextResponse } from 'next/server';
 import { redis } from '@/lib/redis';
 
-// In-memory store — fallback khi Redis không khả dụng
+// Shared in-memory store — fallback khi Redis không khả dụng
 const rateLimitStore = new Map<string, { count: number; resetAt: number }>();
 
-export interface RateLimitConfig {
-  windowMs: number;      // Thời gian cửa sổ (ms)
-  maxRequests: number;   // Số request tối đa trong cửa sổ
+// Cleanup every 5 minutes
+if (typeof setInterval !== 'undefined') {
+  setInterval(() => {
+    const now = Date.now();
+    for (const [key, record] of rateLimitStore.entries()) {
+      if (now > record.resetAt) rateLimitStore.delete(key);
+    }
+  }, 5 * 60 * 1000);
 }
 
-// Cấu hình mặc định cho các loại endpoint
+export interface RateLimitConfig {
+  windowMs: number;       // Thời gian cửa sổ (ms)
+  maxRequests: number;    // Số request tối đa trong cửa sổ
+  keyPrefix?: string;     // Prefix cho Redis key
+  message?: string;       // Custom error message
+}
+
+// Named configs — dùng với checkRateLimit(identifier, endpoint)
 export const RATE_LIMIT_CONFIGS: Record<string, RateLimitConfig> = {
-  // Login: 5 lần / 15 phút
-  login: {
-    windowMs: 15 * 60 * 1000,
-    maxRequests: 5
-  },
-  // OTP verify: 5 lần / 15 phút (sai OTP 3 lần → lock, nên 5 là ceiling an toàn)
-  otp: {
-    windowMs: 15 * 60 * 1000,
-    maxRequests: 5
-  },
-  // Forgot password: 3 lần / 1 giờ
-  forgotPassword: {
-    windowMs: 60 * 60 * 1000,
-    maxRequests: 3
-  },
-  // API chung: 100 lần / phút
-  api: {
-    windowMs: 60 * 1000,
-    maxRequests: 100
-  },
-  // Sensitive operations: 10 lần / phút
-  sensitive: {
-    windowMs: 60 * 1000,
-    maxRequests: 10
-  },
-  // Export: 5 lần / 5 phút
-  export: {
-    windowMs: 5 * 60 * 1000,
-    maxRequests: 5
-  }
+  login:         { windowMs: 15 * 60 * 1000, maxRequests: 5 },
+  otp:           { windowMs: 15 * 60 * 1000, maxRequests: 5 },
+  forgotPassword:{ windowMs: 60 * 60 * 1000, maxRequests: 3 },
+  api:           { windowMs: 60 * 1000,       maxRequests: 100 },
+  sensitive:     { windowMs: 60 * 1000,       maxRequests: 10 },
+  export:        { windowMs: 5 * 60 * 1000,  maxRequests: 5 },
+  ai:            { windowMs: 60 * 1000,       maxRequests: 20 },
 };
 
+// ===== INTERNAL HELPERS =====
+
+async function checkLimitRedis(
+  key: string,
+  config: RateLimitConfig
+): Promise<{ allowed: boolean; remaining: number; resetAt: number; retryAfter?: number } | null> {
+  const count = await redis.incr(key);
+  if (count === 0) return null; // Redis không khả dụng
+
+  if (count === 1) {
+    await redis.expire(key, Math.ceil(config.windowMs / 1000));
+  }
+  const remainingTtl = await redis.ttl(key);
+  const retryAfter = remainingTtl > 0 ? remainingTtl : Math.ceil(config.windowMs / 1000);
+  const resetAt = Date.now() + retryAfter * 1000;
+
+  if (count > config.maxRequests) {
+    return { allowed: false, remaining: 0, resetAt, retryAfter };
+  }
+  return { allowed: true, remaining: Math.max(0, config.maxRequests - count), resetAt };
+}
+
+function checkLimitMemory(
+  key: string,
+  config: RateLimitConfig
+): { allowed: boolean; remaining: number; resetAt: number; retryAfter?: number } {
+  const now = Date.now();
+  let record = rateLimitStore.get(key);
+
+  if (!record || now > record.resetAt) {
+    record = { count: 1, resetAt: now + config.windowMs };
+    rateLimitStore.set(key, record);
+    return { allowed: true, remaining: config.maxRequests - 1, resetAt: record.resetAt };
+  }
+
+  if (record.count >= config.maxRequests) {
+    return {
+      allowed: false,
+      remaining: 0,
+      resetAt: record.resetAt,
+      retryAfter: Math.ceil((record.resetAt - now) / 1000),
+    };
+  }
+
+  record.count++;
+  return { allowed: true, remaining: config.maxRequests - record.count, resetAt: record.resetAt };
+}
+
+function getClientIp(req: { headers: { get(name: string): string | null } }): string {
+  const forwarded = req.headers.get('x-forwarded-for');
+  return forwarded?.split(',')[0]?.trim() || req.headers.get('x-real-ip') || 'unknown';
+}
+
+// ===== PUBLIC API — named endpoint style =====
+
 /**
- * Kiểm tra và cập nhật rate limit
- * Ưu tiên Redis; fallback sang in-memory khi Redis không khả dụng
+ * Kiểm tra và cập nhật rate limit theo tên endpoint.
+ * Ưu tiên Redis; fallback sang in-memory khi Redis không khả dụng.
  * @param identifier - IP hoặc userId
- * @param endpoint - Loại endpoint (login, forgotPassword, api, sensitive)
+ * @param endpoint - Loại endpoint: login, otp, forgotPassword, api, sensitive, export, ai
  */
 export async function checkRateLimit(
   identifier: string,
@@ -60,39 +106,8 @@ export async function checkRateLimit(
 ): Promise<{ allowed: boolean; remaining: number; resetAt: number; retryAfter?: number }> {
   const config = RATE_LIMIT_CONFIGS[endpoint];
   const key = `rl:${endpoint}:${identifier}`;
-  const now = Date.now();
-
-  // --- Thử Redis ---
-  const count = await redis.incr(key);
-  if (count > 0) {
-    // Redis khả dụng (INCR thật luôn >= 1)
-    if (count === 1) {
-      await redis.expire(key, Math.ceil(config.windowMs / 1000));
-    }
-    const remainingTtl = await redis.ttl(key);
-    const retryAfter = remainingTtl > 0 ? remainingTtl : Math.ceil(config.windowMs / 1000);
-    const resetAt = now + retryAfter * 1000;
-
-    if (count > config.maxRequests) {
-      return { allowed: false, remaining: 0, resetAt, retryAfter };
-    }
-    return { allowed: true, remaining: Math.max(0, config.maxRequests - count), resetAt };
-  }
-
-  // --- Fallback: in-memory ---
-  let record = rateLimitStore.get(key);
-  if (!record || now > record.resetAt) {
-    record = { count: 0, resetAt: now + config.windowMs };
-  }
-
-  if (record.count >= config.maxRequests) {
-    const retryAfter = Math.ceil((record.resetAt - now) / 1000);
-    return { allowed: false, remaining: 0, resetAt: record.resetAt, retryAfter };
-  }
-
-  record.count++;
-  rateLimitStore.set(key, record);
-  return { allowed: true, remaining: config.maxRequests - record.count, resetAt: record.resetAt };
+  const redisResult = await checkLimitRedis(key, config);
+  return redisResult ?? checkLimitMemory(key, config);
 }
 
 /**
@@ -103,30 +118,27 @@ export async function resetRateLimit(
   endpoint: keyof typeof RATE_LIMIT_CONFIGS = 'api'
 ): Promise<void> {
   const key = `rl:${endpoint}:${identifier}`;
-  await redis.del(key);       // Redis
-  rateLimitStore.delete(key); // in-memory fallback
+  await redis.del(key);
+  rateLimitStore.delete(key);
 }
 
 /**
- * Middleware wrapper cho API routes
+ * Simple middleware wrapper cho API routes (plain Request)
  */
 export function withRateLimit(
   handler: (req: Request) => Promise<Response>,
   endpoint: keyof typeof RATE_LIMIT_CONFIGS = 'api'
 ) {
   return async (req: Request): Promise<Response> => {
-    // Lấy IP từ headers
-    const forwarded = req.headers.get('x-forwarded-for');
-    const ip = forwarded ? forwarded.split(',')[0].trim() : 'unknown';
-    
+    const ip = getClientIp(req);
     const result = await checkRateLimit(ip, endpoint);
-    
+
     if (!result.allowed) {
       return new Response(
         JSON.stringify({
-          error: 'Too many requests',
-          message: `Quá nhiều yêu cầu. Vui lòng thử lại sau ${result.retryAfter} giây.`,
-          retryAfter: result.retryAfter
+          success: false,
+          error: `Quá nhiều yêu cầu. Vui lòng thử lại sau ${result.retryAfter} giây.`,
+          retryAfter: result.retryAfter,
         }),
         {
           status: 429,
@@ -134,46 +146,141 @@ export function withRateLimit(
             'Content-Type': 'application/json',
             'Retry-After': String(result.retryAfter),
             'X-RateLimit-Remaining': '0',
-            'X-RateLimit-Reset': String(result.resetAt)
-          }
+            'X-RateLimit-Reset': String(result.resetAt),
+          },
         }
       );
     }
-    
-    // Thêm headers rate limit vào response
+
     const response = await handler(req);
     const newHeaders = new Headers(response.headers);
     newHeaders.set('X-RateLimit-Remaining', String(result.remaining));
     newHeaders.set('X-RateLimit-Reset', String(result.resetAt));
-    
     return new Response(response.body, {
       status: response.status,
       statusText: response.statusText,
-      headers: newHeaders
+      headers: newHeaders,
     });
   };
 }
 
+// ===== PUBLIC API — factory style (tương thích lib/rbac/middleware.ts) =====
+
 /**
- * Xóa các record hết hạn (gọi định kỳ)
+ * Tạo rate limiter theo config tuỳ chỉnh.
+ * Trả về async function dùng được trong NextRequest middleware.
  */
+export function createRateLimiter(config: RateLimitConfig) {
+  return async function rateLimit(
+    request: NextRequest,
+    userId?: string
+  ): Promise<{ allowed: true; remaining: number } | { allowed: false; response: NextResponse }> {
+    const ip = getClientIp(request);
+    const clientKey = userId ? `${ip}:${userId}` : ip;
+    const key = config.keyPrefix ? `${config.keyPrefix}:${clientKey}` : clientKey;
+
+    const redisResult = await checkLimitRedis(key, config);
+    const result = redisResult ?? checkLimitMemory(key, config);
+
+    if (!result.allowed) {
+      return {
+        allowed: false,
+        response: NextResponse.json(
+          {
+            success: false,
+            error: config.message || 'Quá nhiều yêu cầu. Vui lòng thử lại sau.',
+            retryAfter: result.retryAfter,
+          },
+          {
+            status: 429,
+            headers: {
+              'Retry-After': String(result.retryAfter),
+              'X-RateLimit-Limit': String(config.maxRequests),
+              'X-RateLimit-Remaining': '0',
+              'X-RateLimit-Reset': String(result.resetAt),
+            },
+          }
+        ),
+      };
+    }
+
+    return { allowed: true, remaining: result.remaining };
+  };
+}
+
+// ===== PRE-CONFIGURED LIMITERS (tương thích app/api/personnel/export/route.ts) =====
+
+export const authRateLimiter = createRateLimiter({
+  windowMs: 60 * 1000,
+  maxRequests: 5,
+  keyPrefix: 'auth',
+  message: 'Quá nhiều lần đăng nhập thất bại. Vui lòng thử lại sau 1 phút.',
+});
+
+export const exportRateLimiter = createRateLimiter({
+  windowMs: 5 * 60 * 1000,
+  maxRequests: 10,
+  keyPrefix: 'export',
+  message: 'Quá nhiều yêu cầu xuất dữ liệu. Vui lòng thử lại sau 5 phút.',
+});
+
+export const apiRateLimiter = createRateLimiter({
+  windowMs: 60 * 1000,
+  maxRequests: 100,
+  keyPrefix: 'api',
+  message: 'Quá nhiều yêu cầu. Vui lòng giảm tần suất.',
+});
+
+export const passwordResetRateLimiter = createRateLimiter({
+  windowMs: 60 * 60 * 1000,
+  maxRequests: 3,
+  keyPrefix: 'pwd-reset',
+  message: 'Quá nhiều yêu cầu đặt lại mật khẩu. Vui lòng thử lại sau 1 giờ.',
+});
+
+export const aiRateLimiter = createRateLimiter({
+  windowMs: 60 * 1000,
+  maxRequests: 20,
+  keyPrefix: 'ai',
+  message: 'Quá nhiều yêu cầu AI. Vui lòng thử lại sau.',
+});
+
+// ===== UTILITIES =====
+
+/** Xóa các record hết hạn (có thể gọi thủ công cho testing) */
 export function cleanupExpiredRecords(): void {
   const now = Date.now();
   for (const [key, record] of rateLimitStore.entries()) {
-    if (now > record.resetAt) {
-      rateLimitStore.delete(key);
-    }
+    if (now > record.resetAt) rateLimitStore.delete(key);
   }
 }
 
-// Cleanup mỗi 5 phút
-if (typeof setInterval !== 'undefined') {
-  setInterval(cleanupExpiredRecords, 5 * 60 * 1000);
+/** Lấy stats của in-memory store (cho monitoring) */
+export function getRateLimitStats() {
+  return {
+    totalKeys: rateLimitStore.size,
+    keys: Array.from(rateLimitStore.entries()).map(([key, entry]) => ({
+      key: key.split(':').slice(0, 2).join(':') + ':***',
+      count: entry.count,
+      resetAt: new Date(entry.resetAt).toISOString(),
+    })),
+  };
+}
+
+/** Xóa rate limit cho key pattern (dùng trong testing hoặc admin reset) */
+export function clearRateLimit(keyPattern?: string): void {
+  if (!keyPattern) {
+    rateLimitStore.clear();
+    return;
+  }
+  for (const key of rateLimitStore.keys()) {
+    if (key.includes(keyPattern)) rateLimitStore.delete(key);
+  }
 }
 
 export default {
   checkRateLimit,
   resetRateLimit,
   withRateLimit,
-  RATE_LIMIT_CONFIGS
+  RATE_LIMIT_CONFIGS,
 };
