@@ -26,6 +26,7 @@
 
 import { PrismaClient, UserStatus, FunctionScope } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+import { fileURLToPath } from 'url';
 import 'dotenv/config';
 import { FUNCTION_CODES } from '../../lib/rbac/function-codes';
 
@@ -261,7 +262,7 @@ type SeedFunction = {
 // resolveScope — scope cho từng position
 // ────────────────────────────────────────────────────────────
 
-function resolveScope(positionCode: string): FunctionScope {
+export function resolveScope(positionCode: string): FunctionScope {
   const ACADEMY = new Set([
     'SYSTEM_ADMIN', 'QUAN_TRI_HE_THONG',
     'GIAM_DOC', 'CHINH_UY', 'PHO_CHINH_UY',
@@ -293,7 +294,7 @@ function resolveScope(positionCode: string): FunctionScope {
 // getFunctionAllowPredicate — phân quyền theo nhóm
 // ────────────────────────────────────────────────────────────
 
-function getFunctionAllowPredicate(positionCode: string): (fn: SeedFunction) => boolean {
+export function getFunctionAllowPredicate(positionCode: string): (fn: SeedFunction) => boolean {
   // ── Nhóm P: Quản trị hệ thống ─────────────────────────────
   if (positionCode === 'SYSTEM_ADMIN') return () => true;
 
@@ -845,6 +846,11 @@ async function main() {
   });
 }
 
-main()
-  .catch(e => { console.error('\n❌ FAILED:', e.message); process.exit(1); })
-  .finally(() => prisma.$disconnect());
+// Chỉ chạy seed khi thực thi trực tiếp file này, KHÔNG chạy khi được import
+// (cho phép script reconcile tái sử dụng predicate mà không trigger seed)
+const isDirectRun = process.argv[1] === fileURLToPath(import.meta.url);
+if (isDirectRun) {
+  main()
+    .catch(e => { console.error('\n❌ FAILED:', e.message); process.exit(1); })
+    .finally(() => prisma.$disconnect());
+}
