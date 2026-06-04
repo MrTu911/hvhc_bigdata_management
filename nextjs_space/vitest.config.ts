@@ -13,6 +13,8 @@ export default defineConfig({
         'lib/services/workflow/**/*.ts',
         'lib/services/science/**/*.ts',
         'lib/services/policy-calculation.service.ts',
+        'lib/services/personnel-service.ts',
+        'lib/export/**/*.ts',
         'lib/rbac/**/*.ts',
         'lib/security/rate-limiter.ts',
         'lib/workers/workflow-escalation-worker.ts',
