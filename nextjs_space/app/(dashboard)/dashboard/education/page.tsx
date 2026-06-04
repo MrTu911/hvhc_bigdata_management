@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { ModuleHero } from "@/components/ui/enhanced-data-card";
 import { Progress } from "@/components/ui/progress";
 import {
   GraduationCap, RefreshCw, Users, BookOpen, AlertTriangle,
@@ -374,47 +375,27 @@ export default function EducationDashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* ── Header ─────────────────────────────────────────────────────── */}
-      <div className="bg-gradient-to-r from-indigo-900 via-indigo-800 to-blue-800 text-white px-6 py-5">
-        <div className="max-w-screen-xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-white/15 backdrop-blur flex items-center justify-center shrink-0">
-              <GraduationCap className="h-7 w-7 text-white" />
-            </div>
-            <div>
-              <h1 className="text-xl font-bold leading-tight">Tổng quan Giáo dục Đào tạo</h1>
-              <p className="text-indigo-200 text-sm mt-0.5">
-                {edu?.currentTerm?.name ?? "—"} · {edu?.currentYear?.name ?? "—"}
-                {lastUpdated && (
-                  <span className="ml-3 opacity-70 text-xs">
-                    <Clock className="inline h-3 w-3 mr-0.5" />
-                    {lastUpdated.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" })}
-                  </span>
-                )}
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={fetchAll}
-              className="text-white hover:bg-white/10 border border-white/20"
-            >
-              <RefreshCw className="h-4 w-4 mr-1.5" />
-              Làm mới
-            </Button>
-          </div>
-        </div>
-      </div>
+    <div className="space-y-6">
+      {/* ── Module Hero ─────────────────────────────────────────────────── */}
+      <ModuleHero
+        moduleId="education"
+        title="Tổng quan Giáo dục Đào tạo"
+        subtitle={`${edu?.currentTerm?.name ?? '—'} · ${edu?.currentYear?.name ?? '—'}`}
+        icon={GraduationCap}
+        controls={
+          <Button variant="outline" size="sm" onClick={fetchAll}
+            className="bg-white/10 border-white/30 text-white hover:bg-white/20 gap-1.5">
+            <RefreshCw className="h-4 w-4" /> Làm mới
+          </Button>
+        }
+      />
 
-      <div className="max-w-screen-xl mx-auto px-6 py-6 space-y-8">
+      <div className="space-y-8">
 
         {/* ── Critical Alert ──────────────────────────────────────────── */}
         {(edu?.warnings?.critical ?? 0) > 0 && (
           <div
-            className="flex items-center justify-between gap-4 bg-red-50 border border-red-200 rounded-xl px-5 py-3.5 shadow-sm cursor-pointer hover:bg-red-100 transition-colors"
+            className="flex items-center justify-between gap-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-xl px-5 py-3.5 shadow-sm cursor-pointer hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors"
             onClick={go("/dashboard/education/warnings")}
           >
             <div className="flex items-center gap-3">
@@ -1096,7 +1077,7 @@ export default function EducationDashboard() {
         </div>
 
         {/* ── Footer ──────────────────────────────────────────────────── */}
-        <div className="text-center text-xs text-slate-400 pb-4">
+        <div className="text-center text-xs text-muted-foreground pb-4">
           Hệ thống Quản lý Giáo dục Đào tạo · Học viện Hậu cần
         </div>
       </div>

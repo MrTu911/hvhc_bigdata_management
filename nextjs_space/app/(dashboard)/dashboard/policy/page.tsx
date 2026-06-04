@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
+import { ModuleHero, StatusBadge } from '@/components/ui/enhanced-data-card';
 import {
   FileText, Plus, Clock, CheckCircle, XCircle, AlertCircle,
   RefreshCw, ArrowRight, Bell, Shield, Folder, TrendingUp,
@@ -129,42 +130,37 @@ export default function PolicyDashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <div className="p-6 space-y-6 max-w-[1400px] mx-auto">
+    <div className="space-y-6">
+      <div className="space-y-6 max-w-[1400px] mx-auto">
 
-        {/* ── Header ─────────────────────────────────────────────────── */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-blue-600 shadow-md shadow-blue-200">
-              <FileText className="h-5 w-5 text-white" />
+        {/* ── Module Hero ─────────────────────────────────────────────── */}
+        <ModuleHero
+          moduleId="policy"
+          title="CSDL Chính sách"
+          subtitle="Quản lý yêu cầu chính sách, chế độ và phúc lợi"
+          icon={FileText}
+          controls={
+            <div className="flex items-center gap-2">
+              <div className="flex gap-1 bg-white/10 rounded-lg border border-white/20 p-1">
+                {yearOptions.map(y => (
+                  <button key={y} onClick={() => setActiveYear(y)}
+                    className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
+                      activeYear === y ? 'bg-white text-teal-800 shadow-sm' : 'text-white/80 hover:bg-white/10'
+                    }`}>
+                    {y}
+                  </button>
+                ))}
+              </div>
+              <Button variant="outline" size="sm" className="bg-white/10 border-white/30 text-white hover:bg-white/20" onClick={() => fetchData(activeYear)}>
+                <RefreshCw className="h-4 w-4" />
+              </Button>
+              <Button size="sm" className="bg-white/20 hover:bg-white/30 text-white border-white/30 border"
+                onClick={() => router.push('/dashboard/policy/requests/new')}>
+                <Plus className="h-4 w-4 mr-1.5" /> Tạo yêu cầu
+              </Button>
             </div>
-            <div>
-              <h1 className="text-xl font-bold text-slate-800">CSDL Chính sách</h1>
-              <p className="text-sm text-slate-500">Quản lý yêu cầu chính sách, chế độ và phúc lợi</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            {/* Year tabs */}
-            <div className="flex gap-1 bg-white rounded-lg border border-slate-200 p-1 shadow-sm">
-              {yearOptions.map(y => (
-                <button key={y} onClick={() => setActiveYear(y)}
-                  className={`px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
-                    activeYear === y ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-600 hover:bg-slate-100'
-                  }`}>
-                  {y}
-                </button>
-              ))}
-            </div>
-            <Button variant="outline" size="sm" className="h-9 border-slate-200 bg-white" onClick={() => fetchData(activeYear)}>
-              <RefreshCw className="h-4 w-4" />
-            </Button>
-            <Button size="sm" className="h-9 bg-blue-600 hover:bg-blue-700 shadow-sm"
-              onClick={() => router.push('/dashboard/policy/requests/new')}>
-              <Plus className="h-4 w-4 mr-1.5" /> Tạo yêu cầu
-            </Button>
-          </div>
-        </div>
+          }
+        />
 
         {/* ── Pending alert banner ────────────────────────────────────── */}
         {submittedCount > 0 && (
@@ -403,7 +399,6 @@ export default function PolicyDashboardPage() {
             </CardContent>
           </Card>
 
-        </div>
       </div>
     </div>
   );

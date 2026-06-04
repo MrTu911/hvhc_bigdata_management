@@ -20,7 +20,7 @@ export default async function DashboardLayout({
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
       <DashboardHeader />
       <DashboardSidebarEnhanced />
-      <main className="lg:pl-64 pt-16">
+      <main className="lg:pl-[var(--sidebar-width)] pt-16 page-enter">
         <div className="container mx-auto max-w-7xl p-4 md:p-6 lg:p-8">
           {children}
         </div>

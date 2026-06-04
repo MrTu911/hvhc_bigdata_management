@@ -11,6 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { PageHeader } from '@/components/ui/page-header';
+import { ModuleHero } from '@/components/ui/enhanced-data-card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
@@ -105,22 +106,27 @@ export default function InsuranceOverviewPage() {
   const s = stats?.summary;
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      <PageHeader
+    <div className="space-y-6">
+      <ModuleHero
+        moduleId="insurance"
         title="Tổng quan Bảo hiểm Xã hội"
-        description="Thống kê và quản lý BHXH toàn học viện"
-        icon={<Shield className="h-6 w-6" />}
-        actions={
+        subtitle="Thống kê và quản lý BHXH toàn học viện"
+        icon={Shield}
+        controls={
           <div className="flex gap-2">
             <Select value={year} onValueChange={setYear}>
-              <SelectTrigger className="w-32">
+              <SelectTrigger className="w-32 bg-white/10 border-white/30 text-white">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 {years.map(y => <SelectItem key={y} value={y}>Năm {y}</SelectItem>)}
               </SelectContent>
             </Select>
-            <Button variant="outline" size="icon" onClick={fetchStats}><RefreshCw className="h-4 w-4" /></Button>
+            <Button variant="outline" size="icon"
+              className="bg-white/10 border-white/30 text-white hover:bg-white/20"
+              onClick={fetchStats}>
+              <RefreshCw className="h-4 w-4" />
+            </Button>
           </div>
         }
       />

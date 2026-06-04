@@ -28,6 +28,7 @@ import {
   REVIEW_GRADE_MAP,
   REVIEW_GRADES,
 } from '@/lib/constants/party.labels';
+import { ModuleHero, KPICard } from '@/components/ui/enhanced-data-card';
 
 // ── Types ───────────────────────────────────────────────────────────────────
 interface DashboardStats {
@@ -91,28 +92,6 @@ function QuickLink({ href, icon: Icon, label, color }: {
   );
 }
 
-// ── KPI Card ─────────────────────────────────────────────────────────────────
-function KpiCard({ label, value, sub, icon: Icon, borderColor, textColor, bgIcon }: {
-  label: string; value: string | number; sub?: string;
-  icon: React.ElementType; borderColor: string; textColor: string; bgIcon: string;
-}) {
-  return (
-    <Card className={`border-l-4 ${borderColor} hover:shadow-md transition-shadow`}>
-      <CardContent className="p-4">
-        <div className="flex items-start justify-between">
-          <div className="space-y-0.5">
-            <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide">{label}</p>
-            <p className={`text-3xl font-bold ${textColor}`}>{value}</p>
-            {sub && <p className="text-xs text-muted-foreground">{sub}</p>}
-          </div>
-          <div className={`p-2.5 rounded-xl ${bgIcon}`}>
-            <Icon className={`h-5 w-5 ${textColor}`} />
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
 
 // ── Loading Skeleton ─────────────────────────────────────────────────────────
 function LoadingSkeleton() {
@@ -199,64 +178,51 @@ export default function PartyDashboardPage() {
     : [];
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <div className="p-6 space-y-6">
+    <div className="space-y-6">
 
-        {/* ── Hero Banner ─────────────────────────────────────────────────── */}
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-red-700 via-red-600 to-rose-500 p-6 text-white shadow-lg">
-          {/* Decorative circles */}
-          <div className="pointer-events-none absolute -right-12 -top-12 h-48 w-48 rounded-full bg-white/5" />
-          <div className="pointer-events-none absolute -right-4 top-8 h-28 w-28 rounded-full bg-white/5" />
-
-          <div className="relative flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <Star className="h-5 w-5 text-yellow-300 fill-yellow-300" />
-                <span className="text-red-200 text-sm font-medium uppercase tracking-widest">
-                  Công tác Đảng — Năm {stats?.year}
-                </span>
-              </div>
-              <h1 className="text-3xl font-bold tracking-tight">Tổng quan Đảng vụ</h1>
-              <p className="text-red-200 mt-1 text-sm">
-                Học viện Hậu cần · {total} đảng viên · {chinhThuc} đang sinh hoạt
-              </p>
+        {/* ── Module Hero ─────────────────────────────────────────────────── */}
+        <ModuleHero
+          moduleId="party"
+          title="Tổng quan Đảng vụ"
+          subtitle={`Học viện Hậu cần · ${total} đảng viên · ${chinhThuc} đang sinh hoạt`}
+          supra={`Công tác Đảng — Năm ${stats?.year}`}
+          icon={Star}
+          stats={[
+            { label: 'Tổng ĐV', value: total },
+            { label: 'Tham dự họp', value: `${kpis?.attendanceRate ?? 0}%` },
+            { label: 'Thu phí', value: `${feeRate}%` },
+          ]}
+          actions={
+            <div className="flex flex-wrap gap-2">
+              <Link href="/dashboard/party/members">
+                <Button size="sm" variant="outline" className="border-white/30 bg-white/10 text-white hover:bg-white/20">
+                  <Users className="h-4 w-4 mr-1.5" /> Đảng viên
+                </Button>
+              </Link>
+              <Link href="/dashboard/party/admissions">
+                <Button size="sm" variant="outline" className="border-white/30 bg-white/10 text-white hover:bg-white/20">
+                  <UserPlus className="h-4 w-4 mr-1.5" /> Kết nạp
+                </Button>
+              </Link>
+              <Link href="/dashboard/party/meetings">
+                <Button size="sm" variant="outline" className="border-white/30 bg-white/10 text-white hover:bg-white/20">
+                  <CalendarCheck className="h-4 w-4 mr-1.5" /> Sinh hoạt
+                </Button>
+              </Link>
             </div>
-
-            {/* Hero inline stats */}
-            <div className="flex gap-4">
-              <div className="rounded-xl bg-white/10 px-4 py-3 text-center backdrop-blur-sm">
-                <p className="text-2xl font-bold">{total}</p>
-                <p className="text-xs text-red-200">Tổng ĐV</p>
-              </div>
-              <div className="rounded-xl bg-white/10 px-4 py-3 text-center backdrop-blur-sm">
-                <p className="text-2xl font-bold">{kpis?.attendanceRate ?? 0}%</p>
-                <p className="text-xs text-red-200">Tham dự họp</p>
-              </div>
-              <div className="rounded-xl bg-white/10 px-4 py-3 text-center backdrop-blur-sm">
-                <p className="text-2xl font-bold">{feeRate}%</p>
-                <p className="text-xs text-red-200">Thu phí</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Action buttons */}
-          <div className="relative mt-4 flex flex-wrap gap-2">
-            <Link href="/dashboard/party/members">
-              <Button size="sm" variant="outline" className="border-white/30 bg-white/10 text-white hover:bg-white/20">
-                <Users className="h-4 w-4 mr-1.5" /> Danh sách Đảng viên
-              </Button>
-            </Link>
-            <Link href="/dashboard/party/admissions">
-              <Button size="sm" variant="outline" className="border-white/30 bg-white/10 text-white hover:bg-white/20">
-                <UserPlus className="h-4 w-4 mr-1.5" /> Kết nạp
-              </Button>
-            </Link>
-            <Link href="/dashboard/party/meetings">
-              <Button size="sm" variant="outline" className="border-white/30 bg-white/10 text-white hover:bg-white/20">
-                <CalendarCheck className="h-4 w-4 mr-1.5" /> Sinh hoạt
-              </Button>
-            </Link>
+          }
+          controls={
             <Button
+              size="sm"
+              variant="outline"
+              className="border-white/30 bg-white/10 text-white hover:bg-white/20"
+              onClick={fetchStats}
+            >
+              <RefreshCw className="h-4 w-4 mr-1.5" /> Làm mới
+            </Button>
+          }
+        />
+
               size="sm"
               variant="outline"
               className="border-white/30 bg-white/10 text-white hover:bg-white/20 ml-auto"
@@ -265,8 +231,6 @@ export default function PartyDashboardPage() {
               <RefreshCw className="h-4 w-4 mr-1.5" /> Làm mới
             </Button>
           </div>
-        </div>
-
         {/* ── Error banner ────────────────────────────────────────────────── */}
         {error && (
           <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 flex items-center gap-3 text-red-700">
@@ -280,73 +244,17 @@ export default function PartyDashboardPage() {
 
         {/* ── KPI Row 1 — Core metrics ─────────────────────────────────── */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <KpiCard
-            label="Tổng Đảng viên"
-            value={total}
-            sub="Toàn học viện"
-            icon={Users}
-            borderColor="border-l-red-600"
-            textColor="text-red-600"
-            bgIcon="bg-red-50"
-          />
-          <KpiCard
-            label="Đang sinh hoạt"
-            value={chinhThuc}
-            sub={`${pct(chinhThuc, total)}% tổng ĐV`}
-            icon={UserCheck}
-            borderColor="border-l-emerald-500"
-            textColor="text-emerald-600"
-            bgIcon="bg-emerald-50"
-          />
-          <KpiCard
-            label="Đảng viên Dự bị"
-            value={duBi}
-            sub="Đang trong thời gian dự bị"
-            icon={TrendingUp}
-            borderColor="border-l-blue-500"
-            textColor="text-blue-600"
-            bgIcon="bg-blue-50"
-          />
-          <KpiCard
-            label="Kết nạp trong năm"
-            value={kpis?.newlyAdmitted ?? 0}
-            sub={`Năm ${stats?.year}`}
-            icon={UserPlus}
-            borderColor="border-l-violet-500"
-            textColor="text-violet-600"
-            bgIcon="bg-violet-50"
-          />
+          <KPICard title="Tổng Đảng viên" value={total} subtitle="Toàn học viện" icon={Users} variant="danger" />
+          <KPICard title="Đang sinh hoạt" value={chinhThuc} subtitle={`${pct(chinhThuc, total)}% tổng ĐV`} icon={UserCheck} variant="success" />
+          <KPICard title="Đảng viên Dự bị" value={duBi} subtitle="Đang trong thời gian dự bị" icon={TrendingUp} variant="info" />
+          <KPICard title="Kết nạp trong năm" value={kpis?.newlyAdmitted ?? 0} subtitle={`Năm ${stats?.year}`} icon={UserPlus} variant="default" />
         </div>
 
         {/* ── KPI Row 2 — Operations ──────────────────────────────────── */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          <KpiCard
-            label="Tỷ lệ tham dự họp"
-            value={`${kpis?.attendanceRate ?? 0}%`}
-            sub="Trung bình các cuộc họp"
-            icon={CalendarCheck}
-            borderColor="border-l-amber-500"
-            textColor="text-amber-600"
-            bgIcon="bg-amber-50"
-          />
-          <KpiCard
-            label="Kỷ luật trong năm"
-            value={kpis?.disciplineCount ?? 0}
-            sub={kpis?.disciplineCount ? 'Cần theo dõi' : 'Không có vi phạm'}
-            icon={ShieldAlert}
-            borderColor={kpis?.disciplineCount ? 'border-l-red-500' : 'border-l-slate-300'}
-            textColor={kpis?.disciplineCount ? 'text-red-600' : 'text-slate-500'}
-            bgIcon={kpis?.disciplineCount ? 'bg-red-50' : 'bg-slate-50'}
-          />
-          <KpiCard
-            label="Đảng viên nợ phí"
-            value={kpis?.debtMemberCount ?? 0}
-            sub={`Tổng nợ: ${fmt(kpis?.totalFeeDebt ?? 0)}đ`}
-            icon={Wallet}
-            borderColor={kpis?.debtMemberCount ? 'border-l-orange-500' : 'border-l-slate-300'}
-            textColor={kpis?.debtMemberCount ? 'text-orange-600' : 'text-slate-500'}
-            bgIcon={kpis?.debtMemberCount ? 'bg-orange-50' : 'bg-slate-50'}
-          />
+          <KPICard title="Tỷ lệ tham dự họp" value={`${kpis?.attendanceRate ?? 0}%`} subtitle="Trung bình các cuộc họp" icon={CalendarCheck} variant="warning" />
+          <KPICard title="Kỷ luật trong năm" value={kpis?.disciplineCount ?? 0} subtitle={kpis?.disciplineCount ? 'Cần theo dõi' : 'Không có vi phạm'} icon={ShieldAlert} variant={kpis?.disciplineCount ? 'danger' : 'default'} />
+          <KPICard title="Đảng viên nợ phí" value={kpis?.debtMemberCount ?? 0} subtitle={`Tổng nợ: ${fmt(kpis?.totalFeeDebt ?? 0)}đ`} icon={Wallet} variant={kpis?.debtMemberCount ? 'warning' : 'default'} />
         </div>
 
         {/* ── Charts Row ──────────────────────────────────────────────── */}
@@ -636,7 +544,6 @@ export default function PartyDashboardPage() {
           </CardContent>
         </Card>
 
-      </div>
     </div>
   );
 }

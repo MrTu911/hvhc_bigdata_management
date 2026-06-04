@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
+import { ModuleHero, KPICard, StatusBadge } from '@/components/ui/enhanced-data-card';
 import { useToast } from '@/components/ui/use-toast';
 import {
   Search,
@@ -417,18 +418,13 @@ export default function StudentListPage() {
     setPage(1);
   };
 
-  const getStatusColor = (status: string) => {
+  const getStudentStatusVariant = (status: string): 'success' | 'info' | 'warning' | 'danger' | 'neutral' => {
     switch (status) {
-      case 'Đang học':
-        return 'bg-blue-100 text-blue-800';
-      case 'Tốt nghiệp':
-        return 'bg-green-100 text-green-800';
-      case 'Bảo lưu':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'Thôi học':
-        return 'bg-red-100 text-red-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
+      case 'Đang học': return 'info';
+      case 'Tốt nghiệp': return 'success';
+      case 'Bảo lưu': return 'warning';
+      case 'Thôi học': return 'danger';
+      default: return 'neutral';
     }
   };
 
@@ -441,43 +437,30 @@ export default function StudentListPage() {
   };
 
   return (
-    <div className="space-y-6 p-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Danh sách Học viên</h1>
-          <p className="text-muted-foreground mt-1">
-            Quản lý thông tin học viên, kết quả học tập
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <Button onClick={() => handleExport('xlsx')} variant="outline">
-            <FileSpreadsheet className="mr-2 h-4 w-4" />
-            Excel
-          </Button>
-          <Button onClick={() => handleExport('csv')} variant="outline">
-            <FileText className="mr-2 h-4 w-4" />
-            CSV
-          </Button>
-          <Button onClick={() => handleOpenDialog()}>
-            <Plus className="mr-2 h-4 w-4" />
-            Thêm học viên
-          </Button>
-        </div>
-      </div>
+    <div className="space-y-6">
+      {/* ── Module Hero ── */}
+      <ModuleHero
+        moduleId="student"
+        title="Danh sách Học viên"
+        subtitle="Quản lý thông tin học viên, kết quả học tập"
+        stats={[{ label: 'Tổng học viên', value: total }]}
+        controls={
+          <div className="flex gap-2">
+            <Button onClick={() => handleExport('xlsx')} variant="outline"
+              className="bg-white/10 border-white/30 text-white hover:bg-white/20">
+              <FileSpreadsheet className="mr-2 h-4 w-4" /> Excel
+            </Button>
+            <Button onClick={() => handleOpenDialog()}
+              className="bg-white/20 hover:bg-white/30 text-white border border-white/30">
+              <Plus className="mr-2 h-4 w-4" /> Thêm học viên
+            </Button>
+          </div>
+        }
+      />
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Tổng số học viên
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{total}</div>
-          </CardContent>
-        </Card>
+        <KPICard title="Tổng số học viên" value={total} variant="default" />
       </div>
 
       {/* Filters */}
@@ -569,9 +552,10 @@ export default function StudentListPage() {
                         <div className="flex items-center gap-3 mb-2">
                           <h3 className="text-lg font-semibold">{student.hoTen}</h3>
                           <Badge variant="outline">{student.maHocVien}</Badge>
-                          <Badge className={getStatusColor(student.trangThai)}>
-                            {student.trangThai}
-                          </Badge>
+                          <StatusBadge
+                            status={getStudentStatusVariant(student.trangThai)}
+                            label={student.trangThai}
+                          />
                         </div>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm text-muted-foreground">
                           <div className="flex items-center gap-2">

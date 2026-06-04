@@ -77,6 +77,18 @@ const config: Config = {
           green: 'hsl(var(--military-green))',
           gold: 'hsl(var(--military-gold))',
         },
+        module: {
+          personnel: 'hsl(var(--module-personnel))',
+          party: 'hsl(var(--module-party))',
+          education: 'hsl(var(--module-education))',
+          research: 'hsl(var(--module-research))',
+          policy: 'hsl(var(--module-policy))',
+          insurance: 'hsl(var(--module-insurance))',
+          student: 'hsl(var(--module-student))',
+          science: 'hsl(var(--module-science))',
+          admin: 'hsl(var(--module-admin))',
+          workflow: 'hsl(var(--module-workflow))',
+        },
       },
       keyframes: {
         'accordion-down': {

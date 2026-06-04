@@ -12,6 +12,7 @@ import {
   UserX, Star, Shield, Filter, RefreshCw, Eye,
   ChevronLeft,
 } from 'lucide-react';
+import { ModuleHero, KPICard, StatusBadge } from '@/components/ui/enhanced-data-card';
 
 // ─────────────────────────────────────────────────────
 // Types
@@ -49,28 +50,23 @@ interface StatusStats {
 // ─────────────────────────────────────────────────────
 // Status config
 // ─────────────────────────────────────────────────────
-const STATUS_CONFIG: Record<string, {
-  label: string;
-  badgeClass: string;
-  dotClass: string;
-  icon: React.ElementType;
-}> = {
-  CHINH_THUC:   { label: 'Chính thức',  badgeClass: 'bg-emerald-100 text-emerald-700 border-emerald-200', dotClass: 'bg-emerald-500', icon: UserCheck },
-  DU_BI:        { label: 'Dự bị',       badgeClass: 'bg-blue-100 text-blue-700 border-blue-200',         dotClass: 'bg-blue-500',     icon: Clock },
-  QUAN_CHUNG:   { label: 'Quần chúng',  badgeClass: 'bg-slate-100 text-slate-600 border-slate-200',      dotClass: 'bg-slate-400',    icon: Users },
-  CAM_TINH:     { label: 'Cảm tình',    badgeClass: 'bg-violet-100 text-violet-700 border-violet-200',   dotClass: 'bg-violet-500',   icon: Star },
-  DOI_TUONG:    { label: 'Đối tượng',   badgeClass: 'bg-amber-100 text-amber-700 border-amber-200',      dotClass: 'bg-amber-500',    icon: Shield },
-  CHUYEN_DI:    { label: 'Chuyển đi',   badgeClass: 'bg-cyan-100 text-cyan-700 border-cyan-200',         dotClass: 'bg-cyan-500',     icon: ChevronRight },
-  KHAI_TRU:     { label: 'Khai trừ',    badgeClass: 'bg-red-100 text-red-700 border-red-200',            dotClass: 'bg-red-500',      icon: UserX },
-  ACTIVE:       { label: 'Hoạt động',   badgeClass: 'bg-emerald-100 text-emerald-700 border-emerald-200', dotClass: 'bg-emerald-500', icon: UserCheck },
-  TRANSFERRED:  { label: 'Đã chuyển',   badgeClass: 'bg-cyan-100 text-cyan-700 border-cyan-200',         dotClass: 'bg-cyan-500',     icon: ChevronRight },
-  SUSPENDED:    { label: 'Đình chỉ',    badgeClass: 'bg-orange-100 text-orange-700 border-orange-200',   dotClass: 'bg-orange-500',   icon: UserX },
-  EXPELLED:     { label: 'Khai trừ',    badgeClass: 'bg-red-100 text-red-700 border-red-200',            dotClass: 'bg-red-500',      icon: UserX },
+const MEMBER_STATUS_LABELS: Record<string, string> = {
+  CHINH_THUC: 'Chính thức', DU_BI: 'Dự bị', QUAN_CHUNG: 'Quần chúng',
+  CAM_TINH: 'Cảm tình', DOI_TUONG: 'Đối tượng', CHUYEN_DI: 'Chuyển đi',
+  KHAI_TRU: 'Khai trừ', ACTIVE: 'Hoạt động', TRANSFERRED: 'Đã chuyển',
+  SUSPENDED: 'Đình chỉ', EXPELLED: 'Khai trừ',
 };
 
-const DEFAULT_STATUS = { label: 'Không rõ', badgeClass: 'bg-gray-100 text-gray-600 border-gray-200', dotClass: 'bg-gray-400', icon: Users };
+const MEMBER_STATUS_VARIANT: Record<string, 'success' | 'info' | 'neutral' | 'warning' | 'danger'> = {
+  CHINH_THUC: 'success', ACTIVE: 'success',
+  DU_BI: 'info', CHUYEN_DI: 'info', TRANSFERRED: 'info',
+  QUAN_CHUNG: 'neutral', CAM_TINH: 'neutral',
+  DOI_TUONG: 'warning', SUSPENDED: 'warning',
+  KHAI_TRU: 'danger', EXPELLED: 'danger',
+};
 
-function getStatus(s: string) { return STATUS_CONFIG[s] ?? DEFAULT_STATUS; }
+function getMemberStatusLabel(s: string) { return MEMBER_STATUS_LABELS[s] ?? s; }
+function getMemberStatusVariant(s: string) { return MEMBER_STATUS_VARIANT[s] ?? 'neutral' as const; }
 
 function fmtDate(d?: string | null) {
   if (!d) return '—';
@@ -146,44 +142,21 @@ export default function PartyMembersPage() {
   return (
     <div className="space-y-6 p-6 max-w-[1400px] mx-auto">
 
-      {/* ── Hero Banner ───────────────────────── */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-red-700 via-red-600 to-rose-500 p-6 text-white shadow-lg">
-        <div className="pointer-events-none absolute -right-10 -top-10 h-52 w-52 rounded-full bg-white/5" />
-        <div className="pointer-events-none absolute right-24 top-6 h-28 w-28 rounded-full bg-white/5" />
-        <div className="pointer-events-none absolute -left-8 -bottom-8 h-40 w-40 rounded-full bg-white/5" />
-        <div className="pointer-events-none absolute right-0 bottom-0 opacity-[0.04]">
-          <Shield className="h-48 w-48" />
-        </div>
-        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <div className="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center">
-                <Users className="h-4 w-4" />
-              </div>
-              <span className="text-red-200 text-sm font-medium">Quản lý Đảng viên · M03</span>
-            </div>
-            <h1 className="text-2xl font-bold tracking-tight">Hồ sơ Đảng viên</h1>
-            <p className="text-red-100 text-sm mt-1">
-              UC-63 · Danh sách hồ sơ toàn trình theo chuẩn biểu mẫu 2A-LLĐV
-            </p>
-            {stats && (
-              <div className="flex items-center gap-3 mt-3">
-                <span className="bg-white/15 backdrop-blur-sm rounded-full px-3 py-1 text-xs font-semibold">
-                  {stats.total} đảng viên
-                </span>
-                <span className="bg-white/15 backdrop-blur-sm rounded-full px-3 py-1 text-xs font-semibold">
-                  {(stats.byStatus['CHINH_THUC'] ?? 0) + (stats.byStatus['ACTIVE'] ?? 0)} chính thức
-                </span>
-              </div>
-            )}
-          </div>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => fetchData(page, search, statusFilter)}
-              className="bg-white/10 border-white/20 text-white hover:bg-white/20 gap-2"
-            >
+      {/* ── Module Hero ───────────────────────── */}
+      <ModuleHero
+        moduleId="party"
+        title="Hồ sơ Đảng viên"
+        subtitle="UC-63 · Danh sách hồ sơ toàn trình theo chuẩn biểu mẫu 2A-LLĐV"
+        supra="Quản lý Đảng viên · M03"
+        icon={Users}
+        stats={stats ? [
+          { label: 'Tổng ĐV', value: stats.total },
+          { label: 'Chính thức', value: (stats.byStatus['CHINH_THUC'] ?? 0) + (stats.byStatus['ACTIVE'] ?? 0) },
+        ] : []}
+        controls={
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" onClick={() => fetchData(page, search, statusFilter)}
+              className="bg-white/10 border-white/20 text-white hover:bg-white/20 gap-2">
               <RefreshCw className="h-4 w-4" /> Làm mới
             </Button>
             <Link href="/dashboard/party/recruitment">
@@ -192,29 +165,21 @@ export default function PartyMembersPage() {
               </Button>
             </Link>
           </div>
-        </div>
-      </div>
+        }
+      />
 
       {/* ── KPI Cards ─────────────────────────── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {kpis.map(k => {
-          const Icon = k.icon;
+        {kpis.map((k, idx) => {
+          const variants = ['default', 'success', 'info', 'warning'] as const;
           return (
-            <Card key={k.label} className="border-0 shadow-sm">
-              <CardContent className="p-4 flex items-center gap-3">
-                <div className={`p-2.5 rounded-xl ${k.bg} flex-shrink-0`}>
-                  <Icon className={`h-5 w-5 ${k.colorClass}`} />
-                </div>
-                <div className="min-w-0">
-                  <p className="text-xs text-gray-500 dark:text-gray-400 font-medium truncate">{k.label}</p>
-                  {loading ? (
-                    <Skeleton className="h-6 w-12 mt-1" />
-                  ) : (
-                    <p className="text-xl font-bold text-gray-900 dark:text-white">{k.value.toLocaleString()}</p>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
+            <KPICard
+              key={k.label}
+              title={k.label}
+              value={k.value}
+              icon={k.icon}
+              variant={variants[idx] ?? 'default'}
+            />
           );
         })}
       </div>
@@ -307,8 +272,6 @@ export default function PartyMembersPage() {
           ) : (
             <div className="divide-y divide-gray-50 dark:divide-gray-800/60">
               {items.map(m => {
-                const sc = getStatus(m.status);
-                const Icon = sc.icon;
                 const initials = (m.user?.name ?? '?').split(' ').slice(-2).map((w: string) => w[0]).join('').toUpperCase();
                 return (
                   <div
@@ -346,12 +309,11 @@ export default function PartyMembersPage() {
                     </p>
 
                     {/* Status */}
-                    <div className="hidden md:flex items-center gap-1.5">
-                      <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${sc.dotClass}`} />
-                      <Badge className={`${sc.badgeClass} border text-[11px] font-semibold gap-1`}>
-                        <Icon className="h-3 w-3" />
-                        {sc.label}
-                      </Badge>
+                    <div className="hidden md:flex items-center">
+                      <StatusBadge
+                        status={getMemberStatusVariant(m.status)}
+                        label={getMemberStatusLabel(m.status)}
+                      />
                     </div>
 
                     {/* Mobile status pill */}

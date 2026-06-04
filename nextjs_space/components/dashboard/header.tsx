@@ -16,11 +16,15 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Moon, Sun, Languages, User, LogOut, Shield } from 'lucide-react';
 import { CommandSearch } from '@/components/dashboard/command-search';
+import { useActiveModule } from '@/hooks/use-active-module';
+import { MODULE_TOKENS } from '@/lib/constants/module-tokens';
 
 export function DashboardHeader() {
   const { data: session } = useSession() || {};
   const { theme, setTheme } = useTheme();
   const { language, setLanguage, t } = useLanguage();
+  const activeModule = useActiveModule();
+  const moduleToken = MODULE_TOKENS[activeModule];
 
   const toggleTheme = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
@@ -48,8 +52,14 @@ export function DashboardHeader() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto max-w-7xl flex h-16 items-center justify-between px-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
+          <div className="relative w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
             <Shield className="w-6 h-6 text-white" />
+            {/* Module accent dot — shows which module is active */}
+            {activeModule !== 'default' && (
+              <span
+                className={`absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full border-2 border-background bg-gradient-to-br ${moduleToken.sidebarGradient}`}
+              />
+            )}
           </div>
           <div className="hidden md:block">
             <h1 className="text-lg font-bold">{t('dashboard.title')}</h1>

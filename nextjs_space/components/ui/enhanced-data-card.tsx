@@ -3,6 +3,7 @@
 import React from 'react';
 import { LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { MODULE_TOKENS, type ModuleId } from '@/lib/constants/module-tokens';
 
 interface KPICardProps {
   title: string;
@@ -277,3 +278,112 @@ export function EmptyState({ icon: Icon, title, description, action, className }
     </div>
   );
 }
+
+// ─── ModuleHero ────────────────────────────────────────────────────────────────
+
+interface ModuleStatChip {
+  label: string;
+  value: string | number;
+}
+
+interface ModuleHeroProps {
+  moduleId: ModuleId;
+  title: string;
+  subtitle?: string;
+  /** Small badge text above title e.g. "M02 · Nhân sự" */
+  supra?: string;
+  icon?: LucideIcon;
+  stats?: ModuleStatChip[];
+  actions?: React.ReactNode;
+  controls?: React.ReactNode;
+  className?: string;
+}
+
+export function ModuleHero({
+  moduleId,
+  title,
+  subtitle,
+  supra,
+  icon: Icon,
+  stats,
+  actions,
+  controls,
+  className,
+}: ModuleHeroProps) {
+  const token = MODULE_TOKENS[moduleId] ?? MODULE_TOKENS.default;
+
+  return (
+    <div
+      className={cn(
+        'relative overflow-hidden rounded-2xl p-6 md:p-8 text-white shadow-xl',
+        'bg-gradient-to-br',
+        token.heroGradient,
+        className
+      )}
+    >
+      {/* Decorative background circles */}
+      <div className="pointer-events-none absolute -right-12 -top-12 h-48 w-48 rounded-full bg-white/5" />
+      <div className="pointer-events-none absolute -bottom-8 -left-8 h-36 w-36 rounded-full bg-white/5" />
+      <div className="pointer-events-none absolute right-1/3 top-0 h-24 w-24 rounded-full bg-white/5" />
+
+      <div className="relative z-10 flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+        {/* Left: title block */}
+        <div className="flex-1">
+          {(supra || (token.code)) && (
+            <p className={cn('text-xs font-semibold uppercase tracking-widest mb-2', token.accentText)}>
+              {supra ?? `${token.code} · ${token.label}`}
+            </p>
+          )}
+
+          <div className="flex items-center gap-3">
+            {Icon && (
+              <div className={cn('flex h-12 w-12 items-center justify-center rounded-xl', token.iconBg)}>
+                <Icon className="h-6 w-6 text-white" />
+              </div>
+            )}
+            <div>
+              <h1 className="text-2xl md:text-3xl font-bold text-white leading-tight">
+                {title}
+              </h1>
+              {subtitle && (
+                <p className={cn('text-sm mt-0.5', token.accentText)}>
+                  {subtitle}
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* Inline stat chips */}
+          {stats && stats.length > 0 && (
+            <div className="mt-4 flex flex-wrap gap-3">
+              {stats.map((chip) => (
+                <div
+                  key={chip.label}
+                  className="flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-sm font-medium text-white backdrop-blur-sm"
+                >
+                  <span className={cn('text-xs', token.accentText)}>{chip.label}:</span>
+                  <span className="font-semibold">{chip.value}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {actions && (
+            <div className="mt-4 flex flex-wrap gap-2">
+              {actions}
+            </div>
+          )}
+        </div>
+
+        {/* Right: controls (year selector, filter, etc.) */}
+        {controls && (
+          <div className="shrink-0">
+            {controls}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export type { ModuleId };

@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { KPICard, StatusBadge, ModuleHero } from '@/components/ui/enhanced-data-card';
 import {
   Table,
   TableBody,
@@ -105,12 +106,12 @@ const WORK_STATUS_LABELS: Record<string, string> = {
   RESIGNED: 'Thôi việc',
 };
 
-const WORK_STATUS_STYLE: Record<string, string> = {
-  ACTIVE: 'bg-emerald-100 text-emerald-700 border-emerald-200',
-  TRANSFERRED: 'bg-blue-100 text-blue-700 border-blue-200',
-  RETIRED: 'bg-gray-100 text-gray-600 border-gray-200',
-  SUSPENDED: 'bg-orange-100 text-orange-700 border-orange-200',
-  RESIGNED: 'bg-red-100 text-red-600 border-red-200',
+const WORK_STATUS_VARIANT: Record<string, 'success' | 'info' | 'neutral' | 'warning' | 'danger'> = {
+  ACTIVE: 'success',
+  TRANSFERRED: 'info',
+  RETIRED: 'neutral',
+  SUSPENDED: 'warning',
+  RESIGNED: 'danger',
 };
 
 const PERSONNEL_TYPE_LABELS: Record<string, string> = {
@@ -315,77 +316,70 @@ export default function PersonnelPage() {
 
   return (
     <TooltipProvider>
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
-        <div className="max-w-screen-2xl mx-auto p-6 space-y-6">
+      <div className="space-y-6">
 
-          {/* ── Header ── */}
-          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div className="flex items-center gap-4">
-              <div className="p-3 bg-gradient-to-br from-red-500 to-red-700 rounded-xl shadow-sm">
-                <Shield className="h-6 w-6 text-white" />
+          {/* ── Module Hero ── */}
+          <ModuleHero
+            moduleId="personnel"
+            title="Quản lý Hồ sơ Cán bộ"
+            subtitle="CSDL quân nhân theo QĐ 144/BQP"
+            icon={Shield}
+            stats={summaryStats ? [
+              { label: 'Tổng', value: summaryStats.total },
+              { label: 'Đang công tác', value: summaryStats.active },
+              { label: 'Đơn vị', value: summaryStats.totalUnits },
+            ] : []}
+            controls={
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="gap-2 bg-white/10 border-white/30 text-white hover:bg-white/20"
+                  onClick={() => fetchPersonnel(pagination.page)}
+                >
+                  <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+                  Làm mới
+                </Button>
+                <Button
+                  size="sm"
+                  className="gap-2 bg-white/20 hover:bg-white/30 text-white border-white/30 border"
+                >
+                  <Download className="h-4 w-4" />
+                  Xuất Excel
+                </Button>
               </div>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">
-                  Quản lý Hồ sơ Cán bộ
-                </h1>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
-                  CSDL quân nhân theo QĐ 144/BQP
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                className="gap-2 text-gray-600 border-gray-200 hover:bg-gray-100"
-                onClick={() => fetchPersonnel(pagination.page)}
-              >
-                <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-                Làm mới
-              </Button>
-              <Button
-                size="sm"
-                className="gap-2 bg-red-600 hover:bg-red-700 text-white shadow-sm"
-              >
-                <Download className="h-4 w-4" />
-                Xuất Excel
-              </Button>
-            </div>
-          </div>
+            }
+          />
 
           {/* ── Stats Grid ── */}
           <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-            <StatCard
+            <KPICard
               icon={Users}
-              label="Tổng cán bộ"
-              value={summaryStats?.total ?? 0}
-              subLabel={`${summaryStats?.totalUnits ?? 0} đơn vị`}
-              color="bg-blue-600"
-              loading={statsLoading}
+              title="Tổng cán bộ"
+              value={statsLoading ? '...' : (summaryStats?.total ?? 0)}
+              subtitle={`${summaryStats?.totalUnits ?? 0} đơn vị`}
+              variant="default"
             />
-            <StatCard
+            <KPICard
               icon={UserCheck}
-              label="Đang công tác"
-              value={summaryStats?.active ?? 0}
-              subLabel={summaryStats ? `${Math.round((summaryStats.active / Math.max(summaryStats.total, 1)) * 100)}% tổng số` : ''}
-              color="bg-emerald-600"
-              loading={statsLoading}
+              title="Đang công tác"
+              value={statsLoading ? '...' : (summaryStats?.active ?? 0)}
+              subtitle={summaryStats ? `${Math.round((summaryStats.active / Math.max(summaryStats.total, 1)) * 100)}% tổng số` : ''}
+              variant="success"
             />
-            <StatCard
+            <KPICard
               icon={Award}
-              label="Sĩ quan / HSQ-BS"
-              value={summaryStats ? `${summaryStats.officerCount} / ${summaryStats.soldierCount}` : '—'}
-              subLabel="Theo diện quản lý"
-              color="bg-red-600"
-              loading={statsLoading}
+              title="Sĩ quan / HSQ-BS"
+              value={statsLoading ? '...' : (summaryStats ? `${summaryStats.officerCount}/${summaryStats.soldierCount}` : '—')}
+              subtitle="Theo diện quản lý"
+              variant="danger"
             />
-            <StatCard
+            <KPICard
               icon={Star}
-              label="Đảng viên"
-              value={summaryStats?.partyMemberCount ?? 0}
-              subLabel={summaryStats ? `${Math.round((summaryStats.partyMemberCount / Math.max(summaryStats.total, 1)) * 100)}% tổng số` : ''}
-              color="bg-purple-600"
-              loading={statsLoading}
+              title="Đảng viên"
+              value={statsLoading ? '...' : (summaryStats?.partyMemberCount ?? 0)}
+              subtitle={summaryStats ? `${Math.round((summaryStats.partyMemberCount / Math.max(summaryStats.total, 1)) * 100)}% tổng số` : ''}
+              variant="info"
             />
           </div>
 
@@ -602,12 +596,12 @@ export default function PersonnelPage() {
                         {/* Work status */}
                         <TableCell>
                           {person.workStatus ? (
-                            <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${WORK_STATUS_STYLE[person.workStatus] || 'bg-gray-100 text-gray-600 border-gray-200'}`}>
-                              <span className={`h-1.5 w-1.5 rounded-full ${person.workStatus === 'ACTIVE' ? 'bg-emerald-500' : 'bg-gray-400'}`} />
-                              {WORK_STATUS_LABELS[person.workStatus] || person.workStatus}
-                            </span>
+                            <StatusBadge
+                              status={WORK_STATUS_VARIANT[person.workStatus] ?? 'neutral'}
+                              label={WORK_STATUS_LABELS[person.workStatus] || person.workStatus}
+                            />
                           ) : (
-                            <span className="text-gray-300 text-sm">—</span>
+                            <span className="text-muted-foreground text-sm">—</span>
                           )}
                         </TableCell>
 
@@ -681,7 +675,7 @@ export default function PersonnelPage() {
 
           {/* ── Bottom meta row ── */}
           {!loading && personnel.length > 0 && (
-            <div className="flex items-center justify-between text-xs text-gray-400 px-1">
+            <div className="flex items-center justify-between text-xs text-muted-foreground px-1">
               <span className="flex items-center gap-1.5">
                 <TrendingUp className="h-3.5 w-3.5" />
                 Dữ liệu cập nhật theo thời gian thực
@@ -690,7 +684,6 @@ export default function PersonnelPage() {
             </div>
           )}
 
-        </div>
       </div>
     </TooltipProvider>
   );

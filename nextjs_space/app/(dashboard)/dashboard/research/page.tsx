@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
+import { ModuleHero, KPICard } from '@/components/ui/enhanced-data-card';
 import {
   FlaskConical, FileText, TrendingUp, Users, Award, RefreshCw,
   BookOpen, Lightbulb, Newspaper, BookMarked, GraduationCap,
@@ -100,7 +101,7 @@ export default function ResearchDashboardPage() {
   // ── Loading ────────────────────────────────────────────────────────────────
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-50">
+      <div className="min-h-screen bg-muted/30">
         <div className="bg-gradient-to-r from-indigo-500 via-violet-500 to-purple-500 h-40 animate-pulse" />
         <div className="p-6 grid grid-cols-3 gap-4">
           {[...Array(6)].map((_, i) => (
@@ -127,74 +128,41 @@ export default function ResearchDashboardPage() {
 
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-slate-50 -m-4 md:-m-6 lg:-m-8">
+    <div className="space-y-6">
 
-      {/* ── Banner ─────────────────────────────────────────────────────────── */}
-      <div className="bg-gradient-to-r from-indigo-500 via-violet-500 to-purple-500 text-white px-6 pt-6 pb-8">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-white/20 rounded-xl">
-              <FlaskConical className="w-6 h-6" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold">Nghiên cứu Khoa học</h1>
-              <p className="text-indigo-100 text-sm">Thống kê ấn phẩm, hoạt động và nhà khoa học</p>
-            </div>
-          </div>
+      {/* ── Module Hero ───────────────────────────────────────────────────── */}
+      <ModuleHero
+        moduleId="research"
+        title="Nghiên cứu Khoa học"
+        subtitle="Thống kê ấn phẩm, hoạt động và nhà khoa học"
+        icon={FlaskConical}
+        stats={[
+          { label: 'Ấn phẩm', value: d.overview.totalPublications },
+          { label: 'Hoạt động NC', value: d.overview.totalActivities },
+          { label: 'Nhà KH', value: d.overview.totalScientists },
+        ]}
+        controls={
           <Button variant="outline" size="sm" className="bg-white/20 border-white/40 text-white hover:bg-white/30" onClick={fetchData}>
             <RefreshCw className="h-3.5 w-3.5 mr-1" /> Làm mới
           </Button>
-        </div>
+        }
+      />
 
-        {/* KPI tiles */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-2">
-          {/* Total publications */}
-          <div className="bg-white/95 hover:bg-white rounded-xl p-4 shadow-md transition-all">
-            <div className="flex items-center gap-2 mb-2">
-              <FileText className="w-4 h-4 text-indigo-500" />
-              <span className="text-xs text-slate-500 font-medium">Tổng ấn phẩm</span>
-            </div>
-            <div className="text-3xl font-bold text-indigo-600">{d.overview.totalPublications}</div>
-            <div className="text-xs text-slate-400 mt-1">
-              {d.pubByType.map(t => `${t.count} ${t.label}`).join(' · ')}
-            </div>
-          </div>
-
-          {/* Total activities */}
-          <div className="bg-white/95 hover:bg-white rounded-xl p-4 shadow-md transition-all">
-            <div className="flex items-center gap-2 mb-2">
-              <GraduationCap className="w-4 h-4 text-violet-500" />
-              <span className="text-xs text-slate-500 font-medium">Hoạt động NC</span>
-            </div>
-            <div className="text-3xl font-bold text-violet-600">{d.overview.totalActivities}</div>
-            <div className="text-xs text-slate-400 mt-1">
-              {d.actByLevel.slice(0, 3).map(a => `${a.count} ${a.level}`).join(' · ')}
-            </div>
-          </div>
-
-          {/* Total scientists */}
-          <div className="bg-white/95 hover:bg-white rounded-xl p-4 shadow-md transition-all">
-            <div className="flex items-center gap-2 mb-2">
-              <Users className="w-4 h-4 text-purple-500" />
-              <span className="text-xs text-slate-500 font-medium">Nhà khoa học</span>
-            </div>
-            <div className="text-3xl font-bold text-purple-600">{d.overview.totalScientists}</div>
-            <div className="text-xs text-slate-400 mt-1">Giảng viên · Nghiên cứu viên</div>
-          </div>
-
-          {/* Combined output */}
-          <div className="bg-white/95 hover:bg-white rounded-xl p-4 shadow-md transition-all">
-            <div className="flex items-center gap-2 mb-2">
-              <TrendingUp className="w-4 h-4 text-blue-500" />
-              <span className="text-xs text-slate-500 font-medium">Tổng đầu ra</span>
-            </div>
-            <div className="text-3xl font-bold text-blue-600">{totalAll}</div>
-            <div className="text-xs text-slate-400 mt-1">Ấn phẩm + Hoạt động NCKH</div>
-          </div>
-        </div>
+      {/* ── KPI Grid ──────────────────────────────────────────────────────── */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <KPICard title="Tổng ấn phẩm" value={d.overview.totalPublications}
+          subtitle={d.pubByType.map(t => `${t.count} ${t.label}`).join(' · ')}
+          icon={FileText} variant="default" />
+        <KPICard title="Hoạt động NC" value={d.overview.totalActivities}
+          subtitle={d.actByLevel.slice(0, 2).map(a => `${a.count} ${a.level}`).join(' · ')}
+          icon={GraduationCap} variant="info" />
+        <KPICard title="Nhà khoa học" value={d.overview.totalScientists}
+          subtitle="Giảng viên · Nghiên cứu viên" icon={Users} variant="success" />
+        <KPICard title="Tổng đầu ra" value={totalAll}
+          subtitle="Ấn phẩm + Hoạt động NCKH" icon={TrendingUp} variant="warning" />
       </div>
 
-      <div className="p-6 space-y-6">
+      <div className="space-y-6">
 
         {/* ── Quick nav cards ──────────────────────────────────────────────── */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -208,8 +176,8 @@ export default function ResearchDashboardPage() {
               <div className={`w-9 h-9 rounded-lg bg-gradient-to-br ${color} flex items-center justify-center mb-3`}>
                 <Icon className="w-4.5 h-4.5 text-white" size={18} />
               </div>
-              <div className="font-semibold text-gray-800 text-sm">{label}</div>
-              <div className="text-xs text-gray-500 mt-0.5">{sub}</div>
+              <div className="font-semibold text-foreground text-sm">{label}</div>
+              <div className="text-xs text-muted-foreground mt-0.5">{sub}</div>
               <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-indigo-500 mt-2 transition-colors" />
             </Link>
           ))}
@@ -222,16 +190,16 @@ export default function ResearchDashboardPage() {
           <div className="lg:col-span-2 bg-white rounded-xl border p-5">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h3 className="font-semibold text-gray-800">Xu hướng theo năm</h3>
-                <p className="text-xs text-gray-500">Ấn phẩm và hoạt động NCKH</p>
+                <h3 className="font-semibold text-foreground">Xu hướng theo năm</h3>
+                <p className="text-xs text-muted-foreground">Ấn phẩm và hoạt động NCKH</p>
               </div>
               <div className="flex gap-2">
                 <button
-                  className={`text-xs px-3 py-1 rounded-full ${activeSection === 'pub' ? 'bg-indigo-100 text-indigo-700 font-medium' : 'text-gray-500 hover:bg-gray-100'}`}
+                  className={`text-xs px-3 py-1 rounded-full ${activeSection === 'pub' ? 'bg-indigo-100 text-indigo-700 font-medium' : 'text-muted-foreground hover:bg-muted/50'}`}
                   onClick={() => setActiveSection('pub')}
                 >Ấn phẩm</button>
                 <button
-                  className={`text-xs px-3 py-1 rounded-full ${activeSection === 'act' ? 'bg-indigo-100 text-indigo-700 font-medium' : 'text-gray-500 hover:bg-gray-100'}`}
+                  className={`text-xs px-3 py-1 rounded-full ${activeSection === 'act' ? 'bg-indigo-100 text-indigo-700 font-medium' : 'text-muted-foreground hover:bg-muted/50'}`}
                   onClick={() => setActiveSection('act')}
                 >Hoạt động</button>
               </div>
@@ -253,8 +221,8 @@ export default function ResearchDashboardPage() {
 
           {/* Pub by type — 1 col */}
           <div className="bg-white rounded-xl border p-5">
-            <h3 className="font-semibold text-gray-800 mb-1">Loại ấn phẩm</h3>
-            <p className="text-xs text-gray-500 mb-4">Phân bố theo loại công trình</p>
+            <h3 className="font-semibold text-foreground mb-1">Loại ấn phẩm</h3>
+            <p className="text-xs text-muted-foreground mb-4">Phân bố theo loại công trình</p>
             <ResponsiveContainer width="100%" height={140}>
               <PieChart>
                 <Pie data={d.pubByType} dataKey="count" cx="50%" cy="50%" outerRadius={60} paddingAngle={3}>
@@ -273,9 +241,9 @@ export default function ResearchDashboardPage() {
                     <div className="flex items-center gap-1.5">
                       <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: t.color }} />
                       <Icon className="w-3 h-3 text-gray-400" />
-                      <span className="text-gray-600">{t.label}</span>
+                      <span className="text-muted-foreground">{t.label}</span>
                     </div>
-                    <span className="font-semibold text-gray-800">{t.count}</span>
+                    <span className="font-semibold text-foreground">{t.count}</span>
                   </div>
                 );
               })}
@@ -288,8 +256,8 @@ export default function ResearchDashboardPage() {
 
           {/* Activity by level bar chart */}
           <div className="bg-white rounded-xl border p-5">
-            <h3 className="font-semibold text-gray-800 mb-1">Hoạt động NC theo cấp độ</h3>
-            <p className="text-xs text-gray-500 mb-4">Phân bố {d.overview.totalActivities} hoạt động theo cấp</p>
+            <h3 className="font-semibold text-foreground mb-1">Hoạt động NC theo cấp độ</h3>
+            <p className="text-xs text-muted-foreground mb-4">Phân bố {d.overview.totalActivities} hoạt động theo cấp</p>
             <ResponsiveContainer width="100%" height={200}>
               <BarChart data={d.actByLevel} layout="vertical" margin={{ left: 0, right: 20, top: 0, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" horizontal={false} />
@@ -309,8 +277,8 @@ export default function ResearchDashboardPage() {
           <div className="bg-white rounded-xl border p-5">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h3 className="font-semibold text-gray-800">Top Nhà khoa học</h3>
-                <p className="text-xs text-gray-500">Nhiều ấn phẩm nhất</p>
+                <h3 className="font-semibold text-foreground">Top Nhà khoa học</h3>
+                <p className="text-xs text-muted-foreground">Nhiều ấn phẩm nhất</p>
               </div>
               <Link href="/dashboard/research/scientists" className="text-xs text-indigo-600 hover:text-indigo-800 flex items-center gap-1">
                 Xem tất cả <ExternalLink className="w-3 h-3" />
@@ -321,12 +289,12 @@ export default function ResearchDashboardPage() {
                 <div key={s.id} className="flex items-center gap-3">
                   <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${
                     i === 0 ? 'bg-amber-100 text-amber-700' :
-                    i === 1 ? 'bg-gray-200 text-gray-600' :
+                    i === 1 ? 'bg-gray-200 text-muted-foreground' :
                     i === 2 ? 'bg-orange-100 text-orange-600' : 'bg-indigo-50 text-indigo-600'
                   }`}>{i + 1}</div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm font-medium text-gray-800 truncate">{s.name}</div>
-                    <div className="text-xs text-gray-500 truncate">
+                    <div className="text-sm font-medium text-foreground truncate">{s.name}</div>
+                    <div className="text-xs text-muted-foreground truncate">
                       {s.degree && <span className="text-purple-600 mr-1">{s.degree}</span>}
                       {s.unit}
                     </div>
@@ -345,8 +313,8 @@ export default function ResearchDashboardPage() {
         <div className="bg-white rounded-xl border">
           <div className="px-5 py-4 border-b flex items-center justify-between">
             <div>
-              <h3 className="font-semibold text-gray-800">Ấn phẩm gần đây</h3>
-              <p className="text-xs text-gray-500 mt-0.5">10 ấn phẩm mới nhất theo năm</p>
+              <h3 className="font-semibold text-foreground">Ấn phẩm gần đây</h3>
+              <p className="text-xs text-muted-foreground mt-0.5">10 ấn phẩm mới nhất theo năm</p>
             </div>
             <Link href="/dashboard/research/management" className="text-xs text-indigo-600 hover:text-indigo-800 flex items-center gap-1">
               Quản lý <ExternalLink className="w-3 h-3" />
@@ -364,9 +332,9 @@ export default function ResearchDashboardPage() {
                     <Icon className="w-4 h-4" style={{ color: p.typeColor }} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm font-medium text-gray-800 line-clamp-1">{p.title}</div>
-                    <div className="text-xs text-gray-500 mt-0.5">
-                      <span className="font-medium text-gray-700">{p.author}</span>
+                    <div className="text-sm font-medium text-foreground line-clamp-1">{p.title}</div>
+                    <div className="text-xs text-muted-foreground mt-0.5">
+                      <span className="font-medium text-foreground">{p.author}</span>
                       {p.authorRank && <span className="text-gray-400 ml-1">· {p.authorRank}</span>}
                       {p.coAuthors && <span className="text-gray-400 ml-1">· {p.coAuthors}</span>}
                     </div>
@@ -388,8 +356,8 @@ export default function ResearchDashboardPage() {
         <div className="bg-white rounded-xl border">
           <div className="px-5 py-4 border-b flex items-center justify-between">
             <div>
-              <h3 className="font-semibold text-gray-800">Hoạt động Nghiên cứu gần đây</h3>
-              <p className="text-xs text-gray-500 mt-0.5">5 hoạt động mới nhất</p>
+              <h3 className="font-semibold text-foreground">Hoạt động Nghiên cứu gần đây</h3>
+              <p className="text-xs text-muted-foreground mt-0.5">5 hoạt động mới nhất</p>
             </div>
             <Link href="/dashboard/research/management" className="text-xs text-indigo-600 hover:text-indigo-800 flex items-center gap-1">
               Xem hết <ExternalLink className="w-3 h-3" />
@@ -402,9 +370,9 @@ export default function ResearchDashboardPage() {
                   <GraduationCap className="w-4 h-4 text-indigo-600" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm font-medium text-gray-800 line-clamp-1">{a.title}</div>
-                  <div className="text-xs text-gray-500 mt-0.5">
-                    <span className="font-medium text-gray-700">{a.author}</span>
+                  <div className="text-sm font-medium text-foreground line-clamp-1">{a.title}</div>
+                  <div className="text-xs text-muted-foreground mt-0.5">
+                    <span className="font-medium text-foreground">{a.author}</span>
                     {a.institution && <span className="text-gray-400 ml-1">· {a.institution}</span>}
                   </div>
                 </div>

@@ -50,6 +50,18 @@
     /* Dynamic Layout Variables */
     --sidebar-width: 280px;
     --header-height: 64px;
+
+    /* Module identity colors — used by ModuleHero & sidebar accent */
+    --module-personnel: 217 91% 35%;
+    --module-party: 0 72% 40%;
+    --module-education: 232 80% 30%;
+    --module-research: 262 80% 40%;
+    --module-policy: 174 72% 28%;
+    --module-insurance: 142 76% 28%;
+    --module-student: 220 80% 32%;
+    --module-science: 290 72% 35%;
+    --module-admin: 220 14% 25%;
+    --module-workflow: 38 80% 32%;
   }
 
   .dark {
@@ -550,4 +562,45 @@
   @apply absolute -top-1 -right-1 w-3 h-3 rounded-full;
   @apply bg-red-500 border-2 border-white dark:border-slate-800;
   @apply animate-pulse;
+}
+
+/* ============================================== */
+/* MODULE HERO UTILITY                           */
+/* ============================================== */
+
+/* IMPORTANT: page roots inside (dashboard) layout MUST NOT set their own
+   background (e.g. bg-slate-50, bg-gray-50). The layout already handles
+   bg-background. Overriding breaks dark mode globally. */
+
+.module-hero {
+  @apply relative overflow-hidden rounded-2xl p-6 text-white shadow-xl;
+}
+
+.module-hero::before {
+  content: '';
+  @apply pointer-events-none absolute -right-12 -top-12 h-48 w-48 rounded-full bg-white/5;
+}
+
+.module-hero::after {
+  content: '';
+  @apply pointer-events-none absolute -bottom-8 -left-8 h-36 w-36 rounded-full bg-white/5;
+}
+
+/* ============================================== */
+/* PAGE TRANSITION                               */
+/* ============================================== */
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-enter {
+  animation: page-enter 0.15s ease-out;
 }
