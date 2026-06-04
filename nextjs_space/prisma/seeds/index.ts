@@ -14,7 +14,7 @@
  *   M02       — Chỉ chạy module M02 (10,11,12)
  *   M03       — Chỉ chạy module M03 (20,21,22)
  *   M09       — Chỉ chạy module M09 (40,41,42)
- *   M10       — Chỉ chạy module M10 (50,51,52,53)
+ *   M10       — Chỉ chạy module M10 (50,51,52,53,54)
  *   M13       — Chỉ chạy module M13 (60,61)
  *   10        — Chỉ chạy step số 10
  *   backfill  — Chỉ chạy backfill (step 90)
@@ -42,6 +42,7 @@ import { seedEducationStructure } from './50_education_structure'
 import { seedStudents } from './51_students'
 import { seedTeaching } from './52_teaching'
 import { seedExamsAndGrades } from './53_exams_grades'
+import { seedMonHoc } from './54_mon_hoc'
 import { seedWorkflowTemplates } from './60_workflow_templates'
 import { seedWorkflowInstances } from './61_workflow_instances'
 import { seedBackfill } from './90_backfill'
@@ -90,6 +91,7 @@ const ALL_STEPS: SeedStep[] = [
   { step: '51', name: 'Students / HocVien',             module: 'M10',   group: 'demo', fn: seedStudents },
   { step: '52', name: 'Teaching',                       module: 'M10',   group: 'demo', fn: seedTeaching },
   { step: '53', name: 'Exams & Grades',                 module: 'M10',   group: 'demo', fn: seedExamsAndGrades },
+  { step: '54', name: 'Môn học thật (danh mục HVHC)',   module: 'M10',   group: 'demo', fn: seedMonHoc },
 
   // ══ NHÓM G: M13 Workflow ══
   { step: '60', name: 'Workflow Templates',             module: 'M13',   group: 'demo', fn: seedWorkflowTemplates },
@@ -108,7 +110,7 @@ const MODULE_MAP: Record<string, string[]> = {
   M06: ['31'],
   M08: ['32'],
   M09: ['40', '41', '42'],
-  M10: ['50', '51', '52', '53'],
+  M10: ['50', '51', '52', '53', '54'],
   M13: ['60', '61'],
 }
 

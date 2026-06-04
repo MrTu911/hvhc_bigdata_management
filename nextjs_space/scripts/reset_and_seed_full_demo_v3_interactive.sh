@@ -473,6 +473,12 @@ run_seed_group \
   "prisma/seed/seed_education.ts" \
   "prisma/seed/seed_teaching_data.ts"
 
+# Danh mục môn học THẬT HVHC — chạy SAU education/teaching vì bước này reset
+# dữ liệu học tập demo (điểm + enrollment + lớp học phần) rồi nạp danh mục môn thật.
+run_seed_group \
+  "Danh mục môn học thật HVHC (HeSoMonHoc + FK Khoa/Bộ môn)" \
+  "prisma/seed/seed_mon_hoc_hvhc.ts"
+
 run_seed_group \
   "Party data" \
   "prisma/seed/seed_party_organizations.ts" \

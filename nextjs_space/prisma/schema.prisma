@@ -874,6 +874,9 @@ model Unit {
   studentsBySystem    HocVien[]         @relation("HocVienTrainingSystem")
   studentsByBattalion HocVien[]         @relation("HocVienBattalion")
   promotionProposals  PromotionProposal[] @relation("UnitPromotionProposals")
+  // Môn học do Khoa/Bộ môn này phụ trách (M10 – danh mục môn học thật)
+  heSoMonHocKhoa      HeSoMonHoc[]      @relation("HeSoMonHocKhoa")
+  heSoMonHocBoMon     HeSoMonHoc[]      @relation("HeSoMonHocBoMon")
 
   @@index([code])
   @@index([type])
@@ -1174,14 +1177,24 @@ model HeSoMonHoc {
   heSoThi       Float          @default(0.5)
   soTinChi      Int            @default(3)
   loaiMon       String?
+  // Tên Khoa/Bộ môn dạng chuỗi: giữ làm display + fallback cho bucket không map được Unit
+  // (vd "Ngoài trường", "Không tên"). Nguồn sự thật chuẩn hóa là khoaId/boMonId.
   khoa          String?
+  boMon         String?
+  // FK chuẩn hóa tới cây tổ chức Unit (Khoa = type KHOA, Bộ môn = type BOMON)
+  khoaId        String?
+  boMonId       String?
   moTa          String?
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   ketQuaHocTap  KetQuaHocTap[]
+  khoaUnit      Unit?          @relation("HeSoMonHocKhoa", fields: [khoaId], references: [id])
+  boMonUnit     Unit?          @relation("HeSoMonHocBoMon", fields: [boMonId], references: [id])
 
   @@index([maMon])
   @@index([khoa])
+  @@index([khoaId])
+  @@index([boMonId])
   @@map("he_so_mon_hoc")
 }
 

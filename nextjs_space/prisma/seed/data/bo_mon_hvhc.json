@@ -1,0 +1,252 @@
+[
+  {
+    "code": "BM_K7_BINHCHUNG",
+    "name": "Binh chủng",
+    "parentKhoaCode": "K7"
+  },
+  {
+    "code": "BM_K7_CHIENTHUATBCHT",
+    "name": "Chiến thuật BCHT",
+    "parentKhoaCode": "K7"
+  },
+  {
+    "code": "BM_K7_CHIENTHUATBINH",
+    "name": "Chiến thuật binh chủng hợp thành",
+    "parentKhoaCode": "K7"
+  },
+  {
+    "code": "BM_K7_QUANSUCHUNG",
+    "name": "Quân sự chung",
+    "parentKhoaCode": "K7"
+  },
+  {
+    "code": "BM_K7_QUANSUDIAPHUON",
+    "name": "Quân sự địa phương",
+    "parentKhoaCode": "K7"
+  },
+  {
+    "code": "BM_K7_THETHAO",
+    "name": "Thể thao",
+    "parentKhoaCode": "K7"
+  },
+  {
+    "code": "BM_K7_DUONGLOICHIEND",
+    "name": "Đường lối - Chiến dịch - Lịch sử",
+    "parentKhoaCode": "K7"
+  },
+  {
+    "code": "BM_K2_BAODAM",
+    "name": "Bảo đảm",
+    "parentKhoaCode": "K2"
+  },
+  {
+    "code": "BM_K2_KYTHUAT",
+    "name": "Kỹ thuật",
+    "parentKhoaCode": "K2"
+  },
+  {
+    "code": "BM_K2_SANXUAT",
+    "name": "Sản xuất",
+    "parentKhoaCode": "K2"
+  },
+  {
+    "code": "BM_K2_THUONGPHAM",
+    "name": "Thương phẩm",
+    "parentKhoaCode": "K2"
+  },
+  {
+    "code": "BM_K11_ANHVAN",
+    "name": "Anh văn",
+    "parentKhoaCode": "K11"
+  },
+  {
+    "code": "BM_K11_NGAVAN",
+    "name": "Nga văn",
+    "parentKhoaCode": "K11"
+  },
+  {
+    "code": "BM_K11_TRUNGVAN",
+    "name": "Trung văn",
+    "parentKhoaCode": "K11"
+  },
+  {
+    "code": "BM_K5_BAODAMDOANHTRA",
+    "name": "Bảo đảm doanh trại",
+    "parentKhoaCode": "K5"
+  },
+  {
+    "code": "BM_K5_CONGNGHEVAQLXD",
+    "name": "Công nghệ và QLXD",
+    "parentKhoaCode": "K5"
+  },
+  {
+    "code": "BM_K5_CONGNGHEVAQUAN",
+    "name": "Công nghệ và quản lý xây dựng",
+    "parentKhoaCode": "K5"
+  },
+  {
+    "code": "BM_K5_KYTHUATXAYDUNG",
+    "name": "Kỹ thuật xây dựng",
+    "parentKhoaCode": "K5"
+  },
+  {
+    "code": "BM_K14_HAUCANCHIENDIC",
+    "name": "Hậu cần chiến dịch",
+    "parentKhoaCode": "K14"
+  },
+  {
+    "code": "BM_K14_HAUCANCHUNG",
+    "name": "Hậu cần chung",
+    "parentKhoaCode": "K14"
+  },
+  {
+    "code": "BM_K14_QUANBINHCHUNGB",
+    "name": "Quân binh chủng, biên phòng",
+    "parentKhoaCode": "K14"
+  },
+  {
+    "code": "BM_K6_KINHTE",
+    "name": "Kinh tế",
+    "parentKhoaCode": "K6"
+  },
+  {
+    "code": "BM_K6_KETOAN",
+    "name": "Kế toán",
+    "parentKhoaCode": "K6"
+  },
+  {
+    "code": "BM_K6_LYLUAN",
+    "name": "Lý luận",
+    "parentKhoaCode": "K6"
+  },
+  {
+    "code": "BM_K6_THONGKE",
+    "name": "Thống kê",
+    "parentKhoaCode": "K6"
+  },
+  {
+    "code": "BM_K6_TAICHINH",
+    "name": "Tài chính",
+    "parentKhoaCode": "K6"
+  },
+  {
+    "code": "BM_K1_CHIHUYTHAMMUUH",
+    "name": "Chỉ huy tham mưu hậu cần",
+    "parentKhoaCode": "K1"
+  },
+  {
+    "code": "BM_K1_HAUCANCHIENDAU",
+    "name": "Hậu cần chiến đấu",
+    "parentKhoaCode": "K1"
+  },
+  {
+    "code": "BM_K1_HAUCANQUANSUDI",
+    "name": "Hậu cần quân sự địa phương",
+    "parentKhoaCode": "K1"
+  },
+  {
+    "code": "BM_K1_QUANY",
+    "name": "Quân y",
+    "parentKhoaCode": "K1"
+  },
+  {
+    "code": "BM_K3_CHIHUY",
+    "name": "Chỉ huy",
+    "parentKhoaCode": "K3"
+  },
+  {
+    "code": "BM_K3_KYTHUAT",
+    "name": "Kỹ thuật",
+    "parentKhoaCode": "K3"
+  },
+  {
+    "code": "BM_K3_TOCHUC",
+    "name": "Tổ chức",
+    "parentKhoaCode": "K3"
+  },
+  {
+    "code": "BM_K4_BAODAM",
+    "name": "Bảo đảm",
+    "parentKhoaCode": "K4"
+  },
+  {
+    "code": "BM_K4_PHUONGTIENKYTH",
+    "name": "Phương tiện kỹ thuật xăng dầu",
+    "parentKhoaCode": "K4"
+  },
+  {
+    "code": "BM_K4_SUDUNG",
+    "name": "Sử dụng",
+    "parentKhoaCode": "K4"
+  },
+  {
+    "code": "BM_K9_CONGTACDANGCON",
+    "name": "Công tác Đảng, công tác chính trị",
+    "parentKhoaCode": "K9"
+  },
+  {
+    "code": "BM_K9_LICHSUDANG",
+    "name": "Lịch sử Đảng",
+    "parentKhoaCode": "K9"
+  },
+  {
+    "code": "BM_K9_NHANUOCPHAPLUA",
+    "name": "Nhà nước pháp luật",
+    "parentKhoaCode": "K9"
+  },
+  {
+    "code": "BM_K9_TAMLYHOCVAGIAO",
+    "name": "Tâm lý học và giáo dục học Quân sự",
+    "parentKhoaCode": "K9"
+  },
+  {
+    "code": "BM_K8_CHUNGHIAXAHOIK",
+    "name": "Chủ nghĩa xã hội khoa học",
+    "parentKhoaCode": "K8"
+  },
+  {
+    "code": "BM_K8_KINHTECHINHTRI",
+    "name": "Kinh tế chính trị",
+    "parentKhoaCode": "K8"
+  },
+  {
+    "code": "BM_K8_TRIETHOC",
+    "name": "Triết học",
+    "parentKhoaCode": "K8"
+  },
+  {
+    "code": "BM_K8_TUTUONGHOCHIMI",
+    "name": "Tư tưởng Hồ Chí Minh",
+    "parentKhoaCode": "K8"
+  },
+  {
+    "code": "BM_K10_HOA",
+    "name": "Hóa",
+    "parentKhoaCode": "K10"
+  },
+  {
+    "code": "BM_K10_KYTHUATCOSO",
+    "name": "Kỹ thuật cơ sở",
+    "parentKhoaCode": "K10"
+  },
+  {
+    "code": "BM_K10_TINHOC",
+    "name": "Tin học",
+    "parentKhoaCode": "K10"
+  },
+  {
+    "code": "BM_K10_TOAN",
+    "name": "Toán",
+    "parentKhoaCode": "K10"
+  },
+  {
+    "code": "BM_K10_VANHOA",
+    "name": "Văn hóa",
+    "parentKhoaCode": "K10"
+  },
+  {
+    "code": "BM_K10_VATLY",
+    "name": "Vật lý",
+    "parentKhoaCode": "K10"
+  }
+]

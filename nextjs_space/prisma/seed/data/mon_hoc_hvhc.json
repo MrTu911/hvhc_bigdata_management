@@ -1,0 +1,6728 @@
+[
+  {
+    "maMon": "A1",
+    "tenMon": "Chiến thuật Bộ binh",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Chiến thuật binh chủng hợp thành"
+  },
+  {
+    "maMon": "A1.1",
+    "tenMon": "Hiểu biết về địch",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Chiến thuật binh chủng hợp thành"
+  },
+  {
+    "maMon": "A1.2",
+    "tenMon": "Công tác tham mưu",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Chiến thuật binh chủng hợp thành"
+  },
+  {
+    "maMon": "A1.3",
+    "tenMon": "Chiến thuật bộ binh",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Chiến thuật binh chủng hợp thành"
+  },
+  {
+    "maMon": "AA",
+    "tenMon": "Ăn uống quân đội",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Thương phẩm"
+  },
+  {
+    "maMon": "ACB",
+    "tenMon": "Tiếng Anh cơ bản",
+    "khoa": "Khoa Ngoại ngữ",
+    "boMon": "Anh văn"
+  },
+  {
+    "maMon": "ACN1",
+    "tenMon": "Tiếng Anh chuyên ngành 1",
+    "khoa": "Khoa Ngoại ngữ",
+    "boMon": "Anh văn"
+  },
+  {
+    "maMon": "ACN2",
+    "tenMon": "Tiếng Anh chuyên ngành 2",
+    "khoa": "Khoa Ngoại ngữ",
+    "boMon": "Anh văn"
+  },
+  {
+    "maMon": "ATL",
+    "tenMon": "An toàn và vệ sinh lao động trong xây dựng",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Công nghệ và quản lý xây dựng"
+  },
+  {
+    "maMon": "ATXD",
+    "tenMon": "An toàn, vệ sinh lao động và bảo vệ môi trường trong xây dưng",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Công nghệ và quản lý xây dựng"
+  },
+  {
+    "maMon": "ATXD1",
+    "tenMon": "An toàn, vệ sinh lao động và quản lý môi trường trong xây dựng",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Công nghệ và quản lý xây dựng"
+  },
+  {
+    "maMon": "AĐC",
+    "tenMon": "Tiếng Anh đại cương",
+    "khoa": "Khoa Ngoại ngữ",
+    "boMon": "Anh văn"
+  },
+  {
+    "maMon": "BBP",
+    "tenMon": "Hậu cần Quân chủng và Biên phòng",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Quân binh chủng, biên phòng"
+  },
+  {
+    "maMon": "BC",
+    "tenMon": "Các binh chủng",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "BCT",
+    "tenMon": "Các binh chủng và tác chiến điện tử",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "BCĐP",
+    "tenMon": "Quân, binh chủng - QSĐP",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "BDT",
+    "tenMon": "Bảo đảm Doanh trại",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Bảo đảm doanh trại"
+  },
+  {
+    "maMon": "BH",
+    "tenMon": "Kinh tế bảo hiểm",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "BH1",
+    "tenMon": "Bảo hiểm",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "BHC",
+    "tenMon": "Bảo đảm Hậu cần chiến đấu",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần chiến đấu"
+  },
+  {
+    "maMon": "BHd",
+    "tenMon": "Bảo đảm HC dBB chiến đấu",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần chiến đấu"
+  },
+  {
+    "maMon": "BHKC",
+    "tenMon": "Bảo đảm HC-KT trung, lữ đoàn chiến đấu",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần chiến đấu"
+  },
+  {
+    "maMon": "BHKCĐ",
+    "tenMon": "Bảo đảm hậu cần, kỹ thuật chiến đấu",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần chiến đấu"
+  },
+  {
+    "maMon": "BHKf",
+    "tenMon": "Bảo đảm hậu cần, kỹ thuật sư đoàn bộ binh chiến đấu",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần chiến đấu"
+  },
+  {
+    "maMon": "BHKQ",
+    "tenMon": "Bảo đảm hậu cần, kỹ thuật quân sự địa phương và khu vực phòng thủ",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần quân sự địa phương"
+  },
+  {
+    "maMon": "BHKĐ",
+    "tenMon": "Bảo đảm hậu cần, kỹ thuật chiến đấu",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần chiến đấu"
+  },
+  {
+    "maMon": "BHN",
+    "tenMon": "Bảo hiểm nhà nước",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "BHP",
+    "tenMon": "Hậu cần chiến đấu và Hậu cần QSĐP",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần chiến đấu"
+  },
+  {
+    "maMon": "BIM",
+    "tenMon": "Công nghệ số và mô hình thông tin công trình (BIM)",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "BK2",
+    "tenMon": "Bắn súng AK bài 2",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "BK4",
+    "tenMon": "Bắn súng K54 bài 1",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "BKO",
+    "tenMon": "Bảo đảm kỹ thuật ô tô",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Kỹ thuật"
+  },
+  {
+    "maMon": "BKT",
+    "tenMon": "Bảo đảm kỹ thuật",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Kỹ thuật"
+  },
+  {
+    "maMon": "BKĐ",
+    "tenMon": "Bảo đảm kỹ thuật d Vận tải chiến đấu",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Kỹ thuật"
+  },
+  {
+    "maMon": "BLX",
+    "tenMon": "Bảo đảm kỹ thuật, luật GT & Lái xe",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Kỹ thuật"
+  },
+  {
+    "maMon": "BLĐ",
+    "tenMon": "Kỹ thuật bắn súng bộ binh, lựu đạn",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "BQCD",
+    "tenMon": "Bảo đảm Quân nhu chiến dich, chiến lược",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "BQL",
+    "tenMon": "Bảo đảm quản lý Doanh trại",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Bảo đảm doanh trại"
+  },
+  {
+    "maMon": "BQN",
+    "tenMon": "Bảo đảm Quân nhu",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "BQQ",
+    "tenMon": "Bảo đảm Quân nhu QBC, BP và QSĐP",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "BS",
+    "tenMon": "Bắn súng",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "BS2",
+    "tenMon": "Bắn súng 2",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "BSB",
+    "tenMon": "Kỹ thuật bắn súng bộ binh",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "BSDT",
+    "tenMon": "Bổ sung kiến thức diễn tập",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Chiến thuật binh chủng hợp thành"
+  },
+  {
+    "maMon": "BSK",
+    "tenMon": "Bổ sung kiến thức",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Quân y"
+  },
+  {
+    "maMon": "BSK1",
+    "tenMon": "Bổ sung kiến thức K1",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "BSK14",
+    "tenMon": "Bổ sung kiến thức K14",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Hậu cần chung"
+  },
+  {
+    "maMon": "BSK2",
+    "tenMon": "Bổ sung kiến thức K2",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "BSK3",
+    "tenMon": "Bổ sung kiến thức K3",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Chỉ huy"
+  },
+  {
+    "maMon": "BSK4",
+    "tenMon": "Bổ sung kiến thức K4",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "BSK5",
+    "tenMon": "Bổ sung kiến thức K5",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Bảo đảm doanh trại"
+  },
+  {
+    "maMon": "BSK6",
+    "tenMon": "Bổ sung kiến thức K6",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "BSK7",
+    "tenMon": "Bổ sung kiến thức K7",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Chiến thuật binh chủng hợp thành"
+  },
+  {
+    "maMon": "BSP",
+    "tenMon": "Bồi dưỡng nghiệp vụ sư phạm chuyên ngành",
+    "khoa": "Viện Nghiên cứu Khoa học Hậu cần",
+    "boMon": "Viện nghiên cứu Khoa học hậu cần quân sự"
+  },
+  {
+    "maMon": "BTX",
+    "tenMon": "Bảo đảm kỹ thuật d VT thường xuyên",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Kỹ thuật"
+  },
+  {
+    "maMon": "BVQ",
+    "tenMon": "Bảo quản vật chất Quân nhu",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Thương phẩm"
+  },
+  {
+    "maMon": "BXD",
+    "tenMon": "Bảo đảm Xăng dầu chiến đấu",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "BXT",
+    "tenMon": "Bảo đảm Xăng dầu thường xuyên",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "BĐ",
+    "tenMon": "Tham mưu bản đồ",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "BĐDT",
+    "tenMon": "Thực hành bảo đảm diễn tập",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "BĐĐ",
+    "tenMon": "Tham mưu bản đồ và Quân đội nước ngoài",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "CB",
+    "tenMon": "Kỹ thuật công binh",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "CBB",
+    "tenMon": "Chiến thuật bộ binh",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Chiến thuật binh chủng hợp thành"
+  },
+  {
+    "maMon": "CBG",
+    "tenMon": "Thiết bị cưa và chế biến gỗ",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "CBQ",
+    "tenMon": "Chiến tranh nhân dân bảo vệ Tổ quốc",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Đường lối - Chiến dịch - Lịch sử"
+  },
+  {
+    "maMon": "CBX",
+    "tenMon": "Bảo đảm Xăng dầu",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "CC",
+    "tenMon": "Chào cờ, thông báo chính trị hàng tuấn",
+    "khoa": "Học viện Hậu cần",
+    "boMon": "Viện nghiên cứu Khoa học hậu cần quân sự"
+  },
+  {
+    "maMon": "CCG",
+    "tenMon": "Cung cấp đồ gỗ",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "CCT",
+    "tenMon": "Công tác chính trị",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Công tác Đảng, công tác chính trị"
+  },
+  {
+    "maMon": "CCĐ",
+    "tenMon": "Cung cấp điện",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Bảo đảm doanh trại"
+  },
+  {
+    "maMon": "CD",
+    "tenMon": "Nghệ thuật chiến dịch",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Đường lối - Chiến dịch - Lịch sử"
+  },
+  {
+    "maMon": "CDP",
+    "tenMon": "Chương trình và dự án phát triển kinh tế - xã hội",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Kinh tế chính trị"
+  },
+  {
+    "maMon": "CDQ",
+    "tenMon": "Công tác Quân nhu-Doanh trại",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Bảo đảm doanh trại"
+  },
+  {
+    "maMon": "CDĐP",
+    "tenMon": "Nghệ thuật chiến dịch và quân sự địa phương",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Đường lối - Chiến dịch - Lịch sử"
+  },
+  {
+    "maMon": "Cef",
+    "tenMon": "Chiến thuật Binh chủng hợp thành cấp e,f",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Chiến thuật binh chủng hợp thành"
+  },
+  {
+    "maMon": "CHC",
+    "tenMon": "Chỉ huy Hậu cần chiến đấu",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "CHCK",
+    "tenMon": "Chỉ huy HC, KT trung (lữ) đoàn",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "CHCN",
+    "tenMon": "Cứu hộ cứu nạn",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "CHCS1",
+    "tenMon": "Cơ học cơ sở 1",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Kỹ thuật cơ sở"
+  },
+  {
+    "maMon": "CHCS2",
+    "tenMon": "Cơ học cơ sở 2",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Kỹ thuật cơ sở"
+  },
+  {
+    "maMon": "CHH",
+    "tenMon": "Chỉ huy Hậu cần",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "CHK1",
+    "tenMon": "Cơ học kết cấu 1",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Kỹ thuật cơ sở"
+  },
+  {
+    "maMon": "CHK2",
+    "tenMon": "Cơ học kết cấu 2",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Kỹ thuật cơ sở"
+  },
+  {
+    "maMon": "CHLT",
+    "tenMon": "Cơ học lí thuyết",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Kỹ thuật cơ sở"
+  },
+  {
+    "maMon": "CHT",
+    "tenMon": "Chỉ huy Hậu cần và Hậu cần thường xuyên",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "CHV",
+    "tenMon": "Công tác chỉ huy, tham mưu vận tải",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Chỉ huy"
+  },
+  {
+    "maMon": "CHY",
+    "tenMon": "Chỉ huy Hậu cần và Quân y",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "CHĐ",
+    "tenMon": "Cơ học đất",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "CK",
+    "tenMon": "Thị trường chứng khoán",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "CKC",
+    "tenMon": "Cơ kết cấu",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Kỹ thuật cơ sở"
+  },
+  {
+    "maMon": "CKC2",
+    "tenMon": "Cơ học kết cấu s2",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Kỹ thuật cơ sở"
+  },
+  {
+    "maMon": "CKH",
+    "tenMon": "Cơ sở hạ tầng quy hoạch",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "CKQ",
+    "tenMon": "Cơ sở hạ tầng kỹ thuật, quy hoạch",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "CKT",
+    "tenMon": "Cơ kỹ thuật",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Không tên"
+  },
+  {
+    "maMon": "CKT1",
+    "tenMon": "Kiến trúc 1",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "CKT2",
+    "tenMon": "Kiến trúc 2 và ĐAMH",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "CKX",
+    "tenMon": "Chính sách kinh tế - xã hội",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Kinh tế chính trị"
+  },
+  {
+    "maMon": "CKX1",
+    "tenMon": "Công tác tham mưu kỹ thuật xe máy",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Kỹ thuật"
+  },
+  {
+    "maMon": "CLS",
+    "tenMon": "Cơ lý thuyết và sức bền vật liệu",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Kỹ thuật cơ sở"
+  },
+  {
+    "maMon": "CLT",
+    "tenMon": "Cơ lý thuyết 1",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Kỹ thuật cơ sở"
+  },
+  {
+    "maMon": "CLT1",
+    "tenMon": "Cơ lý thuyết 1",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Kỹ thuật cơ sở"
+  },
+  {
+    "maMon": "CLT2",
+    "tenMon": "Cơ lý thuyết 2",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Kỹ thuật cơ sở"
+  },
+  {
+    "maMon": "CMH",
+    "tenMon": "Công tác tham mưu Hậu cần thường xuyên",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "CMK",
+    "tenMon": "Chuẩn mực kế toán Quốc tế",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "CML",
+    "tenMon": "Cơ học môi trường liên tục",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Kỹ thuật cơ sở"
+  },
+  {
+    "maMon": "CMT",
+    "tenMon": "Công tác chỉ huy tham mưu Tài chính",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "CMXT",
+    "tenMon": "Công tác tham mưu và xây dựng ngành tài chính",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "CNDT",
+    "tenMon": "Chuyên ngành Doanh trại",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Bảo đảm doanh trại"
+  },
+  {
+    "maMon": "CNK",
+    "tenMon": "Chủ nghĩa xã hội khoa học",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Chủ nghĩa xã hội khoa học"
+  },
+  {
+    "maMon": "CNL",
+    "tenMon": "Nguyên lý cấu tạo phương tiện Xăng dầu",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Phương tiện kỹ thuật xăng dầu"
+  },
+  {
+    "maMon": "CNM",
+    "tenMon": "Cơ học đất nền móng",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "CNQX",
+    "tenMon": "Công nghệ và Quản lý xây dựng",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Công nghệ và quản lý xây dựng"
+  },
+  {
+    "maMon": "CNTT",
+    "tenMon": "Công nghệ thông tin",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Tin học"
+  },
+  {
+    "maMon": "CNTT1",
+    "tenMon": "Công nghệ thông tin 1",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Tin học"
+  },
+  {
+    "maMon": "CNTT2",
+    "tenMon": "Công nghệ thông tin",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Tin học"
+  },
+  {
+    "maMon": "CNVT",
+    "tenMon": "Chuyên ngành Vận tải",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Chỉ huy"
+  },
+  {
+    "maMon": "CNX",
+    "tenMon": "Cấu tạo nguyên lý PTKT Xăng dầu",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Phương tiện kỹ thuật xăng dầu"
+  },
+  {
+    "maMon": "CNXD",
+    "tenMon": "Chuyên ngành Xăng dầu",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "COH",
+    "tenMon": "Công tác Hậu cần",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "COT",
+    "tenMon": "Công tác kỹ thuật",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Tổ chức"
+  },
+  {
+    "maMon": "CPC",
+    "tenMon": "Công tác an toàn PCCC",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Phương tiện kỹ thuật xăng dầu"
+  },
+  {
+    "maMon": "CPH",
+    "tenMon": "Công tác HCTX và phương pháp HLHC",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "CPT",
+    "tenMon": "Cấp phát và tín dụng đầu tư XDCB",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "CQA",
+    "tenMon": "Chiến lược quốc phòng an ninh",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Đường lối - Chiến dịch - Lịch sử"
+  },
+  {
+    "maMon": "CQB",
+    "tenMon": "Chiến thuật Quân chủng – Biên phòng",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Chiến thuật binh chủng hợp thành"
+  },
+  {
+    "maMon": "CQD",
+    "tenMon": "Chiến thuật BCHT, QSĐP & Nghệ thuật CD",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Chiến thuật binh chủng hợp thành"
+  },
+  {
+    "maMon": "CQL",
+    "tenMon": "Công tác quân lực",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "CQN",
+    "tenMon": "Công tác Quân nhu",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "CQNT",
+    "tenMon": "Chuyên ngành Quân nhu",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "CQNĐ",
+    "tenMon": "Bảo đảm quân nhu QSĐP và KVPT",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "CQP",
+    "tenMon": "Chiến thuật BCHT và quân sự địa phương",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Chiến thuật binh chủng hợp thành"
+  },
+  {
+    "maMon": "CQS",
+    "tenMon": "Đường cầu quân sự",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Chỉ huy"
+  },
+  {
+    "maMon": "CQX",
+    "tenMon": "Công tác Quân nhu thường xuyên",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "CQY",
+    "tenMon": "Quân y",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Quân y"
+  },
+  {
+    "maMon": "CQĐ",
+    "tenMon": "Công tác quân sự địa phương",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự địa phương"
+  },
+  {
+    "maMon": "CSKX",
+    "tenMon": "Chính sách kinh tế xã hội",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kinh tế"
+  },
+  {
+    "maMon": "CSN",
+    "tenMon": "Công sự, ngụy trang",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "CT",
+    "tenMon": "Chiến thuật",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Chiến thuật binh chủng hợp thành"
+  },
+  {
+    "maMon": "CT1",
+    "tenMon": "Toán cao cấp học phần I",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Toán"
+  },
+  {
+    "maMon": "CTA",
+    "tenMon": "Chiến thuật aBB",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Chiến thuật binh chủng hợp thành"
+  },
+  {
+    "maMon": "CTB",
+    "tenMon": "Chiến thuật bBB",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Chiến thuật binh chủng hợp thành"
+  },
+  {
+    "maMon": "CTC",
+    "tenMon": "Chiến thuật cBB",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Chiến thuật binh chủng hợp thành"
+  },
+  {
+    "maMon": "CTCH",
+    "tenMon": "Công nghệ thi công hiện đại",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "CTD",
+    "tenMon": "Chiến thuật dBB",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Chiến thuật binh chủng hợp thành"
+  },
+  {
+    "maMon": "CTE",
+    "tenMon": "Chiến thuật e, fBB",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Chiến thuật binh chủng hợp thành"
+  },
+  {
+    "maMon": "CTef",
+    "tenMon": "Chiến thuật trung, sư đoàn bộ binh",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Chiến thuật binh chủng hợp thành"
+  },
+  {
+    "maMon": "CTF",
+    "tenMon": "Chiến thuật fBB",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Chiến thuật binh chủng hợp thành"
+  },
+  {
+    "maMon": "CTH",
+    "tenMon": "Chiến thuật binh chủng hợp thành",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Chiến thuật binh chủng hợp thành"
+  },
+  {
+    "maMon": "CTHe",
+    "tenMon": "Chiến thuật trung đoàn bộ binh",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Chiến thuật binh chủng hợp thành"
+  },
+  {
+    "maMon": "CTHK",
+    "tenMon": "Chỉ huy, tham mưu hậu cần, kỹ thuật trung (lữ) đoàn",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "CTHKQY",
+    "tenMon": "Chỉ huy - Tham mưu hậu cần, kỹ thuật",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "CTK",
+    "tenMon": "Cấu tạo thiết kế kiến trúc",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "CTKX",
+    "tenMon": "Công tác Tài chính, Kế toán nghiệp vụ Xăng dầu",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "CTM",
+    "tenMon": "Một số vấn đề về eBB tiến công & eBB phòng ngự",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Chiến thuật binh chủng hợp thành"
+  },
+  {
+    "maMon": "CTMT",
+    "tenMon": "Công tác tham mưu tác chiến",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "CTN",
+    "tenMon": "Cấp thoát nước",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Bảo đảm doanh trại"
+  },
+  {
+    "maMon": "CTP",
+    "tenMon": "Chiến thuật tổ, aBB, bBB",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Chiến thuật binh chủng hợp thành"
+  },
+  {
+    "maMon": "CTQ",
+    "tenMon": "Học thuyết Mác-Lênin về CTQĐ",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Triết học"
+  },
+  {
+    "maMon": "CTQB",
+    "tenMon": "Chiến thuật quân, binh chủng",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "CTR",
+    "tenMon": "Chính trị học",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Không tên"
+  },
+  {
+    "maMon": "CTT",
+    "tenMon": "Cấu tạo kiến trúc",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "CTTC",
+    "tenMon": "Công tác tham mưu tài chính",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "CTTS",
+    "tenMon": "Công nghệ thông tin, chuyển đổi số",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Tin học"
+  },
+  {
+    "maMon": "CTV",
+    "tenMon": "Công tác Vận tải quân sự",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Tổ chức"
+  },
+  {
+    "maMon": "CTX",
+    "tenMon": "Cấu tạo, trang thiết bị kho Xăng dầu",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Sử dụng"
+  },
+  {
+    "maMon": "CTĐ",
+    "tenMon": "Công tác đảng, công tác chính trị",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Công tác Đảng, công tác chính trị"
+  },
+  {
+    "maMon": "CUD",
+    "tenMon": "Cơ học ứng dụng",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Kỹ thuật cơ sở"
+  },
+  {
+    "maMon": "CVT",
+    "tenMon": "Bảo đảm Vận tải chiến đấu",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Chỉ huy"
+  },
+  {
+    "maMon": "CXD",
+    "tenMon": "Công tác Xăng dầu quân sự",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "CXT",
+    "tenMon": "Công tác Xăng dầu thường xuyên",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "CXV",
+    "tenMon": "Công tác Xăng dầu - Vận tải",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Chỉ huy"
+  },
+  {
+    "maMon": "CY",
+    "tenMon": "Công tác cơ yếu quân đội",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "CYĐ",
+    "tenMon": "Công tác Quân y và bảo đảm Quân y chiến đấu",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Quân y"
+  },
+  {
+    "maMon": "CĐH",
+    "tenMon": "Viết chuyên đề Hậu cần thường xuyên",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "CĐP",
+    "tenMon": "Viết chuyên đề Hậu cần địa phương",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần quân sự địa phương"
+  },
+  {
+    "maMon": "CĐT",
+    "tenMon": "Chuyên đề Tổng cục Hậu cần",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "CĐTC1",
+    "tenMon": "Chuyên đề 1",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "CĐTC2",
+    "tenMon": "Chuyên đề 2",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "CĐTT1",
+    "tenMon": "chuyên đề thực tế 1",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "CĐTT2",
+    "tenMon": "chuyên đề thực tế 2",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "CĐTT3",
+    "tenMon": "chuyên đề thực tế 3",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "CĐV",
+    "tenMon": "Viết chuyên đề Vận tải",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Tổ chức"
+  },
+  {
+    "maMon": "CĐY",
+    "tenMon": "CTĐ - CTCT trong các nhiệm vụ chủ yếu",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Công tác Đảng, công tác chính trị"
+  },
+  {
+    "maMon": "CĐĐ",
+    "tenMon": "Viết chuyên đề Hậu cần quân sự địa phương",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần quân sự địa phương"
+  },
+  {
+    "maMon": "DCD",
+    "tenMon": "Bảo đảm Doanh trại chiến dịch, chiến lược",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Bảo đảm doanh trại"
+  },
+  {
+    "maMon": "DCZ",
+    "tenMon": "Bảo đảm Doanh trại chiến đấu, chiến dịch",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Bảo đảm doanh trại"
+  },
+  {
+    "maMon": "DCĐ",
+    "tenMon": "Bảo đảm Doanh trại chiến đấu",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Bảo đảm doanh trại"
+  },
+  {
+    "maMon": "DD",
+    "tenMon": "Dinh dưỡng",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Thương phẩm"
+  },
+  {
+    "maMon": "DKCX",
+    "tenMon": "Đồ án kiến trúc công trình",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "DKD",
+    "tenMon": "Dự toán kinh tế xây dựng",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Công nghệ và quản lý xây dựng"
+  },
+  {
+    "maMon": "DKNB2",
+    "tenMon": "Đồ án kết cấu bê tông cốt thép",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "DKTH",
+    "tenMon": "Đồ án kết cấu thép",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "DKTTC1",
+    "tenMon": "Đồ án kỹ thuật thi công 1",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "DKTTC2",
+    "tenMon": "Đồ án Kỹ thuật thi công 2",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "DM",
+    "tenMon": "Dầu mỏ và công nghệ chế biến",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Sử dụng"
+  },
+  {
+    "maMon": "DMK",
+    "tenMon": "Kế toán doanh nghiệp thương mại",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "DNQ",
+    "tenMon": "Tài chính doanh nghiệp và đơn vị sự nghiệp Quân đội",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "DNVM",
+    "tenMon": "Đồ án nền và móng",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "DQ",
+    "tenMon": "Kế toán dự toán Quân đội",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "DQN",
+    "tenMon": "Dinh dưỡng và thương phẩm hàng Quân nhu",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Thương phẩm"
+  },
+  {
+    "maMon": "DQĐ",
+    "tenMon": "Dự toán quản lý đầu tư XD công trình",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Công nghệ và quản lý xây dựng"
+  },
+  {
+    "maMon": "DS",
+    "tenMon": "Dân số",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Không tên"
+  },
+  {
+    "maMon": "DT",
+    "tenMon": "Công tác bảo đảm nhà đất",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Bảo đảm doanh trại"
+  },
+  {
+    "maMon": "DTAP",
+    "tenMon": "Diễn tập tổng hợp",
+    "khoa": "Học viện Hậu cần",
+    "boMon": "Không tên"
+  },
+  {
+    "maMon": "DTc",
+    "tenMon": "Quản lý đầu tư xây dựng công trình",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Bảo đảm doanh trại"
+  },
+  {
+    "maMon": "DTcd",
+    "tenMon": "Bảo đảm doanh trại chiến dịch",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Bảo đảm doanh trại"
+  },
+  {
+    "maMon": "DTCX1",
+    "tenMon": "Đồ án tổ chức thi công",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Công nghệ và quản lý xây dựng"
+  },
+  {
+    "maMon": "DTG",
+    "tenMon": "Dân tộc học và tôn giáo học",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Chủ nghĩa xã hội khoa học"
+  },
+  {
+    "maMon": "DTX",
+    "tenMon": "Công tác Doanh trại thường xuyên",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Bảo đảm doanh trại"
+  },
+  {
+    "maMon": "DXD",
+    "tenMon": "Dự toán xây dựng cơ bản",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Công nghệ và quản lý xây dựng"
+  },
+  {
+    "maMon": "DXK",
+    "tenMon": "Dự toán xây dựng và kinh tế xây dựng",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Công nghệ và quản lý xây dựng"
+  },
+  {
+    "maMon": "DXQ",
+    "tenMon": "Công tác Doanh trại",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Bảo đảm doanh trại"
+  },
+  {
+    "maMon": "DĐT",
+    "tenMon": "Dinh dưỡng một số đối tượng",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Thương phẩm"
+  },
+  {
+    "maMon": "G1",
+    "tenMon": "Giáo dục chính trị",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Công tác Đảng, công tác chính trị"
+  },
+  {
+    "maMon": "GC",
+    "tenMon": "Lý thuyết giá cả",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "GDH",
+    "tenMon": "Giáo dục học",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Tâm lý học và giáo dục học Quân sự"
+  },
+  {
+    "maMon": "GDP",
+    "tenMon": "Giáo dục quốc phòng",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "GDP1",
+    "tenMon": "Đường lối quốc phòng và an ninh của Đảng Cộng sản Việt Nam",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Đường lối - Chiến dịch - Lịch sử"
+  },
+  {
+    "maMon": "gdp2",
+    "tenMon": "Công tác quốc phòng và an ninh",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự địa phương"
+  },
+  {
+    "maMon": "GDP21",
+    "tenMon": "Công tác quốc phòng và an ninh",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự địa phương"
+  },
+  {
+    "maMon": "gdp3",
+    "tenMon": "Quân sự chung",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "gdp4",
+    "tenMon": "Kỹ thuật chiến đấu bộ binh và chiến thuật",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "GHQ",
+    "tenMon": "Giáo dục học quân sự",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Tâm lý học và giáo dục học Quân sự"
+  },
+  {
+    "maMon": "GLC",
+    "tenMon": "Giáo dục lý luận chính trị",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Triết học"
+  },
+  {
+    "maMon": "GPL",
+    "tenMon": "Giáo dục Pháp luật",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Nhà nước pháp luật"
+  },
+  {
+    "maMon": "GT1",
+    "tenMon": "Giải tích 1",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Toán"
+  },
+  {
+    "maMon": "GT2",
+    "tenMon": "Giải tích 2",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Toán"
+  },
+  {
+    "maMon": "GTC",
+    "tenMon": "Giáo dục thể chất",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Thể thao"
+  },
+  {
+    "maMon": "GTX",
+    "tenMon": "Giám sát thi công xây dựng công trình",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "HBC",
+    "tenMon": "Hiểu biết về Quân binh chủng",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "HBD",
+    "tenMon": "Hiểu biết về Quân binh chủng và VK  hủy diệt lớn",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "HBe",
+    "tenMon": "BĐHC một số dBC và eBB CĐ",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần chiến đấu"
+  },
+  {
+    "maMon": "HBP",
+    "tenMon": "Hậu cần biên Phòng",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Quân binh chủng, biên phòng"
+  },
+  {
+    "maMon": "HC",
+    "tenMon": "Công tác Hậu cần quân đội",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Hậu cần chung"
+  },
+  {
+    "maMon": "HC-TC1",
+    "tenMon": "Tự chọn 1",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần chiến đấu"
+  },
+  {
+    "maMon": "HCA",
+    "tenMon": "Hậu Cần Chung Và Hậu Cần CAND",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Hậu cần chung"
+  },
+  {
+    "maMon": "HCB",
+    "tenMon": "Bảo đảm HC cho các eBB và d binh chủng",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần chiến đấu"
+  },
+  {
+    "maMon": "HCC",
+    "tenMon": "Hậu cần chung",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Hậu cần chung"
+  },
+  {
+    "maMon": "HCD",
+    "tenMon": "Hậu cần chiến dịch",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Hậu cần chiến dịch"
+  },
+  {
+    "maMon": "HCE",
+    "tenMon": "Bảo đảm Hậu cần eBB chiến đấu",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần chiến đấu"
+  },
+  {
+    "maMon": "HCeQ",
+    "tenMon": "Bảo đảm hậu cần e, fBB chiến đấu",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần chiến đấu"
+  },
+  {
+    "maMon": "HCF",
+    "tenMon": "Bảo đảm Hậu cần fBB chiến đấu",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần chiến đấu"
+  },
+  {
+    "maMon": "HCH",
+    "tenMon": "Hậu cần hải quân",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Quân binh chủng, biên phòng"
+  },
+  {
+    "maMon": "HCK",
+    "tenMon": "Hậu cần không quân",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Quân binh chủng, biên phòng"
+  },
+  {
+    "maMon": "HCKf",
+    "tenMon": "Công tác HC-KT thường xuyên và chỉ huy  tham mưu HC-KT của sư đoàn bộ binh",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "HCKT",
+    "tenMon": "Hậu cần, kỹ thuật",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "HCKT1",
+    "tenMon": "Công tác Hậu cần",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Quân y"
+  },
+  {
+    "maMon": "HCKT2",
+    "tenMon": "Công tác Kỹ thuật",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "HCKTQĐ",
+    "tenMon": "Hậu cần, Kỹ thuật Quân đội",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Hậu cần chung"
+  },
+  {
+    "maMon": "HCL",
+    "tenMon": "Hậu cần chung và lịch sử hậu cần",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Hậu cần chung"
+  },
+  {
+    "maMon": "HCLT",
+    "tenMon": "Hậu cần chiến lược",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Hậu cần chiến dịch"
+  },
+  {
+    "maMon": "HCM",
+    "tenMon": "Tư tưởng Hồ Chí Minh",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Tư tưởng Hồ Chí Minh"
+  },
+  {
+    "maMon": "HCNT",
+    "tenMon": "Sự phát triển mới về NTQS Việt Nam",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Đường lối - Chiến dịch - Lịch sử"
+  },
+  {
+    "maMon": "HCP",
+    "tenMon": "Hóa hữu cơ - Hóa phân tích",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Hóa"
+  },
+  {
+    "maMon": "HCPP",
+    "tenMon": "Phương pháp nghiên cứu khoa học HCQS",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Hậu cần chung"
+  },
+  {
+    "maMon": "HCQ",
+    "tenMon": "Bảo đảm hậu cần các quân binh chủng",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Quân binh chủng, biên phòng"
+  },
+  {
+    "maMon": "HCQS",
+    "tenMon": "Một số phát triển mới về Hậu cần quân sự",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần chiến đấu"
+  },
+  {
+    "maMon": "HCS",
+    "tenMon": "Tư tưởng Hồ Chí Minh về quân sự",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Tư tưởng Hồ Chí Minh"
+  },
+  {
+    "maMon": "HCT",
+    "tenMon": "Những vấn đề cơ bản về HC chiến thuật",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần chiến đấu"
+  },
+  {
+    "maMon": "HCTC",
+    "tenMon": "Hậu cần chung, Tài chính",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Hậu cần chung"
+  },
+  {
+    "maMon": "HCVĐ",
+    "tenMon": "Một số hiểu biết về công sự, vật cản và địch",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "HCZ",
+    "tenMon": "Hậu cần chung và Hậu cần chiến dịch",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Hậu cần chung"
+  },
+  {
+    "maMon": "HCĐ",
+    "tenMon": "Hậu cần chung và Hậu cần địa phương",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần quân sự địa phương"
+  },
+  {
+    "maMon": "HCĐS",
+    "tenMon": "Hậu cần chiến đấu TS",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần chiến đấu"
+  },
+  {
+    "maMon": "HDT",
+    "tenMon": "Huấn luyện và diễn tập Hậu cần",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "HeB",
+    "tenMon": "BĐHC một số tiểu đoàn binh chủng và eBBCĐ",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần chiến đấu"
+  },
+  {
+    "maMon": "Hef",
+    "tenMon": "bảo đảm Hậu cần e,f Bộ binh chiến đấu",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần chiến đấu"
+  },
+  {
+    "maMon": "HeĐ",
+    "tenMon": "Bảo đảm Hậu cần dBB và eBB chiến đấu",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "HH",
+    "tenMon": "Cơ sở lý thuyết hoá học",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Hóa"
+  },
+  {
+    "maMon": "HHC",
+    "tenMon": "Hoá hữu cơ",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Hóa"
+  },
+  {
+    "maMon": "HHCC",
+    "tenMon": "Một số hiểu biết về hậu cần, công binh",
+    "khoa": "Dạy ở Lục quân 1",
+    "boMon": "Viện nghiên cứu Khoa học hậu cần quân sự"
+  },
+  {
+    "maMon": "HHH",
+    "tenMon": "Hình học họa hình",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Kỹ thuật cơ sở"
+  },
+  {
+    "maMon": "HHH1",
+    "tenMon": "Hình học họa hình HP 1",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Kỹ thuật cơ sở"
+  },
+  {
+    "maMon": "HHV",
+    "tenMon": "Hình hoạ vẽ kỹ thuật",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Kỹ thuật cơ sở"
+  },
+  {
+    "maMon": "HHĐ",
+    "tenMon": "Hoá học đại cương",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Hóa"
+  },
+  {
+    "maMon": "HK",
+    "tenMon": "Hỏa khí đi cùng",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "HKBC",
+    "tenMon": "Bảo đảm HCKT một số dBC và eBB chiến đấu",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần chiến đấu"
+  },
+  {
+    "maMon": "HKCD",
+    "tenMon": "Hậu cần, kỹ thuật chiến dịch",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Hậu cần chiến dịch"
+  },
+  {
+    "maMon": "HKCM",
+    "tenMon": "Hậu cần, kỹ thuật thường xuyên và chỉ huy - tham mưu hậu cần, kỹ thuật",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "HKCS",
+    "tenMon": "Công tác HC-KT trung, lữ đoàn chuyển trạng thái sẵn sàng CĐ",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "HKdP",
+    "tenMon": "Bảo đảm hậu cần, kỹ thuật dBB chiến đấu phòng ngự",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần chiến đấu"
+  },
+  {
+    "maMon": "HKdT",
+    "tenMon": "Bảo đảm hậu cần, kỹ thuật dBB chiến đấu tiến công",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần chiến đấu"
+  },
+  {
+    "maMon": "HKNV",
+    "tenMon": "Công tác HC- KT trong thực hiện một số nhiệm vụ ở đơn vị",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "HKP",
+    "tenMon": "Hậu cần quân sự địa phương và Hậu cần khu vực phòng thủ",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần quân sự địa phương"
+  },
+  {
+    "maMon": "HKPT",
+    "tenMon": "Hậu cần, kỹ thuật quân sự địa phương, khu vực phòng thủ",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần quân sự địa phương"
+  },
+  {
+    "maMon": "HKQ",
+    "tenMon": "Hậu phương và công tác hậu cần, kĩ thuật quân đội",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Hậu cần chung"
+  },
+  {
+    "maMon": "HKQB",
+    "tenMon": "Hậu cần, kỹ thuật Quân chủng, Biên phòng",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Quân binh chủng, biên phòng"
+  },
+  {
+    "maMon": "HKQP",
+    "tenMon": "Hậu cần, kĩ thuật quân chủng, biên phòng",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Quân binh chủng, biên phòng"
+  },
+  {
+    "maMon": "HKQĐ",
+    "tenMon": "Hậu cần, Kỹ thuật Quân đội",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Hậu cần chung"
+  },
+  {
+    "maMon": "HKT",
+    "tenMon": "Hợp đồng kinh tế",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kinh tế"
+  },
+  {
+    "maMon": "HKTC",
+    "tenMon": "Công tác HC-KTTX và Chỉ huy HC-KT của trung (lữ) đoàn",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "HKTM",
+    "tenMon": "Công tác HC-KT thường xuyên và chỉ huy tham mưu HC-KT của trung, lữ đoàn",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "HKTX",
+    "tenMon": "Công tác Hậu cần - Kỹ thuật thường xuyên của trung (lữ) đoàn",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "HKĐP",
+    "tenMon": "Hậu cần - kỹ thuật quân sự địa phương và KVPT",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần quân sự địa phương"
+  },
+  {
+    "maMon": "HKĐT",
+    "tenMon": "Công tác Hậu cần - Kỹ thuật QSĐP và KVPT tỉnh (thành phố)",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần quân sự địa phương"
+  },
+  {
+    "maMon": "HKĐV",
+    "tenMon": "Công tác Hậu cần - Kỹ thuật quân sự địa phương và khu vực phòng thủ",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần quân sự địa phương"
+  },
+  {
+    "maMon": "HLB",
+    "tenMon": "Huấn luyện thể lực - Bắn súng",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Thể thao"
+  },
+  {
+    "maMon": "HLC",
+    "tenMon": "Tổ chức, phương pháp huấn luyện Hậu cần",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "HLCK",
+    "tenMon": "Tổ chức, phương pháp huấn luyện hậu cần, kỹ thuật",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "HLCQ",
+    "tenMon": "Huấn luyện hậu cần",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "HLD",
+    "tenMon": "Công tác huấn luyện Doanh trại ở eBB",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Bảo đảm doanh trại"
+  },
+  {
+    "maMon": "HLH",
+    "tenMon": "Tổ chức, phương pháp huấn luyện  Hậu cần",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "HLHK",
+    "tenMon": "Công tác Huấn luyện HC- KT trung, lữ đoàn",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "HLN",
+    "tenMon": "Huấn luyện chuyên ngành",
+    "khoa": "Không tên",
+    "boMon": "Không tên"
+  },
+  {
+    "maMon": "HLNK1",
+    "tenMon": "Huấn luyện chuyên ngành Chỉ huy Tham mưu",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "HLNK2",
+    "tenMon": "Huấn luyện nghiệp vụ Quân nhu ở eBB",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "HLNK3",
+    "tenMon": "Công tác huấn luyện ngành Vận tải",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Chỉ huy"
+  },
+  {
+    "maMon": "HLNK4",
+    "tenMon": "Công tác huấn luyện Xăng dầu ở eBB",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "HLNK5",
+    "tenMon": "Huấn luyện chuyên ngành Doanh trại",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Bảo đảm doanh trại"
+  },
+  {
+    "maMon": "HLNK6",
+    "tenMon": "Huấn luyện nghiệp vụ ngành Tài chính ở eBB",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "HLV",
+    "tenMon": "Công tác huấn luyện ở phân đội Vận tải",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Chỉ huy"
+  },
+  {
+    "maMon": "HLX",
+    "tenMon": "Công tác HL Xăng dầu ở E bộ binh",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "HNQ",
+    "tenMon": "Huấn luyện nghiệp vụ Quân nhu ở eBB",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "HNV",
+    "tenMon": "Huấn luyện chuyên ngành",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "HO",
+    "tenMon": "Vũ khí hoá học",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "HPd",
+    "tenMon": "Bảo đảm Hậu cần dBB phòng ngự",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần chiến đấu"
+  },
+  {
+    "maMon": "HPE",
+    "tenMon": "Bảo đảm Hậu cần eBB phòng ngự",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần chiến đấu"
+  },
+  {
+    "maMon": "HPF",
+    "tenMon": "Bảo đảm Hậu cần f phòng ngự",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần chiến đấu"
+  },
+  {
+    "maMon": "HPT",
+    "tenMon": "Hoá phân tích",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Hóa"
+  },
+  {
+    "maMon": "HPTC",
+    "tenMon": "Học phần tự chọn Tiến sĩ năm 2025",
+    "khoa": "Không tên",
+    "boMon": "Không tên"
+  },
+  {
+    "maMon": "HQa",
+    "tenMon": "Hậu cần quân, binh chủng",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Quân binh chủng, biên phòng"
+  },
+  {
+    "maMon": "HQB",
+    "tenMon": "Hậu cần quân binh chủng và Biên phòng",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Quân binh chủng, biên phòng"
+  },
+  {
+    "maMon": "HQC",
+    "tenMon": "Hậu cần quân chủng",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Quân binh chủng, biên phòng"
+  },
+  {
+    "maMon": "HQH",
+    "tenMon": "Hậu cần chung và Hậu cần QBC-BP",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Hậu cần chung"
+  },
+  {
+    "maMon": "HQP",
+    "tenMon": "Hậu cần quân sự địa phương",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần quân sự địa phương"
+  },
+  {
+    "maMon": "HQPT",
+    "tenMon": "Công tác hậu cần quân sự địa phương tỉnh (thành phố)",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần quân sự địa phương"
+  },
+  {
+    "maMon": "HQQ",
+    "tenMon": "Hậu cần quân chủng (Quốc tế)",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Quân binh chủng, biên phòng"
+  },
+  {
+    "maMon": "HQS",
+    "tenMon": "Hành chính quân sự",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "HQT",
+    "tenMon": "HC thường xuyên và Quân y thường xuyên",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "HQV",
+    "tenMon": "Hiểu biết quân binh chủng và VKHDL",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "HQĐP",
+    "tenMon": "Công tác hậu cần, kỹ thuật quân sự địa phương và khu vực phòng thủ",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần quân sự địa phương"
+  },
+  {
+    "maMon": "HTC",
+    "tenMon": "Hậu cần thường xuyên và chỉ huy Tham mưu",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "HTC1",
+    "tenMon": "Hậu cần thường xuyên và chỉ huy Hậu cần",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "HTCĐ",
+    "tenMon": "Hậu cần thường xuyên và chỉ huy hậu cần chiến đấu",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần chiến đấu"
+  },
+  {
+    "maMon": "HTd",
+    "tenMon": "Bảo đảm Hậu cần dBB tiến công",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần chiến đấu"
+  },
+  {
+    "maMon": "HTE",
+    "tenMon": "Bảo đảm Hậu cần eBB tiến công",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần chiến đấu"
+  },
+  {
+    "maMon": "HTF",
+    "tenMon": "Bảo đảm Hậu cần f tiến công",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần chiến đấu"
+  },
+  {
+    "maMon": "HTH",
+    "tenMon": "Hậu cần thường xuyên và H.luyện hậu cần",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "HTK",
+    "tenMon": "Lịch sử các học thuyết kinh tế",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Kinh tế chính trị"
+  },
+  {
+    "maMon": "HTKT",
+    "tenMon": "Hệ thống kỹ thuật trong công trình",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Bảo đảm doanh trại"
+  },
+  {
+    "maMon": "HTL",
+    "tenMon": "Huấn luyện thể lực",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Thể thao"
+  },
+  {
+    "maMon": "HTL2",
+    "tenMon": "Huấn luyện thể lực lần 2",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Thể thao"
+  },
+  {
+    "maMon": "HTNV",
+    "tenMon": "Công tác Hậu cần - Kỹ thuật trong thực hiện một số nhiệm vụ ở đơn vị",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần chiến đấu"
+  },
+  {
+    "maMon": "HTT",
+    "tenMon": "Hệ thống thông tin kế toán",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "HTTTKT",
+    "tenMon": "Hệ thống thông tin kế toán",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "HTTX",
+    "tenMon": "Công tác hậu cần, kỹ thuật và tham mưu hậu cần, kỹ thuật thường xuyên",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "HTTĐ",
+    "tenMon": "Công tác Hậu cần, kỹ thuật thường xuyên và  tham mưu hậu cần, kỹ thuật chiến đấu",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "HTX",
+    "tenMon": "Công tác Hậu cần thường xuyên",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "HTXC",
+    "tenMon": "Công tác hậu cần thường xuyên và chỉ huy, tham mưu hậu cần của sư đoàn bộ binh",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "HTXQ",
+    "tenMon": "Hậu cần thường xuyên N",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "HTXĐ",
+    "tenMon": "Hậu cần thường xuyên và chỉ huy hậu cần chiến đấu",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "HVC",
+    "tenMon": "Hoá Vô cơ",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Hóa"
+  },
+  {
+    "maMon": "HZB",
+    "tenMon": "HCẦN Chiến dịch, HCẦN Quân BC- BP",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Quân binh chủng, biên phòng"
+  },
+  {
+    "maMon": "HĐC",
+    "tenMon": "Những vấn đề cơ bản về HCCĐ và CHC",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần chiến đấu"
+  },
+  {
+    "maMon": "HĐD",
+    "tenMon": "Hậu cần địa phương và chiến dịch",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần quân sự địa phương"
+  },
+  {
+    "maMon": "HĐH",
+    "tenMon": "Hoá học đại cương - Hoá hữu cơ",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Hóa"
+  },
+  {
+    "maMon": "HĐK",
+    "tenMon": "Hậu cần quân sự địa phương và khu vực phòng thủ",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần quân sự địa phương"
+  },
+  {
+    "maMon": "HĐP",
+    "tenMon": "Hậu cần quân sự địa phương",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần quân sự địa phương"
+  },
+  {
+    "maMon": "HĐPQ",
+    "tenMon": "Hậu cần - kỹ thuật quân sự địa phương, khu vực phòng thủ và quân y",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần quân sự địa phương"
+  },
+  {
+    "maMon": "HĐPT",
+    "tenMon": "Hậu cần QSĐP và Khu vực phòng thủ",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần quân sự địa phương"
+  },
+  {
+    "maMon": "HĐV",
+    "tenMon": "Hậu cần QSĐP và Hậu cần KVPT",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần quân sự địa phương"
+  },
+  {
+    "maMon": "K54",
+    "tenMon": "bắn súng ngắn K54",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "KAT",
+    "tenMon": "Kế toán tài chính",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "KAT1",
+    "tenMon": "Kết toán tài chính 1",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kinh tế"
+  },
+  {
+    "maMon": "KBB",
+    "tenMon": "Kỹ thuật chiến đấu bộ binh",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "KBB1",
+    "tenMon": "Kỹ thuật chiến đấu bộ binh 1",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "KBB1.1",
+    "tenMon": "Thuốc Nổ",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "KBB1.2",
+    "tenMon": "Công sự ngụy trang",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "KBB1.3",
+    "tenMon": "Vật cản",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "KBB1.4",
+    "tenMon": "Bắn súng bộ binh",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "KBB1.5",
+    "tenMon": "Ném Lựu đạn",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "KBB1.6",
+    "tenMon": "Kỹ thuật đánh gần",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "KBB2",
+    "tenMon": "Kỹ Thuật bộ binh 2",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "KBC",
+    "tenMon": "Kiểm toán báo cáo Tài chính",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "KBO",
+    "tenMon": "Kỹ thuật và bảo đảm kỹ thuật ô tô",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Phương tiện kỹ thuật xăng dầu"
+  },
+  {
+    "maMon": "KBS",
+    "tenMon": "Khai thác bảo dưỡng sửa chữa PTXD",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Phương tiện kỹ thuật xăng dầu"
+  },
+  {
+    "maMon": "KBT",
+    "tenMon": "Kết cấu bê tông cốt thép và ĐAMH",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "KCA",
+    "tenMon": "Kỹ thuật chế biến nấu ăn",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Kỹ thuật"
+  },
+  {
+    "maMon": "KCB",
+    "tenMon": "Kỹ thuật chế biến LT - TP",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Kỹ thuật"
+  },
+  {
+    "maMon": "KCC",
+    "tenMon": "Kết cấu gỗ, thép, bê tông cốt thép",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "KCD",
+    "tenMon": "Kết cấu xây dựng",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "KCG",
+    "tenMon": "Kết cấu gỗ",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "KCKT",
+    "tenMon": "Kiến thức chung các chuyên ngành Kỹ thuật",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Kỹ thuật"
+  },
+  {
+    "maMon": "KCN",
+    "tenMon": "Kế toán công nghiệp",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "KCNNT",
+    "tenMon": "Kết cấu nhà nhiều tầng",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "KCNT",
+    "tenMon": "Kết cấu nhà thép & ĐAMH",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "KCO",
+    "tenMon": "Kết cấu công trình",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "KCT",
+    "tenMon": "Kinh tế chính trị học Mác-Lênin",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Kinh tế chính trị"
+  },
+  {
+    "maMon": "KCTB",
+    "tenMon": "Kết cấu liên hợp thép - bê tông",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "KCX",
+    "tenMon": "Kiến trúc công trình xây dựng",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "KCĐ",
+    "tenMon": "Nguyên lý kết cấu động cơ",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Kỹ thuật"
+  },
+  {
+    "maMon": "KCĐB",
+    "tenMon": "Kết cấu công trình đặc biệt",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "KDM",
+    "tenMon": "Kế toán doanh nghiệp thương mại",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "KDN",
+    "tenMon": "Kế toán doanh nghiệp sản xuất",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "KDQ",
+    "tenMon": "Kế toán dự toán quân đội",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "KDT",
+    "tenMon": "Kế toán dự toán",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "KDT1",
+    "tenMon": "Kế toán dự toán Quân đội 1",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "KDT2",
+    "tenMon": "Kế toán dự toán Quân đội 2",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "KDV",
+    "tenMon": "Kế toán đơn vị chủ đầu tư",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "KDX",
+    "tenMon": "Kế toán doanh nghiệp xây lắp",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "KEC",
+    "tenMon": "Kế toán tài chính",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "KET",
+    "tenMon": "Kế toán máy",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "KGG",
+    "tenMon": "Kết cấu gạch đá và gỗ",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "KGĐ",
+    "tenMon": "Kết cấu gạch đá",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "KHD",
+    "tenMon": "Cơ sở khoa học dinh dưỡng",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Thương phẩm"
+  },
+  {
+    "maMon": "KHO",
+    "tenMon": "Kho Xăng dầu quân sự",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Phương tiện kỹ thuật xăng dầu"
+  },
+  {
+    "maMon": "KHS",
+    "tenMon": "Kế toán hành chính sự nghiệp",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "KHT",
+    "tenMon": "Công tác kế hoạch, thống kê Vận tải ô tô",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Tổ chức"
+  },
+  {
+    "maMon": "KIC",
+    "tenMon": "Kiểm toán căn bản",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "KID",
+    "tenMon": "Kinh tế dự toán",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kinh tế"
+  },
+  {
+    "maMon": "KIT",
+    "tenMon": "Kiểm toán",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "KK",
+    "tenMon": "Hiểu biết các quân binh chủng",
+    "khoa": "Dạy ở Lục quân 1",
+    "boMon": "Lục quân 1"
+  },
+  {
+    "maMon": "KKQ",
+    "tenMon": "Khu kinh tế quốc phòng",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự địa phương"
+  },
+  {
+    "maMon": "KKT",
+    "tenMon": "Một số kiến thức về Quản lý kinh tế",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kinh tế"
+  },
+  {
+    "maMon": "KKV",
+    "tenMon": "Kinh tế kế hoạch Vận tải ô tô",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Tổ chức"
+  },
+  {
+    "maMon": "KM",
+    "tenMon": "Kinh tế chính trị Mac - Lenin",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Kinh tế chính trị"
+  },
+  {
+    "maMon": "KMT",
+    "tenMon": "Kinh tế môi trường",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kinh tế"
+  },
+  {
+    "maMon": "KN",
+    "tenMon": "Kỹ năng sống",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Tâm lý học và giáo dục học Quân sự"
+  },
+  {
+    "maMon": "KNB",
+    "tenMon": "Kết cấu nhà bê tông cốt thép và ĐAMH",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "KNB2",
+    "tenMon": "Kết cấu bê tông cốt thép",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "KNC",
+    "tenMon": "Kinh tế chính trị nâng cao",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Kinh tế chính trị"
+  },
+  {
+    "maMon": "KNGT",
+    "tenMon": "Kỹ năng giao tiếp",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Tâm lý học và giáo dục học Quân sự"
+  },
+  {
+    "maMon": "KNH",
+    "tenMon": "Kế toán ngân hàng thương mại",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "KNS",
+    "tenMon": "Kế toán ngân sách",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "KNT",
+    "tenMon": "Kế toán ngân hàng thương mại",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "KNT1",
+    "tenMon": "Kết cấu nhà thép",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "KNX",
+    "tenMon": "Công tác tài chính, kế toán nghiệp vụ X.dầu",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "KOT",
+    "tenMon": "Kỹ thuật  ôtô",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Kỹ thuật"
+  },
+  {
+    "maMon": "KQC",
+    "tenMon": "Khoa học chỉ huy, quản lý",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Toán"
+  },
+  {
+    "maMon": "KQD",
+    "tenMon": "Kế toán quản trị doanh nghiệp",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "KQKT",
+    "tenMon": "Kinh tế học và quản lý kinh tế",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "KQN",
+    "tenMon": "Kế toán quản trị doanh nghiệp",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "KQS",
+    "tenMon": "Kinh tế quân sự Mác-Lênin",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Kinh tế chính trị"
+  },
+  {
+    "maMon": "KSD",
+    "tenMon": "Kỹ thuật Xăng dầu",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Phương tiện kỹ thuật xăng dầu"
+  },
+  {
+    "maMon": "KSN",
+    "tenMon": "Một số KT về tổ chức quản lý SXNN",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Không tên"
+  },
+  {
+    "maMon": "KSX",
+    "tenMon": "Khai thác sử dụng phương tiện  KTXD",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Phương tiện kỹ thuật xăng dầu"
+  },
+  {
+    "maMon": "KT1",
+    "tenMon": "Kế toán tài chính 1",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "KT2",
+    "tenMon": "Kế toán tài chính 2",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "KT3",
+    "tenMon": "Kế toán tài chính 3",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "KTB",
+    "tenMon": "Kỹ thuật chiến đấu Bộ binh",
+    "khoa": "Dạy ở Lục quân 1",
+    "boMon": "Lục quân 1"
+  },
+  {
+    "maMon": "KTC",
+    "tenMon": "Kỹ thuật chăn nuôi trồng trọt",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Sản xuất"
+  },
+  {
+    "maMon": "KTC1",
+    "tenMon": "Kỹ thuật thi công 1 & ĐAMH",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Công nghệ và quản lý xây dựng"
+  },
+  {
+    "maMon": "KTC2",
+    "tenMon": "Kỹ thuật thi công 2 & ĐAMH",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Công nghệ và quản lý xây dựng"
+  },
+  {
+    "maMon": "KTCN",
+    "tenMon": "Kiến thức chung các chuyên ngành Hậu cần",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Quân y"
+  },
+  {
+    "maMon": "KTCN1",
+    "tenMon": "Kiến thức chung các chuyên ngành Hậu cần K1",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Quân y"
+  },
+  {
+    "maMon": "KTCN2",
+    "tenMon": "Kiến thức chung các chuyên ngành Hậu cần  K2",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "KTCN3",
+    "tenMon": "Kiến thức chung các chuyên ngành Hậu cần K3",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Chỉ huy"
+  },
+  {
+    "maMon": "KTCN4",
+    "tenMon": "Kiến thức chung các chuyên ngành Hậu cần K4",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "KTCN5",
+    "tenMon": "Kiến thức chung các chuyên ngành Hậu cần K5",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Bảo đảm doanh trại"
+  },
+  {
+    "maMon": "KTD",
+    "tenMon": "Kế toán thương mại dịch vụ",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "KTE",
+    "tenMon": "Kinh tế thị trường",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kinh tế"
+  },
+  {
+    "maMon": "KTH",
+    "tenMon": "Kết cấu thép",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "KTHK",
+    "tenMon": "Kiến thức chung các chuyên ngành HC-KT",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Kỹ thuật"
+  },
+  {
+    "maMon": "KTL",
+    "tenMon": "Kinh tế lượng",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "KTM",
+    "tenMon": "Hoạch toán kế toán trên máy tính",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "KTN",
+    "tenMon": "Nhiệt Kỹ thuật",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Vật lý"
+  },
+  {
+    "maMon": "KTP",
+    "tenMon": "Kinh tế phát triển",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kinh tế"
+  },
+  {
+    "maMon": "KTQ",
+    "tenMon": "Kinh tế quốc tế",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kinh tế"
+  },
+  {
+    "maMon": "KTQT",
+    "tenMon": "Kinh tế quốc tế",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kinh tế"
+  },
+  {
+    "maMon": "KTQĐ",
+    "tenMon": "GT về chế độ kế toán đơn vị dự toán QĐNDVN",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "KTT",
+    "tenMon": "Kỹ thuật thông tin",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "KTTC1",
+    "tenMon": "Kỹ thuật thi công 1",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "KTTC2",
+    "tenMon": "Kỹ thuật thi công 2",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "KTU",
+    "tenMon": "Kinh tế đầu tư",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kinh tế"
+  },
+  {
+    "maMon": "KTV",
+    "tenMon": "Kinh tế  Vận tải",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Tổ chức"
+  },
+  {
+    "maMon": "KTX",
+    "tenMon": "Kinh tế xây dựng",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Công nghệ và quản lý xây dựng"
+  },
+  {
+    "maMon": "KTXD",
+    "tenMon": "Kỹ thuật Xăng dầu",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Sử dụng"
+  },
+  {
+    "maMon": "KTĐ",
+    "tenMon": "Kỹ thuật điện",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Vật lý"
+  },
+  {
+    "maMon": "KUQ",
+    "tenMon": "Khoa học ứng dụng Quân nhu",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Thương phẩm"
+  },
+  {
+    "maMon": "KVM",
+    "tenMon": "Kinh tế vĩ mô",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kinh tế"
+  },
+  {
+    "maMon": "KVV",
+    "tenMon": "Kinh tế vĩ mô, vi mô",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kinh tế"
+  },
+  {
+    "maMon": "KXD",
+    "tenMon": "Kiểm tra chất lượng Xăng dầu",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Sử dụng"
+  },
+  {
+    "maMon": "KXDQ",
+    "tenMon": "Kho xăng dầu và đường ống xăng dầu quân sự (Quốc tế)",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "KXM",
+    "tenMon": "Công tác kỹ thuật xe-máy",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Kỹ thuật"
+  },
+  {
+    "maMon": "KXMT",
+    "tenMon": "Công tác kỹ thuật xe-máy và tàu thuyền quân sự",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Kỹ thuật"
+  },
+  {
+    "maMon": "KĐC",
+    "tenMon": "Kế toán đại cương",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "KĐG",
+    "tenMon": "Kỹ năng đánh gần",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "KĐL",
+    "tenMon": "Kho Xăng dầu và đường ống dẫn nhiên liệu",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Phương tiện kỹ thuật xăng dầu"
+  },
+  {
+    "maMon": "KĐN",
+    "tenMon": "Kinh tế đối ngoại",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kinh tế"
+  },
+  {
+    "maMon": "KĐT",
+    "tenMon": "Kỹ thuật điện tử",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Vật lý"
+  },
+  {
+    "maMon": "KĐĐ",
+    "tenMon": "Kỹ thuật điện, điện tử",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Vật lý"
+  },
+  {
+    "maMon": "LBS",
+    "tenMon": "L.thuyết bảo dưỡng, sửa chữa PTKTXD",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Phương tiện kỹ thuật xăng dầu"
+  },
+  {
+    "maMon": "LCE",
+    "tenMon": "Lý thuyết Tài chính tiền tệ",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "LCM",
+    "tenMon": "Lịch sử ĐCSVN và đường lối CMVN",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Lịch sử Đảng"
+  },
+  {
+    "maMon": "LCT",
+    "tenMon": "Lý luận chính trị",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Chủ nghĩa xã hội khoa học"
+  },
+  {
+    "maMon": "LDT",
+    "tenMon": "Lịch sử dân tộc Việt Nam",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Lịch sử Đảng"
+  },
+  {
+    "maMon": "LDV",
+    "tenMon": "Lịch sử dân tộc, lịch sử văn hoá VN",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Lịch sử Đảng"
+  },
+  {
+    "maMon": "LG",
+    "tenMon": "Logic học",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Triết học"
+  },
+  {
+    "maMon": "LHC",
+    "tenMon": "Lịch sử hậu cần",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Hậu cần chung"
+  },
+  {
+    "maMon": "LHK",
+    "tenMon": "Lý thuyết hạch toán kế toán",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "LHKC",
+    "tenMon": "Lịch sử Hậu cần, kỹ thuật  và Hậu cần, kỹ thuật chung",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Hậu cần chung"
+  },
+  {
+    "maMon": "LHT",
+    "tenMon": "Lý thuyết hạch toán Kế toán",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "LK",
+    "tenMon": "Pháp luật kinh tế",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Nhà nước pháp luật"
+  },
+  {
+    "maMon": "LKC",
+    "tenMon": "Lý thuyết kết cấu ô tô",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Kỹ thuật"
+  },
+  {
+    "maMon": "LKD",
+    "tenMon": "Lý thuyết kế hoạch nền KTQD",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Không tên"
+  },
+  {
+    "maMon": "LKN",
+    "tenMon": "Lý thuyết thống kê và thống kê ngành SX",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Thống kê"
+  },
+  {
+    "maMon": "LKN1",
+    "tenMon": "Lý thuyết thống kê và thống kê doanh nghiệp",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Thống kê"
+  },
+  {
+    "maMon": "LKT",
+    "tenMon": "Luật kinh tế",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Nhà nước pháp luật"
+  },
+  {
+    "maMon": "LLD",
+    "tenMon": "Lý luận dạy học",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Công tác Đảng, công tác chính trị"
+  },
+  {
+    "maMon": "LLK",
+    "tenMon": "Lý thuyết Kế toán",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "LLQ",
+    "tenMon": "Lý luận chung về quân sự",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "LLT",
+    "tenMon": "Lý luận và thực tiễn ĐL đổi mới của Đảng",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Không tên"
+  },
+  {
+    "maMon": "LNĐ",
+    "tenMon": "Lý luận nguyên tắc xây dựng Đảng",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Lịch sử Đảng"
+  },
+  {
+    "maMon": "LPK",
+    "tenMon": "Logic và phương pháp nghiên cứu KH",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Triết học"
+  },
+  {
+    "maMon": "LQS",
+    "tenMon": "Lịch sử quân sự",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Đường lối - Chiến dịch - Lịch sử"
+  },
+  {
+    "maMon": "LSH",
+    "tenMon": "Lịch sử Hậu cần và Hậu cần chung",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Hậu cần chung"
+  },
+  {
+    "maMon": "LSHK",
+    "tenMon": "Lịch sử Hậu cần - Kỹ thuật",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Hậu cần chung"
+  },
+  {
+    "maMon": "LSĐ",
+    "tenMon": "Lịch sử Đảng cộng sản Việt Nam",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Lịch sử Đảng"
+  },
+  {
+    "maMon": "LT",
+    "tenMon": "Lý thuyết tài chính, tiền tệ",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "LTC",
+    "tenMon": "Lý thuyết tài chính",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "LTD",
+    "tenMon": "Lý thuyết tiền tệ & tín dụng",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "LTE",
+    "tenMon": "Lý thuyết tiền tệ",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "LTH",
+    "tenMon": "Lịch sử triết học",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Triết học"
+  },
+  {
+    "maMon": "LTK",
+    "tenMon": "Lý thuyết thống kê",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Thống kê"
+  },
+  {
+    "maMon": "LTM",
+    "tenMon": "Luật thương mại",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Nhà nước pháp luật"
+  },
+  {
+    "maMon": "LTP",
+    "tenMon": "Lương thực - Thực phẩm",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Thương phẩm"
+  },
+  {
+    "maMon": "LTT",
+    "tenMon": "Lưu thông tiền tệ tín dụng",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "LTU",
+    "tenMon": "Lý thuyết tối ưu và ứng dụng",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Toán"
+  },
+  {
+    "maMon": "LTĐ",
+    "tenMon": "Lý luận thực tiễn các mặt hoạt động",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Không tên"
+  },
+  {
+    "maMon": "LVH",
+    "tenMon": "Lịch sử văn hoá",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Lịch sử Đảng"
+  },
+  {
+    "maMon": "LVTN",
+    "tenMon": "Luận văn tốt nghiệp",
+    "khoa": "Không tên",
+    "boMon": "Không tên"
+  },
+  {
+    "maMon": "LX",
+    "tenMon": "Luật giao thông và lái xe",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Kỹ thuật"
+  },
+  {
+    "maMon": "LĐ",
+    "tenMon": "Lựu đạn",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "LĐ2",
+    "tenMon": "Lựu đạn 2",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "LĐB",
+    "tenMon": "Luật đường bộ Việt Nam",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Kỹ thuật"
+  },
+  {
+    "maMon": "MBX",
+    "tenMon": "Máy bơm",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "MCD",
+    "tenMon": "Một số vấn đề CTdBB",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Chiến thuật BCHT"
+  },
+  {
+    "maMon": "MCT",
+    "tenMon": "Một số VĐ CB và CB của CNM-LN, TTHCM",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Tư tưởng Hồ Chí Minh"
+  },
+  {
+    "maMon": "MH",
+    "tenMon": "Mỹ học Mác-Lênin",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Triết học"
+  },
+  {
+    "maMon": "MHC",
+    "tenMon": "Một số kiến thức về TC và NV ngành HC",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "MHC14",
+    "tenMon": "Kiến thức về Hậu cần chung",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Hậu cần chung"
+  },
+  {
+    "maMon": "MHC2",
+    "tenMon": "Kiến thức về Quân nhu",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "MHC3",
+    "tenMon": "Kiến thức về Vận tải",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Chỉ huy"
+  },
+  {
+    "maMon": "MHC4",
+    "tenMon": "Kiến thức về Xăng dầu",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "MHC5",
+    "tenMon": "Kiến thức về Doanh trại",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Bảo đảm doanh trại"
+  },
+  {
+    "maMon": "MHC6",
+    "tenMon": "Kiến thức về Tài chính",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "MHKT",
+    "tenMon": "Mô hình toán kinh tế",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Toán"
+  },
+  {
+    "maMon": "MHT",
+    "tenMon": "Mô hình toán",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Toán"
+  },
+  {
+    "maMon": "MKD",
+    "tenMon": "Một số kiến thức về CTDV ở PĐ",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Không tên"
+  },
+  {
+    "maMon": "MKN",
+    "tenMon": "Một số kiến thức về KHXH & NV",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Không tên"
+  },
+  {
+    "maMon": "MKNH",
+    "tenMon": "Marketing ngân hàng",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kinh tế"
+  },
+  {
+    "maMon": "MKT",
+    "tenMon": "Marketing",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kinh tế"
+  },
+  {
+    "maMon": "MNH",
+    "tenMon": "Marketing và dịch vụ ngân hàng",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kinh tế"
+  },
+  {
+    "maMon": "MQS",
+    "tenMon": "Một số kiến thức về quân sự",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "MTQ",
+    "tenMon": "Chủ nghĩa MLN,Tư tưởng HCM trong thời đại ngày nay và ĐLQĐ đổi mới của đảng ta",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Tư tưởng Hồ Chí Minh"
+  },
+  {
+    "maMon": "MTX",
+    "tenMon": "Môi trường trong xây dựng",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Bảo đảm doanh trại"
+  },
+  {
+    "maMon": "MXD",
+    "tenMon": "Máy xây dựng",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "MĐT",
+    "tenMon": "Máy tính điện tử",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Tin học"
+  },
+  {
+    "maMon": "NB2",
+    "tenMon": "Kết cấu nhà bê tông cốt thép",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "NC",
+    "tenMon": "Phương pháp nghiên cứu khoa học",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "NCCĐ1",
+    "tenMon": "Nghiên cứu chuyên đề 1",
+    "khoa": "Không tên",
+    "boMon": "Không tên"
+  },
+  {
+    "maMon": "NCCĐ2",
+    "tenMon": "Nghiên cứu chuyên đề 2",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Hậu cần chung"
+  },
+  {
+    "maMon": "NCCĐ3",
+    "tenMon": "Nghiên cứu chuyên đề 3",
+    "khoa": "Không tên",
+    "boMon": "Không tên"
+  },
+  {
+    "maMon": "NCK",
+    "tenMon": "Nghiên cứu KH Hậu cần QS",
+    "khoa": "Viện Nghiên cứu Khoa học Hậu cần",
+    "boMon": "B12"
+  },
+  {
+    "maMon": "NCKT",
+    "tenMon": "Nguyên lý cấu tạo kiến trúc",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "NDL",
+    "tenMon": "Nghệ thuật chiến dịch, chiến lược quốc phòng",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Đường lối - Chiến dịch - Lịch sử"
+  },
+  {
+    "maMon": "NDT",
+    "tenMon": "Nghiệp vụ Doanh trại",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Bảo đảm doanh trại"
+  },
+  {
+    "maMon": "NKH",
+    "tenMon": "Nguyên lý kế hoạch hoá",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "NKT",
+    "tenMon": "Nguyên lý kế toán",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "NLK",
+    "tenMon": "Các nguyên lý kinh tế",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kinh tế"
+  },
+  {
+    "maMon": "NLKT",
+    "tenMon": "Một số nội dung về NLKT và chuẩn mực kế toán",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "NLM",
+    "tenMon": "Nguyên lý chi tiết máy",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Kỹ thuật cơ sở"
+  },
+  {
+    "maMon": "NLM1",
+    "tenMon": "Nguyên lý Mác-Lênin phần 1",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Triết học"
+  },
+  {
+    "maMon": "NLĐ",
+    "tenMon": "Nguyên lý kết cấu động cơ",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Kỹ thuật"
+  },
+  {
+    "maMon": "NM",
+    "tenMon": "Nền và móng; ĐAMH",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "NML",
+    "tenMon": "Nguyên lý cơ bản của CN Mác_Lê Nin",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Triết học"
+  },
+  {
+    "maMon": "NML1",
+    "tenMon": "Nguyên lý cơ bản CN Mác Lê nin 1",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Triết học"
+  },
+  {
+    "maMon": "NML2",
+    "tenMon": "Nguyên lý cơ bản CN Mác Lê nin 2",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Triết học"
+  },
+  {
+    "maMon": "NN",
+    "tenMon": "Ngoại ngữ",
+    "khoa": "Khoa Ngoại ngữ",
+    "boMon": "Anh văn"
+  },
+  {
+    "maMon": "NN1",
+    "tenMon": "Ngoại ngữ 1",
+    "khoa": "Khoa Ngoại ngữ",
+    "boMon": "Anh văn"
+  },
+  {
+    "maMon": "NN2",
+    "tenMon": "Ngoại ngữ 2",
+    "khoa": "Khoa Ngoại ngữ",
+    "boMon": "Anh văn"
+  },
+  {
+    "maMon": "NNA1",
+    "tenMon": "Tiếng Anh cơ bản",
+    "khoa": "Khoa Ngoại ngữ",
+    "boMon": "Anh văn"
+  },
+  {
+    "maMon": "NNA2",
+    "tenMon": "Tiếng Anh chuyên ngành",
+    "khoa": "Khoa Ngoại ngữ",
+    "boMon": "Anh văn"
+  },
+  {
+    "maMon": "NNC",
+    "tenMon": "Ngoại ngữ chuyên ngành",
+    "khoa": "Khoa Ngoại ngữ",
+    "boMon": "Anh văn"
+  },
+  {
+    "maMon": "NNC1",
+    "tenMon": "Ngoại ngữ chuyên ngành 1",
+    "khoa": "Khoa Ngoại ngữ",
+    "boMon": "Anh văn"
+  },
+  {
+    "maMon": "NNC2",
+    "tenMon": "Ngoại ngữ chuyên ngành 2",
+    "khoa": "Khoa Ngoại ngữ",
+    "boMon": "Anh văn"
+  },
+  {
+    "maMon": "NNN",
+    "tenMon": "Ngoại ngữ nga",
+    "khoa": "Khoa Ngoại ngữ",
+    "boMon": "Nga văn"
+  },
+  {
+    "maMon": "NNT",
+    "tenMon": "Tiếng trung",
+    "khoa": "Khoa Ngoại ngữ",
+    "boMon": "Trung văn"
+  },
+  {
+    "maMon": "NPK",
+    "tenMon": "Nhà nước pháp luật và luật kinh tế",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Nhà nước pháp luật"
+  },
+  {
+    "maMon": "NPL",
+    "tenMon": "Nhà nước và Pháp luật",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Nhà nước pháp luật"
+  },
+  {
+    "maMon": "NPX",
+    "tenMon": "Nghiệp vụ Xăng dầu",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "NQS",
+    "tenMon": "Lịch sử Nghệ thuật QS và Nghệ thuật CD",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Đường lối - Chiến dịch - Lịch sử"
+  },
+  {
+    "maMon": "NQVN",
+    "tenMon": "Nghệ thuật quân sự Việt Nam",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Đường lối - Chiến dịch - Lịch sử"
+  },
+  {
+    "maMon": "NS",
+    "tenMon": "Ngân sách nhà nước",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "NTD",
+    "tenMon": "Nguyên lý tài chính, tín dụng",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "NTK",
+    "tenMon": "Nguyên lý thống kê",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Thống kê"
+  },
+  {
+    "maMon": "NTKT",
+    "tenMon": "Nguyên lý thiết kế kiến trúc",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "NVG",
+    "tenMon": "Nguyên lý vật giá",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "NVK",
+    "tenMon": "Công tác nghiệp vụ kho Xăng dầu",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Phương tiện kỹ thuật xăng dầu"
+  },
+  {
+    "maMon": "NVM",
+    "tenMon": "Nền và móng",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "NVNH",
+    "tenMon": "Nghiệp vụ ngân hàng đầu tư",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "NVQ",
+    "tenMon": "Nghiệp vụ Quân nhu",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "NVSP",
+    "tenMon": "Thực hành nghiệp vụ sư phạm chuyên ngành",
+    "khoa": "Viện Nghiên cứu Khoa học Hậu cần",
+    "boMon": "B12"
+  },
+  {
+    "maMon": "NVV",
+    "tenMon": "Nghiệp vụ Vận tải",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Không tên"
+  },
+  {
+    "maMon": "NXD",
+    "tenMon": "Nghiệp vụ kho Xăng dầu",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Phương tiện kỹ thuật xăng dầu"
+  },
+  {
+    "maMon": "NĐT",
+    "tenMon": "Nghiên cứu về địch và tác chiến điện tử",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "PBM",
+    "tenMon": "Phương pháp bộ môn",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Không tên"
+  },
+  {
+    "maMon": "PCA",
+    "tenMon": "Phương tiện KTQN và KT chế biến SPAU",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Kỹ thuật"
+  },
+  {
+    "maMon": "PCD",
+    "tenMon": "Phân tích hoạt động kinh tế DN sản xuất",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Thống kê"
+  },
+  {
+    "maMon": "PCT",
+    "tenMon": "PTHĐ kinh tế, Tài chính  trong đơn vị dự toán",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Thống kê"
+  },
+  {
+    "maMon": "PHC",
+    "tenMon": "Bảo đảm Hậu cần phòng tránh đánh trả",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần chiến đấu"
+  },
+  {
+    "maMon": "PHH",
+    "tenMon": "Phương pháp huấn luyện Hậu cần và Hậu cần thường xuyên",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "PHK",
+    "tenMon": "Phân tích các hoạt động kinh tế",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Thống kê"
+  },
+  {
+    "maMon": "PHKB",
+    "tenMon": "Phân tích các hoạt động kinh tế biển",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kinh tế"
+  },
+  {
+    "maMon": "PKC",
+    "tenMon": "Các phương pháp số trong cơ học kết cấu",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "PKD",
+    "tenMon": "PTHĐ kinh tế, Tài chính  trong đơn vị dự toán",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Thống kê"
+  },
+  {
+    "maMon": "PKH",
+    "tenMon": "Phương pháp nghiên cứu khoa học",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Hậu cần chung"
+  },
+  {
+    "maMon": "PKHT",
+    "tenMon": "Phương pháp NCKH Hậu cần quân sự TS",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Hậu cần chung"
+  },
+  {
+    "maMon": "PKKT",
+    "tenMon": "Phương pháp NCKH Kinh tế",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kinh tế"
+  },
+  {
+    "maMon": "PKN",
+    "tenMon": "Pháp chế kinh tế xã hội chủ nghĩa",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Nhà nước pháp luật"
+  },
+  {
+    "maMon": "PLĐ",
+    "tenMon": "Pháp luật đại cương",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Nhà nước pháp luật"
+  },
+  {
+    "maMon": "PNCK",
+    "tenMon": "Phương pháp nghiên cứu khoa học kinh tế",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "PPQ",
+    "tenMon": "Phương pháp huấn luyện quân sự",
+    "khoa": "Viện Nghiên cứu Khoa học Hậu cần",
+    "boMon": "Không tên"
+  },
+  {
+    "maMon": "PQS",
+    "tenMon": "Phương pháp huấn luyện quân sự",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Chiến thuật BCHT"
+  },
+  {
+    "maMon": "PSB",
+    "tenMon": "Phương pháp sư phạm bộ môn",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "PSM",
+    "tenMon": "Phương pháp sư phạm Bộ môn",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "PSQ",
+    "tenMon": "Phòng tránh đánh trả tiến công HL địch",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "PTA",
+    "tenMon": "Phương tiện nhà ăn, nhà bếp",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Kỹ thuật"
+  },
+  {
+    "maMon": "PTC",
+    "tenMon": "Phân tích tài chính",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Thống kê"
+  },
+  {
+    "maMon": "PTD",
+    "tenMon": "Phân tích Tài chính doanh nghiệp",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Thống kê"
+  },
+  {
+    "maMon": "PTDQ",
+    "tenMon": "Phân tích tài chính đơn vị dự toán quân đội",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Thống kê"
+  },
+  {
+    "maMon": "PTK",
+    "tenMon": "Phân tích tài chính của các ngành sản xuất",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Thống kê"
+  },
+  {
+    "maMon": "PTKT",
+    "tenMon": "Một số nội dung cơ bản về phân tích HĐKT",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Thống kê"
+  },
+  {
+    "maMon": "PTQ",
+    "tenMon": "Phương tiện kỹ thuật Quân nhu",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Kỹ thuật"
+  },
+  {
+    "maMon": "PTU",
+    "tenMon": "Phương pháp tối ưu",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Toán"
+  },
+  {
+    "maMon": "PTV",
+    "tenMon": "Kỹ thuật phương tiện Vận tải ôtô",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Kỹ thuật"
+  },
+  {
+    "maMon": "PVDT",
+    "tenMon": "Phục vụ diễn tập",
+    "khoa": "Không tên",
+    "boMon": "Không tên"
+  },
+  {
+    "maMon": "PVT",
+    "tenMon": "Phương thức Vận tải",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Không tên"
+  },
+  {
+    "maMon": "PXD",
+    "tenMon": "Phương tiện kỹ thuật Xăng dầu",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Phương tiện kỹ thuật xăng dầu"
+  },
+  {
+    "maMon": "Q",
+    "tenMon": "Tham quan",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "Q10",
+    "tenMon": "Hậu cần, tài chính, quân y",
+    "khoa": "Dạy ở Lục quân 1",
+    "boMon": "Lục quân 1"
+  },
+  {
+    "maMon": "Q7",
+    "tenMon": "Điều lệnh quản lý bộ đội",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "Q8",
+    "tenMon": "Điều lệnh đội ngũ",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "QB",
+    "tenMon": "Quân binh chủng",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "QB2",
+    "tenMon": "Quân chủng, binh chủng BQT",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "QBC",
+    "tenMon": "Bảo đảm QN cho QBC và BP",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "QBCT",
+    "tenMon": "Quân chủng - Biên phòng",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "QBCĐ",
+    "tenMon": "Quân, binh chủng – Quân sự địa phương",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "QBĐ",
+    "tenMon": "Quân sự địa phương và tham mưu bản đồ",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự địa phương"
+  },
+  {
+    "maMon": "QCC",
+    "tenMon": "Quản lý Tài chính công",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "QCD",
+    "tenMon": "QS địa phương và nghệ thuật chiến dịch",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự địa phương"
+  },
+  {
+    "maMon": "QCE",
+    "tenMon": "Bảo đảm Quân nhu eBB  chiến đấu",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "QCF",
+    "tenMon": "Bảo đảm Quân nhu fBB  chiến đấu",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "QCN",
+    "tenMon": "Quân sự chung và QĐ nước ngoài",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "QCZ",
+    "tenMon": "Bảo đảm Quân nhu cho  chiến dịch",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "QCĐ",
+    "tenMon": "Bảo đảm Quân nhu chiến đấu",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "QDN",
+    "tenMon": "Quản trị doanh nghiệp",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kinh tế"
+  },
+  {
+    "maMon": "QDT",
+    "tenMon": "Công tác quản lý nhà đất",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Bảo đảm doanh trại"
+  },
+  {
+    "maMon": "QDX",
+    "tenMon": "Quản lý vốn đầu tư xây dựng cơ bản",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "QDĐ",
+    "tenMon": "Quản lý dự án đầu tư",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kinh tế"
+  },
+  {
+    "maMon": "QGD",
+    "tenMon": "Quản lý giáo dục",
+    "khoa": "Ngoài trường",
+    "boMon": "NGOAIHV"
+  },
+  {
+    "maMon": "QHD",
+    "tenMon": "Quy hoạch Doanh trại",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "QHT",
+    "tenMon": "Quan hệ quốc tế",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Chủ nghĩa xã hội khoa học"
+  },
+  {
+    "maMon": "QHX",
+    "tenMon": "Quy hoạch xây dựng",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "QKD",
+    "tenMon": "Quản trị kinh doanh",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kinh tế"
+  },
+  {
+    "maMon": "QKN",
+    "tenMon": "Quản lý trang bị kỹ thuật, vũ khí vật liệu nổ",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "QKT",
+    "tenMon": "Quản lý kinh tế",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kinh tế"
+  },
+  {
+    "maMon": "QKTB",
+    "tenMon": "Công tác quân khí và trang bị kỹ thuật",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "QKTK8",
+    "tenMon": "Quản lý kinh tế",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Kinh tế chính trị"
+  },
+  {
+    "maMon": "QKVN",
+    "tenMon": "QUẢN LÝ TBKT, VKVL NỔ",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "QLC",
+    "tenMon": "Quản lý Tài chính công",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "QLG",
+    "tenMon": "Quản trị Logistics quân sự",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kinh tế"
+  },
+  {
+    "maMon": "QLN",
+    "tenMon": "Công tác quản lý xây dựng ngành Quân nhu",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "QLNS",
+    "tenMon": "Một số kiến thức về quản lý ngân sách nhà nước",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "QLV",
+    "tenMon": "Quản lý cơ sở vật chất Quân nhu",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "QLV1",
+    "tenMon": "Quản lý vốn đầu tư xây dựng cơ bản trong quân đội",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "QNcd",
+    "tenMon": "Bảo đảm Quân nhu chiến dịch và quân, binh chủng",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "QNH",
+    "tenMon": "Quản trị ngân hàng thương mại",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "QNN",
+    "tenMon": "Quản lý nhà nước",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Nhà nước pháp luật"
+  },
+  {
+    "maMon": "QNP",
+    "tenMon": "Quản lý NN và phòng chống tham nhũng",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Nhà nước pháp luật"
+  },
+  {
+    "maMon": "QNS",
+    "tenMon": "Quản lý ngân sách nhà nước",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "QNT",
+    "tenMon": "Bảo đảm QN TX cho quân nhân và PĐ",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "QNTm",
+    "tenMon": "Quản trị ngân hàng thương mại",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "QNĐ",
+    "tenMon": "Bảo dảm Quân nhu cho LLVT địa phương",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "QP",
+    "tenMon": "Quân chủng - Biên phòng",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "QPA",
+    "tenMon": "Đường lối Quốc phòng - An ninh",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Lịch sử Đảng"
+  },
+  {
+    "maMon": "QQN",
+    "tenMon": "Quân đội ĐP và quân đội nước ngoài",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự địa phương"
+  },
+  {
+    "maMon": "QS",
+    "tenMon": "Một số kiến thức về Quân sự",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Chiến thuật BCHT"
+  },
+  {
+    "maMon": "QSC",
+    "tenMon": "Quân sự  chung",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "QSU",
+    "tenMon": "Quân sự",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Đường lối - Chiến dịch - Lịch sử"
+  },
+  {
+    "maMon": "QSĐT",
+    "tenMon": "Quân sự địa phương và khu vực phòng thủ",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự địa phương"
+  },
+  {
+    "maMon": "QTB",
+    "tenMon": "Quân đội nước ngoài, TM, BĐĐH",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "QTC",
+    "tenMon": "Quản lý tài chính nhà nước",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "QTCC",
+    "tenMon": "Quản lý tài chính công",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "QTDN",
+    "tenMon": "Quản trị Tài chính doanh nghiệp",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "QTG",
+    "tenMon": "Quản trị Tài chính công ty đa quốc gia",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "QTH",
+    "tenMon": "QĐNN và CT binh chủng hợp thành",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Chiến thuật binh chủng hợp thành"
+  },
+  {
+    "maMon": "QTQ",
+    "tenMon": "Quân trang quân dụng",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Thương phẩm"
+  },
+  {
+    "maMon": "QTTC",
+    "tenMon": "Quản trị tài chính",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "QTX",
+    "tenMon": "Bảo đảm Quân nhu thường xuyên",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "QTĐ",
+    "tenMon": "Quản trị công ty Tài chính đa quốc gia",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "QVĐ",
+    "tenMon": "Quản lý vốn đầu tư xây dựng cơ bản",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "QXD",
+    "tenMon": "Quản lý xây dựng",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Bảo đảm doanh trại"
+  },
+  {
+    "maMon": "QXDQ",
+    "tenMon": "Quản lý đầu tư xây dựng công trình (Quốc tế)",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Bảo đảm doanh trại"
+  },
+  {
+    "maMon": "QY",
+    "tenMon": "Bảo đảm Quân y",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Quân y"
+  },
+  {
+    "maMon": "QYT",
+    "tenMon": "Bảo đảm Quân y thuờng xuyên",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Quân y"
+  },
+  {
+    "maMon": "QYĐ",
+    "tenMon": "Bảo đảm Quân y chiến đấu",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Quân y"
+  },
+  {
+    "maMon": "QĐ",
+    "tenMon": "Tài chính Quân đội",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "QĐBC",
+    "tenMon": "Quân sự địa phương - Sử dụng QBC",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự địa phương"
+  },
+  {
+    "maMon": "QĐC",
+    "tenMon": "Bảo đảm Quân nhu chiến đấu, chiến dịch",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "QĐD",
+    "tenMon": "Bảo đảm Quân nhu chiến đấu, chiến dịch",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "QĐKQ",
+    "tenMon": "Quân nhu QSĐP và KVPT (Quốc tế)",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "QĐP",
+    "tenMon": "Quân sự địa phương",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự địa phương"
+  },
+  {
+    "maMon": "QĐPT",
+    "tenMon": "Công tác quân sự địa phương tỉnh (thành phố)",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự địa phương"
+  },
+  {
+    "maMon": "QĐPV",
+    "tenMon": "Công tác quân sự địa phương và khu vực phòng thủ tỉnh (thành phố)",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự địa phương"
+  },
+  {
+    "maMon": "QĐX",
+    "tenMon": "Quản lý đầu tư xây dựng",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Công nghệ và quản lý xây dựng"
+  },
+  {
+    "maMon": "QĐZ",
+    "tenMon": "Bảo đảm QN cho LLVTĐP và CD",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "S",
+    "tenMon": "Sinh học đại cương",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Thương phẩm"
+  },
+  {
+    "maMon": "SB",
+    "tenMon": "Sức bền vật liệu",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Kỹ thuật cơ sở"
+  },
+  {
+    "maMon": "SB1",
+    "tenMon": "Sức bền vật liệu 1 và TN môn học",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Kỹ thuật cơ sở"
+  },
+  {
+    "maMon": "SB2",
+    "tenMon": "Sức bền vật liệu 2",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Kỹ thuật cơ sở"
+  },
+  {
+    "maMon": "SBD",
+    "tenMon": "Sử dụng bảo dưỡng Xăng dầu",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Phương tiện kỹ thuật xăng dầu"
+  },
+  {
+    "maMon": "SBHK",
+    "tenMon": "Những vấn đề chuyên sâu về bảo đảm hậu cần, kỹ thuật trung (lữ) đoàn chiến đấu",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần chiến đấu"
+  },
+  {
+    "maMon": "SBP",
+    "tenMon": "Sử dụng, bảo dưỡng và sửa chữa PTKTXD",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Phương tiện kỹ thuật xăng dầu"
+  },
+  {
+    "maMon": "SBVL1",
+    "tenMon": "Sức bền vật liệu 1",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Kỹ thuật cơ sở"
+  },
+  {
+    "maMon": "SBVL2",
+    "tenMon": "Sức bền vật liệu 2",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Kỹ thuật cơ sở"
+  },
+  {
+    "maMon": "SDD",
+    "tenMon": "Sinh lý dinh dưỡng",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Thương phẩm"
+  },
+  {
+    "maMon": "SHV",
+    "tenMon": "Sự phát triển mới về HCQS Việt Nam",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Quân y"
+  },
+  {
+    "maMon": "SIH",
+    "tenMon": "Sinh học",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Thương phẩm"
+  },
+  {
+    "maMon": "SKX",
+    "tenMon": "Sử dụng kiểm tra chất lượng Xăng dầu",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Sử dụng"
+  },
+  {
+    "maMon": "SNQ",
+    "tenMon": "Sự phát triển mới về NTQS Việt nam",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Đường lối - Chiến dịch - Lịch sử"
+  },
+  {
+    "maMon": "SPMCN",
+    "tenMon": "Sự phát triển mới về nghệ thuật quân sự Việt Nam",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Đường lối - Chiến dịch - Lịch sử"
+  },
+  {
+    "maMon": "SQK",
+    "tenMon": "Thi công sử dụng và quản lý Kho",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Phương tiện kỹ thuật xăng dầu"
+  },
+  {
+    "maMon": "SSĐ",
+    "tenMon": "Sẵn sàng chiến đấu",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "SXD",
+    "tenMon": "Sử dụng Xăng dầu",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Sử dụng"
+  },
+  {
+    "maMon": "SĐK",
+    "tenMon": "Sẵn sàng chiến đấu và bắn súng K54",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "T",
+    "tenMon": "Toán học",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Toán"
+  },
+  {
+    "maMon": "TA",
+    "tenMon": "Tiếng Anh",
+    "khoa": "Khoa Ngoại ngữ",
+    "boMon": "Anh văn"
+  },
+  {
+    "maMon": "TA1",
+    "tenMon": "Tiếng Anh 1",
+    "khoa": "Khoa Ngoại ngữ",
+    "boMon": "Anh văn"
+  },
+  {
+    "maMon": "TA2",
+    "tenMon": "Tiếng Anh 2",
+    "khoa": "Khoa Ngoại ngữ",
+    "boMon": "Anh văn"
+  },
+  {
+    "maMon": "TAC",
+    "tenMon": "Tiếng Anh nâng cao",
+    "khoa": "Khoa Ngoại ngữ",
+    "boMon": "Anh văn"
+  },
+  {
+    "maMon": "TACHC",
+    "tenMon": "Tiếng Anh chuyên ngành Hậu cần",
+    "khoa": "Khoa Ngoại ngữ",
+    "boMon": "Anh văn"
+  },
+  {
+    "maMon": "TACN",
+    "tenMon": "Tiếng anh Chuyên ngành",
+    "khoa": "Khoa Ngoại ngữ",
+    "boMon": "Anh văn"
+  },
+  {
+    "maMon": "TANK",
+    "tenMon": "Tiếng anh ngoại khóa",
+    "khoa": "Khoa Ngoại ngữ",
+    "boMon": "Anh văn"
+  },
+  {
+    "maMon": "TATC",
+    "tenMon": "Tiếng Anh chuyên ngành tài chính",
+    "khoa": "Khoa Ngoại ngữ",
+    "boMon": "Anh văn"
+  },
+  {
+    "maMon": "TBC",
+    "tenMon": "Thiết bị chế biến nấu ăn",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Kỹ thuật"
+  },
+  {
+    "maMon": "TBD",
+    "tenMon": "Bảo dưõng sửa chữa trạm bơm Xăng dầu",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Phương tiện kỹ thuật xăng dầu"
+  },
+  {
+    "maMon": "TBK",
+    "tenMon": "Cấu tạo thiết bị kho XD cố định",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Phương tiện kỹ thuật xăng dầu"
+  },
+  {
+    "maMon": "TBQ",
+    "tenMon": "Trang thiết bị Quân nhu",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Kỹ thuật"
+  },
+  {
+    "maMon": "TBS",
+    "tenMon": "Thực hành bảo dưỡng sửa chữa",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Phương tiện kỹ thuật xăng dầu"
+  },
+  {
+    "maMon": "TBV",
+    "tenMon": "Thiết bị phương tiện Vận tải",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Kỹ thuật"
+  },
+  {
+    "maMon": "TBĐ",
+    "tenMon": "Thiết bị điện trên ôtô",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Kỹ thuật"
+  },
+  {
+    "maMon": "TC",
+    "tenMon": "Công tác Tài chính",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TC-TC1",
+    "tenMon": "Tự chọn 1",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TC-TC2",
+    "tenMon": "Tự chọn 2",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TC-TC3",
+    "tenMon": "Tự chọn 3",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TC1",
+    "tenMon": "Toán cao cấp 1",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Toán"
+  },
+  {
+    "maMon": "TC1-K5",
+    "tenMon": "Tự chọn 1",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Bảo đảm doanh trại"
+  },
+  {
+    "maMon": "TC2",
+    "tenMon": "Toán cao cấp 2",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Toán"
+  },
+  {
+    "maMon": "TC2-K5",
+    "tenMon": "Tự chọn 2",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Bảo đảm doanh trại"
+  },
+  {
+    "maMon": "TC3-K5",
+    "tenMon": "Tự chọn 3",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Bảo đảm doanh trại"
+  },
+  {
+    "maMon": "TC_TT",
+    "tenMon": "Tài chính -Tiền tệ",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TCB",
+    "tenMon": "Tổ chức chế biến LT - TP",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Kỹ thuật"
+  },
+  {
+    "maMon": "TCBK",
+    "tenMon": "Thực tập cán bộ kỹ thuật",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "TCC",
+    "tenMon": "Toán cao cấp",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Toán"
+  },
+  {
+    "maMon": "TCC2",
+    "tenMon": "Tài chính công",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TCD",
+    "tenMon": "Kỹ thuật thi công xây dựng",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "TCde",
+    "tenMon": "Công tác tài chính tiểu đoàn, trung đoàn",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TCDM",
+    "tenMon": "Thực hành Tài chính dự toán trên máy",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TCDN",
+    "tenMon": "Tài chính doanh nghiệp",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TCDQ",
+    "tenMon": "Tài chính doanh nghiệp Quân đội",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TCH",
+    "tenMon": "Tài chính học",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "TCK",
+    "tenMon": "Tài chính kế toán quân đội",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TCKT",
+    "tenMon": "Toán cao cấp- Toán kinh tế",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Toán"
+  },
+  {
+    "maMon": "TCL",
+    "tenMon": "Tác chiến chiến lược",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Đường lối - Chiến dịch - Lịch sử"
+  },
+  {
+    "maMon": "TCM",
+    "tenMon": "Thực hành Tài chính máy",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TCNM",
+    "tenMon": "Nghiệp vụ ngân hàng thương mại",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "TCNV",
+    "tenMon": "Nghiệp vụ ngân hàng trung ương",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "TCPT",
+    "tenMon": "Một số v.đề về tác chiến khu vực phòng thủ cấp tỉnh (t.phố) và trung, lữ đoàn",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Chiến thuật BCHT"
+  },
+  {
+    "maMon": "TCQ",
+    "tenMon": "Triết học MLN, học thuyết MLN về CTQĐ",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Triết học"
+  },
+  {
+    "maMon": "TCQĐ",
+    "tenMon": "Tài chính quân đội",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TCS",
+    "tenMon": "Toán cơ sở",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Không tên"
+  },
+  {
+    "maMon": "TCT",
+    "tenMon": "Tổ chức công tác Kế toán",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "TCT1",
+    "tenMon": "Tài chính - Tiền tệ",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "TCTA",
+    "tenMon": "Tiếng Anh",
+    "khoa": "Khoa Ngoại ngữ",
+    "boMon": "Anh văn"
+  },
+  {
+    "maMon": "TCTC",
+    "tenMon": "Các tổ chức và thi trường tài chính",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "TCTQ",
+    "tenMon": "Tài chính dự toán Quân đội",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "TCTS",
+    "tenMon": "Tự chọn môn học Tiến sĩ Hậu cần",
+    "khoa": "Không tên",
+    "boMon": "Không tên"
+  },
+  {
+    "maMon": "TCTT",
+    "tenMon": "Một số kiến thức về tài chính – tiền tệ",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TCV",
+    "tenMon": "Công tác chỉ huy, tham mưu Vận tải",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Chỉ huy"
+  },
+  {
+    "maMon": "TCX",
+    "tenMon": "Tổ chức thi công & ĐAMH",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Công nghệ và quản lý xây dựng"
+  },
+  {
+    "maMon": "TCX1",
+    "tenMon": "Tổ chức thi công",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Công nghệ và quản lý xây dựng"
+  },
+  {
+    "maMon": "TCXV",
+    "tenMon": "Công tác tài chính ngành xe máy - vận tải",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TCĐ",
+    "tenMon": "Truyền chuyển động máy",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Không tên"
+  },
+  {
+    "maMon": "TCĐL",
+    "tenMon": "Đường lối chiến lược QP, AN",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Đường lối - Chiến dịch - Lịch sử"
+  },
+  {
+    "maMon": "TD",
+    "tenMon": "Tài chính doanh nghiệp",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TD1",
+    "tenMon": "Tài chính doanh nghiệp 1",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TD2",
+    "tenMon": "Tài chính doanh nghiệp 2",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TD3",
+    "tenMon": "Tài chính doanh nghiệp 3",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TDN",
+    "tenMon": "Tài chính doanh nghiệp sản xuất",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TDN1",
+    "tenMon": "Tài chính doanh nghiệp 1",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TDNC",
+    "tenMon": "Tài chính doanh nghiệp",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TDNH",
+    "tenMon": "Tín dụng ngân hàng",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "TDQ",
+    "tenMon": "Tài chính đơn vị dự toán quân đội",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TDT",
+    "tenMon": "Tài chính dự toán",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TDT1",
+    "tenMon": "Tài chính dự toán Quân đội 1",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TDT2",
+    "tenMon": "Tài chính dự toán Quân đội 2",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TDX",
+    "tenMon": "Tài chính doanh nghiệp xây lắp",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TG1",
+    "tenMon": "Toán giải tích 1",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Toán"
+  },
+  {
+    "maMon": "TG2",
+    "tenMon": "Toán giải tích 2",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Toán"
+  },
+  {
+    "maMon": "TGD",
+    "tenMon": "Tâm lý giáo dục học quân sự",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Tâm lý học và giáo dục học Quân sự"
+  },
+  {
+    "maMon": "TGQ",
+    "tenMon": "Tâm lý học, giáo dục học quân sự",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Tâm lý học và giáo dục học Quân sự"
+  },
+  {
+    "maMon": "TGT",
+    "tenMon": "Toán giải tích",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Toán"
+  },
+  {
+    "maMon": "TGX",
+    "tenMon": "Tăng gia sản xuất",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Sản xuất"
+  },
+  {
+    "maMon": "TH",
+    "tenMon": "Triết học Mác-Lênin",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Triết học"
+  },
+  {
+    "maMon": "TH1B",
+    "tenMon": "Tổ hợp 1",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Triết học"
+  },
+  {
+    "maMon": "TH1E",
+    "tenMon": "Tổ hợp 1",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Triết học"
+  },
+  {
+    "maMon": "TH1HS",
+    "tenMon": "Tổ hợp 1",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Triết học"
+  },
+  {
+    "maMon": "TH2B",
+    "tenMon": "Tổ hợp 2",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Lịch sử Đảng"
+  },
+  {
+    "maMon": "TH2E",
+    "tenMon": "Tổ hợp 2",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Tư tưởng Hồ Chí Minh"
+  },
+  {
+    "maMon": "TH2HC",
+    "tenMon": "Tổ hợp 2 (Chiến thuật binh chủng hợp thành, Quân sự địa phương)",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Chiến thuật binh chủng hợp thành"
+  },
+  {
+    "maMon": "TH2HS",
+    "tenMon": "Tổ hợp 2",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Lịch sử Đảng"
+  },
+  {
+    "maMon": "TH2PĐ",
+    "tenMon": "Tổ hợp 2 - SQHC (TLH, GDH, VH)",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Tâm lý học và giáo dục học Quân sự"
+  },
+  {
+    "maMon": "TH3B",
+    "tenMon": "Tổ hợp 3",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Tư tưởng Hồ Chí Minh"
+  },
+  {
+    "maMon": "TH3E",
+    "tenMon": "Tổ hợp 3",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Kinh tế chính trị"
+  },
+  {
+    "maMon": "TH3HS",
+    "tenMon": "Tổ hợp 3",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TH4E",
+    "tenMon": "Tổ hợp 4",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Lịch sử Đảng"
+  },
+  {
+    "maMon": "TH5E",
+    "tenMon": "Tổ hợp 5",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Tâm lý học và giáo dục học Quân sự"
+  },
+  {
+    "maMon": "TH5P",
+    "tenMon": "Tổ hợp 5 (CHTM hậu cần, kỹ thuật và quân y; Công tác quân nhu)",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "TH7PĐ",
+    "tenMon": "Tổ hợp 7 (Chỉ huy tham mưu hậu cần, kỹ thuật và công tác quân nhu)",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "THC",
+    "tenMon": "Công tác tham mưu Hậu cần",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "THCN",
+    "tenMon": "Thực hành chuyên ngành",
+    "khoa": "Không tên",
+    "boMon": "Không tên"
+  },
+  {
+    "maMon": "THCN1",
+    "tenMon": "Thực hành chuyên ngành",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "THCN2",
+    "tenMon": "Thực hành chuyên ngành",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Kỹ thuật"
+  },
+  {
+    "maMon": "THCN3",
+    "tenMon": "Thực hành chuyên ngành",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Tổ chức"
+  },
+  {
+    "maMon": "THCN4",
+    "tenMon": "Thực hành chuyên ngành",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Phương tiện kỹ thuật xăng dầu"
+  },
+  {
+    "maMon": "THCN5",
+    "tenMon": "Thực hành chuyên ngành",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Bảo đảm doanh trại"
+  },
+  {
+    "maMon": "THCN6",
+    "tenMon": "Thực hành chuyên ngành",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "THDN",
+    "tenMon": "Thực hành Tài chính doanh nghiệp",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "THHHD",
+    "tenMon": "Thực hành hoá học đại cương",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Hóa"
+  },
+  {
+    "maMon": "THK",
+    "tenMon": "Thiết kế kiến trúc",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "THL",
+    "tenMon": "Thủy lực",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Kỹ thuật cơ sở"
+  },
+  {
+    "maMon": "THLC",
+    "tenMon": "Tổ chức, phương pháp huấn luyện hậu cần",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "THN",
+    "tenMon": "Thực tập hoá nghiệm Xăng dầu",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Sử dụng"
+  },
+  {
+    "maMon": "THNC",
+    "tenMon": "Triết học Mác - Lênin nâng cao",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Triết học"
+  },
+  {
+    "maMon": "THP",
+    "tenMon": "Thực hành phương tiện kĩ thuật Xăng dầu",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Phương tiện kỹ thuật xăng dầu"
+  },
+  {
+    "maMon": "THS",
+    "tenMon": "Tài chính hành chính sự nghiệp",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "THT",
+    "tenMon": "Thực hành tổng hợp",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Không tên"
+  },
+  {
+    "maMon": "THTK",
+    "tenMon": "Thực hành Tài chính - Kế toán tổng hợp",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "THTK1",
+    "tenMon": "Thực hành Tài chính - Kế toán 1",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "THTK2",
+    "tenMon": "Thực hành Tài chính - Kế toán 2",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "THTM1",
+    "tenMon": "Tổ hợp 1 - CHTM (LG,DTH, ĐĐH)",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Triết học"
+  },
+  {
+    "maMon": "THTM2",
+    "tenMon": "Tổ hợp 2 - CHTM (VH,GDH,TLH)",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Tâm lý học và giáo dục học Quân sự"
+  },
+  {
+    "maMon": "THTM3",
+    "tenMon": "Tổ hợp 3 - CHTM (PKH,TVS,CNTT)",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Tin học"
+  },
+  {
+    "maMon": "THTM4",
+    "tenMon": "Tổ hợp 4 - CHTM (ĐLQ,QSP)",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự địa phương"
+  },
+  {
+    "maMon": "THTM5",
+    "tenMon": "Tổ hợp 5 - CHTM (LTK,QKT)",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Thống kê"
+  },
+  {
+    "maMon": "THTM6",
+    "tenMon": "Tổ hợp 6 - CHTM (CXD,CTV,CXD)",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "THTĐ",
+    "tenMon": "Thực hành trắc địa",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "THU",
+    "tenMon": "Thuế",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "THV",
+    "tenMon": "Triết học MLN, lý luận và vận dụng",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Triết học"
+  },
+  {
+    "maMon": "THVT6",
+    "tenMon": "Tổ hợp 6 - Vận tải (TVPS,TVSN)",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Tổ chức"
+  },
+  {
+    "maMon": "THX",
+    "tenMon": "Thực hành hoá nghiệm Xăng dầu",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Sử dụng"
+  },
+  {
+    "maMon": "THĐ",
+    "tenMon": "Công tác Tham mưu Hậu cần chiến đấu",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "TID",
+    "tenMon": "Tin học ứng dụng",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Tin học"
+  },
+  {
+    "maMon": "TIN",
+    "tenMon": "Tin học đại cương",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Tin học"
+  },
+  {
+    "maMon": "TINX",
+    "tenMon": "Ứng dụng tin học trong xây dựng",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "TK",
+    "tenMon": "Kế toán tài chính",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "TKB",
+    "tenMon": "Thực tập các bếp",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Kỹ thuật"
+  },
+  {
+    "maMon": "TKC",
+    "tenMon": "Thực hành Kế toán thủ công",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "TKD",
+    "tenMon": "Thiết kế xây dựng",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "TKE",
+    "tenMon": "Thống kê doanh nghiệp",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Thống kê"
+  },
+  {
+    "maMon": "TKH",
+    "tenMon": "Một số nội dung cơ bản về thống kê",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Thống kê"
+  },
+  {
+    "maMon": "TKK",
+    "tenMon": "Thống kê kinh tế",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Thống kê"
+  },
+  {
+    "maMon": "TKM",
+    "tenMon": "Thực hành Kế toán máy",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "TKN",
+    "tenMon": "Thống kê các ngành sản xuất",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Thống kê"
+  },
+  {
+    "maMon": "TKO",
+    "tenMon": "Thực hành kế toán",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kế toán"
+  },
+  {
+    "maMon": "TKQ",
+    "tenMon": "Thiết kế kiến trúc và quy hoạch doanh trại",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "TKT",
+    "tenMon": "Toán kinh tế",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Toán"
+  },
+  {
+    "maMon": "TKV",
+    "tenMon": "Tổ chức, khai thác mạng vận tải",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Chỉ huy"
+  },
+  {
+    "maMon": "TKX",
+    "tenMon": "Thống kê kho Xăng dầu",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Phương tiện kỹ thuật xăng dầu"
+  },
+  {
+    "maMon": "TKĐV",
+    "tenMon": "Tổ chức, khai thác mạng đường Vận tải",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Chỉ huy"
+  },
+  {
+    "maMon": "TLH",
+    "tenMon": "Tâm lý học quân sự",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Tâm lý học và giáo dục học Quân sự"
+  },
+  {
+    "maMon": "TLQ",
+    "tenMon": "Tâm lý học lãnh đạo - quản lý",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Tâm lý học và giáo dục học Quân sự"
+  },
+  {
+    "maMon": "TLS",
+    "tenMon": "Tâm lý sư phạm",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Tâm lý học và giáo dục học Quân sự"
+  },
+  {
+    "maMon": "TLTQ",
+    "tenMon": "Tiểu luận tổng quan",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "TLĐ",
+    "tenMon": "Tâm lý học Đại cương",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Tâm lý học và giáo dục học Quân sự"
+  },
+  {
+    "maMon": "TLĐC",
+    "tenMon": "Thuỷ lực đại cương",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Kỹ thuật cơ sở"
+  },
+  {
+    "maMon": "TMC",
+    "tenMon": "Tham mưu chỉ huy",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "TMCV",
+    "tenMon": "Công tác tham mưu, chỉ huy vân tải",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Chỉ huy"
+  },
+  {
+    "maMon": "TMCĐ",
+    "tenMon": "Công tác tham mưu hậu cần, kỹ thuật chiến đấu",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "TMH",
+    "tenMon": "Tham mưu Hậu cần",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "TMNĐ",
+    "tenMon": "Tham mưu tác chiến và nghiên cứu về địch",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "TMQ",
+    "tenMon": "Tham mưu bản đồ và quân đội nước ngoài",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "TMT",
+    "tenMon": "Công tác tham mưu tài chính",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TMTC",
+    "tenMon": "Tham mưu tác chiến",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "TMV",
+    "tenMon": "Công tác tham mưu Vận tải",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Chỉ huy"
+  },
+  {
+    "maMon": "TMX",
+    "tenMon": "Tham mưu Hậu cần và Hậu cần th. xuyên",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "TMĐ",
+    "tenMon": "Công tác tham mưu hậu cần chiến đấu",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "TN",
+    "tenMon": "Thuế Nhà nước",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "TNC",
+    "tenMon": "Thực tập nâng cao tay nghề",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Kỹ thuật"
+  },
+  {
+    "maMon": "TNCT",
+    "tenMon": "Thử nghiệm công trình",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "TNCTCT",
+    "tenMon": "Tốt nghiệp môn Chính trị",
+    "khoa": "Không tên",
+    "boMon": "Không tên"
+  },
+  {
+    "maMon": "TNCTUD",
+    "tenMon": "Thí nghiệm, kiểm định công trình và Ứng dụng tin học trong thiết kế xây dựng",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "TNCTĐ",
+    "tenMon": "Công tác đảng, công tác chính trị",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Công tác Đảng, công tác chính trị"
+  },
+  {
+    "maMon": "TND",
+    "tenMon": "Công tác Tài chính, nghiệp vụ Doanh trại",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TNH",
+    "tenMon": "Tiền tệ ngân hàng",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "TNKD",
+    "tenMon": "Thí nghiệm và kiểm định công trình",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "TNLTCNTH",
+    "tenMon": "Lý thuyết chuyên ngành tổng hợp",
+    "khoa": "Không tên",
+    "boMon": "Không tên"
+  },
+  {
+    "maMon": "TNN",
+    "tenMon": "Tài chính nhà nước",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TNO",
+    "tenMon": "Thuốc nổ",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "TNTA",
+    "tenMon": "Tiếng Anh",
+    "khoa": "Không tên",
+    "boMon": "Không tên"
+  },
+  {
+    "maMon": "TNTHCN",
+    "tenMon": "Thực hành chuyên ngành tổng hợp",
+    "khoa": "Không tên",
+    "boMon": "Không tên"
+  },
+  {
+    "maMon": "TNV",
+    "tenMon": "Công tác Tài chính, Kế toán nghiệp vụ vận tải",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TNX",
+    "tenMon": "Thực hành nghiệp vụ Xăng dầu",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "TNĐ",
+    "tenMon": "Tổ chức Vận tải thuỷ nội địa",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Tổ chức"
+  },
+  {
+    "maMon": "TOT",
+    "tenMon": "Tổ chức hoạt động Vận tải ôtô",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Tổ chức"
+  },
+  {
+    "maMon": "TP1",
+    "tenMon": "Toán cao cấp phần 1",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Toán"
+  },
+  {
+    "maMon": "TP2",
+    "tenMon": "Toán cao cấp phần 2",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Toán"
+  },
+  {
+    "maMon": "TPL",
+    "tenMon": "Thương phẩm hàng LT - TP",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Thương phẩm"
+  },
+  {
+    "maMon": "TPN",
+    "tenMon": "Thương phẩm hàng Quân nhu",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Thương phẩm"
+  },
+  {
+    "maMon": "TPQ",
+    "tenMon": "Thương phẩm hàng QT - QD",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Thương phẩm"
+  },
+  {
+    "maMon": "TPX",
+    "tenMon": "Thay thế, điều chỉnh, phục hồi chất lượng XD",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Sử dụng"
+  },
+  {
+    "maMon": "TQC",
+    "tenMon": "TMƯU BĐỒ, QĐNN VÀ CTBCHT E,F",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Chiến thuật binh chủng hợp thành"
+  },
+  {
+    "maMon": "TQG",
+    "tenMon": "Tổ chức quản lý TGSX",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Sản xuất"
+  },
+  {
+    "maMon": "TQL",
+    "tenMon": "Tin học trong quản lý",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Tin học"
+  },
+  {
+    "maMon": "TQP",
+    "tenMon": "Thể thao quốc phòng",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Thể thao"
+  },
+  {
+    "maMon": "TQS",
+    "tenMon": "Thể thao quân sự",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Thể thao"
+  },
+  {
+    "maMon": "TQS1",
+    "tenMon": "Thể thao quân sự 1",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Thể thao"
+  },
+  {
+    "maMon": "TQS1.1",
+    "tenMon": "Huấn luyện thể lực",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Thể thao"
+  },
+  {
+    "maMon": "TQS1.2",
+    "tenMon": "Huấn luyện bơi",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Thể thao"
+  },
+  {
+    "maMon": "TQS2",
+    "tenMon": "Thể thao quân sự 2",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Thể thao"
+  },
+  {
+    "maMon": "TQT",
+    "tenMon": "Tài chính quốc tế",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kinh tế"
+  },
+  {
+    "maMon": "TQT1",
+    "tenMon": "Tài chính QT và TTQT",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TQTHL",
+    "tenMon": "Tham Quan tập huấn Lào",
+    "khoa": "Không tên",
+    "boMon": "Không tên"
+  },
+  {
+    "maMon": "TQX",
+    "tenMon": "Thiết kế quy hoạch xây dựng",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "TQĐ1",
+    "tenMon": "Tài chính quân đội 1",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TQĐ2",
+    "tenMon": "Tài chính quân đội 2",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TSP",
+    "tenMon": "Thực hành sư phạm",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "TSX",
+    "tenMon": "Tổ chức sản xuất",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Sản xuất"
+  },
+  {
+    "maMon": "TT",
+    "tenMon": "Thông tin",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "TTC",
+    "tenMon": "Thực hành tài chính",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TTCN",
+    "tenMon": "Thực tập công nhân",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Công nghệ và quản lý xây dựng"
+  },
+  {
+    "maMon": "TTCĐ",
+    "tenMon": "Thông tin thực tiễn theo chuyên đề",
+    "khoa": "Ngoài trường",
+    "boMon": "NGOAIHV"
+  },
+  {
+    "maMon": "TTDV",
+    "tenMon": "Học tập, nghiên cứu thực tế tại đơn vị",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "TTH1",
+    "tenMon": "Thi tổ hợp 1",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Triết học"
+  },
+  {
+    "maMon": "TTH2",
+    "tenMon": "Thi tổ hợp 2",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Triết học"
+  },
+  {
+    "maMon": "TTH3",
+    "tenMon": "Thi tổ hợp 3",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Triết học"
+  },
+  {
+    "maMon": "TTH4",
+    "tenMon": "Thi tổ hợp 4",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Lịch sử Đảng"
+  },
+  {
+    "maMon": "TTH5",
+    "tenMon": "Thi tổ hợp 5",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Tâm lý học và giáo dục học Quân sự"
+  },
+  {
+    "maMon": "TTK",
+    "tenMon": "Thực tập kỹ thuật xây dựng",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "TTN",
+    "tenMon": "Thực tập tay nghề",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "TTNA",
+    "tenMon": "Thực tập tay nghề",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Kỹ thuật"
+  },
+  {
+    "maMon": "TTNH",
+    "tenMon": "Tiền tệ ngân hàng",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "TTR",
+    "tenMon": "Thanh tra quốc phòng",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "TTT",
+    "tenMon": "Tài chính tiền tệ",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "TTTC",
+    "tenMon": "Tiền tệ ngan hàng và thị trường tài chính",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "TTĐ",
+    "tenMon": "Thông tin liên lạc và TCĐT",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "TU",
+    "tenMon": "Toán ứng dụng",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Không tên"
+  },
+  {
+    "maMon": "TV",
+    "tenMon": "Tiếng việt và Soạn thảo VB",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Văn hóa"
+  },
+  {
+    "maMon": "TV1",
+    "tenMon": "Tiếng Việt",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Văn hóa"
+  },
+  {
+    "maMon": "TVCB",
+    "tenMon": "Tiếng Việt cơ bản trong giao tiếp",
+    "khoa": "Ngoài trường",
+    "boMon": "NGOAIHV"
+  },
+  {
+    "maMon": "TVG",
+    "tenMon": "Công tác tư vấn và giám sát xây dựng",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "TVN",
+    "tenMon": "Tiếng Việt chuyên ngành",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Văn hóa"
+  },
+  {
+    "maMon": "TVNC",
+    "tenMon": "Tiếng Việt nâng cao",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Văn hóa"
+  },
+  {
+    "maMon": "TVNK",
+    "tenMon": "Tiếng Việt ngoại khóa",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Văn hóa"
+  },
+  {
+    "maMon": "TVPS",
+    "tenMon": "Tổ chức vận tải bằng phương tiện đường sắt",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Tổ chức"
+  },
+  {
+    "maMon": "TVPT",
+    "tenMon": "Tổ chức vận tải bằng phương tiện đường thủy",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Tổ chức"
+  },
+  {
+    "maMon": "TVS",
+    "tenMon": "Soạn thảo văn bản",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Văn hóa"
+  },
+  {
+    "maMon": "TVT",
+    "tenMon": "Tổ chức Vận tải",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Tổ chức"
+  },
+  {
+    "maMon": "TVX",
+    "tenMon": "Công tác TMKT Xe máy ở đơn vị VT cấp Chth, Chd",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Kỹ thuật"
+  },
+  {
+    "maMon": "TXD",
+    "tenMon": "Tổ chức nhiệm vụ ngành Xăng dầu quân đội",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "TXN",
+    "tenMon": "Tài chính xí nghiệp công nghiệp",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TXQ",
+    "tenMon": "Tài chính xí nghiệp quốc doanh",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "TXV",
+    "tenMon": "Công tác TMKT Xe máy ở đơn vị VT cấp CT,CD",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Chỉ huy"
+  },
+  {
+    "maMon": "TĐ",
+    "tenMon": "Trắc đạc",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "TĐC",
+    "tenMon": "Thực tập địa chất công trình",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "TĐIA",
+    "tenMon": "Trắc địa",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "TĐM",
+    "tenMon": "Truyền động máy",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Kỹ thuật"
+  },
+  {
+    "maMon": "TĐT",
+    "tenMon": "Tác chiến điện tử",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "TĐTT",
+    "tenMon": "Trắc địa và thực tập môn học",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Công nghệ và quản lý xây dựng"
+  },
+  {
+    "maMon": "UDTX",
+    "tenMon": "Ứng dụng tin học trong thiết kế xây dựng",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "UQT",
+    "tenMon": "Khoa học ứng dụng quân nhu và trang thiết bị quân nhu",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Thương phẩm"
+  },
+  {
+    "maMon": "UTTK",
+    "tenMon": "Ứng dụng tin học trong thiết kế",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "V",
+    "tenMon": "Văn hành chính",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Không tên"
+  },
+  {
+    "maMon": "VAH",
+    "tenMon": "VSMT&AT cháy nổ độc hại trong hoá nghiệm xăng",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Sử dụng"
+  },
+  {
+    "maMon": "VAX",
+    "tenMon": "VSMT&AT cháy nổ trong VHPTXD",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Phương tiện kỹ thuật xăng dầu"
+  },
+  {
+    "maMon": "VBHK",
+    "tenMon": "Một số v.đề c.bản về bảo đảm HC-KT trung, lữ đoàn chiến đấu",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần chiến đấu"
+  },
+  {
+    "maMon": "VCA",
+    "tenMon": "Vật cản",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "VCAĐ",
+    "tenMon": "Một số hiểu biết về công sự, vật cản và địch",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "VCD",
+    "tenMon": "Công tác Vận tải chiến dịch",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Chỉ huy"
+  },
+  {
+    "maMon": "VCDT",
+    "tenMon": "Vận dụng lý luận chủ nghĩa xã hội khoa học và vấn đề dân tộc, tôn giáo vào quá trình xây dựng chủ nghĩa xã hội ở Việt Nam",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Chủ nghĩa xã hội khoa học"
+  },
+  {
+    "maMon": "VCH",
+    "tenMon": "Những vấn đề chung về chỉ huy Vận tải",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Chỉ huy"
+  },
+  {
+    "maMon": "VCK",
+    "tenMon": "Công tác Vận tải chiến dịch và KVPT",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Chỉ huy"
+  },
+  {
+    "maMon": "VCV",
+    "tenMon": "Những vấn đề chung về Vận tải QS",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Chỉ huy"
+  },
+  {
+    "maMon": "VCX",
+    "tenMon": "Vận dụng lý luận chủ nghĩa xã hội khoa học vào quá trình xây dựng CNXHVN",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Chủ nghĩa xã hội khoa học"
+  },
+  {
+    "maMon": "VCZ",
+    "tenMon": "Bảo đảm Vận tải chiến dịch",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Chỉ huy"
+  },
+  {
+    "maMon": "VCĐ",
+    "tenMon": "Vận tải chiến đấu",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Chỉ huy"
+  },
+  {
+    "maMon": "VH",
+    "tenMon": "Cơ sở văn hoá Việt Nam",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Lịch sử Đảng"
+  },
+  {
+    "maMon": "VHB",
+    "tenMon": "Vận hành trạm bơm",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Phương tiện kỹ thuật xăng dầu"
+  },
+  {
+    "maMon": "VHC",
+    "tenMon": "Những vấn đề cơ bản về công tác hậu cần",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Chỉ huy tham mưu hậu cần"
+  },
+  {
+    "maMon": "VHCQ",
+    "tenMon": "Vận dụng phương pháp luận triết học và học thuyết về chiến tranh, quân đội của Mác - Lênin trong lĩnh vực quân sự",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Triết học"
+  },
+  {
+    "maMon": "VHD",
+    "tenMon": "Vũ khí huỷ diệt",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "VHKĐ",
+    "tenMon": "Một số v.đề cơ bản về công tác HC-KT QSĐP, KVPT và c.tác HC-KT Biên phòng",
+    "khoa": "Khoa Chỉ huy hậu cần",
+    "boMon": "Hậu cần quân sự địa phương"
+  },
+  {
+    "maMon": "VHP",
+    "tenMon": "Triển khai vận hành PTKTXD",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Phương tiện kỹ thuật xăng dầu"
+  },
+  {
+    "maMon": "VHQ",
+    "tenMon": "Vận dụng phương pháp luận triết học và học thuyết về chiến tranh, quân đội của Mác - Lênin trong lĩnh vực quân sự",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Triết học"
+  },
+  {
+    "maMon": "VKH",
+    "tenMon": "Vũ khí hủy diệt lớn",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "VKKQ",
+    "tenMon": "Vận dụng lý luận kinh tế chính trị, kinh tế quân sự và quản lý kinh tế vào phát triển kinh tế - xã hội ở Việt Nam.",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Kinh tế chính trị"
+  },
+  {
+    "maMon": "VKO",
+    "tenMon": "V.dụng LL KTCT-MLN vào q.trình PT KTXH",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Kinh tế chính trị"
+  },
+  {
+    "maMon": "VKQ",
+    "tenMon": "V.dụng lý luận kinh tế chính trị Mác-Lênin và quản lý kinh tế",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Kinh tế chính trị"
+  },
+  {
+    "maMon": "VKZ",
+    "tenMon": "Tổ chức bảo đảm Vận tải cho KVPT&CD",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Chỉ huy"
+  },
+  {
+    "maMon": "VL",
+    "tenMon": "Vật lý",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Vật lý"
+  },
+  {
+    "maMon": "VL1",
+    "tenMon": "Vật lí đại cương học phần 1",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Vật lý"
+  },
+  {
+    "maMon": "VL2",
+    "tenMon": "Vật lí đại cương học phần 2",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Vật lý"
+  },
+  {
+    "maMon": "VLT1",
+    "tenMon": "Vật lý đại cương và thí nghiệm môn học 1",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Vật lý"
+  },
+  {
+    "maMon": "VLT2",
+    "tenMon": "Vật lý đại cương và thí nghiệm môn học 2",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Vật lý"
+  },
+  {
+    "maMon": "VLX",
+    "tenMon": "Vật liệu xây dựng",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Công nghệ và quản lý xây dựng"
+  },
+  {
+    "maMon": "VLXT",
+    "tenMon": "Vật liệu xây dựng và thí nghiệm môn học",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Công nghệ và quản lý xây dựng"
+  },
+  {
+    "maMon": "VLY1",
+    "tenMon": "Vật lý 1",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Vật lý"
+  },
+  {
+    "maMon": "VLY2",
+    "tenMon": "Vật lý 2",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Vật lý"
+  },
+  {
+    "maMon": "VLĐ",
+    "tenMon": "Vật lý đại cương",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Vật lý"
+  },
+  {
+    "maMon": "VLĐ1",
+    "tenMon": "Vật lý đại cương I",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Vật lý"
+  },
+  {
+    "maMon": "VLĐN",
+    "tenMon": "Vật lý đại cương và thí nghiệm môn học",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Vật lý"
+  },
+  {
+    "maMon": "VM",
+    "tenMon": "Kinh tế vi mô",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Kinh tế"
+  },
+  {
+    "maMon": "VMH",
+    "tenMon": "V.dụng phương pháp luận triết học M.LN trong hậu cần quân sự",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Triết học"
+  },
+  {
+    "maMon": "VMT",
+    "tenMon": "Vệ sinh môi trường an toàn lao động",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Thương phẩm"
+  },
+  {
+    "maMon": "VOT",
+    "tenMon": "Tổ chức Vận tải ôtô",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Tổ chức"
+  },
+  {
+    "maMon": "VPT",
+    "tenMon": "Bảo đảm Vận tải cho khu vực phòng thủ",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Chỉ huy"
+  },
+  {
+    "maMon": "VQS",
+    "tenMon": "Vận tải quân sự",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Chỉ huy"
+  },
+  {
+    "maMon": "VSC",
+    "tenMon": "Vệ sinh MT và ATLĐ cháy nổ",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Phương tiện kỹ thuật xăng dầu"
+  },
+  {
+    "maMon": "VSD",
+    "tenMon": "Vi sinh vật ứng dụng và sinh lý dinh dưỡng",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Thương phẩm"
+  },
+  {
+    "maMon": "VSM",
+    "tenMon": "Công tác an toàn - vệ sinh môi trường",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Phương tiện kỹ thuật xăng dầu"
+  },
+  {
+    "maMon": "VST",
+    "tenMon": "Vi sinh vật và thương phẩm hàng quân nhu",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Thương phẩm"
+  },
+  {
+    "maMon": "VSX",
+    "tenMon": "Vệ sinh MT và ATLĐ trong xây dựng",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "VTC",
+    "tenMon": "Vận tải chiến đấu",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Chỉ huy"
+  },
+  {
+    "maMon": "VTcd",
+    "tenMon": "Công tác Vận tải chiến dịch",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Chỉ huy"
+  },
+  {
+    "maMon": "VTE",
+    "tenMon": "Vận tải bảo đảm eBB chiến đấu",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Chỉ huy"
+  },
+  {
+    "maMon": "VTF",
+    "tenMon": "Tổ chức bảo đảm Vận tải cho fBB chiến đấu",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Chỉ huy"
+  },
+  {
+    "maMon": "VTH",
+    "tenMon": "Viết thu hoạch",
+    "khoa": "Không tên",
+    "boMon": "Không tên"
+  },
+  {
+    "maMon": "VTK",
+    "tenMon": "TC Vận tải bằng PT TSSN, thuỷ NĐ và Đ.sắt",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Tổ chức"
+  },
+  {
+    "maMon": "VTM",
+    "tenMon": "Công tác vận tải TX và CHTM vận tải",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Chỉ huy"
+  },
+  {
+    "maMon": "VTS",
+    "tenMon": "Tổ chức Vận tải bằng phương tiện TSSN",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Tổ chức"
+  },
+  {
+    "maMon": "VTt",
+    "tenMon": "Công tác vận tải bảo đảm tác chiến phòng thủ tỉnh (thành phố)",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Chỉ huy"
+  },
+  {
+    "maMon": "VTĐPQ",
+    "tenMon": "Công tác vận tải QSĐP và KVPT (Quốc tế)",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Chỉ huy"
+  },
+  {
+    "maMon": "VUD",
+    "tenMon": "Vi sinh vật ứng dụng",
+    "khoa": "Khoa Quân nhu",
+    "boMon": "Thương phẩm"
+  },
+  {
+    "maMon": "VXD",
+    "tenMon": "Vẽ kỹ thuật xây dựng",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Kỹ thuật cơ sở"
+  },
+  {
+    "maMon": "VXD1",
+    "tenMon": "Vẽ kỹ thuật xây dựng 1",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Kỹ thuật cơ sở"
+  },
+  {
+    "maMon": "VXD2",
+    "tenMon": "Vẽ kỹ thuật xây dựng 2",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Kỹ thuật cơ sở"
+  },
+  {
+    "maMon": "VĐK",
+    "tenMon": "Tổ chức VT bằng phương tiện VTĐK",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Tổ chức"
+  },
+  {
+    "maMon": "VĐP",
+    "tenMon": "Vận tải quân sự địa phương",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Chỉ huy"
+  },
+  {
+    "maMon": "VĐQ",
+    "tenMon": "Công tác Vận tải chiến đấu, quân sự địa phương",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Chỉ huy"
+  },
+  {
+    "maMon": "VĐS",
+    "tenMon": "Tổ chức Vận tải bằng phương tiện VTĐS",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Tổ chức"
+  },
+  {
+    "maMon": "VĐSN",
+    "tenMon": "Tổ chức vận tải bằng phương tiện đường sắt và thô sơ, sức người",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Tổ chức"
+  },
+  {
+    "maMon": "VĐT",
+    "tenMon": "Vận tải bằng đường thuỷ",
+    "khoa": "Khoa Vận tải",
+    "boMon": "Tổ chức"
+  },
+  {
+    "maMon": "XCD",
+    "tenMon": "Bảo đảm Xăng dầu chiến dịch, chiến lược",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "XCZ",
+    "tenMon": "Công tác bảo đảm Xăng dầu chiến dịch",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "XCĐ",
+    "tenMon": "Công tác bảo đảm Xăng dầu chiến đấu",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "XD",
+    "tenMon": "Xăng dầu nhiên liệu",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Sử dụng"
+  },
+  {
+    "maMon": "XDB",
+    "tenMon": "Bảo đảm Xăng dầu thời bình",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "XDcd",
+    "tenMon": "Bảo đảm Xăng dầu chiến dịch",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "XDo",
+    "tenMon": "Kho Xăng dầu và đường ống Xăng dầu dã chiến",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Phương tiện kỹ thuật xăng dầu"
+  },
+  {
+    "maMon": "XDQ",
+    "tenMon": "Xây dựng và quản lý nhà đất",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Bảo đảm doanh trại"
+  },
+  {
+    "maMon": "XDT",
+    "tenMon": "Công tác Xăng dầu - Doanh trại",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Bảo đảm doanh trại"
+  },
+  {
+    "maMon": "XDU",
+    "tenMon": "Kĩ thuật xây dựng",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "XH",
+    "tenMon": "Xã hội học",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Tâm lý học và giáo dục học Quân sự"
+  },
+  {
+    "maMon": "XHQ",
+    "tenMon": "Xã hội học quân sự",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Tâm lý học và giáo dục học Quân sự"
+  },
+  {
+    "maMon": "XHT",
+    "tenMon": "Xã hội học quân sự và Tâm lý học lãnh đạo, quản lý bộ đội",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Tâm lý học và giáo dục học Quân sự"
+  },
+  {
+    "maMon": "XHĐ",
+    "tenMon": "Xã hội học đại cương",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Tâm lý học và giáo dục học Quân sự"
+  },
+  {
+    "maMon": "XQC",
+    "tenMon": "Bảo đảm Xăng dầu cho QBC&CD",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "XQQ",
+    "tenMon": "Bảo đảm Xăng dầu QBC & QSĐP",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "XS",
+    "tenMon": "Xác suất thống kê",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Toán"
+  },
+  {
+    "maMon": "XST",
+    "tenMon": "Lý thuyết xác suất và thống kê toán học",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Toán"
+  },
+  {
+    "maMon": "XT",
+    "tenMon": "Xưởng kỹ thuật",
+    "khoa": "Phòng Kỹ thuật",
+    "boMon": "Không tên"
+  },
+  {
+    "maMon": "XTX",
+    "tenMon": "Công tác bảo đảm Xăng dầu TX",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "XĐZ",
+    "tenMon": "Bảo đảm Xăng dầu chiến đấu, chiến dịch",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Bảo đảm"
+  },
+  {
+    "maMon": "ZBQ",
+    "tenMon": "HC chiến dịch và HC binh chủng BP",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Hậu cần chiến dịch"
+  },
+  {
+    "maMon": "Đ",
+    "tenMon": "Quân đội nước ngoài",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Binh chủng"
+  },
+  {
+    "maMon": "ĐAK",
+    "tenMon": "Đồ án kiến trúc",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "ĐBT",
+    "tenMon": "Đồ án bê tông cốt thép",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "ĐC",
+    "tenMon": "Địa chất",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "ĐCCT",
+    "tenMon": "Địa chất công trình",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Kỹ thuật cơ sở"
+  },
+  {
+    "maMon": "ĐCH",
+    "tenMon": "Hóa đại cương",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Hóa"
+  },
+  {
+    "maMon": "ĐCL",
+    "tenMon": "Đánh giá trường, chương trình đào tạo",
+    "khoa": "Ban Khảo thí & kiểm định chất lượng Đào tạo",
+    "boMon": "B14"
+  },
+  {
+    "maMon": "ĐCM",
+    "tenMon": "Đường lối cách mạng Việt Nam",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Lịch sử Đảng"
+  },
+  {
+    "maMon": "ĐCN",
+    "tenMon": "Địa chất công trình - cơ học đất - nền móng",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "ĐCP",
+    "tenMon": "Hóa đại cương, hữu cơ, phân tích",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Hóa"
+  },
+  {
+    "maMon": "ĐCT",
+    "tenMon": "Địa chất công trình và thực tập môn học",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "ĐCTT",
+    "tenMon": "Địa chất công trình và thực tập môn học",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "ĐCTX",
+    "tenMon": "Điện công trình",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Bảo đảm doanh trại"
+  },
+  {
+    "maMon": "ĐCĐ",
+    "tenMon": "Đường lối cách mạng của Đảng CSVN",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Lịch sử Đảng"
+  },
+  {
+    "maMon": "ĐGT",
+    "tenMon": "Định giá tài sản",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "ĐH",
+    "tenMon": "Địa hình quân sự",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "ĐHC",
+    "tenMon": "Hóa học đại cương - Hóa hữu cơ",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Hóa"
+  },
+  {
+    "maMon": "ĐHP",
+    "tenMon": "Hóa đại cương, Hóa phân tích",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Hóa"
+  },
+  {
+    "maMon": "ĐHS",
+    "tenMon": "Đại số tuyến tính và hình học giải tích",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Toán"
+  },
+  {
+    "maMon": "ĐKCT",
+    "tenMon": "Cung cấp điện và hệ thống kỹ thuật công trình",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Bảo đảm doanh trại"
+  },
+  {
+    "maMon": "ĐKD",
+    "tenMon": "Tình đoàn kết ba nước Đông dương",
+    "khoa": "Hệ, Tiểu đoàn",
+    "boMon": "NKHOA"
+  },
+  {
+    "maMon": "ĐKT",
+    "tenMon": "Điều khiển kinh tế",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Kinh tế chính trị"
+  },
+  {
+    "maMon": "ĐL",
+    "tenMon": "Điều lệnh",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "ĐLC",
+    "tenMon": "Động lực học công trình",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "ĐLH",
+    "tenMon": "ĐLQS, lịch sử quân sự, lịch sử hậu cần",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Đường lối - Chiến dịch - Lịch sử"
+  },
+  {
+    "maMon": "ĐLK",
+    "tenMon": "Địa lý kinh tế",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Kinh tế chính trị"
+  },
+  {
+    "maMon": "ĐLLD",
+    "tenMon": "Đường lối chiến lược, nghệ thuật chiến dịch",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Đường lối - Chiến dịch - Lịch sử"
+  },
+  {
+    "maMon": "ĐLN",
+    "tenMon": "Đường lối quân sự và quân đội nước ngoài",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Đường lối - Chiến dịch - Lịch sử"
+  },
+  {
+    "maMon": "ĐLQ",
+    "tenMon": "Đường lối QS và Lịch sử nghệ thuật QS",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Đường lối - Chiến dịch - Lịch sử"
+  },
+  {
+    "maMon": "ĐLĐ",
+    "tenMon": "Điều lệnh đội ngũ",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "ĐMQ",
+    "tenMon": "Đấu thầu mua sắm trong quân đội",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "ĐNB",
+    "tenMon": "Đồ án kết cấu nhà bê tông",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "ĐNB2",
+    "tenMon": "Đồ án kết cấu nhà bê tông cốt thép",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "ĐNM",
+    "tenMon": "Đồ án nền và móng",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "ĐNT",
+    "tenMon": "Đồ án kết cấu nhà thép",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "ĐO",
+    "tenMon": "Đường ống dẫn nhiên liệu",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Phương tiện kỹ thuật xăng dầu"
+  },
+  {
+    "maMon": "ĐOX",
+    "tenMon": "Đo lường Xăng dầu",
+    "khoa": "Khoa Xăng dầu",
+    "boMon": "Phương tiện kỹ thuật xăng dầu"
+  },
+  {
+    "maMon": "ĐQB",
+    "tenMon": "Điều lệnh quản lý Bộ đội",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "ĐQS",
+    "tenMon": "Đường lối quân sự",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Đường lối - Chiến dịch - Lịch sử"
+  },
+  {
+    "maMon": "ĐS",
+    "tenMon": "Đại số",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Toán"
+  },
+  {
+    "maMon": "ĐSH",
+    "tenMon": "Đại số tuyến tính và hình học giải tích",
+    "khoa": "Khoa Khoa học cơ bản",
+    "boMon": "Toán"
+  },
+  {
+    "maMon": "ĐTC",
+    "tenMon": "Đầu tư tài chính",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "ĐTC1",
+    "tenMon": "Đồ án kỹ thuật thi công 1",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "ĐTC2",
+    "tenMon": "đồ án kỹ thuật thi công 2",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "Đte",
+    "tenMon": "Đi thực tế đơn vị",
+    "khoa": "Ngoài trường",
+    "boMon": "NGOAIHV"
+  },
+  {
+    "maMon": "ĐTK",
+    "tenMon": "Đề tài khoa học",
+    "khoa": "Khoa Hậu cần chiến dịch",
+    "boMon": "Hậu cần chung"
+  },
+  {
+    "maMon": "ĐTKT",
+    "tenMon": "Đề tài khoa hoc Tài chính",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "ĐTKT2",
+    "tenMon": "Đề tài khoa học Tài chính 2",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Lý luận"
+  },
+  {
+    "maMon": "ĐTM",
+    "tenMon": "Địa hình quân sự, tham mưu chỉ huy",
+    "khoa": "Khoa Quân sự",
+    "boMon": "Quân sự chung"
+  },
+  {
+    "maMon": "ĐTS",
+    "tenMon": "Định giá tài sản",
+    "khoa": "Khoa Tài chính",
+    "boMon": "Tài chính"
+  },
+  {
+    "maMon": "ĐTT",
+    "tenMon": "Thực tập trắc địa",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "ĐTTC",
+    "tenMon": "Đồ án tổ chức thi công xây dựng",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Kỹ thuật xây dựng"
+  },
+  {
+    "maMon": "ĐTX",
+    "tenMon": "Đầu tư xây dựng",
+    "khoa": "Khoa Doanh trại",
+    "boMon": "Công nghệ và QLXD"
+  },
+  {
+    "maMon": "ĐTĐ",
+    "tenMon": "Đường lối cách mạng VN thời kỳ đổi mới",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Lịch sử Đảng"
+  },
+  {
+    "maMon": "ĐVM",
+    "tenMon": "Đường lối cách mạng VN thời kỳ đổi mới",
+    "khoa": "Khoa Công tác Đảng, Công tác Chính trị",
+    "boMon": "Lịch sử Đảng"
+  },
+  {
+    "maMon": "ĐĐH",
+    "tenMon": "Đạo đức học Quân sự",
+    "khoa": "Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh",
+    "boMon": "Triết học"
+  }
+]

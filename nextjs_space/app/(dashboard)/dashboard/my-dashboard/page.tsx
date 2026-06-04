@@ -1,8 +1,13 @@
 /**
  * MY DASHBOARD PAGE – M11 Phase 1
  *
- * Smart landing: redirect user về đúng dashboard theo role.
- * Nếu không redirect được (admin/custom), hiển thị DashboardBuilder.
+ * Dashboard cá nhân: người dùng tự tùy chỉnh widget (DashboardBuilder).
+ * Đây là đích đến của menu "Dashboard Cá nhân", KHÔNG phải smart-landing.
+ *
+ * Lưu ý: việc điều hướng theo role (smart landing) được xử lý ở route
+ * `/dashboard` (sau khi đăng nhập). Không auto-redirect ở đây, nếu không
+ * mọi user (kể cả admin) sẽ bị đá khỏi trang cá nhân ngay khi vừa mở
+ * — admin có positionCode EXECUTIVE sẽ bị đẩy sang /dashboard/command.
  */
 
 'use client'
@@ -16,8 +21,9 @@ import { WIDGET_REGISTRY } from '@/lib/dashboard/widget-registry'
 import { Skeleton } from '@/components/ui/skeleton'
 
 export default function MyDashboardPage() {
-  // M11: redirect về đúng dashboard role – autoRedirect=true
-  const { loading: redirectLoading } = useDashboardRedirect({ autoRedirect: true })
+  // M11: chỉ tải layout/widget của user — KHÔNG auto-redirect theo role.
+  // Trang cá nhân phải hiển thị được cho mọi user (gồm admin), không bị đá đi.
+  const { loading: redirectLoading } = useDashboardRedirect({ autoRedirect: false })
 
   const { permissions, isAdmin, isLoading: permLoading } = usePermissions()
   const { initializeLayout, currentLayout } = useDashboardStore()

@@ -8,6 +8,8 @@
  */
 
 import { PrismaClient } from '@prisma/client';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 import 'dotenv/config';
 
 const prisma = new PrismaClient();
@@ -19,6 +21,12 @@ interface UnitDef {
   level: number;
   parentCode?: string;
   description?: string;
+}
+
+interface BoMonDef {
+  code: string;
+  name: string;
+  parentKhoaCode: string;
 }
 
 // ============================================================
@@ -48,17 +56,19 @@ const UNITS: UnitDef[] = [
   { code: 'B12', name: 'Viện Nghiên cứu Khoa học Hậu cần quân sự',        type: 'VIEN',  level: 2, parentCode: 'HVHC', description: 'Nghiên cứu khoa học hậu cần quân sự' },
   { code: 'B13', name: 'Tạp chí Nghiên cứu Khoa học Hậu cần quân sự',    type: 'BAN',   level: 2, parentCode: 'HVHC', description: 'Xuất bản tạp chí khoa học' },
   { code: 'B14', name: 'Ban Khảo thí & Đảm bảo chất lượng GD-ĐT',       type: 'BAN',   level: 2, parentCode: 'HVHC', description: 'Quản lý khảo thí, kiểm định chất lượng đào tạo' },
+  { code: 'PKT', name: 'Phòng Kỹ thuật',                                  type: 'PHONG', level: 2, parentCode: 'HVHC', description: 'Phụ trách một số môn kỹ thuật chuyên ngành' },
 
   // ── Level 2: Khoa ──────────────────────────────────────────
-  { code: 'K1',  name: 'Khoa Chỉ huy Hậu cần',                            type: 'KHOA', level: 2, parentCode: 'HVHC' },
+  // Tên Khoa khớp đúng dữ liệu thật (danh mục môn học HVHC) để lookup theo tên hoạt động.
+  { code: 'K1',  name: 'Khoa Chỉ huy hậu cần',                            type: 'KHOA', level: 2, parentCode: 'HVHC' },
   { code: 'K2',  name: 'Khoa Quân nhu',                                    type: 'KHOA', level: 2, parentCode: 'HVHC' },
   { code: 'K3',  name: 'Khoa Vận tải',                                     type: 'KHOA', level: 2, parentCode: 'HVHC' },
   { code: 'K4',  name: 'Khoa Xăng dầu',                                    type: 'KHOA', level: 2, parentCode: 'HVHC' },
   { code: 'K5',  name: 'Khoa Doanh trại',                                  type: 'KHOA', level: 2, parentCode: 'HVHC' },
   { code: 'K6',  name: 'Khoa Tài chính',                                   type: 'KHOA', level: 2, parentCode: 'HVHC' },
   { code: 'K7',  name: 'Khoa Quân sự',                                     type: 'KHOA', level: 2, parentCode: 'HVHC' },
-  { code: 'K8',  name: 'Khoa Lý luận Mác-Lênin',                          type: 'KHOA', level: 2, parentCode: 'HVHC' },
-  { code: 'K9',  name: 'Khoa Công tác Đảng - Công tác Chính trị',         type: 'KHOA', level: 2, parentCode: 'HVHC', description: 'Giảng dạy lý luận CTCT cho học viên' },
+  { code: 'K8',  name: 'Khoa Lý luận Mác-Lênin, Tư tưởng Hồ Chí Minh',    type: 'KHOA', level: 2, parentCode: 'HVHC' },
+  { code: 'K9',  name: 'Khoa Công tác Đảng, Công tác Chính trị',          type: 'KHOA', level: 2, parentCode: 'HVHC', description: 'Giảng dạy lý luận CTCT cho học viên' },
   { code: 'K10', name: 'Khoa Khoa học cơ bản',                             type: 'KHOA', level: 2, parentCode: 'HVHC' },
   { code: 'K11', name: 'Khoa Ngoại ngữ',                                   type: 'KHOA', level: 2, parentCode: 'HVHC' },
   { code: 'K14', name: 'Khoa Hậu cần chiến dịch',                         type: 'KHOA', level: 2, parentCode: 'HVHC' },
@@ -76,24 +86,8 @@ const UNITS: UnitDef[] = [
   { code: 'TD4', name: 'Tiểu đoàn 4', type: 'TIEUDOAN', level: 2, parentCode: 'HVHC', description: 'Tiểu đoàn học viên cử nhân 4' },
 
   // ── Level 3: Bộ môn (dưới Khoa) ───────────────────────────
-  { code: 'BM_K1_1',  name: 'Bộ môn Chỉ huy Hậu cần chiến đấu',  type: 'BOMON', level: 3, parentCode: 'K1' },
-  { code: 'BM_K1_2',  name: 'Bộ môn Tham mưu Hậu cần',            type: 'BOMON', level: 3, parentCode: 'K1' },
-  { code: 'BM_K2_1',  name: 'Bộ môn Kỹ thuật Quân nhu',           type: 'BOMON', level: 3, parentCode: 'K2' },
-  { code: 'BM_K2_2',  name: 'Bộ môn Bảo đảm Quân nhu',            type: 'BOMON', level: 3, parentCode: 'K2' },
-  { code: 'BM_K3_1',  name: 'Bộ môn Chỉ huy Vận tải',             type: 'BOMON', level: 3, parentCode: 'K3' },
-  { code: 'BM_K3_2',  name: 'Bộ môn Kỹ thuật Vận tải',            type: 'BOMON', level: 3, parentCode: 'K3' },
-  { code: 'BM_K4_1',  name: 'Bộ môn Kỹ thuật Xăng dầu',           type: 'BOMON', level: 3, parentCode: 'K4' },
-  { code: 'BM_K5_1',  name: 'Bộ môn Doanh trại quân đội',          type: 'BOMON', level: 3, parentCode: 'K5' },
-  { code: 'BM_K6_1',  name: 'Bộ môn Kế toán Tài chính',            type: 'BOMON', level: 3, parentCode: 'K6' },
-  { code: 'BM_K6_2',  name: 'Bộ môn Kinh tế Tài chính',            type: 'BOMON', level: 3, parentCode: 'K6' },
-  { code: 'BM_K7_1',  name: 'Bộ môn Huấn luyện thể lực',           type: 'BOMON', level: 3, parentCode: 'K7' },
-  { code: 'BM_K7_2',  name: 'Bộ môn Chiến thuật quân sự',          type: 'BOMON', level: 3, parentCode: 'K7' },
-  { code: 'BM_K8_1',  name: 'Bộ môn Triết học Mác-Lênin',          type: 'BOMON', level: 3, parentCode: 'K8' },
-  { code: 'BM_K9_1',  name: 'Bộ môn Công tác Đảng',                type: 'BOMON', level: 3, parentCode: 'K9' },
-  { code: 'BM_K10_1', name: 'Bộ môn Toán – Tin học',               type: 'BOMON', level: 3, parentCode: 'K10' },
-  { code: 'BM_K10_2', name: 'Bộ môn Vật lý – Hóa học',             type: 'BOMON', level: 3, parentCode: 'K10' },
-  { code: 'BM_K11_1', name: 'Bộ môn Tiếng Anh',                    type: 'BOMON', level: 3, parentCode: 'K11' },
-  { code: 'BM_K14_1', name: 'Bộ môn Hậu cần chiến dịch',           type: 'BOMON', level: 3, parentCode: 'K14' },
+  // Bộ môn thật được nạp từ prisma/seed/data/bo_mon_hvhc.json (sinh từ danh mục
+  // môn học HVHC bằng scripts/build_mon_hoc_data.py) và nối vào ALL_UNITS bên dưới.
 
   // ── Level 3: Lớp dưới Hệ ──────────────────────────────────
   { code: 'LOP_HE1_1', name: 'Lớp Cao học 1',           type: 'LOP', level: 3, parentCode: 'HE1', description: 'Lớp cao học chuyên ngành HC-KT' },
@@ -123,6 +117,24 @@ const UNITS: UnitDef[] = [
   { code: 'LOP_TD2_DD1_1', name: 'Lớp CN 1 – Đại đội 1/TD2', type: 'LOP', level: 4, parentCode: 'DD_TD2_1' },
   { code: 'LOP_TD2_DD1_2', name: 'Lớp CN 2 – Đại đội 1/TD2', type: 'LOP', level: 4, parentCode: 'DD_TD2_1' },
 ];
+
+// ============================================================
+// BỘ MÔN THẬT (nạp từ dữ liệu danh mục môn học HVHC)
+// ============================================================
+const BO_MON: BoMonDef[] = JSON.parse(
+  readFileSync(join(__dirname, 'data', 'bo_mon_hvhc.json'), 'utf-8'),
+);
+
+const BO_MON_UNITS: UnitDef[] = BO_MON.map((b) => ({
+  code: b.code,
+  name: b.name,
+  type: 'BOMON',
+  level: 3,
+  parentCode: b.parentKhoaCode,
+}));
+
+// Toàn bộ cây tổ chức = đơn vị cố định + Bộ môn thật từ dữ liệu
+const ALL_UNITS: UnitDef[] = [...UNITS, ...BO_MON_UNITS];
 
 // ============================================================
 // XÓA DATA CŨ
@@ -193,7 +205,7 @@ async function seedUnits() {
   let created = 0;
 
   // Sort by level (parents first)
-  const sorted = [...UNITS].sort((a, b) => a.level - b.level);
+  const sorted = [...ALL_UNITS].sort((a, b) => a.level - b.level);
 
   for (const def of sorted) {
     let parentId: string | null = null;
@@ -224,7 +236,7 @@ async function seedUnits() {
     console.log(`${indent}  ✅ [${def.code}] ${def.name}`);
   }
 
-  console.log(`\n  Tổng tạo mới: ${created}/${UNITS.length} units`);
+  console.log(`\n  Tổng tạo mới: ${created}/${ALL_UNITS.length} units`);
   return codeToId;
 }
 
