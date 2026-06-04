@@ -13,7 +13,10 @@
     "seed:units": "tsx --require dotenv/config prisma/seed/seed_units.ts",
     "seed:commanders": "tsx --require dotenv/config prisma/seed/assign_commanders.ts",
     "seed:councils-test": "tsx --require dotenv/config prisma/seed/seed_councils_test.ts",
-    "seed:council-full": "tsx --require dotenv/config prisma/seed/seed_council_test_full.ts"
+    "seed:council-full": "tsx --require dotenv/config prisma/seed/seed_council_test_full.ts",
+    "seed:managed": "tsx --require dotenv/config prisma/seeds/index.ts all",
+    "seed:required": "tsx --require dotenv/config prisma/seeds/index.ts required",
+    "seed:step": "tsx --require dotenv/config prisma/seeds/index.ts"
   },
   "prisma": {
     "seed": "tsx --require dotenv/config scripts/seed.ts"

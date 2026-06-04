@@ -1,0 +1,74 @@
+# HVHC BigData Management - LOCAL DEV Infrastructure
+# Chỉ chạy services hạ tầng, khớp credentials với nextjs_space/.env
+version: '3.8'
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg15
+    container_name: hvhc_postgres_dev
+    environment:
+      POSTGRES_DB: hvhc_bigdata_89
+      POSTGRES_USER: ductuking
+      POSTGRES_PASSWORD: "Hv@2026"
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    networks:
+      - hvhc_dev_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ductuking -d hvhc_bigdata_89"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: hvhc_redis_dev
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_dev_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - hvhc_dev_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  minio:
+    image: minio/minio:latest
+    container_name: hvhc_minio_dev
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minio_admin
+      MINIO_ROOT_PASSWORD: minio_secure_2024
+    volumes:
+      - minio_dev_data:/data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    networks:
+      - hvhc_dev_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+networks:
+  hvhc_dev_network:
+    driver: bridge
+
+volumes:
+  postgres_dev_data:
+    driver: local
+  redis_dev_data:
+    driver: local
+  minio_dev_data:
+    driver: local
