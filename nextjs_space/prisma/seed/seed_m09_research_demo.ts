@@ -768,7 +768,7 @@ async function main() {
       impactFactor: 7.19,
       ranking: 'Q1',
       citationCount: 1,
-      status: NckhPublicationStatus.IN_REVIEW,
+      status: NckhPublicationStatus.SUBMITTED,
       authorsText: scientists[1]?.name + ', ' + scientists[3]?.name,
       abstract: 'This paper proposes a federated learning framework for military logistics analytics that preserves data privacy while enabling collaborative model training...',
       keywords: ['federated learning', 'privacy', 'military analytics'],

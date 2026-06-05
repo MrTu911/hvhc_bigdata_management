@@ -17,7 +17,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireFunction, sessionToAuthUser } from '@/lib/rbac/middleware';
 import { WORKFLOW } from '@/lib/rbac/function-codes';
 import { getAccessibleUnitIds } from '@/lib/rbac/scope';
-import { FunctionScope } from '@prisma/client';
+import { FunctionScope, Prisma } from '@prisma/client';
 import prisma from '@/lib/db';
 import { WorkflowInstanceStatus } from '@prisma/client';
 import { getServerSession } from 'next-auth';
@@ -63,14 +63,14 @@ export async function GET(request: NextRequest) {
     const userIdSet = usersInScope.map((u) => u.id);
 
     // Build where clause
-    const where: Parameters<typeof prisma.workflowInstance.findMany>[0]['where'] = {
+    const where: Prisma.WorkflowInstanceWhereInput = {
       initiatorId: { in: userIdSet },
       ...(statusFilter ? { status: statusFilter } : {}),
       ...(entityType ? { entityType } : {}),
       ...(keyword ? { title: { contains: keyword, mode: 'insensitive' } } : {}),
     };
 
-    const [total, items] = await Promise.all([
+    const [total, rows] = await Promise.all([
       prisma.workflowInstance.count({ where }),
       prisma.workflowInstance.findMany({
         where,
@@ -84,7 +84,6 @@ export async function GET(request: NextRequest) {
           initiatorId: true,
           currentAssigneeId: true,
           startedAt: true,
-          dueAt: true,
           completedAt: true,
         },
         orderBy: [
@@ -95,6 +94,10 @@ export async function GET(request: NextRequest) {
         take: pageSize,
       }),
     ]);
+
+    // WorkflowInstance không có field dueAt (SLA/deadline nằm ở WorkflowStepInstance).
+    // Giữ key dueAt = null để bảo toàn contract response cho UI dashboard.
+    const items = rows.map((row) => ({ ...row, dueAt: null }));
 
     return NextResponse.json({
       success: true,

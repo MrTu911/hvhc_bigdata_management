@@ -14,9 +14,27 @@ import { requireFunction } from '@/lib/rbac/middleware'
 import { DASHBOARD } from '@/lib/rbac/function-codes'
 import { getRoleTemplate, getUserLayout, logDashboardAccess } from '@/lib/repositories/dashboard/dashboard-layout.repo'
 import { getWidgetsByRole } from '@/lib/dashboard/widget-registry'
+import prisma from '@/lib/db'
 import type { DashboardRoleKey } from '@prisma/client'
 
 export const dynamic = 'force-dynamic'
+
+/**
+ * Lấy mã chức vụ chính (primary position) của user từ RBAC UserPosition.
+ * AuthUser (session) không mang sẵn primaryPositionCode nên cần truy vấn DB.
+ */
+async function getPrimaryPositionCode(userId: string): Promise<string | null> {
+  const userPositions = await prisma.userPosition.findMany({
+    where: { userId, isActive: true },
+    select: { isPrimary: true, position: { select: { code: true } } },
+    orderBy: { isPrimary: 'desc' },
+  })
+
+  if (userPositions.length === 0) return null
+
+  const primary = userPositions.find((up) => up.isPrimary) ?? userPositions[0]
+  return primary.position.code
+}
 
 const EXECUTIVE_POSITIONS = new Set([
   'PHO_GIAM_DOC', 'GIAM_DOC', 'CHINH_UY', 'PHO_CHINH_UY', 'SYSTEM_ADMIN',
@@ -76,7 +94,8 @@ export async function GET(request: NextRequest) {
     if (!authResult.allowed) return authResult.response!
 
     const user = authResult.user!
-    const dashboardKey = resolveDashboardRoleKey(user.primaryPositionCode, user.role)
+    const primaryPositionCode = await getPrimaryPositionCode(user.id)
+    const dashboardKey = resolveDashboardRoleKey(primaryPositionCode, user.role)
 
     // Layout ưu tiên: user layout → role template → generated default
     const [template, userLayout] = await Promise.all([

@@ -243,10 +243,12 @@ async function calcMentoring(
 async function calcService(
   facultyProfileId: string,
 ): Promise<{ score: number; source: EISSourceData['service'] }> {
+  // "Đang dạy trong kỳ" = lớp học phần đang mở hoặc đang diễn ra
+  // (đồng bộ với faculty-profile360.service: OPEN + IN_PROGRESS).
   const activeSections = await db.classSection.count({
     where: {
       facultyId: facultyProfileId,
-      status: ClassSectionStatus.ACTIVE,
+      status: { in: [ClassSectionStatus.OPEN, ClassSectionStatus.IN_PROGRESS] },
     },
   });
 

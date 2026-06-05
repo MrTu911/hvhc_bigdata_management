@@ -18,6 +18,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { RestoreVerifyStatus } from '@prisma/client';
 import { verifyCronSecret } from '@/lib/cron/verify-cron-secret';
 import {
   updateRestoreJobStatus,
@@ -26,7 +27,12 @@ import {
 
 type RestoreEvent = 'started' | 'completed' | 'failed';
 
-const VALID_VERIFY_STATUSES = new Set(['VERIFIED_OK', 'VERIFIED_PARTIAL', 'VERIFICATION_FAILED', 'NOT_VERIFIED']);
+// Valid values derived from the RestoreVerifyStatus enum (source of truth).
+const VALID_VERIFY_STATUSES = new Set<string>(Object.values(RestoreVerifyStatus));
+
+function isRestoreVerifyStatus(value: string): value is RestoreVerifyStatus {
+  return VALID_VERIFY_STATUSES.has(value);
+}
 
 export async function POST(req: NextRequest) {
   if (!verifyCronSecret(req)) {
@@ -76,18 +82,18 @@ export async function POST(req: NextRequest) {
     await updateRestoreJobStatus(restoreJobId, 'COMPLETED');
 
     if (body.verificationStatus) {
-      if (!VALID_VERIFY_STATUSES.has(body.verificationStatus)) {
+      if (!isRestoreVerifyStatus(body.verificationStatus)) {
         return NextResponse.json(
           {
             success: false,
-            error:   'verificationStatus must be VERIFIED_OK|VERIFIED_PARTIAL|VERIFICATION_FAILED|NOT_VERIFIED',
+            error:   'verificationStatus must be NOT_VERIFIED|VERIFIED_OK|VERIFIED_FAILED',
           },
           { status: 400 },
         );
       }
       await verifyRestoreJob({
         restoreJobId,
-        verificationStatus: body.verificationStatus as 'VERIFIED_OK' | 'VERIFIED_PARTIAL' | 'VERIFICATION_FAILED' | 'NOT_VERIFIED',
+        verificationStatus: body.verificationStatus,
         verificationNote:   body.verificationNote,
       });
     }

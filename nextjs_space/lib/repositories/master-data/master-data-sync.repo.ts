@@ -3,6 +3,15 @@
  * Data access only. No business logic.
  */
 import db from '@/lib/db'
+import { MdSyncStatus } from '@prisma/client'
+
+/**
+ * Chuẩn hóa syncStatus (string từ service) về enum MdSyncStatus tại ranh giới ghi DB.
+ * Giá trị không hợp lệ → FAILED (fail-safe, không bao giờ ghi enum sai vào DB).
+ */
+function toMdSyncStatus(value: string): MdSyncStatus {
+  return value in MdSyncStatus ? (MdSyncStatus[value as keyof typeof MdSyncStatus]) : MdSyncStatus.FAILED
+}
 
 export type SyncLogRow = {
   id: string
@@ -139,7 +148,7 @@ export async function createSyncLog(input: CreateSyncLogInput): Promise<SyncLogR
     data: {
       categoryCode: input.categoryCode,
       syncSource: input.syncSource,
-      syncStatus: input.syncStatus,
+      syncStatus: toMdSyncStatus(input.syncStatus),
       addedCount: input.addedCount ?? 0,
       updatedCount: input.updatedCount ?? 0,
       deactivatedCount: input.deactivatedCount ?? 0,

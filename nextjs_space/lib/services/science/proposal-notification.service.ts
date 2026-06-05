@@ -102,13 +102,24 @@ async function resolveRecipients(
   const piEvents: ProposalEvent[] = ['REVISION_REQUESTED', 'UNIT_APPROVED', 'DEPT_APPROVED', 'APPROVED', 'REJECTED']
   if (piEvents.includes(event)) return [piId]
 
-  // SUBMITTED: tìm user có APPROVE_RESEARCH_DEPT trong cùng unit
+  // SUBMITTED: tìm user có APPROVE_RESEARCH_DEPT trong cùng unit.
+  // Quyền là position-based: User → UserPosition → Position → PositionFunction → Function.code
   if (event === 'SUBMITTED' && unitId) {
     const approvers = await prisma.user.findMany({
       where: {
         unitId,
-        userFunctions: {
-          some: { functionCode: 'APPROVE_RESEARCH_DEPT', isActive: true },
+        userPositions: {
+          some: {
+            isActive: true,
+            position: {
+              functions: {
+                some: {
+                  isActive: true,
+                  function: { code: 'APPROVE_RESEARCH_DEPT' },
+                },
+              },
+            },
+          },
         },
       },
       select: { id: true },

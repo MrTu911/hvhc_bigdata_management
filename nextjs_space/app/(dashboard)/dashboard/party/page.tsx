@@ -223,14 +223,6 @@ export default function PartyDashboardPage() {
           }
         />
 
-              size="sm"
-              variant="outline"
-              className="border-white/30 bg-white/10 text-white hover:bg-white/20 ml-auto"
-              onClick={fetchStats}
-            >
-              <RefreshCw className="h-4 w-4 mr-1.5" /> Làm mới
-            </Button>
-          </div>
         {/* ── Error banner ────────────────────────────────────────────────── */}
         {error && (
           <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 flex items-center gap-3 text-red-700">

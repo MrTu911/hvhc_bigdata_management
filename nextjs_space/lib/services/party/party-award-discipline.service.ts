@@ -74,8 +74,8 @@ export const PartyAwardDisciplineService = {
     const { items, total } = await PartyAwardRepo.findMany({
       partyMemberId: filters.partyMemberId,
       search: filters.search,
-      dateFrom: filters.dateFrom,
-      dateTo: filters.dateTo,
+      dateFrom: filters.dateFrom ? new Date(filters.dateFrom) : undefined,
+      dateTo: filters.dateTo ? new Date(filters.dateTo) : undefined,
       page,
       limit,
     });
@@ -106,11 +106,11 @@ export const PartyAwardDisciplineService = {
     return PartyAwardRepo.create({
       partyMemberId: payload.partyMemberId,
       title: payload.title.trim(),
-      decisionNo: payload.decisionNo ?? null,
-      decisionDate: payload.decisionDate ? new Date(payload.decisionDate) : null,
-      issuer: payload.issuer ?? null,
-      note: payload.note ?? null,
-      attachmentUrl: payload.attachmentUrl ?? null,
+      decisionNo: payload.decisionNo ?? undefined,
+      decisionDate: payload.decisionDate ? new Date(payload.decisionDate) : undefined,
+      issuer: payload.issuer ?? undefined,
+      note: payload.note ?? undefined,
+      attachmentUrl: payload.attachmentUrl ?? undefined,
     });
   },
 
@@ -152,8 +152,8 @@ export const PartyAwardDisciplineService = {
     const { items, total } = await PartyDisciplineRepo.findMany({
       partyMemberId: filters.partyMemberId,
       severity: filters.severity,
-      dateFrom: filters.dateFrom,
-      dateTo: filters.dateTo,
+      dateFrom: filters.dateFrom ? new Date(filters.dateFrom) : undefined,
+      dateTo: filters.dateTo ? new Date(filters.dateTo) : undefined,
       page,
       limit,
     });
@@ -194,12 +194,12 @@ export const PartyAwardDisciplineService = {
     const created = await PartyDisciplineRepo.create({
       partyMemberId: payload.partyMemberId,
       severity: payload.severity,
-      decisionNo: payload.decisionNo ?? null,
-      decisionDate: payload.decisionDate ? new Date(payload.decisionDate) : null,
-      expiryDate: payload.expiryDate ? new Date(payload.expiryDate) : null,
-      issuer: payload.issuer ?? null,
-      reason: payload.reason ?? null,
-      attachmentUrl: payload.attachmentUrl ?? null,
+      decisionNo: payload.decisionNo ?? undefined,
+      decisionDate: payload.decisionDate ? new Date(payload.decisionDate) : undefined,
+      expiryDate: payload.expiryDate ? new Date(payload.expiryDate) : undefined,
+      issuer: payload.issuer ?? undefined,
+      reason: payload.reason ?? undefined,
+      attachmentUrl: payload.attachmentUrl ?? undefined,
     });
 
     // Note: KHAI_TRU_KHOI_DANG connection is intentionally left as a TODO above.

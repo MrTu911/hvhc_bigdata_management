@@ -37,8 +37,8 @@ export async function listPOs(filters: {
       orderBy: { orderDate: 'desc' },
       include: {
         project: { select: { id: true, projectCode: true, title: true } },
-        createdBy: { select: { id: true, fullName: true } },
-        approvedBy: { select: { id: true, fullName: true } },
+        createdBy: { select: { id: true, name: true } },
+        approvedBy: { select: { id: true, name: true } },
         _count: { select: { items: true } },
       },
     }),
@@ -58,8 +58,8 @@ export async function getPO(id: string) {
     where: { id },
     include: {
       project: { select: { id: true, projectCode: true, title: true } },
-      createdBy: { select: { id: true, fullName: true } },
-      approvedBy: { select: { id: true, fullName: true } },
+      createdBy: { select: { id: true, name: true } },
+      approvedBy: { select: { id: true, name: true } },
       items: true,
     },
   })
@@ -212,8 +212,8 @@ export async function listInvoices(filters: {
       include: {
         project: { select: { id: true, projectCode: true, title: true } },
         po: { select: { id: true, poNumber: true } },
-        createdBy: { select: { id: true, fullName: true } },
-        paidBy: { select: { id: true, fullName: true } },
+        createdBy: { select: { id: true, name: true } },
+        paidBy: { select: { id: true, name: true } },
       },
     }),
     prisma.nckhInvoice.count({ where }),
@@ -229,8 +229,8 @@ export async function getInvoice(id: string) {
     include: {
       project: { select: { id: true, projectCode: true, title: true } },
       po: { select: { id: true, poNumber: true } },
-      createdBy: { select: { id: true, fullName: true } },
-      paidBy: { select: { id: true, fullName: true } },
+      createdBy: { select: { id: true, name: true } },
+      paidBy: { select: { id: true, name: true } },
       items: true,
     },
   })
@@ -347,8 +347,8 @@ export async function listExpenses(filters: {
       orderBy: { expenseDate: 'desc' },
       include: {
         project: { select: { id: true, projectCode: true, title: true } },
-        submittedBy: { select: { id: true, fullName: true } },
-        approvedBy: { select: { id: true, fullName: true } },
+        submittedBy: { select: { id: true, name: true } },
+        approvedBy: { select: { id: true, name: true } },
       },
     }),
     prisma.nckhExpense.count({ where }),
@@ -367,8 +367,8 @@ export async function getExpense(id: string) {
     where: { id },
     include: {
       project: { select: { id: true, projectCode: true, title: true } },
-      submittedBy: { select: { id: true, fullName: true } },
-      approvedBy: { select: { id: true, fullName: true } },
+      submittedBy: { select: { id: true, name: true } },
+      approvedBy: { select: { id: true, name: true } },
     },
   })
   if (!exp) return null
@@ -445,7 +445,7 @@ export async function listGrants(filters: {
       orderBy: { createdAt: 'desc' },
       include: {
         project: { select: { id: true, projectCode: true, title: true } },
-        createdBy: { select: { id: true, fullName: true } },
+        createdBy: { select: { id: true, name: true } },
         _count: { select: { disbursements: true } },
       },
     }),
@@ -465,7 +465,7 @@ export async function getGrant(id: string) {
     where: { id },
     include: {
       project: { select: { id: true, projectCode: true, title: true } },
-      createdBy: { select: { id: true, fullName: true } },
+      createdBy: { select: { id: true, name: true } },
       disbursements: { orderBy: { disbursementDate: 'desc' } },
     },
   })

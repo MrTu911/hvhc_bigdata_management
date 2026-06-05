@@ -52,7 +52,8 @@ export async function POST(request: NextRequest) {
   const hashedNew = await bcrypt.hash(newPassword, 10);
   await prisma.user.update({
     where: { id: user.id },
-    data: { password: hashedNew },
+    // Đổi mật khẩu xong thì gỡ cờ buộc đổi (nếu có)
+    data: { password: hashedNew, mustChangePassword: false },
   });
 
   return NextResponse.json({ success: true, message: 'Đổi mật khẩu thành công' });

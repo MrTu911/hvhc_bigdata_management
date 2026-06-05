@@ -20,10 +20,7 @@ import { libraryUploadMetaSchema, ALLOWED_MIME_TYPES, MAX_FILE_SIZE_BYTES } from
 
 export const runtime = 'nodejs'
 
-// Next.js 14: disable default body parser để đọc multipart
-export const config = {
-  api: { bodyParser: false },
-}
+// App Router route handler đọc multipart trực tiếp qua req.formData() — không cần bodyParser config.
 
 export async function POST(req: NextRequest) {
   const auth = await requireFunction(req, SCIENCE.LIBRARY_UPLOAD)

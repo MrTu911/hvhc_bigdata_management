@@ -5,7 +5,11 @@ export default defineConfig({
   test: {
     environment: 'node',
     globals: true,
-    include: ['lib/**/__tests__/**/*.test.ts', 'app/**/__tests__/**/*.test.ts'],
+    include: [
+      'lib/**/__tests__/**/*.test.ts',
+      'app/**/__tests__/**/*.test.ts',
+      'hooks/**/__tests__/**/*.test.ts',
+    ],
     coverage: {
       provider: 'v8',
       include: [

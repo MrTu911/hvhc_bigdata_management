@@ -11,6 +11,7 @@ import { z } from 'zod';
 
 const createScheduleSchema = z.object({
   templateId: z.string().uuid(),
+  entityType: z.enum(['personnel', 'student', 'party_member', 'faculty']),
   filterJson: z.record(z.unknown()).optional().default({}),
   cronExpression: z.string().min(5).max(100),
   outputFormat: z.enum(['PDF', 'DOCX', 'XLSX']),
@@ -107,6 +108,7 @@ export async function POST(request: NextRequest) {
     const schedule = await prisma.templateSchedule.create({
       data: {
         templateId: validated.data.templateId,
+        entityType: validated.data.entityType,
         filterJson: validated.data.filterJson as object,
         cronExpression: validated.data.cronExpression,
         outputFormat: validated.data.outputFormat,

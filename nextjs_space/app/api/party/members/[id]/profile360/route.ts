@@ -49,11 +49,6 @@ export async function GET(
     return NextResponse.json({
       success: true,
       data: responseData,
-      meta: {
-        boundaries: Object.fromEntries(
-          Object.entries(responseData.boundaries).map(([key, value]) => [key, value.status]),
-        ),
-      },
     });
   } catch (error) {
     return NextResponse.json(

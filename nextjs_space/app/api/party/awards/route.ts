@@ -26,7 +26,12 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ success: false, error: parsed.error.issues.map(i => i.message).join('; ') }, { status: 400 });
     }
 
-    const result = await PartyAwardDisciplineService.listAwards(parsed.data);
+    // Chuẩn hóa null → undefined để khớp contract AwardListFilters của service.
+    const result = await PartyAwardDisciplineService.listAwards({
+      ...parsed.data,
+      dateFrom: parsed.data.dateFrom ?? undefined,
+      dateTo: parsed.data.dateTo ?? undefined,
+    });
 
     await logAudit({
       userId: authResult.user!.id,
@@ -55,7 +60,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: parsed.error.issues.map(i => i.message).join('; ') }, { status: 400 });
     }
 
-    const created = await PartyAwardDisciplineService.createAward(parsed.data);
+    // Chuẩn hóa null → undefined để khớp contract AwardCreatePayload của service.
+    const created = await PartyAwardDisciplineService.createAward({
+      ...parsed.data,
+      decisionNo: parsed.data.decisionNo ?? undefined,
+      decisionDate: parsed.data.decisionDate ?? undefined,
+      issuer: parsed.data.issuer ?? undefined,
+      note: parsed.data.note ?? undefined,
+      attachmentUrl: parsed.data.attachmentUrl ?? undefined,
+    });
 
     await logAudit({
       userId: authResult.user!.id,

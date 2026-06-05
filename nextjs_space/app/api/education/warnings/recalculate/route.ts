@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
       resolvedBy: user!.id,
     });
 
-    if ('error' in result && result.error === 'NOT_FOUND') {
+    if ('error' in result) {
       return NextResponse.json({ success: false, error: 'Không tìm thấy học viên' }, { status: 404 });
     }
 

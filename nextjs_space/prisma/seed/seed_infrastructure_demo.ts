@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
@@ -165,7 +165,7 @@ async function seedInfrastructure() {
   });
 
   // Seed sync logs cho NAS chính
-  const syncLogsData = [
+  const syncLogsData: Prisma.SyncLogUncheckedCreateInput[] = [
     {
       configId: nas1.id,
       syncType: 'SCHEDULED',

@@ -23,7 +23,6 @@ import {
   type PublicationExportRow,
 } from '@/lib/utils/publication-exporter'
 import { scientistProfileService } from './scientist-profile.service'
-import { onPublicationPublished } from './science/eis-publication-hook.service'
 
 class NckhPublicationServiceClass extends BaseService {
   protected readonly resourceType = 'NCKH_PUBLICATION'
@@ -156,18 +155,15 @@ class NckhPublicationServiceClass extends BaseService {
       }
       const { publicationAuthors, ...fields } = parsed.data
 
-      const updated = await nckhPublicationRepo.update(id, {
+      await nckhPublicationRepo.update(id, {
         ...fields,
         publishedAt: fields.publishedAt ? new Date(fields.publishedAt) : undefined,
         patentGrantDate: fields.patentGrantDate ? new Date(fields.patentGrantDate) : undefined,
       })
 
-      // Fire-and-forget EIS update when status transitions to PUBLISHED
-      if (fields.status === 'PUBLISHED' && pub.status !== 'PUBLISHED') {
-        void onPublicationPublished(id, pub.authorId).catch((err) =>
-          console.error('[NckhPublicationService] EIS hook failed:', err)
-        )
-      }
+      // Lưu ý: chuyển trạng thái sang PUBLISHED (và EIS hook onPublicationPublished)
+      // được xử lý ở luồng review/duyệt công bố (app/api/research/publications/[id]/review).
+      // updatePublication chỉ cập nhật metadata, không đổi status nên không gọi EIS hook ở đây.
 
       // Nếu có danh sách tác giả mới → thay thế toàn bộ
       if (publicationAuthors !== undefined) {

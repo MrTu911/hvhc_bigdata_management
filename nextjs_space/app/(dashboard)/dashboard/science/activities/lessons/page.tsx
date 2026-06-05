@@ -62,7 +62,7 @@ export default function LessonsPage() {
         })
       );
       setLessons(allLessons.sort((a, b) => {
-        const order = { HIGH: 0, MEDIUM: 1, LOW: 2 };
+        const order: Record<string, number> = { HIGH: 0, MEDIUM: 1, LOW: 2 };
         return (order[a.impact] ?? 3) - (order[b.impact] ?? 3);
       }));
     } catch { toast.error('Lỗi kết nối'); }

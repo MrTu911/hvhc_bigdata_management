@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
   Users, Search, ChevronRight, UserCheck, Clock,
@@ -318,7 +317,10 @@ export default function PartyMembersPage() {
 
                     {/* Mobile status pill */}
                     <div className="flex items-center justify-between md:hidden">
-                      <Badge className={`${sc.badgeClass} border text-[11px] font-semibold`}>{sc.label}</Badge>
+                      <StatusBadge
+                        status={getMemberStatusVariant(m.status)}
+                        label={getMemberStatusLabel(m.status)}
+                      />
                       <span className="text-xs text-gray-400">{fmtDate(m.joinDate)}</span>
                     </div>
 

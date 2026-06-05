@@ -12,6 +12,7 @@
  */
 
 import prisma from '@/lib/db';
+import { Prisma } from '@prisma/client';
 
 // ---------------------------------------------------------------------------
 // Event types — khớp với design doc
@@ -44,7 +45,7 @@ export interface SendNotificationInput {
   title: string;
   message: string;
   channel?: 'IN_APP' | 'EMAIL' | 'SMS';
-  payloadJson?: Record<string, unknown>;
+  payloadJson?: Prisma.InputJsonValue;
   /** Nếu set, thông báo sẽ được ghi nhưng chưa gửi ngay */
   scheduledAt?: Date;
 }
@@ -55,7 +56,7 @@ export interface BulkSendInput {
   eventType: WfEventType;
   title: string;
   message: string;
-  payloadJson?: Record<string, unknown>;
+  payloadJson?: Prisma.InputJsonValue;
 }
 
 // ---------------------------------------------------------------------------

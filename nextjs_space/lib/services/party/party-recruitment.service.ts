@@ -80,7 +80,9 @@ export const PartyRecruitmentService = {
     return PartyRecruitmentRepo.upsert({
       userId: payload.userId,
       targetPartyOrgId: payload.targetPartyOrgId,
-      currentStep: payload.currentStep,
+      // Default to the first pipeline step (matches schema @default(THEO_DOI))
+      // when the caller does not specify an explicit starting step.
+      currentStep: payload.currentStep ?? RecruitmentStep.THEO_DOI,
       dossierStatus: payload.dossierStatus,
       assistantMember1: payload.assistantMember1,
       assistantMember2: payload.assistantMember2,
@@ -118,7 +120,7 @@ export const PartyRecruitmentService = {
 
     const updated = await PartyRecruitmentRepo.update(id, {
       currentStep: newStep,
-      note: note ?? entry.note,
+      note: note ?? entry.note ?? undefined,
     });
 
     return updated;

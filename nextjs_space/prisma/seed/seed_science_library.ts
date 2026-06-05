@@ -228,7 +228,7 @@ async function main() {
   const allWorks = [
     ...textbooks.map(w => ({ ...w, isbn: w.isbn ?? null, issn: null, doi: null, journalName: null })),
     ...monographs.map(w => ({ ...w, issn: (w as typeof monographs[0]).issn ?? null, doi: (w as typeof monographs[0]).doi ?? null, journalName: null })),
-    ...articles.map(w => ({ ...w, isbn: null, issn: w.issn ?? null, doi: w.doi ?? null, journalName: w.journalName ?? null })),
+    ...articles.map(w => ({ ...w, subtitle: null, isbn: null, issn: w.issn ?? null, doi: w.doi ?? null, journalName: w.journalName ?? null })),
     ...reports.map(w => ({ ...w, isbn: null, issn: null, doi: null, journalName: null })),
   ]
 

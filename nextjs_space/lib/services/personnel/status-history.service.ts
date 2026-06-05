@@ -9,7 +9,7 @@
  *   Keeping them separate allows back-dated corrections without side effects.
  */
 import 'server-only'
-import { prisma } from '@/lib/prisma'
+import { prisma } from '@/lib/db'
 import { StatusHistoryRepo } from '@/lib/repositories/personnel/status-history.repo'
 import type { WorkStatus } from '@prisma/client'
 
@@ -54,18 +54,23 @@ export const StatusHistoryService = {
       }
     }
 
-    // Capture current status to record as fromStatus
+    // Verify the personnel exists before recording a transition
     const personnel = await prisma.personnel.findUnique({
       where: { id: personnelId },
-      select: { workStatus: true },
+      select: { id: true },
     })
     if (!personnel) {
       return { success: false as const, error: 'Không tìm thấy cán bộ', status: 404 }
     }
 
+    // fromStatus = toStatus của bản ghi lịch sử gần nhất (cùng enum WorkStatus);
+    // null nếu đây là lần ghi trạng thái đầu tiên.
+    const history = await StatusHistoryRepo.listByPersonnel(personnelId)
+    const previousStatus: WorkStatus | null = history[0]?.toStatus ?? null
+
     const record = await StatusHistoryRepo.create({
       personnelId,
-      fromStatus: personnel.workStatus,
+      fromStatus: previousStatus,
       toStatus,
       effectiveDate: effectiveDateObj,
       decisionNumber,

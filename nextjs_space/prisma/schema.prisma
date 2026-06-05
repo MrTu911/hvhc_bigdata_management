@@ -79,7 +79,11 @@ model User {
   workStatus                          WorkStatus                 @default(ACTIVE)
   birthPlace                          String?
   bloodType                           BloodType?
+  bloodGroupRaw                       String?                    // Nhóm máu gốc từ CSDL quân nhân (A/B/O/AB/"Chưa xét nghiệm"); bloodType enum để null vì thiếu Rh
   citizenId                           String?
+  citizenIdIssueDate                  DateTime?                  // Ngày cấp CCCD
+  citizenIdIssuePlace                 String?                    // Nơi cấp CCCD
+  citizenIdExpiryDate                 DateTime?                  // Thời hạn CCCD
   dischargeDate                       DateTime?
   enlistmentDate                      DateTime?
   ethnicity                           String?
@@ -110,6 +114,7 @@ model User {
   lockedUntil                         DateTime?
   mfaEnabled                          Boolean                    @default(false)
   mfaSecret                           String?
+  mustChangePassword                  Boolean                    @default(false) // Buộc đổi mật khẩu lần đăng nhập kế tiếp (tài khoản cấp sẵn)
   accounts                            Account[]
   aiUsageLogs                         AIUsageLog[]
   authSessions                        AuthSession[]

@@ -5,6 +5,13 @@ import {
   ResponsiveContainer, CartesianGrid, XAxis, YAxis, Tooltip, Legend,
   BarChart, Bar, Area, AreaChart, ComposedChart, Line,
 } from 'recharts';
+import type { ValueType, NameType } from 'recharts/types/component/DefaultTooltipContent';
+
+// Recharts truyền value dạng number | string | mảng; chart này luôn nhận số → coerce an toàn.
+function toNumber(value: ValueType | undefined): number {
+  const n = Array.isArray(value) ? Number(value[0]) : Number(value);
+  return Number.isFinite(n) ? n : 0;
+}
 
 function formatMonth(ym: string) {
   if (!ym) return ym;
@@ -30,14 +37,14 @@ const TOOLTIP_STYLE = {
 const TOOLTIP_LABEL_STYLE = { fontWeight: 600, color: '#334155', marginBottom: '4px' };
 const TOOLTIP_ITEM_STYLE = { color: '#475569', padding: '1px 0' };
 
-function moneyFormatter(value: number, name: string): [string, string] {
-  return [`${fmtMoney(value)}đ`, name];
+function moneyFormatter(value: ValueType | undefined, name: NameType | undefined): [string, NameType] {
+  return [`${fmtMoney(toNumber(value))}đ`, name ?? ''];
 }
-function pctFormatter(value: number, name: string): [string, string] {
-  return [`${value}%`, name];
+function pctFormatter(value: ValueType | undefined, name: NameType | undefined): [string, NameType] {
+  return [`${toNumber(value)}%`, name ?? ''];
 }
-function defaultFormatter(value: number, name: string): [string | number, string] {
-  return [value, name];
+function defaultFormatter(value: ValueType | undefined, name: NameType | undefined): [number, NameType] {
+  return [toNumber(value), name ?? ''];
 }
 
 export function PartyTrendCharts({ trends }: { trends: any[] }) {
@@ -82,7 +89,7 @@ export function PartyTrendCharts({ trends }: { trends: any[] }) {
                 contentStyle={TOOLTIP_STYLE}
                 labelStyle={TOOLTIP_LABEL_STYLE}
                 itemStyle={TOOLTIP_ITEM_STYLE}
-                formatter={(value: any, name: string) =>
+                formatter={(value: ValueType | undefined, name: NameType | undefined) =>
                   name === 'Dự họp %' ? pctFormatter(value, name) : defaultFormatter(value, name)
                 }
               />
@@ -134,7 +141,7 @@ export function PartyTrendCharts({ trends }: { trends: any[] }) {
                 contentStyle={TOOLTIP_STYLE}
                 labelStyle={TOOLTIP_LABEL_STYLE}
                 itemStyle={TOOLTIP_ITEM_STYLE}
-                formatter={(value: any, name: string) => moneyFormatter(value, name)}
+                formatter={(value: ValueType | undefined, name: NameType | undefined) => moneyFormatter(value, name)}
               />
               <Legend
                 iconType="circle"
@@ -179,7 +186,7 @@ export function PartyTrendCharts({ trends }: { trends: any[] }) {
                 contentStyle={TOOLTIP_STYLE}
                 labelStyle={TOOLTIP_LABEL_STYLE}
                 itemStyle={TOOLTIP_ITEM_STYLE}
-                formatter={(value: any, name: string) => defaultFormatter(value, name)}
+                formatter={(value: ValueType | undefined, name: NameType | undefined) => defaultFormatter(value, name)}
               />
               <Legend
                 iconType="circle"

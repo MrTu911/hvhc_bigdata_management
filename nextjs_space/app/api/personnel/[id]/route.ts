@@ -8,7 +8,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { requireScopedFunction } from '@/lib/rbac/middleware';
+import { hasPermission } from '@/lib/rbac/policy';
 import { PERSONNEL } from '@/lib/rbac/function-codes';
+import { maskSensitiveIdentity } from '@/lib/services/personnel-identity-guard';
 import { logAudit } from '@/lib/audit';
 
 // Helper: Lấy danh sách đơn vị con (recursive)
@@ -66,6 +68,25 @@ export async function GET(
         unitId: true,
         createdAt: true,
         updatedAt: true,
+        // Thông tin định danh & quân nhân (dữ liệu thật CSDL quân nhân)
+        militaryIdNumber: true,
+        bloodType: true,
+        bloodGroupRaw: true,
+        ethnicity: true,
+        religion: true,
+        birthPlace: true,
+        enlistmentDate: true,
+        dischargeDate: true,
+        managementCategory: true,
+        managementLevel: true,
+        permanentAddress: true,
+        temporaryAddress: true,
+        // Nhạy cảm — sẽ được mask ở dưới nếu thiếu quyền VIEW_PERSONNEL_SENSITIVE
+        citizenId: true,
+        citizenIdIssueDate: true,
+        citizenIdIssuePlace: true,
+        citizenIdExpiryDate: true,
+        officerIdCard: true,
         unitRelation: {
           select: {
             id: true,
@@ -168,6 +189,15 @@ export async function GET(
       }
     }
 
+    // Guard trường định danh nhạy cảm (CCCD, số CMSQ): chỉ chủ hồ sơ hoặc
+    // người có quyền VIEW_PERSONNEL_SENSITIVE mới được xem; còn lại mask = null.
+    const canViewSensitive =
+      isOwner || (await hasPermission(user.id, PERSONNEL.VIEW_SENSITIVE)).hasPermission;
+    const responseData = maskSensitiveIdentity(
+      personnel as unknown as Record<string, unknown>,
+      canViewSensitive,
+    );
+
     // Audit log
     await logAudit({
       userId: user.id,
@@ -179,7 +209,7 @@ export async function GET(
       ipAddress: request.headers.get('x-forwarded-for') || undefined,
     });
 
-    return NextResponse.json({ data: personnel });
+    return NextResponse.json({ data: responseData, sensitiveVisible: canViewSensitive });
   } catch (error) {
     console.error('Error fetching personnel detail:', error);
     return NextResponse.json(

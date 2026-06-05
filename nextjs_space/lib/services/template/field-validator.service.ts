@@ -32,15 +32,15 @@ export async function validateExportFields(
   // Lấy template để kiểm tra fields được khai báo
   const template = await prisma.reportTemplate.findUnique({
     where: { id: templateId },
-    select: { id: true, name: true, fieldMappings: true },
+    select: { id: true, name: true, dataMap: true },
   });
 
   if (!template) {
     return { valid: false, missingFields: [], warnings: [`Template ${templateId} không tồn tại`] };
   }
 
-  // fieldMappings là Json — parse danh sách field keys cần thiết
-  const requiredFields = extractRequiredFieldKeys(template.fieldMappings);
+  // dataMap là Json — parse danh sách field keys cần thiết
+  const requiredFields = extractRequiredFieldKeys(template.dataMap);
 
   if (requiredFields.length === 0) {
     // Template không khai báo field mappings — không thể validate

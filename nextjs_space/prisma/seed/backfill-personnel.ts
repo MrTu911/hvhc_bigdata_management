@@ -9,8 +9,25 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 import { PrismaClient, PersonnelCategory, ManagingOrgan, PersonnelStatus, PersonnelEventType, UserRole, WorkStatus } from '@prisma/client';
+import { encrypt } from '../../lib/encryption';
 
 const prisma = new PrismaClient();
+
+// Mã hóa giá trị nhạy cảm (CCCD, số CMSQ) trước khi lưu vào SensitiveIdentity.
+// Nếu thiếu ENCRYPTION_KEY thì bỏ qua (KHÔNG lưu plaintext vào field *Encrypted).
+let encryptionWarned = false;
+function encryptSensitive(value: string | null | undefined): string | null {
+  if (!value) return null;
+  try {
+    return encrypt(value);
+  } catch (err) {
+    if (!encryptionWarned) {
+      console.warn(`⚠️  Không mã hóa được dữ liệu nhạy cảm (${(err as Error).message}). Bỏ qua SensitiveIdentity.`);
+      encryptionWarned = true;
+    }
+    return null;
+  }
+}
 
 // Xác định cơ quan quản lý từ loại cán bộ
 function deriveManagingOrgan(category: PersonnelCategory | null, role: UserRole): ManagingOrgan {
@@ -179,14 +196,15 @@ async function backfillPersonnel() {
         data: { personnelId: personnel.id }
       });
 
-      // Tạo SensitiveIdentity (nếu có dữ liệu nhạy cảm)
-      const hasSensitiveData = user.citizenId || user.officerIdCard;
-      if (hasSensitiveData) {
+      // Tạo SensitiveIdentity (nếu có dữ liệu nhạy cảm) — lưu dạng MÃ HÓA AES-256-GCM
+      const citizenIdEnc = encryptSensitive(user.citizenId);
+      const officerIdEnc = encryptSensitive(user.officerIdCard);
+      if (citizenIdEnc || officerIdEnc) {
         await prisma.sensitiveIdentity.create({
           data: {
             personnelId: personnel.id,
-            citizenIdEncrypted: user.citizenId, // Trong thực tế cần mã hóa
-            officerIdEncrypted: user.officerIdCard,
+            citizenIdEncrypted: citizenIdEnc,
+            officerIdEncrypted: officerIdEnc,
           }
         });
       }

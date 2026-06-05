@@ -93,21 +93,22 @@ export const PartyInspectionService = {
       throw new Error('Ngày mở đợt kiểm tra (openedAt) là bắt buộc');
     }
 
-    return PartyInspectionRepo.create(
-      {
-        partyMemberId: payload.partyMemberId ?? null,
-        partyOrgId: payload.partyOrgId ?? null,
-        inspectionType: payload.inspectionType,
-        title: payload.title.trim(),
-        openedAt: new Date(payload.openedAt),
-        closedAt: payload.closedAt ? new Date(payload.closedAt) : null,
-        findings: payload.findings ?? null,
-        recommendation: payload.recommendation ?? null,
-        decisionRef: payload.decisionRef ?? null,
-        attachmentUrl: payload.attachmentUrl ?? null,
-      },
+    // PartyInspectionCreateInput uses optional (omittable) fields and carries
+    // `createdBy` inside the input; omitting a field maps to NULL on these
+    // nullable columns, matching the previous explicit-null behavior.
+    return PartyInspectionRepo.create({
+      partyMemberId: payload.partyMemberId ?? undefined,
+      partyOrgId: payload.partyOrgId ?? undefined,
+      inspectionType: payload.inspectionType,
+      title: payload.title.trim(),
+      openedAt: new Date(payload.openedAt),
+      closedAt: payload.closedAt ? new Date(payload.closedAt) : undefined,
+      findings: payload.findings ?? undefined,
+      recommendation: payload.recommendation ?? undefined,
+      decisionRef: payload.decisionRef ?? undefined,
+      attachmentUrl: payload.attachmentUrl ?? undefined,
       createdBy,
-    );
+    });
   },
 
   /**

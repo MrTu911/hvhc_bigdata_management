@@ -5,7 +5,7 @@
 
 'use client';
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, type ReactNode } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -38,6 +38,11 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
   Tooltip as RechartsTooltip, ResponsiveContainer, Cell,
 } from 'recharts';
+import type {
+  Payload as TooltipPayloadEntry,
+  ValueType,
+  NameType,
+} from 'recharts/types/component/DefaultTooltipContent';
 import Link from 'next/link';
 import { usePermissionRefresh } from '@/lib/permission-utils';
 import { useSession } from 'next-auth/react';
@@ -722,12 +727,16 @@ export default function RBACManagementPage() {
                             <YAxis tick={{ fontSize: 10, fill: '#64748b' }} />
                             <RechartsTooltip
                               contentStyle={TOOLTIP_STYLE}
-                              formatter={(value: any, name: string, props: any) => {
+                              formatter={(
+                                value: ValueType | undefined,
+                                name: NameType | undefined,
+                                item: TooltipPayloadEntry<ValueType, NameType>,
+                              ): [ReactNode, NameType] => {
                                 if (name === 'assigned') {
-                                  const { total, pct } = props.payload;
-                                  return [`${value}/${total} (${pct}%)`, 'Đã gán'];
+                                  const row = item.payload as { total: number; pct: number };
+                                  return [`${value}/${row.total} (${row.pct}%)`, 'Đã gán'];
                                 }
-                                return [value, 'Tổng quyền'];
+                                return [value ?? '', 'Tổng quyền'];
                               }}
                             />
                             <Bar dataKey="total" fill="#e2e8f0" radius={[3,3,0,0]} maxBarSize={22} name="total" />

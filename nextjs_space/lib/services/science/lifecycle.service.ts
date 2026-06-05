@@ -38,7 +38,7 @@ export async function listProposals(filters: {
       take: pageSize,
       orderBy: { createdAt: 'desc' },
       include: {
-        pi: { select: { id: true, fullName: true } },
+        pi: { select: { id: true, name: true } },
         unit: { select: { id: true, name: true } },
         reviews: { select: { id: true, recommendation: true, score: true } },
       },
@@ -53,14 +53,14 @@ export async function getProposal(id: string) {
   return prisma.nckhProposal.findUnique({
     where: { id },
     include: {
-      pi: { select: { id: true, fullName: true, email: true } },
+      pi: { select: { id: true, name: true, email: true } },
       unit: { select: { id: true, name: true } },
-      approvedBy: { select: { id: true, fullName: true } },
-      unitApprovedBy: { select: { id: true, fullName: true } },
-      deptApprovedBy: { select: { id: true, fullName: true } },
+      approvedBy: { select: { id: true, name: true } },
+      unitApprovedBy: { select: { id: true, name: true } },
+      deptApprovedBy: { select: { id: true, name: true } },
       reviews: {
         include: {
-          reviewer: { select: { id: true, fullName: true } },
+          reviewer: { select: { id: true, name: true } },
         },
       },
       project: { select: { id: true, projectCode: true, status: true } },
@@ -98,7 +98,7 @@ export async function createProposal(data: {
       reviewDeadline: data.reviewDeadline,
     },
     include: {
-      pi: { select: { id: true, fullName: true } },
+      pi: { select: { id: true, name: true } },
     },
   })
 }
@@ -121,7 +121,7 @@ export async function updateProposal(
 export async function submitProposal(id: string) {
   const proposal = await prisma.nckhProposal.findUniqueOrThrow({
     where: { id },
-    include: { pi: { select: { id: true, email: true, fullName: true } } },
+    include: { pi: { select: { id: true, email: true, name: true } } },
   })
   if (proposal.status !== 'DRAFT' && proposal.status !== 'REVISION_REQUESTED') {
     throw new Error('Chỉ đề xuất ở trạng thái DRAFT hoặc REVISION_REQUESTED mới có thể nộp')
@@ -225,7 +225,7 @@ export async function approveProposal(data: {
 }) {
   const proposal = await prisma.nckhProposal.findUniqueOrThrow({
     where: { id: data.proposalId },
-    include: { pi: { select: { id: true, email: true, fullName: true, facultyProfile: true } } },
+    include: { pi: { select: { id: true, email: true, name: true, facultyProfile: true } } },
   })
 
   if (!(APPROVABLE_STATUSES as readonly string[]).includes(proposal.status)) {
@@ -355,8 +355,8 @@ export async function listProgressReports(projectId: string) {
     where: { projectId },
     orderBy: { createdAt: 'desc' },
     include: {
-      submittedBy: { select: { id: true, fullName: true } },
-      reviewedBy: { select: { id: true, fullName: true } },
+      submittedBy: { select: { id: true, name: true } },
+      reviewedBy: { select: { id: true, name: true } },
     },
   })
 }
@@ -365,8 +365,8 @@ export async function getProgressReport(reportId: string) {
   return prisma.nckhProgressReport.findUnique({
     where: { id: reportId },
     include: {
-      submittedBy: { select: { id: true, fullName: true } },
-      reviewedBy: { select: { id: true, fullName: true } },
+      submittedBy: { select: { id: true, name: true } },
+      reviewedBy: { select: { id: true, name: true } },
       project: { select: { id: true, projectCode: true, title: true } },
     },
   })
@@ -422,8 +422,8 @@ export async function getMidtermReview(projectId: string) {
   return prisma.nckhMidtermReview.findUnique({
     where: { projectId },
     include: {
-      council: { select: { id: true, name: true } },
-      approvedBy: { select: { id: true, fullName: true } },
+      council: { select: { id: true, type: true } },
+      approvedBy: { select: { id: true, name: true } },
     },
   })
 }
@@ -470,8 +470,8 @@ export async function listExtensions(projectId: string) {
     where: { projectId },
     orderBy: { createdAt: 'desc' },
     include: {
-      requestedBy: { select: { id: true, fullName: true } },
-      approvedBy: { select: { id: true, fullName: true } },
+      requestedBy: { select: { id: true, name: true } },
+      approvedBy: { select: { id: true, name: true } },
     },
   })
 }
@@ -531,7 +531,7 @@ export async function getClosure(projectId: string) {
   return prisma.nckhClosure.findUnique({
     where: { projectId },
     include: {
-      closedBy: { select: { id: true, fullName: true } },
+      closedBy: { select: { id: true, name: true } },
     },
   })
 }
@@ -572,7 +572,7 @@ export async function listLessons(projectId: string) {
     where: { projectId },
     orderBy: [{ impact: 'asc' }, { createdAt: 'desc' }],
     include: {
-      addedBy: { select: { id: true, fullName: true } },
+      addedBy: { select: { id: true, name: true } },
     },
   })
 }
@@ -596,7 +596,7 @@ export async function listMeetings(councilId: string) {
     where: { councilId },
     orderBy: { meetingDate: 'desc' },
     include: {
-      createdBy: { select: { id: true, fullName: true } },
+      createdBy: { select: { id: true, name: true } },
       _count: { select: { votes: true } },
     },
   })
@@ -606,8 +606,8 @@ export async function getMeeting(meetingId: string) {
   return prisma.nckhCouncilMeeting.findUnique({
     where: { id: meetingId },
     include: {
-      council: { select: { id: true, name: true } },
-      createdBy: { select: { id: true, fullName: true } },
+      council: { select: { id: true, type: true } },
+      createdBy: { select: { id: true, name: true } },
       votes: true,
     },
   })
@@ -682,7 +682,7 @@ export async function getFormalAcceptance(projectId: string) {
     where: { projectId },
     include: {
       council: { select: { id: true, type: true } },
-      acceptedBy: { select: { id: true, fullName: true } },
+      acceptedBy: { select: { id: true, name: true } },
       scores: true,
     },
   })
@@ -714,7 +714,7 @@ export async function createFormalAcceptance(data: {
       acceptedById:    data.acceptedById,
     },
     include: {
-      acceptedBy: { select: { id: true, fullName: true } },
+      acceptedBy: { select: { id: true, name: true } },
     },
   })
 }

@@ -18,16 +18,26 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const yearsBack = Math.min(10, parseInt(searchParams.get('years') || '3'));
 
-    // Last N academic years
+    // Last N academic years (ordered by start date, most recent first)
     const academicYears = await prisma.academicYear.findMany({
-      orderBy: { startYear: 'desc' },
+      orderBy: { startDate: 'desc' },
       take: yearsBack,
-      select: { id: true, academicYear: true, startYear: true },
+      select: { id: true, name: true, code: true, startDate: true },
     });
+
+    // Derive a normalized view for each academic year:
+    //  - startYear: numeric start year from startDate (for auditDate range filters)
+    //  - code: matches AcademicWarning.academicYear (denormalized copy of AcademicYear.code)
+    //  - displayName: human-readable label for chart output (the AcademicYear name)
+    const academicYearViews = academicYears.map((ay) => ({
+      startYear: new Date(ay.startDate).getFullYear(),
+      code: ay.code,
+      displayName: ay.name,
+    }));
 
     // GraduationAudit approved per academic year (matched by auditDate year range)
     const graduationTrend = await Promise.all(
-      academicYears.map(async (ay) => {
+      academicYearViews.map(async (ay) => {
         const from = new Date(`${ay.startYear}-01-01`);
         const to   = new Date(`${ay.startYear + 1}-12-31`);
         const [approved, eligible, ineligible] = await Promise.all([
@@ -35,26 +45,26 @@ export async function GET(req: NextRequest) {
           prisma.graduationAudit.count({ where: { graduationEligible: true,  auditDate: { gte: from, lte: to } } }),
           prisma.graduationAudit.count({ where: { graduationEligible: false, auditDate: { gte: from, lte: to } } }),
         ]);
-        return { academicYear: ay.academicYear, approved, eligible, ineligible };
+        return { academicYear: ay.displayName, approved, eligible, ineligible };
       }),
     );
 
     // AcademicWarning counts per academic year (active/unresolved at snapshot)
     const warningTrend = await Promise.all(
-      academicYears.map(async (ay) => {
+      academicYearViews.map(async (ay) => {
         const [critical, high, medium, low] = await Promise.all([
-          prisma.academicWarning.count({ where: { academicYear: ay.academicYear, warningLevel: 'CRITICAL' } }),
-          prisma.academicWarning.count({ where: { academicYear: ay.academicYear, warningLevel: 'HIGH' } }),
-          prisma.academicWarning.count({ where: { academicYear: ay.academicYear, warningLevel: 'MEDIUM' } }),
-          prisma.academicWarning.count({ where: { academicYear: ay.academicYear, warningLevel: 'LOW' } }),
+          prisma.academicWarning.count({ where: { academicYear: ay.code, warningLevel: 'CRITICAL' } }),
+          prisma.academicWarning.count({ where: { academicYear: ay.code, warningLevel: 'HIGH' } }),
+          prisma.academicWarning.count({ where: { academicYear: ay.code, warningLevel: 'MEDIUM' } }),
+          prisma.academicWarning.count({ where: { academicYear: ay.code, warningLevel: 'LOW' } }),
         ]);
-        return { academicYear: ay.academicYear, critical, high, medium, low, total: critical + high + medium + low };
+        return { academicYear: ay.displayName, critical, high, medium, low, total: critical + high + medium + low };
       }),
     );
 
     // ThesisProject defense trend per year
     const thesisTrend = await Promise.all(
-      academicYears.map(async (ay) => {
+      academicYearViews.map(async (ay) => {
         const from = new Date(`${ay.startYear}-01-01`);
         const to   = new Date(`${ay.startYear + 1}-12-31`);
         const [defended, inProgress] = await Promise.all([
@@ -66,7 +76,7 @@ export async function GET(req: NextRequest) {
           _avg: { defenseScore: true },
         });
         return {
-          academicYear:   ay.academicYear,
+          academicYear:   ay.displayName,
           defended,
           inProgress,
           avgDefenseScore: avgScore._avg.defenseScore

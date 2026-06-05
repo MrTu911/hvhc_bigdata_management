@@ -67,7 +67,7 @@ export async function GET(request: NextRequest) {
           credits: r.course.credits,
           registrationStatus: r.status,
           registeredAt: r.registeredAt,
-          grade: r.gradeRecords[0] ?? null,
+          grade: r.gradeRecords ?? null,
         })),
       },
     });

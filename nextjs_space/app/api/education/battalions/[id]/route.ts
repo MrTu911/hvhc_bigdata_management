@@ -48,7 +48,7 @@ export async function GET(
       prisma.hocVien.count({ where: { battalionUnitId: id, deletedAt: null } }),
       prisma.hocVien.count({ where: { battalionUnitId: id, deletedAt: null, currentStatus: 'ACTIVE' } }),
       prisma.academicWarning.count({
-        where: { student: { battalionUnitId: id, deletedAt: null } },
+        where: { hocVien: { battalionUnitId: id, deletedAt: null } },
       }),
     ]);
 

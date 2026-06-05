@@ -6,7 +6,7 @@
  */
 
 import { prisma } from '@/lib/db';
-import { GraduationAuditStatus } from '@prisma/client';
+import { GraduationAuditStatus, Prisma } from '@prisma/client';
 import {
   runGraduationEngine,
   GraduationEngineResult,
@@ -101,7 +101,9 @@ export async function batchRunGraduation(filter: BatchCohortFilter): Promise<Bat
         thesisEligible:     engineResult.thesisEligible,
         languageEligible:   engineResult.languageEligible,
         graduationEligible: engineResult.graduationEligible,
-        failureReasonsJson: engineResult.failureReasonsJson as object | null,
+        // Json? field: dùng Prisma.JsonNull khi không có lý do trượt thay vì literal null
+        failureReasonsJson:
+          engineResult.failureReasonsJson ?? Prisma.JsonNull,
         status:             engineResult.graduationEligible
           ? GraduationAuditStatus.ELIGIBLE
           : GraduationAuditStatus.INELIGIBLE,

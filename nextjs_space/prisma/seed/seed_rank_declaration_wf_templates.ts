@@ -11,7 +11,7 @@
  *   npx tsx --require dotenv/config prisma/seed/seed_rank_declaration_wf_templates.ts
  */
 
-import { PrismaClient, WorkflowVersionStatus } from '@prisma/client';
+import { PrismaClient, Prisma, WorkflowVersionStatus } from '@prisma/client';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -27,7 +27,7 @@ interface StepDef {
   orderIndex: number;
   slaHours?: number;
   requiresSignature?: boolean;
-  configJson?: Record<string, unknown>;
+  configJson?: Prisma.InputJsonValue;
 }
 
 interface TransitionDef {

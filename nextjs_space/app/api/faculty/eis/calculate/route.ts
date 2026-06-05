@@ -59,7 +59,9 @@ export async function POST(req: NextRequest) {
       action: 'CREATE',
       resourceType: 'FACULTY_EIS_BATCH',
       newValue: { academicYear, semesterCode, ...summary },
-      result: summary.failed.length === 0 ? 'SUCCESS' : 'PARTIAL',
+      // Audit result chỉ có SUCCESS|FAIL|DENIED — batch còn lỗi ghi nhận là FAIL,
+      // chi tiết partial (số bản ghi failed) đã nằm trong newValue.
+      result: summary.failed.length === 0 ? 'SUCCESS' : 'FAIL',
     });
 
     return NextResponse.json({

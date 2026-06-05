@@ -164,16 +164,25 @@ export async function submitDeclaration(id: string, actorId: string) {
   const templateId =
     managingOrgan === 'BAN_QUAN_LUC' ? WF_TEMPLATE_QUAN_LUC : WF_TEMPLATE_CAN_BO
 
-  // Try to start M13 workflow; fallback gracefully if workflow engine unavailable
+  // Try to start M13 workflow; fallback gracefully if workflow engine unavailable.
+  // M13 model: WorkflowTemplate (by code) → PUBLISHED WorkflowTemplateVersion →
+  // WorkflowInstance (references templateId + templateVersionId).
   let workflowInstanceId: string | null = null
   try {
-    const wfDef = await db.workflowDefinition.findFirst({
+    const template = await db.workflowTemplate.findFirst({
       where: { code: templateId, isActive: true },
     })
-    if (wfDef) {
+    const publishedVersion = template
+      ? await db.workflowTemplateVersion.findFirst({
+          where: { templateId: template.id, status: 'PUBLISHED' },
+        })
+      : null
+
+    if (template && publishedVersion) {
       const wfInstance = await db.workflowInstance.create({
         data: {
-          definitionId: wfDef.id,
+          templateId: template.id,
+          templateVersionId: publishedVersion.id,
           entityType: 'RankDeclaration',
           entityId: id,
           status: 'PENDING',

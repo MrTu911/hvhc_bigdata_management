@@ -162,7 +162,7 @@ export const PartyMemberRepo = {
   },
 
   async create(input: PartyMemberRepoCreateInput) {
-    const data: Prisma.PartyMemberCreateInput = {
+    const data: Prisma.PartyMemberUncheckedCreateInput = {
       userId: input.userId,
       organizationId: input.organizationId ?? null,
       partyCardNumber: input.partyCardNumber ?? null,
@@ -188,7 +188,7 @@ export const PartyMemberRepo = {
   },
 
   async update(id: string, input: PartyMemberRepoUpdateInput) {
-    const data: Prisma.PartyMemberUpdateInput = {
+    const data: Prisma.PartyMemberUncheckedUpdateInput = {
       organizationId: input.organizationId,
       partyCardNumber: input.partyCardNumber,
       partyRole: input.partyRole,
@@ -215,7 +215,7 @@ export const PartyMemberRepo = {
   },
 
   async createInTx(tx: Prisma.TransactionClient, input: PartyMemberRepoCreateInput) {
-    const data: Prisma.PartyMemberCreateInput = {
+    const data: Prisma.PartyMemberUncheckedCreateInput = {
       userId: input.userId,
       organizationId: input.organizationId ?? null,
       partyCardNumber: input.partyCardNumber ?? null,
@@ -241,7 +241,7 @@ export const PartyMemberRepo = {
   },
 
   async updateInTx(tx: Prisma.TransactionClient, id: string, input: PartyMemberRepoUpdateInput) {
-    const data: Prisma.PartyMemberUpdateInput = {
+    const data: Prisma.PartyMemberUncheckedUpdateInput = {
       organizationId: input.organizationId,
       partyCardNumber: input.partyCardNumber,
       partyRole: input.partyRole,

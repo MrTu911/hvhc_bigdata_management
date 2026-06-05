@@ -13,7 +13,7 @@
  * Run: npx tsx --require dotenv/config prisma/seed/seed_council_test_full.ts
  */
 
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, FunctionScope } from '@prisma/client'
 
 const db = new PrismaClient()
 
@@ -57,7 +57,7 @@ async function addScienceFunctionsToPositions() {
           data: {
             positionId: position.id,
             functionId: fn.id,
-            scopeType:  posCode === 'SYSTEM_ADMIN' ? 'ACADEMY' : 'DEPARTMENT',
+            scope:      posCode === 'SYSTEM_ADMIN' ? FunctionScope.ACADEMY : FunctionScope.DEPARTMENT,
             isActive:   true,
           },
         })

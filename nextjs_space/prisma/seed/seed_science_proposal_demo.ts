@@ -12,7 +12,15 @@
  * Run: npx tsx --require dotenv/config prisma/seed/seed_science_proposal_demo.ts
  */
 
-import { PrismaClient } from '@prisma/client'
+import {
+  PrismaClient,
+  NckhProjectStatus,
+  NckhProjectPhase,
+  NckhCategory,
+  NckhField,
+  NckhType,
+  ScienceAttachmentCategory,
+} from '@prisma/client'
 
 const db = new PrismaClient()
 
@@ -82,11 +90,11 @@ async function upsertProject(data: {
   id:          string
   projectCode: string
   title:       string
-  status:      string
-  phase:       string
-  category:    string
-  field:       string
-  researchType: string
+  status:      NckhProjectStatus
+  phase:       NckhProjectPhase
+  category:    NckhCategory
+  field:       NckhField
+  researchType: NckhType
   sensitivity: string
   abstract?:   string
   keywords?:   string[]
@@ -304,7 +312,17 @@ async function main() {
   console.log('  ✓ 4 milestones cho đề tài IN_PROGRESS')
 
   // 5. ScienceAttachment mẫu cho đề tài DRAFT đầu tiên (không cần file MinIO thật)
-  const attachmentData = [
+  const attachmentData: Array<{
+    id: string
+    entityType: string
+    entityId: string
+    docCategory: ScienceAttachmentCategory
+    title: string
+    filePath: string
+    fileSize: bigint
+    mimeType: string
+    checksumSha256: string
+  }> = [
     {
       id:           'demo-att-001',
       entityType:   'PROJECT',

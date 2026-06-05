@@ -12,6 +12,7 @@
  */
 
 import prisma from '@/lib/db';
+import { Prisma } from '@prisma/client';
 import type { AlertSeverity, AlertStatus } from '@prisma/client';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -90,7 +91,7 @@ export async function raiseAlert(input: RaiseAlertInput) {
       message:    input.message,
       severity:   input.severity,
       status:     'ACTIVE',
-      metadata:   input.metadata ?? {},
+      metadata:   (input.metadata ?? {}) as Prisma.InputJsonValue,
     },
   });
 }

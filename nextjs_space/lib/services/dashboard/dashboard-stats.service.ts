@@ -52,7 +52,7 @@ export async function getExecutiveStats(scope: DashboardScope): Promise<Executiv
   ] = await Promise.all([
     db.user.count({ where: { ...unitFilter } }),
     db.user.count({ where: { ...unitFilter, workStatus: 'ACTIVE' } }),
-    db.user.count({ where: { ...unitFilter, personnelType: 'OFFICER' } }),
+    db.user.count({ where: { ...unitFilter, personnelType: 'CAN_BO_CHI_HUY' } }),
     db.hocVien.count(),
     db.ketQuaHocTap.aggregate({ _avg: { diemTongKet: true } }),
     db.hocVien.count({ where: { academicStatus: { not: 'NORMAL' } } }).catch(() => 0),
@@ -157,7 +157,8 @@ export async function getEducationStats(scope: DashboardScope): Promise<Educatio
     db.hocVien.count({ where: { academicStatus: { not: 'NORMAL' } } }).catch(() => 0),
     db.ketQuaHocTap.groupBy({ by: ['ketQua'], _count: { id: true }, where: { ketQua: { not: null } } }),
     db.ketQuaHocTap.aggregate({ _avg: { diemTongKet: true } }),
-    db.classSection.count({ where: { status: 'ACTIVE' } }).catch(() => 0),
+    // "Active" class sections = those open for registration or currently running.
+    db.classSection.count({ where: { status: { in: ['OPEN', 'IN_PROGRESS'] } } }).catch(() => 0),
     db.hocVien.count({ where: { currentStatus: 'ACTIVE' } }).catch(() => 0),
   ])
 

@@ -13,7 +13,7 @@ import { Badge } from '@/components/ui/badge';
 import { useLanguage } from '@/components/providers/language-provider';
 import { Plus, Edit, Trash2, Search, Calculator } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import toast from 'react-hot-toast';
+import { toast } from 'sonner';
 
 interface HeSoMonHoc {
   id: string;

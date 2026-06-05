@@ -3,7 +3,7 @@
  * Data access for PersonnelStatusHistory.
  */
 import 'server-only'
-import { prisma } from '@/lib/prisma'
+import { prisma } from '@/lib/db'
 import type { WorkStatus } from '@prisma/client'
 
 export interface CreateStatusHistoryInput {

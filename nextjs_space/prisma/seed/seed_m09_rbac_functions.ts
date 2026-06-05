@@ -8,13 +8,18 @@
  * Run: npx tsx --require dotenv/config prisma/seed/seed_m09_rbac_functions.ts
  */
 
-import { PrismaClient, FunctionScope } from '@prisma/client'
+import { PrismaClient, FunctionScope, ActionType } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
 // ─── New functions to add ─────────────────────────────────────────────────────
 
-const NEW_FUNCTIONS = [
+const NEW_FUNCTIONS: Array<{
+  code: string
+  name: string
+  module: string
+  actionType: ActionType
+}> = [
   // UC-47: Scientist profile
   { code: 'VIEW_RESEARCH_SCIENTIST',   name: 'Xem hồ sơ nhà khoa học',     module: 'RESEARCH', actionType: 'VIEW'   },
   { code: 'UPDATE_RESEARCH_SCIENTIST', name: 'Cập nhật hồ sơ nhà khoa học', module: 'RESEARCH', actionType: 'UPDATE' },

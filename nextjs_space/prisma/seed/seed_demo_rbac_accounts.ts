@@ -24,7 +24,7 @@
  *   Mật khẩu: Demo@2025 (hoặc env DEMO_PASSWORD)
  */
 
-import { PrismaClient, UserStatus, FunctionScope } from '@prisma/client';
+import { PrismaClient, UserStatus, UserRole, FunctionScope } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import { fileURLToPath } from 'url';
 import 'dotenv/config';
@@ -196,7 +196,7 @@ const DEMO_ACCOUNTS: DemoAccount[] = [
 ];
 
 // Map positionCode → legacy role (backward compat với session.user.role)
-const POSITION_TO_LEGACY_ROLE: Record<string, string> = {
+const POSITION_TO_LEGACY_ROLE: Record<string, UserRole> = {
   SYSTEM_ADMIN:           'QUAN_TRI_HE_THONG',
   QUAN_TRI_HE_THONG:      'QUAN_TRI_HE_THONG',
   GIAM_DOC:               'CHI_HUY_HOC_VIEN',
@@ -706,7 +706,7 @@ async function ensureUnit(code: string) {
 // ────────────────────────────────────────────────────────────
 
 async function upsertDemoUser(account: DemoAccount, hashedPassword: string) {
-  const legacyRole = POSITION_TO_LEGACY_ROLE[account.positionCode] || 'KY_THUAT_VIEN';
+  const legacyRole = POSITION_TO_LEGACY_ROLE[account.positionCode] || UserRole.KY_THUAT_VIEN;
   const unit = await ensureUnit(account.unitCode);
 
   const existing = await prisma.user.findUnique({ where: { email: account.email } });

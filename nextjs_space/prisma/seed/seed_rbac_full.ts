@@ -24,6 +24,10 @@ interface FDef {
   isCritical?: boolean;
 }
 
+// Một function định nghĩa đã được gắn `code` (key của FUNCTION_DEFS).
+// Predicate phân quyền luôn nhận shape này, nên `code` chắc chắn là string.
+type ResolvedFunction = FDef & { code: string };
+
 const FUNCTION_DEFS: Record<string, FDef> = {
   // ── PERSONNEL ──
   VIEW_PERSONNEL:              { name: 'Xem danh sách cán bộ',                  module: 'PERSONNEL',         actionType: 'VIEW' },
@@ -549,16 +553,16 @@ const POSITIONS: PosDef[] = [
 // SECTION 3: PERMISSION PREDICATES
 // Each returns true if a function should be granted to the position
 // ─────────────────────────────────────────────────────────────────────────────
-function m(fn: FDef) { return fn.module.toUpperCase(); }
-function at(fn: FDef) { return fn.actionType; }
+function m(fn: ResolvedFunction) { return fn.module.toUpperCase(); }
+function at(fn: ResolvedFunction) { return fn.actionType; }
 
 const VIEW_EXPORT = new Set(['VIEW', 'EXPORT']);
 const VIEW_EXPORT_DOWNLOAD = new Set(['VIEW', 'EXPORT', 'DOWNLOAD']);
 const CRUD_NO_DELETE_APPROVE = new Set(['VIEW', 'CREATE', 'UPDATE', 'EXPORT', 'IMPORT', 'SUBMIT']);
 
-function allowSystemAdmin(_fn: FDef): boolean { return true; }
+function allowSystemAdmin(_fn: ResolvedFunction): boolean { return true; }
 
-function allowGiamDoc(fn: FDef): boolean {
+function allowGiamDoc(fn: ResolvedFunction): boolean {
   if (m(fn) === 'SYSTEM') return at(fn) === 'VIEW';
   if (m(fn) === 'DASHBOARD') return fn.code === 'VIEW_DASHBOARD' || fn.code === 'VIEW_DASHBOARD_COMMAND';
   if (m(fn) === 'PERSONAL') return true;
@@ -569,7 +573,7 @@ function allowGiamDoc(fn: FDef): boolean {
   return ['FINALIZE_ACCEPTANCE', 'WF.OVERRIDE', 'EVALUATE_RESEARCH'].includes(fn.code);
 }
 
-function allowPhoGiamDoc(fn: FDef): boolean {
+function allowPhoGiamDoc(fn: ResolvedFunction): boolean {
   if (m(fn) === 'SYSTEM') return at(fn) === 'VIEW';
   if (m(fn) === 'DASHBOARD') return fn.code === 'VIEW_DASHBOARD' || fn.code === 'VIEW_DASHBOARD_COMMAND';
   if (m(fn) === 'PERSONAL') return true;
@@ -577,21 +581,21 @@ function allowPhoGiamDoc(fn: FDef): boolean {
   return VIEW_EXPORT_DOWNLOAD.has(at(fn));
 }
 
-function allowPhoGiamDocKH(fn: FDef): boolean {
+function allowPhoGiamDocKH(fn: ResolvedFunction): boolean {
   const mods = new Set(['RESEARCH', 'SCIENCE', 'FACULTY', 'EDUCATION', 'PERSONAL']);
   if (m(fn) === 'DASHBOARD') return fn.code === 'VIEW_DASHBOARD' || fn.code === 'VIEW_DASHBOARD_COMMAND';
   if (!mods.has(m(fn))) return false;
   return VIEW_EXPORT_DOWNLOAD.has(at(fn));
 }
 
-function allowPhoGiamDocHCHCKT(fn: FDef): boolean {
+function allowPhoGiamDocHCHCKT(fn: ResolvedFunction): boolean {
   const mods = new Set(['PERSONNEL', 'INSURANCE', 'POLICY', 'AWARDS', 'PERSONAL']);
   if (m(fn) === 'DASHBOARD') return fn.code === 'VIEW_DASHBOARD' || fn.code === 'VIEW_DASHBOARD_COMMAND';
   if (!mods.has(m(fn))) return false;
   return VIEW_EXPORT_DOWNLOAD.has(at(fn));
 }
 
-function allowTruongKhoa(fn: FDef): boolean {
+function allowTruongKhoa(fn: ResolvedFunction): boolean {
   if (m(fn) === 'SYSTEM') return VIEW_EXPORT.has(at(fn));
   if (m(fn) === 'DASHBOARD') return ['VIEW_DASHBOARD', 'VIEW_DASHBOARD_COMMAND', 'VIEW_DASHBOARD_FACULTY'].includes(fn.code);
   if (m(fn) === 'PERSONAL') return true;
@@ -599,7 +603,7 @@ function allowTruongKhoa(fn: FDef): boolean {
   return ['VIEW', 'CREATE', 'UPDATE', 'APPROVE', 'REJECT', 'EXPORT', 'IMPORT', 'SUBMIT'].includes(at(fn));
 }
 
-function allowTruongPhongDang(fn: FDef): boolean {
+function allowTruongPhongDang(fn: ResolvedFunction): boolean {
   if (m(fn) === 'PARTY' || m(fn) === 'AWARDS') return true;
   if (m(fn) === 'PERSONNEL') return true;
   if (m(fn) === 'DASHBOARD') return fn.code === 'VIEW_DASHBOARD';
@@ -608,7 +612,7 @@ function allowTruongPhongDang(fn: FDef): boolean {
   return false;
 }
 
-function allowTruongPhongDaoTao(fn: FDef): boolean {
+function allowTruongPhongDaoTao(fn: ResolvedFunction): boolean {
   const fullMods = new Set(['EDUCATION', 'STUDENT', 'TRAINING', 'EXAM', 'QUESTION_BANK', 'LEARNING_MATERIAL']);
   if (fullMods.has(m(fn))) return true;
   if (m(fn) === 'FACULTY') return VIEW_EXPORT.has(at(fn));
@@ -619,7 +623,7 @@ function allowTruongPhongDaoTao(fn: FDef): boolean {
   return false;
 }
 
-function allowTruongPhongNhanSu(fn: FDef): boolean {
+function allowTruongPhongNhanSu(fn: ResolvedFunction): boolean {
   const fullMods = new Set(['PERSONNEL', 'INSURANCE', 'POLICY']);
   if (fullMods.has(m(fn))) return true;
   if (m(fn) === 'AWARDS') return VIEW_EXPORT.has(at(fn));
@@ -629,7 +633,7 @@ function allowTruongPhongNhanSu(fn: FDef): boolean {
   return false;
 }
 
-function allowTruongPhongKhoaHoc(fn: FDef): boolean {
+function allowTruongPhongKhoaHoc(fn: ResolvedFunction): boolean {
   const fullMods = new Set(['RESEARCH', 'SCIENCE']);
   if (fullMods.has(m(fn))) return true;
   if (m(fn) === 'FACULTY') return VIEW_EXPORT.has(at(fn));
@@ -639,7 +643,7 @@ function allowTruongPhongKhoaHoc(fn: FDef): boolean {
   return false;
 }
 
-function allowTruongPhongChinhSach(fn: FDef): boolean {
+function allowTruongPhongChinhSach(fn: ResolvedFunction): boolean {
   if (m(fn) === 'POLICY' || m(fn) === 'INSURANCE') return true;
   if (m(fn) === 'PERSONNEL') return VIEW_EXPORT.has(at(fn));
   if (m(fn) === 'DASHBOARD') return fn.code === 'VIEW_DASHBOARD';
@@ -648,7 +652,7 @@ function allowTruongPhongChinhSach(fn: FDef): boolean {
   return false;
 }
 
-function allowPhoTruongPhong(fn: FDef): boolean {
+function allowPhoTruongPhong(fn: ResolvedFunction): boolean {
   if (m(fn) === 'PERSONNEL' || m(fn) === 'INSURANCE' || m(fn) === 'POLICY') return CRUD_NO_DELETE_APPROVE.has(at(fn));
   if (m(fn) === 'AWARDS') return VIEW_EXPORT.has(at(fn));
   if (m(fn) === 'DASHBOARD') return fn.code === 'VIEW_DASHBOARD';
@@ -656,7 +660,7 @@ function allowPhoTruongPhong(fn: FDef): boolean {
   return false;
 }
 
-function allowChiHuyHe(fn: FDef): boolean {
+function allowChiHuyHe(fn: ResolvedFunction): boolean {
   if (m(fn) === 'STUDENT') return true;
   if (m(fn) === 'EDUCATION') return at(fn) === 'VIEW' || fn.code === 'MANAGE_CONDUCT';
   if (m(fn) === 'TRAINING') return VIEW_EXPORT.has(at(fn));
@@ -668,7 +672,7 @@ function allowChiHuyHe(fn: FDef): boolean {
   return false;
 }
 
-function allowChiHuyBoMon(fn: FDef): boolean {
+function allowChiHuyBoMon(fn: ResolvedFunction): boolean {
   if (m(fn) === 'SYSTEM') return at(fn) === 'VIEW';
   if (m(fn) === 'DASHBOARD') return ['VIEW_DASHBOARD', 'VIEW_DASHBOARD_FACULTY'].includes(fn.code);
   if (m(fn) === 'PERSONAL') return true;
@@ -676,7 +680,7 @@ function allowChiHuyBoMon(fn: FDef): boolean {
   return ['VIEW', 'CREATE', 'UPDATE', 'APPROVE', 'REJECT', 'EXPORT', 'IMPORT', 'SUBMIT'].includes(at(fn));
 }
 
-function allowGiangVien(fn: FDef): boolean {
+function allowGiangVien(fn: ResolvedFunction): boolean {
   const mods = new Set(['TRAINING', 'EDUCATION', 'FACULTY', 'RESEARCH', 'QUESTION_BANK', 'LEARNING_MATERIAL', 'DASHBOARD', 'AI', 'PERSONAL']);
   if (!mods.has(m(fn))) return false;
   if (m(fn) === 'DASHBOARD') return ['VIEW_DASHBOARD', 'VIEW_DASHBOARD_FACULTY'].includes(fn.code);
@@ -684,7 +688,7 @@ function allowGiangVien(fn: FDef): boolean {
   return ['VIEW', 'CREATE', 'UPDATE', 'SUBMIT', 'EXPORT', 'IMPORT'].includes(at(fn));
 }
 
-function allowNghienCuuVien(fn: FDef): boolean {
+function allowNghienCuuVien(fn: ResolvedFunction): boolean {
   const mods = new Set(['RESEARCH', 'SCIENCE', 'FACULTY', 'DASHBOARD', 'AI', 'PERSONAL']);
   if (!mods.has(m(fn))) return false;
   if (m(fn) === 'DASHBOARD') return fn.code === 'VIEW_DASHBOARD';
@@ -692,7 +696,7 @@ function allowNghienCuuVien(fn: FDef): boolean {
   return ['VIEW', 'CREATE', 'UPDATE', 'SUBMIT', 'EXPORT', 'IMPORT'].includes(at(fn));
 }
 
-function allowCanBoDang(fn: FDef): boolean {
+function allowCanBoDang(fn: ResolvedFunction): boolean {
   if (m(fn) === 'PARTY') return !['DELETE', 'APPROVE'].includes(at(fn));
   if (m(fn) === 'AWARDS') return ['VIEW', 'CREATE', 'EXPORT'].includes(at(fn));
   if (m(fn) === 'PERSONNEL') return ['VIEW', 'CREATE', 'EXPORT'].includes(at(fn));
@@ -701,7 +705,7 @@ function allowCanBoDang(fn: FDef): boolean {
   return false;
 }
 
-function allowCanBoTaiChinh(fn: FDef): boolean {
+function allowCanBoTaiChinh(fn: ResolvedFunction): boolean {
   if (m(fn) === 'INSURANCE') return true;
   if (m(fn) === 'POLICY') return ['VIEW', 'CREATE', 'UPDATE', 'EXPORT'].includes(at(fn));
   if (m(fn) === 'AWARDS') return VIEW_EXPORT.has(at(fn));
@@ -711,7 +715,7 @@ function allowCanBoTaiChinh(fn: FDef): boolean {
   return false;
 }
 
-function allowCanBoThuVien(fn: FDef): boolean {
+function allowCanBoThuVien(fn: ResolvedFunction): boolean {
   if (m(fn) === 'LEARNING_MATERIAL') return true;
   if (m(fn) === 'SYSTEM') return ['VIEW_DOCUMENTS', 'SEARCH_DIGITAL_DOCS', 'DOWNLOAD_DIGITAL_DOCS', 'VIEW_DIGITAL_DOCS'].includes(fn.code);
   if (m(fn) === 'DASHBOARD') return fn.code === 'VIEW_DASHBOARD';
@@ -719,7 +723,7 @@ function allowCanBoThuVien(fn: FDef): boolean {
   return false;
 }
 
-function allowKyThuatVien(fn: FDef): boolean {
+function allowKyThuatVien(fn: ResolvedFunction): boolean {
   if (m(fn) === 'INFRASTRUCTURE') return ['INFRA.VIEW', 'INFRA.PIPELINE_VIEW', 'INFRA.STORAGE_VIEW', 'INFRA.DATA_QUALITY_VIEW', 'INFRA.BACKUP_VIEW', 'INFRA.BACKUP_MANAGE', 'INFRA.RESTORE_REQUEST', 'INFRA.DR_VIEW', 'INFRA.ALERT_VIEW'].includes(fn.code);
   if (m(fn) === 'SYSTEM') return ['VIEW_SYSTEM_HEALTH', 'VIEW_INFRASTRUCTURE', 'VIEW_SYSTEM_STATS', 'VIEW_MONITORING_ALERTS', 'VIEW_MONITORING_SERVICES'].includes(fn.code);
   if (m(fn) === 'DATA') return VIEW_EXPORT.has(at(fn));
@@ -728,7 +732,7 @@ function allowKyThuatVien(fn: FDef): boolean {
   return false;
 }
 
-function allowTroLyNhanVien(fn: FDef): boolean {
+function allowTroLyNhanVien(fn: ResolvedFunction): boolean {
   const mods = new Set(['SYSTEM', 'DASHBOARD', 'PERSONAL']);
   if (!mods.has(m(fn)) && m(fn) !== 'DATA') return fn.code === 'VIEW_DASHBOARD';
   if (m(fn) === 'SYSTEM') return at(fn) === 'VIEW';
@@ -738,7 +742,7 @@ function allowTroLyNhanVien(fn: FDef): boolean {
   return false;
 }
 
-function allowHocVien(fn: FDef): boolean {
+function allowHocVien(fn: ResolvedFunction): boolean {
   const whitelist = new Set([
     'VIEW_DASHBOARD', 'VIEW_DASHBOARD_STUDENT',
     'VIEW_TRAINING', 'VIEW_COURSE', 'VIEW_GRADE', 'VIEW_SCHEDULE',
@@ -756,7 +760,7 @@ function allowHocVien(fn: FDef): boolean {
 }
 
 // Map position code → predicate + scope
-function getPredicateAndScope(posCode: string): { predicate: (fn: FDef) => boolean; scope: FunctionScope } {
+function getPredicateAndScope(posCode: string): { predicate: (fn: ResolvedFunction) => boolean; scope: FunctionScope } {
   switch (posCode) {
     case 'SYSTEM_ADMIN':                                     return { predicate: allowSystemAdmin,         scope: 'ACADEMY' };
     case 'GIAM_DOC':                                         return { predicate: allowGiamDoc,             scope: 'ACADEMY' };
@@ -858,7 +862,9 @@ async function seedPositions(): Promise<void> {
 async function seedGrants(): Promise<void> {
   console.log('\n📌 [3/3] Seed Position Grants...');
 
-  const allFunctions = Object.entries(FUNCTION_DEFS).map(([code, def]) => ({ code, ...def }));
+  // Spread def trước, gán code sau để code luôn là string (key của FUNCTION_DEFS),
+  // không bị optional `code?` của FDef làm rộng kiểu thành string | undefined.
+  const allFunctions = Object.entries(FUNCTION_DEFS).map(([code, def]) => ({ ...def, code }));
   let totalCreated = 0;
   let totalUpdated = 0;
 

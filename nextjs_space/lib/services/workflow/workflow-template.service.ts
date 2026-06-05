@@ -14,7 +14,7 @@ import prisma from '@/lib/db';
 import { authorize } from '@/lib/rbac/authorize';
 import { WORKFLOW } from '@/lib/rbac/function-codes';
 import { AuthUser } from '@/lib/rbac/types';
-import { WorkflowVersionStatus } from '@prisma/client';
+import { Prisma, WorkflowVersionStatus } from '@prisma/client';
 import { WorkflowError } from './workflow-engine.service';
 
 // ---------------------------------------------------------------------------
@@ -37,7 +37,7 @@ export interface UpsertVersionStepsInput {
     slaHours?: number;
     isParallel?: boolean;
     requiresSignature?: boolean;
-    configJson?: Record<string, unknown>;
+    configJson?: Prisma.InputJsonValue;
   }>;
   transitions: Array<{
     fromStepCode: string;

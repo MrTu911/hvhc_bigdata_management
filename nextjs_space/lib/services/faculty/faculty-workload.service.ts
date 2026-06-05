@@ -104,16 +104,16 @@ export async function rebuildWorkloadSnapshot(
     select: { id: true },
   });
 
-  // Nếu không tìm được term, vẫn tính từ lớp ACTIVE theo giảng viên (không filter term)
+  // Nếu không tìm được term, vẫn tính từ lớp đang mở (OPEN) theo giảng viên (không filter term)
   const classSectionWhere = term
     ? {
         facultyId: facultyProfileId,
         termId: term.id,
-        status: ClassSectionStatus.ACTIVE,
+        status: ClassSectionStatus.OPEN,
       }
     : {
         facultyId: facultyProfileId,
-        status: ClassSectionStatus.ACTIVE,
+        status: ClassSectionStatus.OPEN,
       };
 
   // ── 2. Lấy danh sách lớp đang dạy trong kỳ ────────────────────────────────

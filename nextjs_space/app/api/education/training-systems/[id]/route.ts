@@ -48,7 +48,7 @@ export async function GET(
       prisma.hocVien.count({ where: { trainingSystemUnitId: id, deletedAt: null } }),
       prisma.hocVien.count({ where: { trainingSystemUnitId: id, deletedAt: null, currentStatus: 'ACTIVE' } }),
       prisma.academicWarning.count({
-        where: { student: { trainingSystemUnitId: id, deletedAt: null } },
+        where: { hocVien: { trainingSystemUnitId: id, deletedAt: null } },
       }),
       prisma.hocVien.count({ where: { trainingSystemUnitId: id, deletedAt: null, currentStatus: 'GRADUATED' } }),
     ]);
@@ -99,18 +99,24 @@ export async function GET(
     }
 
     // 5. Top cảnh báo học vụ (overview)
-    const topWarnings = await prisma.academicWarning.findMany({
+    const topWarningRecords = await prisma.academicWarning.findMany({
       where: {
-        student: { trainingSystemUnitId: id, deletedAt: null },
+        hocVien: { trainingSystemUnitId: id, deletedAt: null },
         warningLevel: { in: ['HIGH', 'CRITICAL'] },
       },
       select: {
         warningLevel: true,
-        student: { select: { id: true, maHocVien: true, hoTen: true, lop: true } },
+        hocVien: { select: { id: true, maHocVien: true, hoTen: true, lop: true } },
       },
       take: 10,
       orderBy: { createdAt: 'desc' },
     });
+
+    // Map relation `hocVien` → `student` to preserve the existing response contract.
+    const topWarnings = topWarningRecords.map((w) => ({
+      warningLevel: w.warningLevel,
+      student: w.hocVien,
+    }));
 
     // 6. Phân bổ ngành
     const majorDistribution = await prisma.hocVien.groupBy({

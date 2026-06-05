@@ -28,7 +28,17 @@ export async function PATCH(
       return NextResponse.json({ success: false, error: 'Không tìm thấy bản ghi khen thưởng' }, { status: 404 });
     }
 
-    const updated = await PartyAwardDisciplineService.updateAward(id, parsed.data);
+    // Schema cho phép null (clear giá trị); service/repo dùng undefined để "không đổi".
+    // Chuẩn hóa null → undefined để khớp AwardUpdatePayload.
+    const { title, decisionNo, decisionDate, issuer, note, attachmentUrl } = parsed.data;
+    const updated = await PartyAwardDisciplineService.updateAward(id, {
+      title: title ?? undefined,
+      decisionNo: decisionNo ?? undefined,
+      decisionDate: decisionDate ?? undefined,
+      issuer: issuer ?? undefined,
+      note: note ?? undefined,
+      attachmentUrl: attachmentUrl ?? undefined,
+    });
 
     await logAudit({
       userId: authResult.user!.id,

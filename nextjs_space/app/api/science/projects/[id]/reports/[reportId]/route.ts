@@ -59,7 +59,9 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
     updateData.reviewedById = auth.user!.id
     if (reviewNote) updateData.reviewNote = reviewNote
   } else if (action === 'REJECT') {
-    updateData.status = 'REJECTED'
+    // NckhReportStatus không có REJECTED — báo cáo đã được xem xét nhưng không duyệt;
+    // lý do từ chối lưu ở reviewNote.
+    updateData.status = 'REVIEWED'
     updateData.reviewedAt = new Date()
     updateData.reviewedById = auth.user!.id
     if (reviewNote) updateData.reviewNote = reviewNote

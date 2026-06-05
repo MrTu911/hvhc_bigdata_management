@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/table';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
-import { RollbackConfirmModal, type RollbackTarget } from './rollback-confirm-modal';
+import { RollbackConfirmModal } from './rollback-confirm-modal';
 
 interface VersionRow {
   id: string;
@@ -158,7 +158,7 @@ export function VersionHistoryList({
                       size="sm"
                       className="h-7 text-xs"
                       onClick={() => {
-                        setRollbackTarget(row as RollbackTarget);
+                        setRollbackTarget(row);
                         setRollbackOpen(true);
                       }}
                     >

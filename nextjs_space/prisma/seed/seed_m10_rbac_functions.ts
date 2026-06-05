@@ -19,7 +19,7 @@
  *   NHAN_VIEN           – VIEW (UNIT) – cán bộ phòng đào tạo
  */
 
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import 'dotenv/config';
 
 const prisma = new PrismaClient();
@@ -181,7 +181,8 @@ async function main() {
         positionId: position.id,
         functionId: fn.id,
         scope: grant.scope,
-        conditions: null,
+        // conditions bỏ trống → DB NULL (không có ràng buộc điều kiện)
+        conditions: Prisma.JsonNull,
       },
     });
     console.log(`  ✓ ${grant.positionCode} → ${grant.functionCode} [${grant.scope}]`);

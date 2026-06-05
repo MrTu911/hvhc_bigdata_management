@@ -76,12 +76,21 @@ export async function POST(req: NextRequest) {
       // Batch rebuild
       const batchResult = await rebuildGpaBatch(academicYear, semesterCode);
 
+      // Audit result only supports SUCCESS|FAIL|DENIED; a batch with any failed
+      // item is a partial failure → record as FAIL and keep counts in metadata.
+      const hasFailures = batchResult.failed.length > 0;
       await logAudit({
         userId: user.id,
         functionCode: STUDENT.GPA_MANAGE,
         action: 'RECALCULATE_BATCH',
         resourceType: 'STUDENT_GPA',
-        result: batchResult.failed.length === 0 ? 'SUCCESS' : 'PARTIAL',
+        result: hasFailures ? 'FAIL' : 'SUCCESS',
+        metadata: {
+          total: batchResult.total,
+          succeeded: batchResult.succeeded,
+          failedCount: batchResult.failed.length,
+          partial: hasFailures && batchResult.succeeded > 0,
+        },
       });
 
       return NextResponse.json({

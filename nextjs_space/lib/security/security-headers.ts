@@ -53,7 +53,8 @@ export function applySecurityHeaders(
   const merged = { ...SECURITY_HEADERS, ...overrides };
 
   for (const [key, value] of Object.entries(merged)) {
-    if (value === '') {
+    // Empty string or an explicit undefined override means: remove the header.
+    if (value === '' || value === undefined) {
       headers.delete(key);
     } else {
       headers.set(key, value);

@@ -12,7 +12,7 @@
  * Run: npx tsx --require dotenv/config prisma/seed/seed_m10_learning_materials.ts
  */
 
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import 'dotenv/config';
 
 const prisma = new PrismaClient();
@@ -502,7 +502,7 @@ async function main() {
           content: q.content,
           contentType: 'TEXT',
           questionType: q.questionType,
-          options: q.options ?? null,
+          options: q.options ? (q.options as Prisma.InputJsonValue) : Prisma.JsonNull,
           correctAnswer: q.correctAnswer,
           explanation: q.explanation ?? null,
           difficulty: q.difficulty,

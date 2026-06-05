@@ -399,6 +399,7 @@ export default function PolicyDashboardPage() {
             </CardContent>
           </Card>
 
+        </div>
       </div>
     </div>
   );

@@ -383,7 +383,8 @@ async function main() {
         languageEligible: true,
         graduationEligible,
         status: graduationEligible ? 'ELIGIBLE' : 'INELIGIBLE',
-        failureReasonsJson: failureReasons.length > 0 ? { reasons: failureReasons } : null,
+        // Field Json? – chỉ set khi có lý do; bỏ qua để mặc định NULL (không truyền JS null trực tiếp).
+        ...(failureReasons.length > 0 ? { failureReasonsJson: { reasons: failureReasons } } : {}),
       },
     });
     gradCreated++;

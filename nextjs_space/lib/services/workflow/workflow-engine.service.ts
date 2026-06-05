@@ -18,6 +18,7 @@ import { WORKFLOW } from '@/lib/rbac/function-codes';
 import { AuthUser } from '@/lib/rbac/types';
 import { ApproverPolicyResolver } from './approver-policy-resolver';
 import {
+  Prisma,
   WorkflowActionCode,
   WorkflowInstanceStatus,
   WorkflowStepStatus,
@@ -49,7 +50,7 @@ export interface ActOnWorkflowInput {
   /** Comment bắt buộc với REJECT, RETURN theo policy (service tự enforce) */
   comment?: string;
   /** Payload bổ sung (file đính kèm, form data...) */
-  payloadJson?: Record<string, unknown>;
+  payloadJson?: Prisma.InputJsonValue;
 }
 
 export interface WorkflowActionResult {

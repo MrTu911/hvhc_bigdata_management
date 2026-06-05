@@ -14,7 +14,7 @@
  *   npx tsx --require dotenv/config prisma/seed/seed_m13_workflow_templates.ts
  */
 
-import { PrismaClient, WorkflowVersionStatus } from '@prisma/client';
+import { PrismaClient, WorkflowVersionStatus, Prisma } from '@prisma/client';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -32,7 +32,7 @@ interface StepDef {
   orderIndex: number;
   slaHours?: number;
   requiresSignature?: boolean;
-  configJson?: Record<string, unknown>;
+  configJson?: Prisma.InputJsonValue;
 }
 
 interface TransitionDef {

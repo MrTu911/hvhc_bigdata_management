@@ -27,6 +27,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { NckhProjectStatus } from '@prisma/client';
 import prisma from '@/lib/db';
 import { requireFunction } from '@/lib/rbac/middleware';
 import { SCIENCE } from '@/lib/rbac/function-codes';
@@ -42,7 +43,7 @@ const bodySchema = z.object({
   abstract:       z.string().max(5000).optional(),
   threshold:      z.number().min(0).max(1).default(0.15),
   limit:          z.number().int().min(1).max(20).default(8),
-  includeStatuses: z.array(z.string()).optional(),
+  includeStatuses: z.array(z.nativeEnum(NckhProjectStatus)).optional(),
 });
 
 // ─── Tokenization ─────────────────────────────────────────────────────────────
@@ -152,7 +153,14 @@ export async function POST(req: NextRequest) {
   const srcTokens = buildTokenSet(srcTitle, srcKeywords, srcAbstract);
 
   // ── Load candidate projects ──
-  const allowedStatuses = includeStatuses ?? ['SUBMITTED', 'UNDER_REVIEW', 'APPROVED', 'IN_PROGRESS', 'PAUSED', 'COMPLETED'];
+  const allowedStatuses: NckhProjectStatus[] = includeStatuses ?? [
+    NckhProjectStatus.SUBMITTED,
+    NckhProjectStatus.UNDER_REVIEW,
+    NckhProjectStatus.APPROVED,
+    NckhProjectStatus.IN_PROGRESS,
+    NckhProjectStatus.PAUSED,
+    NckhProjectStatus.COMPLETED,
+  ];
 
   const candidates = await prisma.nckhProject.findMany({
     where: {

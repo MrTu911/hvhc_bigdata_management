@@ -10,7 +10,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createId } from '@paralleldrive/cuid2';
+import { randomUUID } from 'crypto';
 import bcrypt from 'bcryptjs';
 import prisma from '@/lib/db';
 import { requireFunction } from '@/lib/rbac/middleware';
@@ -71,9 +71,9 @@ export async function POST(req: NextRequest) {
       }
 
       // Tạo phantom email duy nhất (không thể đăng nhập)
-      const phantomId = createId();
+      const phantomId = randomUUID();
       const phantomEmail = externalEmail?.trim() || `phantom-${phantomId}@external.hvhc.local`;
-      const phantomPassword = await bcrypt.hash(createId() + createId(), 10);
+      const phantomPassword = await bcrypt.hash(randomUUID() + randomUUID(), 10);
 
       // Tạo User phantom + FacultyProfile trong transaction
       const result = await prisma.$transaction(async (tx) => {

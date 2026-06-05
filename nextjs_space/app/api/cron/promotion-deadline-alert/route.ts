@@ -41,11 +41,15 @@ async function getSentinelInstanceId(): Promise<string> {
   })
   if (existing) return existing.id
 
-  // Create sentinel (only needed once; idempotent)
-  const def = await prisma.workflowDefinition.findFirst({ select: { id: true } })
+  // Create sentinel (only needed once; idempotent).
+  // WorkflowInstance yêu cầu templateId + templateVersionId — lấy từ một version bất kỳ.
+  const version = await prisma.workflowTemplateVersion.findFirst({
+    select: { id: true, templateId: true },
+  })
   const created = await prisma.workflowInstance.create({
     data: {
-      definitionId: def?.id ?? '',
+      templateId: version?.templateId ?? '',
+      templateVersionId: version?.id ?? '',
       entityType: SENTINEL_ENTITY_TYPE,
       entityId: SENTINEL_ENTITY_ID,
       status: 'IN_PROGRESS',

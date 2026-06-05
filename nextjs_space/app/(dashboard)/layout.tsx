@@ -4,6 +4,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { DashboardHeader } from '@/components/dashboard/header';
 import { DashboardSidebarEnhanced } from '@/components/dashboard/sidebar-enhanced';
+import { ForcePasswordChangeGuard } from '@/components/auth/force-password-change-guard';
 
 export default async function DashboardLayout({
   children,
@@ -18,6 +19,7 @@ export default async function DashboardLayout({
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+      <ForcePasswordChangeGuard />
       <DashboardHeader />
       <DashboardSidebarEnhanced />
       <main className="lg:pl-[var(--sidebar-width)] pt-16 page-enter">

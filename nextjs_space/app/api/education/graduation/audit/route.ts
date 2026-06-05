@@ -5,6 +5,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/db';
 import { requireFunction } from '@/lib/rbac/middleware';
 import { EDUCATION } from '@/lib/rbac/function-codes';
@@ -85,7 +86,10 @@ export async function POST(req: NextRequest) {
         thesisEligible:     engineResult.thesisEligible,
         languageEligible:   engineResult.languageEligible,
         graduationEligible: engineResult.graduationEligible,
-        failureReasonsJson: engineResult.failureReasonsJson,
+        failureReasonsJson:
+          engineResult.failureReasonsJson
+            ? (engineResult.failureReasonsJson as Prisma.InputJsonValue)
+            : Prisma.JsonNull,
         status:             engineResult.graduationEligible ? 'ELIGIBLE' : 'INELIGIBLE',
         notes:              notes || null,
         createdBy:          user!.id,

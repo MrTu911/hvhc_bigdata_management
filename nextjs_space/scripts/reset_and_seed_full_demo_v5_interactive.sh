@@ -657,6 +657,16 @@ run_seed_group \
   "prisma/seed/seed_personnel_profiles_demo_v2.ts" \
   "prisma/seed/seed_faculty_profiles.ts"
 
+# Dữ liệu THẬT Viện NCKH Hậu cần Quân sự (B12): 4 Ban con (non-destructive), 31 cán bộ thật,
+# rồi RBAC position (gồm nâng scope Chỉ huy Viện + cấp VIEW_PERSONNEL_SENSITIVE).
+# Thứ tự bắt buộc: units -> personnel -> rbac. Phụ thuộc B12 (seed_units.ts ở nhóm lõi).
+# backfill-personnel.ts ở nhóm cuối sẽ tạo Personnel (M02) cho các cán bộ này.
+run_seed_group \
+  "Viện B12 (đơn vị con + cán bộ thật + RBAC từ CSDL.B212)" \
+  "prisma/seed/seed_vien_b212_units.ts" \
+  "prisma/seed/seed_vien_b212_personnel.ts" \
+  "prisma/seed/seed_vien_b212_rbac.ts"
+
 run_seed_group \
   "Education + teaching" \
   "prisma/seed/seed_education.ts" \

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { requireAnyFunction } from '@/lib/rbac/middleware'
+import { authorize } from '@/lib/rbac/authorize'
 import { SCIENCE } from '@/lib/rbac/function-codes'
 import { logAudit } from '@/lib/audit'
 import prisma from '@/lib/db'
@@ -12,6 +13,12 @@ interface RouteParams {
 
 const SANG_KIEN_CATEGORIES = ['SANG_KIEN_CO_SO'] as const
 const SANG_KIEN_TYPES = ['SANG_KIEN_KINH_NGHIEM'] as const
+
+// Báo cáo nghiệm thu của chủ nhiệm dùng reportPeriod cố định làm dấu hiệu nhận diện.
+// reportType nằm trong enum NckhReportType (MONTHLY|QUARTERLY|ANNUAL); báo cáo cuối kỳ
+// nghiệm thu được phân loại ANNUAL.
+const ACCEPTANCE_REPORT_PERIOD = 'NGHI_THU'
+const ACCEPTANCE_REPORT_TYPE = 'ANNUAL' as const
 
 function isSangKien(category: string, researchType: string) {
   return (
@@ -58,9 +65,9 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
         },
         orderBy: { joinDate: 'asc' },
       },
-      // Báo cáo do chủ nhiệm nộp (dùng reportType ADHOC + reportPeriod cố định)
+      // Báo cáo do chủ nhiệm nộp (nhận diện qua reportPeriod cố định)
       progressReports: {
-        where: { reportType: 'ADHOC' },
+        where: { reportPeriod: ACCEPTANCE_REPORT_PERIOD },
         orderBy: { createdAt: 'desc' },
         take: 1,
         select: {
@@ -232,9 +239,11 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
 
   // Chỉ chủ nhiệm đề tài hoặc người có quyền duyệt mới được nộp/lưu báo cáo
   const isPI = project.principalInvestigatorId === auth.user!.id
-  const isApprover =
-    auth.user!.functionCodes?.includes(SCIENCE.PROJECT_APPROVE_DEPT) ||
-    auth.user!.functionCodes?.includes(SCIENCE.PROJECT_APPROVE_ACADEMY)
+  const [deptApproveCheck, academyApproveCheck] = await Promise.all([
+    authorize(auth.user!, SCIENCE.PROJECT_APPROVE_DEPT),
+    authorize(auth.user!, SCIENCE.PROJECT_APPROVE_ACADEMY),
+  ])
+  const isApprover = deptApproveCheck.allowed || academyApproveCheck.allowed
 
   if (!isPI && !isApprover) {
     return NextResponse.json(
@@ -270,9 +279,9 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
   const reportStatus = action === 'submit' ? 'SUBMITTED' : 'DRAFT'
   const contentJson = JSON.stringify({ reportTitle, summary, innovation, applicability, results })
 
-  // Tìm báo cáo ADHOC hiện tại để upsert
+  // Tìm báo cáo nghiệm thu hiện tại để upsert (nhận diện qua reportPeriod cố định)
   const existing = await prisma.nckhProgressReport.findFirst({
-    where: { projectId: id, reportType: 'ADHOC', reportPeriod: 'NGHI_THU' },
+    where: { projectId: id, reportPeriod: ACCEPTANCE_REPORT_PERIOD },
     select: { id: true, status: true },
   })
 
@@ -306,8 +315,8 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
     report = await prisma.nckhProgressReport.create({
       data: {
         projectId: id,
-        reportPeriod: 'NGHI_THU',
-        reportType: 'ADHOC',
+        reportPeriod: ACCEPTANCE_REPORT_PERIOD,
+        reportType: ACCEPTANCE_REPORT_TYPE,
         content: contentJson,
         status: reportStatus,
         completionPercent: 100,

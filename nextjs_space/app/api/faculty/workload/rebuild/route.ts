@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
         action: 'CREATE',
         resourceType: 'FACULTY_WORKLOAD_SNAPSHOT',
         resourceId: facultyProfileId,
-        newValue: { academicYear, semesterCode, ...result },
+        newValue: { ...result, academicYear, semesterCode },
         result: 'SUCCESS',
       });
 
@@ -75,7 +75,9 @@ export async function POST(req: NextRequest) {
       action: 'CREATE',
       resourceType: 'FACULTY_WORKLOAD_BATCH',
       newValue: { academicYear, semesterCode, ...summary },
-      result: summary.failed.length === 0 ? 'SUCCESS' : 'PARTIAL',
+      // Audit result chỉ hỗ trợ SUCCESS/FAIL/DENIED; chi tiết phần thất bại
+      // được ghi trong newValue.failed nên không mất thông tin.
+      result: summary.failed.length === 0 ? 'SUCCESS' : 'FAIL',
     });
 
     return NextResponse.json({

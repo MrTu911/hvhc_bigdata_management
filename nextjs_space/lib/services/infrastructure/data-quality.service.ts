@@ -7,6 +7,7 @@
  */
 
 import prisma from '@/lib/db';
+import { Prisma } from '@prisma/client';
 import { raiseAlert, resolveAlert } from '@/lib/services/infrastructure/alert.service';
 import type {
   DataQualityRule,
@@ -254,14 +255,15 @@ export async function listQualityResults(filter: ListResultsFilter) {
   const page     = filter.page     ?? 1;
   const pageSize = filter.pageSize ?? 30;
 
-  const where: Parameters<typeof prisma.dataQualityResult.findMany>[0]['where'] = {};
+  const where: Prisma.DataQualityResultWhereInput = {};
   if (filter.ruleId)   where.ruleId = filter.ruleId;
   if (filter.passed !== undefined) where.passed = filter.passed;
   if (filter.severity) where.severity = filter.severity;
   if (filter.fromDate || filter.toDate) {
-    where.checkedAt = {};
-    if (filter.fromDate) where.checkedAt.gte = filter.fromDate;
-    if (filter.toDate)   where.checkedAt.lte = filter.toDate;
+    const checkedAt: Prisma.DateTimeFilter = {};
+    if (filter.fromDate) checkedAt.gte = filter.fromDate;
+    if (filter.toDate)   checkedAt.lte = filter.toDate;
+    where.checkedAt = checkedAt;
   }
   if (filter.targetTable) {
     where.rule = { targetTable: filter.targetTable };

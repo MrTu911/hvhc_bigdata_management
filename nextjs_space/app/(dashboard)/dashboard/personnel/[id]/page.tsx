@@ -34,6 +34,11 @@ import {
   BookOpen,
   FlaskConical,
   Star,
+  CreditCard,
+  Droplet,
+  Fingerprint,
+  Flag,
+  Lock,
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { vi } from 'date-fns/locale';
@@ -61,6 +66,25 @@ interface Personnel {
   endDate: string | null;
   createdAt: string;
   updatedAt: string;
+  // Thông tin định danh & quân nhân (dữ liệu thật CSDL quân nhân)
+  militaryIdNumber: string | null;
+  bloodType: string | null;
+  bloodGroupRaw: string | null;
+  ethnicity: string | null;
+  religion: string | null;
+  birthPlace: string | null;
+  enlistmentDate: string | null;
+  dischargeDate: string | null;
+  managementCategory: string | null;
+  managementLevel: string | null;
+  permanentAddress: string | null;
+  temporaryAddress: string | null;
+  // Nhạy cảm — null nếu thiếu quyền VIEW_PERSONNEL_SENSITIVE
+  citizenId: string | null;
+  citizenIdIssueDate: string | null;
+  citizenIdIssuePlace: string | null;
+  citizenIdExpiryDate: string | null;
+  officerIdCard: string | null;
   unitRelation: {
     id: string;
     name: string;
@@ -163,6 +187,11 @@ const PERSONNEL_TYPE_MAP: Record<string, string> = {
   SINH_VIEN_DAN_SU: 'Sinh viên dân sự',
 };
 
+const MANAGEMENT_CATEGORY_MAP: Record<string, string> = {
+  CAN_BO: 'Cán bộ quản lý',
+  QUAN_LUC: 'Quân lực quản lý',
+};
+
 const ATTACHMENT_TYPE_MAP: Record<string, string> = {
   SO_YEU_LY_LICH: 'Sơ yếu lý lịch',
   ANH_THE: 'Ảnh thẻ 4x6',
@@ -180,6 +209,7 @@ export default function PersonnelDetailPage() {
   const [personnel, setPersonnel] = useState<Personnel | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [sensitiveVisible, setSensitiveVisible] = useState(false);
 
   useEffect(() => {
     async function fetchPersonnel() {
@@ -190,6 +220,7 @@ export default function PersonnelDetailPage() {
         if (res.ok) {
           const data = await res.json();
           setPersonnel(data.data);
+          setSensitiveVisible(Boolean(data.sensitiveVisible));
         } else {
           const err = await res.json();
           setError(err.error || 'Không thể tải hồ sơ');
@@ -316,8 +347,12 @@ export default function PersonnelDetailPage() {
       </Card>
 
       {/* Tabs */}
-      <Tabs defaultValue="education" className="space-y-4">
+      <Tabs defaultValue="identity" className="space-y-4">
         <TabsList>
+          <TabsTrigger value="identity">
+            <Fingerprint className="h-4 w-4 mr-2" />
+            Định danh & quân nhân
+          </TabsTrigger>
           <TabsTrigger value="education">
             <GraduationCap className="h-4 w-4 mr-2" />
             Học vấn
@@ -347,6 +382,58 @@ export default function PersonnelDetailPage() {
             </TabsTrigger>
           )}
         </TabsList>
+
+        {/* Định danh & quân nhân (dữ liệu thật CSDL quân nhân) */}
+        <TabsContent value="identity">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {/* Nhân thân */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base flex items-center gap-2">
+                  <User className="h-4 w-4" />
+                  Nhân thân
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <InfoItem icon={<Fingerprint />} label="Mã định danh quân nhân" value={personnel.militaryIdNumber || personnel.militaryId || '-'} />
+                <InfoItem icon={<User />} label="Giới tính" value={personnel.gender || '-'} />
+                <InfoItem icon={<Calendar />} label="Ngày sinh" value={formatDate(personnel.dateOfBirth)} />
+                <InfoItem icon={<Droplet />} label="Nhóm máu" value={personnel.bloodGroupRaw || '-'} />
+                <InfoItem icon={<Flag />} label="Dân tộc" value={personnel.ethnicity || '-'} />
+                <InfoItem icon={<Flag />} label="Tôn giáo" value={personnel.religion || '-'} />
+                <InfoItem icon={<MapPin />} label="Nơi đăng ký khai sinh" value={personnel.birthPlace || '-'} />
+                <InfoItem icon={<MapPin />} label="Quê quán" value={personnel.placeOfOrigin || '-'} />
+              </CardContent>
+            </Card>
+
+            {/* Giấy tờ & quân vụ */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base flex items-center gap-2">
+                  <CreditCard className="h-4 w-4" />
+                  Giấy tờ & quân vụ
+                  {!sensitiveVisible && (
+                    <Badge variant="outline" className="ml-auto text-xs font-normal">
+                      <Lock className="h-3 w-3 mr-1" />
+                      CCCD/CMSQ bị ẩn (thiếu quyền)
+                    </Badge>
+                  )}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <InfoItem icon={<CreditCard />} label="Số CCCD" value={sensitiveVisible ? (personnel.citizenId || '-') : '••••••'} />
+                <InfoItem icon={<Calendar />} label="Ngày cấp CCCD" value={sensitiveVisible ? formatDate(personnel.citizenIdIssueDate) : '••••••'} />
+                <InfoItem icon={<Calendar />} label="Thời hạn CCCD" value={sensitiveVisible ? formatDate(personnel.citizenIdExpiryDate) : '••••••'} />
+                <InfoItem icon={<MapPin />} label="Nơi cấp CCCD" value={sensitiveVisible ? (personnel.citizenIdIssuePlace || '-') : '••••••'} />
+                <InfoItem icon={<Shield />} label="Số CMSQ/CMQNCN" value={sensitiveVisible ? (personnel.officerIdCard || '-') : '••••••'} />
+                <InfoItem icon={<Shield />} label="Diện quản lý" value={personnel.managementCategory ? (MANAGEMENT_CATEGORY_MAP[personnel.managementCategory] || personnel.managementCategory) : '-'} />
+                <InfoItem icon={<Building2 />} label="Đơn vị" value={personnel.unitRelation?.name || '-'} />
+                <InfoItem icon={<Calendar />} label="Ngày nhập ngũ" value={formatDate(personnel.enlistmentDate)} />
+                <InfoItem icon={<Calendar />} label="Ngày xuất ngũ" value={formatDate(personnel.dischargeDate)} />
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
 
         {/* Education History */}
         <TabsContent value="education">

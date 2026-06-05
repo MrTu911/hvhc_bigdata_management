@@ -19,7 +19,7 @@ import {
 } from '@/lib/services/workflow/workflow-engine.service';
 import { WorkflowNotificationService } from '@/lib/services/workflow/workflow-notification.service';
 import { SignatureService } from '@/lib/services/workflow/signature-adapter';
-import { WorkflowActionCode, WorkflowInstanceStatus } from '@prisma/client';
+import { Prisma, WorkflowActionCode, WorkflowInstanceStatus } from '@prisma/client';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import prisma from '@/lib/db';
@@ -71,7 +71,7 @@ export async function POST(
         workflowInstanceId: params.id,
         actionCode: actionCode as WorkflowActionCode,
         comment: typeof comment === 'string' ? comment : undefined,
-        payloadJson: payloadJson as Record<string, unknown> | undefined,
+        payloadJson: payloadJson as Prisma.InputJsonValue | undefined,
       },
       actor
     );

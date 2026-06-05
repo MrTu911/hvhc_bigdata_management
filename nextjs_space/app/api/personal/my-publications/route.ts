@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
       // Đảm bảo user luôn là tác giả đầu tiên nếu chưa khai báo
       publicationAuthors: parsed.data.publicationAuthors?.length
         ? parsed.data.publicationAuthors
-        : [{ authorName: user.name ?? user.username, authorOrder: 1, userId: user.id, isInternal: true }],
+        : [{ authorName: user.name ?? user.email, authorOrder: 1, userId: user.id, isInternal: true }],
     };
 
     const result = await nckhPublicationService.createPublication(

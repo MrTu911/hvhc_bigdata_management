@@ -9,7 +9,7 @@ import { requireFunction } from '@/lib/rbac/middleware'
 import { DASHBOARD } from '@/lib/rbac/function-codes'
 import { getRoleTemplate, saveUserLayout, logDashboardAccess } from '@/lib/repositories/dashboard/dashboard-layout.repo'
 import { getWidgetsByRole } from '@/lib/dashboard/widget-registry'
-import type { DashboardRoleKey } from '@prisma/client'
+import { Prisma, type DashboardRoleKey } from '@prisma/client'
 
 const VALID_DASHBOARD_KEYS = new Set<string>([
   'EXECUTIVE', 'DEPARTMENT', 'EDUCATION', 'PARTY', 'FACULTY', 'STUDENT',
@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
     const saved = await saveUserLayout(
       user.id,
       dashboardKey as DashboardRoleKey,
-      layoutJson,
+      layoutJson as unknown as Prisma.InputJsonValue,
       template?.id ?? null,
     )
 

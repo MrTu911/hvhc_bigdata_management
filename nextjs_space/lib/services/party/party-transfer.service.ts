@@ -81,8 +81,8 @@ export const PartyTransferService = {
       fromPartyOrgId: payload.fromPartyOrgId,
       toPartyOrgId: payload.toPartyOrgId,
       transferDate: new Date(payload.transferDate),
-      introductionLetterNo: payload.introductionLetterNo ?? null,
-      note: payload.note ?? null,
+      introductionLetterNo: payload.introductionLetterNo ?? undefined,
+      note: payload.note ?? undefined,
     });
 
     // For an official transfer, update the member's home organisation and status.

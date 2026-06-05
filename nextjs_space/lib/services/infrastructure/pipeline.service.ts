@@ -10,6 +10,7 @@
 
 import prisma from '@/lib/db';
 import { triggerDag } from '@/lib/integrations/airflow';
+import { Prisma } from '@prisma/client';
 import type {
   PipelineDefinition,
   PipelineRun,
@@ -44,7 +45,7 @@ export interface TriggerWithAirflowInput {
   dagId:          string;
   triggeredBy:    PipelineTrigger;
   triggeredById?: string;
-  dagConf?:       Record<string, unknown>;
+  dagConf?:       Prisma.JsonObject;
 }
 
 export interface TriggerWithAirflowResult {
@@ -227,7 +228,7 @@ export async function listPipelineRuns(filter: ListPipelineRunsFilter) {
   const page     = filter.page     ?? 1;
   const pageSize = filter.pageSize ?? 20;
 
-  const where: Parameters<typeof prisma.pipelineRun.findMany>[0]['where'] = {};
+  const where: Prisma.PipelineRunWhereInput = {};
   if (filter.definitionId) where.definitionId = filter.definitionId;
   if (filter.status)       where.status       = filter.status;
   if (filter.triggeredBy)  where.triggeredBy  = filter.triggeredBy;

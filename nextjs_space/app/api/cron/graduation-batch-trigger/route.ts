@@ -31,8 +31,9 @@ export async function POST(req: NextRequest) {
     logger.info('Graduation batch cron completed', result);
 
     return NextResponse.json({ success: true, data: result, error: null });
-  } catch (error: any) {
-    logger.error('Graduation batch cron failed', { error: error.message });
+  } catch (error: unknown) {
+    const err = error instanceof Error ? error : new Error(String(error));
+    logger.error('Graduation batch cron failed', err);
     return NextResponse.json({ success: false, data: null, error: 'Cron failed' }, { status: 500 });
   }
 }

@@ -342,7 +342,7 @@ function DegreePieChart({ byDegree }: { byDegree: Record<string, number> }) {
           innerRadius={50} outerRadius={80}
           dataKey="value" nameKey="name"
           paddingAngle={2}
-          label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+          label={({ name, percent }) => `${name} ${((percent ?? 0) * 100).toFixed(0)}%`}
           labelLine={false}
         >
           {data.map((_, i) => <Cell key={i} fill={DEGREE_COLORS[i % DEGREE_COLORS.length]} />)}

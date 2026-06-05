@@ -136,7 +136,6 @@ const translations = {
     // 6. CSDL Giảng viên - Học viên
     'nav.facultyStudentDatabase': 'CSDL Giảng viên - Học viên',
     'nav.facultyStudentOverview': 'Tổng quan CSDL GV-HV',
-    'nav.facultyOverview': 'Tổng quan Giảng viên',
     'nav.facultyList': 'Danh sách Giảng viên',
     'nav.facultyProfile': 'Hồ sơ Giảng viên',
     'nav.facultyResearch': 'NCKH của Giảng viên',
@@ -247,7 +246,6 @@ const translations = {
     'nav.trainingPrograms': 'Chương trình Đào tạo',
     
     // 7. Phân tích & AI
-    'nav.analyticsAI': 'Phân tích & AI',
     'nav.analyticsAI': 'Phân tích, Báo cáo & AI',
     'nav.analyticsReports': 'Phân tích & Báo cáo',
     'nav.basicAnalytics': 'Phân tích Cơ bản',
@@ -266,14 +264,7 @@ const translations = {
     // M18/M19. Mẫu biểu & Xuất dữ liệu
     'nav.templateExport': 'Mẫu biểu & Xuất dữ liệu',
 
-    // Groups còn thiếu translation
-    'nav.policyWelfareAwards':    'Chính sách, BHXH & Thi đua',
-    'nav.educationOverviewGroup': 'Tổng quan Đào tạo',
-    'nav.facultyManagementGroup': 'Quản lý Giảng viên',
-    'nav.trainingSystemGroup':    'Hệ đào tạo & Tiểu đoàn',
-    'nav.studentManagementGroup': 'Quản lý Người học',
-    'nav.educationProgramGroup':  'Chương trình & Vận hành',
-    'nav.myResearchSpace':        'Nghiên cứu cá nhân',
+    // Các group key trên đã được định nghĩa phía trên — bỏ block trùng (fix TS1117).
 
     // W. Quy trình nghiệp vụ (M13)
     'nav.workflowModule': 'Quy trình nghiệp vụ',
@@ -549,6 +540,12 @@ const translations = {
     'role.HOC_VIEN_SINH_VIEN': 'Học viên/Sinh viên',
     'role.HOC_VIEN': 'Học viên quân sự',
     'role.KY_THUAT_VIEN': 'Kỹ thuật viên',
+    'role.CHI_HUY_HE': 'Chỉ huy Hệ',
+    'role.CHI_HUY_TIEU_DOAN': 'Chỉ huy Tiểu đoàn',
+    'role.CHI_HUY_BAN': 'Chỉ huy Ban',
+    'role.CHI_HUY_BO_MON': 'Chỉ huy Bộ môn',
+    'role.TRO_LY': 'Trợ lý',
+    'role.NHAN_VIEN': 'Nhân viên',
     
     // Status
     'status.ACTIVE': 'Hoạt động',
@@ -707,7 +704,6 @@ const translations = {
     // 6. Faculty & Student Database
     'nav.facultyStudentDatabase': 'Faculty & Student DB',
     'nav.facultyStudentOverview': 'Faculty-Student Overview',
-    'nav.facultyOverview': 'Faculty Overview',
     'nav.facultyList': 'Faculty List',
     'nav.facultyProfile': 'Faculty Profile',
     'nav.facultyResearch': 'Faculty Research',
@@ -818,7 +814,6 @@ const translations = {
     'nav.trainingPrograms': 'Training Programs',
     
     // 7. Analytics & AI
-    'nav.analyticsAI': 'Analytics & AI',
     'nav.analyticsAI': 'Analytics, Reports & AI',
     'nav.analyticsReports': 'Analytics & Reports',
     'nav.basicAnalytics': 'Basic Analytics',
@@ -855,8 +850,13 @@ const translations = {
     'nav.uploadData': 'Upload Data',
     'nav.queryData': 'Query Data',
     'nav.manageData': 'Manage Dataset',
+    'nav.etlAutomation': 'ETL Automation',
     'nav.files': 'File Management',
-    
+    'nav.governanceCompliance': 'Compliance',
+    'nav.governanceLineage': 'Data Lineage',
+    'nav.governanceRetention': 'Retention Policy',
+    'nav.securityPolicy': 'Security Policy',
+
     // 9. ML & Models
     'nav.mlModule': 'ML/AI - Machine Learning',
     'nav.mlModels': 'ML Models',
@@ -880,6 +880,8 @@ const translations = {
     'nav.unitManagement': 'Unit Management',
     'nav.departmentManagement': 'Department Management',
     'nav.permissionGrants': 'Permission Grants',
+    'nav.rbacSoD': 'Separation of Duties (SoD)',
+    'nav.gradeCoefficients': 'Course Coefficients',
     'nav.auditLogs': 'Audit Logs',
     'nav.sessionManagement': 'Session Management',
     'nav.securityHardening': 'Security Hardening',
@@ -899,14 +901,7 @@ const translations = {
     'nav.acceptanceDocs': 'Acceptance Documents',
     'nav.projectReport': 'Project Report',
 
-    // Missing group title keys (EN)
-    'nav.policyWelfareAwards':    'Policy, Insurance & Awards',
-    'nav.educationOverviewGroup': 'Education Overview',
-    'nav.facultyManagementGroup': 'Faculty Management',
-    'nav.trainingSystemGroup':    'Training System & Battalion',
-    'nav.studentManagementGroup': 'Student Management',
-    'nav.educationProgramGroup':  'Programs & Operations',
-    'nav.myResearchSpace':        'My Research',
+    // Các group key trên đã được định nghĩa phía trên — bỏ block trùng (fix TS1117).
 
     // 12. Monitoring & Security
     'nav.monitoringSecurity': 'Monitoring & Security',
@@ -1111,6 +1106,12 @@ const translations = {
     'role.HOC_VIEN_SINH_VIEN': 'Student',
     'role.HOC_VIEN': 'Military Student',
     'role.KY_THUAT_VIEN': 'Technician',
+    'role.CHI_HUY_HE': 'Hệ Commander',
+    'role.CHI_HUY_TIEU_DOAN': 'Battalion Commander',
+    'role.CHI_HUY_BAN': 'Section Commander',
+    'role.CHI_HUY_BO_MON': 'Subject Division Commander',
+    'role.TRO_LY': 'Assistant',
+    'role.NHAN_VIEN': 'Staff',
     
     // Status
     'status.ACTIVE': 'Active',

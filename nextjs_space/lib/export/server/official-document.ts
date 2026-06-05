@@ -79,7 +79,7 @@ export function buildExcelLetterhead(
   const half = Math.max(1, Math.floor(totalColumns / 2));
   const rightStart = half + 1;
 
-  const leftBlock = [ISSUING_AUTHORITY.ministry, ISSUING_AUTHORITY.academy];
+  const leftBlock: string[] = [ISSUING_AUTHORITY.ministry, ISSUING_AUTHORITY.academy];
   if (meta.unitName) leftBlock.push(meta.unitName.toUpperCase());
   const rightBlock = [NATIONAL_HEADER.nation, NATIONAL_HEADER.motto];
 

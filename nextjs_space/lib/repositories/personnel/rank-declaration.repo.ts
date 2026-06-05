@@ -1,6 +1,7 @@
 import 'server-only'
 import db from '@/lib/db'
-import type { RankDeclarationStatus, AmendmentStatus, PromotionType, Prisma } from '@prisma/client'
+import { Prisma } from '@prisma/client'
+import type { RankDeclarationStatus, AmendmentStatus, PromotionType } from '@prisma/client'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -169,10 +170,16 @@ export async function updateRankDeclaration(
     updatedBy?: string | null
   },
 ) {
+  // Tách attachments khỏi spread: trường Json? không nhận plain null trong update input
+  // của Prisma; null → Prisma.JsonNull (lưu JSON null), undefined → bỏ qua (giữ nguyên).
+  const { attachments, ...rest } = data
   return db.rankDeclaration.update({
     where: { id },
     data: {
-      ...data,
+      ...rest,
+      ...(attachments !== undefined
+        ? { attachments: attachments === null ? Prisma.JsonNull : attachments }
+        : {}),
       updatedAt: new Date(),
     },
     include: declarationInclude,

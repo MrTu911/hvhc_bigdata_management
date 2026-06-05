@@ -23,7 +23,7 @@ const POLICY_WORKFLOW_TEMPLATE_CODE = 'POLICY_REQUEST';
 /** Tìm WorkflowTemplate có code POLICY_REQUEST đang active */
 async function findPolicyWorkflowTemplate() {
   return prisma.workflowTemplate.findFirst({
-    where: { code: POLICY_WORKFLOW_TEMPLATE_CODE, isActive: true, deletedAt: null },
+    where: { code: POLICY_WORKFLOW_TEMPLATE_CODE, isActive: true },
     select: { id: true, code: true },
   });
 }
@@ -69,10 +69,10 @@ export async function submitToWorkflow(
     summary: `Số yêu cầu: ${policyRequest.requestNumber}`,
   };
 
-  const workflowEngine = new WorkflowEngineService();
-  const instance = await workflowEngine.startWorkflow(input, initiator as AuthUser);
+  // WorkflowEngineService được export dưới dạng singleton instance.
+  const instance = await WorkflowEngineService.startWorkflow(input, initiator as AuthUser);
 
-  return { started: true, workflowInstanceId: instance.id };
+  return { started: true, workflowInstanceId: instance.workflowInstanceId };
 }
 
 /**
@@ -90,7 +90,7 @@ export async function syncWorkflowStatus(policyRequestId: string): Promise<Polic
     [WorkflowInstanceStatus.APPROVED]:    PolicyRequestStatus.APPROVED,
     [WorkflowInstanceStatus.REJECTED]:    PolicyRequestStatus.REJECTED,
     [WorkflowInstanceStatus.CANCELLED]:   PolicyRequestStatus.CANCELLED,
-    [WorkflowInstanceStatus.COMPLETED]:   PolicyRequestStatus.COMPLETED,
+    // WorkflowInstanceStatus không có COMPLETED — trạng thái duyệt xong là APPROVED.
   };
 
   const mapped = statusMap[instance.status];

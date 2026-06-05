@@ -9,9 +9,25 @@
  * tái sử dụng tại trang /dashboard/settings (tab Bảo mật).
  */
 
-import { ShieldCheck } from 'lucide-react';
+import { Suspense } from 'react';
+import { ShieldCheck, AlertTriangle } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 import { ChangePasswordCard } from '../_components/change-password-card';
 import { SessionsCard } from '../_components/sessions-card';
+
+function ForceChangeBanner() {
+  const forceChange = useSearchParams().get('forceChange') === '1';
+  if (!forceChange) return null;
+  return (
+    <div className="flex items-start gap-3 rounded-md border border-amber-300 bg-amber-50 p-4 text-amber-900">
+      <AlertTriangle className="h-5 w-5 mt-0.5 shrink-0" />
+      <div className="text-sm">
+        <p className="font-semibold">Bạn cần đổi mật khẩu trước khi tiếp tục</p>
+        <p>Tài khoản đang dùng mật khẩu cấp sẵn. Hãy đặt mật khẩu mới để bảo vệ thông tin.</p>
+      </div>
+    </div>
+  );
+}
 
 export default function SecuritySettingsPage() {
   return (
@@ -23,6 +39,9 @@ export default function SecuritySettingsPage() {
         <p className="text-muted-foreground mt-1">Quản lý mật khẩu và phiên đăng nhập</p>
       </div>
 
+      <Suspense fallback={null}>
+        <ForceChangeBanner />
+      </Suspense>
       <ChangePasswordCard />
       <SessionsCard />
     </div>

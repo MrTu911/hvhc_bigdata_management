@@ -12,7 +12,7 @@
  */
 
 import prisma from '@/lib/db';
-import { WorkflowSignatureStatus } from '@prisma/client';
+import { Prisma, WorkflowSignatureStatus } from '@prisma/client';
 
 // ---------------------------------------------------------------------------
 // Core interface — mọi provider phải implement
@@ -170,7 +170,7 @@ class SignatureServiceClass {
         status: finalStatus,
         signedAt: result.success ? new Date() : null,
         hashValue: result.hashValue ?? null,
-        certificateInfoJson: result.certificateInfoJson ?? undefined,
+        certificateInfoJson: (result.certificateInfoJson as Prisma.InputJsonValue | undefined) ?? undefined,
         evidenceFileId: result.evidenceFileId ?? null,
       },
     });

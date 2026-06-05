@@ -7,7 +7,7 @@
  * Run: npx tsx --require dotenv/config prisma/seed/seed_all_rbac.ts
  */
 
-import { PrismaClient, FunctionScope } from '@prisma/client';
+import { PrismaClient, FunctionScope, ActionType } from '@prisma/client';
 import 'dotenv/config';
 
 const prisma = new PrismaClient();
@@ -19,7 +19,7 @@ interface FDef {
   name: string;
   description?: string;
   module: string;
-  actionType: string;
+  actionType: ActionType;
   isCritical?: boolean;
 }
 

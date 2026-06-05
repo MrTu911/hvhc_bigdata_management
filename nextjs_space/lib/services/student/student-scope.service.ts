@@ -159,7 +159,8 @@ export async function canActorViewStudent(
   }
 
   // DEPARTMENT / UNIT scope: kiểm tra học viên có thuộc đơn vị không
-  if (scope === FunctionScope.DEPARTMENT || scope === FunctionScope.UNIT || scope === FunctionScope.ACADEMY) {
+  // (ACADEMY đã return ở trên — ở đây scope chỉ còn UNIT / DEPARTMENT / SELF)
+  if (scope === FunctionScope.DEPARTMENT || scope === FunctionScope.UNIT) {
     const authUser: AuthUser = { id: actorUserId, email: '', role: actorRole };
 
     // Ưu tiên unit-type filter (HE / TIEUDOAN) trước khi dùng scope chuẩn
@@ -171,9 +172,7 @@ export async function canActorViewStudent(
       return count > 0;
     }
 
-    if (scope === FunctionScope.ACADEMY) return true;
-
-    const filter = await buildUnitScopeFilter(authUser, scope as FunctionScope.DEPARTMENT | FunctionScope.UNIT);
+    const filter = await buildUnitScopeFilter(authUser, scope);
     const count = await prisma.hocVien.count({
       where: { id: targetHocVienId, ...filter.where },
     });
@@ -229,7 +228,7 @@ async function buildUnitTypeFilter(user: AuthUser): Promise<StudentScopeFilter |
  */
 async function buildUnitScopeFilter(
   user: AuthUser,
-  scope: FunctionScope.DEPARTMENT | FunctionScope.UNIT,
+  scope: 'DEPARTMENT' | 'UNIT',
 ): Promise<StudentScopeFilter> {
   const accessibleUnitIds = await getAccessibleUnitIds(user, scope);
 
@@ -249,16 +248,11 @@ async function buildUnitScopeFilter(
   });
   const unitNames = units.map((u) => u.name);
 
-  // Đồng thời filter theo classId → StudentClass.unitId nếu có dữ liệu đó
-  const studentClasses = await prisma.studentClass.findMany({
-    where: { unitId: { in: accessibleUnitIds } },
-    select: { id: true },
-  });
-  const classIds = studentClasses.map((c) => c.id);
-
+  // StudentClass hiện chưa có quan hệ trực tiếp tới Unit (chỉ có cohortId/majorId),
+  // nên không thể lọc lớp theo accessibleUnitIds. Best-effort lọc theo khoaQuanLy
+  // (legacy string field) cho tới khi chuẩn hóa StudentClass → Unit.
   const orClauses: object[] = [];
   if (unitNames.length > 0) orClauses.push({ khoaQuanLy: { in: unitNames } });
-  if (classIds.length > 0)  orClauses.push({ classId: { in: classIds } });
 
   if (orClauses.length === 0) {
     return {

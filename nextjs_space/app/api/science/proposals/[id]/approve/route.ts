@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { requireAnyFunction } from '@/lib/rbac/middleware'
+import { hasPermission } from '@/lib/rbac/policy'
 import { SCIENCE } from '@/lib/rbac/function-codes'
 import { lifecycleService } from '@/lib/services/science/lifecycle.service'
 import { logAudit } from '@/lib/audit'
@@ -36,9 +37,9 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
     )
   }
 
-  // Xác định approverLevel từ function codes của user
-  const userFunctions = auth.userFunctions as string[] ?? []
-  const hasAcademy = userFunctions.includes(SCIENCE.PROJECT_APPROVE_ACADEMY)
+  // Xác định approverLevel: ưu tiên cấp ACADEMY nếu user có quyền duyệt cấp học viện
+  const academyCheck = await hasPermission(auth.user!.id, SCIENCE.PROJECT_APPROVE_ACADEMY)
+  const hasAcademy = academyCheck.hasPermission
   const approverLevel: 'DEPT' | 'ACADEMY' = hasAcademy ? 'ACADEMY' : 'DEPT'
 
   try {

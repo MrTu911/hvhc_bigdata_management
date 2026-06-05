@@ -51,15 +51,15 @@ export async function GET(req: NextRequest) {
 
     // 3. Đếm cảnh báo học vụ theo Hệ (join qua HocVien.trainingSystemUnitId)
     const warningRaw = await prisma.academicWarning.groupBy({
-      by: ['studentId'],
+      by: ['hocVienId'],
       _max: { warningLevel: true },
       where: {
-        student: { deletedAt: null, trainingSystemUnitId: { not: null } },
+        hocVien: { deletedAt: null, trainingSystemUnitId: { not: null } },
       },
     });
 
-    // Lấy trainingSystemUnitId cho mỗi studentId có cảnh báo
-    const warnStudentIds = warningRaw.map((w) => w.studentId);
+    // Lấy trainingSystemUnitId cho mỗi học viên có cảnh báo
+    const warnStudentIds = warningRaw.map((w) => w.hocVienId);
     const warnStudents = warnStudentIds.length
       ? await prisma.hocVien.findMany({
           where: { id: { in: warnStudentIds } },

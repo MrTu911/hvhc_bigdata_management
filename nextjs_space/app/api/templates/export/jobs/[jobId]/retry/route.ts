@@ -53,17 +53,18 @@ export async function POST(
       );
     }
 
-    if (originalJob.status !== 'FAILED' && originalJob.status !== 'PARTIAL') {
+    if (originalJob.status !== 'FAILED') {
       return NextResponse.json(
-        { success: false, data: null, error: 'Chỉ retry được job ở trạng thái FAILED hoặc PARTIAL' },
+        { success: false, data: null, error: 'Chỉ retry được job ở trạng thái FAILED' },
         { status: 400 },
       );
     }
 
-    // Xác định entity cần retry: PARTIAL → chỉ entity lỗi; FAILED → toàn bộ
+    // Xác định entity cần retry: nếu errors ghi rõ entity lỗi → chỉ retry các entity đó;
+    // nếu không xác định được entity lỗi → retry toàn bộ.
     let retryEntityIds: string[] = originalJob.entityIds as string[];
 
-    if (originalJob.status === 'PARTIAL' && Array.isArray(originalJob.errors)) {
+    if (Array.isArray(originalJob.errors)) {
       const failedIds = (originalJob.errors as { entityId: string }[])
         .map((e) => e.entityId)
         .filter((id) => id && id !== 'batch');

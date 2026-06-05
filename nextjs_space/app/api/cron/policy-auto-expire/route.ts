@@ -24,8 +24,11 @@ export async function POST(req: NextRequest) {
     const expired = await expireOverduePolicyRecords();
     logger.info(`Policy auto-expire completed: ${expired} records expired`);
     return NextResponse.json({ success: true, data: { expired }, error: null });
-  } catch (error: any) {
-    logger.error('Policy auto-expire cron failed', { error: error.message });
+  } catch (error) {
+    logger.error(
+      'Policy auto-expire cron failed',
+      error instanceof Error ? error : new Error(String(error)),
+    );
     return NextResponse.json({ success: false, data: null, error: 'Cron failed' }, { status: 500 });
   }
 }

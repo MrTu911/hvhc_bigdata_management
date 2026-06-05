@@ -6,7 +6,8 @@
  */
 import 'server-only'
 import db from '@/lib/db'
-import type { MdChangeType } from '@prisma/client'
+import { Prisma } from '@prisma/client'
+import type { MdCacheType, MdChangeType, MdSourceType } from '@prisma/client'
 
 // ─── Category write ────────────────────────────────────────────────────────────
 
@@ -23,7 +24,14 @@ export const masterDataAdminRepo = {
     description?: string | null
     sortOrder?: number
   }) {
-    return db.masterCategory.create({ data })
+    // cacheType/sourceType đã được service validate là giá trị enum hợp lệ trước khi xuống đây.
+    const { cacheType, sourceType, ...rest } = data
+    const createData: Prisma.MasterCategoryUncheckedCreateInput = {
+      ...rest,
+      cacheType: cacheType as MdCacheType,
+      sourceType: sourceType as MdSourceType,
+    }
+    return db.masterCategory.create({ data: createData })
   },
 
   async updateCategory(
@@ -39,7 +47,14 @@ export const masterDataAdminRepo = {
       isActive: boolean
     }>
   ) {
-    return db.masterCategory.update({ where: { code }, data })
+    // cacheType/sourceType đã được service validate là giá trị enum hợp lệ trước khi xuống đây.
+    const { cacheType, sourceType, ...rest } = data
+    const updateData: Prisma.MasterCategoryUncheckedUpdateInput = {
+      ...rest,
+      ...(cacheType !== undefined ? { cacheType: cacheType as MdCacheType } : {}),
+      ...(sourceType !== undefined ? { sourceType: sourceType as MdSourceType } : {}),
+    }
+    return db.masterCategory.update({ where: { code }, data: updateData })
   },
 
   async findCategoryByCode(code: string) {
@@ -95,8 +110,9 @@ export const masterDataAdminRepo = {
   },
 
   async itemCodeExistsInCategory(categoryCode: string, code: string): Promise<boolean> {
+    // count() dùng WhereInput (không phải WhereUniqueInput), nên lọc trực tiếp theo 2 field.
     const count = await db.masterDataItem.count({
-      where: { categoryCode_code: { categoryCode, code } },
+      where: { categoryCode, code },
     })
     return count > 0
   },

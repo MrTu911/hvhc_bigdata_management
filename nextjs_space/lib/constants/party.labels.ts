@@ -26,6 +26,11 @@ export const PARTY_STATUS_LABELS: Record<PartyMemberStatus, string> = {
   CHUYEN_DI: 'Chuyển đi',
   XOA_TEN_TU_NGUYEN: 'Xóa tên tự nguyện',
   KHAI_TRU: 'Khai trừ',
+  // Trạng thái dạng English có trong enum PartyMemberStatus (giữ đồng bộ với map cục bộ ở party/members)
+  ACTIVE: 'Hoạt động',
+  TRANSFERRED: 'Đã chuyển',
+  SUSPENDED: 'Đình chỉ',
+  EXPELLED: 'Khai trừ',
 };
 
 export const PARTY_STATUS_COLORS: Record<PartyMemberStatus, string> = {
@@ -37,6 +42,10 @@ export const PARTY_STATUS_COLORS: Record<PartyMemberStatus, string> = {
   CHUYEN_DI: '#f97316',
   XOA_TEN_TU_NGUYEN: '#ef4444',
   KHAI_TRU: '#7f1d1d',
+  ACTIVE: '#22c55e',
+  TRANSFERRED: '#06b6d4',
+  SUSPENDED: '#f59e0b',
+  EXPELLED: '#7f1d1d',
 };
 
 // ---------------------------------------------------------------------------

@@ -96,7 +96,7 @@ export interface FacultyProfile360 {
     trend: string | null;
     calculatedAt: Date;
   } | null;
-  teachingSubjects: { subjectCode: string; subjectName: string }[];
+  teachingSubjects: { subjectCode: string | null; subjectName: string }[];
 }
 
 /**
@@ -141,7 +141,8 @@ export async function buildFacultyProfile360(
     db.classSection.count({
       where: {
         facultyId: facultyProfileId,
-        status: ClassSectionStatus.ACTIVE,
+        // "Đang dạy" = lớp học phần chưa kết thúc (đang mở hoặc đang diễn ra)
+        status: { in: [ClassSectionStatus.OPEN, ClassSectionStatus.IN_PROGRESS] },
       },
     }),
     db.facultyWorkloadSnapshot.findFirst({

@@ -6,6 +6,7 @@
  */
 import 'server-only'
 import db from '@/lib/db'
+import { Prisma } from '@prisma/client'
 import type { DashboardRoleKey } from '@prisma/client'
 
 // ─── Role Templates ───────────────────────────────────────────────────────────
@@ -16,7 +17,7 @@ export async function getRoleTemplate(roleKey: DashboardRoleKey) {
 
 export async function upsertRoleTemplate(
   roleKey: DashboardRoleKey,
-  layoutJson: unknown,
+  layoutJson: Prisma.InputJsonValue,
   widgetKeys: string[],
 ) {
   return db.dashboardRoleTemplate.upsert({
@@ -38,7 +39,7 @@ export async function getUserLayout(userId: string, dashboardKey: DashboardRoleK
 export async function saveUserLayout(
   userId: string,
   dashboardKey: DashboardRoleKey,
-  layoutJson: unknown,
+  layoutJson: Prisma.InputJsonValue,
   templateId?: string | null,
 ) {
   return db.dashboardUserLayout.upsert({
@@ -60,7 +61,7 @@ export async function logDashboardAccess(
   userId: string,
   dashboardKey: string,
   action: 'VIEW' | 'EXPORT' | 'REFRESH' | 'LAYOUT_SAVE' | 'LAYOUT_RESET' | 'ALERT_ACK',
-  meta?: Record<string, unknown>,
+  meta?: Prisma.InputJsonValue,
 ) {
   return db.dashboardAccessLog.create({
     data: { userId, dashboardKey, action, meta: meta ?? undefined },

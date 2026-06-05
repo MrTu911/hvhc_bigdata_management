@@ -1095,18 +1095,18 @@ async function checkMigrationState(): Promise<{
 }> {
   const tables: string[] = await prisma.$queryRawUnsafe(
     "SELECT tablename FROM pg_tables WHERE schemaname='public' AND tablename LIKE 'party%'"
-  ).then((r: unknown[]) => (r as { tablename: string }[]).map((t) => t.tablename));
+  ).then((r: unknown) => (r as { tablename: string }[]).map((t) => t.tablename));
 
   const enums: string[] = await prisma.$queryRawUnsafe(
     "SELECT typname FROM pg_type WHERE typcategory='E' AND typname IN ('ReviewGrade','DisciplineSeverity','TransferType','InspectionType','RecruitmentStep','MeetingType')"
-  ).then((r: unknown[]) => (r as { typname: string }[]).map((t) => t.typname));
+  ).then((r: unknown) => (r as { typname: string }[]).map((t) => t.typname));
 
   // Check if PartyMemberStatus has new values
   let hasNewStatusEnums = false;
   try {
     const statusEnums: string[] = await prisma.$queryRawUnsafe(
       "SELECT enum_range(NULL::\"PartyMemberStatus\")"
-    ).then((r: unknown[]) => {
+    ).then((r: unknown) => {
       const row = (r as Record<string, unknown>[])[0];
       const val = Object.values(row)[0];
       return Array.isArray(val) ? val as string[] : [];

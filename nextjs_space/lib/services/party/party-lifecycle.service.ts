@@ -12,6 +12,12 @@ const ALLOWED_TRANSITIONS: Record<PartyMemberStatus, PartyMemberStatus[]> = {
   CHUYEN_DI: ['CHINH_THUC'],
   XOA_TEN_TU_NGUYEN: [],
   KHAI_TRU: [],
+  // Legacy statuses (tương thích dữ liệu cũ): không định nghĩa transition trong
+  // vòng đời mới — không cho phép chuyển trạng thái từ các giá trị legacy này.
+  ACTIVE: [],
+  TRANSFERRED: [],
+  SUSPENDED: [],
+  EXPELLED: [],
 };
 
 export function assertPartyLifecycleTransition(from: PartyMemberStatus, to: PartyMemberStatus) {
