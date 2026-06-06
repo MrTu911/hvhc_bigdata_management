@@ -2,9 +2,19 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAnyFunction } from '@/lib/rbac/middleware';
 import { PARTY } from '@/lib/rbac/function-codes';
 import { logAudit } from '@/lib/audit';
+import { enforceScopeAccess } from '@/lib/rbac/scope-access';
 import { PartyAwardDisciplineService } from '@/lib/services/party/party-award-discipline.service';
 import { partyAwardUpdateSchema } from '@/lib/validators/party/party-award.schema';
 import { PartyAwardRepo } from '@/lib/repositories/party/party-award.repo';
+
+// A party award's scope follows its party member (member's linked user/unit).
+// PartyAwardRepo.findById includes partyMember.user with unitRelation.
+function scopeContextForAward(record: any) {
+  return {
+    resourceUnitId: record?.partyMember?.user?.unitRelation?.id ?? null,
+    resourceOwnerId: record?.partyMember?.user?.id ?? null,
+  };
+}
 
 export async function PATCH(
   request: NextRequest,
@@ -27,6 +37,9 @@ export async function PATCH(
     if (!existing) {
       return NextResponse.json({ success: false, error: 'Không tìm thấy bản ghi khen thưởng' }, { status: 404 });
     }
+
+    const denied = await enforceScopeAccess(authResult.user!, authResult.authResult, scopeContextForAward(existing));
+    if (denied) return denied;
 
     // Schema cho phép null (clear giá trị); service/repo dùng undefined để "không đổi".
     // Chuẩn hóa null → undefined để khớp AwardUpdatePayload.
@@ -73,6 +86,9 @@ export async function DELETE(
     if (!existing) {
       return NextResponse.json({ success: false, error: 'Không tìm thấy bản ghi khen thưởng' }, { status: 404 });
     }
+
+    const denied = await enforceScopeAccess(authResult.user!, authResult.authResult, scopeContextForAward(existing));
+    if (denied) return denied;
 
     await PartyAwardDisciplineService.deleteAward(id);
 

@@ -2,7 +2,16 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAnyFunction } from '@/lib/rbac/middleware';
 import { PARTY } from '@/lib/rbac/function-codes';
 import { logAudit, logSensitiveAccess } from '@/lib/audit';
+import { enforceScopeAccess } from '@/lib/rbac/scope-access';
 import { getPartyMemberById, softDeletePartyMember, updatePartyMember } from '@/lib/services/party/party-member.service';
+
+// A party member's unit is the unit of its linked user; owner is that user.
+function scopeContextFor(member: any) {
+  return {
+    resourceUnitId: member?.user?.unitId ?? null,
+    resourceOwnerId: member?.userId ?? null,
+  };
+}
 
 export async function GET(
   request: NextRequest,
@@ -21,6 +30,9 @@ export async function GET(
     if (!member) {
       return NextResponse.json({ success: false, error: 'Không tìm thấy đảng viên' }, { status: 404 });
     }
+
+    const denied = await enforceScopeAccess(authResult.user!, authResult.authResult, scopeContextFor(member));
+    if (denied) return denied;
 
     const canViewSensitive = sensitiveAuth.allowed;
     const responseData = canViewSensitive
@@ -49,6 +61,13 @@ export async function PUT(
     if (!authResult.allowed) {
       return NextResponse.json({ success: false, error: authResult.authResult?.deniedReason || 'Forbidden' }, { status: 403 });
     }
+
+    const existing = await getPartyMemberById(params.id);
+    if (!existing) {
+      return NextResponse.json({ success: false, error: 'Không tìm thấy đảng viên' }, { status: 404 });
+    }
+    const denied = await enforceScopeAccess(authResult.user!, authResult.authResult, scopeContextFor(existing));
+    if (denied) return denied;
 
     const body = await request.json();
     if (Object.prototype.hasOwnProperty.call(body, 'confidentialNote')) {
@@ -88,6 +107,13 @@ export async function DELETE(
     if (!authResult.allowed) {
       return NextResponse.json({ success: false, error: authResult.authResult?.deniedReason || 'Forbidden' }, { status: 403 });
     }
+
+    const existing = await getPartyMemberById(params.id);
+    if (!existing) {
+      return NextResponse.json({ success: false, error: 'Không tìm thấy đảng viên' }, { status: 404 });
+    }
+    const denied = await enforceScopeAccess(authResult.user!, authResult.authResult, scopeContextFor(existing));
+    if (denied) return denied;
 
     const deleted = await softDeletePartyMember(params.id, authResult.user!.id);
     if (!deleted) {

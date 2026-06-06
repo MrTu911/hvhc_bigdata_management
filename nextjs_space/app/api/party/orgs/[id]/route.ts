@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
+import prisma from '@/lib/db';
 import { requireFunction } from '@/lib/rbac/middleware';
 import { PARTY } from '@/lib/rbac/function-codes';
 import { logAudit } from '@/lib/audit';
+import { enforceScopeAccess } from '@/lib/rbac/scope-access';
 import { updatePartyOrg } from '@/lib/services/party/party-org.service';
 
 export async function PUT(
@@ -13,6 +15,19 @@ export async function PUT(
     if (!auth.allowed) {
       return NextResponse.json({ success: false, error: auth.authResult?.deniedReason || 'Forbidden' }, { status: 403 });
     }
+
+    // A party org maps 1:1 to a unit; scope edits by that unit.
+    const org = await prisma.partyOrganization.findUnique({
+      where: { id: params.id },
+      select: { unitId: true, linkedUnitId: true },
+    });
+    if (!org) {
+      return NextResponse.json({ success: false, error: 'Không tìm thấy tổ chức Đảng' }, { status: 404 });
+    }
+    const denied = await enforceScopeAccess(auth.user!, auth.authResult, {
+      resourceUnitId: org.linkedUnitId ?? org.unitId,
+    });
+    if (denied) return denied;
 
     const body = await request.json();
     const updated = await updatePartyOrg(params.id, body);

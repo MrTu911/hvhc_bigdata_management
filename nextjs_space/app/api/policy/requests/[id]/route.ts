@@ -9,6 +9,7 @@ import { authOptions } from '@/lib/auth';
 import prisma from '@/lib/db';
 import { POLICY } from '@/lib/rbac/function-codes';
 import { requireFunction } from '@/lib/rbac/middleware';
+import { enforceScopeAccess } from '@/lib/rbac/scope-access';
 import { logAudit } from '@/lib/audit';
 import { PolicyRequestStatus, PolicyWorkflowAction } from '@prisma/client';
 
@@ -43,6 +44,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
             rank: true,
             position: true,
             unit: true,
+            unitId: true,
             department: true,
           },
         },
@@ -91,6 +93,13 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         { status: 404 }
       );
     }
+
+    // Scope: owner (SELF), their unit/department approvers, or academy.
+    const denied = await enforceScopeAccess(authResult.user!, authResult.authResult, {
+      resourceUnitId: policyRequest.requester?.unitId,
+      resourceOwnerId: policyRequest.requesterId,
+    });
+    if (denied) return denied;
 
     // Log audit
     await logAudit({

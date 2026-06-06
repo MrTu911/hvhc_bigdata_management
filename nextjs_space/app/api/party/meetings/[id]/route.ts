@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
+import prisma from '@/lib/db';
 import { requireFunction } from '@/lib/rbac/middleware';
 import { PARTY } from '@/lib/rbac/function-codes';
 import { logAudit } from '@/lib/audit';
+import { enforceScopeAccess } from '@/lib/rbac/scope-access';
 import { getPartyMeetingById } from '@/lib/services/party/party-meeting.service';
 
 export async function GET(
@@ -18,6 +20,16 @@ export async function GET(
     if (!meeting) {
       return NextResponse.json({ success: false, error: 'Không tìm thấy cuộc họp' }, { status: 404 });
     }
+
+    // A meeting belongs to a party org → scope by that org's unit.
+    const org = await prisma.partyOrganization.findUnique({
+      where: { id: (meeting as any).partyOrgId },
+      select: { unitId: true, linkedUnitId: true },
+    });
+    const denied = await enforceScopeAccess(auth.user!, auth.authResult, {
+      resourceUnitId: org?.linkedUnitId ?? org?.unitId,
+    });
+    if (denied) return denied;
 
     await logAudit({
       userId: auth.user!.id,

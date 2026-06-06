@@ -6,6 +6,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { requireAnyFunction } from '@/lib/rbac/middleware';
 import { PARTY } from '@/lib/rbac/function-codes';
+import { enforceScopeAccess } from '@/lib/rbac/scope-access';
 
 const STEP_ORDER = [
   'THEO_DOI',
@@ -51,10 +52,18 @@ export async function PATCH(
 
     const pipeline = await prisma.partyRecruitmentPipeline.findUnique({
       where: { id: params.id },
+      include: { user: { select: { unitId: true } } },
     });
     if (!pipeline) {
       return NextResponse.json({ success: false, error: 'Không tìm thấy hồ sơ' }, { status: 404 });
     }
+
+    // Recruitment pipeline scope follows the candidate's unit (owner = candidate).
+    const denied = await enforceScopeAccess(auth.user!, auth.authResult, {
+      resourceUnitId: pipeline.user?.unitId,
+      resourceOwnerId: pipeline.userId,
+    });
+    if (denied) return denied;
 
     const updateData: Record<string, unknown> = {};
     if (dossierStatus !== undefined) updateData.dossierStatus = dossierStatus;

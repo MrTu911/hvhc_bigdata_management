@@ -13,6 +13,23 @@ import prisma from '@/lib/db';
 import { requireFunction } from '@/lib/rbac/middleware';
 import { STUDENT } from '@/lib/rbac/function-codes';
 import { logAudit } from '@/lib/audit';
+import { canActorViewStudent } from '@/lib/services/student/student-scope.service';
+import { FunctionScope, UserRole } from '@prisma/client';
+
+// Record-level scope for học viên: a Hệ commander sees their trainingSystemUnitId,
+// a Tiểu đoàn commander their battalionUnitId, a student only themselves, etc.
+async function assertStudentScope(
+  authResult: Awaited<ReturnType<typeof requireFunction>>,
+  hocVienId: string,
+): Promise<NextResponse | null> {
+  const user = authResult.user!;
+  const scope = (authResult.authResult?.scope ?? 'SELF') as FunctionScope;
+  const canView = await canActorViewStudent(user.id, user.role as UserRole, scope, hocVienId);
+  if (!canView) {
+    return NextResponse.json({ error: 'Ngoài phạm vi quyền truy cập' }, { status: 403 });
+  }
+  return null;
+}
 
 // GET: Lấy thông tin chi tiết học viên
 export async function GET(
@@ -62,6 +79,9 @@ export async function GET(
       return NextResponse.json({ error: 'Không tìm thấy học viên' }, { status: 404 });
     }
 
+    const denied = await assertStudentScope(authResult, params.id);
+    if (denied) return denied;
+
     // Audit log
     await logAudit({
       userId: user.id,
@@ -108,6 +128,9 @@ export async function PUT(
     if (!existing) {
       return NextResponse.json({ error: 'Không tìm thấy học viên' }, { status: 404 });
     }
+
+    const denied = await assertStudentScope(authResult, params.id);
+    if (denied) return denied;
 
     // If updating maHocVien, check it's not taken
     if (data.maHocVien && data.maHocVien !== existing.maHocVien) {
@@ -230,6 +253,9 @@ export async function DELETE(
     if (!existing) {
       return NextResponse.json({ error: 'Không tìm thấy học viên' }, { status: 404 });
     }
+
+    const denied = await assertStudentScope(authResult, params.id);
+    if (denied) return denied;
 
     // Delete student (will cascade delete results)
     await prisma.hocVien.delete({

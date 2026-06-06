@@ -9,6 +9,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireFunction } from '@/lib/rbac/middleware';
 import { EDUCATION } from '@/lib/rbac/function-codes';
 import { logAudit } from '@/lib/audit';
+import { canActorViewStudent } from '@/lib/services/student/student-scope.service';
+import { FunctionScope, UserRole } from '@prisma/client';
 import {
   getStudentById,
   updateStudent,
@@ -20,12 +22,31 @@ import {
 
 type Params = { params: { id: string } };
 
+// Record-level scope for học viên (Hệ → trainingSystemUnitId, Tiểu đoàn →
+// battalionUnitId, giảng viên → advisee/class, học viên → self).
+async function assertStudentScope(
+  auth: Awaited<ReturnType<typeof requireFunction>>,
+  hocVienId: string,
+): Promise<NextResponse | null> {
+  const user = auth.user!;
+  const scope = (auth.authResult?.scope ?? 'SELF') as FunctionScope;
+  const canView = await canActorViewStudent(user.id, user.role as UserRole, scope, hocVienId);
+  if (!canView) {
+    return NextResponse.json({ success: false, error: 'Ngoài phạm vi quyền truy cập' }, { status: 403 });
+  }
+  return null;
+}
+
 export async function GET(req: NextRequest, { params }: Params) {
   try {
     const auth = await requireFunction(req, EDUCATION.VIEW_STUDENT);
     if (!auth.allowed) return auth.response!;
 
     const hocVien = await getStudentById(params.id);
+
+    const denied = await assertStudentScope(auth, params.id);
+    if (denied) return denied;
+
     return NextResponse.json({ success: true, data: hocVien });
   } catch (error: any) {
     if (error instanceof ServiceNotFoundError) {
@@ -41,6 +62,9 @@ export async function PATCH(req: NextRequest, { params }: Params) {
     const auth = await requireFunction(req, EDUCATION.UPDATE_STUDENT);
     if (!auth.allowed) return auth.response!;
     const { user } = auth;
+
+    const denied = await assertStudentScope(auth, params.id);
+    if (denied) return denied;
 
     const body = await req.json();
 
@@ -92,6 +116,9 @@ export async function DELETE(req: NextRequest, { params }: Params) {
     const auth = await requireFunction(req, EDUCATION.UPDATE_STUDENT);
     if (!auth.allowed) return auth.response!;
     const { user } = auth;
+
+    const denied = await assertStudentScope(auth, params.id);
+    if (denied) return denied;
 
     const deleted = await softDeleteStudent(params.id);
 

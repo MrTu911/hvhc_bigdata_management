@@ -8,6 +8,19 @@ import { requireFunction } from '@/lib/rbac/middleware';
 import { PARTY } from '@/lib/rbac/function-codes';
 import prisma from '@/lib/db';
 import { logAudit } from '@/lib/audit';
+import { enforceScopeAccess } from '@/lib/rbac/scope-access';
+
+// An evaluation's scope follows its party member (member's linked user/unit).
+const MEMBER_UNIT_INCLUDE = {
+  partyMember: { select: { userId: true, user: { select: { unitId: true } } } },
+} as const;
+
+function scopeContextForMember(record: any) {
+  return {
+    resourceUnitId: record?.partyMember?.user?.unitId ?? null,
+    resourceOwnerId: record?.partyMember?.userId ?? null,
+  };
+}
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
@@ -35,6 +48,10 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     });
 
     if (!evaluation) return NextResponse.json({ error: 'Không tìm thấy đánh giá' }, { status: 404 });
+
+    const denied = await enforceScopeAccess(authResult.user!, authResult.authResult, scopeContextForMember(evaluation));
+    if (denied) return denied;
+
     return NextResponse.json(evaluation);
   } catch (error) {
     console.error('[Party Evaluations GET/:id]', error);
@@ -49,8 +66,14 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     const user = authResult.user!;
     const body = await request.json();
 
-    const existing = await prisma.partyAnnualReview.findUnique({ where: { id: params.id } });
+    const existing = await prisma.partyAnnualReview.findUnique({
+      where: { id: params.id },
+      include: MEMBER_UNIT_INCLUDE,
+    });
     if (!existing) return NextResponse.json({ error: 'Không tìm thấy đánh giá' }, { status: 404 });
+
+    const deniedUpdate = await enforceScopeAccess(authResult.user!, authResult.authResult, scopeContextForMember(existing));
+    if (deniedUpdate) return deniedUpdate;
 
     // Prevent editing after submitted (unless political dept approving)
     const action = body.action as string | undefined;
@@ -135,8 +158,14 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
     if (!authResult.allowed) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     const user = authResult.user!;
 
-    const existing = await prisma.partyAnnualReview.findUnique({ where: { id: params.id } });
+    const existing = await prisma.partyAnnualReview.findUnique({
+      where: { id: params.id },
+      include: MEMBER_UNIT_INCLUDE,
+    });
     if (!existing) return NextResponse.json({ error: 'Không tìm thấy đánh giá' }, { status: 404 });
+
+    const deniedDelete = await enforceScopeAccess(authResult.user!, authResult.authResult, scopeContextForMember(existing));
+    if (deniedDelete) return deniedDelete;
 
     await prisma.partyAnnualReview.delete({ where: { id: params.id } });
 

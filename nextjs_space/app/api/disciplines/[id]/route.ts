@@ -7,6 +7,7 @@ import { requireFunction } from '@/lib/rbac/middleware';
 import { AWARDS } from '@/lib/rbac/function-codes';
 import prisma from '@/lib/db';
 import { logAudit } from '@/lib/audit';
+import { enforceScopeAccess } from '@/lib/rbac/scope-access';
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
@@ -26,6 +27,13 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     });
 
     if (!record) return NextResponse.json({ error: 'Không tìm thấy kỷ luật' }, { status: 404 });
+
+    const denied = await enforceScopeAccess(authResult.user!, authResult.authResult, {
+      resourceUnitId: record.unitId,
+      resourceOwnerId: record.userId,
+    });
+    if (denied) return denied;
+
     return NextResponse.json(record);
   } catch (error) {
     console.error('[Disciplines GET/:id]', error);
@@ -44,6 +52,12 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
       where: { id: params.id, deletedAt: null, recordType: 'DISCIPLINE' },
     });
     if (!existing) return NextResponse.json({ error: 'Không tìm thấy kỷ luật' }, { status: 404 });
+
+    const deniedUpdate = await enforceScopeAccess(authResult.user!, authResult.authResult, {
+      resourceUnitId: existing.unitId,
+      resourceOwnerId: existing.userId,
+    });
+    if (deniedUpdate) return deniedUpdate;
 
     if (existing.workflowStatus !== 'PROPOSED') {
       return NextResponse.json({ error: 'Chỉ có thể cập nhật kỷ luật ở trạng thái Đề xuất' }, { status: 400 });
@@ -88,6 +102,12 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
       where: { id: params.id, deletedAt: null, recordType: 'DISCIPLINE' },
     });
     if (!existing) return NextResponse.json({ error: 'Không tìm thấy kỷ luật' }, { status: 404 });
+
+    const deniedDelete = await enforceScopeAccess(authResult.user!, authResult.authResult, {
+      resourceUnitId: existing.unitId,
+      resourceOwnerId: existing.userId,
+    });
+    if (deniedDelete) return deniedDelete;
 
     if (!['PROPOSED', 'REJECTED', 'CANCELLED'].includes(existing.workflowStatus)) {
       return NextResponse.json({ error: 'Không thể xóa kỷ luật đã được phê duyệt' }, { status: 400 });

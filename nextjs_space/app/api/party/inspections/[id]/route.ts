@@ -7,6 +7,23 @@ import prisma from '@/lib/db';
 import { requireAnyFunction } from '@/lib/rbac/middleware';
 import { PARTY } from '@/lib/rbac/function-codes';
 import { logAudit } from '@/lib/audit';
+import { enforceScopeAccess } from '@/lib/rbac/scope-access';
+
+// Inspections target either a party member or a party org. Scope by the
+// member's unit when present, else by the org's unit (party org maps 1:1 to a unit).
+const MEMBER_UNIT_INCLUDE = {
+  partyMember: { select: { userId: true, user: { select: { unitId: true } } } },
+  partyOrg: { select: { unitId: true, linkedUnitId: true } },
+} as const;
+
+function scopeContextForMember(record: any) {
+  const memberUnit = record?.partyMember?.user?.unitId ?? null;
+  const orgUnit = record?.partyOrg?.linkedUnitId ?? record?.partyOrg?.unitId ?? null;
+  return {
+    resourceUnitId: memberUnit ?? orgUnit,
+    resourceOwnerId: record?.partyMember?.userId ?? null,
+  };
+}
 
 const INSPECTION_TYPES = [
   'KIEM_TRA_DINH_KY',
@@ -25,13 +42,17 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     const item = await inspectionRepo.findUnique({
       where: { id: params.id },
       include: {
-        partyMember: { include: { user: { select: { id: true, name: true, militaryId: true, rank: true, position: true } } } },
-        partyOrg: { select: { id: true, code: true, name: true, orgLevel: true } },
+        partyMember: { include: { user: { select: { id: true, name: true, militaryId: true, rank: true, position: true, unitId: true } } } },
+        partyOrg: { select: { id: true, code: true, name: true, orgLevel: true, unitId: true, linkedUnitId: true } },
         creator: { select: { id: true, name: true, email: true } },
       },
     });
 
     if (!item) return NextResponse.json({ error: 'Không tìm thấy hồ sơ kiểm tra' }, { status: 404 });
+
+    const denied = await enforceScopeAccess(authResult.user!, authResult.authResult, scopeContextForMember(item));
+    if (denied) return denied;
+
     return NextResponse.json(item);
   } catch (error) {
     console.error('[Party Inspections GET/:id]', error);
@@ -46,8 +67,14 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     const user = authResult.user!;
 
     const inspectionRepo = (prisma as any).partyInspectionTarget;
-    const existing = await inspectionRepo.findUnique({ where: { id: params.id } });
+    const existing = await inspectionRepo.findUnique({
+      where: { id: params.id },
+      include: MEMBER_UNIT_INCLUDE,
+    });
     if (!existing) return NextResponse.json({ error: 'Không tìm thấy hồ sơ kiểm tra' }, { status: 404 });
+
+    const deniedUpdate = await enforceScopeAccess(authResult.user!, authResult.authResult, scopeContextForMember(existing));
+    if (deniedUpdate) return deniedUpdate;
 
     const body = await request.json();
     const nextInspectionType = body.inspectionType ?? existing.inspectionType;

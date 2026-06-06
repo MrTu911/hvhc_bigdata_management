@@ -6,6 +6,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 import { requireFunction } from '@/lib/rbac/middleware';
 import { AWARDS } from '@/lib/rbac/function-codes';
+import { enforceScopeAccess } from '@/lib/rbac/scope-access';
 
 /**
  * GET - Chi tiết khen thưởng/kỷ luật
@@ -41,6 +42,12 @@ export async function GET(
     if (!record) {
       return NextResponse.json({ error: 'Không tìm thấy bản ghi' }, { status: 404 });
     }
+
+    const denied = await enforceScopeAccess(authResult.user!, authResult.authResult, {
+      resourceUnitId: record.unitId,
+      resourceOwnerId: record.userId,
+    });
+    if (denied) return denied;
 
     return NextResponse.json(record);
   } catch (error) {
@@ -87,6 +94,12 @@ export async function PUT(
     if (!existing) {
       return NextResponse.json({ error: 'Không tìm thấy bản ghi' }, { status: 404 });
     }
+
+    const deniedUpdate = await enforceScopeAccess(authResult.user!, authResult.authResult, {
+      resourceUnitId: existing.unitId,
+      resourceOwnerId: existing.userId,
+    });
+    if (deniedUpdate) return deniedUpdate;
 
     const record = await prisma.policyRecord.update({
       where: { id: params.id },
@@ -139,6 +152,12 @@ export async function DELETE(
     if (!existing) {
       return NextResponse.json({ error: 'Không tìm thấy bản ghi' }, { status: 404 });
     }
+
+    const deniedDelete = await enforceScopeAccess(authResult.user!, authResult.authResult, {
+      resourceUnitId: existing.unitId,
+      resourceOwnerId: existing.userId,
+    });
+    if (deniedDelete) return deniedDelete;
 
     // Soft delete
     await prisma.policyRecord.update({
