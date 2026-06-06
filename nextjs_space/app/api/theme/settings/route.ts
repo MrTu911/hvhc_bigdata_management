@@ -70,6 +70,11 @@ function groupSettingsByCategory(settings: any[]) {
 // PUT: Update theme settings
 export async function PUT(request: Request) {
   try {
+    const authResult = await requireFunction(request, THEME.UPDATE);
+    if (!authResult.allowed) {
+      return authResult.response;
+    }
+
     const body = await request.json();
     const { settings } = body;
 
@@ -106,6 +111,11 @@ export async function PUT(request: Request) {
 // POST: Create new theme setting
 export async function POST(request: Request) {
   try {
+    const authResult = await requireFunction(request, THEME.UPDATE);
+    if (!authResult.allowed) {
+      return authResult.response;
+    }
+
     const body = await request.json();
     const { key, value, type, category, displayName, description } = body;
 

@@ -38,6 +38,11 @@ export async function GET(request: Request) {
 // POST: Upload new branding asset
 export async function POST(request: Request) {
   try {
+    const authResult = await requireFunction(request, THEME.UPDATE);
+    if (!authResult.allowed) {
+      return authResult.response;
+    }
+
     const body = await request.json();
     const { assetType, assetName, filePath, fileUrl, dimensions, fileSize, mimeType } = body;
 
@@ -73,6 +78,11 @@ export async function POST(request: Request) {
 // DELETE: Remove branding asset
 export async function DELETE(request: Request) {
   try {
+    const authResult = await requireFunction(request, THEME.UPDATE);
+    if (!authResult.allowed) {
+      return authResult.response;
+    }
+
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
 

@@ -3,11 +3,18 @@
  * Path: /api/admin/acceptance-docs/stats
  * Returns live counts from DB to prove system modules are operational.
  */
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
+import { requireFunction } from '@/lib/rbac/middleware';
+import { SYSTEM } from '@/lib/rbac/function-codes';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const authResult = await requireFunction(request, SYSTEM.VIEW_SYSTEM_STATS);
+    if (!authResult.allowed) {
+      return authResult.response;
+    }
+
     const [
       partyTotal,
       partyByStatus,

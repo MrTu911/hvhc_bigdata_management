@@ -8,6 +8,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma as db } from '@/lib/db';
 import { requireFunction } from '@/lib/rbac/middleware';
 import { SYSTEM } from '@/lib/rbac/function-codes';
+import { verifyInternalToken } from '@/lib/auth/internal-auth';
 
 /**
  * GET /api/auth/audit
@@ -28,47 +29,45 @@ export async function GET(request: NextRequest) {
     const status = searchParams.get('status'); // 'success', 'failed', 'blocked'
     const email = searchParams.get('email');
 
-    // Build query
-    const whereClause: any = {};
+    // Build parameterized WHERE clause to prevent SQL injection.
+    const conditions: string[] = [];
+    const filterParams: any[] = [];
     if (status) {
-      whereClause.status = status;
+      filterParams.push(status);
+      conditions.push(`status = $${filterParams.length}`);
     }
     if (email) {
-      whereClause.email = { contains: email, mode: 'insensitive' };
+      filterParams.push(`%${email}%`);
+      conditions.push(`email ILIKE $${filterParams.length}`);
     }
+    const whereClause = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
 
-    // Fetch logs
+    // Fetch logs (limit/offset bound as parameters after the filters)
     const logs = await db.$queryRawUnsafe(`
-      SELECT 
-        id, 
-        user_id, 
-        email, 
-        ip_address, 
-        user_agent, 
-        location, 
-        status, 
+      SELECT
+        id,
+        user_id,
+        email,
+        ip_address,
+        user_agent,
+        location,
+        status,
         failure_reason,
         login_method,
         session_id,
         created_at
       FROM login_audit
-      ${status || email ? 'WHERE' : ''}
-      ${status ? "status = '" + status + "'" : ''}
-      ${status && email ? 'AND' : ''}
-      ${email ? "email ILIKE '%" + email + "%'" : ''}
+      ${whereClause}
       ORDER BY created_at DESC
-      LIMIT ${limit} OFFSET ${offset}
-    `);
+      LIMIT $${filterParams.length + 1} OFFSET $${filterParams.length + 2}
+    `, ...filterParams, limit, offset);
 
     // Get total count
     const countResult: any = await db.$queryRawUnsafe(`
       SELECT COUNT(*) as count
       FROM login_audit
-      ${status || email ? 'WHERE' : ''}
-      ${status ? "status = '" + status + "'" : ''}
-      ${status && email ? 'AND' : ''}
-      ${email ? "email ILIKE '%" + email + "%'" : ''}
-    `);
+      ${whereClause}
+    `, ...filterParams);
 
     const total = parseInt(countResult[0]?.count || '0');
 
@@ -86,11 +85,20 @@ export async function GET(request: NextRequest) {
 
 /**
  * POST /api/auth/audit
- * Create a login audit log entry
- * Internal use only (called by auth handlers)
+ * Create a login audit log entry.
+ * Internal/server-to-server only — protected by INTERNAL_API_SECRET Bearer token
+ * (login happens pre-session, so this cannot use RBAC). Prevents audit-log spoofing.
  */
 export async function POST(request: NextRequest) {
   try {
+    const internalAuth = verifyInternalToken(request);
+    if (!internalAuth.authorized) {
+      return NextResponse.json(
+        { error: internalAuth.reason || 'Forbidden' },
+        { status: 403 }
+      );
+    }
+
     const body = await request.json();
     const { email, userId, ipAddress, userAgent, location, status, failureReason, loginMethod, sessionId } =
       body;
@@ -99,30 +107,32 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    // Insert log
+    // Insert log (all values bound as parameters to prevent SQL injection)
     await db.$executeRawUnsafe(`
       INSERT INTO login_audit (
-        user_id, 
-        email, 
-        ip_address, 
-        user_agent, 
-        location, 
-        status, 
+        user_id,
+        email,
+        ip_address,
+        user_agent,
+        location,
+        status,
         failure_reason,
         login_method,
         session_id
       ) VALUES (
-        ${userId ? userId : 'NULL'},
-        '${email}',
-        ${ipAddress ? "'" + ipAddress + "'" : 'NULL'},
-        ${userAgent ? "'" + userAgent.replace(/'/g, "''") + "'" : 'NULL'},
-        ${location ? "'" + location + "'" : 'NULL'},
-        '${status}',
-        ${failureReason ? "'" + failureReason.replace(/'/g, "''") + "'" : 'NULL'},
-        ${loginMethod ? "'" + loginMethod + "'" : 'NULL'},
-        ${sessionId ? "'" + sessionId + "'" : 'NULL'}
+        $1, $2, $3, $4, $5, $6, $7, $8, $9
       )
-    `);
+    `,
+      userId ?? null,
+      email,
+      ipAddress ?? null,
+      userAgent ?? null,
+      location ?? null,
+      status,
+      failureReason ?? null,
+      loginMethod ?? null,
+      sessionId ?? null,
+    );
 
     return NextResponse.json({ success: true });
   } catch (error) {

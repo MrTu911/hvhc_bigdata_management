@@ -5,8 +5,16 @@ import { NextResponse } from 'next/server';
 import { uploadFile } from '@/lib/s3';
 import { getBucketConfig } from '@/lib/aws-config';
 
+// Branding assets are images — cap upload size to 5MB.
+const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
+
 export async function POST(request: Request) {
   try {
+    const authResult = await requireFunction(request, THEME.UPDATE);
+    if (!authResult.allowed) {
+      return authResult.response;
+    }
+
     const formData = await request.formData();
     const file = formData.get('file') as File;
     const assetType = formData.get('assetType') as string;
@@ -23,6 +31,14 @@ export async function POST(request: Request) {
     if (!allowedTypes.includes(file.type)) {
       return NextResponse.json(
         { success: false, error: 'Invalid file type. Only images allowed.' },
+        { status: 400 }
+      );
+    }
+
+    // Validate file size
+    if (file.size > MAX_UPLOAD_BYTES) {
+      return NextResponse.json(
+        { success: false, error: 'File quá lớn. Tối đa 5MB.' },
         { status: 400 }
       );
     }

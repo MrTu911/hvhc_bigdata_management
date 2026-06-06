@@ -6,6 +6,11 @@ import { NextResponse } from 'next/server';
 // POST: Apply theme changes dynamically
 export async function POST(request: Request) {
   try {
+    const authResult = await requireFunction(request, THEME.UPDATE);
+    if (!authResult.allowed) {
+      return authResult.response;
+    }
+
     const body = await request.json();
     const { themeConfig } = body;
 

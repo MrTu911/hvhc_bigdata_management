@@ -31,6 +31,7 @@ export interface RateLimitConfig {
 // Named configs — dùng với checkRateLimit(identifier, endpoint)
 export const RATE_LIMIT_CONFIGS: Record<string, RateLimitConfig> = {
   login:         { windowMs: 15 * 60 * 1000, maxRequests: 5 },
+  register:      { windowMs: 60 * 60 * 1000, maxRequests: 5 },
   otp:           { windowMs: 15 * 60 * 1000, maxRequests: 5 },
   forgotPassword:{ windowMs: 60 * 60 * 1000, maxRequests: 3 },
   api:           { windowMs: 60 * 1000,       maxRequests: 100 },

@@ -3,11 +3,27 @@ import { NextRequest, NextResponse } from 'next/server';
 import { hash } from 'bcryptjs';
 import prisma from '@/lib/db';
 import { UserRole } from '@prisma/client';
+import { checkRateLimit } from '@/lib/security/rate-limiter';
+
+function getClientIp(request: NextRequest): string {
+  return request.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
+    || request.headers.get('x-real-ip')
+    || 'unknown';
+}
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limit public self-registration to prevent mass account creation.
+    const rl = await checkRateLimit(getClientIp(request), 'register');
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { success: false, error: `Quá nhiều yêu cầu đăng ký. Vui lòng thử lại sau ${rl.retryAfter ?? 60} giây.` },
+        { status: 429 }
+      );
+    }
+
     const body = await request.json();
-    const { email, password, name, role, department, militaryId, rank, phone } = body;
+    const { email, password, name, department, militaryId, rank, phone } = body;
 
     // Validate required fields
     if (!email || !password || !name) {
@@ -46,26 +62,11 @@ export async function POST(request: NextRequest) {
     // Hash password
     const hashedPassword = await hash(password, 10);
 
-    // Map role string to UserRole enum
-    const roleMap: Record<string, UserRole> = {
-      'admin': UserRole.QUAN_TRI_HE_THONG,
-      'ADMIN': UserRole.QUAN_TRI_HE_THONG,
-      'QUAN_TRI_HE_THONG': UserRole.QUAN_TRI_HE_THONG,
-      'teacher': UserRole.GIANG_VIEN,
-      'instructor': UserRole.GIANG_VIEN,
-      'GIANG_VIEN': UserRole.GIANG_VIEN,
-      'student': UserRole.HOC_VIEN_SINH_VIEN,
-      'HOC_VIEN': UserRole.HOC_VIEN_SINH_VIEN,
-      'HOC_VIEN_SINH_VIEN': UserRole.HOC_VIEN_SINH_VIEN,
-      'researcher': UserRole.NGHIEN_CUU_VIEN,
-      'NGHIEN_CUU_VIEN': UserRole.NGHIEN_CUU_VIEN,
-      'CHI_HUY_HOC_VIEN': UserRole.CHI_HUY_HOC_VIEN,
-      'CHI_HUY_KHOA_PHONG': UserRole.CHI_HUY_KHOA_PHONG,
-      'CHU_NHIEM_BO_MON': UserRole.CHU_NHIEM_BO_MON,
-      'KY_THUAT_VIEN': UserRole.KY_THUAT_VIEN,
-    };
-
-    const userRole = role ? roleMap[role] || UserRole.HOC_VIEN_SINH_VIEN : UserRole.HOC_VIEN_SINH_VIEN;
+    // SECURITY: public self-registration must NEVER honor a client-supplied role
+    // (previously `role: 'admin'` in the body created a QUAN_TRI_HE_THONG account).
+    // Privileged accounts are created only via the authenticated admin endpoint
+    // (/api/admin/rbac/users). Self-signup is always the lowest-privilege role.
+    const userRole = UserRole.HOC_VIEN_SINH_VIEN;
 
     // Create user
     const user = await prisma.user.create({
@@ -78,7 +79,9 @@ export async function POST(request: NextRequest) {
         militaryId,
         rank,
         phone,
-        status: 'ACTIVE',
+        // Self-registered accounts start INACTIVE and require admin activation.
+        // Login is blocked for non-ACTIVE users (see lib/auth.ts).
+        status: 'INACTIVE',
       },
       select: {
         id: true,
@@ -107,7 +110,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       data: user,
-      message: 'User created successfully',
+      message: 'Đăng ký thành công. Tài khoản cần được quản trị viên kích hoạt trước khi đăng nhập.',
     });
   } catch (error: any) {
     console.error('Signup error:', error);

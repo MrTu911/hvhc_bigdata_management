@@ -11,6 +11,9 @@ import { masterDataAdminService } from '@/lib/services/master-data/master-data-a
 // A1 – list all categories (admin sees inactive too)
 export async function GET(req: NextRequest) {
   try {
+    const session = await getServerSession(authOptions)
+    if (!session) return NextResponse.json({ error: 'Chưa xác thực' }, { status: 401 })
+
     const { searchParams } = req.nextUrl
     const groupTag = searchParams.get('groupTag') ?? undefined
     const includeInactive = searchParams.get('includeInactive') === 'true'
