@@ -17,10 +17,10 @@ export async function GET(
     const modelId = params.id;
 
     const versions = await db.$queryRawUnsafe(`
-      SELECT * FROM model_versions 
-      WHERE model_id = '${modelId}'
+      SELECT * FROM model_versions
+      WHERE model_id = $1
       ORDER BY version_number DESC
-    `);
+    `, modelId);
 
     return NextResponse.json({ versions });
   } catch (error) {
@@ -56,11 +56,11 @@ export async function POST(
 
     // Lấy version number mới nhất
     const latestVersions = await db.$queryRawUnsafe<Array<{ version_number: number }>>(`
-      SELECT version_number FROM model_versions 
-      WHERE model_id = '${modelId}'
+      SELECT version_number FROM model_versions
+      WHERE model_id = $1
       ORDER BY version_number DESC
       LIMIT 1
-    `);
+    `, modelId);
 
     const newVersionNumber = latestVersions && latestVersions.length > 0
       ? latestVersions[0].version_number + 1
@@ -70,17 +70,23 @@ export async function POST(
 
     await db.$executeRawUnsafe(`
       INSERT INTO model_versions (
-        id, model_id, version_number, description, 
-        experiment_id, metrics, artifact_path, tags, 
+        id, model_id, version_number, description,
+        experiment_id, metrics, artifact_path, tags,
         status, created_by, created_at
       ) VALUES (
-        '${versionId}', '${modelId}', ${newVersionNumber}, 
-        '${description || ''}', '${experimentId || ''}', 
-        '${JSON.stringify(metrics || {})}', '${artifactPath || ''}',
-        '${JSON.stringify(tags || [])}', 'draft', 
-        '${user!.id}', NOW()
+        $1, $2, $3, $4, $5, $6, $7, $8, 'draft', $9, NOW()
       )
-    `);
+    `,
+      versionId,
+      modelId,
+      newVersionNumber,
+      description || '',
+      experimentId || '',
+      JSON.stringify(metrics || {}),
+      artifactPath || '',
+      JSON.stringify(tags || []),
+      user!.id,
+    );
 
     return NextResponse.json({ 
       versionId,

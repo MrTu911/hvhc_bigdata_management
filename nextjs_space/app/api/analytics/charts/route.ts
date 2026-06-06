@@ -46,6 +46,19 @@ export async function GET(request: NextRequest) {
   }
 }
 
+// Map UI time-range tokens → cutoff Date. Tránh nội suy input người dùng vào SQL.
+function resolveSince(timeRange: string): Date {
+  const daysByToken: Record<string, number> = {
+    '24h': 1,
+    '7d': 7,
+    '30d': 30,
+    '90d': 90,
+    '1y': 365,
+  };
+  const days = daysByToken[timeRange] ?? 7;
+  return new Date(Date.now() - days * 24 * 60 * 60 * 1000);
+}
+
 async function getModelPerformanceData(timeRange: string) {
   const models = await db.$queryRawUnsafe(`
     SELECT 
@@ -63,15 +76,16 @@ async function getModelPerformanceData(timeRange: string) {
 }
 
 async function getExperimentMetricsData(timeRange: string) {
+  const since = resolveSince(timeRange);
   const experiments = await db.$queryRawUnsafe(`
-    SELECT 
+    SELECT
       e.id, e.name, e.model_id,
       em.metric_name, em.metric_value, em.timestamp
     FROM ml_experiments e
     JOIN experiment_metrics em ON e.id = em.experiment_id
-    WHERE e.created_at >= NOW() - INTERVAL '${timeRange}'
+    WHERE e.created_at >= $1
     ORDER BY em.timestamp ASC
-  `);
+  `, since);
 
   return experiments;
 }
@@ -109,15 +123,17 @@ async function getResourceUtilizationData(timeRange: string) {
 }
 
 async function getUserActivityData(timeRange: string) {
+  const since = resolveSince(timeRange);
+  // audit_logs là Prisma model (@@map) nhưng cột không @map → tên cột thật là camelCase "createdAt".
   const activities = await db.$queryRawUnsafe(`
-    SELECT 
-      DATE(created_at) as date,
+    SELECT
+      DATE("createdAt") as date,
       COUNT(*) as count
     FROM audit_logs
-    WHERE created_at >= NOW() - INTERVAL '${timeRange}'
-    GROUP BY DATE(created_at)
+    WHERE "createdAt" >= $1
+    GROUP BY DATE("createdAt")
     ORDER BY date ASC
-  `);
+  `, since);
 
   return activities;
 }

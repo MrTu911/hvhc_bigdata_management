@@ -21,20 +21,21 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const idsString = experimentIds.map(id => `'${id}'`).join(',');
+    // Bind each id as a parameter ($1, $2, ...) to prevent SQL injection.
+    const placeholders = experimentIds.map((_, i) => `$${i + 1}`).join(',');
 
     // Lấy thông tin các experiments
     const experiments = await db.$queryRawUnsafe(`
-      SELECT * FROM ml_experiments 
-      WHERE id IN (${idsString})
-    `);
+      SELECT * FROM ml_experiments
+      WHERE id IN (${placeholders})
+    `, ...experimentIds);
 
     // Lấy metrics của các experiments
     const metrics = await db.$queryRawUnsafe(`
-      SELECT * FROM experiment_metrics 
-      WHERE experiment_id IN (${idsString})
+      SELECT * FROM experiment_metrics
+      WHERE experiment_id IN (${placeholders})
       ORDER BY experiment_id, timestamp ASC
-    `);
+    `, ...experimentIds);
 
     // Nhóm metrics theo experiment
     const experimentMetrics: Record<string, any[]> = {};

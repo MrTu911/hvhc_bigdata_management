@@ -21,8 +21,8 @@ export async function POST(
 
     // Kiểm tra workflow tồn tại
     const workflows = await db.$queryRawUnsafe(`
-      SELECT * FROM ml_workflows WHERE id = '${workflowId}'
-    `);
+      SELECT * FROM ml_workflows WHERE id = $1
+    `, workflowId);
 
     if (!Array.isArray(workflows) || workflows.length === 0) {
       return NextResponse.json(
@@ -36,14 +36,12 @@ export async function POST(
 
     await db.$executeRawUnsafe(`
       INSERT INTO workflow_executions (
-        id, workflow_id, status, parameters, 
+        id, workflow_id, status, parameters,
         started_at, started_by
       ) VALUES (
-        '${executionId}', '${workflowId}', 'running', 
-        '${JSON.stringify(parameters || {})}', 
-        NOW(), '${user!.id}'
+        $1, $2, 'running', $3, NOW(), $4
       )
-    `);
+    `, executionId, workflowId, JSON.stringify(parameters || {}), user!.id);
 
     // Thực thi workflow (async)
     executeWorkflow(executionId, workflowId, workflows[0], parameters).catch(error => {
@@ -78,12 +76,12 @@ async function executeWorkflow(
       
       // Cập nhật progress
       await db.$executeRawUnsafe(`
-        UPDATE workflow_executions 
-        SET current_step = ${i + 1}, 
-            progress = ${((i + 1) / steps.length * 100).toFixed(0)},
+        UPDATE workflow_executions
+        SET current_step = $1,
+            progress = $2,
             updated_at = NOW()
-        WHERE id = '${executionId}'
-      `);
+        WHERE id = $3
+      `, i + 1, Math.round((i + 1) / steps.length * 100), executionId);
 
       // Thực hiện step (giả lập)
       await new Promise(resolve => setTimeout(resolve, 2000));
@@ -97,21 +95,21 @@ async function executeWorkflow(
 
     // Cập nhật kết quả
     await db.$executeRawUnsafe(`
-      UPDATE workflow_executions 
-      SET status = 'completed', 
-          results = '${JSON.stringify(results)}',
+      UPDATE workflow_executions
+      SET status = 'completed',
+          results = $1,
           completed_at = NOW(),
           progress = 100
-      WHERE id = '${executionId}'
-    `);
+      WHERE id = $2
+    `, JSON.stringify(results), executionId);
   } catch (error) {
     console.error('Workflow execution failed:', error);
     await db.$executeRawUnsafe(`
-      UPDATE workflow_executions 
-      SET status = 'failed', 
-          error = '${String(error)}',
+      UPDATE workflow_executions
+      SET status = 'failed',
+          error = $1,
           completed_at = NOW()
-      WHERE id = '${executionId}'
-    `);
+      WHERE id = $2
+    `, String(error), executionId);
   }
 }

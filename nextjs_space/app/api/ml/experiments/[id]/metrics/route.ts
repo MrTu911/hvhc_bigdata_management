@@ -28,16 +28,15 @@ export async function POST(
     // Log từng metric
     for (const metric of metrics) {
       const metricId = `metric_${Date.now()}_${Math.random().toString(36).substring(7)}`;
-      
+
       await db.$executeRawUnsafe(`
         INSERT INTO experiment_metrics (
-          id, experiment_id, metric_name, metric_value, 
+          id, experiment_id, metric_name, metric_value,
           step, epoch, timestamp
         ) VALUES (
-          '${metricId}', '${experimentId}', '${metric.name}', 
-          ${metric.value}, ${metric.step || 0}, ${metric.epoch || 0}, NOW()
+          $1, $2, $3, $4, $5, $6, NOW()
         )
-      `);
+      `, metricId, experimentId, metric.name, metric.value, metric.step || 0, metric.epoch || 0);
     }
 
     return NextResponse.json({ message: 'Metrics logged successfully' });

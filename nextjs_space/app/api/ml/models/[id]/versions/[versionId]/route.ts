@@ -17,8 +17,8 @@ export async function GET(
     const { versionId } = params;
 
     const versions = await db.$queryRawUnsafe(`
-      SELECT * FROM model_versions WHERE id = '${versionId}'
-    `);
+      SELECT * FROM model_versions WHERE id = $1
+    `, versionId);
 
     if (!Array.isArray(versions) || versions.length === 0) {
       return NextResponse.json(
@@ -52,35 +52,38 @@ export async function PUT(
     const body = await request.json();
     const { status, stage, notes } = body;
 
-    let updateFields = [];
-    if (status) updateFields.push(`status = '${status}'`);
-    if (stage) updateFields.push(`stage = '${stage}'`);
-    if (notes) updateFields.push(`notes = '${notes}'`);
+    // Build parameterized SET clause: column names are code-controlled, values are bound.
+    const updateFields: string[] = [];
+    const queryParams: any[] = [];
+    if (status) { queryParams.push(status); updateFields.push(`status = $${queryParams.length}`); }
+    if (stage) { queryParams.push(stage); updateFields.push(`stage = $${queryParams.length}`); }
+    if (notes) { queryParams.push(notes); updateFields.push(`notes = $${queryParams.length}`); }
 
     if (updateFields.length > 0) {
+      queryParams.push(versionId);
       await db.$executeRawUnsafe(`
-        UPDATE model_versions 
+        UPDATE model_versions
         SET ${updateFields.join(', ')}, updated_at = NOW()
-        WHERE id = '${versionId}'
-      `);
+        WHERE id = $${queryParams.length}
+      `, ...queryParams);
     }
 
     // Nếu promote to production, cập nhật model
     if (stage === 'production') {
       await db.$executeRawUnsafe(`
-        UPDATE ml_models 
+        UPDATE ml_models
         SET current_version = (
-          SELECT version_number FROM model_versions WHERE id = '${versionId}'
+          SELECT version_number FROM model_versions WHERE id = $1
         ), updated_at = NOW()
-        WHERE id = '${modelId}'
-      `);
+        WHERE id = $2
+      `, versionId, modelId);
 
       // Demote các versions khác
       await db.$executeRawUnsafe(`
-        UPDATE model_versions 
+        UPDATE model_versions
         SET stage = 'archived', updated_at = NOW()
-        WHERE model_id = '${modelId}' AND id != '${versionId}' AND stage = 'production'
-      `);
+        WHERE model_id = $1 AND id != $2 AND stage = 'production'
+      `, modelId, versionId);
     }
 
     return NextResponse.json({ message: 'Version updated successfully' });
@@ -108,8 +111,8 @@ export async function DELETE(
 
     // Không cho phép xóa version đang production
     const versions = await db.$queryRawUnsafe<Array<{ stage: string }>>(`
-      SELECT stage FROM model_versions WHERE id = '${versionId}'
-    `);
+      SELECT stage FROM model_versions WHERE id = $1
+    `, versionId);
 
     if (versions && versions.length > 0 && versions[0].stage === 'production') {
       return NextResponse.json(
@@ -119,8 +122,8 @@ export async function DELETE(
     }
 
     await db.$executeRawUnsafe(`
-      DELETE FROM model_versions WHERE id = '${versionId}'
-    `);
+      DELETE FROM model_versions WHERE id = $1
+    `, versionId);
 
     return NextResponse.json({ message: 'Version deleted successfully' });
   } catch (error) {
