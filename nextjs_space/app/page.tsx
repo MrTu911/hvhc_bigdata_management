@@ -9,7 +9,14 @@ import CTASection from '@/components/homepage/cta-section';
 import Footer from '@/components/homepage/footer';
 import Header from '@/components/homepage/header';
 
-// Server component: nội dung trang chủ là marketing tĩnh, không phụ thuộc session.
+// Bắt buộc render động mỗi request.
+// Lý do: Header đọc session (qua getServerSession ở root layout → SessionProvider) để hiển thị
+// đúng nút "Đăng nhập" (chưa login) hoặc "Vào hệ thống" (đã login). Nếu để Next static-prerender
+// trang chủ, session bị "đóng băng" = null lúc build → user đã đăng nhập vẫn thấy nút "Đăng nhập"
+// và bị đẩy về form login. force-dynamic đảm bảo session luôn đọc theo cookie thực của request.
+export const dynamic = 'force-dynamic';
+
+// Server component: nội dung trang chủ là marketing tĩnh, nhưng trạng thái auth ở Header phụ thuộc session.
 // Để SSR render ngay HTML, không gate bằng `mounted`/`useSession` (gây màn hình trắng + phải refresh).
 export default function HomePage() {
   return (

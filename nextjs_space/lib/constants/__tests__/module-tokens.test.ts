@@ -11,7 +11,7 @@ import { MODULE_TOKENS, type ModuleId } from '@/lib/constants/module-tokens';
 
 const ALL_IDS: ModuleId[] = [
   'personnel', 'party', 'education', 'research', 'policy',
-  'insurance', 'student', 'science', 'admin', 'workflow', 'default',
+  'insurance', 'student', 'science', 'admin', 'workflow', 'bigdata', 'default',
 ];
 
 // Các field phải luôn có giá trị (code='' hợp lệ cho 'default' nên không kiểm tra ở đây).

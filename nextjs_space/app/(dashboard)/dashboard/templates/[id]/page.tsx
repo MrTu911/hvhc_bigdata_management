@@ -44,6 +44,7 @@ import {
 } from '@/components/ui/dialog';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Checkbox } from '@/components/ui/checkbox';
+import { EntityPicker } from '@/components/templates/entity-picker';
 
 interface Template {
   id: string;
@@ -65,8 +66,8 @@ interface Template {
 interface VersionRecord {
   version: number;
   fileKey?: string;
-  changedBy?: string;
-  changedAt?: string;
+  createdBy?: string;
+  createdAt?: string;
   changeNote?: string;
 }
 
@@ -183,7 +184,7 @@ export default function TemplateDetailPage() {
       const res = await fetch(`/api/templates/${id}/versions`);
       if (!res.ok) return;
       const json = await res.json();
-      setVersions(json.data?.versions || []);
+      setVersions(json.data || []);
     } catch {
       // ignore
     }
@@ -704,9 +705,9 @@ export default function TemplateDetailPage() {
                         <TableCell className="font-mono text-xs text-gray-500">
                           {v.fileKey?.split('/').pop() || '–'}
                         </TableCell>
-                        <TableCell className="text-sm">{v.changedBy || '–'}</TableCell>
+                        <TableCell className="text-sm">{v.createdBy || '–'}</TableCell>
                         <TableCell className="text-xs text-gray-500">
-                          {v.changedAt ? new Date(v.changedAt).toLocaleString('vi-VN') : '–'}
+                          {v.createdAt ? new Date(v.createdAt).toLocaleString('vi-VN') : '–'}
                         </TableCell>
                         <TableCell className="text-sm">{v.changeNote || '–'}</TableCell>
                         <TableCell className="text-right">
@@ -805,17 +806,24 @@ export default function TemplateDetailPage() {
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-1">
-              <Label>Entity ID (mã cán bộ/học viên)</Label>
-              <Input
-                placeholder="Nhập ID để lấy dữ liệu thực..."
+              <Label>Đối tượng <span className="text-red-500">*</span></Label>
+              <EntityPicker
+                entityType={previewEntityType}
                 value={previewEntityId}
-                onChange={e => setPreviewEntityId(e.target.value)}
+                onChange={(id) => setPreviewEntityId(id)}
+                placeholder="Tìm theo tên hoặc mã..."
               />
+              <p className="text-xs text-gray-400">
+                Tìm theo tên; hoặc nhập tay số quân nhân / mã học viên / ID.
+              </p>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
                 <Label>Loại entity</Label>
-                <Select value={previewEntityType} onValueChange={setPreviewEntityType}>
+                <Select
+                  value={previewEntityType}
+                  onValueChange={v => { setPreviewEntityType(v); setPreviewEntityId(''); }}
+                >
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="personnel">Cán bộ (Personnel)</SelectItem>
@@ -863,17 +871,24 @@ export default function TemplateDetailPage() {
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-1">
-              <Label>Entity ID <span className="text-red-500">*</span></Label>
-              <Input
-                placeholder="Nhập ID cán bộ/học viên..."
+              <Label>Đối tượng <span className="text-red-500">*</span></Label>
+              <EntityPicker
+                entityType={exportEntityType}
                 value={exportEntityId}
-                onChange={e => setExportEntityId(e.target.value)}
+                onChange={(id) => setExportEntityId(id)}
+                placeholder="Tìm theo tên hoặc mã..."
               />
+              <p className="text-xs text-gray-400">
+                Tìm theo tên; hoặc nhập tay số quân nhân / mã học viên / ID.
+              </p>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1">
                 <Label>Loại entity</Label>
-                <Select value={exportEntityType} onValueChange={setExportEntityType}>
+                <Select
+                  value={exportEntityType}
+                  onValueChange={v => { setExportEntityType(v); setExportEntityId(''); }}
+                >
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="personnel">Cán bộ</SelectItem>

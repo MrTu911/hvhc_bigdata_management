@@ -9,6 +9,7 @@ export type ModuleId =
   | 'science'
   | 'admin'
   | 'workflow'
+  | 'bigdata'
   | 'default';
 
 export interface ModuleToken {
@@ -110,6 +111,15 @@ export const MODULE_TOKENS: Record<ModuleId, ModuleToken> = {
     heroGradient: 'from-amber-900 via-amber-800 to-orange-800',
     sidebarGradient: 'from-amber-600 to-orange-600',
     accentText: 'text-amber-200',
+    iconBg: 'bg-white/20',
+  },
+  bigdata: {
+    id: 'bigdata',
+    label: 'Khai thác Dữ liệu',
+    code: 'KTDL',
+    heroGradient: 'from-blue-900 via-blue-800 to-sky-700',
+    sidebarGradient: 'from-blue-600 to-sky-600',
+    accentText: 'text-sky-200',
     iconBg: 'bg-white/20',
   },
   default: {

@@ -45,6 +45,7 @@ import { seedExamsAndGrades } from './53_exams_grades'
 import { seedMonHoc } from './54_mon_hoc'
 import { seedWorkflowTemplates } from './60_workflow_templates'
 import { seedWorkflowInstances } from './61_workflow_instances'
+import { seedAdminDocTemplates } from './70_admin_doc_templates'
 import { seedBackfill } from './90_backfill'
 
 // ─── Danh sách step ──────────────────────────────────────────────────────────
@@ -97,6 +98,9 @@ const ALL_STEPS: SeedStep[] = [
   { step: '60', name: 'Workflow Templates',             module: 'M13',   group: 'demo', fn: seedWorkflowTemplates },
   { step: '61', name: 'Workflow Instances',             module: 'M13',   group: 'demo', fn: seedWorkflowInstances },
 
+  // ══ NHÓM G2: M18 Mẫu văn bản hành chính ══
+  { step: '70', name: 'Mẫu văn bản hành chính (NĐ30)',  module: 'M18',   group: 'demo', fn: seedAdminDocTemplates },
+
   // ══ NHÓM H: Backfill ══
   { step: '90', name: 'Backfill (cleanup & fix)',       module: 'CORE',  group: 'backfill', fn: seedBackfill },
 ]
@@ -112,6 +116,7 @@ const MODULE_MAP: Record<string, string[]> = {
   M09: ['40', '41', '42'],
   M10: ['50', '51', '52', '53', '54'],
   M13: ['60', '61'],
+  M18: ['70'],
 }
 
 // ─── Main runner ─────────────────────────────────────────────────────────────
@@ -147,7 +152,7 @@ async function main() {
     }
   } else {
     console.error(`\n❌ Mode không hợp lệ: '${mode}'`)
-    console.error('   Hợp lệ: all | required | demo | backfill | M02 | M03 | M09 | M10 | M13 | <step_number>')
+    console.error('   Hợp lệ: all | required | demo | backfill | M02 | M03 | M09 | M10 | M13 | M18 | <step_number>')
     process.exit(1)
   }
 

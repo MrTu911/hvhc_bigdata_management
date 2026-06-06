@@ -15,33 +15,121 @@ interface ResolveOptions {
 }
 
 /**
+ * Thông tin định danh cố định trên giấy tiêu đề của học viện (Nghị định 30/2020).
+ * Đây là danh tính của chính cơ quan ban hành — không phải lookup M19 — nên dùng
+ * hằng số là hợp lệ. Số/ngày ký/người ký để trống vì không có nguồn dữ liệu, do
+ * VT/người ký điền tay sau khi xuất.
+ */
+const ACADEMY_HEADER = {
+  quocHieu: 'CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM',
+  tieuNgu: 'Độc lập - Tự do - Hạnh phúc',
+  tenCoQuanCapTren: 'BỘ QUỐC PHÒNG',
+  tenCoQuanBanHanh: 'HỌC VIỆN HẬU CẦN',
+  diaDanh: 'Hà Nội',
+} as const;
+
+/**
+ * Trả về các trường tiêu đề/định danh dùng chung cho mọi mẫu văn bản hành chính.
+ * Các trường người ký/số/ngày để trống (dòng chấm điền tay).
+ */
+export function buildHeaderContext(): Record<string, string> {
+  const now = new Date();
+  return {
+    ...ACADEMY_HEADER,
+    ngayThangNamText: `ngày ... tháng ... năm ${now.getFullYear()}`,
+    diaDanhNgayThang: `${ACADEMY_HEADER.diaDanh}, ngày ... tháng ... năm ${now.getFullYear()}`,
+    soVanBan: '.....',
+    chucVuNguoiKy: '',
+    hoTenNguoiKy: '',
+    noiNhan: '',
+    luuBoPhan: 'VT',
+  };
+}
+
+/**
  * Resolve dữ liệu từ DB cho 1 entity dựa theo dataMap
  * Returns flat object với key là placeholder name, value là data đã resolve
  */
 export async function resolveEntityData(options: ResolveOptions): Promise<Record<string, unknown>> {
   const { entityId, entityType, dataMap } = options;
-  const resolved: Record<string, unknown> = {};
 
   try {
+    let base: Record<string, unknown>;
     switch (entityType) {
       case 'personnel':
-        return await resolvePersonnelData(entityId, dataMap);
+        base = await resolvePersonnelData(entityId, dataMap);
+        break;
       case 'student':
-        return await resolveStudentData(entityId, dataMap);
+        base = await resolveStudentData(entityId, dataMap);
+        break;
       case 'faculty':
-        return await resolveFacultyData(entityId, dataMap);
+        base = await resolveFacultyData(entityId, dataMap);
+        break;
       case 'party_member':
-        return await resolvePartyMemberData(entityId, dataMap);
+        base = await resolvePartyMemberData(entityId, dataMap);
+        break;
       case 'scientific_council':
-        return await resolveScientificCouncilData(entityId);
+        base = await resolveScientificCouncilData(entityId);
+        break;
       case 'scientist_profile':
-        return await resolveScientistProfileData(entityId);
+        base = await resolveScientistProfileData(entityId);
+        break;
       default:
-        return resolved;
+        base = {};
     }
+    // Gộp tiêu đề/định danh hành chính (Nghị định 30/2020) cho mọi entity type;
+    // dữ liệu thực thể (base) thắng nếu trùng key. dataMap rỗng → giữ nguyên để
+    // không phá các template cũ.
+    const withHeader = { ...buildHeaderContext(), ...base };
+    return applyDataMap(withHeader, dataMap);
   } catch (error) {
     throw new Error(`Data resolve failed for ${entityType}/${entityId}: ${error}`);
   }
+}
+
+/**
+ * Lấy giá trị từ resolved data theo key (hỗ trợ dot-path cho field lồng nhau).
+ */
+function getByPath(obj: Record<string, unknown>, path: string): unknown {
+  if (!path) return undefined;
+  if (path in obj) return obj[path];
+  return path
+    .split('.')
+    .reduce<unknown>((acc, key) => (acc == null ? undefined : (acc as Record<string, unknown>)[key]), obj);
+}
+
+/**
+ * Ánh xạ placeholder ↔ field theo dataMap đã cấu hình ở UI Data Map.
+ *
+ * dataMap có dạng { [placeholderTrongTemplate]: fieldKey } — fieldKey là key trong
+ * base resolved data (vd "hoTen", "ngaySinh"). Cũng chấp nhận value dạng object
+ * { field } / { apiPath } để tương thích các bản map cũ.
+ *
+ * Chiến lược: giữ nguyên toàn bộ base (template cũ dùng trực tiếp tên field vẫn chạy),
+ * đồng thời thêm các key placeholder đã ánh xạ. dataMap rỗng → trả base nguyên vẹn.
+ */
+function applyDataMap(
+  base: Record<string, unknown>,
+  dataMap: Record<string, unknown> | undefined,
+): Record<string, unknown> {
+  if (!dataMap) return base;
+  const placeholders = Object.keys(dataMap);
+  if (placeholders.length === 0) return base;
+
+  const output: Record<string, unknown> = { ...base };
+  for (const placeholder of placeholders) {
+    const ref = dataMap[placeholder];
+    const fieldKey =
+      typeof ref === 'string'
+        ? ref
+        : ref && typeof ref === 'object'
+          ? ((ref as Record<string, unknown>).field ?? (ref as Record<string, unknown>).apiPath)
+          : undefined;
+    if (!fieldKey) continue;
+    const value = getByPath(base, String(fieldKey));
+    if (value !== undefined) output[placeholder] = value;
+  }
+  return output;
 }
 
 /**
@@ -49,18 +137,20 @@ export async function resolveEntityData(options: ResolveOptions): Promise<Record
  */
 async function resolvePersonnelData(
   id: string,
-  dataMap: Record<string, unknown>
+  _dataMap: Record<string, unknown>
 ): Promise<Record<string, unknown>> {
-  // Lấy personnel với unit relation và linked user account
-  const personnel = await prisma.personnel.findUnique({
-    where: { id },
+  // Ánh xạ placeholder ↔ field do applyDataMap() xử lý ở resolveEntityData; resolver chỉ trả base data.
+  // Lấy personnel với unit relation và linked user account.
+  // Cho phép truyền id nội bộ HOẶC số quân nhân (militaryIdNumber) để dễ dùng từ UI.
+  const personnel = await prisma.personnel.findFirst({
+    where: { OR: [{ id }, { militaryIdNumber: id }] },
     include: {
       unit: { select: { id: true, name: true, code: true } },
       account: true,
     },
   });
 
-  if (!personnel) throw new Error(`Không tìm thấy nhân sự ID: ${id}`);
+  if (!personnel) throw new Error(`Không tìm thấy nhân sự (ID hoặc số quân nhân): ${id}`);
 
   const userId = personnel.account?.id;
 
@@ -200,8 +290,9 @@ async function resolveStudentData(
   id: string,
   _dataMap: Record<string, unknown>
 ): Promise<Record<string, unknown>> {
-  const student = await prisma.hocVien.findUnique({
-    where: { id },
+  // Cho phép truyền id nội bộ HOẶC mã học viên (maHocVien) để dễ dùng từ UI.
+  const student = await prisma.hocVien.findFirst({
+    where: { OR: [{ id }, { maHocVien: id }] },
     include: {
       ketQuaHocTap: {
         orderBy: { hocKy: 'asc' },
@@ -209,7 +300,7 @@ async function resolveStudentData(
     },
   });
 
-  if (!student) throw new Error(`Không tìm thấy học viên ID: ${id}`);
+  if (!student) throw new Error(`Không tìm thấy học viên (ID hoặc mã học viên): ${id}`);
 
   const fmt = (d: Date | null | undefined) => {
     if (!d) return '';

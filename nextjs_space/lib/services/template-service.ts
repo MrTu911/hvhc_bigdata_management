@@ -25,7 +25,6 @@ import {
   type TemplateUpdateInput,
 } from '@/lib/repositories/template/template.repository';
 import prisma from '@/lib/db';
-import { ExportJobStatus } from '@prisma/client';
 
 // Kept for reference by export-engine-service (deprecated — use M18_TEMPLATE domain)
 /** @deprecated Dùng storageService với domain 'M18_TEMPLATE' thay vì TEMPLATE_BUCKET trực tiếp */
@@ -92,9 +91,9 @@ export async function updateTemplate(id: string, input: TemplateUpdateInput) {
 }
 
 /**
- * Soft delete template. Từ chối nếu có job đang chạy.
+ * Soft delete template (set deletedAt). Từ chối nếu có job đang chạy.
  */
-export async function deleteTemplate(id: string) {
+export async function deleteTemplate(id: string, userId: string) {
   const template = await findTemplateById(id);
   if (!template) throw new Error('Template không tồn tại');
 
@@ -103,7 +102,7 @@ export async function deleteTemplate(id: string) {
     throw new Error('Không thể vô hiệu hóa template đang được sử dụng trong export job');
   }
 
-  return softDeleteTemplate(id);
+  return softDeleteTemplate(id, userId);
 }
 
 // ─── Versioning (Phase 3 — chờ upload) ───────────────────────────────────────

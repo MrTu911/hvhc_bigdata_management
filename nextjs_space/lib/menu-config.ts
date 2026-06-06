@@ -1458,6 +1458,71 @@ export const MENU_CONFIG: MenuGroup[] = [
     ],
   },
 
+  // ========== 14b. KHAI THÁC DỮ LIỆU (BigData Platform) ==========
+  // Hub điều hướng kiểu nền tảng dữ liệu lớn. Overview/Sources/Warehouse là UI mới;
+  // Pipelines/Reports/Monitor/Audit/Security là entry-shell trỏ vào page đã có.
+  {
+    title: 'nav.bigdataPlatform',
+    items: [
+      {
+        name: 'nav.bigdataOverview',
+        href: '/dashboard/bigdata',
+        icon: LayoutDashboard,
+        gradient: 'from-blue-600 to-sky-600',
+        functions: [DATA.VIEW, SYSTEM.VIEW_SYSTEM_HEALTH],
+      },
+      {
+        name: 'nav.bigdataSources',
+        href: '/dashboard/bigdata/sources',
+        icon: Database,
+        gradient: 'from-cyan-500 to-blue-600',
+        functions: [DATA.VIEW],
+      },
+      {
+        name: 'nav.bigdataWarehouse',
+        href: '/dashboard/bigdata/warehouse',
+        icon: Layers,
+        gradient: 'from-indigo-500 to-blue-600',
+        functions: [DATA.VIEW, INFRA.STORAGE_VIEW],
+      },
+      {
+        name: 'nav.bigdataPipelines',
+        href: '/dashboard/bigdata/pipelines',
+        icon: Zap,
+        gradient: 'from-yellow-500 to-orange-600',
+        functions: [ETL.VIEW, INFRA.PIPELINE_VIEW],
+      },
+      {
+        name: 'nav.bigdataReports',
+        href: '/dashboard/bigdata/reports',
+        icon: PieChart,
+        gradient: 'from-amber-500 to-amber-600',
+        functions: [DATA.VIEW],
+      },
+      {
+        name: 'nav.bigdataMonitor',
+        href: '/dashboard/bigdata/monitor',
+        icon: Activity,
+        gradient: 'from-green-500 to-emerald-600',
+        functions: [SYSTEM.VIEW_SYSTEM_HEALTH, MONITORING.VIEW_SERVICES],
+      },
+      {
+        name: 'nav.bigdataAudit',
+        href: '/dashboard/bigdata/audit',
+        icon: ScrollText,
+        gradient: 'from-red-500 to-rose-600',
+        functions: [AUDIT.VIEW_LOGS, SYSTEM.VIEW_AUDIT_LOG],
+      },
+      {
+        name: 'nav.bigdataSecurity',
+        href: '/dashboard/bigdata/security',
+        icon: Shield,
+        gradient: 'from-red-600 to-rose-700',
+        functions: [SECURITY.VIEW_POLICY, GOVERNANCE.VIEW_COMPLIANCE],
+      },
+    ],
+  },
+
   // ─────────────────────────────────────────────────────────────────────────
   // LỚP 4: CÁ NHÂN
   // ─────────────────────────────────────────────────────────────────────────

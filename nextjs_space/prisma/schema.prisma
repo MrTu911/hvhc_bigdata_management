@@ -358,6 +358,7 @@ model BigDataService {
   updatedAt   DateTime        @updatedAt
   alerts      ServiceAlert[]
   metrics     ServiceMetric[]
+  dataSources DataSource[]
 
   @@index([type])
   @@index([status])
@@ -882,6 +883,7 @@ model Unit {
   // Môn học do Khoa/Bộ môn này phụ trách (M10 – danh mục môn học thật)
   heSoMonHocKhoa      HeSoMonHoc[]      @relation("HeSoMonHocKhoa")
   heSoMonHocBoMon     HeSoMonHoc[]      @relation("HeSoMonHocBoMon")
+  dataSources         DataSource[]      // M-KTDL: nguồn dữ liệu do đơn vị quản lý
 
   @@index([code])
   @@index([type])
@@ -4181,6 +4183,7 @@ model DataClassification {
   color       String? @db.VarChar(10)
   level       Int     @db.SmallInt
   description String?
+  dataSources DataSource[]
 
   @@map("data_classifications")
 }
@@ -8437,4 +8440,57 @@ enum PromotionProposalStatus {
   ACKNOWLEDGED
   APPROVED
   REJECTED
+}
+
+// ============================================================
+// KHAI THÁC DỮ LIỆU (BigData Platform) — DataSource catalog
+// ============================================================
+
+enum DataSourceStatus {
+  ACTIVE
+  WARNING
+  ERROR
+  SYNCING
+  INACTIVE
+}
+
+/// Danh mục nguồn dữ liệu (catalog metadata + health). KHÔNG lưu dữ liệu hàng
+/// thực tế — kết nối/engine/metrics lấy từ BigDataService (serviceId).
+/// kindCode/domainCode tham chiếu M19 (MasterDataItem theo category);
+/// classification reuse DataClassification; ownerUnit reuse Unit (M02).
+model DataSource {
+  id               String              @id @default(cuid())
+  code             String              @unique // slug nghiệp vụ: 'wh_quannhan'
+  title            String
+  description      String?
+  kindCode         String // M19 'DATA_SOURCE_KIND': warehouse/datalake/oltp/stream/cold
+  domainCode       String? // M19 'DATA_DOMAIN'
+  classificationId String?             @db.VarChar(20)
+  classification   DataClassification? @relation(fields: [classificationId], references: [id])
+  serviceId        String?
+  service          BigDataService?     @relation(fields: [serviceId], references: [id])
+  engineLabel      String? // Nhãn engine khi chưa gắn BigDataService (vd 'Hive', 'Iceberg')
+  ownerUnitId      String?
+  ownerUnit        Unit?               @relation(fields: [ownerUnitId], references: [id])
+  ownerLabel       String? // Nhãn đơn vị/phòng quản lý khi chưa gắn Unit FK (vd 'P. Quân lực')
+  // Snapshot thống kê catalog — refresh bởi service từ BigDataService/WarehouseSyncJob
+  recordCount      BigInt?             @default(0)
+  sizeBytes        BigInt?             @default(0)
+  tableCount       Int?                @default(0)
+  healthScore      Int?                @default(100) // 0..100
+  status           DataSourceStatus    @default(ACTIVE)
+  lastSyncedAt     DateTime?
+  isActive         Boolean             @default(true)
+  archivedAt       DateTime? // soft delete
+  createdById      String?
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+
+  @@index([kindCode])
+  @@index([domainCode])
+  @@index([status])
+  @@index([ownerUnitId])
+  @@index([serviceId])
+  @@index([isActive])
+  @@map("data_sources")
 }

@@ -80,7 +80,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
     const { user, response } = await requireScopedFunction(request, TEMPLATES.MANAGE);
     if (!user) return response!;
 
-    await deleteTemplate(params.id);
+    await deleteTemplate(params.id, user.id);
 
     await logAudit({
       userId: user.id,

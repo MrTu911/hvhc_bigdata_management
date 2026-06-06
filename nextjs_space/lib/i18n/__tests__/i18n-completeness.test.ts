@@ -17,7 +17,9 @@ import fs from 'fs';
 import path from 'path';
 
 const ROOT = path.resolve(__dirname, '../../..');
-const PROVIDER = path.join(ROOT, 'components/providers/language-provider.tsx');
+// Dictionary was decoupled from language-provider into translations-data.ts
+// (commit "decouple translation dictionary from LanguageProvider").
+const PROVIDER = path.join(ROOT, 'components/providers/translations-data.ts');
 const MENU_CONFIG = path.join(ROOT, 'lib/menu-config.ts');
 const SCHEMA = path.join(ROOT, 'prisma/schema.prisma');
 

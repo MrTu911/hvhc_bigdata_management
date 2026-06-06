@@ -79,12 +79,11 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
       }
     }
 
+    // Lưu data map là cập nhật metadata — KHÔNG tăng version.
+    // Version chỉ tăng khi upload file mẫu hoặc rollback (giữ version đồng bộ với version rows).
     await prisma.reportTemplate.update({
       where: { id: params.id },
-      data: {
-        dataMap,
-        version: template.version + 1,
-      },
+      data: { dataMap },
     });
 
     await logAudit({

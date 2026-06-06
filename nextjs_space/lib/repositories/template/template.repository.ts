@@ -71,7 +71,7 @@ export async function findRootTemplates(filter: TemplateListFilter) {
   const { module, status, format, category, search, page = 1, limit = 20 } = filter;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const where: any = { parentId: null };
+  const where: any = { parentId: null, deletedAt: null };
 
   if (status === 'active') where.isActive = true;
   if (status === 'inactive') where.isActive = false;
@@ -172,13 +172,14 @@ export async function updateTemplateById(id: string, input: TemplateUpdateInput)
 }
 
 /**
- * Soft delete: set isActive = false.
+ * Soft delete: set deletedAt/deletedBy và isActive = false.
+ * Template đã xóa mềm sẽ bị loại khỏi danh sách (findRootTemplates lọc deletedAt = null).
  * Caller phải đã kiểm tra không có job đang chạy.
  */
-export async function softDeleteTemplate(id: string) {
+export async function softDeleteTemplate(id: string, deletedBy: string) {
   return prisma.reportTemplate.update({
     where: { id },
-    data: { isActive: false },
+    data: { deletedAt: new Date(), deletedBy, isActive: false },
   });
 }
 

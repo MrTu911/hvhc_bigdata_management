@@ -7,7 +7,6 @@ import {
   Plus,
   Search,
   FileText,
-  Edit,
   Trash2,
   MoreHorizontal,
   Eye,
@@ -49,10 +48,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Checkbox } from '@/components/ui/checkbox';
 
 interface Template {
   id: string;
@@ -102,21 +98,9 @@ export default function TemplatesPage() {
   const [filterFormat, setFilterFormat] = useState('');
   const [viewMode, setViewMode] = useState<'table' | 'grid'>('table');
 
-  const [createOpen, setCreateOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [selectedTemplate, setSelectedTemplate] = useState<Template | null>(null);
   const [submitting, setSubmitting] = useState(false);
-
-  // Form state for create/edit
-  const [form, setForm] = useState({
-    code: '',
-    name: '',
-    description: '',
-    category: '',
-    moduleSource: [] as string[],
-    outputFormats: [] as string[],
-    rbacCode: 'EXPORT_DATA',
-  });
 
   const fetchTemplates = useCallback(async () => {
     setLoading(true);
@@ -145,34 +129,6 @@ export default function TemplatesPage() {
   useEffect(() => {
     fetchTemplates();
   }, [fetchTemplates]);
-
-  const handleCreate = async () => {
-    if (!form.code || !form.name || form.outputFormats.length === 0) {
-      toast.error('Vui lòng điền đầy đủ: Mã, Tên, và ít nhất 1 định dạng xuất');
-      return;
-    }
-    setSubmitting(true);
-    try {
-      const res = await fetch('/api/templates', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...form,
-          moduleSource: form.moduleSource.length > 0 ? form.moduleSource : ['M02'],
-        }),
-      });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.error || 'Lỗi tạo template');
-      toast.success('Tạo template thành công');
-      setCreateOpen(false);
-      resetForm();
-      fetchTemplates();
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Lỗi tạo template');
-    } finally {
-      setSubmitting(false);
-    }
-  };
 
   const handleToggleStatus = async (template: Template) => {
     try {
@@ -208,36 +164,6 @@ export default function TemplatesPage() {
     }
   };
 
-  const toggleFormat = (fmt: string) => {
-    setForm(prev => ({
-      ...prev,
-      outputFormats: prev.outputFormats.includes(fmt)
-        ? prev.outputFormats.filter(f => f !== fmt)
-        : [...prev.outputFormats, fmt],
-    }));
-  };
-
-  const toggleModule = (mod: string) => {
-    setForm(prev => ({
-      ...prev,
-      moduleSource: prev.moduleSource.includes(mod)
-        ? prev.moduleSource.filter(m => m !== mod)
-        : [...prev.moduleSource, mod],
-    }));
-  };
-
-  const resetForm = () => {
-    setForm({
-      code: '',
-      name: '',
-      description: '',
-      category: '',
-      moduleSource: [],
-      outputFormats: [],
-      rbacCode: 'EXPORT_DATA',
-    });
-  };
-
   const totalPages = Math.ceil(total / limit);
 
   return (
@@ -267,7 +193,7 @@ export default function TemplatesPage() {
             <RefreshCw className="h-4 w-4 mr-2" />
             Xuất định kỳ
           </Button>
-          <Button size="sm" onClick={() => { resetForm(); setCreateOpen(true); }}>
+          <Button size="sm" onClick={() => router.push('/dashboard/templates/new')}>
             <Plus className="h-4 w-4 mr-2" />
             Tạo mẫu mới
           </Button>
@@ -562,95 +488,6 @@ export default function TemplatesPage() {
           </div>
         </div>
       )}
-
-      {/* Create Dialog */}
-      <Dialog open={createOpen} onOpenChange={setCreateOpen}>
-        <DialogContent className="max-w-lg">
-          <DialogHeader>
-            <DialogTitle>Tạo mẫu biểu mới</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4 py-2">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-1">
-                <Label>Mã template <span className="text-red-500">*</span></Label>
-                <Input
-                  placeholder="VD: TMPL_NS_01"
-                  value={form.code}
-                  onChange={e => setForm(prev => ({ ...prev, code: e.target.value.toUpperCase().replace(/[^A-Z0-9_-]/g, '') }))}
-                  className="font-mono"
-                />
-                <p className="text-xs text-gray-400">Chỉ A-Z, 0-9, _, -</p>
-              </div>
-              <div className="space-y-1">
-                <Label>Nhóm nghiệp vụ</Label>
-                <Select value={form.category} onValueChange={v => setForm(prev => ({ ...prev, category: v }))}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Chọn nhóm" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Object.entries(CATEGORIES).map(([k, v]) => (
-                      <SelectItem key={k} value={k}>{v}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            <div className="space-y-1">
-              <Label>Tên mẫu biểu <span className="text-red-500">*</span></Label>
-              <Input
-                placeholder="VD: Lý lịch cán bộ 2A-LLDV"
-                value={form.name}
-                onChange={e => setForm(prev => ({ ...prev, name: e.target.value }))}
-              />
-            </div>
-            <div className="space-y-1">
-              <Label>Mô tả</Label>
-              <Textarea
-                placeholder="Mô tả mục đích sử dụng mẫu biểu..."
-                value={form.description}
-                onChange={e => setForm(prev => ({ ...prev, description: e.target.value }))}
-                rows={2}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>Định dạng xuất <span className="text-red-500">*</span></Label>
-              <div className="flex gap-4">
-                {['PDF', 'DOCX', 'XLSX', 'HTML'].map(fmt => (
-                  <label key={fmt} className="flex items-center gap-2 cursor-pointer">
-                    <Checkbox
-                      checked={form.outputFormats.includes(fmt)}
-                      onCheckedChange={() => toggleFormat(fmt)}
-                    />
-                    <span className={`text-sm px-2 py-0.5 rounded font-medium ${FORMAT_COLORS[fmt] || ''}`}>
-                      {fmt}
-                    </span>
-                  </label>
-                ))}
-              </div>
-            </div>
-            <div className="space-y-2">
-              <Label>Module nguồn dữ liệu</Label>
-              <div className="flex flex-wrap gap-2">
-                {['M02', 'M03', 'M04', 'M05', 'M06', 'M08', 'M09'].map(mod => (
-                  <label key={mod} className="flex items-center gap-1.5 cursor-pointer">
-                    <Checkbox
-                      checked={form.moduleSource.includes(mod)}
-                      onCheckedChange={() => toggleModule(mod)}
-                    />
-                    <span className="text-sm">{mod}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setCreateOpen(false)}>Hủy</Button>
-            <Button onClick={handleCreate} disabled={submitting}>
-              {submitting ? 'Đang tạo...' : 'Tạo mẫu biểu'}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
 
       {/* Delete Confirmation */}
       <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>

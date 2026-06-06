@@ -10,6 +10,7 @@ import {
   downloadObject,
 } from '@/lib/services/infrastructure/storage.service';
 import { resolveEntityData, EntityType, getMissingFields } from './data-resolver-service';
+import { renderHtmlTemplate } from '@/lib/integrations/render/html-renderer';
 import { TEMPLATE_BUCKET } from './template-service';
 import ExcelJS from 'exceljs';
 import { v4 as uuidv4 } from 'uuid';
@@ -185,7 +186,8 @@ export async function startBatchExport(req: BatchExportRequest): Promise<{
  * DOCX: dùng docxtemplater — yêu cầu template.fileKey trỏ tới file .docx trong MinIO
  *       có chứa {placeholder} tags đúng docxtemplater syntax.
  * XLSX: dùng ExcelJS — tạo workbook từ resolvedData (không cần template file).
- * PDF:  dùng Puppeteer — render HTML → PDF. Không cần template file.
+ * PDF/HTML: nếu template có HTML mẫu (dataMap.__htmlKey trỏ tới file .html trong MinIO)
+ *       → render đúng thể thức bằng renderHtmlTemplate; ngược lại fallback bảng key/value.
  */
 export async function renderFile(
   template: { name: string; dataMap: unknown; fileKey: string | null },
@@ -203,14 +205,44 @@ export async function renderFile(
     }
   }
 
+  // HTML mẫu (nếu có) phục vụ cả PDF lẫn HTML — giữ tương thích ngược: không có
+  // __htmlKey thì rơi về fallback bảng key/value như trước.
+  const htmlTemplateKey = getHtmlTemplateKey(template.dataMap);
+
   if (outputFormat === 'PDF') {
-    const { buffer: htmlBuffer } = await renderTextDocument(template.name, resolvedData, 'HTML');
-    const pdfBuffer = await renderPDF(htmlBuffer.toString('utf8'));
+    const html = htmlTemplateKey
+      ? await renderHtmlFromTemplate(htmlTemplateKey, resolvedData)
+      : (await renderTextDocument(template.name, resolvedData, 'HTML')).buffer.toString('utf8');
+    const pdfBuffer = await renderPDF(html);
     return { buffer: pdfBuffer, ext: 'pdf', contentType: 'application/pdf' };
   }
 
-  // DOCX không có file template → HTML fallback
+  if (outputFormat === 'HTML' && htmlTemplateKey) {
+    const html = await renderHtmlFromTemplate(htmlTemplateKey, resolvedData);
+    return { buffer: Buffer.from(html, 'utf8'), ext: 'html', contentType: 'text/html; charset=utf-8' };
+  }
+
+  // DOCX không có file template / HTML không có mẫu → HTML fallback (bảng key/value)
   return renderTextDocument(template.name, resolvedData, outputFormat);
+}
+
+/**
+ * Lấy key file HTML mẫu lưu trong dataMap (quy ước nội bộ __htmlKey).
+ * applyDataMap() ở data-resolver bỏ qua key này an toàn (không ánh xạ ra field thật).
+ */
+function getHtmlTemplateKey(dataMap: unknown): string | null {
+  if (!dataMap || typeof dataMap !== 'object') return null;
+  const key = (dataMap as Record<string, unknown>).__htmlKey;
+  return typeof key === 'string' && key.length > 0 ? key : null;
+}
+
+/** Tải file HTML mẫu từ MinIO và render placeholder + vòng lặp. */
+async function renderHtmlFromTemplate(
+  htmlTemplateKey: string,
+  resolvedData: Record<string, unknown>,
+): Promise<string> {
+  const templateBuffer = await downloadObject('M18_TEMPLATE', htmlTemplateKey);
+  return renderHtmlTemplate(templateBuffer.toString('utf8'), resolvedData);
 }
 
 /**

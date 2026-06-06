@@ -1,0 +1,115 @@
+/* ============================================================
+   PRINT styles — paged, color-exact, no animation jitter
+   ============================================================ */
+
+html, body {
+  background: #FFFFFF !important;
+}
+
+/* Hide interactive-only UI */
+.tweaks-fab, .tweaks-panel, .tweaks-host, [data-cc-tweaks], [data-tweaks-host],
+.modal-mask {
+  display: none !important;
+}
+
+/* Force colors to print */
+* {
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
+
+/* On-screen: stack the print pages vertically with a gutter so the user sees the layout */
+.print-page {
+  width: 1280px;
+  margin: 0 auto 32px;
+  background: var(--bg);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  position: relative;
+  overflow: hidden;
+  page-break-after: always;
+  break-after: page;
+  break-inside: avoid;
+}
+.print-page:last-child { page-break-after: auto; break-after: auto; }
+
+/* Make each module's main area fit one page comfortably */
+.print-page .main {
+  min-height: 0;
+}
+.print-page .app {
+  min-height: 0;
+}
+
+/* Cover page */
+.print-cover {
+  background: linear-gradient(180deg, var(--bg) 0%, var(--bg-sub) 100%);
+  min-height: 840px;
+}
+.print-cover .cover-body {
+  padding: 64px 64px 80px;
+  position: relative;
+  min-height: 700px;
+}
+.print-cover .eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--brand-red);
+  padding: 5px 12px;
+  border: 1px solid color-mix(in oklab, var(--brand-red) 40%, transparent);
+  border-radius: 20px;
+  background: color-mix(in oklab, var(--brand-red) 6%, transparent);
+}
+
+/* Hide the topbar search input flash and pulse */
+.banner img { animation: none !important; }
+.pin-pulse  { display: none !important; }
+
+/* Heatmap cells must keep their colors */
+.heatmap .hm-cell { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+/* PRINT-only rules */
+@media print {
+  @page {
+    size: 1280px 920px;
+    margin: 0;
+  }
+
+  html, body {
+    margin: 0; padding: 0;
+    background: #FFFFFF !important;
+  }
+
+  .print-page {
+    margin: 0 !important;
+    box-shadow: none !important;
+    width: 1280px;
+    page-break-after: always;
+    break-after: page;
+  }
+  .print-page:last-child {
+    page-break-after: auto;
+    break-after: auto;
+  }
+
+  /* Freeze animations at end-state */
+  *, *::before, *::after {
+    animation-delay: -99s !important;
+    animation-duration: .001s !important;
+    animation-iteration-count: 1 !important;
+    animation-fill-mode: both !important;
+    animation-play-state: running !important;
+    transition-duration: 0s !important;
+  }
+
+  /* Prevent breaking inside cards / rows */
+  .card, .kpi, .ds-card, .row > * {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Don't show scrollbars artifacts */
+  body, html { overflow: visible !important; }
+}
