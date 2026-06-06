@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { AggregateExportButton } from '@/components/templates/export/aggregate-export-button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -158,6 +159,7 @@ export default function PartyMembersPage() {
               className="bg-white/10 border-white/20 text-white hover:bg-white/20 gap-2">
               <RefreshCw className="h-4 w-4" /> Làm mới
             </Button>
+            <AggregateExportButton entityType="party_member" keyword={search} label="Xuất danh sách" />
             <Link href="/dashboard/party/recruitment">
               <Button size="sm" className="bg-white text-red-700 hover:bg-red-50 gap-2">
                 <ChevronRight className="h-4 w-4" /> Kết nạp mới

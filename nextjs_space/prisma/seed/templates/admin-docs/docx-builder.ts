@@ -45,6 +45,8 @@ interface ParaOpts {
   after?: number;
   bottomBorder?: boolean;
   firstLineIndent?: boolean;
+  /** Thụt lề trái+phải đối xứng (twips) — dùng rút ngắn & căn giữa đường gạch chân. */
+  indentLR?: number;
 }
 
 function runProps(o: RunOpts): string {
@@ -66,7 +68,10 @@ function paraProps(o: ParaOpts): string {
   if (o.align) s += `<w:jc w:val="${o.align}"/>`;
   if (o.bottomBorder)
     s += '<w:pBdr><w:bottom w:val="single" w:sz="6" w:space="1" w:color="auto"/></w:pBdr>';
-  if (o.firstLineIndent) s += `<w:ind w:firstLine="${FIRST_LINE_INDENT}"/>`;
+  const indAttrs: string[] = [];
+  if (o.indentLR) indAttrs.push(`w:left="${o.indentLR}"`, `w:right="${o.indentLR}"`);
+  if (o.firstLineIndent) indAttrs.push(`w:firstLine="${FIRST_LINE_INDENT}"`);
+  if (indAttrs.length) s += `<w:ind ${indAttrs.join(' ')}/>`;
   s += `<w:spacing w:before="${o.before ?? 0}" w:after="${o.after ?? 0}" w:line="276" w:lineRule="auto"/>`;
   return `<w:pPr>${s}</w:pPr>`;
 }
@@ -108,16 +113,17 @@ function cell(widthDxa: number, contentXml: string): string {
 
 // ─── Header (Nghị định 30: bảng 2 cột không viền) ───────────────────────────────
 function buildHeader(spec: TemplateSpec): string {
-  const leftW = 4100;
-  const rightW = 5000;
+  const leftW = 3900;
+  const rightW = 5200;
   const capTren = spec.headerCapTren ?? '{tenCoQuanCapTren}';
   const banHanh = spec.headerBanHanh ?? '{tenCoQuanBanHanh}';
+  // bottomBorder + indentLR → đường gạch chân ngắn, căn giữa theo Nghị định 30.
   const left =
     line(capTren, { size: 24 }, { align: 'center', after: 0 }) +
-    para(run(banHanh, { bold: true, size: 24 }), { align: 'center', bottomBorder: true });
+    para(run(banHanh, { bold: true, size: 24 }), { align: 'center', bottomBorder: true, indentLR: 700 });
   const right =
     para(run('{quocHieu}', { bold: true, size: 24 }), { align: 'center', after: 0 }) +
-    para(run('{tieuNgu}', { bold: true, size: SZ_BODY }), { align: 'center', bottomBorder: true });
+    para(run('{tieuNgu}', { bold: true, size: SZ_BODY }), { align: 'center', bottomBorder: true, indentLR: 900 });
   return (
     `<w:tbl>${borderlessTableProps()}<w:tblGrid><w:gridCol w:w="${leftW}"/><w:gridCol w:w="${rightW}"/></w:tblGrid>` +
     `<w:tr>${cell(leftW, left)}${cell(rightW, right)}</w:tr></w:tbl>`
@@ -126,8 +132,8 @@ function buildHeader(spec: TemplateSpec): string {
 
 // ─── Số / địa danh - ngày (bảng 2 cột không viền) ───────────────────────────────
 function buildNumberDateRow(spec: TemplateSpec): string {
-  const leftW = 4100;
-  const rightW = 5000;
+  const leftW = 3900;
+  const rightW = 5200;
   const left = line(`Số: {soVanBan}/${spec.kyHieu}`, {}, { align: 'center', before: 60 });
   const right = line('{diaDanhNgayThang}', { italic: true }, { align: 'center', before: 60 });
   return (
@@ -220,8 +226,29 @@ function buildLoopTable(loop: LoopTable): string {
   return `<w:tbl>${griddedTableProps()}<w:tblGrid>${grid}</w:tblGrid>${headerRow}${dataRow}</w:tbl>`;
 }
 
-// ─── Khối ký + nơi nhận (bảng 2 cột không viền) ─────────────────────────────────
+// ─── Khối ký ────────────────────────────────────────────────────────────────────
+function buildSignBlock(chucVu: string[], kyGhiChu: string, hoTen: string): string {
+  let s = chucVu.map((c) => line(c, { bold: true }, { align: 'center', after: 0 })).join('');
+  s += line(kyGhiChu, { italic: true }, { align: 'center', after: 0 });
+  s += emptyPara() + emptyPara();
+  s += line(hoTen, { bold: true }, { align: 'center', after: 0 });
+  return s;
+}
+
+// ─── Footer: 2 chữ ký (biên bản) hoặc nơi nhận + 1 chữ ký (mặc định) ─────────────
 function buildFooter(spec: TemplateSpec): string {
+  // Biên bản: 2 cột chữ ký, bỏ nơi nhận.
+  if (spec.signatures && spec.signatures.length === 2) {
+    const w = 4550;
+    const [a, b] = spec.signatures;
+    const left = buildSignBlock(a.chucVu, a.kyGhiChu ?? '(Ký, ghi rõ họ tên)', a.hoTen ?? '{hoTenNguoiKy}');
+    const right = buildSignBlock(b.chucVu, b.kyGhiChu ?? '(Ký, ghi rõ họ tên)', b.hoTen ?? '{hoTenNguoiKy}');
+    return (
+      `<w:tbl>${borderlessTableProps()}<w:tblGrid><w:gridCol w:w="${w}"/><w:gridCol w:w="${w}"/></w:tblGrid>` +
+      `<w:tr>${cell(w, left)}${cell(w, right)}</w:tr></w:tbl>`
+    );
+  }
+
   const leftW = 5000;
   const rightW = 4100;
 
@@ -233,11 +260,7 @@ function buildFooter(spec: TemplateSpec): string {
   noiNhan += line(`- Lưu: VT, ${spec.luuBoPhan ?? 'BKHHCQS'}.`, { size: SZ_SMALL }, { after: 0 });
 
   // Khối ký (phải)
-  const chucVu = spec.chuKyChucVu ?? ['GIÁM ĐỐC'];
-  let sign = chucVu.map((c, i) => line(c, { bold: true }, { align: 'center', after: 0, before: i === 0 ? 0 : 0 })).join('');
-  sign += line('(Ký, đóng dấu)', { italic: true }, { align: 'center', after: 0 });
-  sign += emptyPara() + emptyPara();
-  sign += line('{hoTenNguoiKy}', { bold: true }, { align: 'center', after: 0 });
+  const sign = buildSignBlock(spec.chuKyChucVu ?? ['GIÁM ĐỐC'], '(Ký, đóng dấu)', '{hoTenNguoiKy}');
 
   return (
     `<w:tbl>${borderlessTableProps()}<w:tblGrid><w:gridCol w:w="${leftW}"/><w:gridCol w:w="${rightW}"/></w:tblGrid>` +

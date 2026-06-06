@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { AggregateExportButton } from '@/components/templates/export/aggregate-export-button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
@@ -561,6 +562,7 @@ export default function PersonnelListPage() {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+          <AggregateExportButton entityType="personnel" keyword={search} label="Xuất danh sách" />
           <Button onClick={() => setCreateModal(true)} className="bg-white text-blue-700 hover:bg-white/90">
             <Plus className="h-4 w-4 mr-2" />Thêm mới
           </Button>

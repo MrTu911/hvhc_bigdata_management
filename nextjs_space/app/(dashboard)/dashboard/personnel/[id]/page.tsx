@@ -16,6 +16,7 @@ import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
+import { DocumentExportMenu } from '@/components/templates/export/document-export-menu';
 import {
   ArrowLeft,
   User,
@@ -299,6 +300,7 @@ export default function PersonnelDetailPage() {
               </Button>
             </Link>
           )}
+          <DocumentExportMenu entityType="personnel" entityId={personnel.id} />
         </div>
       </div>
 

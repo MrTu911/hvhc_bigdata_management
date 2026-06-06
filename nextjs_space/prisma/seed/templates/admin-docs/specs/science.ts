@@ -97,9 +97,10 @@ export const SCIENCE_SPECS: TemplateSpec[] = [
         paragraphs: ['Điểm trung bình: {diemTrungBinh}          Kết quả: {ketQua}', 'Kết luận của hội đồng: {ketLuan}'],
       },
     ],
-    chuKyChucVu: ['CHỦ TỊCH HỘI ĐỒNG'],
-    noiNhan: ['- Phòng Khoa học Quân sự;', '- Lưu hồ sơ hội đồng;'],
-    luuBoPhan: 'PKHQS',
+    signatures: [
+      { chucVu: ['THƯ KÝ'], kyGhiChu: '(Ký, ghi rõ họ tên)', hoTen: '{thuKy}' },
+      { chucVu: ['CHỦ TỊCH HỘI ĐỒNG'], kyGhiChu: '(Ký, ghi rõ họ tên)', hoTen: '{chuTich}' },
+    ],
     placeholders: [
       '{quocHieu}',
       '{tieuNgu}',

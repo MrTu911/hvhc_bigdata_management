@@ -13,6 +13,8 @@ import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { DocumentExportMenu } from '@/components/templates/export/document-export-menu';
+import { SCIENCE } from '@/lib/rbac/function-codes';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
 import {
@@ -98,6 +100,13 @@ export default function CouncilDetailPage() {
             </div>
           </div>
         </div>
+        <DocumentExportMenu
+          entityType="scientific_council"
+          entityId={params.id as string}
+          exportEndpoint={`/api/science/councils/${params.id}/export`}
+          requiredPermission={SCIENCE.COUNCIL_FINALIZE}
+          label="Xuất biên bản"
+        />
       </div>
 
       {/* Project link */}

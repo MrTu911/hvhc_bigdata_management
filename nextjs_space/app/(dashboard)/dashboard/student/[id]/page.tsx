@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { useParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
+import { DocumentExportMenu } from '@/components/templates/export/document-export-menu';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
@@ -403,6 +404,7 @@ export default function StudentDetailPage() {
             {student.lop || 'Chưa có lớp'} - {student.khoaHoc || 'Chưa có khóa'}
           </p>
         </div>
+        <DocumentExportMenu entityType="student" entityId={student.id} />
       </div>
 
       {/* Stats Cards */}

@@ -4,6 +4,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
+import { DocumentExportMenu } from '@/components/templates/export/document-export-menu';
+import { SCIENCE } from '@/lib/rbac/function-codes';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -1100,6 +1102,12 @@ export default function ScientistDetailPage() {
             <Download className="h-3.5 w-3.5" />
             {exportLoading ? 'Đang xuất...' : 'Xuất hồ sơ'}
           </Button>
+          <DocumentExportMenu
+            entityType="scientist_profile"
+            entityId={scientistId}
+            exportEndpoint={`/api/science/scientists/${scientistId}/export`}
+            requiredPermission={SCIENCE.REPORT_EXPORT}
+          />
         </div>
       </div>
 

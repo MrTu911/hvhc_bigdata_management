@@ -561,6 +561,16 @@ export default function TemplateAnalyticsPage() {
                 Thư viện Template
                 <ExternalLink className="h-3 w-3 ml-auto text-gray-400" />
               </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="w-full justify-start text-sm"
+                onClick={() => router.push('/dashboard/templates/admin-docs')}
+              >
+                <BarChart2 className="h-4 w-4 mr-2 text-amber-500" />
+                KPI văn bản hành chính
+                <ExternalLink className="h-3 w-3 ml-auto text-gray-400" />
+              </Button>
             </CardContent>
           </Card>
         </div>

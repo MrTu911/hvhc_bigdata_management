@@ -23,7 +23,10 @@ import * as Minio from 'minio';
 import { buildDocx } from './templates/admin-docs/docx-builder';
 import { buildHtml } from './templates/admin-docs/html-builder';
 import { TEMPLATE_SPECS } from './templates/admin-docs/manifest';
-import type { TemplateSpec } from './templates/admin-docs/types';
+import { DOC_TYPE_META, type TemplateSpec } from './templates/admin-docs/types';
+
+/** Marker nhận diện nhóm mẫu văn bản hành chính (phục vụ KPI/analytics nhóm). */
+export const ADMIN_DOC_GROUP = 'admin-docs';
 
 const prisma = new PrismaClient();
 
@@ -103,7 +106,16 @@ async function seedSpec(spec: TemplateSpec, bucket: string, createdBy: string): 
 
   // fileKey chỉ set khi upload .docx thành công; __htmlKey khi upload .html thành công.
   const fileKey = docxUploaded ? dKey : null;
-  const dataMapObj: Record<string, unknown> = { ...(spec.dataMap ?? {}) };
+  // Meta nhóm (private, prefix __) phục vụ KPI/analytics; applyDataMap bỏ qua an toàn.
+  const dataMapObj: Record<string, unknown> = {
+    ...(spec.dataMap ?? {}),
+    __group: ADMIN_DOC_GROUP,
+    __module: spec.module,
+    __docType: spec.docType,
+    __docLabel: DOC_TYPE_META[spec.docType].label,
+    __entity: spec.entity ?? '',
+    __classification: spec.classification,
+  };
   if (htmlUploaded) dataMapObj.__htmlKey = hKey;
   const dataMap = dataMapObj as Prisma.InputJsonValue;
 

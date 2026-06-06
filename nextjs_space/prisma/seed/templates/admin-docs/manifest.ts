@@ -20,6 +20,7 @@ import { M05_SPECS } from './specs/m05';
 import { M09_SPECS } from './specs/m09';
 import { M10_SPECS } from './specs/m10';
 import { SCIENCE_SPECS } from './specs/science';
+import { GENERAL_SPECS } from './specs/general';
 
 export const TEMPLATE_SPECS: TemplateSpec[] = [
   ...M02_SPECS,
@@ -28,4 +29,5 @@ export const TEMPLATE_SPECS: TemplateSpec[] = [
   ...M09_SPECS,
   ...M10_SPECS,
   ...SCIENCE_SPECS,
+  ...GENERAL_SPECS,
 ];

@@ -28,7 +28,10 @@ const STYLE = `
   @page { size: A4; margin: 20mm 20mm 20mm 30mm; }
   body { font-family: 'Times New Roman', serif; font-size: 13pt; line-height: 1.5; color: #000; }
   .header { width: 100%; border-collapse: collapse; }
-  .header td { vertical-align: top; width: 50%; text-align: center; }
+  .header td { vertical-align: top; text-align: center; }
+  .header td:first-child { width: 42%; }
+  .header td:last-child { width: 58%; }
+  .header .qh { font-size: 12pt; white-space: nowrap; }
   .header .uline { display: inline-block; border-bottom: 1px solid #000; padding-bottom: 2px; }
   .small-caps { text-transform: uppercase; }
   .bold { font-weight: bold; }
@@ -65,7 +68,7 @@ function buildHeader(spec: TemplateSpec): string {
       <div class="bold small-caps"><span class="uline">${banHanh}</span></div>
     </td>
     <td>
-      <div class="bold small-caps">{quocHieu}</div>
+      <div class="bold small-caps qh">{quocHieu}</div>
       <div class="bold"><span class="uline">{tieuNgu}</span></div>
     </td>
   </tr></table>`;
@@ -122,19 +125,32 @@ function buildBody(spec: TemplateSpec): string {
   return spec.body.map(buildSection).join('');
 }
 
+function buildSignHtml(chucVu: string[], kyGhiChu: string, hoTen: string): string {
+  return (
+    chucVu.map((c) => `<div class="bold">${esc(c)}</div>`).join('') +
+    `<div class="italic">${esc(kyGhiChu)}</div>` +
+    `<div class="sign-space"></div>` +
+    `<div class="bold">${hoTen}</div>`
+  );
+}
+
 function buildFooter(spec: TemplateSpec): string {
+  // Biên bản: 2 cột chữ ký, bỏ nơi nhận.
+  if (spec.signatures && spec.signatures.length === 2) {
+    const [a, b] = spec.signatures;
+    return `<table class="footer"><tr>
+    <td class="sign">${buildSignHtml(a.chucVu, a.kyGhiChu ?? '(Ký, ghi rõ họ tên)', a.hoTen ?? '{hoTenNguoiKy}')}</td>
+    <td class="sign">${buildSignHtml(b.chucVu, b.kyGhiChu ?? '(Ký, ghi rõ họ tên)', b.hoTen ?? '{hoTenNguoiKy}')}</td>
+  </tr></table>`;
+  }
+
   const noiNhanLines = [
     `<div class="label">Nơi nhận:</div>`,
     ...(spec.noiNhan ?? ['- Như trên;']).map((n) => `<div>${esc(n)}</div>`),
     `<div>- Lưu: VT, ${esc(spec.luuBoPhan ?? 'BKHHCQS')}.</div>`,
   ].join('');
 
-  const chucVu = (spec.chuKyChucVu ?? ['GIÁM ĐỐC']).map((c) => `<div class="bold">${esc(c)}</div>`).join('');
-  const sign =
-    chucVu +
-    `<div class="italic">(Ký, đóng dấu)</div>` +
-    `<div class="sign-space"></div>` +
-    `<div class="bold">{hoTenNguoiKy}</div>`;
+  const sign = buildSignHtml(spec.chuKyChucVu ?? ['GIÁM ĐỐC'], '(Ký, đóng dấu)', '{hoTenNguoiKy}');
 
   return `<table class="footer"><tr>
     <td class="noi-nhan">${noiNhanLines}</td>

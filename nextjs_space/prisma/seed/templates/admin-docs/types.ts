@@ -11,7 +11,7 @@
  *   - Vòng lặp: {#listKey}...{fieldOfItem}...{/listKey}
  */
 
-export type DocType = 'BC' | 'CV' | 'KH' | 'TTr' | 'QD' | 'TB';
+export type DocType = 'BC' | 'CV' | 'KH' | 'TTr' | 'QD' | 'TB' | 'GM' | 'GGT';
 
 export type EntityBinding =
   | 'personnel'
@@ -102,6 +102,11 @@ export interface TemplateSpec {
 
   /** Khối ký: các dòng chức vụ (in đậm). Mặc định ['GIÁM ĐỐC']. */
   chuKyChucVu?: string[];
+  /**
+   * Hai chữ ký (vd biên bản: Thư ký + Chủ tịch). Nếu có 2 phần tử, footer hiển thị
+   * 2 cột ký và BỎ phần "Nơi nhận".
+   */
+  signatures?: SignatureBlock[];
   /** Nơi nhận (mỗi phần tử một dòng). Tự thêm dòng "- Lưu: VT, ...". */
   noiNhan?: string[];
   /** Bộ phận lưu. Mặc định 'BKHHCQS'. */
@@ -113,6 +118,16 @@ export interface TemplateSpec {
   dataMap?: Record<string, unknown>;
 }
 
+/** Một khối chữ ký (dùng cho footer 2 chữ ký). */
+export interface SignatureBlock {
+  /** Các dòng chức vụ in đậm, vd ['CHỦ TỊCH HỘI ĐỒNG']. */
+  chucVu: string[];
+  /** Dòng ghi chú dưới chức vụ. Mặc định '(Ký, đóng dấu)'. */
+  kyGhiChu?: string;
+  /** Dòng họ tên (placeholder hoặc text). Mặc định '{hoTenNguoiKy}'. */
+  hoTen?: string;
+}
+
 /** Tiêu đề loại văn bản hiển thị ở giữa trang (null = Công văn, không in tên loại). */
 export const DOC_TYPE_META: Record<DocType, { title: string | null; label: string }> = {
   BC: { title: 'BÁO CÁO', label: 'Báo cáo' },
@@ -121,4 +136,6 @@ export const DOC_TYPE_META: Record<DocType, { title: string | null; label: strin
   TTr: { title: 'TỜ TRÌNH', label: 'Tờ trình' },
   QD: { title: 'QUYẾT ĐỊNH', label: 'Quyết định' },
   TB: { title: 'THÔNG BÁO', label: 'Thông báo' },
+  GM: { title: 'GIẤY MỜI', label: 'Giấy mời' },
+  GGT: { title: 'GIẤY GIỚI THIỆU', label: 'Giấy giới thiệu' },
 };

@@ -281,6 +281,11 @@ async function getBrowser(): Promise<import('puppeteer').Browser> {
   return _browser;
 }
 
+/** Render HTML → PDF, tái dùng browser singleton (dùng cho aggregate export). */
+export async function renderHtmlToPdf(html: string): Promise<Buffer> {
+  return renderPDF(html);
+}
+
 async function renderPDF(html: string): Promise<Buffer> {
   const browser = await getBrowser();
   const page = await browser.newPage();

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { DocumentExportMenu } from '@/components/templates/export/document-export-menu';
 import { PartyMemberSummaryCard } from '@/components/party/member/party-member-summary-card';
 import { PartyMemberProfileTabs } from '@/components/party/member/party-member-profile-tabs';
 
@@ -32,9 +33,12 @@ export default function PartyMemberDetailPage() {
           <h1 className="text-2xl font-bold">Chi tiết hồ sơ Đảng viên</h1>
           <p className="text-sm text-muted-foreground">UC-63 – Hồ sơ 360° theo mẫu 2A-LLĐV</p>
         </div>
-        <Link href="/dashboard/party/members">
-          <Button variant="outline">Quay lại danh sách</Button>
-        </Link>
+        <div className="flex items-center gap-2">
+          {id && <DocumentExportMenu entityType="party_member" entityId={id} />}
+          <Link href="/dashboard/party/members">
+            <Button variant="outline">Quay lại danh sách</Button>
+          </Link>
+        </div>
       </div>
 
       {loading ? (

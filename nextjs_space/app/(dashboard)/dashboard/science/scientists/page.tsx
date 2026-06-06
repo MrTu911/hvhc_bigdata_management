@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { AggregateExportButton } from '@/components/templates/export/aggregate-export-button';
 import { Card, CardContent } from '@/components/ui/card';
 import {
   Select,
@@ -269,6 +270,7 @@ export default function ScienceScientistsPage() {
             Hồ sơ năng lực · chỉ số khoa học · lịch sử đề tài
           </p>
         </div>
+        <AggregateExportButton entityType="scientist_profile" keyword={keyword} label="Xuất danh sách" />
       </div>
 
       {/* ── Stats ──────────────────────────────────────────────────────────── */}

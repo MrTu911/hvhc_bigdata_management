@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
+import { AggregateExportButton } from '@/components/templates/export/aggregate-export-button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -450,6 +451,7 @@ export default function StudentListPage() {
               className="bg-white/10 border-white/30 text-white hover:bg-white/20">
               <FileSpreadsheet className="mr-2 h-4 w-4" /> Excel
             </Button>
+            <AggregateExportButton entityType="student" keyword={search} label="Xuất danh sách" />
             <Button onClick={() => handleOpenDialog()}
               className="bg-white/20 hover:bg-white/30 text-white border border-white/30">
               <Plus className="mr-2 h-4 w-4" /> Thêm học viên
