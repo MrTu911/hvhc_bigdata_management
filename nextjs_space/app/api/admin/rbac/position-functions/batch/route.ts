@@ -34,12 +34,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Không tìm thấy chức vụ' }, { status: 404 });
     }
 
-    // Lấy danh sách gán hiện tại
+    // Lấy danh sách gán hiện tại. Chỉ coi là "đang gán" khi isActive=true
+    // (giống GET ma trận) để có thể kích hoạt lại grant đã bị tắt.
     const currentAssignments = await prisma.positionFunction.findMany({
       where: { positionId },
-      select: { functionId: true, scope: true }
+      select: { functionId: true, scope: true, isActive: true }
     });
-    const currentFunctionIds = new Set(currentAssignments.map(a => a.functionId));
+    const activeFunctionIds = new Set(
+      currentAssignments.filter(a => a.isActive).map(a => a.functionId)
+    );
 
     const results = {
       granted: 0,
@@ -59,45 +62,27 @@ export async function POST(request: NextRequest) {
       results.revoked = deleteResult.count;
     }
 
-    // 2. Thêm quyền mới (grant)
-    const toCreate = grant.filter((fid: string) => !currentFunctionIds.has(fid));
-    if (toCreate.length > 0) {
-      // Kiểm tra các function tồn tại
+    // 2. Gán / kích hoạt lại quyền (grant) — upsert để bật lại cả grant đã bị tắt
+    if (grant.length > 0) {
       const validFunctions = await prisma.function.findMany({
-        where: { id: { in: toCreate }, isActive: true },
+        where: { id: { in: grant }, isActive: true },
         select: { id: true }
       });
       const validFunctionIds = new Set(validFunctions.map(f => f.id));
 
-      const createData = toCreate
-        .filter((fid: string) => validFunctionIds.has(fid))
-        .map((fid: string) => ({
-          positionId,
-          functionId: fid,
-          scope: scopeByFunctionId[fid] || 'UNIT'
-        }));
-
-      if (createData.length > 0) {
-        await prisma.positionFunction.createMany({
-          data: createData,
-          skipDuplicates: true
+      for (const fid of grant as string[]) {
+        if (!validFunctionIds.has(fid)) continue;
+        const scopeForFn = scopeByFunctionId[fid] || 'UNIT';
+        await prisma.positionFunction.upsert({
+          where: { positionId_functionId: { positionId, functionId: fid } },
+          update: { scope: scopeForFn, isActive: true },
+          create: { positionId, functionId: fid, scope: scopeForFn, isActive: true },
         });
-        results.granted = createData.length;
-      }
-    }
-
-    // 3. Cập nhật scope cho các quyền đã tồn tại
-    const toUpdate = grant.filter((fid: string) => currentFunctionIds.has(fid));
-    for (const fid of toUpdate) {
-      const newScope = scopeByFunctionId[fid];
-      if (newScope) {
-        const current = currentAssignments.find(a => a.functionId === fid);
-        if (current && current.scope !== newScope) {
-          await prisma.positionFunction.updateMany({
-            where: { positionId, functionId: fid },
-            data: { scope: newScope }
-          });
-          results.updated++;
+        if (!activeFunctionIds.has(fid)) {
+          results.granted++;
+        } else {
+          const current = currentAssignments.find(a => a.functionId === fid);
+          if (current && current.scope !== scopeForFn) results.updated++;
         }
       }
     }

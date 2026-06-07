@@ -75,24 +75,26 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'positionId và functionId là bắt buộc' }, { status: 400 });
     }
 
-    // Check if already exists
-    const existing = await prisma.positionFunction.findFirst({
-      where: { positionId, functionId }
-    });
-
-    if (existing) {
-      return NextResponse.json({ error: 'Quyền đã được gán' }, { status: 400 });
-    }
-
     const validScopes = ['SELF', 'UNIT', 'DEPARTMENT', 'ACADEMY'];
     const normalizedScope = scope?.toUpperCase();
     const functionScope = validScopes.includes(normalizedScope) ? normalizedScope : 'UNIT';
 
-    const assignment = await prisma.positionFunction.create({
-      data: {
+    // Idempotent: gán mới HOẶC kích hoạt lại grant đã bị tắt (isActive=false).
+    // Trước đây POST chặn khi tồn tại bản ghi (kể cả inactive) → không thể bật lại
+    // quyền từng bị gỡ, gây lỗi "một số chức năng không bật tắt được".
+    const assignment = await prisma.positionFunction.upsert({
+      where: {
+        positionId_functionId: { positionId, functionId },
+      },
+      update: {
+        scope: functionScope,
+        isActive: true,
+      },
+      create: {
         positionId,
         functionId,
-        scope: functionScope
+        scope: functionScope,
+        isActive: true,
       },
       include: {
         position: { select: { code: true, name: true } },
