@@ -49,6 +49,10 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     if (e.message === 'NOT_FOUND') return NextResponse.json({ error: 'Not found' }, { status: 404 })
     if (e.message === 'DECLARATION_NOT_APPROVED_OR_NOT_LOCKED')
       return NextResponse.json({ error: 'Chỉ có thể đề nghị chỉnh sửa bản khai đã được phê duyệt' }, { status: 409 })
+    if (e.message === 'NO_CHANGES')
+      return NextResponse.json({ error: 'Vui lòng chọn ít nhất một trường cần chỉnh sửa' }, { status: 400 })
+    if (e.message === 'INVALID_AMENDMENT_FIELDS')
+      return NextResponse.json({ error: 'Có trường không hợp lệ cho loại quân hàm này' }, { status: 400 })
     throw e
   }
 }

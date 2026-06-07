@@ -8,8 +8,14 @@ import { useState, useEffect, useCallback } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import { Checkbox } from '@/components/ui/checkbox'
 import { Skeleton } from '@/components/ui/skeleton'
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from '@/components/ui/select'
 import {
   Dialog,
   DialogContent,
@@ -27,11 +33,15 @@ import {
   getAmendmentStatusMeta,
   getRankLabel,
   getPromotionTypeLabel,
+  getAmendableFields,
+  getRankOptions,
+  formatAmendmentValue,
   RANK_TYPE_LABELS,
+  type RankType,
 } from '@/lib/constants/rank-declaration'
 import {
   ArrowLeft, Lock, Send, CheckCircle2, XCircle, RotateCcw, Loader2,
-  Award, FilePen, UserCog, FileSignature, History,
+  Award, FilePen, UserCog, FileSignature, History, ArrowRight,
 } from 'lucide-react'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -95,6 +105,8 @@ export default function RankDeclarationDetailPage() {
   const [showActionDialog, setShowActionDialog] = useState<WorkflowAction | null>(null)
   const [showAmendDialog, setShowAmendDialog] = useState(false)
   const [amendReason, setAmendReason] = useState('')
+  // amendDraft: key trường được chọn → giá trị mới (chuỗi). Có mặt = được chọn sửa.
+  const [amendDraft, setAmendDraft] = useState<Record<string, string>>({})
 
   const fetchData = useCallback(async () => {
     try {
@@ -151,25 +163,95 @@ export default function RankDeclarationDetailPage() {
   }
 
   const handleAmendmentRequest = async () => {
-    if (!amendReason.trim()) return
+    if (!declaration) return
+    const selectedKeys = Object.keys(amendDraft)
+    if (selectedKeys.length === 0) {
+      toast({ title: 'Chưa chọn trường', description: 'Chọn ít nhất một trường cần chỉnh sửa.', variant: 'destructive' })
+      return
+    }
+    if (!amendReason.trim()) {
+      toast({ title: 'Thiếu lý do', description: 'Vui lòng nêu lý do chỉnh sửa.', variant: 'destructive' })
+      return
+    }
+
+    // Build requestedChanges: { field: { from: giá trị hiện tại, to: giá trị mới } }
+    const requestedChanges: Record<string, { from: unknown; to: unknown }> = {}
+    for (const key of selectedKeys) {
+      const raw = amendDraft[key]
+      requestedChanges[key] = {
+        from: (declaration as unknown as Record<string, unknown>)[key] ?? null,
+        to: raw === '' ? null : raw,
+      }
+    }
+
     setActionLoading(true)
     try {
       const res = await fetch(`/api/officer-career/rank-declarations/${id}/amendments`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ requestedChanges: {}, reason: amendReason }),
+        body: JSON.stringify({ requestedChanges, reason: amendReason }),
       })
       const json = await res.json()
       if (!res.ok || !json.success) throw new Error(json.error || 'Gửi đề nghị thất bại')
-      toast({ title: 'Đã gửi đề nghị chỉnh sửa' })
+      toast({ title: 'Đã gửi đề nghị chỉnh sửa', description: 'Đề nghị đang chờ cơ quan duyệt.' })
       setShowAmendDialog(false)
       setAmendReason('')
+      setAmendDraft({})
       await fetchData()
     } catch (e: any) {
       toast({ title: 'Gửi đề nghị thất bại', description: e?.message, variant: 'destructive' })
     } finally {
       setActionLoading(false)
     }
+  }
+
+  const handleAmendmentAction = async (amendmentId: string, action: 'APPROVE' | 'REJECT') => {
+    setActionLoading(true)
+    try {
+      const res = await fetch(
+        `/api/officer-career/rank-declarations/${id}/amendments/${amendmentId}/workflow`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action }),
+        },
+      )
+      const json = await res.json()
+      if (!res.ok || !json.success) throw new Error(json.error || 'Thao tác thất bại')
+      toast({ title: action === 'APPROVE' ? 'Đã duyệt & áp dụng chỉnh sửa' : 'Đã từ chối đề nghị' })
+      await fetchData()
+    } catch (e: any) {
+      toast({ title: 'Thao tác thất bại', description: e?.message, variant: 'destructive' })
+    } finally {
+      setActionLoading(false)
+    }
+  }
+
+  // Bật/tắt một trường trong editor; khi bật seed bằng giá trị hiện tại của bản khai.
+  const toggleAmendField = (key: string) => {
+    setAmendDraft((prev) => {
+      if (key in prev) {
+        const next = { ...prev }
+        delete next[key]
+        return next
+      }
+      return { ...prev, [key]: currentFieldValue(key) }
+    })
+  }
+
+  const setAmendValue = (key: string, value: string) =>
+    setAmendDraft((prev) => ({ ...prev, [key]: value }))
+
+  const currentFieldValue = (key: string): string => {
+    if (!declaration) return ''
+    const raw = (declaration as unknown as Record<string, unknown>)[key]
+    if (raw === null || raw === undefined) return ''
+    // date → yyyy-mm-dd cho input[type=date]
+    if (key === 'effectiveDate' || key === 'decisionDate') {
+      const d = new Date(String(raw))
+      return isNaN(d.getTime()) ? '' : d.toISOString().slice(0, 10)
+    }
+    return String(raw)
   }
 
   if (loading) {
@@ -203,7 +285,11 @@ export default function RankDeclarationDetailPage() {
   const canSubmit = isDraftLike && hasPermission(PROMOTION.SUBMIT)
   const canReview = isReviewable && hasPermission(PROMOTION.APPROVE)
   const canAmend = isLockedApproved && hasPermission(PROMOTION.REQUEST_AMENDMENT)
+  const canApproveAmendment = hasPermission(PROMOTION.APPROVE_AMENDMENT)
   const hasActions = canSubmit || canReview || canAmend
+
+  const rankType = declaration.rankType as RankType
+  const amendableFields = getAmendableFields(rankType)
 
   return (
     <div className="mx-auto max-w-3xl space-y-5">
@@ -334,6 +420,8 @@ export default function RankDeclarationDetailPage() {
           <CardContent className="space-y-3 pt-4">
             {declaration.amendments.map((a) => {
               const meta = getAmendmentStatusMeta(a.amendmentStatus)
+              const changeEntries = Object.entries(a.requestedChanges ?? {})
+              const isPending = a.amendmentStatus === 'SUBMITTED' || a.amendmentStatus === 'DRAFT'
               return (
                 <div key={a.id} className="rounded-lg border border-slate-200 p-3 text-sm">
                   <div className="flex items-center justify-between">
@@ -343,7 +431,48 @@ export default function RankDeclarationDetailPage() {
                     </span>
                   </div>
                   <p className="mt-1 text-slate-600">{a.reason}</p>
-                  <p className="mt-1 text-xs text-slate-400">{formatDate(a.createdAt)}</p>
+
+                  {/* Diff các trường đề nghị sửa */}
+                  {changeEntries.length > 0 && (
+                    <div className="mt-2 space-y-1.5 rounded-md bg-slate-50 p-2.5">
+                      {changeEntries.map(([key, change]) => (
+                        <div key={key} className="flex flex-wrap items-center gap-1.5 text-xs">
+                          <span className="font-medium text-slate-500">
+                            {amendableFields.find((f) => f.key === key)?.label ?? key}:
+                          </span>
+                          <span className="text-slate-400 line-through">
+                            {formatAmendmentValue(key, change?.from)}
+                          </span>
+                          <ArrowRight className="h-3 w-3 text-slate-400" />
+                          <span className="font-semibold text-blue-700">
+                            {formatAmendmentValue(key, change?.to)}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  <div className="mt-2 flex items-center justify-between">
+                    <p className="text-xs text-slate-400">{formatDate(a.createdAt)}</p>
+                    {isPending && canApproveAmendment && (
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm" disabled={actionLoading}
+                          className="h-7 gap-1 bg-emerald-600 px-2.5 hover:bg-emerald-700"
+                          onClick={() => handleAmendmentAction(a.id, 'APPROVE')}
+                        >
+                          <CheckCircle2 className="h-3.5 w-3.5" /> Duyệt
+                        </Button>
+                        <Button
+                          size="sm" variant="outline" disabled={actionLoading}
+                          className="h-7 gap-1 border-red-300 px-2.5 text-red-700 hover:bg-red-50"
+                          onClick={() => handleAmendmentAction(a.id, 'REJECT')}
+                        >
+                          <XCircle className="h-3.5 w-3.5" /> Từ chối
+                        </Button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )
             })}
@@ -390,24 +519,93 @@ export default function RankDeclarationDetailPage() {
         </DialogContent>
       </Dialog>
 
-      {/* ── Amendment Dialog ────────────────────────────────────────────────── */}
-      <Dialog open={showAmendDialog} onOpenChange={setShowAmendDialog}>
-        <DialogContent>
+      {/* ── Amendment Dialog (editor diff field) ────────────────────────────── */}
+      <Dialog
+        open={showAmendDialog}
+        onOpenChange={(o) => { setShowAmendDialog(o); if (!o) { setAmendDraft({}); setAmendReason('') } }}
+      >
+        <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-lg">
           <DialogHeader>
             <DialogTitle>Đề nghị chỉnh sửa bản khai</DialogTitle>
             <DialogDescription>
-              Bản khai đã được phê duyệt và khóa. Vui lòng nêu rõ nội dung cần chỉnh sửa.
+              Bản khai đã được phê duyệt và khóa. Chọn các trường cần sửa, nhập giá trị
+              mới và nêu lý do. Đề nghị sẽ được cơ quan duyệt trước khi áp dụng.
             </DialogDescription>
           </DialogHeader>
-          <Textarea
-            placeholder="Nội dung cần chỉnh sửa và lý do..."
-            value={amendReason}
-            onChange={(e) => setAmendReason(e.target.value)}
-            rows={4}
-          />
+
+          <div className="space-y-2.5">
+            {amendableFields.map((field) => {
+              const selected = field.key in amendDraft
+              return (
+                <div
+                  key={field.key}
+                  className={cn(
+                    'rounded-lg border p-2.5 transition-colors',
+                    selected ? 'border-blue-200 bg-blue-50/40' : 'border-slate-200',
+                  )}
+                >
+                  <label className="flex cursor-pointer items-center gap-2">
+                    <Checkbox
+                      checked={selected}
+                      onCheckedChange={() => toggleAmendField(field.key)}
+                    />
+                    <span className="text-sm font-medium text-slate-700">{field.label}</span>
+                    <span className="ml-auto text-xs text-slate-400">
+                      Hiện tại: {formatAmendmentValue(field.key, (declaration as unknown as Record<string, unknown>)[field.key])}
+                    </span>
+                  </label>
+
+                  {selected && (
+                    <div className="mt-2 pl-6">
+                      {field.kind === 'rank' ? (
+                        <Select
+                          value={amendDraft[field.key]}
+                          onValueChange={(v) => setAmendValue(field.key, v)}
+                        >
+                          <SelectTrigger className="h-9"><SelectValue placeholder="Chọn quân hàm" /></SelectTrigger>
+                          <SelectContent>
+                            {getRankOptions(rankType).map((r) => (
+                              <SelectItem key={r.value} value={r.value}>{r.label}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      ) : field.kind === 'longtext' ? (
+                        <Textarea
+                          rows={2}
+                          value={amendDraft[field.key]}
+                          onChange={(e) => setAmendValue(field.key, e.target.value)}
+                        />
+                      ) : (
+                        <Input
+                          type={field.kind === 'date' ? 'date' : 'text'}
+                          value={amendDraft[field.key]}
+                          onChange={(e) => setAmendValue(field.key, e.target.value)}
+                        />
+                      )}
+                    </div>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+
+          <div className="space-y-1.5">
+            <Label className="text-slate-600">Lý do chỉnh sửa <span className="text-red-500">*</span></Label>
+            <Textarea
+              placeholder="Nêu rõ lý do / căn cứ chỉnh sửa..."
+              value={amendReason}
+              onChange={(e) => setAmendReason(e.target.value)}
+              rows={2}
+            />
+          </div>
+
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowAmendDialog(false)}>Hủy</Button>
-            <Button onClick={handleAmendmentRequest} disabled={actionLoading || !amendReason.trim()} className="gap-1.5">
+            <Button
+              onClick={handleAmendmentRequest}
+              disabled={actionLoading || Object.keys(amendDraft).length === 0 || !amendReason.trim()}
+              className="gap-1.5"
+            >
               {actionLoading && <Loader2 className="h-4 w-4 animate-spin" />}
               Gửi đề nghị
             </Button>

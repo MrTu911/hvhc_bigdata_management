@@ -7,6 +7,7 @@ import { DashboardSidebarEnhanced } from '@/components/dashboard/sidebar-enhance
 import { ForcePasswordChangeGuard } from '@/components/auth/force-password-change-guard';
 import { TranslationProvider } from '@/components/providers/translation-provider';
 import { Toaster } from '@/components/ui/toaster';
+import { Toaster as SonnerToaster } from '@/components/ui/sonner';
 
 export default async function DashboardLayout({
   children,
@@ -36,8 +37,9 @@ export default async function DashboardLayout({
             {children}
           </div>
         </main>
-        {/* Toast viewport dùng chung cho toàn khu dashboard */}
+        {/* Toast viewport dùng chung: radix (use-toast) + sonner (toast từ 'sonner') */}
         <Toaster />
+        <SonnerToaster />
       </div>
     </TranslationProvider>
   );

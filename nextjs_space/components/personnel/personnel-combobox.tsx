@@ -36,14 +36,27 @@ export interface PersonnelOption {
 interface PersonnelComboboxProps {
   value: PersonnelOption | null
   onChange: (personnel: PersonnelOption | null) => void
+  /** id Personnel để preload sẵn khi mở form từ liên kết (?personnelId=) */
+  initialId?: string | null
   placeholder?: string
   disabled?: boolean
   className?: string
 }
 
+function mapPersonnel(p: any): PersonnelOption {
+  return {
+    id: p.id,
+    fullName: p.fullName,
+    personnelCode: p.personnelCode,
+    militaryRank: p.militaryRank ?? null,
+    unit: p.unit ? { id: p.unit.id, name: p.unit.name } : null,
+  }
+}
+
 export function PersonnelCombobox({
   value,
   onChange,
+  initialId,
   placeholder = 'Tìm cán bộ theo tên hoặc mã...',
   disabled,
   className,
@@ -52,7 +65,32 @@ export function PersonnelCombobox({
   const [keyword, setKeyword] = useState('')
   const [options, setOptions] = useState<PersonnelOption[]>([])
   const [loading, setLoading] = useState(false)
+  const [preloading, setPreloading] = useState(!!initialId)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const preloadedRef = useRef(false)
+
+  // Preload: nạp sẵn cán bộ theo initialId (một lần) để hiển thị tên trên trigger.
+  useEffect(() => {
+    if (!initialId || preloadedRef.current || value) {
+      setPreloading(false)
+      return
+    }
+    preloadedRef.current = true
+    let cancelled = false
+    ;(async () => {
+      try {
+        const res = await fetch(`/api/personnel/search?personnelId=${encodeURIComponent(initialId)}`)
+        const json = await res.json()
+        const first = json?.success && Array.isArray(json.data) ? json.data[0] : null
+        if (!cancelled && first) onChange(mapPersonnel(first))
+      } catch {
+        /* im lặng: người dùng vẫn có thể tự chọn lại */
+      } finally {
+        if (!cancelled) setPreloading(false)
+      }
+    })()
+    return () => { cancelled = true }
+  }, [initialId, value, onChange])
 
   const fetchOptions = useCallback(async (kw: string) => {
     setLoading(true)
@@ -62,15 +100,7 @@ export function PersonnelCombobox({
       const res = await fetch(`/api/personnel/search?${params}`)
       const json = await res.json()
       if (json.success && Array.isArray(json.data)) {
-        setOptions(
-          json.data.map((p: any) => ({
-            id: p.id,
-            fullName: p.fullName,
-            personnelCode: p.personnelCode,
-            militaryRank: p.militaryRank ?? null,
-            unit: p.unit ? { id: p.unit.id, name: p.unit.name } : null,
-          })),
-        )
+        setOptions(json.data.map(mapPersonnel))
       } else {
         setOptions([])
       }
@@ -99,14 +129,18 @@ export function PersonnelCombobox({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          disabled={disabled}
+          disabled={disabled || preloading}
           className={cn(
             'w-full justify-between font-normal',
             !value && 'text-muted-foreground',
             className,
           )}
         >
-          {value ? (
+          {preloading ? (
+            <span className="flex items-center gap-2 text-muted-foreground">
+              <Loader2 className="h-4 w-4 animate-spin" /> Đang tải cán bộ...
+            </span>
+          ) : value ? (
             <span className="flex items-center gap-2 truncate">
               <UserRound className="h-4 w-4 shrink-0 text-blue-600" />
               <span className="truncate">

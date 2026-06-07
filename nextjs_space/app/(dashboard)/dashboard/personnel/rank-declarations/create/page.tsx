@@ -164,15 +164,14 @@ export default function CreateRankDeclarationPage() {
               <Label className="text-slate-600">
                 Cán bộ / quân nhân <span className="text-red-500">*</span>
               </Label>
-              <PersonnelCombobox value={personnel} onChange={setPersonnel} />
+              <PersonnelCombobox
+                value={personnel}
+                onChange={setPersonnel}
+                initialId={prefilledPersonnelId}
+              />
               {personnel && (
                 <p className="text-xs text-slate-500">
                   Đơn vị: {personnel.unit?.name ?? '—'}
-                </p>
-              )}
-              {prefilledPersonnelId && !personnel && (
-                <p className="text-xs text-amber-600">
-                  Có gợi ý cán bộ từ liên kết trước — vui lòng tìm và chọn lại để xác nhận.
                 </p>
               )}
             </div>

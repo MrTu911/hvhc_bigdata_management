@@ -17,6 +17,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import { DocumentExportMenu } from '@/components/templates/export/document-export-menu';
+import { usePermissions } from '@/hooks/use-permissions';
+import { PROMOTION } from '@/lib/rbac/function-codes';
 import {
   ArrowLeft,
   User,
@@ -57,6 +59,7 @@ interface Personnel {
   address: string | null;
   workStatus: string;
   personnelType: string | null;
+  personnelId: string | null; // FK → Personnel.id (CSDL quân nhân)
   educationLevel: string | null;
   specialization: string | null;
   placeOfOrigin: string | null;
@@ -206,6 +209,7 @@ export default function PersonnelDetailPage() {
   const router = useRouter();
   const params = useParams();
   const id = params?.id as string;
+  const { hasAnyPermission } = usePermissions();
 
   const [personnel, setPersonnel] = useState<Personnel | null>(null);
   const [loading, setLoading] = useState(true);
@@ -292,6 +296,15 @@ export default function PersonnelDetailPage() {
           </div>
         </div>
         <div className="flex gap-2">
+          {personnel.personnelId &&
+            hasAnyPermission([PROMOTION.CREATE_SELF, PROMOTION.CREATE_ON_BEHALF]) && (
+            <Link href={`/dashboard/personnel/rank-declarations/create?personnelId=${personnel.personnelId}`}>
+              <Button variant="outline">
+                <Award className="h-4 w-4 mr-2" />
+                Tạo bản khai quân hàm
+              </Button>
+            </Link>
+          )}
           {personnel.scientificProfile && (
             <Link href={`/dashboard/faculty/scientific-profile?userId=${personnel.id}`}>
               <Button variant="outline">

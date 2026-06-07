@@ -103,7 +103,7 @@ export const PersonnelSearchService = {
     }
 
     const {
-      keyword, category, unitId, rank, position,
+      keyword, category, personnelId, unitId, rank, position,
       degree, academicTitle, major, politicalTheory,
       status, ageMin, ageMax, serviceYearsMin, hasResearch,
       page, pageSize,
@@ -114,6 +114,7 @@ export const PersonnelSearchService = {
     const result = await PersonnelSearchRepo.search({
       keyword,
       category,
+      personnelId,
       // Scope takes precedence over caller-supplied unitId for UNIT scope
       unitId: scopeConstraints.effectiveUnitId,
       allowedUnitIds: scopeConstraints.allowedUnitIds,

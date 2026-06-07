@@ -14,6 +14,8 @@ import type { PersonnelCategory, PersonnelStatus, PolicyRecordType, AwardWorkflo
 export interface PersonnelSearchFilter {
   keyword?: string
   category?: PersonnelCategory
+  /** Lấy đúng một Personnel theo id (preload); vẫn bị scope ràng buộc */
+  personnelId?: string
   unitId?: string
   /** RBAC: restrict to records whose unitId is in this list */
   allowedUnitIds?: string[]
@@ -70,6 +72,7 @@ export const PersonnelSearchRepo = {
     const {
       keyword,
       category,
+      personnelId,
       unitId,
       allowedUnitIds,
       selfPersonnelId,
@@ -99,6 +102,11 @@ export const PersonnelSearchRepo = {
     }
 
     // ── Caller-supplied filters ───────────────────────────────────────────────
+    // personnelId chỉ được NARROW trong phạm vi scope, không bao giờ bypass:
+    // nếu scope đã ghim sang id khác (SELF) → giao rỗng.
+    if (personnelId) {
+      where.id = where.id && where.id !== personnelId ? '__no_match__' : personnelId
+    }
     if (unitId) where.unitId = unitId
     if (category) where.category = category
     if (status) where.status = status

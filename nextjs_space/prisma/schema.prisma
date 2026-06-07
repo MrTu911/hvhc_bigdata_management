@@ -8356,7 +8356,10 @@ model RankDeclaration {
   committedServiceRecordId String?
   createdAt                DateTime              @default(now())
   updatedAt                DateTime              @updatedAt
-  createdBy                String?
+  // Cột DB thực tế tên legacy "createdById" (chưa db push lại sau khi đổi tên field).
+  // @map giữ schema dùng createdBy mà không cần ALTER bảng dùng chung. Khi nào đồng
+  // bộ DB (rename createdById -> createdBy) thì có thể gỡ @map này.
+  createdBy                String?               @map("createdById")
   updatedBy                String?
   personnel                Personnel             @relation("RankDeclarationPersonnel", fields: [personnelId], references: [id], onDelete: Cascade)
   declarer                 User                  @relation("RankDeclarationDeclarer", fields: [declaredBy], references: [id])

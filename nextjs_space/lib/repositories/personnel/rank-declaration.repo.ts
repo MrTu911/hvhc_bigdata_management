@@ -40,6 +40,8 @@ export interface AmendmentCreateData {
   requestedChanges: Prisma.InputJsonValue
   reason: string
   requestedBy: string
+  /** mặc định DRAFT; luồng "đề nghị chỉnh sửa" tạo thẳng SUBMITTED để chờ duyệt */
+  amendmentStatus?: AmendmentStatus
 }
 
 const declarationInclude = {
@@ -217,6 +219,7 @@ export async function createAmendment(data: AmendmentCreateData) {
       requestedChanges: data.requestedChanges,
       reason: data.reason,
       requestedBy: data.requestedBy,
+      ...(data.amendmentStatus ? { amendmentStatus: data.amendmentStatus } : {}),
     },
     include: { requester: { select: { id: true, name: true } } },
   })

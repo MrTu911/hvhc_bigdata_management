@@ -57,6 +57,7 @@ export async function GET(
         address: true,
         workStatus: true,
         personnelType: true,
+        personnelId: true, // FK → Personnel.id (CSDL quân nhân) cho liên kết khai báo quân hàm
         educationLevel: true,
         specialization: true,
         placeOfOrigin: true,

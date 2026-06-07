@@ -122,3 +122,62 @@ export function getAmendmentStatusMeta(status: string) {
     }
   )
 }
+
+// ─── Catalog trường có thể đề nghị chỉnh sửa (amendment) ────────────────────
+//
+// Một nguồn sự thật duy nhất cho cả UI (editor) lẫn service (apply): key là tên
+// trường ở cấp bản khai (RankDeclaration); officerColumn/soldierColumn là cột
+// tương ứng trên bản ghi đã commit (OfficerPromotion / SoldierServiceRecord).
+// soldierColumn = null → trường không áp dụng cho quân nhân (vd chức vụ, ngày QĐ).
+
+export type AmendmentFieldKind = 'text' | 'longtext' | 'date' | 'rank'
+
+export interface AmendableField {
+  key: string
+  label: string
+  kind: AmendmentFieldKind
+  /** cột trên OfficerPromotion */
+  officerColumn: string
+  /** cột trên SoldierServiceRecord; null nếu không áp dụng cho quân nhân */
+  soldierColumn: string | null
+}
+
+export const AMENDABLE_FIELDS: AmendableField[] = [
+  { key: 'newRank',          label: 'Quân hàm mới',     kind: 'rank',     officerColumn: 'newRank',          soldierColumn: 'newRank' },
+  { key: 'previousRank',     label: 'Quân hàm trước',   kind: 'rank',     officerColumn: 'previousRank',     soldierColumn: 'previousRank' },
+  { key: 'effectiveDate',    label: 'Ngày hiệu lực',    kind: 'date',     officerColumn: 'effectiveDate',    soldierColumn: 'eventDate' },
+  { key: 'decisionNumber',   label: 'Số quyết định',    kind: 'text',     officerColumn: 'decisionNumber',   soldierColumn: 'decisionNumber' },
+  { key: 'decisionDate',     label: 'Ngày quyết định',  kind: 'date',     officerColumn: 'decisionDate',     soldierColumn: null },
+  { key: 'newPosition',      label: 'Chức vụ mới',      kind: 'text',     officerColumn: 'newPosition',      soldierColumn: null },
+  { key: 'previousPosition', label: 'Chức vụ trước',    kind: 'text',     officerColumn: 'previousPosition', soldierColumn: null },
+  { key: 'reason',           label: 'Lý do / Căn cứ',   kind: 'longtext', officerColumn: 'reason',           soldierColumn: 'description' },
+  { key: 'notes',            label: 'Ghi chú',          kind: 'longtext', officerColumn: 'notes',            soldierColumn: 'notes' },
+]
+
+const AMENDABLE_FIELD_BY_KEY: Record<string, AmendableField> = Object.fromEntries(
+  AMENDABLE_FIELDS.map((f) => [f.key, f]),
+)
+
+export function getAmendableField(key: string): AmendableField | undefined {
+  return AMENDABLE_FIELD_BY_KEY[key]
+}
+
+/** Danh sách trường có thể chỉnh sửa theo loại quân hàm. */
+export function getAmendableFields(rankType: RankType): AmendableField[] {
+  if (rankType === 'SOLDIER') {
+    return AMENDABLE_FIELDS.filter((f) => f.soldierColumn !== null)
+  }
+  return AMENDABLE_FIELDS
+}
+
+/** Hiển thị giá trị thô của một trường amendment thành chuỗi dễ đọc. */
+export function formatAmendmentValue(key: string, value: unknown): string {
+  if (value === null || value === undefined || value === '') return '—'
+  const field = getAmendableField(key)
+  if (field?.kind === 'rank') return getRankLabel(String(value))
+  if (field?.kind === 'date') {
+    const d = new Date(String(value))
+    return isNaN(d.getTime()) ? String(value) : d.toLocaleDateString('vi-VN')
+  }
+  return String(value)
+}

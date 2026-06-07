@@ -16,6 +16,9 @@ export const personnelSearchSchema = z.object({
 
   category: z.nativeEnum(PersonnelCategory).optional(),
 
+  /** Lấy đúng một Personnel theo id (dùng để preload picker) */
+  personnelId: z.string().cuid().optional(),
+
   unitId: z.string().cuid().optional(),
 
   /** Filters by Personnel.militaryRank (string) */

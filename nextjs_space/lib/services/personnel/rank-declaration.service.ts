@@ -12,6 +12,12 @@ import { logAudit } from '@/lib/audit'
 import { PROMOTION } from '@/lib/rbac/function-codes'
 import type { PromotionType, OfficerRank, SoldierRank, Prisma } from '@prisma/client'
 import {
+  getAmendableField,
+  getAmendableFields,
+  type AmendmentFieldKind,
+  type RankType,
+} from '@/lib/constants/rank-declaration'
+import {
   createRankDeclaration,
   findRankDeclarationById,
   updateRankDeclaration,
@@ -376,11 +382,22 @@ export async function requestAmendment(input: RequestAmendmentInput) {
     throw new Error('DECLARATION_NOT_APPROVED_OR_NOT_LOCKED')
   }
 
+  // Validate: chỉ chấp nhận trường trong catalog & áp dụng đúng loại quân hàm
+  const allowedKeys = new Set(
+    getAmendableFields(declaration.rankType as RankType).map((f) => f.key),
+  )
+  const changeKeys = Object.keys(input.requestedChanges ?? {})
+  if (changeKeys.length === 0) throw new Error('NO_CHANGES')
+  const invalidKeys = changeKeys.filter((k) => !allowedKeys.has(k))
+  if (invalidKeys.length > 0) throw new Error('INVALID_AMENDMENT_FIELDS')
+
   const amendment = await createAmendment({
     declarationId: input.declarationId,
     requestedChanges: input.requestedChanges as Prisma.InputJsonValue,
     reason: input.reason,
     requestedBy: input.requestedBy,
+    // Đề nghị được gửi đi là chờ duyệt ngay (không để ở DRAFT)
+    amendmentStatus: 'SUBMITTED',
   })
 
   await logAudit({
@@ -432,6 +449,16 @@ export async function actOnAmendment(input: ActOnAmendmentInput) {
 
 // ─── Apply Amendment to committed record ─────────────────────────────────────
 
+/** Ép kiểu giá trị 'to' theo loại trường trước khi ghi DB. */
+function coerceAmendmentValue(kind: AmendmentFieldKind, value: unknown): unknown {
+  if (value === '' || value === null || value === undefined) return null
+  if (kind === 'date') {
+    const parsed = new Date(String(value))
+    return isNaN(parsed.getTime()) ? null : parsed
+  }
+  return value
+}
+
 async function applyAmendment(
   amendment: Awaited<ReturnType<typeof findAmendmentById>>,
   actorId: string,
@@ -440,24 +467,45 @@ async function applyAmendment(
 
   const changes = amendment.requestedChanges as Record<string, { from: unknown; to: unknown }>
   const declaration = amendment.declaration
-  const patchData: Record<string, unknown> = {}
+  const isOfficer = !!declaration.committedPromotionId
 
-  for (const [field, { to }] of Object.entries(changes)) {
-    patchData[field] = to
+  // recordPatch: cột trên bản ghi đã commit (Officer/Soldier); declarationPatch:
+  // đồng bộ chính bản khai để trang chi tiết phản ánh giá trị đã sửa.
+  const recordPatch: Record<string, unknown> = {}
+  const declarationPatch: Record<string, unknown> = {}
+
+  for (const [field, change] of Object.entries(changes)) {
+    const meta = getAmendableField(field)
+    if (!meta) continue
+    const column = isOfficer ? meta.officerColumn : meta.soldierColumn
+    if (!column) continue // trường không áp dụng cho quân nhân → bỏ qua
+    const value = coerceAmendmentValue(meta.kind, change?.to)
+    recordPatch[column] = value
+    declarationPatch[field] = value
   }
+
+  if (Object.keys(recordPatch).length === 0) return
 
   await db.$transaction(async (tx) => {
     if (declaration.committedPromotionId) {
       await tx.officerPromotion.update({
         where: { id: declaration.committedPromotionId },
-        data: patchData as Prisma.OfficerPromotionUpdateInput,
+        data: recordPatch as Prisma.OfficerPromotionUpdateInput,
       })
     } else if (declaration.committedServiceRecordId) {
       await tx.soldierServiceRecord.update({
         where: { id: declaration.committedServiceRecordId },
-        data: patchData as Prisma.SoldierServiceRecordUpdateInput,
+        data: recordPatch as Prisma.SoldierServiceRecordUpdateInput,
       })
     }
+
+    // Đồng bộ bản khai (đã khóa) với nội dung đã được duyệt chỉnh sửa.
+    // NOTE: KHÔNG re-sync OfficerCareer.currentRank ở đây — amendment chủ yếu
+    // sửa số/ngày QĐ; nếu cần đổi quân hàm hiện tại phải qua quy trình riêng.
+    await tx.rankDeclaration.update({
+      where: { id: declaration.id },
+      data: { ...(declarationPatch as Prisma.RankDeclarationUpdateInput), updatedBy: actorId },
+    })
 
     await logAudit({
       userId: actorId,
@@ -465,7 +513,7 @@ async function applyAmendment(
       action: 'APPLY_AMENDMENT',
       resourceType: declaration.committedPromotionId ? 'OFFICER_PROMOTION' : 'SOLDIER_SERVICE_RECORD',
       resourceId: (declaration.committedPromotionId ?? declaration.committedServiceRecordId)!,
-      newValue: JSON.stringify(patchData),
+      newValue: JSON.stringify(recordPatch),
       result: 'SUCCESS',
     })
   })
