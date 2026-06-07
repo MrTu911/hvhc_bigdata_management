@@ -250,7 +250,7 @@ export const MENU_CONFIG: MenuGroup[] = [
           icon: Users,
           gradient: 'from-cyan-500 to-cyan-600',
           badge: '📝',
-          functions: [],
+          functions: [PERSONAL.MANAGE_PROFILE],
         },
         {
           name: 'nav.myDashboard',
@@ -272,7 +272,7 @@ export const MENU_CONFIG: MenuGroup[] = [
           href: '/dashboard/notifications/history',
           icon: Bell,
           gradient: 'from-indigo-500 to-indigo-600',
-          functions: [],
+          functions: [PERSONAL.VIEW_NOTIFICATIONS],
         },
         {
           name: 'nav.mySecurity',
@@ -286,14 +286,14 @@ export const MENU_CONFIG: MenuGroup[] = [
           href: '/dashboard/settings',
           icon: Settings,
           gradient: 'from-blue-600 to-blue-700',
-          functions: [],
+          functions: [PERSONAL.MANAGE_SECURITY],
         },
         {
           name: 'nav.personalHub',
           href: '/dashboard/personal',
           icon: UserCog,
           gradient: 'from-pink-500 to-rose-600',
-          functions: [],
+          functions: [PERSONAL.VIEW_DASHBOARD],
         },
       ]),
       subSection('nav.personalRecordsGroup', BookUser, [
@@ -1857,7 +1857,7 @@ export const MENU_CONFIG: MenuGroup[] = [
           href: '/dashboard/admin/sessions',
           icon: Shield,
           gradient: 'from-red-500 to-red-600',
-          functions: ['VIEW_AUTH_SESSIONS'],
+          functions: [SECURITY.VIEW_SESSIONS],
         },
         {
           name: 'nav.securityHardening',

@@ -50,6 +50,10 @@
     /* Dynamic Layout Variables */
     --sidebar-width: 280px;
     --header-height: 64px;
+    /* Tổng chiều cao "top chrome" (banner định danh + thanh điều hướng).
+       Mặc định: mobile chỉ có thanh xanh (4rem); desktop có thêm banner (override bên dưới).
+       DashboardChrome đo chiều cao thật và ghi đè biến này (banner tỉ lệ gốc nên cao thay đổi theo bề rộng). */
+    --top-chrome-h: 4rem;
 
     /* Module identity colors — used by ModuleHero & sidebar accent */
     --module-personnel: 217 91% 35%;
@@ -112,6 +116,13 @@
     --chart-3: 199 89% 60%;
     --chart-4: 142 71% 55%;
     --chart-5: 0 84% 65%;
+  }
+}
+
+/* Desktop có thêm dải banner định danh phía trên thanh điều hướng (giá trị mặc định trước khi JS đo). */
+@media (min-width: 1024px) {
+  :root {
+    --top-chrome-h: 13rem;
   }
 }
 

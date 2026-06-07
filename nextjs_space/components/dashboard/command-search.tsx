@@ -7,6 +7,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import { cn } from '@/lib/utils';
 import {
   Dialog,
   DialogContent,
@@ -46,7 +47,17 @@ const TYPE_COLOR = {
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-export function CommandSearch() {
+interface CommandSearchProps {
+  /** Class bổ sung cho nút trigger (để chỉnh độ rộng / màu theo ngữ cảnh header). */
+  triggerClassName?: string;
+  /** Văn bản gợi ý hiển thị trên nút trigger. */
+  placeholder?: string;
+}
+
+export function CommandSearch({
+  triggerClassName,
+  placeholder = 'Tìm kiếm NCKH...',
+}: CommandSearchProps = {}) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(false);
@@ -141,11 +152,14 @@ export function CommandSearch() {
       {/* Trigger button in header */}
       <button
         onClick={() => setOpen(true)}
-        className="hidden md:flex items-center gap-2 px-3 h-9 rounded-md border border-input bg-muted/50 text-sm text-muted-foreground hover:bg-muted transition-colors min-w-[180px]"
+        className={cn(
+          'hidden md:flex items-center gap-2 px-3 h-9 rounded-md border border-input bg-muted/50 text-sm text-muted-foreground hover:bg-muted transition-colors min-w-[180px]',
+          triggerClassName
+        )}
       >
         <Search className="h-3.5 w-3.5 shrink-0" />
-        <span className="flex-1 text-left text-xs">Tìm kiếm NCKH...</span>
-        <kbd className="text-[10px] font-mono bg-background border rounded px-1 py-0.5 leading-none">
+        <span className="flex-1 text-left text-xs truncate">{placeholder}</span>
+        <kbd className="text-[10px] font-mono bg-white/20 border border-white/30 rounded px-1 py-0.5 leading-none">
           ⌘K
         </kbd>
       </button>

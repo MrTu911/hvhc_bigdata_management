@@ -14,6 +14,7 @@ import prisma from '@/lib/db';
 import { logAudit } from '@/lib/audit';
 import { SYSTEM } from '@/lib/rbac/function-codes';
 import { requireFunction } from '@/lib/rbac/middleware';
+import { clearPermissionCache } from '@/lib/rbac/policy';
 
 export async function GET(request: NextRequest) {
   try {
@@ -179,6 +180,9 @@ export async function POST(request: NextRequest) {
       result: 'SUCCESS'
     });
 
+    // Gán chức vụ làm thay đổi quyền hiệu lực → xóa cache để áp dụng ngay
+    clearPermissionCache(userId);
+
     return NextResponse.json({
       success: true,
       data: { ...userPosition, user }
@@ -247,6 +251,9 @@ export async function DELETE(request: NextRequest) {
       oldValue: { ...existing, user },
       result: 'SUCCESS'
     });
+
+    // Gỡ chức vụ làm thay đổi quyền hiệu lực → xóa cache để áp dụng ngay
+    clearPermissionCache(existing.userId);
 
     return NextResponse.json({
       success: true,

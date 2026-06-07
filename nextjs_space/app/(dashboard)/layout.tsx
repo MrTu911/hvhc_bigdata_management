@@ -2,7 +2,7 @@
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { DashboardHeader } from '@/components/dashboard/header';
+import { DashboardChrome } from '@/components/dashboard/dashboard-chrome';
 import { DashboardSidebarEnhanced } from '@/components/dashboard/sidebar-enhanced';
 import { ForcePasswordChangeGuard } from '@/components/auth/force-password-change-guard';
 import { TranslationProvider } from '@/components/providers/translation-provider';
@@ -23,9 +23,14 @@ export default async function DashboardLayout({
     <TranslationProvider>
       <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
         <ForcePasswordChangeGuard />
-        <DashboardHeader />
+        {/* Top chrome cố định (banner + thanh điều hướng); tự đo chiều cao -> biến --top-chrome-h */}
+        <DashboardChrome />
         <DashboardSidebarEnhanced />
-        <main className="lg:pl-[var(--sidebar-width)] pt-16 page-enter">
+        {/* Chừa đúng chiều cao top chrome (banner tỉ lệ gốc nên cao thay đổi theo bề rộng) */}
+        <main
+          className="lg:pl-[var(--sidebar-width)] page-enter"
+          style={{ paddingTop: 'var(--top-chrome-h)' }}
+        >
           <div className="container mx-auto max-w-7xl p-4 md:p-6 lg:p-8">
             {children}
           </div>

@@ -540,7 +540,7 @@ export const translations = {
     'code': 'vi',
     
     // Dashboard
-    'dashboard.title': 'Hệ thống Quản lý BigData HVHC',
+    'dashboard.title': 'Hệ thống Quản lý CSDL Bigdata',
     'dashboard.welcome': 'Chào mừng',
     'dashboard.services': 'Dịch vụ',
     'dashboard.users': 'Người dùng',
@@ -1152,7 +1152,7 @@ export const translations = {
     'code': 'en',
     
     // Dashboard
-    'dashboard.title': 'HVHC BigData Management System',
+    'dashboard.title': 'Bigdata Management System',
     'dashboard.welcome': 'Welcome',
     'dashboard.services': 'Services',
     'dashboard.users': 'Users',

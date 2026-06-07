@@ -466,9 +466,10 @@ export function DashboardSidebarEnhanced() {
       {/* Mobile Sidebar */}
       <aside 
         className={cn(
-          'lg:hidden fixed inset-y-0 left-0 z-50 w-72 bg-gradient-to-b from-background to-muted/20 border-r shadow-xl transform transition-transform duration-300 ease-in-out overflow-y-auto pt-16',
+          'lg:hidden fixed inset-y-0 left-0 z-50 w-72 bg-gradient-to-b from-background to-muted/20 border-r shadow-xl transform transition-transform duration-300 ease-in-out overflow-y-auto',
           isMobileOpen ? 'translate-x-0' : '-translate-x-full'
         )}
+        style={{ paddingTop: 'var(--top-chrome-h)' }}
       >
         {/* Mobile: Expand/Collapse All Button */}
         <div className="flex items-center justify-end gap-2 px-4 py-2 border-b">
@@ -514,9 +515,10 @@ export function DashboardSidebarEnhanced() {
       {/* Desktop Sidebar */}
       <aside 
         className={cn(
-          'hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-40 lg:block lg:overflow-y-auto lg:border-r lg:pt-16 lg:bg-gradient-to-b from-background to-muted/20 backdrop-blur-xl transition-all duration-300 ease-in-out',
+          'hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-40 lg:block lg:overflow-y-auto lg:border-r lg:bg-gradient-to-b from-background to-muted/20 backdrop-blur-xl transition-all duration-300 ease-in-out',
           isCollapsed ? 'lg:w-20' : 'lg:w-64'
         )}
+        style={{ paddingTop: 'var(--top-chrome-h)' }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
