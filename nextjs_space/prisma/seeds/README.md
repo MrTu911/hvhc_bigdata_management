@@ -76,6 +76,7 @@ npm run seed:module -- M12    # Một nhóm module
 | `20_party_organizations.ts` | Tổ chức Đảng (Đảng ủy, Chi bộ) | `seed_party_organizations.ts` |
 | `21_party_members.ts` | Đảng viên + lịch sử đảng | `seed_party_members.ts` |
 | `22_party_activities.ts` | Hoạt động đảng + đánh giá chính trị | `seed_party_activities.ts` |
+| `23_party_recruitment.ts` *(optional)* | Quy trình phát triển Đảng (6 bước) | `seed_recruitment_pipeline.ts` |
 
 ### 🟡 NHÓM D — M05-M08 Chính sách & Bảo hiểm (30–32)
 > Phục vụ: **M05 Insurance, M06 Policy, M08 Discipline**
@@ -131,6 +132,7 @@ npm run seed:module -- M12    # Một nhóm module
 
 | File | Nội dung | File nguồn |
 |------|----------|-----------|
+| `79_ml_models.ts` *(optional)* | MLModel + TrainingJob + ModelPrediction (lớp AI/ML) | `seed_ml_models.ts` |
 | `80_bigdata_sources.ts` | DataSource + M19 category (DATA_SOURCE_KIND/DOMAIN) | `seed_bigdata_sources.ts` |
 | `81_infra_rbac.ts` *(optional)* | Function codes INFRA | `seed_infra_rbac.ts` |
 | `82_infra_full.ts` | Service, pipeline, data-quality, backup, DR | `seed_m12_infra_full.ts` |
@@ -216,7 +218,9 @@ npm run seed:module -- M12    # Một nhóm module
 
 `check_db.ts` · `check_party_access.ts` · `check_perm.ts` · `etl_lan_import.ts` · `backfill_embeddings.ts`
 
-## Backlog Phase 2
+## Backlog còn lại
 
-- `seed_recruitment_pipeline.ts` — đang **hard-code cuid user ID**, không portable; rewrite resolve theo `code`/email rồi wire vào step 23 (M03)
-- CSDL chưa có seed: **M24** (NckhPurchaseOrder/Invoice/Expense), **M25** (chat/works), **M26** (AI/report), **ML** (`MLModel`/`TrainingJob`)
+- ✅ `seed_recruitment_pipeline.ts` đã rewrite (resolve User theo `militaryId`, bỏ hard-code cuid) → đã wire **step 23**.
+- ✅ **ML** (`MLModel`/`TrainingJob`/`ModelPrediction`) → đã thêm `seed_ml_models.ts` + **step 79**.
+- ✅ **M24** (NckhPurchaseOrder/Invoice/Expense/Grant) & **M25** (chat/collaboration) **đã được seed sẵn** bởi `seed_science_phase1_6.ts` (chạy trong **step 41**) — không tạo seed mới để tránh trùng nguồn.
+- ⏳ Còn lại: **M26** (AI insights/reports nâng cao) nếu sau này cần dữ liệu mẫu riêng.

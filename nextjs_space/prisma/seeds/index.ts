@@ -59,6 +59,7 @@ import { seedThesis } from './56_thesis'
 import { seedPromotionInstances } from './62_promotion_instances'
 import { seedScienceRbac } from './71_science_rbac'
 // ── Nhóm Big Data & Hạ tầng (CSDL lõi của dự án) ──
+import { seedMlModels } from './79_ml_models'
 import { seedBigdataSources } from './80_bigdata_sources'
 import { seedInfraRbac } from './81_infra_rbac'
 import { seedInfraFull } from './82_infra_full'
@@ -70,8 +71,7 @@ import { seedCommandDashboard } from './86_command_dashboard'
 import { seedRealdataB212Units } from './87_realdata_b212_units'
 import { seedRealdataB212Personnel } from './88_realdata_b212_personnel'
 import { seedRealdataB212Rbac } from './89_realdata_b212_rbac'
-// Phase 2 — file hard-code cuid, cần rewrite trước khi wire:
-// import { seedPartyRecruitment } from './23_party_recruitment'
+import { seedPartyRecruitment } from './23_party_recruitment'
 
 // ─── Danh sách step ──────────────────────────────────────────────────────────
 
@@ -109,6 +109,7 @@ const ALL_STEPS: SeedStep[] = [
   { step: '20', name: 'Party Organizations',            module: 'M03',   group: 'demo', fn: seedPartyOrganizations },
   { step: '21', name: 'Party Members',                  module: 'M03',   group: 'demo', fn: seedPartyMembers },
   { step: '22', name: 'Party Activities',               module: 'M03',   group: 'demo', fn: seedPartyActivities },
+  { step: '23', name: 'Party Recruitment Pipeline',     module: 'M03',   group: 'demo', optional: true, fn: seedPartyRecruitment },
 
   // ══ NHÓM D: M05-08 Chính sách & BH ══
   { step: '30', name: 'Insurance / BHXH',               module: 'M05',   group: 'demo', fn: seedInsurance },
@@ -141,6 +142,7 @@ const ALL_STEPS: SeedStep[] = [
   { step: '71', name: 'Science RBAC (M20–M26)',         module: 'M20',   group: 'demo', optional: true, fn: seedScienceRbac },
 
   // ══ NHÓM I: M11/M12 Big Data & Hạ tầng (CSDL lõi) ══
+  { step: '79', name: 'ML Models (AI/ML registry)',     module: 'M12',   group: 'bigdata', optional: true, fn: seedMlModels },
   { step: '80', name: 'Big Data Sources (DataSource)',  module: 'M12',   group: 'bigdata', fn: seedBigdataSources },
   { step: '81', name: 'Infra RBAC functions',           module: 'M12',   group: 'bigdata', optional: true, fn: seedInfraRbac },
   { step: '82', name: 'Infra Full (services/DR/backup)', module: 'M12',  group: 'bigdata', fn: seedInfraFull },
@@ -162,14 +164,14 @@ const ALL_STEPS: SeedStep[] = [
 
 const MODULE_MAP: Record<string, string[]> = {
   M02: ['10', '11', '12', '13', '14'],
-  M03: ['20', '21', '22'],
+  M03: ['20', '21', '22', '23'],
   M05: ['30'],
   M06: ['31'],
   M08: ['32'],
   M09: ['40', '41', '42'],
   M10: ['50', '51', '52', '53', '54', '55', '56'],
   M11: ['85', '86'],
-  M12: ['80', '81', '82', '83', '84'],
+  M12: ['79', '80', '81', '82', '83', '84'],
   M13: ['60', '61', '62'],
   M18: ['70'],
   M20: ['71'],

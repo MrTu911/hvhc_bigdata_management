@@ -2,55 +2,15 @@ import { PrismaClient, RecruitmentStep } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-// ─── User IDs ──────────────────────────────────────────────────────────────
-const users: { code: string; id: string }[] = [
-  { code: 'HV000500', id: 'cmmuk9rv001uw8i4626vn99a7' },
-  { code: 'HV000501', id: 'cmmuk9rv601v18i46d6bazqsj' },
-  { code: 'HV000502', id: 'cmmuk9rvd01v68i464lqoaimv' },
-  { code: 'HV000503', id: 'cmmuk9rvh01vb8i46tudwk19v' },
-  { code: 'HV000504', id: 'cmmuk9rvl01vg8i460wk0oml9' },
-  { code: 'HV000505', id: 'cmmuk9rvo01vl8i46bqjlrnyx' },
-  { code: 'HV000506', id: 'cmmuk9rvr01vq8i46k2o4ycm7' },
-  { code: 'HV000507', id: 'cmmuk9rvu01vv8i46z5hge0u4' },
-  { code: 'HV000508', id: 'cmmuk9rvx01w08i46x2ap9113' },
-  { code: 'HV000509', id: 'cmmuk9rw001w58i4659dqhr36' },
-  { code: 'HV000510', id: 'cmmuk9rw301wa8i46v7irfmce' },
-  { code: 'HV000511', id: 'cmmuk9rw601wf8i465k5vdjw2' },
-  { code: 'HV000512', id: 'cmmuk9rwa01wk8i46ytaxgvco' },
-  { code: 'HV000513', id: 'cmmuk9rwc01wp8i46b7v69hpu' },
-  { code: 'HV000514', id: 'cmmuk9rwf01wu8i46e4r5dock' },
-  { code: 'HV000515', id: 'cmmuk9rwi01wz8i46yvx0yta4' },
-  { code: 'HV000516', id: 'cmmuk9rwl01x48i46ss7h934k' },
-  { code: 'HV000517', id: 'cmmuk9rwn01x98i469evz88du' },
-  { code: 'HV000518', id: 'cmmuk9rwq01xe8i460utvvu04' },
-  { code: 'HV000519', id: 'cmmuk9rwt01xj8i46mxeprzvr' },
-  { code: 'HV000520', id: 'cmmuk9rww01xo8i46ad518zp7' },
-  { code: 'HV000521', id: 'cmmuk9rwz01xt8i46b29qqjbi' },
-  { code: 'HV000522', id: 'cmmuk9rx101xy8i46grksi6oy' },
-  { code: 'HV000523', id: 'cmmuk9rx401y38i4664v4ze4v' },
-  { code: 'HV000524', id: 'cmmuk9rx701y88i467clw3o4v' },
-  { code: 'HV000525', id: 'cmmuk9rxa01yd8i46qxat2yc2' },
-  { code: 'HV000526', id: 'cmmuk9rxd01yi8i468agutcgr' },
-  { code: 'HV000527', id: 'cmmuk9rxh01yn8i46ma2fohm3' },
-  { code: 'HV000528', id: 'cmmuk9rxk01ys8i46i9yyvemy' },
-  { code: 'HV000529', id: 'cmmuk9rxn01yx8i46hlp5fdj9' },
-  { code: 'HV000530', id: 'cmmuk9rxq01z28i46e4jb8lsv' },
-  { code: 'HV000531', id: 'cmmuk9rxt01z78i46j7ycnbew' },
-];
+// ─── User codes ──────────────────────────────────────────────────────────────
+// Resolve User.id theo militaryId lúc chạy (KHÔNG hard-code cuid → portable qua db reset).
+// Học viên HV000500–HV000531.
+const USER_CODES: string[] = Array.from(
+  { length: 32 },
+  (_, i) => `HV${String(500 + i).padStart(6, '0')}`,
+);
 
-// ─── Org IDs (rotate) ────────────────────────────────────────────────────────
-const orgIds: string[] = [
-  'cmmuk9c3900018iapj3yih8wm',
-  'cmmuk9c3g00028iap8n6qj6xu',
-  'cmmuk9c3l00038iap9ir6b4z0',
-  'cmmuk9c3r00048iapkpluznfg',
-  'cmmuk9c3x00058iap2w3tsajx',
-  'cmnfaa2n300058iepn4eix46t',
-  'cmnfaa2n400078iepztpt5dot',
-  'cmnfaa2n600098iepglpbzjad',
-  'cmnfaa2oj00318iepno0fp53z',
-  'cmnfaa2ok00338iepjyxsxcbf',
-];
+type ResolvedUser = { code: string; id?: string };
 
 // ─── Vietnamese assistant names ───────────────────────────────────────────────
 const assistants1 = [
@@ -87,7 +47,7 @@ function d(year: number, month: number, day: number): Date {
 // Steps: 7 more THEO_DOI, 6 more HOC_CAM_TINH, 6 DOI_TUONG, 5 CHI_BO_XET,
 //        4 CAP_TREN_DUYET, 4 DA_KET_NAP  → 32 new records
 interface RecordSpec {
-  userId: string;
+  userId?: string;
   currentStep: RecruitmentStep;
   targetPartyOrgId: string;
   camTinhDate?: Date;
@@ -101,7 +61,8 @@ interface RecordSpec {
   note?: string;
 }
 
-const records: RecordSpec[] = [
+function buildRecords(users: ResolvedUser[], orgIds: string[]): RecordSpec[] {
+  return [
   // ── THEO_DOI (7 more, idx 0–6) ──────────────────────────────────────────
   {
     userId: users[0].id,
@@ -470,10 +431,46 @@ const records: RecordSpec[] = [
     dossierStatus: 'COMPLETE',
     note: 'Kết nạp Đảng viên, hoàn thành toàn bộ thủ tục hồ sơ.',
   },
-];
+  ];
+}
+
+/** Resolve User.id theo militaryId (HV codes). Trả về theo đúng thứ tự USER_CODES. */
+async function resolveUsers(): Promise<ResolvedUser[]> {
+  const found = await prisma.user.findMany({
+    where: { militaryId: { in: USER_CODES } },
+    select: { id: true, militaryId: true },
+  });
+  const idByCode = new Map(found.map((u) => [u.militaryId as string, u.id]));
+  return USER_CODES.map((code) => ({ code, id: idByCode.get(code) }));
+}
+
+/** Lấy tối đa 10 party org (cycle nếu DB có ít hơn 10) làm đích kết nạp. */
+async function resolveOrgIds(): Promise<string[]> {
+  const orgs = await prisma.partyOrganization.findMany({
+    take: 10,
+    orderBy: { id: 'asc' },
+    select: { id: true },
+  });
+  if (orgs.length === 0) return [];
+  return Array.from({ length: 10 }, (_, i) => orgs[i % orgs.length].id);
+}
 
 async function main() {
-  console.log(`\nUpserting ${records.length} PartyRecruitmentPipeline records...\n`);
+  const users = await resolveUsers();
+  const orgIds = await resolveOrgIds();
+
+  const missingUsers = users.filter((u) => !u.id).map((u) => u.code);
+  if (missingUsers.length > 0) {
+    console.warn(`⚠ Không tìm thấy ${missingUsers.length} học viên (militaryId): ${missingUsers.join(', ')}`);
+  }
+  if (orgIds.length === 0) {
+    throw new Error('Không có PartyOrganization nào trong DB — hãy chạy seed party org trước (step 20).');
+  }
+
+  // Chỉ giữ record có userId hợp lệ (học viên tồn tại trong DB).
+  const records = buildRecords(users, orgIds).filter((r): r is RecordSpec & { userId: string } => Boolean(r.userId));
+
+  console.log(`\nUpserting ${records.length}/${USER_CODES.length} PartyRecruitmentPipeline records...\n`);
 
   let created = 0;
   let updated = 0;
