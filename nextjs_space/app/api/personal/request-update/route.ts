@@ -19,6 +19,10 @@ const SENSITIVE_FIELDS = new Set([
   'enlistmentDate', 'dischargeDate', 'partyJoinDate', 'partyPosition',
 ]);
 
+// Đính chính một sự kiện quá trình công tác: fieldName dạng "careerHistory:<eventId>".
+// Bỏ qua kiểm tra SENSITIVE_FIELDS nhưng phải xác minh sự kiện thuộc về user.
+const CAREER_EVENT_FIELD_PREFIX = 'careerHistory:';
+
 export async function POST(request: NextRequest) {
   const authResult = await requireAuth(request);
   if (!authResult.allowed) return authResult.response!;
@@ -44,7 +48,24 @@ export async function POST(request: NextRequest) {
   if (!requestedValue || typeof requestedValue !== 'string') {
     return NextResponse.json({ error: 'Thiếu requestedValue' }, { status: 400 });
   }
-  if (!SENSITIVE_FIELDS.has(fieldName)) {
+
+  // Đính chính sự kiện công tác: xác minh sở hữu trước khi cho phép.
+  if (fieldName.startsWith(CAREER_EVENT_FIELD_PREFIX)) {
+    const eventId = fieldName.slice(CAREER_EVENT_FIELD_PREFIX.length);
+    if (!eventId) {
+      return NextResponse.json({ error: 'Thiếu mã sự kiện công tác' }, { status: 400 });
+    }
+    const event = await prisma.careerHistory.findFirst({
+      where: { id: eventId, userId: user.id, deletedAt: null },
+      select: { id: true },
+    });
+    if (!event) {
+      return NextResponse.json(
+        { error: 'Sự kiện công tác không tồn tại hoặc không thuộc về bạn' },
+        { status: 404 }
+      );
+    }
+  } else if (!SENSITIVE_FIELDS.has(fieldName)) {
     return NextResponse.json(
       { error: `Trường "${fieldName}" không cần phê duyệt — dùng PUT /api/profile/me để cập nhật trực tiếp` },
       { status: 400 }

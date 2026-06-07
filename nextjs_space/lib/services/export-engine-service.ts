@@ -40,78 +40,86 @@ export interface BatchExportRequest {
   zipName?: string;
 }
 
-/**
- * Xuất file đơn lẻ (sync)
- * Returns signed URL để download
- */
-export async function exportSingle(req: ExportRequest): Promise<{
-  jobId: string;
-  downloadUrl: string;
-  expiresIn: number;
-}> {
-  // Lấy template trước để gắn đúng version vào job record
-  const template = await prisma.reportTemplate.findUnique({
-    where: { id: req.templateId },
-  });
+/** Xuất file từ dữ liệu đã resolve sẵn (không qua data-resolver theo entity). */
+export interface ExportWithDataRequest {
+  templateId: string;
+  resolvedData: Record<string, unknown>;
+  entityType: EntityType;
+  /** Id thực thể để ghi vào job record (truy vết); không dùng để resolve dữ liệu. */
+  entityId: string;
+  outputFormat: 'PDF' | 'DOCX' | 'XLSX';
+  requestedBy: string;
+  callerType?: string;
+}
+
+/** Template fields tối thiểu cần để render + tạo job. */
+type RenderableTemplate = {
+  id: string;
+  version: number;
+  name: string;
+  dataMap: unknown;
+  fileKey: string | null;
+};
+
+async function loadActiveTemplate(templateId: string): Promise<RenderableTemplate> {
+  const template = await prisma.reportTemplate.findUnique({ where: { id: templateId } });
   if (!template) throw new Error('Template không tồn tại');
   if (!template.isActive) throw new Error('Template đã bị vô hiệu hóa');
+  return template;
+}
 
-  // Create job record — templateVersion gắn version thực tại thời điểm render
+/**
+ * Tạo job → render → upload MinIO → ký URL → cập nhật trạng thái.
+ * Dùng chung cho exportSingle (resolve theo entity) và exportWithData (data dựng sẵn).
+ */
+async function runExportJob(params: {
+  template: RenderableTemplate;
+  resolvedData: Record<string, unknown>;
+  entityIds: string[];
+  entityType: EntityType;
+  outputFormat: 'PDF' | 'DOCX' | 'XLSX';
+  requestedBy: string;
+  callerType?: string;
+}): Promise<{ jobId: string; downloadUrl: string; expiresIn: number }> {
+  const { template, resolvedData, entityIds, entityType, outputFormat, requestedBy, callerType } = params;
+
   const job = await prisma.exportJob.create({
     data: {
-      templateId: req.templateId,
+      templateId: template.id,
       templateVersion: template.version,
-      requestedBy: req.requestedBy,
-      entityIds: [req.entityId],
-      entityType: req.entityType,
-      outputFormat: req.outputFormat,
+      requestedBy,
+      entityIds,
+      entityType,
+      outputFormat,
       status: 'PROCESSING',
       progress: 0,
-      callerType: req.callerType || 'user',
+      callerType: callerType || 'user',
     },
   });
 
   try {
+    const { buffer, ext, contentType } = await renderFile(template, resolvedData, outputFormat);
 
-    // Resolve data
-    const dataMap = (template.dataMap as Record<string, unknown>) || {};
-    const resolvedData = await resolveEntityData({
-      entityId: req.entityId,
-      entityType: req.entityType,
-      dataMap,
-      requestedBy: req.requestedBy,
-    });
-
-    // Render file
-    const { buffer, ext, contentType } = await renderFile(
-      template,
-      resolvedData,
-      req.outputFormat
-    );
-
-    // Upload to MinIO via storageService
     const outputKey = `exports/${job.id}/output.${ext}`;
     await uploadObject('M18_EXPORT', outputKey, buffer, {
       module:         'M18',
       'entity-type':  'export-job',
       'entity-id':    job.id,
-      'uploaded-by':  req.requestedBy,
+      'uploaded-by':  requestedBy,
       classification: 'INTERNAL',
       'content-type': contentType,
       jobId:          job.id,
     });
 
-    // Generate signed URL (24h)
     const signedUrl = await getPresignedDownloadUrl('M18_EXPORT', outputKey, { expirySeconds: EXPORT_URL_TTL });
     const urlExpiresAt = new Date(Date.now() + EXPORT_URL_TTL * 1000);
 
-    // Update job as COMPLETED
     await prisma.exportJob.update({
       where: { id: job.id },
       data: {
         status: 'COMPLETED',
         progress: 100,
-        successCount: 1,
+        successCount: entityIds.length,
         outputKey,
         signedUrl,
         urlExpiresAt,
@@ -125,12 +133,66 @@ export async function exportSingle(req: ExportRequest): Promise<{
       where: { id: job.id },
       data: {
         status: 'FAILED',
-        errors: [{ entityId: req.entityId, reason: String(error) }],
+        errors: [{ entityId: entityIds[0] ?? '', reason: String(error) }],
         completedAt: new Date(),
       },
     });
     throw error;
   }
+}
+
+/**
+ * Xuất file đơn lẻ (sync) — resolve dữ liệu từ entity qua data-resolver.
+ * Returns signed URL để download.
+ */
+export async function exportSingle(req: ExportRequest): Promise<{
+  jobId: string;
+  downloadUrl: string;
+  expiresIn: number;
+}> {
+  const template = await loadActiveTemplate(req.templateId);
+
+  const dataMap = (template.dataMap as Record<string, unknown>) || {};
+  const resolvedData = await resolveEntityData({
+    entityId: req.entityId,
+    entityType: req.entityType,
+    dataMap,
+    requestedBy: req.requestedBy,
+  });
+
+  return runExportJob({
+    template,
+    resolvedData,
+    entityIds: [req.entityId],
+    entityType: req.entityType,
+    outputFormat: req.outputFormat,
+    requestedBy: req.requestedBy,
+    callerType: req.callerType,
+  });
+}
+
+/**
+ * Xuất file đơn lẻ từ dữ liệu đã dựng sẵn (bỏ qua data-resolver theo entity).
+ * Dùng cho CSDL có nguồn dữ liệu riêng/scope SELF (vd hồ sơ quá trình công tác cá
+ * nhân lấy từ CareerHistory). Engine vẫn dùng template.dataMap (__htmlKey) để render
+ * PDF/HTML đúng thể thức; resolvedData chỉ cấp giá trị placeholder + vòng lặp.
+ */
+export async function exportWithData(req: ExportWithDataRequest): Promise<{
+  jobId: string;
+  downloadUrl: string;
+  expiresIn: number;
+}> {
+  const template = await loadActiveTemplate(req.templateId);
+
+  return runExportJob({
+    template,
+    resolvedData: req.resolvedData,
+    entityIds: [req.entityId],
+    entityType: req.entityType,
+    outputFormat: req.outputFormat,
+    requestedBy: req.requestedBy,
+    callerType: req.callerType,
+  });
 }
 
 /**

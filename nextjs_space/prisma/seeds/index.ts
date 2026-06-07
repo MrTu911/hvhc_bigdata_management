@@ -54,6 +54,7 @@ import { seedAdminUnits } from './07_admin_units'
 import { seedSalaryGrades } from './08_salary_grades'
 import { seedOfficerHealth } from './13_officer_health'
 import { seedPromotionRank } from './14_promotion_rank'
+import { seedCareerHistory } from './15_career_history'
 import { seedCivilStudents } from './55_civil_students'
 import { seedThesis } from './56_thesis'
 import { seedPromotionInstances } from './62_promotion_instances'
@@ -104,6 +105,7 @@ const ALL_STEPS: SeedStep[] = [
   { step: '12', name: 'Officer & Soldier',              module: 'M02',   group: 'demo', fn: seedOfficerAndSoldier },
   { step: '13', name: 'Officer Health',                 module: 'M02',   group: 'demo', optional: true, fn: seedOfficerHealth },
   { step: '14', name: 'Promotion & Rank templates',     module: 'M02',   group: 'demo', optional: true, fn: seedPromotionRank },
+  { step: '15', name: 'Career History (Quá trình công tác)', module: 'M02', group: 'demo', optional: true, fn: seedCareerHistory },
 
   // ══ NHÓM C: M03 Đảng ══
   { step: '20', name: 'Party Organizations',            module: 'M03',   group: 'demo', fn: seedPartyOrganizations },
@@ -163,7 +165,7 @@ const ALL_STEPS: SeedStep[] = [
 // ─── Module grouping ─────────────────────────────────────────────────────────
 
 const MODULE_MAP: Record<string, string[]> = {
-  M02: ['10', '11', '12', '13', '14'],
+  M02: ['10', '11', '12', '13', '14', '15'],
   M03: ['20', '21', '22', '23'],
   M05: ['30'],
   M06: ['31'],

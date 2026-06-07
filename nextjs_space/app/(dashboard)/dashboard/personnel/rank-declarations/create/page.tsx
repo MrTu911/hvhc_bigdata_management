@@ -1,5 +1,9 @@
 'use client'
 
+/**
+ * M02 Extension – Tạo bản khai quá trình lên quân hàm
+ * Route: /dashboard/personnel/rank-declarations/create
+ */
 import { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -7,6 +11,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import { Switch } from '@/components/ui/switch'
 import {
   Select,
   SelectContent,
@@ -14,149 +19,193 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { ArrowLeft, Loader2, Shield } from 'lucide-react'
+import { ModuleHero } from '@/components/ui/enhanced-data-card'
+import { toast } from '@/components/ui/use-toast'
+import {
+  PersonnelCombobox,
+  type PersonnelOption,
+} from '@/components/personnel/personnel-combobox'
+import {
+  getRankOptions,
+  PROMOTION_TYPE_OPTIONS,
+  type RankType,
+} from '@/lib/constants/rank-declaration'
+import { ArrowLeft, Loader2, Award, UserCog, FileSignature, Save } from 'lucide-react'
 
-const OFFICER_RANK_OPTIONS = [
-  { value: 'THIEU_UY', label: 'Thiếu úy' },
-  { value: 'TRUNG_UY', label: 'Trung úy' },
-  { value: 'THUONG_UY', label: 'Thượng úy' },
-  { value: 'DAI_UY', label: 'Đại úy' },
-  { value: 'THIEU_TA', label: 'Thiếu tá' },
-  { value: 'TRUNG_TA', label: 'Trung tá' },
-  { value: 'THUONG_TA', label: 'Thượng tá' },
-  { value: 'DAI_TA', label: 'Đại tá' },
-  { value: 'THIEU_TUONG', label: 'Thiếu tướng' },
-  { value: 'TRUNG_TUONG', label: 'Trung tướng' },
-  { value: 'THUONG_TUONG', label: 'Thượng tướng' },
-  { value: 'DAI_TUONG', label: 'Đại tướng' },
-]
+interface DeclarationForm {
+  rankType: RankType
+  promotionType: string
+  previousRank: string
+  newRank: string
+  effectiveDate: string
+  decisionNumber: string
+  decisionDate: string
+  previousPosition: string
+  newPosition: string
+  reason: string
+  notes: string
+  onBehalf: boolean
+}
 
-const SOLDIER_RANK_OPTIONS = [
-  { value: 'BINH_NHI', label: 'Binh nhì' },
-  { value: 'BINH_NHAT', label: 'Binh nhất' },
-  { value: 'HA_SI', label: 'Hạ sĩ' },
-  { value: 'TRUNG_SI', label: 'Trung sĩ' },
-  { value: 'THUONG_SI', label: 'Thượng sĩ' },
-]
-
-const PROMOTION_TYPES = [
-  { value: 'THANG_CAP',   label: 'Thăng cấp' },
-  { value: 'BO_NHIEM',    label: 'Bổ nhiệm' },
-  { value: 'DIEU_DONG',   label: 'Điều động' },
-  { value: 'LUAN_CHUYEN', label: 'Luân chuyển' },
-  { value: 'GIANG_CHUC',  label: 'Giáng chức' },
-  { value: 'CACH_CHUC',   label: 'Cách chức' },
-  { value: 'NGHI_HUU',    label: 'Nghỉ hưu' },
-  { value: 'XUAT_NGU',    label: 'Xuất ngũ' },
-]
+const INITIAL_FORM: DeclarationForm = {
+  rankType: 'OFFICER',
+  promotionType: 'THANG_CAP',
+  previousRank: '',
+  newRank: '',
+  effectiveDate: '',
+  decisionNumber: '',
+  decisionDate: '',
+  previousPosition: '',
+  newPosition: '',
+  reason: '',
+  notes: '',
+  onBehalf: false,
+}
 
 export default function CreateRankDeclarationPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const prefilledPersonnelId = searchParams.get('personnelId') ?? ''
+  const prefilledPersonnelId = searchParams.get('personnelId')
 
+  const [personnel, setPersonnel] = useState<PersonnelOption | null>(null)
+  const [form, setForm] = useState<DeclarationForm>(INITIAL_FORM)
   const [submitting, setSubmitting] = useState(false)
-  const [error, setError] = useState<string | null>(null)
 
-  const [form, setForm] = useState({
-    personnelId:      prefilledPersonnelId,
-    rankType:         'OFFICER',
-    promotionType:    'THANG_CAP',
-    previousRank:     '',
-    newRank:          '',
-    effectiveDate:    '',
-    decisionNumber:   '',
-    decisionDate:     '',
-    previousPosition: '',
-    newPosition:      '',
-    reason:           '',
-    notes:            '',
-    onBehalf:         false,
-  })
+  const rankOptions = getRankOptions(form.rankType)
 
-  const rankOptions = form.rankType === 'OFFICER' ? OFFICER_RANK_OPTIONS : SOLDIER_RANK_OPTIONS
-
-  const handleChange = (field: string, value: string | boolean) => {
-    setForm((prev) => ({ ...prev, [field]: value }))
-    if (field === 'rankType') {
-      setForm((prev) => ({ ...prev, rankType: value as string, previousRank: '', newRank: '' }))
-    }
+  function updateField<K extends keyof DeclarationForm>(field: K, value: DeclarationForm[K]) {
+    setForm((prev) => {
+      // Đổi loại quân hàm → reset hai trường quân hàm vì danh mục khác nhau
+      if (field === 'rankType') {
+        return { ...prev, rankType: value as RankType, previousRank: '', newRank: '' }
+      }
+      return { ...prev, [field]: value }
+    })
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!form.personnelId || !form.effectiveDate) {
-      setError('Vui lòng điền đầy đủ thông tin bắt buộc')
+
+    if (!personnel) {
+      toast({ title: 'Thiếu thông tin', description: 'Vui lòng chọn cán bộ.', variant: 'destructive' })
+      return
+    }
+    if (!form.effectiveDate) {
+      toast({ title: 'Thiếu thông tin', description: 'Vui lòng nhập ngày hiệu lực.', variant: 'destructive' })
       return
     }
 
     setSubmitting(true)
-    setError(null)
-
     try {
       const res = await fetch('/api/officer-career/rank-declarations', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          ...form,
-          previousRank:   form.previousRank   || null,
-          newRank:        form.newRank         || null,
-          decisionNumber: form.decisionNumber  || null,
-          decisionDate:   form.decisionDate    || null,
+          personnelId:      personnel.id,
+          rankType:         form.rankType,
+          promotionType:    form.promotionType,
+          previousRank:     form.previousRank     || null,
+          newRank:          form.newRank          || null,
+          effectiveDate:    form.effectiveDate,
+          decisionNumber:   form.decisionNumber   || null,
+          decisionDate:     form.decisionDate     || null,
           previousPosition: form.previousPosition || null,
-          newPosition:    form.newPosition     || null,
-          reason:         form.reason          || null,
-          notes:          form.notes           || null,
+          newPosition:      form.newPosition      || null,
+          reason:           form.reason           || null,
+          notes:            form.notes            || null,
+          onBehalf:         form.onBehalf,
         }),
       })
       const json = await res.json()
-      if (!res.ok) {
-        setError(json.error ?? 'Có lỗi xảy ra')
-        return
+      if (!res.ok || !json.success) {
+        throw new Error(json.error || 'Không thể tạo bản khai')
       }
+      toast({ title: 'Đã lưu bản nháp', description: 'Bản khai đã được tạo thành công.' })
       router.push(`/dashboard/personnel/rank-declarations/${json.data.id}`)
-    } catch {
-      setError('Lỗi kết nối. Vui lòng thử lại.')
+    } catch (e: any) {
+      toast({
+        title: 'Tạo bản khai thất bại',
+        description: e?.message ?? 'Vui lòng thử lại.',
+        variant: 'destructive',
+      })
     } finally {
       setSubmitting(false)
     }
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-6 space-y-4">
-      <div className="flex items-center gap-3">
-        <Button variant="ghost" size="icon" onClick={() => router.back()}>
-          <ArrowLeft className="h-4 w-4" />
-        </Button>
-        <div>
-          <h1 className="text-xl font-bold flex items-center gap-2">
-            <Shield className="h-5 w-5" />
-            Tạo bản khai quân hàm
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            Khai báo một sự kiện lên/thay đổi quân hàm
-          </p>
-        </div>
-      </div>
+    <div className="space-y-6">
+      <ModuleHero
+        moduleId="personnel"
+        supra="M02 · Nhân sự"
+        title="Tạo bản khai quân hàm"
+        subtitle="Khai báo một sự kiện thăng/biến động quân hàm cho cán bộ, quân nhân"
+        icon={Award}
+        controls={
+          <Button
+            variant="outline" size="sm" onClick={() => router.back()}
+            className="gap-1.5 border-white/30 bg-white/10 text-white hover:bg-white/20"
+          >
+            <ArrowLeft className="h-4 w-4" /> Quay lại
+          </Button>
+        }
+      />
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <Card>
-          <CardHeader><CardTitle className="text-base">Thông tin cơ bản</CardTitle></CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="col-span-2 space-y-1">
-                <Label>Mã cán bộ / Personnel ID <span className="text-red-500">*</span></Label>
-                <Input
-                  value={form.personnelId}
-                  onChange={(e) => handleChange('personnelId', e.target.value)}
-                  placeholder="ID hoặc mã cán bộ"
-                  required
-                />
+      <form onSubmit={handleSubmit} className="mx-auto max-w-3xl space-y-5">
+        {/* ── Đối tượng khai báo ──────────────────────────────────────────── */}
+        <Card className="border-0 shadow-md">
+          <CardHeader className="border-b border-slate-100 pb-3">
+            <CardTitle className="flex items-center gap-2 text-base text-slate-700">
+              <UserCog className="h-4 w-4 text-blue-600" /> Đối tượng khai báo
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4 pt-4">
+            <div className="space-y-1.5">
+              <Label className="text-slate-600">
+                Cán bộ / quân nhân <span className="text-red-500">*</span>
+              </Label>
+              <PersonnelCombobox value={personnel} onChange={setPersonnel} />
+              {personnel && (
+                <p className="text-xs text-slate-500">
+                  Đơn vị: {personnel.unit?.name ?? '—'}
+                </p>
+              )}
+              {prefilledPersonnelId && !personnel && (
+                <p className="text-xs text-amber-600">
+                  Có gợi ý cán bộ từ liên kết trước — vui lòng tìm và chọn lại để xác nhận.
+                </p>
+              )}
+            </div>
+
+            <div className="flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5">
+              <div>
+                <Label className="text-slate-700">Khai hộ</Label>
+                <p className="text-xs text-slate-500">
+                  Bật khi cán bộ nhân sự khai thay cho người khác
+                </p>
               </div>
+              <Switch
+                checked={form.onBehalf}
+                onCheckedChange={(v) => updateField('onBehalf', v)}
+              />
+            </div>
+          </CardContent>
+        </Card>
 
-              <div className="space-y-1">
-                <Label>Loại quân hàm <span className="text-red-500">*</span></Label>
-                <Select value={form.rankType} onValueChange={(v) => handleChange('rankType', v)}>
+        {/* ── Nội dung quân hàm ───────────────────────────────────────────── */}
+        <Card className="border-0 shadow-md">
+          <CardHeader className="border-b border-slate-100 pb-3">
+            <CardTitle className="flex items-center gap-2 text-base text-slate-700">
+              <Award className="h-4 w-4 text-blue-600" /> Nội dung quân hàm
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4 pt-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="space-y-1.5">
+                <Label className="text-slate-600">
+                  Loại quân hàm <span className="text-red-500">*</span>
+                </Label>
+                <Select value={form.rankType} onValueChange={(v) => updateField('rankType', v as RankType)}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="OFFICER">Sĩ quan</SelectItem>
@@ -165,21 +214,23 @@ export default function CreateRankDeclarationPage() {
                 </Select>
               </div>
 
-              <div className="space-y-1">
-                <Label>Loại sự kiện <span className="text-red-500">*</span></Label>
-                <Select value={form.promotionType} onValueChange={(v) => handleChange('promotionType', v)}>
+              <div className="space-y-1.5">
+                <Label className="text-slate-600">
+                  Loại sự kiện <span className="text-red-500">*</span>
+                </Label>
+                <Select value={form.promotionType} onValueChange={(v) => updateField('promotionType', v)}>
                   <SelectTrigger><SelectValue /></SelectTrigger>
                   <SelectContent>
-                    {PROMOTION_TYPES.map((t) => (
+                    {PROMOTION_TYPE_OPTIONS.map((t) => (
                       <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
 
-              <div className="space-y-1">
-                <Label>Quân hàm trước</Label>
-                <Select value={form.previousRank} onValueChange={(v) => handleChange('previousRank', v)}>
+              <div className="space-y-1.5">
+                <Label className="text-slate-600">Quân hàm trước</Label>
+                <Select value={form.previousRank} onValueChange={(v) => updateField('previousRank', v)}>
                   <SelectTrigger><SelectValue placeholder="Chọn quân hàm" /></SelectTrigger>
                   <SelectContent>
                     {rankOptions.map((r) => (
@@ -189,9 +240,9 @@ export default function CreateRankDeclarationPage() {
                 </Select>
               </div>
 
-              <div className="space-y-1">
-                <Label>Quân hàm mới</Label>
-                <Select value={form.newRank} onValueChange={(v) => handleChange('newRank', v)}>
+              <div className="space-y-1.5">
+                <Label className="text-slate-600">Quân hàm mới</Label>
+                <Select value={form.newRank} onValueChange={(v) => updateField('newRank', v)}>
                   <SelectTrigger><SelectValue placeholder="Chọn quân hàm" /></SelectTrigger>
                   <SelectContent>
                     {rankOptions.map((r) => (
@@ -199,81 +250,93 @@ export default function CreateRankDeclarationPage() {
                     ))}
                   </SelectContent>
                 </Select>
+              </div>
+
+              <div className="space-y-1.5">
+                <Label className="text-slate-600">Chức vụ trước</Label>
+                <Input
+                  value={form.previousPosition}
+                  onChange={(e) => updateField('previousPosition', e.target.value)}
+                  placeholder="Nếu có thay đổi chức vụ"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <Label className="text-slate-600">Chức vụ mới</Label>
+                <Input
+                  value={form.newPosition}
+                  onChange={(e) => updateField('newPosition', e.target.value)}
+                  placeholder="Nếu có thay đổi chức vụ"
+                />
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader><CardTitle className="text-base">Thông tin quyết định</CardTitle></CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-1">
-                <Label>Ngày hiệu lực <span className="text-red-500">*</span></Label>
+        {/* ── Thông tin quyết định ────────────────────────────────────────── */}
+        <Card className="border-0 shadow-md">
+          <CardHeader className="border-b border-slate-100 pb-3">
+            <CardTitle className="flex items-center gap-2 text-base text-slate-700">
+              <FileSignature className="h-4 w-4 text-blue-600" /> Thông tin quyết định
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4 pt-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="space-y-1.5">
+                <Label className="text-slate-600">
+                  Ngày hiệu lực <span className="text-red-500">*</span>
+                </Label>
                 <Input
                   type="date"
                   value={form.effectiveDate}
-                  onChange={(e) => handleChange('effectiveDate', e.target.value)}
+                  onChange={(e) => updateField('effectiveDate', e.target.value)}
                   required
                 />
               </div>
-              <div className="space-y-1">
-                <Label>Số quyết định</Label>
+              <div className="space-y-1.5">
+                <Label className="text-slate-600">Số quyết định</Label>
                 <Input
                   value={form.decisionNumber}
-                  onChange={(e) => handleChange('decisionNumber', e.target.value)}
+                  onChange={(e) => updateField('decisionNumber', e.target.value)}
                   placeholder="VD: 123/QĐ-HVHC"
                 />
               </div>
-              <div className="space-y-1">
-                <Label>Ngày quyết định</Label>
+              <div className="space-y-1.5">
+                <Label className="text-slate-600">Ngày quyết định</Label>
                 <Input
                   type="date"
                   value={form.decisionDate}
-                  onChange={(e) => handleChange('decisionDate', e.target.value)}
-                />
-              </div>
-              <div className="space-y-1">
-                <Label>Chức vụ mới</Label>
-                <Input
-                  value={form.newPosition}
-                  onChange={(e) => handleChange('newPosition', e.target.value)}
-                  placeholder="Nếu có thay đổi chức vụ"
+                  onChange={(e) => updateField('decisionDate', e.target.value)}
                 />
               </div>
             </div>
-            <div className="space-y-1">
-              <Label>Lý do / Căn cứ</Label>
+            <div className="space-y-1.5">
+              <Label className="text-slate-600">Lý do / Căn cứ</Label>
               <Textarea
                 value={form.reason}
-                onChange={(e) => handleChange('reason', e.target.value)}
+                onChange={(e) => updateField('reason', e.target.value)}
                 rows={3}
                 placeholder="Lý do thăng cấp, số nghị quyết căn cứ..."
               />
             </div>
-            <div className="space-y-1">
-              <Label>Ghi chú thêm</Label>
+            <div className="space-y-1.5">
+              <Label className="text-slate-600">Ghi chú thêm</Label>
               <Textarea
                 value={form.notes}
-                onChange={(e) => handleChange('notes', e.target.value)}
+                onChange={(e) => updateField('notes', e.target.value)}
                 rows={2}
               />
             </div>
           </CardContent>
         </Card>
 
-        {error && (
-          <div className="rounded-md bg-red-50 border border-red-200 p-3 text-sm text-red-700">
-            {error}
-          </div>
-        )}
-
-        <div className="flex gap-3 justify-end">
+        {/* ── Sticky action bar ───────────────────────────────────────────── */}
+        <div className="sticky bottom-0 flex justify-end gap-3 rounded-xl border border-slate-200 bg-white/90 p-3 shadow-sm backdrop-blur">
           <Button type="button" variant="outline" onClick={() => router.back()}>
             Hủy
           </Button>
-          <Button type="submit" disabled={submitting}>
-            {submitting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+          <Button type="submit" disabled={submitting} className="gap-1.5 bg-blue-600 hover:bg-blue-700">
+            {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
             Lưu bản nháp
           </Button>
         </div>

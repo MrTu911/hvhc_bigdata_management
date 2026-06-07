@@ -6,6 +6,7 @@ import { DashboardChrome } from '@/components/dashboard/dashboard-chrome';
 import { DashboardSidebarEnhanced } from '@/components/dashboard/sidebar-enhanced';
 import { ForcePasswordChangeGuard } from '@/components/auth/force-password-change-guard';
 import { TranslationProvider } from '@/components/providers/translation-provider';
+import { Toaster } from '@/components/ui/toaster';
 
 export default async function DashboardLayout({
   children,
@@ -35,6 +36,8 @@ export default async function DashboardLayout({
             {children}
           </div>
         </main>
+        {/* Toast viewport dùng chung cho toàn khu dashboard */}
+        <Toaster />
       </div>
     </TranslationProvider>
   );

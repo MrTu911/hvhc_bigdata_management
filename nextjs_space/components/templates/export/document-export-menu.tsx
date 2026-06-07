@@ -69,6 +69,11 @@ interface DocumentExportMenuProps {
   exportEndpoint?: string;
   /** Function code gate hiển thị nút. Mặc định EXPORT_DATA. */
   requiredPermission?: string;
+  /**
+   * Giới hạn danh sách mẫu hiển thị theo code (vd chỉ mẫu quá trình công tác trên
+   * trang cá nhân). Không set → hiển thị mọi mẫu của module tương ứng entityType.
+   */
+  templateCodes?: string[];
 }
 
 export function DocumentExportMenu({
@@ -79,6 +84,7 @@ export function DocumentExportMenu({
   variant = 'outline',
   exportEndpoint,
   requiredPermission = TEMPLATES.EXPORT_DATA,
+  templateCodes,
 }: DocumentExportMenuProps) {
   const { hasPermission, isLoading: permLoading } = usePermissions();
   const [templates, setTemplates] = useState<TemplateRow[] | null>(null);
@@ -96,6 +102,8 @@ export function DocumentExportMenu({
       const res = await fetch(`/api/templates?module=${module}&status=active&limit=100`);
       const json = await res.json();
       const rows: TemplateRow[] = (json.data ?? [])
+        // Lọc theo code nếu trang chỉ muốn 1 nhóm mẫu cụ thể.
+        .filter((t: TemplateRow) => (templateCodes ? templateCodes.includes(t.code) : true))
         // Endpoint riêng tự enforce quyền → không lọc theo rbacCode của template.
         .filter((t: TemplateRow) => (exportEndpoint ? true : hasPermission(t.rbacCode)))
         .map((t: TemplateRow) => ({

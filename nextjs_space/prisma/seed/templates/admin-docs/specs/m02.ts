@@ -246,4 +246,59 @@ export const M02_SPECS: TemplateSpec[] = [
       '{kyLuat}',
     ],
   },
+  {
+    // Bản tự thuật quá trình công tác — phục vụ trang cá nhân /dashboard/personal/my-career.
+    // Dữ liệu lấy từ CareerHistory (không dùng resolver personnel/WorkExperience) qua
+    // route SELF riêng /api/personal/my-career/export (xem career-export.service.ts).
+    code: 'TPL_M02_QTCT_CANHAN',
+    name: 'Bản quá trình công tác cá nhân',
+    description: 'Bản tự thuật quá trình công tác của cá nhân (gắn dữ liệu lịch sử công tác CareerHistory).',
+    docType: 'BC',
+    category: 'NHAN_SU',
+    module: 'M02',
+    moduleSource: ['M02'],
+    entity: 'personnel',
+    classification: 'INTERNAL',
+    rbacCode: 'EXPORT_DATA',
+    kyHieu: 'BC-HVHC',
+    trichYeu: 'Quá trình công tác của cá nhân',
+    titleOverride: 'BẢN QUÁ TRÌNH CÔNG TÁC',
+    body: [
+      {
+        heading: 'I. THÔNG TIN CÁ NHÂN',
+        paragraphs: [
+          'Họ và tên: {hoTen}',
+          'Cấp bậc: {capBac}          Chức vụ hiện tại: {chucVu}',
+          'Đơn vị hiện tại: {donVi}',
+          'Ngày nhập ngũ: {ngayNhapNgu}          Thâm niên công tác: {thamNien}',
+        ],
+      },
+      {
+        heading: 'II. DIỄN BIẾN QUÁ TRÌNH CÔNG TÁC',
+        loop: {
+          key: 'congTac_list',
+          columns: [
+            { header: 'Từ', field: 'tuNgay', weight: 1, align: 'center' },
+            { header: 'Đến', field: 'denNgay', weight: 1, align: 'center' },
+            { header: 'Sự kiện', field: 'suKien', weight: 2 },
+            { header: 'Chức vụ / Đơn vị / Nội dung', field: 'noiDung', weight: 4 },
+            { header: 'Quyết định', field: 'quyetDinh', weight: 2 },
+          ],
+        },
+      },
+    ],
+    chuKyChucVu: ['NGƯỜI KHAI'],
+    noiNhan: ['- Lưu hồ sơ cán bộ;'],
+    luuBoPhan: 'PCB',
+    placeholders: [
+      ...HEADER_PH,
+      '{hoTen}',
+      '{capBac}',
+      '{chucVu}',
+      '{donVi}',
+      '{ngayNhapNgu}',
+      '{thamNien}',
+      '{#congTac_list}',
+    ],
+  },
 ];

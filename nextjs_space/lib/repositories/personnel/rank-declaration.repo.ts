@@ -108,35 +108,29 @@ export async function listRankDeclarations(filter: RankDeclarationFilter) {
   const limit = Math.min(100, filter.limit ?? 20)
   const skip = (page - 1) * limit
 
-  const where: Prisma.RankDeclarationWhereInput = {}
+  // baseWhere = mọi điều kiện TRỪ trạng thái → dùng để đếm phân bố theo trạng thái
+  // (KPI hiển thị đầy đủ các trạng thái dù người dùng đang lọc theo 1 trạng thái).
+  const baseWhere: Prisma.RankDeclarationWhereInput = {}
 
   if (filter.personnelId) {
-    where.personnelId = filter.personnelId
-  }
-
-  if (filter.declarationStatus) {
-    if (Array.isArray(filter.declarationStatus)) {
-      where.declarationStatus = { in: filter.declarationStatus }
-    } else {
-      where.declarationStatus = filter.declarationStatus
-    }
+    baseWhere.personnelId = filter.personnelId
   }
 
   if (filter.rankType) {
-    where.rankType = filter.rankType
+    baseWhere.rankType = filter.rankType
   }
 
   if (filter.declaredBy) {
-    where.declaredBy = filter.declaredBy
+    baseWhere.declaredBy = filter.declaredBy
   }
 
   if (filter.unitId) {
-    where.personnel = { unitId: filter.unitId }
+    baseWhere.personnel = { unitId: filter.unitId }
   }
 
   if (filter.keyword) {
-    where.personnel = {
-      ...((where.personnel as object) ?? {}),
+    baseWhere.personnel = {
+      ...((baseWhere.personnel as object) ?? {}),
       OR: [
         { fullName: { contains: filter.keyword, mode: 'insensitive' } },
         { personnelCode: { contains: filter.keyword, mode: 'insensitive' } },
@@ -144,7 +138,14 @@ export async function listRankDeclarations(filter: RankDeclarationFilter) {
     }
   }
 
-  const [total, items] = await Promise.all([
+  const where: Prisma.RankDeclarationWhereInput = { ...baseWhere }
+  if (filter.declarationStatus) {
+    where.declarationStatus = Array.isArray(filter.declarationStatus)
+      ? { in: filter.declarationStatus }
+      : filter.declarationStatus
+  }
+
+  const [total, items, grouped] = await Promise.all([
     db.rankDeclaration.count({ where }),
     db.rankDeclaration.findMany({
       where,
@@ -153,9 +154,30 @@ export async function listRankDeclarations(filter: RankDeclarationFilter) {
       skip,
       take: limit,
     }),
+    db.rankDeclaration.groupBy({
+      by: ['declarationStatus'],
+      where: baseWhere,
+      _count: { _all: true },
+    }),
   ])
 
-  return { items, total, page, limit, totalPages: Math.ceil(total / limit) }
+  const statusCounts: Record<string, number> = {}
+  let totalAllStatuses = 0
+  for (const row of grouped) {
+    const count = row._count._all
+    statusCounts[row.declarationStatus] = count
+    totalAllStatuses += count
+  }
+
+  return {
+    items,
+    total,
+    page,
+    limit,
+    totalPages: Math.ceil(total / limit),
+    statusCounts,
+    totalAllStatuses,
+  }
 }
 
 export async function updateRankDeclaration(
