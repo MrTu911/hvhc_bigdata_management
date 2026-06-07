@@ -1,9 +1,13 @@
 /**
  * SEED Danh mục môn học thật — Học viện Hậu cần (HVHC)
  *
- * - Reset dữ liệu học tập demo (điểm + enrollment + lớp học phần)
- * - Xóa danh mục môn cũ trong HeSoMonHoc và nạp lại từ dữ liệu thật
+ * - Nạp lại danh mục môn học thật vào HeSoMonHoc (độc lập với dữ liệu học tập)
  * - Gán mỗi môn về Khoa + Bộ môn (FK tới Unit) theo cây tổ chức HVHC
+ *
+ * ⚠️ Reset dữ liệu học tập (ClassSection/ClassEnrollment/KetQuaHocTap/ScoreHistory…)
+ *    là OPT-IN: chỉ chạy khi đặt env RESET_M10_LEARNING=true. Mặc định KHÔNG reset
+ *    để không phá dữ liệu seed ở step 51-53 khi file này chạy ở step 54 (orchestrator).
+ *    Danh mục môn (HeSoMonHoc) không có FK bắt buộc tới các bảng học tập đó.
  *
  * Nguồn dữ liệu: prisma/seed/data/mon_hoc_hvhc.json
  *   (sinh từ file Excel gốc bằng scripts/build_mon_hoc_data.py)
@@ -240,7 +244,12 @@ async function main() {
   console.log('='.repeat(60));
 
   await ensureOrgUnits();
-  await resetDemoLearningData();
+  // Reset dữ liệu học tập là OPT-IN — mặc định bỏ qua để không phá seed step 51-53.
+  if (process.env.RESET_M10_LEARNING === 'true') {
+    await resetDemoLearningData();
+  } else {
+    console.log('\n⏭️  Bỏ qua reset dữ liệu học tập (đặt RESET_M10_LEARNING=true nếu thực sự muốn xoá).');
+  }
   await clearOldSubjects();
   await seedSubjects();
 

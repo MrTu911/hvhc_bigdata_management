@@ -42,6 +42,43 @@ export const translations = {
     'nav.myPublications':     'Công bố của tôi',
     'nav.scientificCV':       'Lý lịch Khoa học',
 
+    // ===== IA v9 — Nhóm cấp 1 mới + nhãn sub-section (cấp 2) =====
+    'nav.scienceTech':              'CSDL Khoa học & Công nghệ',
+    'nav.bigdataInfra':             'Khai thác & Hạ tầng Dữ liệu',
+    // Cá nhân
+    'nav.personalAccountGroup':     'Hồ sơ & Tài khoản',
+    'nav.personalRecordsGroup':     'Hồ sơ cán bộ của tôi',
+    // Nhân sự
+    'nav.personnelOverviewGroup':   'Tổng quan & Danh sách',
+    'nav.personnelStaffGroup':      'Cán bộ & Quân nhân',
+    'nav.personnelRankGroup':       'Quân hàm & Thăng tiến',
+    'nav.personnelPlanningGroup':   'Quy hoạch & Hưu trí',
+    'nav.personnelInputGroup':      'Nhập liệu',
+    // Đảng viên
+    'nav.partyOverviewGroup':       'Tổng quan & Tổ chức',
+    'nav.partyDevelopmentGroup':    'Phát triển Đảng',
+    'nav.partyActivityGroup':       'Sinh hoạt Đảng',
+    'nav.partyEvalGroup':           'Đánh giá & Khen-Kỷ luật',
+    'nav.partyTransferGroup':       'Chuyển sinh hoạt & Kiểm tra',
+    'nav.partyMemberGroup':         'Hồ sơ Đảng viên',
+    // Giáo dục
+    'nav.educationExamGroup':       'Khảo thí & Học liệu',
+    // Khoa học & Công nghệ
+    'nav.researchSubGroup':         'Nghiên cứu & Công bố (M09)',
+    'nav.scienceActivitiesGroup':   'Hoạt động & Đề tài KH',
+    'nav.scienceResourceGroup':     'Nhà KH & Hội đồng',
+    'nav.scienceFinanceGroup':      'Tài chính & Kinh phí KH',
+    'nav.scienceDataGroup':         'Dữ liệu, Thư viện & Báo cáo KH',
+    // Phân tích & AI
+    'nav.aiAssistantGroup':         'Trợ lý AI',
+    'nav.mlGroup':                  'Machine Learning',
+    // Quản trị
+    'nav.adminAccountGroup':        'Tài khoản & Phân quyền',
+    'nav.adminOrgGroup':            'Tổ chức Đơn vị',
+    'nav.adminDataGroup':           'Dữ liệu chính & Liên kết',
+    'nav.adminInfraGroup':          'Hạ tầng & Tích hợp',
+    'nav.adminMonitorGroup':        'Giám sát & Kiểm toán',
+
     // 5. CSDL Nhân sự (alias giữ nguyên)
 
     // 3. CSDL Nhân sự
@@ -621,6 +658,43 @@ export const translations = {
     'nav.myResearch':         'My Research Projects',
     'nav.myPublications':     'My Publications',
     'nav.scientificCV':       'Scientific CV',
+
+    // ===== IA v9 — new top-level groups + sub-section (level 2) labels =====
+    'nav.scienceTech':              'Science & Technology DB',
+    'nav.bigdataInfra':             'Big Data & Infrastructure',
+    // Personal
+    'nav.personalAccountGroup':     'Profile & Account',
+    'nav.personalRecordsGroup':     'My Staff Records',
+    // Personnel
+    'nav.personnelOverviewGroup':   'Overview & Directory',
+    'nav.personnelStaffGroup':      'Officers & Soldiers',
+    'nav.personnelRankGroup':       'Rank & Promotion',
+    'nav.personnelPlanningGroup':   'Planning & Retirement',
+    'nav.personnelInputGroup':      'Data Entry',
+    // Party
+    'nav.partyOverviewGroup':       'Overview & Organization',
+    'nav.partyDevelopmentGroup':    'Party Development',
+    'nav.partyActivityGroup':       'Party Activities',
+    'nav.partyEvalGroup':           'Evaluation & Discipline',
+    'nav.partyTransferGroup':       'Transfer & Inspection',
+    'nav.partyMemberGroup':         'Member Records',
+    // Education
+    'nav.educationExamGroup':       'Examination & Materials',
+    // Science & Technology
+    'nav.researchSubGroup':         'Research & Publications (M09)',
+    'nav.scienceActivitiesGroup':   'Science Activities & Projects',
+    'nav.scienceResourceGroup':     'Scientists & Councils',
+    'nav.scienceFinanceGroup':      'Science Finance & Budget',
+    'nav.scienceDataGroup':         'Science Data, Library & Reports',
+    // Analytics & AI
+    'nav.aiAssistantGroup':         'AI Assistants',
+    'nav.mlGroup':                  'Machine Learning',
+    // Administration
+    'nav.adminAccountGroup':        'Accounts & RBAC',
+    'nav.adminOrgGroup':            'Organization',
+    'nav.adminDataGroup':           'Master Data & Linking',
+    'nav.adminInfraGroup':          'Infrastructure & Integration',
+    'nav.adminMonitorGroup':        'Monitoring & Audit',
     // 7. Merged management group
     'nav.policyWelfareAwards': 'Policy, Insurance & Awards',
 

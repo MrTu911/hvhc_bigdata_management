@@ -22,7 +22,7 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
 import { useLanguage } from '@/components/providers/language-provider';
-import { previewSidebar, MenuGroup } from '@/lib/menu-config';
+import { previewSidebar, flattenMenuItems, MenuGroup } from '@/lib/menu-config';
 import {
   Eye, LayoutDashboard, ChevronDown, ChevronUp, Users,
   Shield, AlertCircle, ListChecks,
@@ -57,16 +57,23 @@ const SCOPE_CONFIG: Record<string, { label: string; badgeClass: string }> = {
 const GROUP_ACCENTS: Record<string, { dot: string; text: string; bg: string }> = {
   'nav.overview':          { dot: 'bg-violet-500', text: 'text-violet-700',  bg: 'bg-violet-50' },
   'nav.personalProfile':   { dot: 'bg-cyan-500',   text: 'text-cyan-700',    bg: 'bg-cyan-50' },
+  'nav.personalSpace':     { dot: 'bg-cyan-500',   text: 'text-cyan-700',    bg: 'bg-cyan-50' },
   'nav.personnelDatabase': { dot: 'bg-blue-500',   text: 'text-blue-700',    bg: 'bg-blue-50' },
   'nav.partyDatabase':     { dot: 'bg-red-500',    text: 'text-red-700',     bg: 'bg-red-50' },
   'nav.policyDatabase':    { dot: 'bg-orange-500', text: 'text-orange-700',  bg: 'bg-orange-50' },
   'nav.insuranceDatabase': { dot: 'bg-teal-500',   text: 'text-teal-700',    bg: 'bg-teal-50' },
   'nav.awardsDatabase':    { dot: 'bg-amber-500',  text: 'text-amber-700',   bg: 'bg-amber-50' },
   'nav.educationModule':   { dot: 'bg-emerald-500',text: 'text-emerald-700', bg: 'bg-emerald-50' },
+  'nav.educationDatabase': { dot: 'bg-emerald-500',text: 'text-emerald-700', bg: 'bg-emerald-50' },
   'nav.researchDatabase':  { dot: 'bg-cyan-500',   text: 'text-cyan-700',    bg: 'bg-cyan-50' },
   'nav.scienceDatabase':   { dot: 'bg-violet-500', text: 'text-violet-700',  bg: 'bg-violet-50' },
+  'nav.scienceTech':       { dot: 'bg-violet-500', text: 'text-violet-700',  bg: 'bg-violet-50' },
+  'nav.workflowDocuments': { dot: 'bg-violet-400', text: 'text-violet-600',  bg: 'bg-violet-50' },
+  'nav.templateExport':    { dot: 'bg-blue-400',   text: 'text-blue-600',    bg: 'bg-blue-50' },
+  'nav.analyticsAI':       { dot: 'bg-indigo-500', text: 'text-indigo-700',  bg: 'bg-indigo-50' },
   'nav.analyticsReports':  { dot: 'bg-indigo-500', text: 'text-indigo-700',  bg: 'bg-indigo-50' },
   'nav.dataManagement':    { dot: 'bg-slate-500',  text: 'text-slate-700',   bg: 'bg-slate-100' },
+  'nav.bigdataInfra':      { dot: 'bg-slate-600',  text: 'text-slate-700',   bg: 'bg-slate-100' },
   'nav.systemAdmin':       { dot: 'bg-rose-500',   text: 'text-rose-700',    bg: 'bg-rose-50' },
   'nav.settings':          { dot: 'bg-gray-400',   text: 'text-gray-600',    bg: 'bg-gray-100' },
 };
@@ -142,8 +149,8 @@ export function SidebarPreviewTab({ positions }: SidebarPreviewTabProps) {
     });
   }, []);
 
-  // Thống kê tổng
-  const totalItems = previewGroups.reduce((sum, g) => sum + g.items.length, 0);
+  // Thống kê tổng — đếm item lá (đệ quy qua sub-section IA v9)
+  const totalItems = previewGroups.reduce((sum, g) => sum + flattenMenuItems(g.items).length, 0);
   const scopeMeta = selectedPosition
     ? SCOPE_CONFIG[selectedPosition.positionScope] ?? SCOPE_CONFIG.UNIT
     : null;
@@ -313,6 +320,7 @@ export function SidebarPreviewTab({ positions }: SidebarPreviewTabProps) {
                       dot: 'bg-slate-400', text: 'text-slate-700', bg: 'bg-slate-50',
                     };
                     const isExpanded = expandedGroups.has(group.title);
+                    const leafItems = flattenMenuItems(group.items);
 
                     return (
                       <div key={group.title} className="rounded-lg border border-slate-200 overflow-hidden">
@@ -332,7 +340,7 @@ export function SidebarPreviewTab({ positions }: SidebarPreviewTabProps) {
                               {t(group.title)}
                             </span>
                             <Badge variant="secondary" className="text-[10px] px-1.5 py-0">
-                              {group.items.length}
+                              {leafItems.length}
                             </Badge>
                           </div>
                           {isExpanded
@@ -344,7 +352,7 @@ export function SidebarPreviewTab({ positions }: SidebarPreviewTabProps) {
                         {/* Group items */}
                         {isExpanded && (
                           <div className="divide-y divide-slate-100">
-                            {group.items.map((item) => (
+                            {leafItems.map((item) => (
                               <div
                                 key={item.href ?? item.name}
                                 className="flex items-center gap-3 px-4 py-2.5 bg-white hover:bg-slate-50 transition-colors"

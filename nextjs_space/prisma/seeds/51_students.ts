@@ -6,8 +6,10 @@
  *
  * Tạo:
  *   - HocVien: học viên (quân sự + dân sự)
- *   - ClassEnrollment: đăng ký vào lớp
+ *   - KetQuaHocTap: điểm học tập chính thức (nguồn cho GPA/transcript/AI/dashboard)
  *   - Liên kết HocVien ↔ User account
+ *
+ * Ghi chú: ClassEnrollment được seed ở step 52 (cần ClassSection có trước).
  *
  * Chạy độc lập:
  *   npx tsx --require dotenv/config prisma/seeds/51_students.ts
@@ -21,7 +23,7 @@ const SEED_DIR = path.resolve(__dirname, '../seed')
 export async function seedStudents() {
   console.log('\n[51] Seeding Students / HocVien (M10)...')
 
-  for (const file of ['seed_hocvien_v2.ts', 'seed_link_hocvien_users.ts']) {
+  for (const file of ['seed_hocvien_v2.ts', 'seed_ketquahoctap.ts', 'seed_link_hocvien_users.ts']) {
     console.log(`  → ${file}`)
     try {
       execSync(`npx tsx --require dotenv/config "${path.join(SEED_DIR, file)}"`, {

@@ -18,7 +18,7 @@ import { useLanguage } from '@/components/providers/language-provider';
 import { useMemo, useState, useEffect, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import { usePermissions } from '@/hooks/use-permissions';
-import { MENU_CONFIG, filterMenu, MenuItem } from '@/lib/menu-config';
+import { MENU_CONFIG, filterMenu, flattenMenuItems, MenuItem } from '@/lib/menu-config';
 import {
   ChevronLeft,
   ChevronRight,
@@ -34,8 +34,28 @@ interface NavItem extends MenuItem {}
 // Auto-collapse timeout in milliseconds (30 seconds)
 const IDLE_TIMEOUT = 30000;
 
-// LocalStorage key for collapsed groups
+// LocalStorage key for collapsed groups (gồm cả group cấp 1 và sub-section cấp 2)
 const COLLAPSED_GROUPS_KEY = 'sidebar_collapsed_groups';
+
+// Một item là sub-section (nhóm con cấp 2) khi có children và không có href trực tiếp.
+function isSubSection(item: MenuItem): boolean {
+  return Array.isArray(item.children) && item.children.length > 0;
+}
+
+/**
+ * Tìm đường dẫn các sub-section chứa item đang active (href === pathname).
+ * Trả về mảng tên sub-section trên đường đi, hoặc null nếu không thuộc group này.
+ */
+function findActiveSubsectionPath(items: MenuItem[], pathname: string): string[] | null {
+  for (const item of items) {
+    if (item.href === pathname) return [];
+    if (item.children && item.children.length > 0) {
+      const sub = findActiveSubsectionPath(item.children, pathname);
+      if (sub) return [item.name, ...sub];
+    }
+  }
+  return null;
+}
 
 export function DashboardSidebarEnhanced() {
   const pathname = usePathname();
@@ -103,21 +123,25 @@ export function DashboardSidebarEnhanced() {
     setIsMobileOpen(false);
   }, [pathname]);
   
-  // Auto-expand group containing current page
+  // Auto-expand group + sub-section containing current page (đệ quy children)
   useEffect(() => {
-    if (pathname) {
-      for (const group of MENU_CONFIG) {
-        const hasActiveItem = group.items.some(item => item.href === pathname);
-        if (hasActiveItem && collapsedGroups.has(group.title)) {
-          setCollapsedGroups(prev => {
-            const newSet = new Set(prev);
-            newSet.delete(group.title);
-            saveCollapsedGroups(newSet);
-            return newSet;
-          });
-          break;
-        }
+    if (!pathname) return;
+    for (const group of MENU_CONFIG) {
+      const subPath = findActiveSubsectionPath(group.items, pathname);
+      if (subPath === null) continue;
+
+      // Các key cần mở: group cấp 1 + tất cả sub-section trên đường đi
+      const keysToOpen = [group.title, ...subPath];
+      const needOpen = keysToOpen.some(k => collapsedGroups.has(k));
+      if (needOpen) {
+        setCollapsedGroups(prev => {
+          const newSet = new Set(prev);
+          keysToOpen.forEach(k => newSet.delete(k));
+          saveCollapsedGroups(newSet);
+          return newSet;
+        });
       }
+      break;
     }
   }, [pathname, saveCollapsedGroups]);
 
@@ -214,7 +238,7 @@ export function DashboardSidebarEnhanced() {
     saveCollapsedGroups(allGroups);
   }, [filteredNavigationGroups, saveCollapsedGroups]);
 
-  const renderNavItem = (item: NavItem) => {
+  const renderNavItem = (item: NavItem, indented: boolean = false) => {
     const Icon = item.icon;
     const isActive = pathname === item.href;
 
@@ -226,10 +250,12 @@ export function DashboardSidebarEnhanced() {
           'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200',
           'hover:scale-[1.02]',
           isActive
-            ? item.gradient 
+            ? item.gradient
               ? `bg-gradient-to-r ${item.gradient} text-white shadow-lg shadow-primary/20`
               : 'bg-primary text-primary-foreground shadow-lg'
             : 'text-foreground hover:bg-gradient-to-r hover:from-primary/10 hover:to-primary/5',
+          // Item nằm trong sub-section: thụt lề nhẹ để thấy phân cấp
+          !isCollapsed && indented && 'ml-2.5 pl-2 border-l border-border/40',
           isCollapsed && 'justify-center px-2'
         )}
         title={isCollapsed ? t(item.name) : undefined}
@@ -265,7 +291,61 @@ export function DashboardSidebarEnhanced() {
       </Link>
     );
   };
-  
+
+  // Render một sub-section (nhóm con cấp 2): header thu/mở + danh sách item lá
+  const renderSubSection = (sub: NavItem) => {
+    const SubIcon = sub.icon;
+    const isSubCollapsed = collapsedGroups.has(sub.name);
+    const children = sub.children ?? [];
+
+    // Sidebar thu gọn (icon-only): bỏ header, render phẳng các item lá
+    if (isCollapsed) {
+      return (
+        <div key={sub.name} className="space-y-1">
+          {flattenMenuItems(children).map(leaf => renderNavItem(leaf))}
+        </div>
+      );
+    }
+
+    return (
+      <div key={sub.name} className="space-y-1">
+        <button
+          onClick={() => toggleGroup(sub.name)}
+          className="w-full flex items-center justify-between px-2.5 py-1 rounded-md hover:bg-muted/50 transition-colors group/sub"
+        >
+          <div className="flex items-center gap-2 min-w-0">
+            <SubIcon className="h-3.5 w-3.5 text-muted-foreground/70 flex-shrink-0" />
+            <span className={cn(
+              'text-[11px] font-semibold truncate',
+              isSubCollapsed ? 'text-muted-foreground/50' : 'text-muted-foreground'
+            )}>
+              {t(sub.name)}
+            </span>
+          </div>
+          <div className="flex items-center gap-1 flex-shrink-0">
+            <span className="text-[9px] text-muted-foreground/40 opacity-0 group-hover/sub:opacity-100">
+              {children.length}
+            </span>
+            {isSubCollapsed
+              ? <ChevronDown className="h-3 w-3 text-muted-foreground/40" />
+              : <ChevronUp className="h-3 w-3 text-muted-foreground/40" />}
+          </div>
+        </button>
+        <div className={cn(
+          'space-y-1 overflow-hidden transition-all duration-200',
+          isSubCollapsed ? 'max-h-0 opacity-0' : 'max-h-[2000px] opacity-100'
+        )}>
+          {children.map(child => renderNavItem(child, true))}
+        </div>
+      </div>
+    );
+  };
+
+  // Dispatcher: sub-section → accordion con; item lá → link
+  const renderMenuItem = (item: NavItem) => (
+    isSubSection(item) ? renderSubSection(item) : renderNavItem(item)
+  );
+
   // Color accent per group
   const GROUP_ACCENTS: Record<string, { dot: string; text: string; bg: string }> = {
     // Tổng quan
@@ -291,6 +371,12 @@ export function DashboardSidebarEnhanced() {
     // Nghiên cứu
     'nav.researchDatabase':       { dot: 'bg-cyan-500',    text: 'text-cyan-600',    bg: 'hover:bg-cyan-50/60' },
     'nav.scienceDatabase':        { dot: 'bg-violet-500',  text: 'text-violet-600',  bg: 'hover:bg-violet-50/60' },
+    // IA v9 — nhóm cấp 1 mới
+    'nav.educationDatabase':      { dot: 'bg-emerald-500', text: 'text-emerald-600', bg: 'hover:bg-emerald-50/60' },
+    'nav.scienceTech':            { dot: 'bg-violet-500',  text: 'text-violet-600',  bg: 'hover:bg-violet-50/60' },
+    'nav.analyticsAI':            { dot: 'bg-indigo-500',  text: 'text-indigo-600',  bg: 'hover:bg-indigo-50/60' },
+    'nav.workflowDocuments':      { dot: 'bg-violet-400',  text: 'text-violet-500',  bg: 'hover:bg-violet-50/60' },
+    'nav.bigdataInfra':           { dot: 'bg-slate-600',   text: 'text-slate-700',   bg: 'hover:bg-slate-100/60' },
     // Mẫu biểu & Xuất
     'nav.templateExport':         { dot: 'bg-blue-400',    text: 'text-blue-500',    bg: 'hover:bg-blue-50/60' },
     // AI & Phân tích
@@ -309,6 +395,8 @@ export function DashboardSidebarEnhanced() {
   const renderGroupHeader = (group: { title: string; items: MenuItem[] }, isMobile: boolean = false) => {
     const isGroupCollapsed = collapsedGroups.has(group.title);
     const accent = GROUP_ACCENTS[group.title] ?? { dot: 'bg-slate-400', text: 'text-slate-500', bg: 'hover:bg-slate-50/60' };
+    // Đếm số mục thực (item lá), không tính sub-section header
+    const leafCount = flattenMenuItems(group.items).length;
 
     // Khi sidebar thu gọn, không hiển thị header
     if (isCollapsed && !isMobile) {
@@ -340,7 +428,7 @@ export function DashboardSidebarEnhanced() {
               ? 'opacity-0 group-hover:opacity-100 bg-muted text-muted-foreground'
               : `opacity-0 group-hover:opacity-100 ${accent.text} bg-current/10`
           )}>
-            {group.items.length}
+            {leafCount}
           </span>
           {isGroupCollapsed ? (
             <ChevronDown className={cn('h-3 w-3 transition-colors', isGroupCollapsed ? 'text-muted-foreground/40' : accent.text)} />
@@ -415,7 +503,7 @@ export function DashboardSidebarEnhanced() {
                     isGroupCollapsed ? 'max-h-0 opacity-0' : 'max-h-[2000px] opacity-100'
                   )}
                 >
-                  {group.items.map(item => renderNavItem(item))}
+                  {group.items.map(item => renderMenuItem(item))}
                 </div>
               </div>
             );
@@ -485,7 +573,7 @@ export function DashboardSidebarEnhanced() {
                         : 'max-h-[2000px] opacity-100'
                   )}
                 >
-                  {group.items.map(item => renderNavItem(item))}
+                  {group.items.map(item => renderMenuItem(item))}
                 </div>
               </div>
             );

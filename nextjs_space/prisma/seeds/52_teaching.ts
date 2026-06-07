@@ -10,6 +10,9 @@
  *   - TrainingSession: buổi học thực tế
  *   - SessionAttendance: điểm danh
  *   - TeachingStatistics: thống kê giảng dạy
+ *   - ClassEnrollment: ghi danh học viên vào lớp học phần + điểm
+ *     (chạy SAU seed_teaching_data.ts vì cần ClassSection, và TRƯỚC step 53
+ *      gpa_history vì ScoreHistory/StudentGpaHistory đọc ClassEnrollment)
  *
  * Chạy độc lập:
  *   npx tsx --require dotenv/config prisma/seeds/52_teaching.ts
@@ -23,7 +26,7 @@ const SEED_DIR = path.resolve(__dirname, '../seed')
 export async function seedTeaching() {
   console.log('\n[52] Seeding Teaching Data (M10)...')
 
-  for (const file of ['seed_teaching_data.ts', 'seed_teaching_statistics.ts', 'seed_m10_learning_materials.ts']) {
+  for (const file of ['seed_teaching_data.ts', 'seed_class_enrollments.ts', 'seed_teaching_statistics.ts', 'seed_m10_learning_materials.ts']) {
     console.log(`  → ${file}`)
     try {
       execSync(`npx tsx --require dotenv/config "${path.join(SEED_DIR, file)}"`, {

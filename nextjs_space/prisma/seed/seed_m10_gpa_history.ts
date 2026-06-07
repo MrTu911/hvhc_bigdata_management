@@ -92,18 +92,19 @@ async function main() {
     for (let s = startSemIdx; s < GPA_SEMESTER_SEQUENCE.length; s++) {
       const sem = GPA_SEMESTER_SEQUENCE[s];
 
-      // StudentGpaHistory chưa được generate vào Prisma client, dùng raw SQL
-      // (chạy `npx prisma generate` sau khi seed nếu muốn dùng ORM)
-      const existingRows = await prisma.$queryRaw<Array<{ id: string; total_credits_accumulated: number }>>`
-        SELECT id, total_credits_accumulated
-        FROM student_gpa_histories
-        WHERE hoc_vien_id = ${hv.id}
-          AND academic_year = ${sem.academicYear}
-          AND semester_code = ${sem.semesterCode}
-        LIMIT 1
-      `;
-      if (existingRows.length > 0) {
-        accumulatedCredits = existingRows[0].total_credits_accumulated ?? accumulatedCredits;
+      // Idempotent: bỏ qua nếu snapshot kỳ này đã tồn tại (giữ luỹ kế tín chỉ).
+      const existingRow = await prisma.studentGpaHistory.findUnique({
+        where: {
+          hocVienId_academicYear_semesterCode: {
+            hocVienId: hv.id,
+            academicYear: sem.academicYear,
+            semesterCode: sem.semesterCode,
+          },
+        },
+        select: { totalCreditsAccumulated: true },
+      });
+      if (existingRow) {
+        accumulatedCredits = existingRow.totalCreditsAccumulated ?? accumulatedCredits;
         continue;
       }
 
@@ -129,22 +130,18 @@ async function main() {
         academicStatus = 'SUSPENDED';
       }
 
-      const newId = `sgpa_${Date.now()}_${i}_${s}`;
-      const now = new Date();
-      await prisma.$executeRaw`
-        INSERT INTO student_gpa_histories (
-          id, hoc_vien_id, academic_year, semester_code,
-          semester_gpa, cumulative_gpa, credits_earned,
-          total_credits_accumulated, academic_status,
-          built_at, created_at, updated_at
-        ) VALUES (
-          ${newId}, ${hv.id}, ${sem.academicYear}, ${sem.semesterCode},
-          ${semesterGpa}, ${cumulativeGpaNow}, ${creditsThisSem},
-          ${accumulatedCredits}, ${academicStatus}::"AcademicPerformanceStatus",
-          ${now}, ${now}, ${now}
-        )
-        ON CONFLICT (hoc_vien_id, academic_year, semester_code) DO NOTHING
-      `;
+      await prisma.studentGpaHistory.create({
+        data: {
+          hocVienId: hv.id,
+          academicYear: sem.academicYear,
+          semesterCode: sem.semesterCode,
+          semesterGpa,
+          cumulativeGpa: cumulativeGpaNow,
+          creditsEarned: creditsThisSem,
+          totalCreditsAccumulated: accumulatedCredits,
+          academicStatus,
+        },
+      });
       gpaCreated++;
     }
   }
@@ -408,11 +405,8 @@ async function main() {
 
   // ─── Summary ──────────────────────────────────────────────────────────────
   console.log('📊 TỔNG KẾT:');
-  const gpaCountRows = await prisma.$queryRaw<Array<{ count: bigint }>>`
-    SELECT COUNT(*)::bigint AS count FROM student_gpa_histories
-  `;
-  const gpaCount = Number(gpaCountRows[0]?.count ?? 0);
-  const [scoreHistCount, repoCount] = await Promise.all([
+  const [gpaCount, scoreHistCount, repoCount] = await Promise.all([
+    prisma.studentGpaHistory.count(),
     prisma.scoreHistory.count(),
     prisma.academicRepositoryItem.count(),
   ]);

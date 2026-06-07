@@ -28,6 +28,7 @@ export async function seedExamsAndGrades() {
   for (const file of [
     'seed_m10_exam_data.ts',
     'seed_m10_lab_data.ts',
+    'seed_equipment_maintenance.ts', // bảo trì thiết bị (cần LabEquipment từ lab_data)
     'seed_m10_gpa_history.ts',
     'seed_missing_grades.ts',
     'seed_exams_demo.ts',
