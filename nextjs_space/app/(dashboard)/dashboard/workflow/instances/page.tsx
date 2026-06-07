@@ -5,41 +5,26 @@
  * Route: /dashboard/workflow/instances
  *
  * Dành cho quản lý: xem tất cả workflow instances trong phạm vi đơn vị mình.
- * Filter theo: status, template, entity type, assignee, date range.
- * Bulk action: không (Phase 2 chỉ view + navigate to detail).
+ * Filter theo: status, keyword. Pagination. View-only + navigate to detail.
  */
 
 import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from '@/components/ui/table';
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from '@/components/ui/use-toast';
 import { EmptyState } from '@/components/ui/empty-state';
+import { ModuleHero } from '@/components/ui/enhanced-data-card';
 import { cn } from '@/lib/utils';
 import {
-  RefreshCw,
-  Search,
-  ExternalLink,
-  Clock,
-  AlertCircle,
-  Layers,
+  RefreshCw, Search, ChevronRight, Clock, AlertCircle, AlertTriangle, Layers,
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -84,21 +69,21 @@ const STATUS_OPTIONS = [
 ];
 
 const STATUS_BADGE: Record<string, { label: string; className: string }> = {
-  PENDING:     { label: 'Chờ xử lý',  className: 'bg-blue-100 text-blue-700' },
-  IN_PROGRESS: { label: 'Đang xử lý', className: 'bg-indigo-100 text-indigo-700' },
-  APPROVED:    { label: 'Đã duyệt',   className: 'bg-green-100 text-green-700' },
-  REJECTED:    { label: 'Từ chối',    className: 'bg-red-100 text-red-700' },
-  RETURNED:    { label: 'Trả lại',    className: 'bg-amber-100 text-amber-700' },
-  CANCELLED:   { label: 'Đã hủy',     className: 'bg-gray-100 text-gray-500' },
-  EXPIRED:     { label: 'Hết hạn',    className: 'bg-orange-100 text-orange-700' },
-  FAILED:      { label: 'Lỗi',        className: 'bg-red-100 text-red-700' },
+  PENDING:     { label: 'Chờ xử lý',  className: 'bg-blue-50 text-blue-700 border-blue-200' },
+  IN_PROGRESS: { label: 'Đang xử lý', className: 'bg-indigo-50 text-indigo-700 border-indigo-200' },
+  APPROVED:    { label: 'Đã duyệt',   className: 'bg-green-50 text-green-700 border-green-200' },
+  REJECTED:    { label: 'Từ chối',    className: 'bg-red-50 text-red-700 border-red-200' },
+  RETURNED:    { label: 'Trả lại',    className: 'bg-amber-50 text-amber-700 border-amber-200' },
+  CANCELLED:   { label: 'Đã hủy',     className: 'bg-slate-50 text-slate-500 border-slate-200' },
+  EXPIRED:     { label: 'Hết hạn',    className: 'bg-orange-50 text-orange-700 border-orange-200' },
+  FAILED:      { label: 'Lỗi',        className: 'bg-red-50 text-red-700 border-red-200' },
 };
 
-const PRIORITY_LABELS: Record<number, { label: string; className: string }> = {
-  3: { label: 'Khẩn cấp', className: 'text-red-600 font-semibold' },
-  2: { label: 'Cao',      className: 'text-amber-600' },
-  1: { label: 'TB',       className: 'text-blue-600' },
-  0: { label: 'BT',       className: 'text-muted-foreground' },
+const PRIORITY_META: Record<number, { label: string; dot: string; text: string }> = {
+  3: { label: 'Khẩn cấp', dot: 'bg-red-500',   text: 'text-red-600 font-semibold' },
+  2: { label: 'Cao',      dot: 'bg-amber-500', text: 'text-amber-600' },
+  1: { label: 'TB',       dot: 'bg-blue-500',  text: 'text-blue-600' },
+  0: { label: 'BT',       dot: 'bg-slate-400', text: 'text-slate-500' },
 };
 
 function formatDate(dateStr: string | null): string {
@@ -172,68 +157,62 @@ export default function WorkflowInstancesPage() {
   const totalPages = data ? Math.ceil(data.total / PAGE_SIZE) : 1;
 
   return (
-    <div className="space-y-6 p-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight flex items-center gap-2">
-            <Layers className="h-6 w-6" />
-            Danh sách quy trình
-          </h1>
-          <p className="text-sm text-muted-foreground mt-1">
-            Tất cả workflow instances trong phạm vi quản lý
-          </p>
+    <div className="space-y-6">
+      {/* ── Module Hero ──────────────────────────────────────────────────────── */}
+      <ModuleHero
+        moduleId="workflow"
+        title="Danh sách quy trình"
+        subtitle="Tất cả workflow instances trong phạm vi quản lý của bạn"
+        icon={Layers}
+        stats={data ? [{ label: 'Tổng quy trình', value: data.total }] : undefined}
+        controls={
+          <Button
+            variant="outline" size="sm" onClick={handleRefresh} disabled={refreshing}
+            className="bg-white/10 border-white/30 text-white hover:bg-white/20 gap-1.5"
+          >
+            <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
+            Làm mới
+          </Button>
+        }
+      />
+
+      {/* ── Filters ──────────────────────────────────────────────────────────── */}
+      <div className="flex flex-wrap items-center gap-3 p-4 rounded-xl bg-slate-50 border border-slate-200">
+        <div className="flex-1 min-w-48 relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+          <Input
+            placeholder="Tìm theo tiêu đề quy trình..."
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+            className="pl-9 bg-white"
+          />
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleRefresh}
-          disabled={refreshing}
-          className="gap-2"
-        >
-          <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
-          Làm mới
+        <Select value={statusFilter} onValueChange={(v) => { setStatusFilter(v); fetchInstances(true); }}>
+          <SelectTrigger className="w-48 bg-white">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {STATUS_OPTIONS.map((opt) => (
+              <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Button onClick={handleSearch} size="sm" className="bg-amber-600 hover:bg-amber-700 gap-1.5">
+          <Search className="h-4 w-4" /> Tìm kiếm
         </Button>
       </div>
 
-      {/* Filters */}
-      <Card>
-        <CardContent className="pt-4 pb-3">
-          <div className="flex flex-wrap gap-3">
-            <div className="flex-1 min-w-48 relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Tìm theo tiêu đề quy trình..."
-                value={keyword}
-                onChange={(e) => setKeyword(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                className="pl-9"
-              />
-            </div>
-            <Select value={statusFilter} onValueChange={(v) => { setStatusFilter(v); fetchInstances(true); }}>
-              <SelectTrigger className="w-48">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {STATUS_OPTIONS.map((opt) => (
-                  <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Button onClick={handleSearch} size="sm">Tìm kiếm</Button>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Table */}
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-base">
+      {/* ── Table ────────────────────────────────────────────────────────────── */}
+      <Card className="border-0 shadow-md">
+        <CardHeader className="pb-3 border-b border-slate-100">
+          <CardTitle className="text-base text-slate-700">
             {data ? (
-              <span>
+              <span className="flex items-center gap-2">
+                <Layers className="h-4 w-4 text-amber-500" />
                 {data.total} quy trình
                 {statusFilter !== 'ALL' && (
-                  <span className="ml-1 text-muted-foreground font-normal text-sm">
+                  <span className="ml-1 text-slate-400 font-normal text-sm">
                     — đang lọc: {STATUS_OPTIONS.find(o => o.value === statusFilter)?.label}
                   </span>
                 )}
@@ -241,112 +220,116 @@ export default function WorkflowInstancesPage() {
             ) : 'Quy trình'}
           </CardTitle>
         </CardHeader>
-        <CardContent className="pt-0">
+        <CardContent className="pt-4">
           {loading ? (
             <div className="space-y-2">
               {Array.from({ length: 6 }).map((_, i) => (
-                <Skeleton key={i} className="h-12 w-full" />
+                <Skeleton key={i} className="h-12 w-full rounded-lg" />
               ))}
             </div>
           ) : !data || data.items.length === 0 ? (
             <EmptyState
+              icon={<Layers className="h-8 w-8 text-muted-foreground" />}
               title="Không có quy trình nào"
               description="Thử thay đổi bộ lọc hoặc tìm kiếm khác."
               className="py-10"
             />
           ) : (
             <>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-[35%]">Tiêu đề</TableHead>
-                    <TableHead>Loại đối tượng</TableHead>
-                    <TableHead>Bước hiện tại</TableHead>
-                    <TableHead>Trạng thái</TableHead>
-                    <TableHead>Ưu tiên</TableHead>
-                    <TableHead>Hạn / Ngày bắt đầu</TableHead>
-                    <TableHead className="w-[60px]" />
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {data.items.map((row) => {
-                    const statusCfg = STATUS_BADGE[row.status] ?? { label: row.status, className: 'bg-muted' };
-                    const prio = PRIORITY_LABELS[row.priority] ?? PRIORITY_LABELS[0];
-                    const dueStatus = getDueStatus(row.dueAt, row.completedAt);
-                    return (
-                      <TableRow
-                        key={row.id}
-                        className={cn(
-                          dueStatus === 'overdue' && 'bg-red-50/40',
-                          dueStatus === 'near' && 'bg-amber-50/40',
-                        )}
-                      >
-                        <TableCell>
-                          <div className="font-medium text-sm leading-snug line-clamp-2">
-                            {row.title}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <span className="text-sm text-muted-foreground">{row.entityType}</span>
-                        </TableCell>
-                        <TableCell>
-                          {row.currentStepCode ? (
-                            <code className="text-xs bg-muted px-1.5 py-0.5 rounded">
-                              {row.currentStepCode}
-                            </code>
-                          ) : '—'}
-                        </TableCell>
-                        <TableCell>
-                          <Badge className={cn('text-xs font-normal', statusCfg.className)}>
-                            {statusCfg.label}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          <span className={cn('text-xs', prio.className)}>{prio.label}</span>
-                        </TableCell>
-                        <TableCell>
-                          <span className={cn(
-                            'flex items-center gap-1 text-xs',
-                            dueStatus === 'overdue' && 'text-red-600',
-                            dueStatus === 'near' && 'text-amber-600',
-                            !dueStatus && 'text-muted-foreground',
-                          )}>
-                            {dueStatus === 'overdue' && <AlertCircle className="h-3 w-3" />}
-                            {dueStatus === 'near' && <Clock className="h-3 w-3" />}
-                            {row.dueAt ? formatDate(row.dueAt) : formatDate(row.startedAt)}
-                          </span>
-                        </TableCell>
-                        <TableCell>
-                          <Button asChild size="sm" variant="ghost" className="h-7 w-7 p-0">
-                            <Link href={`/dashboard/workflow/instances/${row.id}`}>
-                              <ExternalLink className="h-3.5 w-3.5" />
-                            </Link>
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
+              <div className="overflow-hidden rounded-lg border border-slate-100">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="hover:bg-transparent border-slate-200 bg-slate-50/70">
+                      <TableHead className="w-[34%] text-xs font-semibold uppercase tracking-wide text-slate-500">Tiêu đề</TableHead>
+                      <TableHead className="text-xs font-semibold uppercase tracking-wide text-slate-500">Loại đối tượng</TableHead>
+                      <TableHead className="text-xs font-semibold uppercase tracking-wide text-slate-500">Bước</TableHead>
+                      <TableHead className="text-xs font-semibold uppercase tracking-wide text-slate-500">Trạng thái</TableHead>
+                      <TableHead className="text-xs font-semibold uppercase tracking-wide text-slate-500">Ưu tiên</TableHead>
+                      <TableHead className="text-xs font-semibold uppercase tracking-wide text-slate-500">Hạn / Bắt đầu</TableHead>
+                      <TableHead className="w-[90px]" />
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {data.items.map((row) => {
+                      const statusCfg = STATUS_BADGE[row.status] ?? { label: row.status, className: 'bg-slate-50 text-slate-600 border-slate-200' };
+                      const prio = PRIORITY_META[row.priority] ?? PRIORITY_META[0];
+                      const dueStatus = getDueStatus(row.dueAt, row.completedAt);
+                      return (
+                        <TableRow
+                          key={row.id}
+                          className={cn(
+                            'border-slate-100 transition-colors',
+                            dueStatus === 'overdue' && 'bg-red-50/40 hover:bg-red-50/70',
+                            dueStatus === 'near' && 'bg-amber-50/40 hover:bg-amber-50/70',
+                          )}
+                        >
+                          <TableCell>
+                            <div className="flex items-start gap-2.5">
+                              <span className={cn('mt-1.5 h-2 w-2 rounded-full shrink-0', prio.dot)} title={prio.label} />
+                              <div className="font-medium text-sm leading-snug text-slate-800 line-clamp-2">{row.title}</div>
+                            </div>
+                          </TableCell>
+                          <TableCell>
+                            <span className="text-sm text-slate-500">{row.entityType}</span>
+                          </TableCell>
+                          <TableCell>
+                            {row.currentStepCode ? (
+                              <code className="text-xs bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-mono">
+                                {row.currentStepCode}
+                              </code>
+                            ) : <span className="text-slate-300">—</span>}
+                          </TableCell>
+                          <TableCell>
+                            <span className={cn('inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border', statusCfg.className)}>
+                              {statusCfg.label}
+                            </span>
+                          </TableCell>
+                          <TableCell>
+                            <span className={cn('text-xs', prio.text)}>{prio.label}</span>
+                          </TableCell>
+                          <TableCell>
+                            <span className={cn(
+                              'flex items-center gap-1 text-xs',
+                              dueStatus === 'overdue' && 'text-red-600 font-medium',
+                              dueStatus === 'near' && 'text-amber-600 font-medium',
+                              !dueStatus && 'text-slate-500',
+                            )}>
+                              {dueStatus === 'overdue' && <AlertCircle className="h-3 w-3" />}
+                              {dueStatus === 'near' && <AlertTriangle className="h-3 w-3" />}
+                              {!dueStatus && <Clock className="h-3 w-3" />}
+                              {row.dueAt ? formatDate(row.dueAt) : formatDate(row.startedAt)}
+                            </span>
+                          </TableCell>
+                          <TableCell>
+                            <Button asChild size="sm" variant="outline" className="h-8 gap-1 border-slate-200 hover:bg-slate-50">
+                              <Link href={`/dashboard/workflow/instances/${row.id}`}>
+                                Xem <ChevronRight className="h-3.5 w-3.5" />
+                              </Link>
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </div>
 
               {/* Pagination */}
               {totalPages > 1 && (
-                <div className="flex items-center justify-between pt-4 border-t">
-                  <p className="text-sm text-muted-foreground">
+                <div className="flex items-center justify-between pt-4">
+                  <p className="text-sm text-slate-500">
                     Trang {page} / {totalPages}
                   </p>
                   <div className="flex gap-2">
                     <Button
-                      variant="outline"
-                      size="sm"
+                      variant="outline" size="sm"
                       onClick={() => setPage((p) => Math.max(1, p - 1))}
                       disabled={page === 1}
                     >
                       Trước
                     </Button>
                     <Button
-                      variant="outline"
-                      size="sm"
+                      variant="outline" size="sm"
                       onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                       disabled={page === totalPages}
                     >

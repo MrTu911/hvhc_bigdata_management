@@ -6,7 +6,7 @@
  * Props-based — không fetch data trực tiếp, nhận từ page parent.
  */
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
 import {
@@ -26,40 +26,49 @@ export interface WorkflowMyWorkStats {
   completedRecentCount: number;
 }
 
+type KpiColor = 'blue' | 'amber' | 'red' | 'violet' | 'green';
+
+const COLOR_STYLES: Record<KpiColor, { bar: string; icon: string; value: string; ring: string }> = {
+  blue:   { bar: 'bg-blue-500',   icon: 'bg-blue-50 text-blue-600',     value: 'text-blue-600',   ring: '' },
+  amber:  { bar: 'bg-amber-500',  icon: 'bg-amber-50 text-amber-600',   value: 'text-amber-600',  ring: 'ring-1 ring-amber-100' },
+  red:    { bar: 'bg-red-500',    icon: 'bg-red-50 text-red-600',       value: 'text-red-600',    ring: 'ring-1 ring-red-200' },
+  violet: { bar: 'bg-violet-500', icon: 'bg-violet-50 text-violet-600', value: 'text-violet-600', ring: '' },
+  green:  { bar: 'bg-green-500',  icon: 'bg-green-50 text-green-600',    value: 'text-green-600',  ring: '' },
+};
+
 interface KpiCardProps {
   title: string;
   value: number;
   subtitle: string;
   icon: LucideIcon;
-  variant: 'default' | 'warning' | 'danger' | 'success';
+  color: KpiColor;
+  /** Tô đậm giá trị + viền nhấn khi có số liệu cần chú ý (quá hạn / sắp hạn) */
+  emphasize?: boolean;
 }
 
-const VARIANT_STYLES: Record<KpiCardProps['variant'], { icon: string; badge: string }> = {
-  default: { icon: 'bg-primary/10 text-primary', badge: '' },
-  warning: { icon: 'bg-amber-100 text-amber-600', badge: '' },
-  danger:  { icon: 'bg-red-100 text-red-600', badge: '' },
-  success: { icon: 'bg-green-100 text-green-600', badge: '' },
-};
-
-function KpiCard({ title, value, subtitle, icon: Icon, variant }: KpiCardProps) {
-  const styles = VARIANT_STYLES[variant];
+function KpiCard({ title, value, subtitle, icon: Icon, color, emphasize }: KpiCardProps) {
+  const styles = COLOR_STYLES[color];
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium text-muted-foreground">{title}</CardTitle>
-        <div className={cn('h-9 w-9 rounded-full flex items-center justify-center', styles.icon)}>
-          <Icon className="h-4 w-4" />
+    <Card
+      className={cn(
+        'relative overflow-hidden border-0 shadow-md hover:shadow-lg transition-all duration-200',
+        emphasize && styles.ring,
+      )}
+    >
+      <CardContent className="p-5">
+        <div className="flex items-start justify-between">
+          <div className="flex-1">
+            <p className="text-xs font-medium text-slate-500 uppercase tracking-wider mb-1">{title}</p>
+            <p className={cn('text-3xl font-bold leading-none', emphasize ? styles.value : 'text-slate-800')}>
+              {value}
+            </p>
+            <p className="text-xs text-slate-500 mt-1.5">{subtitle}</p>
+          </div>
+          <div className={cn('rounded-xl p-2.5', styles.icon)}>
+            <Icon className="h-5 w-5" />
+          </div>
         </div>
-      </CardHeader>
-      <CardContent>
-        <div className={cn(
-          'text-3xl font-bold',
-          variant === 'danger' && value > 0 ? 'text-red-600' : '',
-          variant === 'warning' && value > 0 ? 'text-amber-600' : '',
-        )}>
-          {value}
-        </div>
-        <p className="text-xs text-muted-foreground mt-1">{subtitle}</p>
+        <div className={cn('absolute bottom-0 left-0 right-0 h-0.5', styles.bar)} />
       </CardContent>
     </Card>
   );
@@ -75,12 +84,10 @@ export function WorkflowKpiCards({ stats, loading }: WorkflowKpiCardsProps) {
     return (
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         {Array.from({ length: 5 }).map((_, i) => (
-          <Card key={i}>
-            <CardHeader className="pb-2">
-              <Skeleton className="h-4 w-24" />
-            </CardHeader>
-            <CardContent>
-              <Skeleton className="h-8 w-12 mb-1" />
+          <Card key={i} className="border-0 shadow-md">
+            <CardContent className="p-5">
+              <Skeleton className="h-4 w-24 mb-3" />
+              <Skeleton className="h-8 w-12 mb-2" />
               <Skeleton className="h-3 w-32" />
             </CardContent>
           </Card>
@@ -98,35 +105,39 @@ export function WorkflowKpiCards({ stats, loading }: WorkflowKpiCardsProps) {
         value={stats.pendingCount}
         subtitle="bước đang gán cho bạn"
         icon={Clock}
-        variant={stats.pendingCount > 0 ? 'default' : 'default'}
+        color="blue"
+        emphasize={stats.pendingCount > 0}
       />
       <KpiCard
         title="Sắp đến hạn"
         value={stats.nearDueCount}
         subtitle="trong 24 giờ tới"
         icon={AlertTriangle}
-        variant={stats.nearDueCount > 0 ? 'warning' : 'default'}
+        color="amber"
+        emphasize={stats.nearDueCount > 0}
       />
       <KpiCard
         title="Quá hạn"
         value={stats.overdueCount}
         subtitle="cần xử lý ngay"
         icon={AlertCircle}
-        variant={stats.overdueCount > 0 ? 'danger' : 'default'}
+        color="red"
+        emphasize={stats.overdueCount > 0}
       />
       <KpiCard
         title="Tôi khởi tạo"
         value={stats.initiatedCount}
         subtitle="đang trong quy trình"
         icon={FilePlus}
-        variant="default"
+        color="violet"
       />
       <KpiCard
         title="Hoàn thành gần đây"
         value={stats.completedRecentCount}
         subtitle="trong 7 ngày qua"
         icon={CheckCircle2}
-        variant={stats.completedRecentCount > 0 ? 'success' : 'default'}
+        color="green"
+        emphasize={stats.completedRecentCount > 0}
       />
     </div>
   );
