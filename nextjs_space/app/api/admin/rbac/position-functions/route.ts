@@ -38,6 +38,17 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const positionId = searchParams.get('positionId');
 
+    // Summary toàn hệ thống (nhẹ): danh sách functionId đã gán (distinct) + tổng số grant.
+    // Dùng cho tab Tổng quan để không phụ thuộc vào chức vụ đang chọn ở ma trận.
+    if (searchParams.get('summary')) {
+      const grants = await prisma.positionFunction.findMany({
+        where: { isActive: true },
+        select: { functionId: true },
+      });
+      const assignedFunctionIds = Array.from(new Set(grants.map(g => g.functionId)));
+      return NextResponse.json({ assignedFunctionIds, totalGrants: grants.length });
+    }
+
     const where = positionId
       ? { positionId, isActive: true }
       : { isActive: true };

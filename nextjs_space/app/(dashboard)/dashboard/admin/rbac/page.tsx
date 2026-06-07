@@ -143,6 +143,27 @@ const MODULE_META: Record<string, {
   DASHBOARD:  { label: 'Dashboard',   textClass: 'text-sky-700',     bgClass: 'bg-sky-50',     borderClass: 'border-sky-200',     barColor: '#0ea5e9' },
   AI:         { label: 'AI',          textClass: 'text-indigo-700',  bgClass: 'bg-indigo-50',  borderClass: 'border-indigo-200',  barColor: '#6366f1' },
   AUDIT:      { label: 'Kiểm toán',   textClass: 'text-slate-700',   bgClass: 'bg-slate-50',   borderClass: 'border-slate-200',   barColor: '#64748b' },
+  // Các phân hệ bổ sung — trước đây thiếu nên hiển thị chung nhãn "Khác"
+  EXAM:              { label: 'Khảo thí',       textClass: 'text-lime-700',    bgClass: 'bg-lime-50',    borderClass: 'border-lime-200',    barColor: '#84cc16' },
+  QUESTION_BANK:     { label: 'Ngân hàng CH',   textClass: 'text-emerald-700', bgClass: 'bg-emerald-50', borderClass: 'border-emerald-200', barColor: '#10b981' },
+  LEARNING_MATERIAL: { label: 'Học liệu',       textClass: 'text-green-700',   bgClass: 'bg-green-50',   borderClass: 'border-green-200',   barColor: '#16a34a' },
+  LAB:               { label: 'Thí nghiệm',     textClass: 'text-teal-700',    bgClass: 'bg-teal-50',    borderClass: 'border-teal-200',    barColor: '#0d9488' },
+  SCIENCE:           { label: 'Khoa học QL',    textClass: 'text-fuchsia-700', bgClass: 'bg-fuchsia-50', borderClass: 'border-fuchsia-200', barColor: '#d946ef' },
+  PERSONAL:          { label: 'Cá nhân',        textClass: 'text-rose-700',    bgClass: 'bg-rose-50',    borderClass: 'border-rose-200',    barColor: '#f43f5e' },
+  PROMOTION:         { label: 'Thăng quân hàm', textClass: 'text-amber-700',   bgClass: 'bg-amber-50',   borderClass: 'border-amber-200',   barColor: '#d97706' },
+  ML:                { label: 'Machine Learning', textClass: 'text-purple-700', bgClass: 'bg-purple-50', borderClass: 'border-purple-200',  barColor: '#9333ea' },
+  SECURITY:          { label: 'Bảo mật',        textClass: 'text-red-700',     bgClass: 'bg-red-50',     borderClass: 'border-red-200',     barColor: '#dc2626' },
+  GOVERNANCE:        { label: 'Quản trị DL',    textClass: 'text-slate-700',   bgClass: 'bg-slate-50',   borderClass: 'border-slate-200',   barColor: '#475569' },
+  ETL:               { label: 'ETL',            textClass: 'text-cyan-700',    bgClass: 'bg-cyan-50',    borderClass: 'border-cyan-200',    barColor: '#0891b2' },
+  DEPARTMENT:        { label: 'Khoa/Phòng',     textClass: 'text-sky-700',     bgClass: 'bg-sky-50',     borderClass: 'border-sky-200',     barColor: '#0284c7' },
+  WORKFLOW:          { label: 'Quy trình',      textClass: 'text-violet-700',  bgClass: 'bg-violet-50',  borderClass: 'border-violet-200',  barColor: '#7c3aed' },
+  DIGITAL_DOCS:      { label: 'Văn bản số',     textClass: 'text-blue-700',    bgClass: 'bg-blue-50',    borderClass: 'border-blue-200',    barColor: '#2563eb' },
+  TEMPLATES:         { label: 'Mẫu biểu',       textClass: 'text-orange-700',  bgClass: 'bg-orange-50',  borderClass: 'border-orange-200',  barColor: '#ea580c' },
+  INFRA:             { label: 'Hạ tầng',        textClass: 'text-pink-700',    bgClass: 'bg-pink-50',    borderClass: 'border-pink-200',    barColor: '#db2777' },
+  MONITORING:        { label: 'Giám sát',       textClass: 'text-stone-700',   bgClass: 'bg-stone-50',   borderClass: 'border-stone-200',   barColor: '#78716c' },
+  MASTER_DATA:       { label: 'Danh mục',       textClass: 'text-zinc-700',    bgClass: 'bg-zinc-50',    borderClass: 'border-zinc-200',    barColor: '#71717a' },
+  THEME:             { label: 'Giao diện',      textClass: 'text-yellow-700',  bgClass: 'bg-yellow-50',  borderClass: 'border-yellow-200',  barColor: '#eab308' },
+  DOCUMENTS:         { label: 'Tài liệu',       textClass: 'text-cyan-700',    bgClass: 'bg-cyan-50',    borderClass: 'border-cyan-200',    barColor: '#0e7490' },
 };
 const DEFAULT_MODULE_META = { label: 'Khác', textClass: 'text-slate-600', bgClass: 'bg-slate-50', borderClass: 'border-slate-200', barColor: '#94a3b8' };
 
@@ -192,6 +213,9 @@ export default function RBACManagementPage() {
   const [positions, setPositions] = useState<Position[]>([]);
   const [functions, setFunctions] = useState<FunctionItem[]>([]);
   const [positionFunctions, setPositionFunctions] = useState<PositionFunction[]>([]);
+  // System-wide assignment summary (toàn hệ thống) — tab Tổng quan, không đổi theo chức vụ đang chọn
+  const [systemAssignedFuncIds, setSystemAssignedFuncIds] = useState<Set<string>>(new Set());
+  const [systemTotalGrants, setSystemTotalGrants] = useState(0);
   const [users, setUsers] = useState<UserItem[]>([]);
   const [units, setUnits] = useState<UnitItem[]>([]);
   const [userPositions, setUserPositions] = useState<UserPosition[]>([]);
@@ -211,6 +235,7 @@ export default function RBACManagementPage() {
   const [funcSearch, setFuncSearch] = useState('');
   const [actionFilter, setActionFilter] = useState('ALL');
   const [savingFuncId, setSavingFuncId] = useState<string | null>(null);
+  const [bulkSaving, setBulkSaving] = useState(false);
 
   // ── User-position tab ──
   const [userSearch, setUserSearch] = useState('');
@@ -256,6 +281,16 @@ export default function RBACManagementPage() {
     if (res?.ok) { const d = await res.json(); setPositionFunctions(d.assignments || []); }
   }, []);
 
+  // Tổng hợp gán quyền toàn hệ thống (nhẹ) — cho tab Tổng quan
+  const fetchSystemAssignmentSummary = useCallback(async () => {
+    const res = await fetch('/api/admin/rbac/position-functions?summary=1').catch(() => null);
+    if (res?.ok) {
+      const d = await res.json();
+      setSystemAssignedFuncIds(new Set<string>(d.assignedFunctionIds || []));
+      setSystemTotalGrants(d.totalGrants || 0);
+    }
+  }, []);
+
   const fetchUsers = useCallback(async () => {
     const res = await fetch('/api/admin/rbac/users?limit=500').catch(() => null);
     if (res?.ok) { const d = await res.json(); setUsers(d.data || []); }
@@ -294,12 +329,12 @@ export default function RBACManagementPage() {
     (async () => {
       setLoading(true);
       await Promise.all([
-        fetchPositions(), fetchFunctions(), fetchPositionFunctions(),
+        fetchPositions(), fetchFunctions(), fetchSystemAssignmentSummary(),
         fetchUsers(), fetchUnits(), fetchUserPositions(), fetchStats(),
       ]);
       setLoading(false);
     })();
-  }, [fetchPositions, fetchFunctions, fetchPositionFunctions, fetchUsers, fetchUnits, fetchUserPositions, fetchStats]);
+  }, [fetchPositions, fetchFunctions, fetchSystemAssignmentSummary, fetchUsers, fetchUnits, fetchUserPositions, fetchStats]);
 
   useEffect(() => {
     if (selectedPositionId) fetchPositionFunctions(selectedPositionId);
@@ -307,7 +342,9 @@ export default function RBACManagementPage() {
 
   useEffect(() => {
     if (activeTab === 'audit') fetchAuditLogs(auditPage);
-  }, [activeTab, auditPage, fetchAuditLogs]);
+    // Làm mới thống kê toàn hệ thống khi quay lại tab Tổng quan (sau khi sửa ở ma trận)
+    if (activeTab === 'overview') fetchSystemAssignmentSummary();
+  }, [activeTab, auditPage, fetchAuditLogs, fetchSystemAssignmentSummary]);
 
   // ─── Derived data ─────────────────────────────────────────────────────────
 
@@ -335,11 +372,6 @@ export default function RBACManagementPage() {
     return map;
   }, [positionFunctions, selectedPositionId]);
 
-  // System-wide assigned function ids for overview chart (all positions, not filtered)
-  const allAssignedFuncIds = useMemo(() =>
-    new Set<string>(positionFunctions.map(pf => pf.functionId)),
-  [positionFunctions]);
-
   const moduleFunctions = useMemo(() => functions.filter(f => {
     if (!f.isActive || f.module !== selectedModule) return false;
     if (actionFilter !== 'ALL' && f.actionType !== actionFilter) return false;
@@ -350,16 +382,28 @@ export default function RBACManagementPage() {
     return true;
   }), [functions, selectedModule, actionFilter, funcSearch]);
 
-  const moduleStats = useMemo(() => {
+  // Thống kê theo chức vụ ĐANG CHỌN (cho ma trận: badge tab + header) — dùng pfMap
+  const matrixModuleStats = useMemo(() => {
     const stats: Record<string, { total: number; assigned: number }> = {};
     for (const mod of availableModules) {
       const mFuncs = functions.filter(f => f.isActive && f.module === mod);
-      stats[mod] = { total: mFuncs.length, assigned: mFuncs.filter(f => allAssignedFuncIds.has(f.id)).length };
+      stats[mod] = { total: mFuncs.length, assigned: mFuncs.filter(f => pfMap.has(f.id)).length };
     }
     return stats;
-  }, [availableModules, functions, allAssignedFuncIds]);
+  }, [availableModules, functions, pfMap]);
 
-  const totalAssigned = positionFunctions.length;
+  // Thống kê TOÀN HỆ THỐNG (cho tab Tổng quan) — dùng systemAssignedFuncIds, không đổi theo chức vụ
+  const systemModuleStats = useMemo(() => {
+    const stats: Record<string, { total: number; assigned: number }> = {};
+    for (const mod of availableModules) {
+      const mFuncs = functions.filter(f => f.isActive && f.module === mod);
+      stats[mod] = { total: mFuncs.length, assigned: mFuncs.filter(f => systemAssignedFuncIds.has(f.id)).length };
+    }
+    return stats;
+  }, [availableModules, functions, systemAssignedFuncIds]);
+
+  // Số quyền của chức vụ đang chọn (cho header ma trận)
+  const totalAssigned = pfMap.size;
   const totalFunctions = functions.filter(f => f.isActive).length;
 
   const filteredPositions = useMemo(() => positions.filter(p => {
@@ -370,11 +414,11 @@ export default function RBACManagementPage() {
     return matchScope && matchSearch;
   }), [positions, positionScopeFilter, positionSearch]);
 
-  // Chart data – module coverage
+  // Chart data – module coverage (TOÀN HỆ THỐNG)
   const moduleCoverageData = useMemo(() =>
     availableModules.map(mod => {
       const meta = MODULE_META[mod] || DEFAULT_MODULE_META;
-      const stats = moduleStats[mod] || { total: 0, assigned: 0 };
+      const stats = systemModuleStats[mod] || { total: 0, assigned: 0 };
       return {
         name: meta.label,
         assigned: stats.assigned,
@@ -383,7 +427,7 @@ export default function RBACManagementPage() {
         fill: meta.barColor,
       };
     }),
-  [availableModules, moduleStats]);
+  [availableModules, systemModuleStats]);
 
   // Scope distribution
   const scopeDistribution = useMemo(() =>
@@ -426,6 +470,7 @@ export default function RBACManagementPage() {
       }
       await fetchPositionFunctions(selectedPositionId);
       await fetchPositions();
+      await fetchSystemAssignmentSummary();
       refreshAll();
     } catch (err: any) {
       toast({ title: 'Không thể thay đổi quyền', description: err.message, variant: 'destructive' });
@@ -452,8 +497,31 @@ export default function RBACManagementPage() {
 
   const handleBulkModule = async (assign: boolean) => {
     if (!selectedPositionId) return;
-    const funcsToChange = moduleFunctions.filter(f => assign ? !pfMap.has(f.id) : pfMap.has(f.id));
-    for (const f of funcsToChange) await handleToggleFunction(f, assign);
+    const ids = moduleFunctions.filter(f => assign ? !pfMap.has(f.id) : pfMap.has(f.id)).map(f => f.id);
+    if (ids.length === 0) return;
+    setBulkSaving(true);
+    try {
+      // Một request /batch thay vì N request tuần tự — mượt với module lớn (EDUCATION, PARTY)
+      const body = assign
+        ? { positionId: selectedPositionId, grant: ids, scopeByFunctionId: Object.fromEntries(ids.map(id => [id, 'ACADEMY'])) }
+        : { positionId: selectedPositionId, revoke: ids };
+      const res = await fetch('/api/admin/rbac/position-functions/batch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.error || e.message || `Lỗi ${res.status}`); }
+      const d = await res.json().catch(() => ({}));
+      toast({ title: assign ? 'Đã gán cả phân hệ' : 'Đã gỡ cả phân hệ', description: d.message || `${ids.length} chức năng` });
+      await fetchPositionFunctions(selectedPositionId);
+      await fetchPositions();
+      await fetchSystemAssignmentSummary();
+      refreshAll();
+    } catch (err: any) {
+      toast({ title: 'Không thể cập nhật cả phân hệ', description: err.message, variant: 'destructive' });
+    } finally {
+      setBulkSaving(false);
+    }
   };
 
   const handleCreateUserPosition = async () => {
@@ -572,7 +640,7 @@ export default function RBACManagementPage() {
   });
 
   const moduleMeta = selectedModule ? (MODULE_META[selectedModule] || DEFAULT_MODULE_META) : DEFAULT_MODULE_META;
-  const modStats = selectedModule ? (moduleStats[selectedModule] || { total: 0, assigned: 0 }) : { total: 0, assigned: 0 };
+  const modStats = selectedModule ? (matrixModuleStats[selectedModule] || { total: 0, assigned: 0 }) : { total: 0, assigned: 0 };
   const allModuleAssigned = modStats.total > 0 && moduleFunctions.every(f => pfMap.has(f.id));
   const noneModuleAssigned = moduleFunctions.every(f => !pfMap.has(f.id));
   const coveragePct = totalFunctions > 0 ? Math.round(totalAssigned / totalFunctions * 100) : 0;
@@ -617,7 +685,7 @@ export default function RBACManagementPage() {
                 {[
                   { label: 'Chức vụ',    value: activePositions,         sub: 'hoạt động',    icon: Layers },
                   { label: 'Chức năng',  value: totalFunctions,          sub: `${availableModules.length} phân hệ`, icon: Key },
-                  { label: 'Gán quyền',  value: positionFunctions.length, sub: 'pos-function', icon: Grid3X3 },
+                  { label: 'Gán quyền',  value: systemTotalGrants, sub: 'pos-function', icon: Grid3X3 },
                   { label: 'Người dùng', value: userStats?.activeUsers ?? userPositions.length, sub: 'active', icon: Users },
                 ].map(({ label, value, sub, icon: Icon }) => (
                   <div key={label} className="rounded-xl bg-white/10 px-4 py-2.5 text-center backdrop-blur-sm min-w-[76px]">
@@ -676,7 +744,7 @@ export default function RBACManagementPage() {
                 {[
                   { icon: Layers,   border: 'border-l-indigo-500', bg: 'bg-indigo-50',  txt: 'text-indigo-600',  label: 'Chức vụ hoạt động',  value: activePositions,          sub: `${positions.length} tổng` },
                   { icon: Key,      border: 'border-l-emerald-500',bg: 'bg-emerald-50', txt: 'text-emerald-600', label: 'Chức năng hệ thống', value: totalFunctions,           sub: `${availableModules.length} phân hệ` },
-                  { icon: Grid3X3,  border: 'border-l-amber-500',  bg: 'bg-amber-50',   txt: 'text-amber-600',   label: 'Tổng gán quyền',     value: positionFunctions.length, sub: 'position-function' },
+                  { icon: Grid3X3,  border: 'border-l-amber-500',  bg: 'bg-amber-50',   txt: 'text-amber-600',   label: 'Tổng gán quyền',     value: systemTotalGrants, sub: 'position-function' },
                   { icon: Users,    border: 'border-l-blue-500',   bg: 'bg-blue-50',    txt: 'text-blue-600',    label: 'Người dùng Active',  value: userStats?.activeUsers ?? 0, sub: `${userStats?.totalUsers ?? 0} tổng` },
                 ].map(({ icon: Icon, border, bg, txt, label, value, sub }) => (
                   <div key={label} className={`rounded-xl border bg-white p-4 border-l-4 ${border} shadow-sm hover:shadow-md transition-shadow`}>
@@ -1046,7 +1114,7 @@ export default function RBACManagementPage() {
                             <div className="flex min-w-max">
                               {availableModules.map(mod => {
                                 const meta = MODULE_META[mod] || DEFAULT_MODULE_META;
-                                const stats = moduleStats[mod] || { total: 0, assigned: 0 };
+                                const stats = matrixModuleStats[mod] || { total: 0, assigned: 0 };
                                 const isActive = selectedModule === mod;
                                 return (
                                   <button type="button" key={mod}
@@ -1098,7 +1166,7 @@ export default function RBACManagementPage() {
                                   <Button size="sm" variant="outline"
                                     className="h-8 text-xs gap-1.5 text-green-700 border-green-300 hover:bg-green-50"
                                     onClick={() => handleBulkModule(true)}
-                                    disabled={allModuleAssigned || moduleFunctions.length === 0}>
+                                    disabled={bulkSaving || allModuleAssigned || moduleFunctions.length === 0}>
                                     <CheckSquare className="h-3.5 w-3.5" /> Chọn tất cả
                                   </Button>
                                 </TooltipTrigger>
@@ -1109,7 +1177,7 @@ export default function RBACManagementPage() {
                                   <Button size="sm" variant="outline"
                                     className="h-8 text-xs gap-1.5 text-red-600 border-red-300 hover:bg-red-50"
                                     onClick={() => handleBulkModule(false)}
-                                    disabled={noneModuleAssigned || moduleFunctions.length === 0}>
+                                    disabled={bulkSaving || noneModuleAssigned || moduleFunctions.length === 0}>
                                     <Square className="h-3.5 w-3.5" /> Bỏ tất cả
                                   </Button>
                                 </TooltipTrigger>
