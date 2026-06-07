@@ -96,9 +96,9 @@ export function WorkflowNotificationPanel({
       {/* Header */}
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <div className={cn('rounded-lg p-2', unreadCount > 0 ? 'bg-amber-50' : 'bg-slate-100')}>
+          <div className={cn('rounded-lg p-2', unreadCount > 0 ? 'bg-blue-50' : 'bg-slate-100')}>
             {unreadCount > 0
-              ? <BellRing className="h-4 w-4 text-amber-600" />
+              ? <BellRing className="h-4 w-4 text-blue-600" />
               : <Bell className="h-4 w-4 text-slate-400" />}
           </div>
           <div>
@@ -108,7 +108,7 @@ export function WorkflowNotificationPanel({
             </p>
           </div>
           {unreadCount > 0 && (
-            <Badge className="h-5 px-1.5 text-xs bg-amber-500 hover:bg-amber-500 text-white border-0">
+            <Badge className="h-5 px-1.5 text-xs bg-blue-500 hover:bg-blue-500 text-white border-0">
               {unreadCount > 99 ? '99+' : unreadCount}
             </Badge>
           )}
@@ -117,7 +117,7 @@ export function WorkflowNotificationPanel({
           <Button
             variant="ghost"
             size="sm"
-            className="h-7 text-xs text-amber-700 hover:bg-amber-50 shrink-0"
+            className="h-7 text-xs text-blue-700 hover:bg-blue-50 shrink-0"
             onClick={handleMarkAllRead}
             disabled={markingAll}
           >
@@ -158,7 +158,7 @@ export function WorkflowNotificationPanel({
                 className={cn(
                   'flex gap-3 rounded-lg px-3 py-2.5 transition-colors',
                   isUnread
-                    ? 'bg-amber-50/60 hover:bg-amber-50 border-l-2 border-amber-400'
+                    ? 'bg-blue-50/60 hover:bg-blue-50 border-l-2 border-blue-400'
                     : 'hover:bg-slate-50',
                 )}
               >
@@ -176,7 +176,7 @@ export function WorkflowNotificationPanel({
                     {isUnread && (
                       <button
                         onClick={() => onMarkRead(notif.id)}
-                        className="flex-shrink-0 text-slate-400 hover:text-amber-600 transition-colors"
+                        className="flex-shrink-0 text-slate-400 hover:text-blue-600 transition-colors"
                         title="Đánh dấu đã đọc"
                       >
                         <CheckCheck className="h-3.5 w-3.5" />

@@ -85,7 +85,7 @@ export function SectionTitle({ children, action }: SectionTitleProps) {
   return (
     <div className="flex items-center justify-between mb-4">
       <h2 className="text-base font-semibold text-slate-700 flex items-center gap-2">
-        <span className="w-1 h-5 rounded-full bg-amber-500 inline-block" />
+        <span className="w-1 h-5 rounded-full bg-cyan-500 inline-block" />
         {children}
       </h2>
       {action}

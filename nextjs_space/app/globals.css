@@ -65,7 +65,7 @@
     --module-student: 220 80% 32%;
     --module-science: 290 72% 35%;
     --module-admin: 220 14% 25%;
-    --module-workflow: 38 80% 32%;
+    --module-workflow: 200 90% 38%;
     --module-bigdata: 217 91% 40%;
 
     /* Chart palette — consumed by recharts wrappers via hsl(var(--chart-N)).

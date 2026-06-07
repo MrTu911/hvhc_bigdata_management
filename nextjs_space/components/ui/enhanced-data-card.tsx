@@ -312,14 +312,22 @@ export function ModuleHero({
 }: ModuleHeroProps) {
   const token = MODULE_TOKENS[moduleId] ?? MODULE_TOKENS.default;
 
+  // Nền hero lấy trực tiếp từ biến màu định danh của module (--module-<id>) qua
+  // inline style, KHÔNG phụ thuộc class Tailwind động (vốn không được JIT quét vì
+  // token nằm trong lib/). Lớp phủ tối chéo đảm bảo chữ trắng luôn đủ tương phản.
+  const moduleColor = `hsl(var(--module-${moduleId}, 217 91% 40%))`;
+  const heroBackground = {
+    backgroundColor: moduleColor,
+    backgroundImage: `linear-gradient(135deg, rgba(0,0,0,0.50) 0%, rgba(0,0,0,0.22) 100%)`,
+  } as const;
+
   return (
     <div
       className={cn(
         'relative overflow-hidden rounded-2xl p-6 md:p-8 text-white shadow-xl',
-        'bg-gradient-to-br',
-        token.heroGradient,
         className
       )}
+      style={heroBackground}
     >
       {/* Decorative background circles */}
       <div className="pointer-events-none absolute -right-12 -top-12 h-48 w-48 rounded-full bg-white/5" />

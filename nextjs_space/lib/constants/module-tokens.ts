@@ -108,9 +108,9 @@ export const MODULE_TOKENS: Record<ModuleId, ModuleToken> = {
     id: 'workflow',
     label: 'Quy trình & Hồ sơ',
     code: 'M13',
-    heroGradient: 'from-amber-900 via-amber-800 to-orange-800',
-    sidebarGradient: 'from-amber-600 to-orange-600',
-    accentText: 'text-amber-200',
+    heroGradient: 'from-blue-900 via-blue-800 to-cyan-800',
+    sidebarGradient: 'from-blue-600 to-cyan-600',
+    accentText: 'text-cyan-200',
     iconBg: 'bg-white/20',
   },
   bigdata: {

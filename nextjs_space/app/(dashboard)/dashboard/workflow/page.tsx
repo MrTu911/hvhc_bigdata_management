@@ -156,7 +156,7 @@ export default function WorkflowPage() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <WorkflowStatCard
             icon={Clock} label="Đang chờ xử lý" value={overview.summary.totalPending}
-            sub="trên toàn bộ quy trình" color={WF_PALETTE.orange}
+            sub="trên toàn bộ quy trình" color={WF_PALETTE.blue}
             emphasize={overview.summary.totalPending > 0}
           />
           <WorkflowStatCard
@@ -194,7 +194,7 @@ export default function WorkflowPage() {
         <TabsContent value="overview" className="space-y-4">
           {loading ? (
             <div className="flex flex-col items-center justify-center py-16 gap-3 text-slate-400">
-              <Loader2 className="h-8 w-8 animate-spin text-amber-500" />
+              <Loader2 className="h-8 w-8 animate-spin text-cyan-500" />
               <p className="text-sm">Đang tải dữ liệu quy trình...</p>
             </div>
           ) : overview ? (

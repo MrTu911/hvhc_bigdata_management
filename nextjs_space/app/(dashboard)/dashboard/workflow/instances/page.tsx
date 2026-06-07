@@ -198,7 +198,7 @@ export default function WorkflowInstancesPage() {
             ))}
           </SelectContent>
         </Select>
-        <Button onClick={handleSearch} size="sm" className="bg-amber-600 hover:bg-amber-700 gap-1.5">
+        <Button onClick={handleSearch} size="sm" className="bg-blue-600 hover:bg-blue-700 gap-1.5">
           <Search className="h-4 w-4" /> Tìm kiếm
         </Button>
       </div>
@@ -209,7 +209,7 @@ export default function WorkflowInstancesPage() {
           <CardTitle className="text-base text-slate-700">
             {data ? (
               <span className="flex items-center gap-2">
-                <Layers className="h-4 w-4 text-amber-500" />
+                <Layers className="h-4 w-4 text-cyan-600" />
                 {data.total} quy trình
                 {statusFilter !== 'ALL' && (
                   <span className="ml-1 text-slate-400 font-normal text-sm">

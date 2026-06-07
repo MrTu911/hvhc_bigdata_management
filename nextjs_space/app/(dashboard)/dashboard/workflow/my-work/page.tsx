@@ -58,7 +58,7 @@ interface NotifResponse {
 // ---------------------------------------------------------------------------
 
 const QUICK_LINKS = [
-  { icon: LayoutDashboard, label: 'Tổng quan quy trình', sub: 'Dashboard điều hành M13', href: '/dashboard/workflow', color: '#d97706' },
+  { icon: LayoutDashboard, label: 'Tổng quan quy trình', sub: 'Dashboard điều hành M13', href: '/dashboard/workflow', color: '#0891b2' },
   { icon: Layers, label: 'Tất cả phiên xử lý', sub: 'Danh sách workflow instances', href: '/dashboard/workflow/instances', color: '#2563eb' },
   { icon: History, label: 'Lịch sử xử lý', sub: 'Các quy trình đã hoàn tất', href: '/dashboard/workflow/history', color: '#7c3aed' },
 ];
@@ -211,12 +211,12 @@ export default function WorkflowMyWorkPage() {
           <Card className="border-0 shadow-md">
             <CardHeader className="pb-3 border-b border-slate-100">
               <CardTitle className="text-base flex items-center gap-2 text-slate-700">
-                <span className="rounded-lg bg-amber-50 p-1.5">
-                  <Inbox className="h-4 w-4 text-amber-600" />
+                <span className="rounded-lg bg-blue-50 p-1.5">
+                  <Inbox className="h-4 w-4 text-blue-600" />
                 </span>
                 Việc cần xử lý
                 {!loadingWork && pendingCount > 0 && (
-                  <span className="ml-1 inline-flex items-center justify-center h-5 min-w-5 px-1.5 rounded-full bg-amber-500 text-white text-xs font-bold">
+                  <span className="ml-1 inline-flex items-center justify-center h-5 min-w-5 px-1.5 rounded-full bg-blue-500 text-white text-xs font-bold">
                     {pendingCount > 99 ? '99+' : pendingCount}
                   </span>
                 )}
@@ -247,7 +247,7 @@ export default function WorkflowMyWorkPage() {
       {/* ── Truy cập nhanh ───────────────────────────────────────────────────── */}
       <div>
         <h2 className="text-base font-semibold text-slate-700 flex items-center gap-2 mb-4">
-          <span className="w-1 h-5 rounded-full bg-amber-500 inline-block" />
+          <span className="w-1 h-5 rounded-full bg-cyan-500 inline-block" />
           Truy cập nhanh
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
