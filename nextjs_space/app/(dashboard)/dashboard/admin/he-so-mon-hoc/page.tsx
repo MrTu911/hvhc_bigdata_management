@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { AggregateExportButton } from '@/components/templates/export/aggregate-export-button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -205,6 +206,8 @@ export default function HeSoMonHocPage() {
             Quản lý trọng số điểm cho từng môn học (Tổng hệ số = 1.0)
           </p>
         </div>
+        <div className="flex items-center gap-2">
+        <AggregateExportButton entityType="subject" label="Xuất danh sách" />
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
             <Button onClick={() => handleOpenDialog()} className="gap-2">
@@ -359,6 +362,7 @@ export default function HeSoMonHocPage() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
+        </div>
       </div>
 
       {/* Filters */}

@@ -1,4 +1,10 @@
 /**
+ * @deprecated — File legacy, đã được thay thế bởi orchestrator prisma/seeds/index.ts.
+ * Giữ lại để tra cứu lịch sử (migration rule: không hard-delete). KHÔNG dùng cho seed mới.
+ * Xem prisma/seeds/README.md mục "\File legacy đã deprecate'".
+ */
+
+/**
  * Seed: M10 Demo Data
  * Tạo dữ liệu mẫu cho module Giáo dục Đào tạo (M10):
  *   - ProgramVersion (gắn vào Program hiện có)

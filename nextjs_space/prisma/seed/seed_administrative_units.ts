@@ -156,9 +156,41 @@ const canthoDistricts = [
   { code: '927', name: 'Thới Lai', fullName: 'Huyện Thới Lai' },
 ];
 
+// Tỉnh/Thành phố trực thuộc trung ương (mã 2 số theo Tổng cục Thống kê).
+// Đây là gốc cây AdministrativeUnit — phải tồn tại trước khi seed Quận/Huyện,
+// nếu không seedDistricts() sẽ không tìm thấy parent và tạo 0 district.
+const provinces = [
+  { code: '01', name: 'Hà Nội', fullName: 'Thành phố Hà Nội' },
+  { code: '79', name: 'Hồ Chí Minh', fullName: 'Thành phố Hồ Chí Minh' },
+  { code: '48', name: 'Đà Nẵng', fullName: 'Thành phố Đà Nẵng' },
+  { code: '31', name: 'Hải Phòng', fullName: 'Thành phố Hải Phòng' },
+  { code: '92', name: 'Cần Thơ', fullName: 'Thành phố Cần Thơ' },
+];
+
+async function seedProvinces() {
+  console.log('=== Seeding Provinces (Tỉnh/Thành phố) ===');
+  for (let i = 0; i < provinces.length; i++) {
+    const p = provinces[i];
+    await prisma.administrativeUnit.upsert({
+      where: { code: p.code },
+      update: { name: p.name, fullName: p.fullName, sortOrder: i + 1 },
+      create: {
+        code: p.code,
+        name: p.name,
+        fullName: p.fullName,
+        level: AdministrativeLevel.PROVINCE,
+        parentId: null,
+        sortOrder: i + 1,
+        isActive: true,
+      },
+    });
+  }
+  console.log(`  ✓ Added ${provinces.length} provinces`);
+}
+
 async function seedDistricts() {
   console.log('=== Seeding Districts (Quận/Huyện) ===');
-  
+
   // Get province IDs (codes match the seed_master_data.ts file)
   const hanoi = await prisma.administrativeUnit.findFirst({ 
     where: { code: '01', level: 'PROVINCE' } 
@@ -346,20 +378,25 @@ async function main() {
   console.log(`Started at: ${new Date().toISOString()}\n`);
 
   try {
+    await seedProvinces();
     await seedDistricts();
     await seedWards();
-    
+
     // Count results
+    const provinceCount = await prisma.administrativeUnit.count({
+      where: { level: 'PROVINCE', isActive: true }
+    });
     const districtCount = await prisma.administrativeUnit.count({
       where: { level: 'DISTRICT', isActive: true }
     });
     const wardCount = await prisma.administrativeUnit.count({
       where: { level: 'WARD', isActive: true }
     });
-    
+
     console.log('\n========================================');
     console.log('  SEED COMPLETED SUCCESSFULLY!');
     console.log('========================================');
+    console.log(`Total provinces: ${provinceCount}`);
     console.log(`Total districts: ${districtCount}`);
     console.log(`Total wards: ${wardCount}`);
   } catch (error) {

@@ -1,4 +1,10 @@
 /**
+ * @deprecated — File legacy, đã được thay thế bởi orchestrator prisma/seeds/index.ts.
+ * Giữ lại để tra cứu lịch sử (migration rule: không hard-delete). KHÔNG dùng cho seed mới.
+ * Xem prisma/seeds/README.md mục "\File legacy đã deprecate'".
+ */
+
+/**
  * Seed: Master Data HVHC v8.9+
  * 10 nhóm | 38 bảng | ~800 bản ghi
  * Chạy: npx tsx --require dotenv/config prisma/seed/seed_master_data_v1.ts

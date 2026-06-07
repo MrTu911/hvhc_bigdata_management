@@ -19,7 +19,12 @@
     "seed:admin-docs": "tsx --require dotenv/config prisma/seed/seed_admin_doc_templates.ts",
     "seed:managed": "tsx --require dotenv/config prisma/seeds/index.ts all",
     "seed:required": "tsx --require dotenv/config prisma/seeds/index.ts required",
-    "seed:step": "tsx --require dotenv/config prisma/seeds/index.ts"
+    "seed:demo": "tsx --require dotenv/config prisma/seeds/index.ts demo",
+    "seed:bigdata": "tsx --require dotenv/config prisma/seeds/index.ts bigdata",
+    "seed:realdata": "tsx --require dotenv/config prisma/seeds/index.ts realdata",
+    "seed:backfill": "tsx --require dotenv/config prisma/seeds/index.ts backfill",
+    "seed:step": "tsx --require dotenv/config prisma/seeds/index.ts",
+    "seed:module": "tsx --require dotenv/config prisma/seeds/index.ts"
   },
   "prisma": {
     "seed": "tsx --require dotenv/config scripts/seed.ts"

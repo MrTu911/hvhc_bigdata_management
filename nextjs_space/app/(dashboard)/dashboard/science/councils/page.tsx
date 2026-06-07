@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
+import { AggregateExportButton } from '@/components/templates/export/aggregate-export-button';
 import { Card, CardContent } from '@/components/ui/card';
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
@@ -151,11 +152,14 @@ export default function ScienceCouncilsPage() {
           </h1>
           <p className="text-sm text-gray-500 mt-0.5">Thẩm định, nghiệm thu và tổng kết đề tài</p>
         </div>
-        <Button asChild>
-          <Link href="/dashboard/science/councils/new">
-            <Users size={16} className="mr-1" /> Lập hội đồng
-          </Link>
-        </Button>
+        <div className="flex items-center gap-2">
+          <AggregateExportButton entityType="scientific_council" label="Xuất danh sách" />
+          <Button asChild>
+            <Link href="/dashboard/science/councils/new">
+              <Users size={16} className="mr-1" /> Lập hội đồng
+            </Link>
+          </Button>
+        </div>
       </div>
 
       {/* Quick stats */}

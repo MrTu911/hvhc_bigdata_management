@@ -1,4 +1,10 @@
 /**
+ * @deprecated — File legacy, đã được thay thế bởi orchestrator prisma/seeds/index.ts.
+ * Giữ lại để tra cứu lịch sử (migration rule: không hard-delete). KHÔNG dùng cho seed mới.
+ * Xem prisma/seeds/README.md mục "\File legacy đã deprecate'".
+ */
+
+/**
  * seed_m03_complete.ts  –  M03 Party Work / Political Work Database
  *
  * Single comprehensive seed for ALL M03 models in lifecycle order:

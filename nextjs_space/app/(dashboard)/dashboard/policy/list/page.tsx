@@ -10,6 +10,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { AggregateExportButton } from '@/components/templates/export/aggregate-export-button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -151,6 +152,7 @@ export default function PolicyListPage() {
           <Button variant="outline" onClick={fetchRecords} className="bg-white/20 border-white/40 text-white hover:bg-white/30">
             <RefreshCw className="h-4 w-4 mr-2" />Làm mới
           </Button>
+          <AggregateExportButton entityType="policy" label="Xuất danh sách" />
           <Link href="/dashboard/policy/create">
             <Button className="bg-white text-teal-700 hover:bg-white/90">
               <Plus className="h-4 w-4 mr-2" />Tạo hồ sơ mới

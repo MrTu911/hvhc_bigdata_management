@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
+import { AggregateExportButton } from '@/components/templates/export/aggregate-export-button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -327,6 +328,7 @@ export default function PublicationsPage() {
             <Download className="h-4 w-4" />
             Export
           </Button>
+          <AggregateExportButton entityType="publication" label="Xuất danh sách" />
           <Button
             size="sm"
             className="bg-blue-600 hover:bg-blue-700 text-white gap-1.5 shadow-sm"

@@ -1,4 +1,10 @@
 /**
+ * @deprecated — File legacy, đã được thay thế bởi orchestrator prisma/seeds/index.ts.
+ * Giữ lại để tra cứu lịch sử (migration rule: không hard-delete). KHÔNG dùng cho seed mới.
+ * Xem prisma/seeds/README.md mục "\File legacy đã deprecate'".
+ */
+
+/**
  * Script seed dữ liệu đồng bộ theo QĐ 144/BQP
  * Mỗi cán bộ sẽ có đầy đủ các bảng dữ liệu liên quan:
  * - User (CSDL Quân nhân)

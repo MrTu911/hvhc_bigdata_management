@@ -1,4 +1,10 @@
 /**
+ * @deprecated — File legacy, đã được thay thế bởi orchestrator prisma/seeds/index.ts.
+ * Giữ lại để tra cứu lịch sử (migration rule: không hard-delete). KHÔNG dùng cho seed mới.
+ * Xem prisma/seeds/README.md mục "\File legacy đã deprecate'".
+ */
+
+/**
  * Seed dữ liệu CSDL Chính sách (A2.3) và Bảo hiểm XH (A2.4)
  * Chạy: yarn tsx --require dotenv/config prisma/seed/seed_policy_insurance.ts
  */

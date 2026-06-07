@@ -1,10 +1,13 @@
 import { PrismaClient, Prisma } from '@prisma/client';
 import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
 
 const prisma = new PrismaClient();
 
-const NAS_PASSWORD = 'nas@hvhc2024';
-const SERVER_PASSWORD = 'server@hvhc2024';
+// Không hard-code credential trong repo (security rule). Demo credential lấy từ env;
+// nếu thiếu thì sinh ngẫu nhiên lúc chạy — chỉ lưu bản băm bcrypt vào DB.
+const NAS_PASSWORD = process.env.DEMO_NAS_PASSWORD ?? crypto.randomBytes(12).toString('base64url');
+const SERVER_PASSWORD = process.env.DEMO_SERVER_PASSWORD ?? crypto.randomBytes(12).toString('base64url');
 
 async function seedInfrastructure() {
   console.log('🔧 Seeding infrastructure configurations...');
@@ -228,6 +231,11 @@ async function seedInfrastructure() {
       duration: 1842,
     },
   ];
+
+  // Idempotent: xóa sync log demo cũ của đúng các config này trước khi tạo lại,
+  // tránh nhân đôi khi chạy lại seed.
+  const demoConfigIds = [nas1.id, nas2.id, gpuServer.id, devServer.id, backupServer.id];
+  await prisma.syncLog.deleteMany({ where: { configId: { in: demoConfigIds } } });
 
   // Insert sync logs với timestamps khác nhau
   const now = Date.now();

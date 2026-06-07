@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { AggregateExportButton } from '@/components/templates/export/aggregate-export-button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -1351,6 +1352,7 @@ export default function FacultyListPage() {
                 onClick={fetchFaculty}>
                 <RefreshCw className="h-4 w-4" />
               </Button>
+              <AggregateExportButton entityType="faculty" label="Xuất danh sách" />
             </div>
           </div>
         </div>

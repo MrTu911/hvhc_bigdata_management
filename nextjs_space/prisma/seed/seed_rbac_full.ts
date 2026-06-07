@@ -1,4 +1,10 @@
 /**
+ * @deprecated — File legacy, đã được thay thế bởi orchestrator prisma/seeds/index.ts.
+ * Giữ lại để tra cứu lịch sử (migration rule: không hard-delete). KHÔNG dùng cho seed mới.
+ * Xem prisma/seeds/README.md mục "\File legacy đã deprecate'".
+ */
+
+/**
  * seed_rbac_full.ts
  * Seed hợp nhất: tất cả Functions + tất cả Positions + phân quyền đầy đủ theo chức vụ
  * Admin (SYSTEM_ADMIN) nhận toàn bộ function codes ở scope ACADEMY

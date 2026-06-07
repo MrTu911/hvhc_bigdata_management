@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { AggregateExportButton } from '@/components/templates/export/aggregate-export-button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -144,6 +145,8 @@ export default function DisciplinePage() {
           </h1>
           <p className="text-gray-500">Theo dõi và quản lý các hình thức kỉ luật</p>
         </div>
+        <div className="flex items-center gap-2">
+        <AggregateExportButton entityType="policy" label="Xuất danh sách" />
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
             <Button><Plus className="h-4 w-4 mr-2" />Thêm mới</Button>
@@ -204,6 +207,7 @@ export default function DisciplinePage() {
             </div>
           </DialogContent>
         </Dialog>
+        </div>
       </div>
 
       {/* Stats */}

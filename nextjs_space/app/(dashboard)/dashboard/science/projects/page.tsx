@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
+import { AggregateExportButton } from '@/components/templates/export/aggregate-export-button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import {
@@ -327,12 +328,15 @@ export default function ScienceProjectsPage() {
             Quản lý vòng đời đề tài · theo dõi tiến độ · kinh phí
           </p>
         </div>
-        <Link href="/dashboard/science/projects/new">
-          <Button className="bg-violet-600 hover:bg-violet-700 text-white gap-2 shadow-sm">
-            <Plus className="h-4 w-4" />
-            Thêm đề tài
-          </Button>
-        </Link>
+        <div className="flex items-center gap-2">
+          <AggregateExportButton entityType="research_project" label="Xuất danh sách" />
+          <Link href="/dashboard/science/projects/new">
+            <Button className="bg-violet-600 hover:bg-violet-700 text-white gap-2 shadow-sm">
+              <Plus className="h-4 w-4" />
+              Thêm đề tài
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* ── Stats ──────────────────────────────────────────────────────────── */}
