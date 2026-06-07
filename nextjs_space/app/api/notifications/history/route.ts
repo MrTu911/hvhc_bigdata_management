@@ -5,7 +5,11 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getNotificationHistory, getNotificationStats } from '@/lib/notifications/history';
+import {
+  getNotificationHistory,
+  getNotificationStats,
+  getNotificationHistoryCount,
+} from '@/lib/notifications/history';
 import { requireFunction } from '@/lib/rbac/middleware';
 import { SYSTEM } from '@/lib/rbac/function-codes';
 
@@ -36,11 +40,25 @@ export async function GET(request: NextRequest) {
       offset: searchParams.get('offset') ? parseInt(searchParams.get('offset')!) : 0,
     };
 
-    const history = await getNotificationHistory(filters);
+    // Lấy danh sách + tổng số (cùng filter, bỏ limit/offset) song song để phân trang.
+    const countFilters = {
+      type: filters.type,
+      recipient: filters.recipient,
+      status: filters.status,
+      startDate: filters.startDate,
+      endDate: filters.endDate,
+    };
+    const [history, total] = await Promise.all([
+      getNotificationHistory(filters),
+      getNotificationHistoryCount(countFilters),
+    ]);
 
     return NextResponse.json({
       success: true,
       data: history,
+      total,
+      page: Math.floor(filters.offset / filters.limit) + 1,
+      pageSize: filters.limit,
       filters,
     });
   } catch (error: any) {

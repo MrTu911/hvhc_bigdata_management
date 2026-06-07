@@ -67,6 +67,7 @@
     --module-admin: 220 14% 25%;
     --module-workflow: 200 90% 38%;
     --module-bigdata: 217 91% 40%;
+    --module-notifications: 234 76% 46%;
 
     /* Chart palette — consumed by recharts wrappers via hsl(var(--chart-N)).
        Mirrors the BigData design template: blue / gold / info / success / danger. */

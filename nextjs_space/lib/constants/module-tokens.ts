@@ -10,6 +10,7 @@ export type ModuleId =
   | 'admin'
   | 'workflow'
   | 'bigdata'
+  | 'notifications'
   | 'default';
 
 export interface ModuleToken {
@@ -120,6 +121,15 @@ export const MODULE_TOKENS: Record<ModuleId, ModuleToken> = {
     heroGradient: 'from-blue-900 via-blue-800 to-sky-700',
     sidebarGradient: 'from-blue-600 to-sky-600',
     accentText: 'text-sky-200',
+    iconBg: 'bg-white/20',
+  },
+  notifications: {
+    id: 'notifications',
+    label: 'Trung tâm Thông báo',
+    code: 'TB',
+    heroGradient: 'from-indigo-900 via-indigo-800 to-blue-800',
+    sidebarGradient: 'from-indigo-600 to-blue-600',
+    accentText: 'text-indigo-200',
     iconBg: 'bg-white/20',
   },
   default: {
