@@ -10,12 +10,16 @@
 
 import {
   PrismaClient,
-  PartyMemberStatus,
   PartyPosition,
   UserRole,
   UserStatus,
 } from '@prisma/client';
 import 'dotenv/config';
+import {
+  assignPartyStage,
+  bucketFromId,
+  reasonForStatus,
+} from './_helpers/party-status-distribution';
 
 const prisma = new PrismaClient();
 
@@ -39,17 +43,6 @@ function pick<T>(arr: readonly T[], seed: number): T {
 
 function buildPartyCard(index: number): string {
   return `DV${String(100000 + index)}`;
-}
-
-function buildJoinDate(seed: number): Date {
-  const year = 2008 + (seed % 13); // 2008..2020
-  const month = seed % 12;
-  const day = 1 + (seed % 27);
-  return new Date(year, month, day);
-}
-
-function buildOfficialDate(joinDate: Date): Date {
-  return new Date(joinDate.getFullYear() + 1, joinDate.getMonth(), joinDate.getDate());
 }
 
 function inferPartyPositionFromRole(role: UserRole, seed: number): PartyPosition {
@@ -176,6 +169,8 @@ async function main() {
   let updated = 0;
   let skipped = 0;
 
+  const now = new Date();
+
   for (let i = 0; i < users.length; i++) {
     const user = users[i] as CandidateUser;
     const seed = i + 1;
@@ -187,41 +182,51 @@ async function main() {
 
     const organization = await resolveBestOrganizationForUser(user);
 
-    const joinDate = user.partyJoinDate ?? buildJoinDate(seed);
-    const officialDate = buildOfficialDate(joinDate);
     const currentPosition = inferPartyPositionFromRole(user.role, seed);
+
+    // Trạng thái + ngày tháng nhất quán với vòng đời (tôn trọng partyJoinDate thật nếu có).
+    const stage = assignPartyStage(currentPosition, bucketFromId(user.id), now, {
+      existingJoinDate: user.partyJoinDate,
+      classifyFromExistingDate: true,
+    });
 
     const existing = await prisma.partyMember.findUnique({
       where: { userId: user.id },
     });
 
-    const payload = {
+    // Field không thuộc vòng đời — an toàn ghi đè khi re-seed.
+    const baseFields = {
       userId: user.id,
       organizationId: organization.id,
       partyCardNumber: buildPartyCard(seed),
-      joinDate,
-      officialDate,
       partyCell: organization.shortName ?? organization.name,
       partyCommittee: 'Đảng ủy Học viện Hậu cần',
       recommender1: 'Đồng chí Nguyễn Văn A',
       recommender2: 'Đồng chí Trần Văn B',
       currentPosition,
-      status: 'ACTIVE' as PartyMemberStatus,
-      statusChangeDate: null as Date | null,
-      statusChangeReason: null as string | null,
       deletedAt: null as Date | null,
       deletedBy: null as string | null,
     };
 
+    // Field vòng đời — CHỈ set khi tạo mới; re-seed KHÔNG ghi đè (tôn trọng thay đổi lifecycle thủ công).
+    const lifecycleFields = {
+      status: stage.status,
+      joinDate: stage.joinDate,
+      officialDate: stage.officialDate,
+      statusChangeDate: stage.status === 'KHAI_TRU' ? now : (null as Date | null),
+      statusChangeReason:
+        stage.status === 'KHAI_TRU' ? reasonForStatus(stage.status) : (null as string | null),
+    };
+
     if (!existing) {
       await prisma.partyMember.create({
-        data: payload,
+        data: { ...baseFields, ...lifecycleFields },
       });
       created++;
     } else {
       await prisma.partyMember.update({
         where: { userId: user.id },
-        data: payload,
+        data: baseFields,
       });
       updated++;
     }
@@ -229,12 +234,12 @@ async function main() {
     await prisma.user.update({
       where: { id: user.id },
       data: {
-        partyJoinDate: joinDate,
+        partyJoinDate: stage.joinDate,
         partyPosition: partyPositionToUserString(currentPosition),
       },
     });
 
-    console.log(`✅ ${user.email} -> ${organization.code} -> ${currentPosition}`);
+    console.log(`✅ ${user.email} -> ${organization.code} -> ${currentPosition} -> ${stage.status}`);
   }
 
   const total = await prisma.partyMember.count();
