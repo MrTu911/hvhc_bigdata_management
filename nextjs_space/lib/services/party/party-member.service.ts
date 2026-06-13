@@ -27,6 +27,19 @@ function formatZodError(prefix: string, issues: string[]) {
   return `${prefix}: ${issues.join('; ')}`;
 }
 
+// Khi cập nhật: phân biệt "không gửi field" (undefined → giữ giá trị cũ) với
+// "gửi field rỗng/null" (cho phép xóa giá trị). Tránh dùng `??` vì `??` không
+// cho phép set null để clear một trường text.
+function coalesceUpdate<T>(value: T | undefined, current: T): T {
+  return value === undefined ? current : value;
+}
+
+function coalesceAlias<T>(primary: T | undefined, alias: T | undefined, current: T): T {
+  if (primary !== undefined) return primary;
+  if (alias !== undefined) return alias;
+  return current;
+}
+
 function normalizeCreatePayload(payload: PartyMemberCreateInput) {
   const status = payload.status as PartyMemberStatus | undefined;
 
@@ -63,14 +76,17 @@ export async function listPartyMembers(filters: PartyMemberListFilters) {
 
   const { search, status, organizationId, page, limit } = parsed.data;
 
-  const { items, total } = await PartyMemberRepo.findMany({
-    search,
-    status,
-    organizationId,
-    unitIds: filters.unitIds,
-    page,
-    limit,
-  });
+  const [{ items, total }, stats] = await Promise.all([
+    PartyMemberRepo.findMany({
+      search,
+      status,
+      organizationId,
+      unitIds: filters.unitIds,
+      page,
+      limit,
+    }),
+    PartyMemberRepo.countByStatus(filters.unitIds),
+  ]);
 
   return {
     items,
@@ -80,6 +96,7 @@ export async function listPartyMembers(filters: PartyMemberListFilters) {
       limit,
       totalPages: Math.ceil(total / limit),
     },
+    stats,
   };
 }
 
@@ -139,20 +156,22 @@ export async function updatePartyMember(id: string, payload: any) {
   }
 
   const updatePayload = {
-    organizationId: data.organizationId ?? data.partyOrgId ?? current.organizationId,
-    partyCardNumber: data.partyCardNumber ?? data.partyCardNo ?? current.partyCardNumber,
-    partyRole: data.partyRole ?? current.partyRole,
-    joinDate: data.joinDate === undefined ? current.joinDate : data.joinDate,
-    officialDate: data.officialDate === undefined ? current.officialDate : data.officialDate,
-    recommender1: data.recommender1 ?? data.introducer1 ?? current.recommender1,
-    recommender2: data.recommender2 ?? data.introducer2 ?? current.recommender2,
-    currentReviewGrade: data.currentReviewGrade ?? current.currentReviewGrade,
+    organizationId: coalesceAlias(data.organizationId, data.partyOrgId, current.organizationId),
+    partyCardNumber: coalesceAlias(data.partyCardNumber, data.partyCardNo, current.partyCardNumber),
+    partyRole: coalesceUpdate(data.partyRole, current.partyRole),
+    joinDate: coalesceUpdate(data.joinDate, current.joinDate),
+    officialDate: coalesceUpdate(data.officialDate, current.officialDate),
+    recommender1: coalesceAlias(data.recommender1, data.introducer1, current.recommender1),
+    recommender2: coalesceAlias(data.recommender2, data.introducer2, current.recommender2),
+    currentReviewGrade: coalesceUpdate(data.currentReviewGrade, current.currentReviewGrade),
     currentDebtAmount:
       data.currentDebtAmount === undefined ? current.currentDebtAmount ?? 0 : Number(data.currentDebtAmount),
-    confidentialNote: data.confidentialNote ?? current.confidentialNote,
+    confidentialNote: coalesceUpdate(data.confidentialNote, current.confidentialNote),
     status: nextStatus ?? current.status,
     statusChangeDate: statusChanged ? new Date() : current.statusChangeDate,
-    statusChangeReason: data.statusChangeReason ?? current.statusChangeReason,
+    statusChangeReason: statusChanged
+      ? data.statusChangeReason ?? null
+      : current.statusChangeReason,
   };
 
   if (!statusChanged) {

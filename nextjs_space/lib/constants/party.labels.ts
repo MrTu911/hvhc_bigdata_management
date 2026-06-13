@@ -49,6 +49,41 @@ export const PARTY_STATUS_COLORS: Record<PartyMemberStatus, string> = {
 };
 
 // ---------------------------------------------------------------------------
+// PartyMember lifecycle transitions
+//
+// Đây là source of truth dùng chung cho:
+// - backend: party-lifecycle.service.assertPartyLifecycleTransition (enforce)
+// - frontend: dialog chỉnh sửa hồ sơ chỉ gợi ý các trạng thái đích hợp lệ.
+//
+// UI chỉ dùng để gợi ý; backend vẫn enforce nên không phải duplicate rule.
+// ---------------------------------------------------------------------------
+
+export const PARTY_LIFECYCLE_TRANSITIONS: Record<PartyMemberStatus, PartyMemberStatus[]> = {
+  QUAN_CHUNG: ['CAM_TINH'],
+  CAM_TINH: ['DOI_TUONG'],
+  DOI_TUONG: ['DU_BI'],
+  DU_BI: ['CHINH_THUC', 'XOA_TEN_TU_NGUYEN', 'KHAI_TRU'],
+  CHINH_THUC: ['CHUYEN_DI', 'XOA_TEN_TU_NGUYEN', 'KHAI_TRU'],
+  CHUYEN_DI: ['CHINH_THUC'],
+  XOA_TEN_TU_NGUYEN: [],
+  KHAI_TRU: [],
+  // Legacy statuses (tương thích dữ liệu cũ): không cho chuyển trong vòng đời mới.
+  ACTIVE: [],
+  TRANSFERRED: [],
+  SUSPENDED: [],
+  EXPELLED: [],
+};
+
+/**
+ * Danh sách trạng thái chọn được khi chỉnh sửa: trạng thái hiện tại (giữ nguyên)
+ * cộng các trạng thái đích hợp lệ. Trả về unique, giữ thứ tự current trước.
+ */
+export function getEditablePartyStatusOptions(current: PartyMemberStatus): PartyMemberStatus[] {
+  const next = PARTY_LIFECYCLE_TRANSITIONS[current] ?? [];
+  return Array.from(new Set<PartyMemberStatus>([current, ...next]));
+}
+
+// ---------------------------------------------------------------------------
 // ReviewGrade  (enum: HTXSNV | HTTNV | HTNV | KHNV)
 // ---------------------------------------------------------------------------
 

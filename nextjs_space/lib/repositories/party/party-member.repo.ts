@@ -120,7 +120,10 @@ export const PartyMemberRepo = {
       ];
     }
 
-    if (input.unitIds && input.unitIds.length > 0) {
+    // Fail-closed scope: unitIds === undefined nghĩa là ACADEMY (không lọc).
+    // unitIds === [] (scope không có đơn vị nào) phải khớp KHÔNG bản ghi nào,
+    // không được hiểu nhầm thành "không lọc" → tránh lộ dữ liệu ngoài phạm vi.
+    if (input.unitIds !== undefined) {
       userFilter.unitId = { in: input.unitIds };
     }
 
@@ -147,6 +150,29 @@ export const PartyMemberRepo = {
       where: { id, deletedAt: null },
       include: DETAIL_INCLUDE,
     });
+  },
+
+  /**
+   * Thống kê số đảng viên theo trạng thái, áp cùng scope đơn vị với danh sách
+   * (không áp filter search/status để KPI phản ánh tổng quan trong phạm vi).
+   */
+  async countByStatus(unitIds?: string[]) {
+    const where: Prisma.PartyMemberWhereInput = { deletedAt: null };
+    if (unitIds !== undefined) {
+      where.user = { unitId: { in: unitIds } };
+    }
+
+    const [grouped, total] = await Promise.all([
+      db.partyMember.groupBy({ by: ['status'], where, _count: { id: true } }),
+      db.partyMember.count({ where }),
+    ]);
+
+    const byStatus = grouped.reduce<Record<string, number>>((acc, row) => {
+      acc[row.status] = row._count.id;
+      return acc;
+    }, {});
+
+    return { total, byStatus };
   },
 
   async findById(id: string) {

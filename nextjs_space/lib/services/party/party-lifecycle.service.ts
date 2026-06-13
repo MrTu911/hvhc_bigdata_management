@@ -1,28 +1,13 @@
 import type { PartyMember, PartyMemberStatus, Prisma } from '@prisma/client';
+// Bản đồ transition là source of truth dùng chung với UI (xem party.labels.ts).
+import { PARTY_LIFECYCLE_TRANSITIONS } from '@/lib/constants/party.labels';
 
 const PROBATION_MONTHS = 12;
 const DUE_SOON_DAYS = 30;
 
-const ALLOWED_TRANSITIONS: Record<PartyMemberStatus, PartyMemberStatus[]> = {
-  QUAN_CHUNG: ['CAM_TINH'],
-  CAM_TINH: ['DOI_TUONG'],
-  DOI_TUONG: ['DU_BI'],
-  DU_BI: ['CHINH_THUC', 'XOA_TEN_TU_NGUYEN', 'KHAI_TRU'],
-  CHINH_THUC: ['CHUYEN_DI', 'XOA_TEN_TU_NGUYEN', 'KHAI_TRU'],
-  CHUYEN_DI: ['CHINH_THUC'],
-  XOA_TEN_TU_NGUYEN: [],
-  KHAI_TRU: [],
-  // Legacy statuses (tương thích dữ liệu cũ): không định nghĩa transition trong
-  // vòng đời mới — không cho phép chuyển trạng thái từ các giá trị legacy này.
-  ACTIVE: [],
-  TRANSFERRED: [],
-  SUSPENDED: [],
-  EXPELLED: [],
-};
-
 export function assertPartyLifecycleTransition(from: PartyMemberStatus, to: PartyMemberStatus) {
   if (from === to) return;
-  const allowed = ALLOWED_TRANSITIONS[from] ?? [];
+  const allowed = PARTY_LIFECYCLE_TRANSITIONS[from] ?? [];
   if (!allowed.includes(to)) {
     throw new Error(`Transition không hợp lệ: ${from} -> ${to}`);
   }

@@ -10,9 +10,12 @@ import { Skeleton } from '@/components/ui/skeleton';
 import {
   Users, Search, ChevronRight, UserCheck, Clock,
   UserX, Star, Shield, Filter, RefreshCw, Eye,
-  ChevronLeft,
+  ChevronLeft, Pencil,
 } from 'lucide-react';
 import { ModuleHero, KPICard, StatusBadge } from '@/components/ui/enhanced-data-card';
+import { PartyMemberEditDialog } from '@/components/party/member/party-member-edit-dialog';
+import { usePermissions } from '@/hooks/use-permissions';
+import { PARTY } from '@/lib/rbac/function-codes';
 
 // ─────────────────────────────────────────────────────
 // Types
@@ -20,11 +23,11 @@ import { ModuleHero, KPICard, StatusBadge } from '@/components/ui/enhanced-data-
 interface MemberRow {
   id: string;
   partyCardNumber?: string | null;
-  partyCell?: string | null;
   partyRole?: string | null;
   joinDate?: string | null;
   officialDate?: string | null;
   status: string;
+  organization?: { id: string; code?: string | null; name: string } | null;
   user?: {
     name?: string;
     militaryId?: string;
@@ -86,6 +89,10 @@ export default function PartyMembersPage() {
   const [search, setSearch]       = useState('');
   const [statusFilter, setStatus] = useState('ALL');
   const [page, setPage]           = useState(1);
+  const [editingId, setEditingId] = useState<string | null>(null);
+
+  const { hasAnyPermission } = usePermissions();
+  const canEdit = hasAnyPermission([PARTY.UPDATE_MEMBER, PARTY.UPDATE]);
 
   const fetchData = useCallback(async (pg: number, q: string, st: string) => {
     setLoading(true);
@@ -93,9 +100,10 @@ export default function PartyMembersPage() {
       const params = new URLSearchParams({ page: String(pg), limit: String(LIMIT) });
       if (q)          params.set('search', q);
       if (st !== 'ALL') params.set('status', st);
-      const res  = await fetch(`/api/party-members?${params}`);
+      // Dùng route chuẩn /api/party/members (enforce scope + audit + stats).
+      const res  = await fetch(`/api/party/members?${params}`);
       const json = await res.json();
-      setItems(json?.members ?? []);
+      setItems(json?.data ?? []);
       setPag(json?.pagination ?? null);
       setStats(json?.stats ?? null);
     } finally {
@@ -299,9 +307,9 @@ export default function PartyMembersPage() {
                       {m.partyRole ?? '—'}
                     </p>
 
-                    {/* Party cell */}
+                    {/* Tổ chức Đảng (chi bộ) — dùng quan hệ organization chuẩn */}
                     <p className="text-sm text-gray-600 dark:text-gray-400 truncate hidden md:block">
-                      {m.partyCell ?? '—'}
+                      {m.organization?.name ?? '—'}
                     </p>
 
                     {/* Join date */}
@@ -327,7 +335,18 @@ export default function PartyMembersPage() {
                     </div>
 
                     {/* Action */}
-                    <div className="flex items-center justify-end">
+                    <div className="flex items-center justify-end gap-1">
+                      {canEdit && (
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => setEditingId(m.id)}
+                          className="h-8 gap-1.5 text-xs opacity-60 group-hover:opacity-100 transition-opacity"
+                        >
+                          <Pencil className="h-3.5 w-3.5" />
+                          <span className="hidden sm:inline">Sửa</span>
+                        </Button>
+                      )}
                       <Link href={`/dashboard/party/members/${m.id}`}>
                         <Button
                           size="sm"
@@ -389,6 +408,15 @@ export default function PartyMembersPage() {
           </div>
         )}
       </Card>
+
+      {canEdit && (
+        <PartyMemberEditDialog
+          memberId={editingId}
+          open={editingId !== null}
+          onOpenChange={(o) => { if (!o) setEditingId(null); }}
+          onSaved={() => fetchData(page, search, statusFilter)}
+        />
+      )}
     </div>
   );
 }

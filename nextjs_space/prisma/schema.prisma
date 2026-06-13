@@ -2195,7 +2195,10 @@ model PartyMember {
   partyRole          String?
   joinDate           DateTime?
   officialDate       DateTime?
+  /// @deprecated Legacy free-text. Nguồn sự thật mới là quan hệ organization (organizationId → PartyOrganization).
+  /// Giữ tạm để rollback/đối chiếu; backfill bằng scripts/backfill/backfill-party-org-from-cell.ts rồi tắt dần. Không ghi mới qua service chuẩn.
   partyCell          String?
+  /// @deprecated Legacy free-text. Thay bằng quan hệ organization (PartyOrganization). Xem partyCell.
   partyCommittee     String?
   recommender1       String?
   recommender2       String?
