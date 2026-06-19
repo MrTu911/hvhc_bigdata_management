@@ -115,6 +115,53 @@ model User {
   mfaEnabled                          Boolean                    @default(false)
   mfaSecret                           String?
   mustChangePassword                  Boolean                    @default(false) // Buộc đổi mật khẩu lần đăng nhập kế tiếp (tài khoản cấp sẵn)
+  // ===== M02 ext: Hồ sơ cán bộ điện tử (mẫu 99 trường) — bổ sung trường còn thiếu =====
+  aliasName                           String?                    // (2) Họ tên khác / bí danh
+  salaryRaiseCount                    Int?                       // (12) Nâng lương (lần)
+  salaryRaiseDate                     DateTime?                  // (13) Thời gian nâng lương
+  salaryCoefficient                   Decimal?                   @db.Decimal(6, 2) // (14) Hệ số lương
+  salaryAmount                        Decimal?                   @db.Decimal(18, 2) // (15) Mức lương
+  positionAllowanceCoeff              Decimal?                   @db.Decimal(6, 2) // (18) Hệ số phụ cấp chức vụ
+  familyBackgroundId                  String?                    @db.VarChar(20) // (28) Thành phần gia đình
+  personalBackgroundId                String?                    @db.VarChar(20) // (29) Thành phần bản thân
+  identifyingMarks                    String?                    // (30) Nhận dạng
+  healthGrade                         String?                    // (31) Sức khỏe (loại)
+  height                              Float?                     // (32) Chiều cao (m)
+  weight                              Float?                     // (33) Cân nặng (kg)
+  chronicDisease                      String?                    // (35) Bệnh chính
+  disabilityStatus                    String?                    // (36) Thương tật
+  disabilityDetail                    String?                    // (37) Chi tiết thương tật
+  warMartyrFamily                     String?                    // (38) Gia đình thương binh, liệt sĩ
+  academicTitleId                     String?                    @db.VarChar(10) // (39) Học hàm
+  academicTitleDate                   DateTime?                  // (40) Thời gian học hàm
+  academicDegreeId                    String?                    @db.VarChar(10) // (41) Học vị
+  commandMgmtLevel                    CommandMgmtLevel?          // (43) Trình độ chỉ huy quản lý
+  commandMgmtLevelDate                DateTime?                  // (44) Thời gian nhận CHQL
+  politicalTheoryLevel                PoliticalTheoryLevel?      // (45) Trình độ lý luận chính trị
+  politicalTheoryDate                 DateTime?                  // (46) Thời gian LLCT
+  generalEducationLevel               String?                    // (49) Trình độ văn hóa (vd 12/12)
+  revolutionJoinDate                  DateTime?                  // (50) Tham gia cách mạng
+  recruitmentDate                     DateTime?                  // (51) Thời gian tuyển dụng
+  recruitmentUnit                     String?                    // (52) Đơn vị tuyển dụng
+  enlistmentUnit                      String?                    // (54) Đơn vị nhập ngũ
+  dischargeUnit                       String?                    // (56) Đơn vị xuất ngũ
+  reenlistmentDate                    DateTime?                  // (57) Thời gian tái ngũ
+  reenlistmentUnit                    String?                    // (58) Đơn vị tái ngũ
+  partyJoinPlace                      String?                    // (60) Nơi kết nạp Đảng
+  partyOfficialPlace                  String?                    // (62) Nơi vào Đảng chính thức
+  recommenderPartyPosition            String?                    // (64) Chức vụ đảng người giới thiệu
+  workStrength                        String?                    // (70) Sở trường công tác
+  personalStrength                    String?                    // (71) Sở trường cá nhân
+  personalHobby                       String?                    // (72) Sở thích cá nhân
+  currentMainWork                     String?                    // (73) Công tác chính đang làm
+  longestWork                         String?                    // (74) Công việc đã làm lâu nhất
+  currentSector                       String?                    // (75) Ngành đang công tác
+  cadreType                           String?                    // (76) Loại cán bộ
+  entrySource                         String?                    // (77) Nguồn vào đội ngũ
+  isCorrectPosition                   Boolean?                   // (78) Đúng vị trí công tác
+  maritalStatus                       MaritalStatus?             // (79) Tình trạng hôn nhân
+  headcountIncreaseReason             String?                    // (81) Lý do tăng quân số
+  headcountIncreaseDate               DateTime?                  // (82) Thời gian tăng quân số
   accounts                            Account[]
   aiUsageLogs                         AIUsageLog[]
   authSessions                        AuthSession[]
@@ -211,6 +258,24 @@ model User {
   rankDeclarationsCreated             RankDeclaration[]           @relation("RankDeclarationDeclarer")
   declarationAmendmentsRequested      DeclarationAmendment[]      @relation("AmendmentRequester")
   promotionProposalsCreated           PromotionProposal[]         @relation("PromotionProposalAuthor")
+  // M02 ext: Hồ sơ cán bộ điện tử — catalog refs
+  academicTitleRef                    AcademicTitle?             @relation(fields: [academicTitleId], references: [id])
+  academicDegreeRef                   AcademicDegree?            @relation(fields: [academicDegreeId], references: [id])
+  familyBackgroundRef                 FamilyBackground?          @relation("UserFamilyBackground", fields: [familyBackgroundId], references: [id])
+  personalBackgroundRef               FamilyBackground?          @relation("UserPersonalBackground", fields: [personalBackgroundId], references: [id])
+  // M02 ext: Hồ sơ cán bộ điện tử — back-relations
+  youthUnionMembership                YouthUnionMembership?
+  youthUnionPositionHistory           YouthUnionPositionHistory[]
+  assetDeclarations                   AssetDeclaration[]
+  foreignTrips                        ForeignTrip[]
+  honorTitleRecords                   HonorTitleRecord[]
+  combatHistories                     CombatHistory[]
+  personnelEvaluations                PersonnelEvaluation[]
+  allowanceRecords                    AllowanceRecord[]
+  concurrentPositions                 ConcurrentPosition[]
+  professionalTitleRecords            ProfessionalTitleRecord[]
+  ethnicLanguages                     EthnicLanguage[]
+  externalPositions                   ExternalPosition[]
 
   @@index([email])
   @@index([role])
@@ -2729,6 +2794,12 @@ model FamilyRelation {
   isDeceased    Boolean            @default(false)
   deceasedDate  DateTime?
   dependentFlag Boolean            @default(false)
+  hometownOld      String?         // (89) Quê quán (cũ)
+  residenceNew     String?         // (89) Thường trú (mới)
+  isPartyMember    Boolean         @default(false) // (89) Là đảng viên
+  partyPosition    String?         // (89) Chức vụ đảng
+  isSeniorOfficial Boolean         @default(false) // (89) Là cán bộ cao cấp
+  politicalNote    String?         // (89) Đặc điểm chính trị (tổng hợp)
   notes         String?
   deletedAt     DateTime?
   deletedBy     String?
@@ -2742,6 +2813,345 @@ model FamilyRelation {
   @@index([relation])
   @@index([deletedAt])
   @@map("family_relations")
+}
+
+// ============================================================================
+// M02 ext — Hồ sơ cán bộ điện tử (mẫu 99 trường): các model bổ sung.
+// Khóa theo userId (bắt buộc) + personnelId (tùy chọn), soft-delete cho dữ liệu
+// pháp lý/lịch sử, sortOrder cho thứ tự hiển thị khi xuất văn bản.
+// ============================================================================
+
+model YouthUnionMembership {
+  id              String                      @id @default(cuid())
+  userId          String                      @unique
+  personnelId     String?
+  joinDate        DateTime?                   // (65) Thời gian vào Đoàn
+  joinPlace       String?                     // (66) Nơi vào Đoàn
+  currentPosition String?                     // (67) Chức vụ Đoàn hiện tại
+  leftDate        DateTime?
+  notes           String?
+  deletedAt       DateTime?
+  deletedBy       String?
+  createdAt       DateTime                    @default(now())
+  updatedAt       DateTime                    @updatedAt
+  user            User                        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  personnel       Personnel?                  @relation(fields: [personnelId], references: [id])
+  positionHistory YouthUnionPositionHistory[]
+
+  @@index([userId])
+  @@index([personnelId])
+  @@index([deletedAt])
+  @@map("youth_union_memberships")
+}
+
+model YouthUnionPositionHistory {
+  id             String               @id @default(cuid())
+  membershipId   String
+  userId         String
+  personnelId    String?
+  position       String               // (97) Chức vụ Đoàn
+  organization   String?
+  fromDate       DateTime?
+  toDate         DateTime?
+  decisionNumber String?
+  notes          String?
+  sortOrder      Int                  @default(0)
+  deletedAt      DateTime?
+  deletedBy      String?
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+  membership     YouthUnionMembership @relation(fields: [membershipId], references: [id], onDelete: Cascade)
+  user           User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  personnel      Personnel?           @relation(fields: [personnelId], references: [id])
+
+  @@index([membershipId])
+  @@index([userId])
+  @@index([personnelId])
+  @@map("youth_union_position_histories")
+}
+
+model AssetDeclaration {
+  id           String     @id @default(cuid())
+  userId       String
+  personnelId  String?
+  assetType    AssetType  // (88) Loại tài sản
+  declaredDate DateTime?
+  assetName    String     // Tên tài sản / công trình
+  area         String?    // Diện tích
+  value        Decimal?   @db.Decimal(18, 2) // Giá trị
+  documentRef  String?    // Giấy tờ chứng nhận
+  notes        String?
+  sortOrder    Int        @default(0)
+  deletedAt    DateTime?
+  deletedBy    String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  personnel    Personnel? @relation(fields: [personnelId], references: [id])
+
+  @@index([userId])
+  @@index([personnelId])
+  @@index([assetType])
+  @@index([deletedAt])
+  @@map("asset_declarations")
+}
+
+model ForeignTrip {
+  id             String     @id @default(cuid())
+  userId         String
+  personnelId    String?
+  fromDate       DateTime?
+  toDate         DateTime?
+  country        String     // (90) Nước đến
+  purpose        String?    // Lý do
+  sponsor        String?    // Kinh phí / nguồn cử đi
+  decisionNumber String?
+  notes          String?
+  sortOrder      Int        @default(0)
+  deletedAt      DateTime?
+  deletedBy      String?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  user           User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  personnel      Personnel? @relation(fields: [personnelId], references: [id])
+
+  @@index([userId])
+  @@index([personnelId])
+  @@index([deletedAt])
+  @@map("foreign_trips")
+}
+
+model HonorTitleRecord {
+  id             String      @id @default(cuid())
+  userId         String
+  personnelId    String?
+  meritTitleId   String?     @db.VarChar(30)
+  titleName      String      // (91) Danh hiệu (snapshot)
+  level          String?     // Cấp
+  awardYear      Int?
+  decisionNumber String?
+  awardedBy      String?
+  notes          String?
+  sortOrder      Int         @default(0)
+  deletedAt      DateTime?
+  deletedBy      String?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  user           User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  personnel      Personnel?  @relation(fields: [personnelId], references: [id])
+  meritTitle     MeritTitle? @relation(fields: [meritTitleId], references: [id])
+
+  @@index([userId])
+  @@index([personnelId])
+  @@index([meritTitleId])
+  @@index([deletedAt])
+  @@map("honor_title_records")
+}
+
+model CombatHistory {
+  id          String     @id @default(cuid())
+  userId      String
+  personnelId String?
+  fromDate    DateTime?
+  toDate      DateTime?
+  battlefield String?    // (83) Chiến trường / mặt trận
+  unit        String?    // Đơn vị chiến đấu
+  role        String?    // Cương vị
+  description String?
+  sortOrder   Int        @default(0)
+  deletedAt   DateTime?
+  deletedBy   String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  personnel   Personnel? @relation(fields: [personnelId], references: [id])
+
+  @@index([userId])
+  @@index([personnelId])
+  @@index([deletedAt])
+  @@map("combat_histories")
+}
+
+model PersonnelEvaluation {
+  id               String                @id @default(cuid())
+  userId           String
+  personnelId      String?
+  periodType       EvaluationPeriodType  // (95) Kỳ đánh giá: quý/năm
+  periodYear       Int
+  periodQuarter    Int?                  // 1..4 khi periodType = QUY
+  taskResultRankId String?               @db.VarChar(20)
+  taskResultLabel  String?               // Kết quả phân loại (snapshot, vd HTSXNV)
+  partyMemberRank  String?               // Xếp loại đảng viên
+  decisionNumber   String?
+  notes            String?
+  sortOrder        Int                   @default(0)
+  deletedAt        DateTime?
+  deletedBy        String?
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
+  user             User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  personnel        Personnel?            @relation(fields: [personnelId], references: [id])
+  taskResultRank   AnnualEvaluationRank? @relation(fields: [taskResultRankId], references: [id])
+
+  @@unique([userId, periodType, periodYear, periodQuarter])
+  @@index([userId])
+  @@index([personnelId])
+  @@index([periodYear])
+  @@index([deletedAt])
+  @@map("personnel_evaluations")
+}
+
+model AllowanceRecord {
+  id              String         @id @default(cuid())
+  userId          String
+  personnelId     String?
+  allowanceTypeId String?        @db.VarChar(30)
+  allowanceLabel  String?        // (96) Loại phụ cấp (snapshot)
+  fromDate        DateTime?
+  toDate          DateTime?
+  coefficient     Decimal?       @db.Decimal(6, 2) // Hệ số
+  reason          String?
+  decisionNumber  String?
+  notes           String?
+  sortOrder       Int            @default(0)
+  deletedAt       DateTime?
+  deletedBy       String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  personnel       Personnel?     @relation(fields: [personnelId], references: [id])
+  allowanceType   AllowanceType? @relation(fields: [allowanceTypeId], references: [id])
+
+  @@index([userId])
+  @@index([personnelId])
+  @@index([allowanceTypeId])
+  @@index([deletedAt])
+  @@map("allowance_records")
+}
+
+model ConcurrentPosition {
+  id             String     @id @default(cuid())
+  userId         String
+  personnelId    String?
+  positionTitle  String     // (19) Chức vụ kiêm
+  fromDate       DateTime?  // (20) Thời gian chức vụ kiêm
+  toDate         DateTime?
+  unit           String?
+  detail         String?    // (21) Chi tiết chức vụ kiêm
+  decisionNumber String?
+  notes          String?
+  sortOrder      Int        @default(0)
+  deletedAt      DateTime?
+  deletedBy      String?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  user           User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  personnel      Personnel? @relation(fields: [personnelId], references: [id])
+
+  @@index([userId])
+  @@index([personnelId])
+  @@index([deletedAt])
+  @@map("concurrent_positions")
+}
+
+model ProfessionalTitleRecord {
+  id             String     @id @default(cuid())
+  userId         String
+  personnelId    String?
+  titleName      String     // (68) Chức danh CMKTNV (vd Giảng viên chính)
+  effectiveDate  DateTime?  // (69) Thời gian nhận
+  decisionNumber String?
+  issuer         String?
+  notes          String?
+  sortOrder      Int        @default(0)
+  deletedAt      DateTime?
+  deletedBy      String?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  user           User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  personnel      Personnel? @relation(fields: [personnelId], references: [id])
+
+  @@index([userId])
+  @@index([personnelId])
+  @@index([deletedAt])
+  @@map("professional_title_records")
+}
+
+model EthnicLanguage {
+  id          String     @id @default(cuid())
+  userId      String
+  personnelId String?
+  language    String     // (85) Tên tiếng dân tộc
+  proficiency String?    // Mức độ
+  notes       String?
+  sortOrder   Int        @default(0)
+  deletedAt   DateTime?
+  deletedBy   String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  personnel   Personnel? @relation(fields: [personnelId], references: [id])
+
+  @@index([userId])
+  @@index([personnelId])
+  @@index([deletedAt])
+  @@map("ethnic_languages")
+}
+
+model ExternalPosition {
+  id             String     @id @default(cuid())
+  userId         String
+  personnelId    String?
+  positionTitle  String     // (99) Chức vụ ngoài Quân đội
+  organization   String?
+  fromDate       DateTime?
+  toDate         DateTime?
+  decisionNumber String?
+  notes          String?
+  sortOrder      Int        @default(0)
+  deletedAt      DateTime?
+  deletedBy      String?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  user           User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  personnel      Personnel? @relation(fields: [personnelId], references: [id])
+
+  @@index([userId])
+  @@index([personnelId])
+  @@index([deletedAt])
+  @@map("external_positions")
+}
+
+enum AssetType {
+  DAT
+  NHA
+  O_TO
+  TAI_SAN_KHAC
+}
+
+enum EvaluationPeriodType {
+  QUY
+  NAM
+}
+
+enum CommandMgmtLevel {
+  SO_CAP
+  TRUNG_CAP
+  CAO_CAP
+}
+
+enum PoliticalTheoryLevel {
+  SO_CAP
+  TRUNG_CAP
+  CAO_CAP
+  CU_NHAN
+}
+
+enum MaritalStatus {
+  DOC_THAN
+  KET_HON
+  LY_HON
+  GOA
 }
 
 model AIUsageLog {
@@ -2876,6 +3286,8 @@ model Personnel {
   specializationId        String?
   birthPlaceAdminId       String?
   placeOfOriginAdminId    String?
+  permanentAddressAdminId String?                  // (26) Thường trú (địa danh mới)
+  currentResidenceAdminId String?                  // (27) Nơi ở hiện nay (địa danh mới)
   officerCareer           OfficerCareer?           @relation("OfficerCareerLink")
   birthPlaceAdminRef      AdministrativeUnit?      @relation("PersonnelBirthPlaceAdmin", fields: [birthPlaceAdminId], references: [id])
   ethnicityRef            Ethnicity?               @relation("PersonnelEthnicity", fields: [ethnicityId], references: [id])
@@ -2895,6 +3307,21 @@ model Personnel {
   scientificProfile       ScientificProfile?       @relation("ScientificProfilePersonnel")
   rankDeclarations        RankDeclaration[]        @relation("RankDeclarationPersonnel")
   promotionProposals      PromotionProposal[]      @relation("PromotionProposalPersonnel")
+  // M02 ext: Hồ sơ cán bộ điện tử — địa danh hành chính mới + back-relations
+  permanentAddressAdminRef AdministrativeUnit?     @relation("PersonnelPermanentAddressAdmin", fields: [permanentAddressAdminId], references: [id])
+  currentResidenceAdminRef AdministrativeUnit?     @relation("PersonnelCurrentResidenceAdmin", fields: [currentResidenceAdminId], references: [id])
+  youthUnionMemberships    YouthUnionMembership[]
+  youthUnionPositionHistory YouthUnionPositionHistory[]
+  assetDeclarations        AssetDeclaration[]
+  foreignTrips             ForeignTrip[]
+  honorTitleRecords        HonorTitleRecord[]
+  combatHistories          CombatHistory[]
+  personnelEvaluations     PersonnelEvaluation[]
+  allowanceRecords         AllowanceRecord[]
+  concurrentPositions      ConcurrentPosition[]
+  professionalTitleRecords ProfessionalTitleRecord[]
+  ethnicLanguages          EthnicLanguage[]
+  externalPositions        ExternalPosition[]
 
   @@index([personnelCode])
   @@index([category])
@@ -3839,6 +4266,8 @@ model AdministrativeUnit {
   personnelPlaceOfOrigin Personnel[]          @relation("PersonnelPlaceOfOriginAdmin")
   usersBirthPlace        User[]               @relation("UserBirthPlace")
   usersPlaceOfOrigin     User[]               @relation("UserPlaceOfOrigin")
+  personnelPermanentAddress Personnel[]       @relation("PersonnelPermanentAddressAdmin")
+  personnelCurrentResidence Personnel[]       @relation("PersonnelCurrentResidenceAdmin")
 
   @@index([code])
   @@index([parentId])
@@ -3960,22 +4389,24 @@ model UnitType {
 }
 
 model AcademicTitle {
-  id        String  @id @db.VarChar(10)
-  name      String  @db.VarChar(60)
-  shortName String? @db.VarChar(10)
-  orderNo   Int     @default(0) @db.SmallInt
-  isActive  Boolean @default(true)
+  id            String  @id @db.VarChar(10)
+  name          String  @db.VarChar(60)
+  shortName     String? @db.VarChar(10)
+  orderNo       Int     @default(0) @db.SmallInt
+  isActive      Boolean @default(true)
+  usersWithTitle User[]
 
   @@map("academic_titles")
 }
 
 model AcademicDegree {
-  id        String  @id @db.VarChar(10)
-  name      String  @db.VarChar(80)
-  shortName String? @db.VarChar(10)
-  level     Int     @db.SmallInt
-  orderNo   Int     @default(0) @db.SmallInt
-  isActive  Boolean @default(true)
+  id             String  @id @db.VarChar(10)
+  name           String  @db.VarChar(80)
+  shortName      String? @db.VarChar(10)
+  level          Int     @db.SmallInt
+  orderNo        Int     @default(0) @db.SmallInt
+  isActive       Boolean @default(true)
+  usersWithDegree User[]
 
   @@map("academic_degrees")
 }
@@ -4030,12 +4461,13 @@ model GradeScale {
 }
 
 model AnnualEvaluationRank {
-  id        String  @id @db.VarChar(20)
-  name      String  @db.VarChar(80)
-  shortCode String  @db.VarChar(10)
-  color     String? @db.VarChar(10)
-  orderNo   Int     @default(0) @db.SmallInt
-  isActive  Boolean @default(true)
+  id                   String                @id @db.VarChar(20)
+  name                 String                @db.VarChar(80)
+  shortCode            String                @db.VarChar(10)
+  color                String?               @db.VarChar(10)
+  orderNo              Int                   @default(0) @db.SmallInt
+  isActive             Boolean               @default(true)
+  personnelEvaluations PersonnelEvaluation[]
 
   @@map("annual_evaluation_ranks")
 }
@@ -4065,11 +4497,12 @@ model InsuranceTypeCatalog {
 }
 
 model AllowanceType {
-  id        String  @id @db.VarChar(30)
-  name      String  @db.VarChar(100)
-  calcBasis String? @db.VarChar(20)
-  isActive  Boolean @default(true)
-  orderNo   Int     @default(0) @db.SmallInt
+  id               String            @id @db.VarChar(30)
+  name             String            @db.VarChar(100)
+  calcBasis        String?           @db.VarChar(20)
+  isActive         Boolean           @default(true)
+  orderNo          Int               @default(0) @db.SmallInt
+  allowanceRecords AllowanceRecord[]
 
   @@map("allowance_types")
 }
@@ -4104,10 +4537,11 @@ model DisciplineTypeCatalog {
 }
 
 model MeritTitle {
-  id       String  @id @db.VarChar(30)
-  name     String  @db.VarChar(100)
-  level    String? @db.VarChar(20)
-  isActive Boolean @default(true)
+  id                String             @id @db.VarChar(30)
+  name              String             @db.VarChar(100)
+  level             String?            @db.VarChar(20)
+  isActive          Boolean            @default(true)
+  honorTitleRecords HonorTitleRecord[]
 
   @@map("merit_titles")
 }
@@ -4220,8 +4654,10 @@ model FamilyMemberType {
 }
 
 model FamilyBackground {
-  id   String @id @db.VarChar(20)
-  name String @db.VarChar(80)
+  id                      String @id @db.VarChar(20)
+  name                    String @db.VarChar(80)
+  usersFamilyBackground   User[] @relation("UserFamilyBackground")
+  usersPersonalBackground User[] @relation("UserPersonalBackground")
 
   @@map("family_backgrounds")
 }

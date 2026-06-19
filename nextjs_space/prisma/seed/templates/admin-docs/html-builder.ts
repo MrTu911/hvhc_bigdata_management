@@ -13,6 +13,7 @@
 import {
   DOC_TYPE_META,
   type BodySection,
+  type KvTable,
   type LoopTable,
   type TemplateSpec,
 } from './types';
@@ -51,6 +52,7 @@ const STYLE = `
   table.data { width: 100%; border-collapse: collapse; margin: 6px 0; }
   table.data th, table.data td { border: 1px solid #000; padding: 4px 6px; font-size: 13pt; }
   table.data th { text-align: center; font-weight: bold; }
+  table.kv td.kv-tt { text-align: center; }
   .footer { width: 100%; border-collapse: collapse; margin-top: 18px; }
   .footer td { vertical-align: top; }
   .footer .noi-nhan { width: 55%; font-size: 11pt; }
@@ -109,8 +111,17 @@ function buildSection(section: BodySection): string {
   let out = '';
   if (section.heading) out += `<div class="section-heading">${esc(section.heading)}</div>`;
   for (const p of section.paragraphs ?? []) out += `<div class="para">${esc(p)}</div>`;
+  if (section.kvTable) out += buildKvTable(section.kvTable);
   if (section.loop) out += buildLoopTable(section.loop);
   return out;
+}
+
+function buildKvTable(kv: KvTable): string {
+  const head = kv.columns.map((h) => `<th>${esc(h)}</th>`).join('');
+  const rows = kv.rows
+    .map((r) => `<tr><td class="kv-tt">${esc(r.tt)}</td><td>${esc(r.label)}</td><td>{${r.field}}</td></tr>`)
+    .join('');
+  return `<table class="data kv"><colgroup><col style="width:6%"><col style="width:36%"><col style="width:58%"></colgroup><tr>${head}</tr>${rows}</table>`;
 }
 
 function buildLoopTable(loop: LoopTable): string {

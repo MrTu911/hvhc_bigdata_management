@@ -13,6 +13,7 @@ import PizZip from 'pizzip';
 import {
   DOC_TYPE_META,
   type BodySection,
+  type KvTable,
   type LoopTable,
   type TemplateSpec,
 } from './types';
@@ -188,10 +189,43 @@ function buildSection(section: BodySection): string {
   for (const p of section.paragraphs ?? []) {
     out += line(p, {}, { align: 'both', firstLineIndent: true, after: 40 });
   }
+  if (section.kvTable) {
+    out += buildKvTable(section.kvTable);
+  }
   if (section.loop) {
     out += buildLoopTable(section.loop);
   }
   return out;
+}
+
+// ─── Bảng key/value 3 cột (TT | nhãn | {field}) cho phần thân scalar ────────────
+function buildKvTable(kv: KvTable): string {
+  const ttW = 700;
+  const labelW = 3600;
+  const valueW = CONTENT_WIDTH - ttW - labelW;
+  const widths = [ttW, labelW, valueW];
+  const grid = widths.map((w) => `<w:gridCol w:w="${w}"/>`).join('');
+
+  const headerRow =
+    '<w:tr>' +
+    kv.columns
+      .map((h, i) => cell(widths[i], para(run(h, { bold: true }), { align: 'center', after: 0 })))
+      .join('') +
+    '</w:tr>';
+
+  // Mỗi dòng: STT (giữa) + nhãn (trái) + {field} (placeholder, một <w:t> để docxtemplater nhận tag).
+  const dataRows = kv.rows
+    .map(
+      (r) =>
+        '<w:tr>' +
+        cell(ttW, para(run(r.tt), { align: 'center', after: 0 })) +
+        cell(labelW, para(run(r.label), { after: 0 })) +
+        cell(valueW, para(run(`{${r.field}}`), { after: 0 })) +
+        '</w:tr>',
+    )
+    .join('');
+
+  return `<w:tbl>${griddedTableProps()}<w:tblGrid>${grid}</w:tblGrid>${headerRow}${dataRows}</w:tbl>`;
 }
 
 function buildLoopTable(loop: LoopTable): string {

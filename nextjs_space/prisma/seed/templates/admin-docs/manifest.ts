@@ -15,6 +15,7 @@
 
 import type { TemplateSpec } from './types';
 import { M02_SPECS } from './specs/m02';
+import { M02_HSCB_SPECS } from './specs/m02-hscb';
 import { M03_SPECS } from './specs/m03';
 import { M05_SPECS } from './specs/m05';
 import { M09_SPECS } from './specs/m09';
@@ -24,6 +25,7 @@ import { GENERAL_SPECS } from './specs/general';
 
 export const TEMPLATE_SPECS: TemplateSpec[] = [
   ...M02_SPECS,
+  ...M02_HSCB_SPECS,
   ...M03_SPECS,
   ...M05_SPECS,
   ...M09_SPECS,

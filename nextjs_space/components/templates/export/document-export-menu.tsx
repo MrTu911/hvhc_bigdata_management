@@ -74,6 +74,11 @@ interface DocumentExportMenuProps {
    * trang cá nhân). Không set → hiển thị mọi mẫu của module tương ứng entityType.
    */
   templateCodes?: string[];
+  /**
+   * Loại trừ một số mẫu khỏi menu chung (vd mẫu có route/resolver riêng như hồ sơ
+   * cán bộ điện tử) để tránh render qua engine chung với dữ liệu thiếu.
+   */
+  excludeCodes?: string[];
 }
 
 export function DocumentExportMenu({
@@ -85,6 +90,7 @@ export function DocumentExportMenu({
   exportEndpoint,
   requiredPermission = TEMPLATES.EXPORT_DATA,
   templateCodes,
+  excludeCodes,
 }: DocumentExportMenuProps) {
   const { hasPermission, isLoading: permLoading } = usePermissions();
   const [templates, setTemplates] = useState<TemplateRow[] | null>(null);
@@ -104,6 +110,8 @@ export function DocumentExportMenu({
       const rows: TemplateRow[] = (json.data ?? [])
         // Lọc theo code nếu trang chỉ muốn 1 nhóm mẫu cụ thể.
         .filter((t: TemplateRow) => (templateCodes ? templateCodes.includes(t.code) : true))
+        // Loại trừ mẫu có route riêng (vd hồ sơ cán bộ điện tử).
+        .filter((t: TemplateRow) => (excludeCodes ? !excludeCodes.includes(t.code) : true))
         // Endpoint riêng tự enforce quyền → không lọc theo rbacCode của template.
         .filter((t: TemplateRow) => (exportEndpoint ? true : hasPermission(t.rbacCode)))
         .map((t: TemplateRow) => ({

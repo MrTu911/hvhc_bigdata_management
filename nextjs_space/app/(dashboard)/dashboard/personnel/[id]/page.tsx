@@ -17,6 +17,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import { DocumentExportMenu } from '@/components/templates/export/document-export-menu';
+import { CadreProfileTab } from '@/components/personnel/profile/cadre/cadre-profile-tab';
 import { usePermissions } from '@/hooks/use-permissions';
 import { PROMOTION } from '@/lib/rbac/function-codes';
 import {
@@ -313,7 +314,18 @@ export default function PersonnelDetailPage() {
               </Button>
             </Link>
           )}
-          <DocumentExportMenu entityType="personnel" entityId={personnel.id} />
+          <DocumentExportMenu
+            entityType="personnel"
+            entityId={personnel.id}
+            excludeCodes={['TPL_M02_HSCB_DIENTU']}
+          />
+          <DocumentExportMenu
+            entityType="personnel"
+            entityId={personnel.id}
+            label="Hồ sơ cán bộ điện tử"
+            templateCodes={['TPL_M02_HSCB_DIENTU']}
+            exportEndpoint={`/api/personnel/${personnel.id}/profile-document/export`}
+          />
         </div>
       </div>
 
@@ -396,6 +408,10 @@ export default function PersonnelDetailPage() {
               Khoa học
             </TabsTrigger>
           )}
+          <TabsTrigger value="cadre-profile">
+            <FileUser className="h-4 w-4 mr-2" />
+            Hồ sơ điện tử
+          </TabsTrigger>
         </TabsList>
 
         {/* Định danh & quân nhân (dữ liệu thật CSDL quân nhân) */}
@@ -718,6 +734,11 @@ export default function PersonnelDetailPage() {
             </Card>
           </TabsContent>
         )}
+
+        {/* Hồ sơ cán bộ điện tử (mẫu 99 trường) — nhập liệu + nguồn cho xuất văn bản */}
+        <TabsContent value="cadre-profile">
+          <CadreProfileTab personnelId={personnel.id} />
+        </TabsContent>
       </Tabs>
     </div>
   );

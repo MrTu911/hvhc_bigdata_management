@@ -50,6 +50,27 @@ export interface LoopTable {
   columns: LoopColumn[];
 }
 
+/** Một dòng trong bảng key/value (3 cột: TT | nhãn | giá trị). */
+export interface KvRow {
+  /** Số thứ tự cột 1 (vd '1', '10') — text tĩnh, không phải placeholder. */
+  tt: string;
+  /** Nhãn dữ liệu cột 2 — text tĩnh. */
+  label: string;
+  /** Tên field placeholder cột 3 (không gồm dấu ngoặc), vd 'hoTen'. */
+  field: string;
+}
+
+/**
+ * Bảng key/value 3 cột cho phần thân scalar (mẫu hồ sơ cán bộ điện tử):
+ *   TT | Dữ liệu | Cập nhật thông tin
+ * Mỗi dòng: số thứ tự + nhãn tĩnh + 1 placeholder {field}. Không phải vòng lặp.
+ */
+export interface KvTable {
+  /** Tiêu đề 3 cột. */
+  columns: [string, string, string];
+  rows: KvRow[];
+}
+
 /** Một mục nội dung trong phần thân văn bản. */
 export interface BodySection {
   /** Tiêu đề mục (in đậm), vd 'Phần I. KẾT QUẢ THỰC HIỆN' hoặc 'Điều 1.'. */
@@ -58,6 +79,8 @@ export interface BodySection {
   paragraphs?: string[];
   /** Bảng dữ liệu lặp (chỉ dùng cho mẫu entity-bound). */
   loop?: LoopTable;
+  /** Bảng key/value 3 cột cho nhóm trường scalar (mẫu hồ sơ cán bộ điện tử). */
+  kvTable?: KvTable;
 }
 
 export interface TemplateSpec {
