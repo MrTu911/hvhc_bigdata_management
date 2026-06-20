@@ -66,6 +66,10 @@ model User {
   createdAt                           DateTime                   @default(now())
   updatedAt                           DateTime                   @updatedAt
   lastLoginAt                         DateTime?
+  // Vòng đời khai báo HSCB: null = đang khai báo lần đầu (cho ghi trực tiếp);
+  // có giá trị = đã chốt khai báo (khóa, mọi thay đổi sau đó qua đề nghị 2 cấp).
+  profileDeclaredAt                   DateTime?
+  profileDeclaredBy                   String?
   employeeId                          String?                    @unique
   endDate                             DateTime?
   personnelType                       PersonnelCategory?

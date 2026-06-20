@@ -18,8 +18,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import { DocumentExportMenu } from '@/components/templates/export/document-export-menu';
 import { CadreProfileTab } from '@/components/personnel/profile/cadre/cadre-profile-tab';
+import { ReopenDeclarationButton } from '@/components/personnel/profile/cadre/reopen-declaration-button';
 import { usePermissions } from '@/hooks/use-permissions';
-import { PROMOTION } from '@/lib/rbac/function-codes';
+import { PROMOTION, PROFILE_CHANGE } from '@/lib/rbac/function-codes';
 import {
   ArrowLeft,
   User,
@@ -737,6 +738,11 @@ export default function PersonnelDetailPage() {
 
         {/* Hồ sơ cán bộ điện tử (mẫu 99 trường) — nhập liệu + nguồn cho xuất văn bản */}
         <TabsContent value="cadre-profile">
+          {hasAnyPermission([PROFILE_CHANGE.APPROVE_ORGAN]) && (
+            <div className="flex justify-end mb-3">
+              <ReopenDeclarationButton targetId={personnel.id} />
+            </div>
+          )}
           <CadreProfileTab personnelId={personnel.id} />
         </TabsContent>
       </Tabs>
