@@ -157,6 +157,7 @@ import {
   PERSONAL,
   INFRA,
   PROMOTION,
+  PROFILE_CHANGE,
 } from '@/lib/rbac/function-codes';
 
 export interface MenuItem {
@@ -333,6 +334,13 @@ export const MENU_CONFIG: MenuGroup[] = [
           badge: 'HSCB',
           functions: [PERSONAL.VIEW_CADRE_PROFILE],
         },
+        {
+          name: 'nav.myProfileChanges',
+          href: '/dashboard/personal/my-profile-changes',
+          icon: ClipboardCheck,
+          gradient: 'from-amber-500 to-orange-600',
+          functions: [PROFILE_CHANGE.VIEW_OWN],
+        },
       ]),
       subSection('nav.myLearning', GraduationCap, [
         {
@@ -445,6 +453,14 @@ export const MENU_CONFIG: MenuGroup[] = [
           gradient: 'from-green-600 to-emerald-600',
           badge: 'QL',
           functions: [PERSONNEL.VIEW],
+        },
+        {
+          name: 'nav.profileChangeApproval',
+          href: '/dashboard/personnel/profile-changes',
+          icon: ClipboardCheck,
+          gradient: 'from-orange-500 to-amber-600',
+          badge: 'Duyệt',
+          functions: [PROFILE_CHANGE.VIEW_UNIT, PROFILE_CHANGE.VIEW_ORGAN],
         },
       ]),
       subSection('nav.personnelRankGroup', Star, [

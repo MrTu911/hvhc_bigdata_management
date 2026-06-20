@@ -29,6 +29,7 @@ export const translations = {
     'nav.myInsurance':        'Bảo hiểm của tôi',
     'nav.myAward':            'Khen thưởng của tôi',
     'nav.myCadreProfile':     'Hồ sơ cán bộ điện tử',
+    'nav.myProfileChanges':   'Đề nghị cập nhật hồ sơ',
     'nav.mySecurity':         'Bảo mật tài khoản',
     'nav.personalHub':        'Trung tâm Cá nhân',
     // 3. Học tập của tôi (Tier 2 - Học viên)
@@ -90,6 +91,7 @@ export const translations = {
     'nav.personnelStats': 'Thống kê Nhân sự',
     'nav.officerManagement': 'Quản lý Sĩ quan',
     'nav.soldierManagement': 'Quản lý Quân nhân',
+    'nav.profileChangeApproval': 'Duyệt cập nhật hồ sơ',
     'nav.rankDeclarations': 'Khai báo Quân hàm',
     'nav.rankDeclarationApproval': 'Duyệt Khai báo Quân hàm',
     'nav.promotionProposals': 'Đề nghị Thăng Quân hàm',
@@ -647,6 +649,7 @@ export const translations = {
     'nav.myInsurance':        'My Insurance',
     'nav.myAward':            'My Awards',
     'nav.myCadreProfile':     'My Electronic Cadre Profile',
+    'nav.myProfileChanges':   'My Profile Update Requests',
     'nav.mySecurity':         'Account Security',
     'nav.personalHub':        'Personal Hub',
     // 3. My Learning (Tier 2 - Students)
@@ -708,6 +711,7 @@ export const translations = {
     'nav.personnelStats': 'Personnel Statistics',
     'nav.officerManagement': 'Officer Management',
     'nav.soldierManagement': 'Soldier Management',
+    'nav.profileChangeApproval': 'Profile Update Approval',
     'nav.rankDeclarations': 'Rank Declaration',
     'nav.rankDeclarationApproval': 'Rank Declaration Approval',
     'nav.promotionProposals': 'Promotion Proposals',

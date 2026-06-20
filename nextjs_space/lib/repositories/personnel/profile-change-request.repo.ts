@@ -50,7 +50,8 @@ const requestInclude = {
       email: true,
       militaryId: true,
       unitId: true,
-      unit: { select: { id: true, name: true, commanderId: true } },
+      // User.unit là field text legacy; quan hệ Unit thật là unitRelation (FK unitId).
+      unitRelation: { select: { id: true, name: true, commanderId: true } },
     },
   },
   tier1Reviewer: { select: { id: true, name: true } },
@@ -89,7 +90,9 @@ export async function findProfileChangeRequestById(id: string) {
 
 export async function updateProfileChangeRequest(
   id: string,
-  data: Prisma.ProfileChangeRequestUpdateInput,
+  // Unchecked: cho phép set trực tiếp các FK scalar (tier1ReviewerId, tier2ReviewerId,
+  // unitId, workflowInstanceId...) thay vì qua quan hệ.
+  data: Prisma.ProfileChangeRequestUncheckedUpdateInput,
 ) {
   return db.profileChangeRequest.update({ where: { id }, data, include: requestInclude });
 }

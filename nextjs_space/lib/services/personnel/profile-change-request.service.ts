@@ -120,6 +120,26 @@ async function resolveOwner(userId: string) {
   return user;
 }
 
+/**
+ * Chống IDOR: SECTION_UPDATE/DELETE chỉ được nhắm tới bản ghi thuộc CHÍNH chủ hồ
+ * sơ. Kiểm tại lúc tạo/sửa nháp (trước khi commit ghi thẳng theo targetRecordId).
+ */
+async function assertSectionTargetsOwned(items: ProfileChangeItemInput[], ownerUserId: string) {
+  for (const it of items) {
+    if (it.itemType !== 'SECTION_UPDATE' && it.itemType !== 'SECTION_DELETE') continue;
+    const section = getCadreSection(it.sectionSlug!);
+    if (!section) throw new ProfileChangeError(`Nhóm danh sách không hợp lệ: ${it.sectionSlug}`, 400);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const record = await (db as any)[section.model].findUnique({
+      where: { id: it.targetRecordId },
+      select: { userId: true, deletedAt: true },
+    });
+    if (!record || record.deletedAt || record.userId !== ownerUserId) {
+      throw new ProfileChangeError('Bản ghi không tồn tại hoặc không thuộc về chủ hồ sơ', 403);
+    }
+  }
+}
+
 /** Người duyệt có quyền truy cập đề nghị này không (ngoài function-code đã gate ở route). */
 async function reviewerCanAccess(actor: AuthUser, scope: FunctionScope, unitId: string | null): Promise<boolean> {
   if (scope === 'ACADEMY') return true;
@@ -201,6 +221,7 @@ async function notifyReviewerSafe(
 
 export async function createRequest(input: CreateRequestInput, actorId: string) {
   const owner = await resolveOwner(input.ownerUserId);
+  await assertSectionTargetsOwned(input.items, owner.id);
   const items = mapItemsForStore(input.items);
 
   const created = await createProfileChangeRequest({
@@ -239,6 +260,7 @@ export async function updateDraft(
   }
 
   if (input.items) {
+    await assertSectionTargetsOwned(input.items, request.userId);
     await replaceProfileChangeItems(requestId, mapItemsForStore(input.items));
   }
   const updated = await updateProfileChangeRequest(requestId, {
@@ -296,7 +318,7 @@ export async function submitRequest(requestId: string, actorId: string) {
   }
 
   const unitId = request.user.unitId;
-  const commanderId = request.user.unit?.commanderId ?? null;
+  const commanderId = request.user.unitRelation?.commanderId ?? null;
   // Auto-skip tier-1 khi không có chỉ huy hoặc người đề nghị chính là chỉ huy.
   const autoSkipTier1 = !commanderId || commanderId === request.userId;
 

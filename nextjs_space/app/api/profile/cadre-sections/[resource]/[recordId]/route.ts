@@ -1,70 +1,28 @@
 /**
- * Self-service cadre section record API
- * PATCH  /api/profile/cadre-sections/[resource]/[recordId]  — update own record
- * DELETE /api/profile/cadre-sections/[resource]/[recordId]  — soft-delete own record
+ * Self-service cadre section record API — đã ĐÓNG ghi trực tiếp.
  *
- * Gate: MANAGE_MY_PROFILE (write)
- * Always scoped to current session user — backend enforces ownership check.
+ * Sửa/xóa bản ghi danh sách hồ sơ cá nhân phải qua quy trình duyệt 2 cấp
+ * (Chỉ huy đơn vị → Ban cán bộ/Quân lực). Dùng POST /api/profile/change-requests
+ * với item SECTION_UPDATE / SECTION_DELETE. Giữ handler để trả thông báo rõ ràng.
  */
 import 'server-only';
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/rbac/middleware';
-import { authorize } from '@/lib/rbac/authorize';
-import { PERSONAL } from '@/lib/rbac/function-codes';
-import { CadreProfileSectionService, getCadreSection } from '@/lib/services/personnel/cadre-profile-section.service';
-import type { AuthUser } from '@/lib/rbac/types';
 
-function toAuthUser(user: { id: string; email?: string | null; role?: string | null; unitId?: string | null }): AuthUser {
-  return { id: user.id, email: user.email || '', role: user.role || '', unitId: user.unitId ?? null };
-}
+const REQUIRES_APPROVAL = {
+  success: false,
+  code: 'REQUIRES_APPROVAL',
+  error: 'Thay đổi dữ liệu hồ sơ cá nhân phải gửi đề nghị duyệt. Vui lòng dùng POST /api/profile/change-requests.',
+} as const;
 
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { resource: string; recordId: string } },
-) {
-  const section = getCadreSection(params.resource);
-  if (!section) return NextResponse.json({ success: false, error: 'Nhóm dữ liệu không hợp lệ' }, { status: 404 });
-
+export async function PATCH(request: NextRequest) {
   const authResult = await requireAuth(request);
   if (!authResult.allowed) return authResult.response!;
-  const user = authResult.user!;
-
-  const perm = await authorize(user, PERSONAL.MANAGE_PROFILE, {});
-  if (!perm.allowed) {
-    return NextResponse.json({ success: false, error: 'Không có quyền cập nhật hồ sơ cán bộ điện tử' }, { status: 403 });
-  }
-
-  let body: Record<string, unknown>;
-  try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ success: false, error: 'Body không hợp lệ' }, { status: 400 });
-  }
-
-  const authUser = toAuthUser(user);
-  const result = await CadreProfileSectionService.update(authUser, 'SELF', params.recordId, section, body, false);
-  if (!result.success) return NextResponse.json({ success: false, error: result.error }, { status: result.status });
-  return NextResponse.json({ success: true, data: result.data });
+  return NextResponse.json(REQUIRES_APPROVAL, { status: 409 });
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { resource: string; recordId: string } },
-) {
-  const section = getCadreSection(params.resource);
-  if (!section) return NextResponse.json({ success: false, error: 'Nhóm dữ liệu không hợp lệ' }, { status: 404 });
-
+export async function DELETE(request: NextRequest) {
   const authResult = await requireAuth(request);
   if (!authResult.allowed) return authResult.response!;
-  const user = authResult.user!;
-
-  const perm = await authorize(user, PERSONAL.MANAGE_PROFILE, {});
-  if (!perm.allowed) {
-    return NextResponse.json({ success: false, error: 'Không có quyền cập nhật hồ sơ cán bộ điện tử' }, { status: 403 });
-  }
-
-  const authUser = toAuthUser(user);
-  const result = await CadreProfileSectionService.softDelete(authUser, 'SELF', params.recordId, section);
-  if (!result.success) return NextResponse.json({ success: false, error: result.error }, { status: result.status });
-  return NextResponse.json({ success: true });
+  return NextResponse.json(REQUIRES_APPROVAL, { status: 409 });
 }

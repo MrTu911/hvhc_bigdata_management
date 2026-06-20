@@ -150,6 +150,19 @@ describe('Menu ↔ RBAC consistency', () => {
       }
     });
 
+    it('Mọi cán bộ thấy "Đề nghị cập nhật hồ sơ"; chỉ huy/Ban CB thấy "Duyệt cập nhật hồ sơ"', () => {
+      for (const positionCode of ['GIANG_VIEN', 'NHAN_VIEN', 'NGHIEN_CUU_VIEN']) {
+        const visible = visibleNamesForPosition(positionCode);
+        expect(visible.has('nav.myProfileChanges'), `${positionCode} phải thấy nav.myProfileChanges`).toBe(true);
+        expect(visible.has('nav.profileChangeApproval'), `${positionCode} KHÔNG được thấy nav.profileChangeApproval`).toBe(false);
+      }
+      // Tier-1 (chỉ huy đơn vị) + tier-2 (Ban cán bộ/Quân lực) đều thấy mục duyệt.
+      for (const positionCode of ['CHI_HUY_HE', 'TRUONG_PHONG_NHAN_SU', 'GIAM_DOC']) {
+        const visible = visibleNamesForPosition(positionCode);
+        expect(visible.has('nav.profileChangeApproval'), `${positionCode} phải thấy nav.profileChangeApproval`).toBe(true);
+      }
+    });
+
     it('Phòng Khoa học thấy cụm Khoa học', () => {
       const visible = visibleNamesForPosition('TRUONG_PHONG_KHOA_HOC');
       expect(visible.has('nav.scienceDashboard')).toBe(true);
