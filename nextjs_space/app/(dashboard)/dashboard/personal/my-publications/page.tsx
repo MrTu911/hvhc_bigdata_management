@@ -913,6 +913,7 @@ export default function MyPublicationsPage() {
   return (
     <div className="space-y-6 p-6">
       <PageHeader
+        moduleId="research"
         title="Công bố khoa học của tôi"
         description="Tự đăng và theo dõi trạng thái phê duyệt"
         icon={<BookOpen className="w-5 h-5" />}

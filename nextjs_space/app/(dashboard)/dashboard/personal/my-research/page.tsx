@@ -412,6 +412,7 @@ export default function MyResearchPage() {
 
       {/* ── Page header ── */}
       <PageHeader
+        moduleId="research"
         title="Đề tài NCKH của tôi"
         description="Tổng hợp đề tài bạn chủ nhiệm và tham gia"
         icon={<FlaskConical className="w-5 h-5" />}
