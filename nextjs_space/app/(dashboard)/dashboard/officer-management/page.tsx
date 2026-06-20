@@ -56,7 +56,6 @@ import {
   Plus,
   Pencil,
   Trash2,
-  FileDown,
   Shield,
   UserPlus,
   Loader2,
@@ -82,6 +81,7 @@ import {
 import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
 import { useMasterData } from '@/hooks/use-master-data';
+import { AggregateExportButton } from '@/components/templates/export/aggregate-export-button';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -1258,15 +1258,7 @@ export default function OfficerManagementPage() {
                 <span className="text-sm text-slate-500">
                   {totalOfficers > 0 && `${totalOfficers} hồ sơ`}
                 </span>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="border-slate-200 text-slate-600 hover:bg-slate-50"
-                  title="Xuất danh sách"
-                >
-                  <FileDown className="h-4 w-4 mr-1.5" />
-                  Xuất Excel
-                </Button>
+                <AggregateExportButton entityType="officer" keyword={search} />
                 <Button
                   size="sm"
                   className="bg-blue-700 hover:bg-blue-800 text-white"

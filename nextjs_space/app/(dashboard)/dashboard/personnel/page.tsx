@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { KPICard, StatusBadge, ModuleHero } from '@/components/ui/enhanced-data-card';
+import { AggregateExportButton } from '@/components/templates/export/aggregate-export-button';
 import {
   Table,
   TableBody,
@@ -29,7 +30,6 @@ import {
   Shield,
   Star,
   Search,
-  Download,
   RefreshCw,
   Eye,
   ChevronLeft,
@@ -340,13 +340,7 @@ export default function PersonnelPage() {
                   <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
                   Làm mới
                 </Button>
-                <Button
-                  size="sm"
-                  className="gap-2 bg-white/20 hover:bg-white/30 text-white border-white/30 border"
-                >
-                  <Download className="h-4 w-4" />
-                  Xuất Excel
-                </Button>
+                <AggregateExportButton entityType="personnel" keyword={searchQuery} />
               </div>
             }
           />

@@ -12,17 +12,13 @@ import bcrypt from 'bcryptjs';
 import { requireScopedFunction } from '@/lib/rbac/middleware';
 import { PERSONNEL } from '@/lib/rbac/function-codes';
 import { logAudit } from '@/lib/audit';
+import {
+  buildOfficerWhereCondition,
+  buildSoldierWhereCondition,
+  classifyPersonnelType,
+} from '@/lib/services/personnel/personnel-classification.service';
 
-// Rank keyword classification — consistent with frontend getPersonnelType()
-const OFFICER_RANK_KEYWORDS = ['tướng', 'tá', 'úy'];
-const SOLDIER_RANK_KEYWORDS = ['sĩ', 'binh'];
-
-function officerRankCond() {
-  return { OR: OFFICER_RANK_KEYWORDS.map(k => ({ rank: { contains: k, mode: 'insensitive' as const } })) };
-}
-function soldierRankCond() {
-  return { OR: SOLDIER_RANK_KEYWORDS.map(k => ({ rank: { contains: k, mode: 'insensitive' as const } })) };
-}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function addAnd(where: any, extra: any) {
   return { ...where, AND: [...(Array.isArray(where.AND) ? where.AND : []), extra] };
 }
@@ -113,12 +109,12 @@ export async function GET(request: NextRequest) {
     // Snapshot for type stats BEFORE type-specific rank filter
     const baseWhere = { ...where };
 
-    // Type filter (OFFICER / SOLDIER) — rank keyword matching
+    // Type filter (OFFICER / SOLDIER) — ưu tiên quan hệ thật, fallback keyword
     const type = searchParams.get('type');
     if (type === 'OFFICER') {
-      where.AND = [...(Array.isArray(where.AND) ? where.AND : []), officerRankCond()];
+      where.AND = [...(Array.isArray(where.AND) ? where.AND : []), buildOfficerWhereCondition()];
     } else if (type === 'SOLDIER') {
-      where.AND = [...(Array.isArray(where.AND) ? where.AND : []), soldierRankCond()];
+      where.AND = [...(Array.isArray(where.AND) ? where.AND : []), buildSoldierWhereCondition()];
     }
 
     // Query with pagination
@@ -156,6 +152,13 @@ export async function GET(request: NextRequest) {
           scientificProfile: {
             select: { id: true },
           },
+          // Nguồn sự thật phân loại SQ/QN: quan hệ trên Personnel liên kết
+          personnelProfile: {
+            select: {
+              officerCareer: { select: { id: true } },
+              soldierProfile: { select: { id: true } },
+            },
+          },
         },
         orderBy: [{ rank: 'asc' }, { name: 'asc' }],
         skip: (page - 1) * limit,
@@ -164,11 +167,12 @@ export async function GET(request: NextRequest) {
       prisma.user.count({ where }),
     ]);
 
-    // Get work-status stats + type counts (all against baseWhere, not type-filtered)
+    // Get work-status stats + type counts (all against baseWhere, not type-filtered).
+    // Officer/Soldier rời nhau (buildSoldierWhereCondition đã loại trừ sĩ quan).
     const [stats, officerTotal, soldierTotal, grandTotal] = await Promise.all([
       prisma.user.groupBy({ by: ['workStatus'], where: baseWhere, _count: { id: true } }),
-      prisma.user.count({ where: addAnd(baseWhere, officerRankCond()) }),
-      prisma.user.count({ where: addAnd(baseWhere, soldierRankCond()) }),
+      prisma.user.count({ where: addAnd(baseWhere, buildOfficerWhereCondition()) }),
+      prisma.user.count({ where: addAnd(baseWhere, buildSoldierWhereCondition()) }),
       prisma.user.count({ where: baseWhere }),
     ]);
 
@@ -182,9 +186,15 @@ export async function GET(request: NextRequest) {
       ipAddress: request.headers.get('x-forwarded-for') || undefined,
     });
 
+    // Gắn nhãn phân loại quyền uy (server-side) cho từng dòng: OFFICER/SOLDIER/CIVILIAN.
+    const data = personnel.map((p) => ({
+      ...p,
+      personnelTypeClass: classifyPersonnelType(p),
+    }));
+
     return NextResponse.json({
       success: true,
-      data: personnel,
+      data,
       pagination: {
         page,
         limit,

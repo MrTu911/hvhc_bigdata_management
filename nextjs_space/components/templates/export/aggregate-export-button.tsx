@@ -20,7 +20,7 @@ import { usePermissions } from '@/hooks/use-permissions';
 import { TEMPLATES } from '@/lib/rbac/function-codes';
 
 type AggEntityType =
-  | 'personnel' | 'student' | 'party_member' | 'scientist_profile' | 'scientific_council'
+  | 'personnel' | 'officer' | 'soldier' | 'student' | 'party_member' | 'scientist_profile' | 'scientific_council'
   | 'policy' | 'award' | 'research_project' | 'publication' | 'legacy_project'
   | 'insurance' | 'faculty' | 'party_org' | 'subject';
 
@@ -28,7 +28,7 @@ const ALL = '__all__';
 
 /** CSDL có lọc theo đơn vị (gắn unit trực tiếp hoặc qua user). */
 const UNIT_FILTERABLE = new Set<AggEntityType>([
-  'personnel', 'party_member', 'scientist_profile', 'policy', 'award', 'research_project', 'publication', 'legacy_project',
+  'personnel', 'officer', 'soldier', 'party_member', 'scientist_profile', 'policy', 'award', 'research_project', 'publication', 'legacy_project',
   'insurance', 'faculty', 'party_org', 'subject',
 ]);
 

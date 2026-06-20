@@ -18,9 +18,10 @@ import type {
 import prisma from '@/lib/db';
 import { uploadObject, getPresignedDownloadUrl } from '@/lib/services/infrastructure/storage.service';
 import { renderHtmlToPdf } from '@/lib/services/export-engine-service';
+import { OFFICER_RANK_LABELS, SOLDIER_RANK_LABELS } from '@/lib/promotion/promotionUtils';
 
 export type AggregateEntityType =
-  | 'personnel' | 'student' | 'party_member' | 'scientist_profile' | 'scientific_council'
+  | 'personnel' | 'officer' | 'soldier' | 'student' | 'party_member' | 'scientist_profile' | 'scientific_council'
   | 'policy' | 'award' | 'research_project' | 'publication' | 'legacy_project'
   | 'insurance' | 'faculty' | 'party_org' | 'subject';
 export type AggregateFormat = 'XLSX' | 'PDF';
@@ -30,6 +31,8 @@ const MAX_ROWS = 5000;
 
 const TITLES: Record<AggregateEntityType, string> = {
   personnel: 'DANH SÁCH CÁN BỘ',
+  officer: 'DANH SÁCH SĨ QUAN',
+  soldier: 'DANH SÁCH QUÂN NHÂN',
   student: 'DANH SÁCH HỌC VIÊN',
   party_member: 'DANH SÁCH ĐẢNG VIÊN',
   scientist_profile: 'DANH SÁCH NHÀ KHOA HỌC',
@@ -66,6 +69,20 @@ const NCKH_STATUS: Record<string, string> = {
   DRAFT: 'Nháp', SUBMITTED: 'Đã nộp', UNDER_REVIEW: 'Đang xét', APPROVED: 'Đã duyệt', REJECTED: 'Từ chối',
   IN_PROGRESS: 'Đang thực hiện', PAUSED: 'Tạm dừng', COMPLETED: 'Hoàn thành', CANCELLED: 'Đã hủy',
 };
+const SOLDIER_CATEGORY: Record<string, string> = {
+  QNCN: 'Quân nhân chuyên nghiệp', CNVQP: 'Công nhân viên QP', HSQ: 'Hạ sĩ quan', CHIEN_SI: 'Chiến sĩ',
+};
+const SOLDIER_SERVICE_TYPE: Record<string, string> = {
+  NGHIA_VU: 'Nghĩa vụ', HOP_DONG: 'Hợp đồng', CHUYEN_NGHIEP: 'Chuyên nghiệp',
+};
+
+/** Nhãn quân hàm tái dùng từ promotionUtils; rỗng nếu chưa có cấp bậc. */
+function officerRankLabel(code: string | null | undefined): string {
+  return code ? (OFFICER_RANK_LABELS as Record<string, string>)[code] ?? code : '';
+}
+function soldierRankLabel(code: string | null | undefined): string {
+  return code ? (SOLDIER_RANK_LABELS as Record<string, string>)[code] ?? code : '';
+}
 
 export interface AggregateScopeCtx {
   scope: FunctionScope;
@@ -125,6 +142,77 @@ async function buildPersonnelTable(ctx: AggregateScopeCtx, keyword?: string): Pr
     rows: rows.map((r, i) => [
       String(i + 1), r.fullName ?? '', r.militaryIdNumber ?? '', r.militaryRank ?? '', r.position ?? '',
       r.unit?.name ?? '', fmtDate(r.dateOfBirth), gender(r.gender),
+    ]),
+  };
+}
+
+/** CSDL Sĩ quan — Personnel có officerCareer (nguồn sự thật), kèm dữ liệu binh nghiệp SQ. */
+async function buildOfficerTable(ctx: AggregateScopeCtx, keyword?: string): Promise<TableData> {
+  const unitFilter = unitInScope(ctx);
+  const rows = await prisma.personnel.findMany({
+    where: {
+      officerCareer: { isNot: null },
+      ...(unitFilter ? { unitId: unitFilter } : {}),
+      ...(keyword
+        ? { OR: [
+            { fullName: { contains: keyword, mode: 'insensitive' } },
+            { militaryIdNumber: { contains: keyword, mode: 'insensitive' } },
+          ] }
+        : {}),
+    },
+    select: {
+      fullName: true, militaryIdNumber: true, position: true, dateOfBirth: true,
+      unit: { select: { name: true } },
+      officerCareer: {
+        select: { officerIdNumber: true, currentRank: true, currentPosition: true, lastRankDate: true },
+      },
+    },
+    orderBy: { fullName: 'asc' },
+    take: MAX_ROWS,
+  });
+  return {
+    columns: ['STT', 'Họ và tên', 'Số hiệu SQ', 'Cấp bậc', 'Chức vụ', 'Đơn vị', 'Ngày phong gần nhất'],
+    rows: rows.map((r, i) => [
+      String(i + 1), r.fullName ?? '', r.officerCareer?.officerIdNumber ?? r.militaryIdNumber ?? '',
+      officerRankLabel(r.officerCareer?.currentRank),
+      r.officerCareer?.currentPosition ?? r.position ?? '', r.unit?.name ?? '',
+      fmtDate(r.officerCareer?.lastRankDate),
+    ]),
+  };
+}
+
+/** CSDL Quân nhân — Personnel có soldierProfile (chiến sĩ/HSQ/QNCN), kèm binh vụ & sức khỏe. */
+async function buildSoldierTable(ctx: AggregateScopeCtx, keyword?: string): Promise<TableData> {
+  const unitFilter = unitInScope(ctx);
+  const rows = await prisma.personnel.findMany({
+    where: {
+      soldierProfile: { isNot: null },
+      ...(unitFilter ? { unitId: unitFilter } : {}),
+      ...(keyword
+        ? { OR: [
+            { fullName: { contains: keyword, mode: 'insensitive' } },
+            { militaryIdNumber: { contains: keyword, mode: 'insensitive' } },
+          ] }
+        : {}),
+    },
+    select: {
+      fullName: true, militaryIdNumber: true,
+      unit: { select: { name: true } },
+      soldierProfile: {
+        select: { soldierIdNumber: true, soldierCategory: true, currentRank: true, serviceType: true, healthCategory: true },
+      },
+    },
+    orderBy: { fullName: 'asc' },
+    take: MAX_ROWS,
+  });
+  return {
+    columns: ['STT', 'Họ và tên', 'Số hiệu QN', 'Loại quân nhân', 'Cấp bậc', 'Hình thức phục vụ', 'Phân loại SK', 'Đơn vị'],
+    rows: rows.map((r, i) => [
+      String(i + 1), r.fullName ?? '', r.soldierProfile?.soldierIdNumber ?? r.militaryIdNumber ?? '',
+      r.soldierProfile?.soldierCategory ? SOLDIER_CATEGORY[r.soldierProfile.soldierCategory] ?? r.soldierProfile.soldierCategory : '',
+      soldierRankLabel(r.soldierProfile?.currentRank),
+      r.soldierProfile?.serviceType ? SOLDIER_SERVICE_TYPE[r.soldierProfile.serviceType] ?? r.soldierProfile.serviceType : '',
+      r.soldierProfile?.healthCategory ?? '', r.unit?.name ?? '',
     ]),
   };
 }
@@ -439,6 +527,8 @@ async function buildTable(
 ): Promise<TableData> {
   switch (entityType) {
     case 'personnel': return buildPersonnelTable(ctx, keyword);
+    case 'officer': return buildOfficerTable(ctx, keyword);
+    case 'soldier': return buildSoldierTable(ctx, keyword);
     case 'student': return buildStudentTable(ctx, keyword);
     case 'party_member': return buildPartyMemberTable(ctx, keyword, status);
     case 'scientist_profile': return buildScientistTable(ctx, keyword);

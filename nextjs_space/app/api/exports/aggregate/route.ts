@@ -24,7 +24,7 @@ import {
 } from '@/lib/services/aggregate-export-service';
 
 const ENTITY_TYPES: AggregateEntityType[] = [
-  'personnel', 'student', 'party_member', 'scientist_profile', 'scientific_council',
+  'personnel', 'officer', 'soldier', 'student', 'party_member', 'scientist_profile', 'scientific_council',
   'policy', 'award', 'research_project', 'publication', 'legacy_project',
   'insurance', 'faculty', 'party_org', 'subject',
 ];

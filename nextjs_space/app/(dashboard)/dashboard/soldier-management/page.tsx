@@ -25,7 +25,7 @@ import { Textarea } from '@/components/ui/textarea';
 import {
   Users, Search, RefreshCw, Star, Building, ChevronLeft, ChevronRight,
   Eye, Clock, AlertTriangle, AlertCircle, CheckCircle2, Info, Plus,
-  Pencil, Trash2, FileDown, Shield, UserPlus, Loader2, ArrowUpCircle,
+  Pencil, Trash2, Shield, UserPlus, Loader2, ArrowUpCircle,
   HeartPulse, Activity, ClipboardList, CalendarCheck,
 } from 'lucide-react';
 import {
@@ -33,6 +33,7 @@ import {
   CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts';
 import { useRouter } from 'next/navigation';
+import { AggregateExportButton } from '@/components/templates/export/aggregate-export-button';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -648,7 +649,7 @@ export default function SoldierManagementPage() {
               </Select>
               <div className="ml-auto flex items-center gap-2">
                 <span className="text-sm text-slate-500">{totalSoldiers > 0 && `${totalSoldiers} hồ sơ`}</span>
-                <Button variant="outline" size="sm" className="border-slate-200 text-slate-600"><FileDown className="h-4 w-4 mr-1.5" />Xuất Excel</Button>
+                <AggregateExportButton entityType="soldier" keyword={search} />
                 <Button size="sm" className="bg-emerald-700 hover:bg-emerald-800 text-white"
                   onClick={() => { setSelectedPersonnel(null); setPersonnelQuery(''); setSoldierForm({ personnelId: '', soldierIdNumber: '', soldierCategory: '', currentRank: '', serviceType: '', enlistmentDate: '', expectedDischargeDate: '' }); setSoldierDialog({ open: true, mode: 'create' }); }}>
                   <Plus className="h-4 w-4 mr-1.5" />Thêm hồ sơ
