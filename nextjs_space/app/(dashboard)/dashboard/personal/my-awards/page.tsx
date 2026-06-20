@@ -7,6 +7,7 @@
 
 import { useEffect, useState } from 'react';
 import { Award } from 'lucide-react';
+import { ModuleHero } from '@/components/ui/enhanced-data-card';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
@@ -42,12 +43,13 @@ export default function MyAwardsPage() {
 
   return (
     <div className="space-y-6 p-6">
-      <div>
-        <h1 className="text-2xl font-bold flex items-center gap-2">
-          <Award className="h-6 w-6" /> Khen thưởng & Kỷ luật
-        </h1>
-        <p className="text-muted-foreground mt-1">Lịch sử thi đua khen thưởng của bạn</p>
-      </div>
+      <ModuleHero
+        moduleId="policy"
+        supra="M05 · Chính sách"
+        title="Khen thưởng & Kỷ luật"
+        subtitle="Lịch sử thi đua khen thưởng của bạn"
+        icon={Award}
+      />
 
       <Card>
         <CardHeader>

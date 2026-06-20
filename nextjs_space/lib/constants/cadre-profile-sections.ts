@@ -10,6 +10,7 @@
 
 import {
   ASSET_TYPE_LABELS,
+  CAREER_EVENT_TYPE_LABELS,
   COMMAND_MGMT_LEVEL_LABELS,
   EVALUATION_PERIOD_TYPE_LABELS,
   MANAGEMENT_CATEGORY_LABELS,
@@ -47,8 +48,37 @@ export interface CadreListSection {
 const DATE = 'date' as const;
 const TEXT = 'text' as const;
 
-/** 11 nhóm dạng danh sách (mỗi nhóm = 1 model con). */
+/** Các nhóm dạng danh sách (mỗi nhóm = 1 model con). */
 export const CADRE_LIST_SECTIONS: CadreListSection[] = [
+  {
+    // Quá trình công tác — cho phép đính chính có cấu trúc qua luồng duyệt 2 cấp.
+    // CareerHistory mang userId + personnelId ⇒ liên thông sẵn với Personnel (M02).
+    slug: 'career-history',
+    model: 'careerHistory',
+    title: 'Quá trình công tác',
+    listColumns: ['eventType', 'eventDate', 'title'],
+    orderBy: { field: 'eventDate', dir: 'desc' },
+    fields: [
+      { name: 'eventType', label: 'Loại sự kiện', type: 'select', required: true, options: toSelectOptions(CAREER_EVENT_TYPE_LABELS) },
+      { name: 'eventDate', label: 'Ngày sự kiện', type: DATE, required: true },
+      { name: 'effectiveDate', label: 'Ngày hiệu lực', type: DATE },
+      { name: 'endDate', label: 'Ngày kết thúc', type: DATE },
+      { name: 'title', label: 'Tiêu đề', type: TEXT },
+      { name: 'oldPosition', label: 'Chức vụ cũ', type: TEXT },
+      { name: 'newPosition', label: 'Chức vụ mới', type: TEXT },
+      { name: 'oldRank', label: 'Cấp bậc cũ', type: TEXT },
+      { name: 'newRank', label: 'Cấp bậc mới', type: TEXT },
+      { name: 'oldUnit', label: 'Đơn vị cũ', type: TEXT },
+      { name: 'newUnit', label: 'Đơn vị mới', type: TEXT },
+      { name: 'reason', label: 'Lý do', type: 'textarea' },
+      { name: 'decisionNumber', label: 'Số quyết định', type: TEXT },
+      { name: 'decisionDate', label: 'Ngày quyết định', type: DATE },
+      { name: 'decisionAuthority', label: 'Cấp quyết định', type: TEXT },
+      { name: 'signerName', label: 'Người ký', type: TEXT },
+      { name: 'signerPosition', label: 'Chức vụ người ký', type: TEXT },
+      { name: 'notes', label: 'Ghi chú', type: 'textarea' },
+    ],
+  },
   {
     slug: 'concurrent-positions',
     model: 'concurrentPosition',

@@ -460,10 +460,11 @@ export default function MyInsurancePage() {
       {/* ── Header ───────────────────────────────────────────────────────────── */}
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-md">
+          <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center shadow-md">
             <Shield className="h-5 w-5 text-white" />
           </div>
           <div>
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-emerald-600">M06 · Bảo hiểm</p>
             <h1 className="text-xl font-bold text-foreground">Bảo hiểm xã hội của tôi</h1>
             <p className="text-sm text-muted-foreground">BHXH — BHYT — Chế độ bảo hiểm cá nhân</p>
           </div>

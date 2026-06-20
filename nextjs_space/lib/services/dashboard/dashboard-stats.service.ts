@@ -50,9 +50,11 @@ export async function getExecutiveStats(scope: DashboardScope): Promise<Executiv
     workflowPending,
     rewardPipeline,
   ] = await Promise.all([
-    db.user.count({ where: { ...unitFilter } }),
-    db.user.count({ where: { ...unitFilter, workStatus: 'ACTIVE' } }),
-    db.user.count({ where: { ...unitFilter, personnelType: 'CAN_BO_CHI_HUY' } }),
+    // Đọc từ Personnel (M02 master) thay vì User để khớp nguồn ghi (liên thông) và
+    // loại học viên khỏi quân số cán bộ. status DANG_CONG_TAC = đang công tác.
+    db.personnel.count({ where: { ...unitFilter, deletedAt: null } }),
+    db.personnel.count({ where: { ...unitFilter, deletedAt: null, status: 'DANG_CONG_TAC' } }),
+    db.personnel.count({ where: { ...unitFilter, deletedAt: null, category: 'CAN_BO_CHI_HUY' } }),
     db.hocVien.count(),
     db.ketQuaHocTap.aggregate({ _avg: { diemTongKet: true } }),
     db.hocVien.count({ where: { academicStatus: { not: 'NORMAL' } } }).catch(() => 0),
@@ -106,8 +108,9 @@ export async function getDepartmentStats(scope: DashboardScope): Promise<Departm
 
   const [unitPersonnel, activePersonnel, instructors, workflowPending, rewardPipeline, activeResearch] =
     await Promise.all([
-      db.user.count({ where: { ...unitFilter } }),
-      db.user.count({ where: { ...unitFilter, workStatus: 'ACTIVE' } }),
+      // Personnel (M02 master) — khớp nguồn ghi, loại học viên khỏi quân số cán bộ.
+      db.personnel.count({ where: { ...unitFilter, deletedAt: null } }),
+      db.personnel.count({ where: { ...unitFilter, deletedAt: null, status: 'DANG_CONG_TAC' } }),
       db.facultyProfile.count({ where: { ...(scope.unitId ? { unitId: scope.unitId } : {}), isActive: true } }),
       db.workflowInstance.count({ where: { status: { in: ['PENDING', 'IN_PROGRESS'] } } }).catch(() => 0),
       db.policyRecord

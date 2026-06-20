@@ -7,6 +7,7 @@
 
 import { useEffect, useState } from 'react';
 import { GraduationCap, CheckCircle, XCircle } from 'lucide-react';
+import { ModuleHero } from '@/components/ui/enhanced-data-card';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
@@ -71,12 +72,13 @@ export default function MyGraduationPage() {
 
   return (
     <div className="space-y-6 p-6">
-      <div>
-        <h1 className="text-2xl font-bold flex items-center gap-2">
-          <GraduationCap className="h-6 w-6" /> Xét tốt nghiệp
-        </h1>
-        <p className="text-muted-foreground mt-1">Mã học viên: {data.hocVien.maHocVien}</p>
-      </div>
+      <ModuleHero
+        moduleId="education"
+        supra="M10 · Học tập"
+        title="Xét tốt nghiệp"
+        subtitle={`Mã học viên: ${data.hocVien.maHocVien}`}
+        icon={GraduationCap}
+      />
 
       {/* Bằng tốt nghiệp nếu đã có */}
       {data.diploma && (

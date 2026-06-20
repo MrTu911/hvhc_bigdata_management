@@ -20,6 +20,7 @@ import { logAudit } from '@/lib/audit';
 import { PROFILE_CHANGE } from '@/lib/rbac/function-codes';
 import { getAccessibleUnitIds } from '@/lib/rbac/scope';
 import { coerce, buildPayload } from './cadre-profile-section.service';
+import { projectUserPatchToPersonnel } from './personnel-projection.service';
 import {
   EXTENDED_FIELD_GROUPS,
   YOUTH_MEMBERSHIP_FIELD_MAP,
@@ -481,6 +482,9 @@ async function commitRequest(
 
     if (Object.keys(extendedPatch).length > 0) {
       await tx.user.update({ where: { id: owner.id }, data: extendedPatch });
+      // Liên thông: chiếu trường mô tả nhân thân sang Personnel (M02 master) để CSDL
+      // chính phục vụ lãnh đạo đồng bộ ngay. Trường không nằm trong map sẽ bị bỏ qua.
+      await projectUserPatchToPersonnel(tx, owner.personnelId, extendedPatch);
     }
     if (Object.keys(youthPatch).length > 0) {
       await tx.youthUnionMembership.upsert({

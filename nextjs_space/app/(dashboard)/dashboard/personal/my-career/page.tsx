@@ -16,7 +16,7 @@ import {
   Briefcase, MapPin, Calendar, CalendarClock, UserPlus, ChevronsUp, ChevronsDown,
   BadgeCheck, ArrowRightLeft, GraduationCap, Trophy, AlertTriangle, Home, LogOut,
   Send, BookOpen, RotateCcw, Hourglass, Building2, CircleDot, RefreshCw, Star,
-  History, Paperclip, FileText, Layers, ShieldCheck, Clock, type LucideIcon,
+  History, Paperclip, FileText, Layers, ShieldCheck, type LucideIcon,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -24,8 +24,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { ModuleHero, EmptyState } from '@/components/ui/enhanced-data-card';
 import { DocumentExportMenu } from '@/components/templates/export/document-export-menu';
 import { RequestCorrectionDialog, type CorrectableField } from '@/components/personal/request-correction-dialog';
-import { usePermissions } from '@/hooks/use-permissions';
-import { PERSONAL, TEMPLATES } from '@/lib/rbac/function-codes';
+import { CareerEventCorrectionDialog } from '@/components/personal/career-event-correction-dialog';
+import { TEMPLATES } from '@/lib/rbac/function-codes';
 import { cn } from '@/lib/utils';
 
 const CAREER_TEMPLATE_CODE = 'TPL_M02_QTCT_CANHAN';
@@ -86,35 +86,13 @@ interface CareerData {
   positions: PositionItem[];
 }
 
-interface UpdateRequestItem {
-  id: string;
-  fieldName: string;
-  currentValue: string | null;
-  requestedValue: string;
-  status: string;
-  reviewNote: string | null;
-  createdAt: string;
-}
-
-/** Nhãn tiếng Việt cho các trường nhạy cảm có thể đề nghị đính chính trên trang này. */
+/** Nhãn tiếng Việt cho các trường do chỉ huy/cơ quan quản lý (hiển thị ở dialog thông tin). */
 const CORRECTION_FIELD_LABELS: Record<string, string> = {
   rank: 'Cấp bậc',
   enlistmentDate: 'Ngày nhập ngũ',
   unitId: 'Đơn vị công tác',
   positionId: 'Chức vụ',
 };
-
-const REQUEST_STATUS_META: Record<string, { label: string; className: string }> = {
-  PENDING: { label: 'Chờ duyệt', className: 'bg-amber-50 text-amber-700 border-amber-200' },
-  APPROVED: { label: 'Đã duyệt', className: 'bg-green-50 text-green-700 border-green-200' },
-  REJECTED: { label: 'Từ chối', className: 'bg-red-50 text-red-700 border-red-200' },
-};
-
-/** Nhãn hiển thị cho fieldName của một đề nghị đính chính (gồm cả sự kiện công tác). */
-function labelForRequestField(fieldName: string): string {
-  if (fieldName.startsWith('careerHistory:')) return 'Sự kiện công tác';
-  return CORRECTION_FIELD_LABELS[fieldName] ?? fieldName;
-}
 
 // ---------------------------------------------------------------------------
 // Event-type presentation metadata (label, icon, màu sắc)
@@ -289,7 +267,7 @@ function ChangeRow({ label, from, to }: { label: string; from: string | null; to
   );
 }
 
-function TimelineEvent({ event, onCorrectionSubmitted }: { event: CareerHistoryItem; onCorrectionSubmitted?: () => void }) {
+function TimelineEvent({ event }: { event: CareerHistoryItem }) {
   const meta = getEventMeta(event.eventType);
   const Icon = meta.icon;
   const hasTraining = event.trainingName || event.trainingInstitution || event.trainingResult;
@@ -322,18 +300,9 @@ function TimelineEvent({ event, onCorrectionSubmitted }: { event: CareerHistoryI
               {formatFullDate(event.eventDate)}
               {event.endDate && <span className="text-slate-400">→ {formatMonthYear(event.endDate)}</span>}
             </div>
-            <RequestCorrectionDialog
-              fields={[{
-                fieldName: `careerHistory:${event.id}`,
-                label: buildEventSummary(event),
-                currentValue: buildEventSummary(event),
-              }]}
-              title="Đề nghị đính chính sự kiện công tác"
-              description="Mô tả nội dung cần đính chính cho sự kiện này. Đề nghị sẽ được gửi tới đơn vị quản lý để xem xét."
-              triggerLabel="Đề nghị sửa"
-              variant="ghost"
-              size="sm"
-              onSubmitted={onCorrectionSubmitted}
+            <CareerEventCorrectionDialog
+              event={event as unknown as Record<string, unknown> & { id: string }}
+              summary={buildEventSummary(event)}
             />
           </div>
         </div>
@@ -424,13 +393,11 @@ function LoadingState() {
 // ---------------------------------------------------------------------------
 
 export default function MyCareerPage() {
-  const { hasPermission } = usePermissions();
   const [data, setData] = useState<CareerData | null>(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [typeFilter, setTypeFilter] = useState<string>('ALL');
-  const [requests, setRequests] = useState<UpdateRequestItem[]>([]);
 
   const fetchData = useCallback(async (isRefresh = false) => {
     if (isRefresh) setRefreshing(true);
@@ -447,24 +414,9 @@ export default function MyCareerPage() {
     }
   }, []);
 
-  // Đề nghị đính chính chỉ nạp khi người dùng có quyền gửi (tránh gọi 403 thừa).
-  const fetchRequests = useCallback(async () => {
-    if (!hasPermission(PERSONAL.REQUEST_INFO_UPDATE)) return;
-    try {
-      const res = await fetch('/api/personal/request-update').then((r) => r.json());
-      if (res.success && Array.isArray(res.data)) setRequests(res.data);
-    } catch {
-      /* không chặn trang nếu phần phụ này lỗi */
-    }
-  }, [hasPermission]);
-
   useEffect(() => {
     fetchData();
   }, [fetchData]);
-
-  useEffect(() => {
-    fetchRequests();
-  }, [fetchRequests]);
 
   const histories = data?.careerHistories ?? [];
   const positions = data?.positions ?? [];
@@ -535,7 +487,7 @@ export default function MyCareerPage() {
           templateCodes={[CAREER_TEMPLATE_CODE]}
           label="Xuất hồ sơ"
         />
-        <RequestCorrectionDialog fields={correctionFields} onSubmitted={fetchRequests} />
+        <RequestCorrectionDialog fields={correctionFields} />
         <Button variant="outline" size="sm" onClick={() => fetchData(true)} disabled={refreshing}>
           <RefreshCw className={cn('mr-1.5 h-4 w-4', refreshing && 'animate-spin')} />
           Làm mới
@@ -546,43 +498,6 @@ export default function MyCareerPage() {
         <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
           {error}
         </div>
-      )}
-
-      {/* Đề nghị đính chính đã gửi */}
-      {requests.length > 0 && (
-        <section className="rounded-xl border border-slate-200 bg-white shadow-sm">
-          <div className="flex items-center gap-2 border-b border-slate-100 px-5 py-3.5">
-            <Clock className="h-5 w-5 text-amber-600" />
-            <h2 className="font-semibold text-slate-800">Đề nghị đính chính đã gửi</h2>
-            <Badge variant="outline" className="ml-auto text-slate-500">{requests.length}</Badge>
-          </div>
-          <div className="divide-y divide-slate-100">
-            {requests.map((r) => {
-              const status = REQUEST_STATUS_META[r.status] ?? REQUEST_STATUS_META.PENDING;
-              return (
-                <div key={r.id} className="flex flex-wrap items-start justify-between gap-3 px-5 py-3">
-                  <div className="min-w-0 text-sm">
-                    <span className="font-medium text-slate-700">
-                      {labelForRequestField(r.fieldName)}
-                    </span>
-                    <div className="text-slate-500">
-                      {r.currentValue && <span className="line-through decoration-slate-300">{r.currentValue}</span>}
-                      {r.currentValue && <ArrowRightLeft className="mx-1 inline h-3 w-3 text-slate-400" />}
-                      <span className="font-medium text-slate-700">{r.requestedValue}</span>
-                    </div>
-                    {r.reviewNote && <p className="mt-0.5 text-xs text-slate-500">Phản hồi: {r.reviewNote}</p>}
-                  </div>
-                  <div className="flex items-center gap-2 whitespace-nowrap text-xs text-slate-400">
-                    <span>{formatFullDate(r.createdAt)}</span>
-                    <span className={cn('inline-flex items-center rounded-full border px-2 py-0.5 font-semibold', status.className)}>
-                      {status.label}
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </section>
       )}
 
       {/* Thẻ tóm tắt */}
@@ -680,7 +595,7 @@ export default function MyCareerPage() {
               description="Thử chọn loại sự kiện khác hoặc xem tất cả."
             />
           ) : (
-            <Timeline events={filteredHistories} onCorrectionSubmitted={fetchRequests} />
+            <Timeline events={filteredHistories} />
           )}
         </div>
       </section>
@@ -692,7 +607,7 @@ export default function MyCareerPage() {
 // Timeline wrapper (group theo năm + đường kẻ dọc)
 // ---------------------------------------------------------------------------
 
-function Timeline({ events, onCorrectionSubmitted }: { events: CareerHistoryItem[]; onCorrectionSubmitted?: () => void }) {
+function Timeline({ events }: { events: CareerHistoryItem[] }) {
   return (
     <div className="relative">
       {/* Đường rail dọc */}
@@ -711,7 +626,7 @@ function Timeline({ events, onCorrectionSubmitted }: { events: CareerHistoryItem
                   </span>
                 </div>
               )}
-              <TimelineEvent event={event} onCorrectionSubmitted={onCorrectionSubmitted} />
+              <TimelineEvent event={event} />
             </div>
           );
         })}

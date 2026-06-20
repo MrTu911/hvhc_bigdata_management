@@ -7,6 +7,7 @@
 
 import { useEffect, useState } from 'react';
 import { Award } from 'lucide-react';
+import { ModuleHero } from '@/components/ui/enhanced-data-card';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
@@ -51,12 +52,13 @@ export default function MyConductPage() {
 
   return (
     <div className="space-y-6 p-6">
-      <div>
-        <h1 className="text-2xl font-bold flex items-center gap-2">
-          <Award className="h-6 w-6" /> Điểm rèn luyện
-        </h1>
-        <p className="text-muted-foreground mt-1">Kết quả đánh giá tác phong theo từng học kỳ</p>
-      </div>
+      <ModuleHero
+        moduleId="education"
+        supra="M10 · Học tập"
+        title="Điểm rèn luyện"
+        subtitle="Kết quả đánh giá tác phong theo từng học kỳ"
+        icon={Award}
+      />
 
       <Card>
         <CardHeader>

@@ -104,6 +104,27 @@ export const POLICY_LEVEL_LABELS: Record<string, string> = {
   DEPARTMENT: 'Phòng/Ban',
 };
 
+/** Nhãn đầy đủ cho enum CareerEventType (17 giá trị) — dùng cho section "Quá trình công tác". */
+export const CAREER_EVENT_TYPE_LABELS: Record<string, string> = {
+  ENLISTMENT: 'Nhập ngũ / Tuyển dụng',
+  PROMOTION: 'Thăng quân hàm',
+  APPOINTMENT: 'Bổ nhiệm chức vụ',
+  POSITION_CHANGE: 'Thay đổi chức vụ',
+  TRANSFER: 'Điều động',
+  UNIT_CHANGE: 'Chuyển đơn vị',
+  SECONDMENT: 'Biệt phái',
+  TRAINING: 'Đào tạo / Bồi dưỡng',
+  STUDY_LEAVE: 'Đi học tập trung',
+  RETURN: 'Trở lại công tác',
+  AWARD: 'Khen thưởng',
+  DISCIPLINE: 'Kỷ luật',
+  RANK_DEMOTION: 'Giáng cấp',
+  RETIREMENT_PREP: 'Chuẩn bị nghỉ hưu',
+  RETIREMENT: 'Nghỉ hưu',
+  DISCHARGE: 'Phục viên / Xuất ngũ',
+  OTHER: 'Khác',
+};
+
 /** Tùy chọn select cho UI nhập liệu (label + value). */
 export function toSelectOptions(labels: Record<string, string>): { value: string; label: string }[] {
   return Object.entries(labels).map(([value, label]) => ({ value, label }));

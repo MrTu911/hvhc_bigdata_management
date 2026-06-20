@@ -7,6 +7,7 @@
 
 import { useEffect, useState } from 'react';
 import { BookOpen } from 'lucide-react';
+import { ModuleHero } from '@/components/ui/enhanced-data-card';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
@@ -75,12 +76,13 @@ export default function MyGradePage() {
 
   return (
     <div className="space-y-6 p-6">
-      <div>
-        <h1 className="text-2xl font-bold flex items-center gap-2">
-          <BookOpen className="h-6 w-6" /> Điểm học tập
-        </h1>
-        <p className="text-muted-foreground mt-1">{data.hocVien.hoTen} — Mã: {data.hocVien.maHocVien}</p>
-      </div>
+      <ModuleHero
+        moduleId="education"
+        supra="M10 · Học tập"
+        title="Điểm học tập"
+        subtitle={`${data.hocVien.hoTen} — Mã: ${data.hocVien.maHocVien}`}
+        icon={BookOpen}
+      />
 
       <div className="flex gap-4">
         <Card className="flex-1">

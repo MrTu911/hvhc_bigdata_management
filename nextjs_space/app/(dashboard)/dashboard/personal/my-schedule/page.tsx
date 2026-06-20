@@ -7,6 +7,7 @@
 
 import { useEffect, useState } from 'react';
 import { Calendar, Clock, MapPin, BookOpen } from 'lucide-react';
+import { ModuleHero } from '@/components/ui/enhanced-data-card';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
@@ -75,12 +76,13 @@ export default function MySchedulePage() {
 
   return (
     <div className="space-y-6 p-6">
-      <div>
-        <h1 className="text-2xl font-bold flex items-center gap-2">
-          <Calendar className="h-6 w-6" /> Thời khóa biểu
-        </h1>
-        <p className="text-muted-foreground mt-1">Các lớp học phần đang ghi danh</p>
-      </div>
+      <ModuleHero
+        moduleId="education"
+        supra="M10 · Học tập"
+        title="Thời khóa biểu"
+        subtitle="Các lớp học phần đang ghi danh"
+        icon={Calendar}
+      />
 
       {data.length === 0 && (
         <Card>

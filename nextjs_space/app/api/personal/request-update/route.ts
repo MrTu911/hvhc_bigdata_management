@@ -1,10 +1,13 @@
 /**
- * POST /api/personal/request-update
- * Gửi yêu cầu cập nhật thông tin cá nhân nhạy cảm (để admin M02 duyệt).
- * Trường không nhạy cảm nên dùng PUT /api/profile/me trực tiếp.
- * Yêu cầu: REQUEST_MY_INFO_UPDATE
+ * /api/personal/request-update — DEPRECATED.
  *
- * Body: { fieldName: string, requestedValue: string, currentValue?: string }
+ * Trước đây POST tạo `PersonalUpdateRequest` (1 cấp "admin M02") cho trường nhạy cảm.
+ * Luồng này TRÙNG bản chất với ProfileChangeRequest (duyệt 2 cấp) và KHÔNG có handler
+ * duyệt/áp dụng (ngõ cụt). Đã hợp nhất về một đường duy nhất:
+ *   - Sửa trường mô tả nhân thân  → ProfileChangeRequest (POST /api/profile/change-requests)
+ *   - Trường quyết định chỉ huy (cấp bậc/đơn vị/chức vụ) → quy trình điều động/phong quân hàm
+ * POST nay trả 410 Gone. GET vẫn giữ để xem lịch sử yêu cầu cũ (read-only).
+ * Xem docs/design/personal-space-data-flow.md.
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/rbac/middleware';
@@ -12,87 +15,16 @@ import { authorize } from '@/lib/rbac/authorize';
 import { PERSONAL } from '@/lib/rbac/function-codes';
 import { prisma } from '@/lib/db';
 
-// Trường nhạy cảm cần phê duyệt — trường khác dùng PUT /api/profile/me
-const SENSITIVE_FIELDS = new Set([
-  'rank', 'militaryId', 'citizenId', 'officerIdCard', 'militaryIdNumber',
-  'unitId', 'positionId', 'managementCategory', 'managementLevel',
-  'enlistmentDate', 'dischargeDate', 'partyJoinDate', 'partyPosition',
-]);
-
-// Đính chính một sự kiện quá trình công tác: fieldName dạng "careerHistory:<eventId>".
-// Bỏ qua kiểm tra SENSITIVE_FIELDS nhưng phải xác minh sự kiện thuộc về user.
-const CAREER_EVENT_FIELD_PREFIX = 'careerHistory:';
-
-export async function POST(request: NextRequest) {
-  const authResult = await requireAuth(request);
-  if (!authResult.allowed) return authResult.response!;
-  const user = authResult.user!;
-
-  const perm = await authorize(user, PERSONAL.REQUEST_INFO_UPDATE, {});
-  if (!perm.allowed) {
-    return NextResponse.json({ error: perm.deniedReason ?? 'Không có quyền gửi yêu cầu cập nhật' }, { status: 403 });
-  }
-
-  let body: { fieldName?: string; requestedValue?: string; currentValue?: string };
-  try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: 'Body không hợp lệ' }, { status: 400 });
-  }
-
-  const { fieldName, requestedValue, currentValue } = body;
-
-  if (!fieldName || typeof fieldName !== 'string') {
-    return NextResponse.json({ error: 'Thiếu fieldName' }, { status: 400 });
-  }
-  if (!requestedValue || typeof requestedValue !== 'string') {
-    return NextResponse.json({ error: 'Thiếu requestedValue' }, { status: 400 });
-  }
-
-  // Đính chính sự kiện công tác: xác minh sở hữu trước khi cho phép.
-  if (fieldName.startsWith(CAREER_EVENT_FIELD_PREFIX)) {
-    const eventId = fieldName.slice(CAREER_EVENT_FIELD_PREFIX.length);
-    if (!eventId) {
-      return NextResponse.json({ error: 'Thiếu mã sự kiện công tác' }, { status: 400 });
-    }
-    const event = await prisma.careerHistory.findFirst({
-      where: { id: eventId, userId: user.id, deletedAt: null },
-      select: { id: true },
-    });
-    if (!event) {
-      return NextResponse.json(
-        { error: 'Sự kiện công tác không tồn tại hoặc không thuộc về bạn' },
-        { status: 404 }
-      );
-    }
-  } else if (!SENSITIVE_FIELDS.has(fieldName)) {
-    return NextResponse.json(
-      { error: `Trường "${fieldName}" không cần phê duyệt — dùng PUT /api/profile/me để cập nhật trực tiếp` },
-      { status: 400 }
-    );
-  }
-
-  try {
-    const record = await prisma.personalUpdateRequest.create({
-      data: {
-        userId: user.id,
-        fieldName,
-        requestedValue,
-        currentValue: currentValue ?? null,
-        status: 'PENDING',
-      },
-    });
-
-    return NextResponse.json({
-      success: true,
-      message: 'Yêu cầu đã được gửi và đang chờ admin phê duyệt',
-      data: { id: record.id, fieldName, status: record.status, createdAt: record.createdAt },
-    });
-  } catch (error: unknown) {
-    const msg = error instanceof Error ? error.message : 'Lỗi không xác định';
-    console.error('[POST /api/personal/request-update]', error);
-    return NextResponse.json({ error: 'Lỗi server: ' + msg }, { status: 500 });
-  }
+export async function POST() {
+  return NextResponse.json(
+    {
+      success: false,
+      error:
+        'Chức năng này đã ngừng dùng. Vui lòng gửi đề nghị cập nhật hồ sơ tại "Đề nghị cập nhật hồ sơ" (duyệt 2 cấp).',
+      redirect: '/dashboard/personal/my-profile-changes',
+    },
+    { status: 410 },
+  );
 }
 
 export async function GET(request: NextRequest) {

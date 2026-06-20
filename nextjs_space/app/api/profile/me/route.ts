@@ -9,6 +9,7 @@ import { prisma } from '@/lib/db';
 import { requireAuth } from '@/lib/rbac/middleware';
 import { authorize } from '@/lib/rbac/authorize';
 import { PERSONAL } from '@/lib/rbac/function-codes';
+import { projectUserPatchToPersonnel } from '@/lib/services/personnel/personnel-projection.service';
 
 export async function GET(request: NextRequest) {
   try {
@@ -158,13 +159,15 @@ export async function PUT(request: NextRequest) {
     }
 
     const body = await request.json();
-    
-    // Chỉ cho phép cập nhật các trường an toàn
+
+    // Chỉ cho phép sửa TRỰC TIẾP các trường mô tả an toàn. Các trường quyết định chỉ
+    // huy (rank, position, unitId) và định danh nhạy cảm (citizenId, militaryId) KHÔNG
+    // cho tự sửa — phải qua quy trình điều động/phong quân hàm hoặc duyệt 2 cấp
+    // (ProfileChangeRequest). Xem docs/design/personal-space-data-flow.md.
     const allowedFields = [
-      'name', 'phone', 'dateOfBirth', 'gender', 'citizenId',
+      'name', 'phone', 'dateOfBirth', 'gender',
       'birthPlace', 'placeOfOrigin', 'permanentAddress', 'temporaryAddress',
       'ethnicity', 'religion', 'bloodType', 'educationLevel', 'specialization',
-      'rank', 'position'
     ];
 
     const updateData: any = {};
@@ -183,6 +186,7 @@ export async function PUT(request: NextRequest) {
       data: updateData,
       select: {
         id: true,
+        personnelId: true,
         name: true,
         email: true,
         phone: true,
@@ -212,6 +216,10 @@ export async function PUT(request: NextRequest) {
         },
       }
     });
+
+    // Liên thông: chiếu trường mô tả vừa sửa sang Personnel (M02 master) để dashboard
+    // lãnh đạo (đọc theo Personnel) đồng bộ ngay. Bỏ qua nếu account chưa gắn Personnel.
+    await projectUserPatchToPersonnel(prisma, updatedUser.personnelId, updateData);
 
     return NextResponse.json({
       success: true,

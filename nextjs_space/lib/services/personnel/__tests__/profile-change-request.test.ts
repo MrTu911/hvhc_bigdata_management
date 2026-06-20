@@ -11,6 +11,7 @@ const mockPrisma = vi.hoisted(() => ({
   youthUnionMembership: { findUnique: vi.fn(), create: vi.fn(), upsert: vi.fn() },
   profileChangeRequest: { update: vi.fn() },
   concurrentPosition: { findUnique: vi.fn() },
+  careerHistory: { findUnique: vi.fn() },
   $transaction: vi.fn(),
 }));
 const mockScope = vi.hoisted(() => ({ getAccessibleUnitIds: vi.fn() }));
@@ -135,6 +136,46 @@ describe('actOnRequest tier-2 commit', () => {
     );
   });
 
+  it('tier-2 APPROVE: trường mô tả (birthPlace) được CHIẾU sang Personnel (liên thông M02)', async () => {
+    const txMock = {
+      user: { update: vi.fn() },
+      personnel: { update: vi.fn() },
+      youthUnionMembership: { findUnique: vi.fn(), create: vi.fn(), upsert: vi.fn() },
+      profileChangeRequest: { update: vi.fn() },
+    };
+    mockPrisma.$transaction.mockImplementation(async (cb: (tx: typeof txMock) => Promise<void>) => cb(txMock));
+    mockRepo.findProfileChangeRequestById.mockResolvedValue(baseRequest({
+      status: 'UNIT_APPROVED',
+      items: [{ id: 'it1', itemType: 'EXTENDED_FIELD', fieldName: 'birthPlace', requestedValue: 'Thái Bình' }],
+    }));
+
+    await actOnRequest({ requestId: 'req1', tier: 2, action: 'APPROVE', actor: hr, scope: 'ACADEMY' });
+
+    // Ghi User (mirror) + chiếu sang Personnel master cùng giá trị.
+    expect(txMock.user.update).toHaveBeenCalledWith(
+      expect.objectContaining({ data: expect.objectContaining({ birthPlace: 'Thái Bình' }) }),
+    );
+    expect(txMock.personnel.update).toHaveBeenCalledWith(
+      expect.objectContaining({ where: { id: 'p1' }, data: expect.objectContaining({ birthPlace: 'Thái Bình' }) }),
+    );
+  });
+
+  it('tier-2 APPROVE: trường chỉ-User (aliasName) KHÔNG ghi Personnel', async () => {
+    const txMock = {
+      user: { update: vi.fn() },
+      personnel: { update: vi.fn() },
+      youthUnionMembership: { findUnique: vi.fn(), create: vi.fn(), upsert: vi.fn() },
+      profileChangeRequest: { update: vi.fn() },
+    };
+    mockPrisma.$transaction.mockImplementation(async (cb: (tx: typeof txMock) => Promise<void>) => cb(txMock));
+    mockRepo.findProfileChangeRequestById.mockResolvedValue(baseRequest({ status: 'UNIT_APPROVED' }));
+
+    await actOnRequest({ requestId: 'req1', tier: 2, action: 'APPROVE', actor: hr, scope: 'ACADEMY' });
+
+    expect(txMock.user.update).toHaveBeenCalled();
+    expect(txMock.personnel.update).not.toHaveBeenCalled();
+  });
+
   it('tier-2 APPROVE: SECTION_UPDATE → update bản ghi danh sách đúng id + payload', async () => {
     const txMock = {
       user: { update: vi.fn() },
@@ -152,6 +193,27 @@ describe('actOnRequest tier-2 commit', () => {
 
     expect(txMock.concurrentPosition.update).toHaveBeenCalledWith(
       expect.objectContaining({ where: { id: 'rec1' }, data: expect.objectContaining({ positionTitle: 'Phó Chủ nhiệm' }) }),
+    );
+  });
+
+  it('tier-2 APPROVE: SECTION_UPDATE career-history → đính chính sự kiện công tác (careerHistory.update)', async () => {
+    const txMock = {
+      user: { update: vi.fn() },
+      personnel: { update: vi.fn() },
+      youthUnionMembership: { findUnique: vi.fn(), create: vi.fn(), upsert: vi.fn() },
+      profileChangeRequest: { update: vi.fn() },
+      careerHistory: { update: vi.fn(), create: vi.fn() },
+    };
+    mockPrisma.$transaction.mockImplementation(async (cb: (tx: typeof txMock) => Promise<void>) => cb(txMock));
+    mockRepo.findProfileChangeRequestById.mockResolvedValue(baseRequest({
+      status: 'UNIT_APPROVED',
+      items: [{ id: 'it1', itemType: 'SECTION_UPDATE', sectionSlug: 'career-history', targetRecordId: 'evt1', requestedValue: { newRank: 'Thượng tá' } }],
+    }));
+
+    await actOnRequest({ requestId: 'req1', tier: 2, action: 'APPROVE', actor: hr, scope: 'ACADEMY' });
+
+    expect(txMock.careerHistory.update).toHaveBeenCalledWith(
+      expect.objectContaining({ where: { id: 'evt1' }, data: expect.objectContaining({ newRank: 'Thượng tá' }) }),
     );
   });
 
@@ -196,5 +258,31 @@ describe('createRequest IDOR guard (SECTION_UPDATE/DELETE)', () => {
     mockPrisma.concurrentPosition.findUnique.mockResolvedValue({ userId: 'cadre', deletedAt: null });
     await createRequest(sectionUpdateInput, 'cadre');
     expect(mockRepo.createProfileChangeRequest).toHaveBeenCalledTimes(1);
+  });
+
+  it('đính chính sự kiện công tác (career-history) của chính chủ → cho phép', async () => {
+    mockPrisma.careerHistory.findUnique.mockResolvedValue({ userId: 'cadre', deletedAt: null });
+    await createRequest(
+      {
+        ownerUserId: 'cadre',
+        items: [{ itemType: 'SECTION_UPDATE' as const, sectionSlug: 'career-history', targetRecordId: 'evt1', requestedValue: { newRank: 'Thượng tá' } }],
+      },
+      'cadre',
+    );
+    expect(mockRepo.createProfileChangeRequest).toHaveBeenCalledTimes(1);
+  });
+
+  it('đính chính sự kiện công tác của người khác → 403 (IDOR)', async () => {
+    mockPrisma.careerHistory.findUnique.mockResolvedValue({ userId: 'someone-else', deletedAt: null });
+    await expect(
+      createRequest(
+        {
+          ownerUserId: 'cadre',
+          items: [{ itemType: 'SECTION_UPDATE' as const, sectionSlug: 'career-history', targetRecordId: 'evtX', requestedValue: { newRank: 'X' } }],
+        },
+        'cadre',
+      ),
+    ).rejects.toMatchObject({ status: 403 });
+    expect(mockRepo.createProfileChangeRequest).not.toHaveBeenCalled();
   });
 });

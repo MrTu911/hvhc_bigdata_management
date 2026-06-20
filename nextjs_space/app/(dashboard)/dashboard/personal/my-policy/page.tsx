@@ -923,10 +923,11 @@ export default function MyPolicyPage() {
         {/* ── Hero Header ── */}
         <div className="flex items-start justify-between flex-wrap gap-4">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 shadow-lg">
+            <div className="p-2.5 rounded-xl bg-gradient-to-br from-teal-600 to-cyan-700 shadow-lg">
               <ShieldCheck className="h-6 w-6 text-white" />
             </div>
             <div>
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-teal-600">M05 · Chính sách</p>
               <h1 className="text-xl font-bold text-slate-800">Chính sách của tôi</h1>
               <p className="text-sm text-muted-foreground">Xem, khai báo và theo dõi chế độ chính sách cá nhân</p>
             </div>
@@ -944,7 +945,7 @@ export default function MyPolicyPage() {
             </Button>
             <Button
               size="sm"
-              className="h-9 gap-1.5 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 shadow-sm"
+              className="h-9 gap-1.5 bg-gradient-to-r from-teal-600 to-cyan-700 hover:from-teal-700 hover:to-cyan-800 shadow-sm"
               onClick={() => setShowNewDialog(true)}
             >
               <Plus className="h-4 w-4" />
