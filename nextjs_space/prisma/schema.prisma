@@ -255,6 +255,9 @@ model User {
   scienceAttachmentsUploaded          ScienceAttachment[]         @relation("ScienceAttachmentUploader")
   personalUpdateRequests              PersonalUpdateRequest[]     @relation("PersonalUpdateRequestUser")
   personalUpdateRequestsReviewed      PersonalUpdateRequest[]     @relation("PersonalUpdateRequestReviewer")
+  profileChangeRequests               ProfileChangeRequest[]      @relation("ProfileChangeRequestUser")
+  profileChangeRequestsTier1Reviewed  ProfileChangeRequest[]      @relation("ProfileChangeRequestTier1Reviewer")
+  profileChangeRequestsTier2Reviewed  ProfileChangeRequest[]      @relation("ProfileChangeRequestTier2Reviewer")
   rankDeclarationsCreated             RankDeclaration[]           @relation("RankDeclarationDeclarer")
   declarationAmendmentsRequested      DeclarationAmendment[]      @relation("AmendmentRequester")
   promotionProposalsCreated           PromotionProposal[]         @relation("PromotionProposalAuthor")
@@ -8766,6 +8769,103 @@ model PersonalUpdateRequest {
   @@index([userId, status])
   @@index([status, createdAt])
   @@map("personal_update_requests")
+}
+
+// ─── Profile Change Request (Duyệt cập nhật hồ sơ cán bộ theo phân cấp 2 cấp) ──
+// Mọi đề nghị bổ sung/thay đổi hồ sơ cá nhân (kèm minh chứng) phải qua 2 cấp:
+//   tier-1 = Chỉ huy đơn vị (Unit.commanderId) → tier-2 = Ban cán bộ/Quân lực
+//   (Personnel.managingOrgan). Chỉ commit vào CSDL ở tier-2 APPROVE.
+// Thay thế dần PersonalUpdateRequest (legacy 1 trường, 1 cấp, không minh chứng).
+
+enum ProfileChangeRequestStatus {
+  DRAFT
+  SUBMITTED // chờ tier-1 (chỉ huy đơn vị)
+  UNIT_APPROVED // tier-1 đã duyệt, chờ tier-2 (ban cán bộ/quân lực)
+  APPROVED // tier-2 đã duyệt + commit vào CSDL
+  REJECTED
+  RETURNED // trả lại cho người đề nghị sửa
+  CANCELLED
+}
+
+enum ProfileChangeItemType {
+  EXTENDED_FIELD // trường scalar trong hồ sơ mở rộng
+  SECTION_CREATE // thêm bản ghi vào danh sách HSCB
+  SECTION_UPDATE // sửa bản ghi danh sách HSCB
+  SECTION_DELETE // xóa bản ghi danh sách HSCB
+}
+
+model ProfileChangeRequest {
+  id                 String                     @id @default(cuid())
+  userId             String // chủ hồ sơ (người đề nghị)
+  personnelId        String? // để định tuyến theo managingOrgan
+  title              String?
+  reason             String?
+  status             ProfileChangeRequestStatus @default(DRAFT)
+  // tier-1 (chỉ huy đơn vị)
+  unitId             String? // snapshot đơn vị lúc submit
+  tier1ReviewerId    String?
+  tier1ReviewedAt    DateTime?
+  tier1Note          String?
+  // tier-2 (ban cán bộ / quân lực)
+  managingOrgan      ManagingOrgan? // snapshot định tuyến
+  tier2ReviewerId    String?
+  tier2ReviewedAt    DateTime?
+  tier2Note          String?
+  // commit / workflow
+  workflowInstanceId String?
+  submittedAt        DateTime?
+  committedAt        DateTime?
+  lockedAt           DateTime?
+  createdBy          String?
+  updatedBy          String?
+  createdAt          DateTime                   @default(now())
+  updatedAt          DateTime                   @updatedAt
+
+  items          ProfileChangeItem[]
+  attachments    ProfileChangeAttachment[]
+  user           User                      @relation("ProfileChangeRequestUser", fields: [userId], references: [id], onDelete: Cascade)
+  tier1Reviewer  User?                     @relation("ProfileChangeRequestTier1Reviewer", fields: [tier1ReviewerId], references: [id])
+  tier2Reviewer  User?                     @relation("ProfileChangeRequestTier2Reviewer", fields: [tier2ReviewerId], references: [id])
+
+  @@index([userId, status])
+  @@index([status, createdAt])
+  @@index([unitId, status])
+  @@index([managingOrgan, status])
+  @@map("profile_change_requests")
+}
+
+model ProfileChangeItem {
+  id             String                @id @default(cuid())
+  requestId      String
+  itemType       ProfileChangeItemType
+  sectionSlug    String? // SECTION_* (vd "concurrent-positions")
+  targetRecordId String? // SECTION_UPDATE / SECTION_DELETE
+  fieldName      String? // EXTENDED_FIELD
+  currentValue   String? // snapshot để diff
+  requestedValue Json? // giá trị mới (scalar hoặc payload bản ghi)
+  isSensitive    Boolean               @default(false)
+  request        ProfileChangeRequest  @relation(fields: [requestId], references: [id], onDelete: Cascade)
+
+  @@index([requestId])
+  @@map("profile_change_items")
+}
+
+model ProfileChangeAttachment {
+  id         String               @id @default(cuid())
+  requestId  String
+  itemId     String?
+  fileName   String
+  objectKey  String
+  bucketName String
+  fileUrl    String
+  mimeType   String?
+  fileSize   Int?
+  uploadedBy String
+  uploadedAt DateTime             @default(now())
+  request    ProfileChangeRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+
+  @@index([requestId])
+  @@map("profile_change_attachments")
 }
 
 // ─── Rank Declaration (Khai báo quá trình lên quân hàm) ──────────────────────

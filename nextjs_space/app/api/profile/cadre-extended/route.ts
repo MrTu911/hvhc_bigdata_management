@@ -34,25 +34,20 @@ export async function GET(request: NextRequest) {
   return NextResponse.json({ success: true, data: result.data });
 }
 
+/**
+ * PATCH đã ĐÓNG cho self-service: cập nhật hồ sơ cá nhân phải qua quy trình duyệt
+ * 2 cấp (Chỉ huy đơn vị → Ban cán bộ/Quân lực). Dùng POST /api/profile/change-requests.
+ * Giữ handler để trả thông báo rõ ràng thay vì 404, chống ghi thẳng vào CSDL.
+ */
 export async function PATCH(request: NextRequest) {
   const authResult = await requireAuth(request);
   if (!authResult.allowed) return authResult.response!;
-  const user = authResult.user!;
-
-  const perm = await authorize(user, PERSONAL.MANAGE_PROFILE, {});
-  if (!perm.allowed) {
-    return NextResponse.json({ success: false, error: 'Không có quyền cập nhật hồ sơ cán bộ điện tử' }, { status: 403 });
-  }
-
-  let body: Record<string, unknown>;
-  try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ success: false, error: 'Body không hợp lệ' }, { status: 400 });
-  }
-
-  const authUser = toAuthUser(user);
-  const result = await CadreExtendedProfileService.update(authUser, 'SELF', user.id, body, false);
-  if (!result.success) return NextResponse.json({ success: false, error: result.error }, { status: result.status });
-  return NextResponse.json({ success: true, data: result.data });
+  return NextResponse.json(
+    {
+      success: false,
+      code: 'REQUIRES_APPROVAL',
+      error: 'Cập nhật hồ sơ cá nhân phải gửi đề nghị duyệt. Vui lòng dùng POST /api/profile/change-requests.',
+    },
+    { status: 409 },
+  );
 }

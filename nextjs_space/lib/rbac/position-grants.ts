@@ -421,6 +421,8 @@ const PERSONAL_BASE_CODES = new Set<string>([
   'VIEW_MY_CAREER_HISTORY',
   'REQUEST_MY_INFO_UPDATE',
   'VIEW_MY_CADRE_PROFILE',  // Hồ sơ cán bộ điện tử 99 trường
+  'VIEW_OWN_PROFILE_CHANGE', // Xem đề nghị cập nhật hồ sơ của mình
+  'CREATE_PROFILE_CHANGE',   // Tạo/sửa/gửi đề nghị cập nhật hồ sơ (có minh chứng)
 ]);
 
 /**
@@ -432,6 +434,32 @@ const PROMOTION_SELF_CODES = new Set<string>([
   'CREATE_SELF_RANK_DECLARATION',
   'SUBMIT_RANK_DECLARATION',
 ]);
+
+/**
+ * Duyệt cập nhật hồ sơ cán bộ theo phân cấp (2 cấp).
+ * - Tier-1 (chỉ huy đơn vị): mọi chức vụ chỉ huy được duyệt lần 1 trong phạm vi
+ *   đơn vị. Người duyệt thực tế được giải bằng Unit.commanderId ở service.
+ * - Tier-2 (ban cán bộ/quân lực + thủ trưởng): duyệt lần 2 và commit vào CSDL.
+ *   Định tuyến cơ quan theo Personnel.managingOrgan ở service.
+ * Mã SELF (VIEW_OWN/CREATE) đã nằm trong PERSONAL_BASE_CODES nên mọi tài khoản có.
+ */
+const PROFILE_CHANGE_TIER1_POSITIONS = new Set<string>([
+  'SYSTEM_ADMIN',
+  'TRUONG_KHOA', 'PHO_TRUONG_KHOA', 'CHI_HUY_KHOA',
+  'TRUONG_PHONG_DANG', 'TRUONG_PHONG_DAO_TAO', 'TRUONG_PHONG_NHAN_SU',
+  'TRUONG_PHONG_KHOA_HOC', 'TRUONG_PHONG_CHINH_SACH', 'CHI_HUY_PHONG',
+  'CHI_HUY_HE', 'CHI_HUY_TIEU_DOAN', 'CHI_HUY_BAN',
+  'CHI_HUY_BO_MON', 'CHU_NHIEM_BO_MON',
+  'B1_TRUONG_PHONG', 'B2_TRUONG_PHONG', 'B3_CNCT',
+]);
+
+const PROFILE_CHANGE_TIER2_POSITIONS = new Set<string>([
+  'SYSTEM_ADMIN', 'GIAM_DOC', 'PHO_GIAM_DOC_HC_HCKT',
+  'TRUONG_PHONG_NHAN_SU', 'CHI_HUY_PHONG',
+]);
+
+const PROFILE_CHANGE_TIER1_CODES = ['VIEW_UNIT_PROFILE_CHANGES', 'APPROVE_UNIT_PROFILE_CHANGE'];
+const PROFILE_CHANGE_TIER2_CODES = ['VIEW_ORGAN_PROFILE_CHANGES', 'APPROVE_ORGAN_PROFILE_CHANGE'];
 
 export function allowForSystemAdmin(_fn: SeedFunction): boolean {
   return true;
@@ -950,7 +978,9 @@ export function grantsForPosition(positionCode: string, functions: SeedFunction[
 
   const grantMap = new Map<string, SeedGrant>();
 
-  for (const fn of functions.filter(predicate)) {
+  // PROFILE_CHANGE được cấp DUY NHẤT qua post-step phân cấp bên dưới (tránh các
+  // predicate catch-all APPROVE rò rỉ quyền duyệt tier-2 cho chỉ huy khoa/bộ môn).
+  for (const fn of functions.filter((fn) => fn.module !== 'profile_change' && predicate(fn))) {
     grantMap.set(fn.code, { positionCode, functionCode: fn.code, scope, conditions: null });
   }
 
@@ -962,6 +992,17 @@ export function grantsForPosition(positionCode: string, functions: SeedFunction[
       if (PERSONAL_BASE_CODES.has(fn.code) && !grantMap.has(fn.code)) {
         grantMap.set(fn.code, { positionCode, functionCode: fn.code, scope, conditions: null });
       }
+    }
+  }
+
+  // Duyệt cập nhật hồ sơ cán bộ theo phân cấp: cấp quyền tier-1/tier-2 theo chức
+  // vụ (post-step, dùng scope của chức vụ để lọc phạm vi đơn vị/cơ quan).
+  const profileChangeCodes: string[] = [];
+  if (PROFILE_CHANGE_TIER1_POSITIONS.has(positionCode)) profileChangeCodes.push(...PROFILE_CHANGE_TIER1_CODES);
+  if (PROFILE_CHANGE_TIER2_POSITIONS.has(positionCode)) profileChangeCodes.push(...PROFILE_CHANGE_TIER2_CODES);
+  for (const code of profileChangeCodes) {
+    if (!grantMap.has(code)) {
+      grantMap.set(code, { positionCode, functionCode: code, scope, conditions: null });
     }
   }
 

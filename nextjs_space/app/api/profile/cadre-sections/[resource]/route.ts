@@ -37,28 +37,19 @@ export async function GET(request: NextRequest, { params }: { params: { resource
   return NextResponse.json({ success: true, data: result.data });
 }
 
-export async function POST(request: NextRequest, { params }: { params: { resource: string } }) {
-  const section = getCadreSection(params.resource);
-  if (!section) return NextResponse.json({ success: false, error: 'Nhóm dữ liệu không hợp lệ' }, { status: 404 });
-
+/**
+ * POST đã ĐÓNG cho self-service: thêm bản ghi danh sách phải qua quy trình duyệt
+ * 2 cấp. Dùng POST /api/profile/change-requests với item SECTION_CREATE.
+ */
+export async function POST(request: NextRequest) {
   const authResult = await requireAuth(request);
   if (!authResult.allowed) return authResult.response!;
-  const user = authResult.user!;
-
-  const perm = await authorize(user, PERSONAL.MANAGE_PROFILE, {});
-  if (!perm.allowed) {
-    return NextResponse.json({ success: false, error: 'Không có quyền cập nhật hồ sơ cán bộ điện tử' }, { status: 403 });
-  }
-
-  let body: Record<string, unknown>;
-  try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ success: false, error: 'Body không hợp lệ' }, { status: 400 });
-  }
-
-  const authUser = toAuthUser(user);
-  const result = await CadreProfileSectionService.create(authUser, 'SELF', user.id, section, body, false);
-  if (!result.success) return NextResponse.json({ success: false, error: result.error }, { status: result.status });
-  return NextResponse.json({ success: true, data: result.data }, { status: 201 });
+  return NextResponse.json(
+    {
+      success: false,
+      code: 'REQUIRES_APPROVAL',
+      error: 'Thêm dữ liệu hồ sơ cá nhân phải gửi đề nghị duyệt. Vui lòng dùng POST /api/profile/change-requests.',
+    },
+    { status: 409 },
+  );
 }

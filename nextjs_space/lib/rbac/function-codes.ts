@@ -662,6 +662,17 @@ export const PROMOTION = {
   APPROVE_PROPOSAL:   'APPROVE_PROMOTION_PROPOSAL',     // Cơ quan phê duyệt đề nghị
 } as const;
 
+// ===== MODULE: PROFILE_CHANGE (DUYỆT CẬP NHẬT HỒ SƠ CÁN BỘ THEO PHÂN CẤP) =====
+// 2 cấp: tier-1 chỉ huy đơn vị → tier-2 ban cán bộ/quân lực, rồi commit vào CSDL.
+export const PROFILE_CHANGE = {
+  VIEW_OWN:      'VIEW_OWN_PROFILE_CHANGE',      // SELF — xem đề nghị của mình
+  CREATE:        'CREATE_PROFILE_CHANGE',        // SELF — tạo/sửa/submit/hủy đề nghị
+  VIEW_UNIT:     'VIEW_UNIT_PROFILE_CHANGES',    // Chỉ huy đơn vị — xem đề nghị trong đơn vị
+  APPROVE_UNIT:  'APPROVE_UNIT_PROFILE_CHANGE',  // tier-1: chỉ huy đơn vị duyệt lần 1
+  VIEW_ORGAN:    'VIEW_ORGAN_PROFILE_CHANGES',   // Ban cán bộ/quân lực — xem đề nghị chờ duyệt
+  APPROVE_ORGAN: 'APPROVE_ORGAN_PROFILE_CHANGE', // tier-2: ban cán bộ/quân lực duyệt lần 2 + commit
+} as const;
+
 // ===== ALL FUNCTION CODES (for seeding) =====
 export const ALL_FUNCTION_CODES = {
   ...PERSONNEL,
@@ -699,6 +710,7 @@ export const ALL_FUNCTION_CODES = {
   ...SCIENCE,
   ...PERSONAL,
   ...PROMOTION,
+  ...PROFILE_CHANGE,
 } as const;
 
 // ===== FUNCTION_CODES (grouped by module) =====
@@ -739,6 +751,7 @@ export const FUNCTION_CODES = {
   SCIENCE,
   PERSONAL,
   PROMOTION,
+  PROFILE_CHANGE,
 } as const;
 
 // Type for all function codes
@@ -777,4 +790,5 @@ export const MODULE_NAMES: Record<string, string> = {
   digital_docs: 'Văn bản số',
   science: 'CSDL Khoa học Quản lý',
   promotion: 'Khai báo & Duyệt Thăng Quân hàm',
+  profile_change: 'Duyệt cập nhật hồ sơ cán bộ',
 };

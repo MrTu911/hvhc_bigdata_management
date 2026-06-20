@@ -51,7 +51,7 @@ async function canAccess(user: AuthUser, scope: FunctionScope, target: { userId:
 
 // ─── Field coercion ─────────────────────────────────────────────────────────────
 
-function coerce(field: CadreField, raw: unknown): unknown {
+export function coerce(field: CadreField, raw: unknown): unknown {
   if (raw === null || raw === undefined || raw === '') return null;
   switch (field.type) {
     case 'date': {
@@ -89,7 +89,7 @@ function coerce(field: CadreField, raw: unknown): unknown {
  * - mode 'update': chỉ lấy field có trong input.
  * - canSensitive=false: loại field nhạy cảm (không ghi đè).
  */
-function buildPayload(
+export function buildPayload(
   fields: CadreField[],
   input: Record<string, unknown>,
   mode: 'create' | 'update',
