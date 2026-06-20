@@ -15,12 +15,14 @@ import { EXTENDED_FIELD_GROUPS } from '@/lib/constants/cadre-profile-sections';
 interface CadreExtendedFormProps {
   personnelId: string;
   canEdit: boolean;
+  /** Override API base URL — default: /api/personnel/[id]/profile-extended */
+  apiBase?: string;
 }
 
 const ALL_FIELDS = EXTENDED_FIELD_GROUPS.flatMap((g) => g.fields);
 
-export function CadreExtendedForm({ personnelId, canEdit }: CadreExtendedFormProps) {
-  const base = `/api/personnel/${personnelId}/profile-extended`;
+export function CadreExtendedForm({ personnelId, canEdit, apiBase }: CadreExtendedFormProps) {
+  const base = apiBase ?? `/api/personnel/${personnelId}/profile-extended`;
   const [form, setForm] = useState<Record<string, unknown>>({});
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);

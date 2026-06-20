@@ -630,6 +630,7 @@ export const PERSONAL = {
   VIEW_POLICY:          'VIEW_MY_POLICY',           // Xem chính sách/chế độ của tôi
   VIEW_INSURANCE:       'VIEW_MY_INSURANCE',        // Xem thông tin bảo hiểm
   VIEW_AWARD:           'VIEW_MY_AWARD',            // Xem khen thưởng/kỷ luật
+  VIEW_CADRE_PROFILE:   'VIEW_MY_CADRE_PROFILE',    // Xem/cập nhật hồ sơ cán bộ điện tử (99 trường)
   // Tầng 1: Giảng viên / Nghiên cứu viên
   VIEW_RESEARCH:        'VIEW_MY_RESEARCH',         // Xem đề tài NCKH của tôi
   VIEW_PUBLICATIONS:    'VIEW_MY_PUBLICATIONS',     // Xem công bố khoa học của tôi

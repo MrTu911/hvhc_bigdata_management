@@ -420,6 +420,7 @@ const PERSONAL_BASE_CODES = new Set<string>([
   'MANAGE_MY_SECURITY',
   'VIEW_MY_CAREER_HISTORY',
   'REQUEST_MY_INFO_UPDATE',
+  'VIEW_MY_CADRE_PROFILE',  // Hồ sơ cán bộ điện tử 99 trường
 ]);
 
 /**

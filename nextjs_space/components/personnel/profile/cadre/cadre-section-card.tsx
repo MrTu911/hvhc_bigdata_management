@@ -46,10 +46,14 @@ interface CadreSectionCardProps {
   personnelId: string;
   section: CadreListSection;
   canEdit: boolean;
+  /** Override API base — e.g. /api/profile/cadre-sections for self-service */
+  apiBase?: string;
 }
 
-export function CadreSectionCard({ personnelId, section, canEdit }: CadreSectionCardProps) {
-  const base = `/api/personnel/${personnelId}/profile/${section.slug}`;
+export function CadreSectionCard({ personnelId, section, canEdit, apiBase }: CadreSectionCardProps) {
+  const base = apiBase
+    ? `${apiBase}/${section.slug}`
+    : `/api/personnel/${personnelId}/profile/${section.slug}`;
   const [rows, setRows] = useState<Row[]>([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);

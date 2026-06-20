@@ -29,7 +29,7 @@ const ALLOWED_FORMATS = new Set(['PDF', 'DOCX']);
 
 /** Ẩn các trường nhạy cảm khi caller thiếu VIEW_SENSITIVE (CCCD, lương, tài sản). */
 function maskSensitive(data: Record<string, unknown>): Record<string, unknown> {
-  const masked = { ...data, soCCCD: '', heSoLuong: '', mucLuong: '', heSoPCCV: '' };
+  const masked: Record<string, unknown> = { ...data, soCCCD: '', heSoLuong: '', mucLuong: '', heSoPCCV: '' };
   if (Array.isArray(masked.asset_list)) {
     masked.asset_list = (masked.asset_list as Record<string, unknown>[]).map((a) => ({
       ...a,

@@ -325,6 +325,14 @@ export const MENU_CONFIG: MenuGroup[] = [
           gradient: 'from-yellow-500 to-amber-600',
           functions: [PERSONAL.VIEW_AWARD],
         },
+        {
+          name: 'nav.myCadreProfile',
+          href: '/dashboard/personal/my-cadre-profile',
+          icon: ClipboardList,
+          gradient: 'from-blue-600 to-violet-600',
+          badge: 'HSCB',
+          functions: [PERSONAL.VIEW_CADRE_PROFILE],
+        },
       ]),
       subSection('nav.myLearning', GraduationCap, [
         {

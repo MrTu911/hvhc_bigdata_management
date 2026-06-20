@@ -28,6 +28,7 @@ export const translations = {
     'nav.myPolicy':           'Chính sách của tôi',
     'nav.myInsurance':        'Bảo hiểm của tôi',
     'nav.myAward':            'Khen thưởng của tôi',
+    'nav.myCadreProfile':     'Hồ sơ cán bộ điện tử',
     'nav.mySecurity':         'Bảo mật tài khoản',
     'nav.personalHub':        'Trung tâm Cá nhân',
     // 3. Học tập của tôi (Tier 2 - Học viên)
@@ -645,6 +646,7 @@ export const translations = {
     'nav.myPolicy':           'My Policy & Benefits',
     'nav.myInsurance':        'My Insurance',
     'nav.myAward':            'My Awards',
+    'nav.myCadreProfile':     'My Electronic Cadre Profile',
     'nav.mySecurity':         'Account Security',
     'nav.personalHub':        'Personal Hub',
     // 3. My Learning (Tier 2 - Students)

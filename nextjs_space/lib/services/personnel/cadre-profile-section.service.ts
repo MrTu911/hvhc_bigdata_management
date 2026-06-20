@@ -231,6 +231,25 @@ export const CadreProfileSectionService = {
     });
     return { success: true, data: deleted };
   },
+
+  /** Xóa mềm TẤT CẢ bản ghi của 1 nhóm cho 1 cán bộ — phục vụ chế độ import "thay thế". */
+  async softDeleteAll(
+    user: AuthUser,
+    scope: FunctionScope,
+    id: string,
+    section: CadreListSection,
+  ): Promise<Result<{ deleted: number }>> {
+    const account = await resolveAccount(id);
+    if (!account) return { success: false, error: 'Không tìm thấy cán bộ', status: 404 };
+    if (!(await canAccess(user, scope, account))) {
+      return { success: false, error: 'Không có quyền xóa dữ liệu ngoài phạm vi đơn vị', status: 403 };
+    }
+    const res = await delegate(section.model).updateMany({
+      where: { userId: account.userId, deletedAt: null },
+      data: { deletedAt: new Date(), deletedBy: user.id },
+    });
+    return { success: true, data: { deleted: res.count } };
+  },
 };
 
 async function accessByUserId(user: AuthUser, scope: FunctionScope, userId: string): Promise<boolean> {

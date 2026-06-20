@@ -30,8 +30,9 @@ import {
   Mail, Phone, Building2, Calendar, Edit2, Save, Plus, Trash2,
   Loader2, Clock, Globe, FileCheck, X, MapPin, Droplets,
   Hash, Fingerprint, BookOpen, ChevronRight, CheckCircle2,
-  Camera,
+  Camera, FileUser,
 } from 'lucide-react';
+import { CadreProfileTab } from '@/components/personnel/profile/cadre/cadre-profile-tab';
 import { format } from 'date-fns';
 import { vi } from 'date-fns/locale';
 
@@ -792,6 +793,7 @@ export default function MyProfilePage() {
             { value: 'awards',    label: 'Khen thưởng', Icon: Award },
             { value: 'party',     label: 'Đảng viên',   Icon: Star },
             { value: 'rank',      label: 'Quân hàm',    Icon: Shield },
+            { value: 'cadre',     label: 'HSCB 99 trường', Icon: FileUser },
           ] as const).map(({ value, label, Icon }) => (
             <TabsTrigger key={value} value={value}
               className="flex items-center gap-1.5 text-xs rounded-lg data-[state=active]:bg-blue-700 data-[state=active]:text-white data-[state=active]:shadow-sm">
@@ -1755,6 +1757,26 @@ export default function MyProfilePage() {
               </p>
             </div>
           </CrudDialog>
+        </TabsContent>
+
+        {/* ═══════════════════════════════════════════════════════════════ */}
+        {/* TAB: Hồ sơ cán bộ điện tử (99 trường) */}
+        {/* ═══════════════════════════════════════════════════════════════ */}
+        <TabsContent value="cadre" className="mt-4">
+          <div className="mb-4 p-3 rounded-xl bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800">
+            <div className="flex items-start gap-2.5">
+              <FileUser className="h-4 w-4 text-blue-600 mt-0.5 shrink-0" />
+              <div className="text-xs text-blue-800 dark:text-blue-200">
+                <strong>Hồ sơ cán bộ điện tử (HSCB)</strong> — Mẫu 99 trường theo quy định.
+                Cập nhật đầy đủ thông tin để hoàn thiện hồ sơ điện tử.
+              </div>
+            </div>
+          </div>
+          <CadreProfileTab
+            personnelId={profile.id}
+            canEdit={true}
+            apiBase="/api/profile/cadre-extended"
+          />
         </TabsContent>
       </Tabs>
     </div>
