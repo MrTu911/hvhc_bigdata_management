@@ -388,29 +388,8 @@ model FacultyProfile {
   @@map("faculty_profiles")
 }
 
-model Department {
-  id          String   @id @default(cuid())
-  code        String   @unique
-  name        String
-  shortName   String?
-  fullName    String?
-  parentId    String?
-  level       Int
-  description String?
-  address     String?
-  phone       String?
-  email       String?
-  latitude    Float?
-  longitude   Float?
-  sortOrder   Int      @default(0)
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  @@index([code])
-  @@index([parentId])
-  @@map("departments")
-}
+// Model Department đã gỡ bỏ (2026-06): đảo dữ liệu, không UI nào dùng. Cơ cấu tổ chức quản lý
+// thống nhất ở model Unit. Bảng `departments` được drop bằng surgical SQL (backup trong backups/).
 
 model BigDataService {
   id          String          @id @default(cuid())

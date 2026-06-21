@@ -226,11 +226,7 @@ async function seedCourses() {
   console.log('\n📚 Đang tạo môn học...');
 
   for (const course of sampleCourses) {
-    // Tìm department
-    const dept = await prisma.department.findFirst({
-      where: { code: course.departmentCode }
-    });
-
+    // Department đã gỡ bỏ — không gán departmentId (cơ cấu tổ chức ở model Unit).
     await prisma.course.upsert({
       where: { code: course.code },
       update: {
@@ -239,7 +235,6 @@ async function seedCourses() {
         credits: course.credits,
         semester: course.semester,
         year: course.year,
-        departmentId: dept?.id
       },
       create: {
         code: course.code,
@@ -249,7 +244,6 @@ async function seedCourses() {
         semester: course.semester,
         year: course.year,
         isActive: true,
-        departmentId: dept?.id
       }
     });
     console.log(`  ✓ ${course.code}: ${course.name}`);

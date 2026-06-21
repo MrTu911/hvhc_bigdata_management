@@ -40,7 +40,7 @@ type Unit = {
   active: boolean
   path: string | null
   commander?: { id: string; name: string; rank: string | null } | null
-  _count?: { users: number; children: number }
+  _count?: { users: number; children: number; personnelMembers?: number }
 }
 
 type UnitForm = {
@@ -235,10 +235,11 @@ export default function DepartmentsPage() {
     .filter(u => u.active)
     .reduce<Record<string, number>>((acc, u) => { acc[u.type] = (acc[u.type] ?? 0) + 1; return acc }, {})
 
-  // KPI
+  // KPI — tách rõ từng loại (Khoa, Phòng) thay vì gộp
   const total    = units.length
   const active   = units.filter(u => u.active).length
   const khoa     = units.filter(u => u.active && u.type === 'KHOA').length
+  const phong    = units.filter(u => u.active && u.type === 'PHONG').length
   const bomon    = units.filter(u => u.active && u.type === 'BO_MON').length
 
   // parent lookup map
@@ -255,7 +256,9 @@ export default function DepartmentsPage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold tracking-tight">Quản lý Khoa / Phòng / Đơn vị</h1>
-            <p className="text-sm text-muted-foreground">Cơ cấu tổ chức phân cấp của Học viện Hậu cần</p>
+            <p className="text-sm text-muted-foreground">
+              Cơ cấu tổ chức Học viện Hậu cần — mọi loại đơn vị (Khoa, Phòng, Hệ, Tiểu đoàn, Lớp, Ban, Bộ môn) quản lý chung tại đây, phân biệt theo loại.
+            </p>
           </div>
         </div>
         <div className="flex gap-2">
@@ -271,10 +274,10 @@ export default function DepartmentsPage() {
       {/* ── KPI Cards ─────────────────────────────────────────────── */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { label: 'Tổng đơn vị',   value: total,  icon: Network,      color: 'text-foreground' },
-          { label: 'Đang hoạt động', value: active, icon: CheckCircle2, color: 'text-green-600' },
-          { label: 'Khoa / Phòng',   value: khoa,   icon: BookOpen,     color: 'text-blue-600' },
-          { label: 'Bộ môn',         value: bomon,  icon: Layers,       color: 'text-amber-600' },
+          { label: 'Tổng đơn vị', value: total, icon: Network,    color: 'text-foreground' },
+          { label: 'Khoa',        value: khoa,  icon: BookOpen,   color: 'text-blue-600' },
+          { label: 'Phòng',       value: phong, icon: Building2,  color: 'text-indigo-600' },
+          { label: 'Bộ môn',      value: bomon, icon: Layers,     color: 'text-amber-600' },
         ].map(kpi => (
           <Card key={kpi.label} className="relative overflow-hidden">
             <CardHeader className="pb-1 pt-4 px-4">
@@ -439,9 +442,9 @@ export default function DepartmentsPage() {
                         )}
                       </TableCell>
                       <TableCell className="text-center">
-                        <span className="inline-flex items-center gap-1 text-xs">
+                        <span className="inline-flex items-center gap-1 text-xs" title="Số cán bộ trong đơn vị">
                           <Users className="h-3 w-3 text-muted-foreground" />
-                          <span className="tabular-nums font-medium">{u._count?.users ?? 0}</span>
+                          <span className="tabular-nums font-medium">{u._count?.personnelMembers ?? u._count?.users ?? 0}</span>
                         </span>
                       </TableCell>
                       <TableCell>

@@ -154,7 +154,6 @@ import {
   SECURITY,
   GOVERNANCE,
   ETL,
-  DEPARTMENT,
   SCIENCE,
   PERSONAL,
   INFRA,
@@ -1787,7 +1786,8 @@ export const MENU_CONFIG: MenuGroup[] = [
           href: '/dashboard/admin/departments',
           icon: Building2,
           gradient: 'from-blue-600 to-indigo-600',
-          functions: [DEPARTMENT.VIEW, SYSTEM.MANAGE_UNITS],
+          // Trang "Khoa/Phòng" chạy trên model Unit; Department đã gỡ bỏ.
+          functions: [SYSTEM.MANAGE_UNITS],
         },
       ]),
       subSection('nav.adminDataGroup', Database, [

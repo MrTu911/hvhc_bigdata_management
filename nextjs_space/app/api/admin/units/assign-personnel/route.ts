@@ -1,15 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { requireFunction } from '@/lib/rbac/middleware';
+import { requireFunction, orgRateLimiter } from '@/lib/rbac/middleware';
 import { SYSTEM } from '@/lib/rbac/function-codes';
 import prisma from '@/lib/db';
 import { logAudit } from '@/lib/audit';
+import { projectUnitMembership } from '@/lib/services/org/unit-membership.service';
 
 // POST: Assign multiple users to a unit
 export async function POST(request: NextRequest) {
   try {
-    const authResult = await requireFunction(request, SYSTEM.MANAGE_USERS);
+    const authResult = await requireFunction(request, SYSTEM.MANAGE_USERS, undefined, {
+      rateLimiter: orgRateLimiter,
+    });
     if (!authResult.allowed) {
-      return NextResponse.json({ error: authResult.authResult?.deniedReason || 'Không có quyền' || 'Forbidden' }, { status: 403 });
+      // Trả nguyên response của middleware (vd 429) để client phân biệt được rate-limit
+      if (authResult.response) return authResult.response;
+      return NextResponse.json({ error: authResult.authResult?.deniedReason || 'Không có quyền' }, { status: 403 });
     }
     const { user } = authResult;
 
@@ -32,15 +37,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Đơn vị không tồn tại' }, { status: 404 });
     }
 
-    // Update users to assign them to this unit
-    const result = await prisma.user.updateMany({
-      where: {
-        id: { in: userIds },
-      },
-      data: {
-        unitId: unitId,
-      },
-    });
+    // Gán user vào đơn vị, đồng bộ cả 3 cột unitId (Personnel nguồn chuẩn → User → Faculty)
+    // trong cùng transaction qua service chung.
+    const result = await prisma.$transaction((tx) =>
+      projectUnitMembership(tx, { userIds, unitId })
+    );
 
     // Log the action
     await logAudit({
@@ -49,14 +50,15 @@ export async function POST(request: NextRequest) {
       action: 'UPDATE',
       resourceType: 'UNIT',
       resourceId: unitId,
-      newValue: { unitId, userIds, count: result.count },
+      newValue: { unitId, userIds, count: result.usersUpdated, personnelSynced: result.personnelUpdated, facultySynced: result.facultyUpdated },
       result: 'SUCCESS'
     });
 
     return NextResponse.json({
       success: true,
-      count: result.count,
-      message: `Đã gán ${result.count} nhân sự vào đơn vị ${unit.name}`,
+      count: result.usersUpdated,
+      personnelSynced: result.personnelUpdated,
+      message: `Đã gán ${result.usersUpdated} nhân sự vào đơn vị ${unit.name}`,
     });
   } catch (error) {
     console.error('Error assigning personnel to unit:', error);
@@ -70,8 +72,11 @@ export async function POST(request: NextRequest) {
 // DELETE: Remove a user from a unit (set unitId to null)
 export async function DELETE(request: NextRequest) {
   try {
-    const authResult = await requireFunction(request, SYSTEM.MANAGE_USERS);
+    const authResult = await requireFunction(request, SYSTEM.MANAGE_USERS, undefined, {
+      rateLimiter: orgRateLimiter,
+    });
     if (!authResult.allowed) {
+      if (authResult.response) return authResult.response;
       return NextResponse.json({ error: 'Không có quyền' }, { status: 403 });
     }
     const { user } = authResult;
@@ -84,10 +89,10 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'userId là bắt buộc' }, { status: 400 });
     }
 
-    await prisma.user.update({
-      where: { id: userId },
-      data: { unitId: null },
-    });
+    // Gỡ user khỏi đơn vị + đồng bộ cả 3 cột (Personnel/User/Faculty) trong cùng transaction
+    await prisma.$transaction((tx) =>
+      projectUnitMembership(tx, { userIds: [userId], unitId: null })
+    );
 
     await logAudit({
       userId: user!.id,

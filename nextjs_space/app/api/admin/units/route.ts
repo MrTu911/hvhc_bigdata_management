@@ -41,14 +41,41 @@ export async function GET(request: NextRequest) {
       }
       if (levelParam) where.level = parseInt(levelParam);
 
-      const units = await prisma.unit.findMany({
+      const findArgs = {
         where,
         include: {
           commander: { select: { id: true, name: true, rank: true } },
-          _count: { select: { users: true, children: true } },
+          _count: {
+            select: {
+              // "Số cán bộ" đếm theo Personnel (M02), loại bản ghi đã xóa mềm.
+              personnelMembers: { where: { deletedAt: null } },
+              users: true,
+              children: { where: { active: true } },
+            },
+          },
         },
-        orderBy: [{ level: 'asc' }, { code: 'asc' }],
-      });
+        orderBy: [{ level: 'asc' as const }, { code: 'asc' as const }],
+      };
+
+      // Phân trang opt-in: chỉ khi truyền page/pageSize. Không truyền → trả đủ để tương thích
+      // trang cây/khoa-phòng đang đọc toàn bộ danh sách.
+      const pageParam = searchParams.get('page');
+      const pageSizeParam = searchParams.get('pageSize');
+      if (pageParam !== null || pageSizeParam !== null) {
+        const page = Math.max(1, parseInt(pageParam || '1') || 1);
+        const pageSize = Math.min(200, Math.max(1, parseInt(pageSizeParam || '50') || 50));
+        const [total, units] = await Promise.all([
+          prisma.unit.count({ where }),
+          prisma.unit.findMany({ ...findArgs, skip: (page - 1) * pageSize, take: pageSize }),
+        ]);
+        return NextResponse.json({
+          success: true,
+          data: units,
+          pagination: { total, page, pageSize, totalPages: Math.ceil(total / pageSize) },
+        });
+      }
+
+      const units = await prisma.unit.findMany(findArgs);
       return NextResponse.json({ success: true, data: units });
     }
 

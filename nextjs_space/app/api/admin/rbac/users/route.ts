@@ -7,7 +7,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { requireScopedFunction } from '@/lib/rbac/middleware';
+import { requireScopedFunction, orgRateLimiter } from '@/lib/rbac/middleware';
 import { SYSTEM, PERSONNEL } from '@/lib/rbac/function-codes';
 import { logAudit } from '@/lib/audit';
 import bcrypt from 'bcryptjs';
@@ -18,8 +18,12 @@ import bcrypt from 'bcryptjs';
  */
 export async function GET(request: NextRequest) {
   try {
-    // RBAC Check với Scope: MANAGE_USERS (API quản trị tài khoản)
-    const { user, response } = await requireScopedFunction(request, SYSTEM.MANAGE_USERS);
+    // RBAC Check với Scope: MANAGE_USERS (API quản trị tài khoản).
+    // Dùng limiter ORG (120/min) thay cho bucket SENSITIVE 20/min vì route này được
+    // trang quản lý đơn vị gọi liên tục (picker + danh sách nhân sự của đơn vị).
+    const { user, response } = await requireScopedFunction(request, SYSTEM.MANAGE_USERS, undefined, {
+      rateLimiter: orgRateLimiter,
+    });
     if (!user) {
       return response!;
     }

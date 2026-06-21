@@ -115,24 +115,9 @@ export async function POST(req: NextRequest) {
           continue;
         }
 
-        // Find or create department
-        let departmentId: string | undefined;
-        if (row['Khoa/Phong']) {
-          let department = await prisma.department.findFirst({
-            where: { name: row['Khoa/Phong'] }
-          });
-
-          if (!department) {
-            department = await prisma.department.create({
-              data: {
-                name: row['Khoa/Phong'],
-                code: row['Khoa/Phong'].substring(0, 10).toUpperCase().replace(/\s/g, ''),
-                level: 1
-              }
-            });
-          }
-          departmentId = department.id;
-        }
+        // Cơ cấu tổ chức nay quản lý ở model Unit (Department đã gỡ bỏ).
+        // Cột FacultyProfile.unitId mới là liên kết đơn vị thật; gán đơn vị cho giảng viên
+        // làm qua trang quản lý đơn vị / gán cán bộ thay vì tạo Department khi import.
 
         // Hash password
         const password = row['Mat khau'] || 'password123';
@@ -153,7 +138,6 @@ export async function POST(req: NextRequest) {
         await prisma.facultyProfile.create({
           data: {
             userId: user.id,
-            departmentId,
             academicRank: row['Hoc ham'],
             academicDegree: row['Hoc vi'],
             specialization: row['Chuyen nganh'],

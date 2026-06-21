@@ -94,13 +94,14 @@ export async function GET(request: NextRequest) {
       console.warn('Failed to fetch ML metrics:', error);
     }
     
-    // 4. Department metrics
+    // 4. Org-unit metrics (cơ cấu tổ chức ở model Unit; Department đã gỡ bỏ).
+    // Giữ tên metric `hvhc_departments_*` để không vỡ dashboard Prometheus đang scrape.
     try {
       const [totalDepartments, activeDepartments] = await Promise.all([
-        db.department.count(),
-        db.department.count({ where: { isActive: true } })
+        db.unit.count(),
+        db.unit.count({ where: { active: true } })
       ]);
-      
+
       metrics.push(
         { name: 'hvhc_departments_total', value: totalDepartments, labels: {}, timestamp: now },
         { name: 'hvhc_departments_active', value: activeDepartments, labels: {}, timestamp: now }

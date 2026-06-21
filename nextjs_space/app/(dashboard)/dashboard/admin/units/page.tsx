@@ -52,6 +52,8 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
+import { UNIT_TYPE, UNIT_TYPE_LABEL_VI, normalizeUnitType } from '@/lib/constants/unit-type';
+import { CadreAssignmentPanel } from '@/components/admin/cadre-assignment-panel';
 
 interface Unit {
   id: string;
@@ -63,7 +65,31 @@ interface Unit {
   parentId: string | null;
   description?: string;
   children: Unit[];
-  _count: { users: number; children: number };
+  // personnelMembers: số cán bộ (Personnel.unitId) — nguồn đếm chính cho badge.
+  // users: giữ để tương thích; là số tài khoản User gán vào đơn vị.
+  _count: { users: number; children: number; personnelMembers?: number };
+}
+
+/** fetch có timeout để client không treo vô hạn khi server chậm. */
+async function fetchWithTimeout(input: string, init?: RequestInit, timeoutMs = 15000): Promise<Response> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(input, { ...init, signal: controller.signal });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+/** Số cán bộ hiển thị của một đơn vị: ưu tiên Personnel, fallback users. */
+function getUnitMemberCount(unit: Unit): number {
+  return unit._count?.personnelMembers ?? unit._count?.users ?? 0;
+}
+
+/** Nhãn tiếng Việt cho Unit.type (chuẩn hóa mã trước khi tra cứu). */
+function getUnitTypeLabel(type: string): string {
+  const code = normalizeUnitType(type);
+  return code ? UNIT_TYPE_LABEL_VI[code] : type;
 }
 
 interface Personnel {
@@ -98,6 +124,8 @@ export default function UnitsManagementPage() {
   const [viewMode, setViewMode] = useState<'tree' | 'table'>('tree');
 
   const [selectedUnit, setSelectedUnit] = useState<Unit | null>(null);
+  // Chế độ panel: gán theo tài khoản User (cũ) hay theo cán bộ Personnel (quản lý cả cán bộ chưa có account)
+  const [panelMode, setPanelMode] = useState<'account' | 'cadre'>('account');
   const [personnel, setPersonnel] = useState<Personnel[]>([]);
   const [loadingPersonnel, setLoadingPersonnel] = useState(false);
   const [personnelSearch, setPersonnelSearch] = useState('');
@@ -146,17 +174,25 @@ export default function UnitsManagementPage() {
     try {
       setLoading(true);
       const [treeRes, flatRes] = await Promise.all([
-        fetch('/api/admin/units'),
-        fetch('/api/admin/units?flat=true'),
+        fetchWithTimeout('/api/admin/units'),
+        fetchWithTimeout('/api/admin/units?flat=true'),
       ]);
 
-      const treeData = await treeRes.json();
-      const flatData = await flatRes.json();
+      if (treeRes.status === 429 || flatRes.status === 429) {
+        toast.error('Thao tác quá nhanh, hệ thống đang giới hạn. Đợi vài giây rồi thử lại.');
+        return; // Giữ dữ liệu cũ, không xóa trắng màn hình
+      }
+
+      const treeData = await treeRes.json().catch(() => ({}));
+      const flatData = await flatRes.json().catch(() => ({}));
 
       if (treeRes.ok) setUnits(treeData.data || []);
       if (flatRes.ok) setFlatUnits(flatData.data || []);
+      if (!treeRes.ok && !flatRes.ok) {
+        toast.error('Không thể tải danh sách đơn vị');
+      }
     } catch {
-      toast.error('Không thể tải danh sách đơn vị');
+      toast.error('Không thể tải danh sách đơn vị (kết nối chậm hoặc bị ngắt)');
     } finally {
       setLoading(false);
     }
@@ -165,13 +201,19 @@ export default function UnitsManagementPage() {
   const fetchPersonnel = useCallback(async (unitId: string) => {
     try {
       setLoadingPersonnel(true);
-      const res = await fetch(`/api/admin/rbac/users?unitId=${unitId}&limit=100`);
-      const data = await res.json();
+      const res = await fetchWithTimeout(`/api/admin/rbac/users?unitId=${unitId}&limit=100`);
+      if (res.status === 429) {
+        toast.error('Thao tác quá nhanh, đợi vài giây rồi thử lại.');
+        return; // Giữ danh sách cũ thay vì xóa trắng panel
+      }
+      const data = await res.json().catch(() => ({}));
       if (res.ok) {
         setPersonnel(data.data || []);
+      } else {
+        toast.error(data.error || 'Không thể tải danh sách nhân sự');
       }
     } catch {
-      console.error('Error fetching personnel');
+      toast.error('Không thể tải nhân sự (kết nối chậm hoặc bị ngắt)');
     } finally {
       setLoadingPersonnel(false);
     }
@@ -180,33 +222,63 @@ export default function UnitsManagementPage() {
   const fetchAvailablePersonnel = useCallback(async () => {
     try {
       setLoadingAvailablePersonnel(true);
-      const res = await fetch('/api/admin/rbac/users?noUnit=true&limit=500');
-      const data = await res.json();
+      const res = await fetchWithTimeout('/api/admin/rbac/users?noUnit=true&limit=500');
+      if (res.status === 429) {
+        toast.error('Thao tác quá nhanh, đợi vài giây rồi thử lại.');
+        return;
+      }
+      const data = await res.json().catch(() => ({}));
       if (res.ok) {
         setAvailablePersonnel(data.data || []);
+      } else {
+        toast.error(data.error || 'Không thể tải danh sách nhân sự chưa gán');
       }
     } catch {
-      console.error('Error fetching available personnel');
+      toast.error('Không thể tải nhân sự chưa gán (kết nối chậm hoặc bị ngắt)');
     } finally {
       setLoadingAvailablePersonnel(false);
     }
   }, []);
 
+  // Cập nhật số cán bộ của một đơn vị cục bộ (optimistic) để tránh refetch toàn bộ cây
+  // sau mỗi lần gán/gỡ — nguyên nhân chính gây dồn request và treo.
+  const adjustUnitMemberCount = useCallback((unitId: string, delta: number) => {
+    const bump = (u: Unit): Unit => {
+      const current = u._count?.personnelMembers ?? u._count?.users ?? 0;
+      return {
+        ...u,
+        _count: { ...u._count, personnelMembers: Math.max(0, current + delta) },
+      };
+    };
+    const walk = (list: Unit[]): Unit[] =>
+      list.map((u) => {
+        const base = u.id === unitId ? bump(u) : u;
+        return { ...base, children: u.children ? walk(u.children) : [] };
+      });
+    setUnits((prev) => walk(prev));
+    setFlatUnits((prev) => prev.map((u) => (u.id === unitId ? bump(u) : u)));
+    setSelectedUnit((prev) => (prev && prev.id === unitId ? bump(prev) : prev));
+  }, []);
+
   const handleAssignPersonnel = async () => {
     if (!selectedUnit || selectedPersonnelIds.length === 0) return;
+    const unitId = selectedUnit.id;
     try {
-      const res = await fetch('/api/admin/units/assign-personnel', {
+      const res = await fetchWithTimeout('/api/admin/units/assign-personnel', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ unitId: selectedUnit.id, userIds: selectedPersonnelIds }),
+        body: JSON.stringify({ unitId, userIds: selectedPersonnelIds }),
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
       if (res.ok) {
         toast.success(`Đã gán ${data.count} nhân sự vào đơn vị thành công!`);
+        // Badge đếm theo Personnel: cộng số cán bộ thực sự được đồng bộ.
+        adjustUnitMemberCount(unitId, data.personnelSynced ?? 0);
         setIsAssignPersonnelOpen(false);
         setSelectedPersonnelIds([]);
-        fetchPersonnel(selectedUnit.id);
-        fetchUnits();
+        fetchPersonnel(unitId);
+      } else if (res.status === 429) {
+        toast.error('Thao tác quá nhanh, đợi vài giây rồi thử lại.');
       } else {
         toast.error(data.error || 'Không thể gán nhân sự');
       }
@@ -217,18 +289,21 @@ export default function UnitsManagementPage() {
 
   const handleUnassign = async (userId: string) => {
     if (!selectedUnit) return;
+    const unitId = selectedUnit.id;
     setUnassigningId(userId);
     try {
-      const res = await fetch(
-        `/api/admin/units/assign-personnel?userId=${userId}&unitId=${selectedUnit.id}`,
+      const res = await fetchWithTimeout(
+        `/api/admin/units/assign-personnel?userId=${userId}&unitId=${unitId}`,
         { method: 'DELETE' }
       );
       if (res.ok) {
         toast.success('Đã xóa nhân sự khỏi đơn vị');
-        fetchPersonnel(selectedUnit.id);
-        fetchUnits();
+        adjustUnitMemberCount(unitId, -1);
+        fetchPersonnel(unitId);
+      } else if (res.status === 429) {
+        toast.error('Thao tác quá nhanh, đợi vài giây rồi thử lại.');
       } else {
-        const data = await res.json();
+        const data = await res.json().catch(() => ({}));
         toast.error(data.error || 'Không thể xóa nhân sự');
       }
     } catch {
@@ -434,9 +509,9 @@ export default function UnitsManagementPage() {
                 </span>
               )}
               <Badge variant="outline" className="text-xs">Cấp {unit.level}</Badge>
-              <span className="flex items-center gap-1 bg-green-500/10 text-green-600 dark:text-green-400 px-1.5 py-0.5 rounded">
+              <span className="flex items-center gap-1 bg-green-500/10 text-green-600 dark:text-green-400 px-1.5 py-0.5 rounded" title="Số cán bộ trong đơn vị">
                 <Users className="w-3 h-3" />
-                {unit._count.users}
+                {getUnitMemberCount(unit)}
               </span>
             </div>
           </div>
@@ -671,8 +746,8 @@ export default function UnitsManagementPage() {
                 <Users className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Tổng nhân sự</p>
-                <p className="text-2xl font-bold">{flatUnits.reduce((s, u) => s + u._count.users, 0)}</p>
+                <p className="text-sm text-muted-foreground">Tổng cán bộ</p>
+                <p className="text-2xl font-bold">{flatUnits.reduce((s, u) => s + getUnitMemberCount(u), 0)}</p>
                 <p className="text-xs text-muted-foreground">đã gán vào đơn vị</p>
               </div>
             </div>
@@ -685,11 +760,11 @@ export default function UnitsManagementPage() {
                 <Building2 className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Khoa / Phòng ban</p>
+                <p className="text-sm text-muted-foreground">Khoa</p>
                 <p className="text-2xl font-bold">
-                  {flatUnits.filter(u => ['Khoa', 'Phòng', 'Ban'].includes(u.type)).length}
+                  {flatUnits.filter(u => normalizeUnitType(u.type) === UNIT_TYPE.KHOA).length}
                 </p>
-                <p className="text-xs text-muted-foreground">đơn vị chức năng</p>
+                <p className="text-xs text-muted-foreground">khoa chuyên môn</p>
               </div>
             </div>
           </CardContent>
@@ -701,16 +776,43 @@ export default function UnitsManagementPage() {
                 <Users className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Bộ môn / Tiểu đoàn</p>
+                <p className="text-sm text-muted-foreground">Phòng</p>
                 <p className="text-2xl font-bold">
-                  {flatUnits.filter(u => ['Bộ môn', 'Tiểu đoàn', 'Đại đội'].includes(u.type)).length}
+                  {flatUnits.filter(u => normalizeUnitType(u.type) === UNIT_TYPE.PHONG).length}
                 </p>
-                <p className="text-xs text-muted-foreground">đơn vị cơ sở</p>
+                <p className="text-xs text-muted-foreground">phòng / ban chức năng</p>
               </div>
             </div>
           </CardContent>
         </Card>
       </div>
+
+      {/* Breakdown theo loại đơn vị — mọi loại trong cùng mô hình Unit */}
+      {(() => {
+        const order = [
+          UNIT_TYPE.HOC_VIEN, UNIT_TYPE.KHOA, UNIT_TYPE.PHONG, UNIT_TYPE.HE, UNIT_TYPE.VIEN,
+          UNIT_TYPE.BAN, UNIT_TYPE.BO_MON, UNIT_TYPE.TIEU_DOAN, UNIT_TYPE.DAI_DOI, UNIT_TYPE.LOP,
+          UNIT_TYPE.TRUNG_TAM, UNIT_TYPE.XUONG, UNIT_TYPE.CHI_HUY, UNIT_TYPE.TRUNG_DOI, UNIT_TYPE.TIEU_DOI, UNIT_TYPE.TO,
+        ];
+        const counts: Record<string, number> = {};
+        for (const u of flatUnits) {
+          const c = normalizeUnitType(u.type);
+          if (c) counts[c] = (counts[c] || 0) + 1;
+        }
+        const items = order.filter(t => counts[t]).map(t => ({ code: t, label: UNIT_TYPE_LABEL_VI[t], count: counts[t] }));
+        if (items.length === 0) return null;
+        return (
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs text-muted-foreground mr-1">Phân loại:</span>
+            {items.map(it => (
+              <span key={it.code} className="inline-flex items-center gap-1.5 rounded-full border bg-muted/40 px-2.5 py-1 text-xs">
+                <span className="font-medium">{it.label}</span>
+                <span className="rounded-full bg-primary/10 text-primary px-1.5 font-semibold">{it.count}</span>
+              </span>
+            ))}
+          </div>
+        );
+      })()}
 
       {/* Main Content */}
       <div className="grid grid-cols-12 gap-4">
@@ -782,7 +884,7 @@ export default function UnitsManagementPage() {
                               : <span className="text-muted-foreground/40">—</span>}
                           </TableCell>
                           <TableCell className="font-medium">{unit.name}</TableCell>
-                          <TableCell className="text-muted-foreground">{unit.type}</TableCell>
+                          <TableCell className="text-muted-foreground">{getUnitTypeLabel(unit.type)}</TableCell>
                           <TableCell>
                             <Badge variant="outline" className="text-xs">Cấp {unit.level}</Badge>
                           </TableCell>
@@ -790,8 +892,8 @@ export default function UnitsManagementPage() {
                             {parent ? parent.name : <span className="text-muted-foreground/40">—</span>}
                           </TableCell>
                           <TableCell className="text-center">
-                            <span className="inline-flex items-center gap-1 text-xs font-medium bg-green-500/10 text-green-600 dark:text-green-400 px-2 py-0.5 rounded-full">
-                              <Users className="w-3 h-3" />{unit._count.users}
+                            <span className="inline-flex items-center gap-1 text-xs font-medium bg-green-500/10 text-green-600 dark:text-green-400 px-2 py-0.5 rounded-full" title="Số cán bộ trong đơn vị">
+                              <Users className="w-3 h-3" />{getUnitMemberCount(unit)}
                             </span>
                           </TableCell>
                           <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
@@ -827,7 +929,9 @@ export default function UnitsManagementPage() {
                         {selectedUnit.name}
                       </CardTitle>
                     </div>
-                    <p className="text-xs text-muted-foreground mt-0.5">{personnel.length} người trong đơn vị</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      {panelMode === 'account' ? `${personnel.length} tài khoản trong đơn vị` : 'Cán bộ (Personnel) trong đơn vị'}
+                    </p>
                   </div>
                   <Button variant="ghost" size="sm" onClick={() => { setSelectedUnit(null); setPersonnel([]); }}>
                     <X className="w-4 h-4" />
@@ -835,6 +939,29 @@ export default function UnitsManagementPage() {
                 </div>
               </CardHeader>
 
+              {/* Tab chọn cách gán: theo tài khoản (User) hoặc theo cán bộ (Personnel) */}
+              <div className="flex border-b text-xs font-medium">
+                <button
+                  onClick={() => setPanelMode('account')}
+                  className={`flex-1 py-2 transition-colors ${panelMode === 'account' ? 'border-b-2 border-primary text-primary' : 'text-muted-foreground hover:text-foreground'}`}
+                >
+                  Theo tài khoản
+                </button>
+                <button
+                  onClick={() => setPanelMode('cadre')}
+                  className={`flex-1 py-2 transition-colors ${panelMode === 'cadre' ? 'border-b-2 border-primary text-primary' : 'text-muted-foreground hover:text-foreground'}`}
+                >
+                  Theo cán bộ
+                </button>
+              </div>
+
+              {panelMode === 'cadre' ? (
+                <CadreAssignmentPanel
+                  unitId={selectedUnit.id}
+                  onMemberCountChange={(delta) => adjustUnitMemberCount(selectedUnit.id, delta)}
+                />
+              ) : (
+              <>
               <div className="flex gap-2 px-4 py-3 border-b">
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -920,6 +1047,8 @@ export default function UnitsManagementPage() {
                   </div>
                 )}
               </ScrollArea>
+              </>
+              )}
             </Card>
           </div>
         )}

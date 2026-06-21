@@ -504,13 +504,7 @@ export const ETL = {
   EXECUTE: 'EXECUTE_ETL',                     // Chạy ETL workflow
 } as const;
 
-// ===== MODULE: DEPARTMENT (KHOA/PHÒNG) =====
-export const DEPARTMENT = {
-  VIEW: 'VIEW_DEPARTMENT',                    // Xem khoa/phòng
-  CREATE: 'CREATE_DEPARTMENT',                // Tạo khoa/phòng
-  UPDATE: 'UPDATE_DEPARTMENT',                // Cập nhật khoa/phòng
-  DELETE: 'DELETE_DEPARTMENT',                // Xóa khoa/phòng
-} as const;
+// Module DEPARTMENT đã gỡ bỏ — cơ cấu tổ chức quản lý ở model Unit (dùng SYSTEM.MANAGE_UNITS).
 
 // ===== MODULE: WORKFLOW (QUY TRÌNH NGHIỆP VỤ) =====
 export const WORKFLOW = {
@@ -703,7 +697,6 @@ export const ALL_FUNCTION_CODES = {
   ...THEME,
   ...DOCUMENTS,
   ...ETL,
-  ...DEPARTMENT,
   ...WORKFLOW,
   ...DIGITAL_DOCS,
   ...TEMPLATES,
@@ -744,7 +737,6 @@ export const FUNCTION_CODES = {
   THEME,
   DOCUMENTS,
   ETL,
-  DEPARTMENT,
   WORKFLOW,
   DIGITAL_DOCS,
   TEMPLATES,

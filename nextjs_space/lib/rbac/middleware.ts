@@ -83,7 +83,24 @@ const rateLimitConfigs = {
     keyPrefix: 'rbac-default',
     message: 'Quá nhiều yêu cầu. Vui lòng giảm tần suất.',
   }),
+
+  // Org-management endpoints: 120 req/min (thao tác quản trị tổ chức tương tác cao:
+  // gán/gỡ nhân sự, tải danh sách nhân sự của đơn vị). Vẫn rate-limit per ip:userId,
+  // nhưng KHÔNG dùng chung bucket SENSITIVE 20/min của MANAGE_* để tránh treo khi
+  // người dùng thao tác liên tục trên trang quản lý đơn vị.
+  ORG: createRateLimiter({
+    windowMs: 60 * 1000,
+    maxRequests: 120,
+    keyPrefix: 'rbac-org',
+    message: 'Thao tác quá nhanh. Vui lòng đợi vài giây rồi thử lại.',
+  }),
 };
+
+/**
+ * Rate limiter dành cho các route quản trị tổ chức (đơn vị/khoa-phòng).
+ * Dùng qua RateLimitOptions.rateLimiter để thay cho bucket SENSITIVE mặc định.
+ */
+export const orgRateLimiter = rateLimitConfigs.ORG;
 
 /**
  * Xác định rate limiter dựa trên function code
@@ -736,9 +753,10 @@ export function withAnyScopedFunction(functionCodes: string[], additionalContext
 export async function requireScopedFunction(
   request: NextRequest | Request,
   functionCode: string,
-  additionalContext?: AuthContext
+  additionalContext?: AuthContext,
+  options?: RateLimitOptions
 ): Promise<RequireResult & { scope?: FunctionScope; scopedOptions?: ScopedQueryOptions }> {
-  const result = await requireFunction(request, functionCode, additionalContext);
+  const result = await requireFunction(request, functionCode, additionalContext, options);
   
   if (!result.allowed) {
     return result;

@@ -16,7 +16,6 @@ export async function GET(request: NextRequest) {
     const [
       totalUsers,
       totalUnits,
-      totalDepartments,
       totalCourses,
       totalProjects,
       totalStudents,
@@ -31,7 +30,6 @@ export async function GET(request: NextRequest) {
     ] = await Promise.all([
       prisma.user.count(),
       prisma.unit.count(),
-      prisma.department.count(),
       prisma.course.count(),
       prisma.researchProject.count(),
       prisma.hocVien.count(),
@@ -53,7 +51,7 @@ export async function GET(request: NextRequest) {
       success: true,
       data: {
         totalPersonnel: totalUsers,
-        totalUnits: totalUnits + totalDepartments,
+        totalUnits: totalUnits,
         totalDatabases: totalDatabases,
         totalCourses: totalCourses,
         totalProjects: totalProjects,

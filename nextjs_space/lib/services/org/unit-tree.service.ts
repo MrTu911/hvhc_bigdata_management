@@ -5,6 +5,7 @@
  * Tách khỏi route layer để dễ test và tái sử dụng.
  */
 
+import type { Prisma } from '@prisma/client';
 import prisma from '@/lib/db';
 import { isValidUnitType, UNIT_TYPE_LABEL_VI } from '@/lib/constants/unit-type';
 
@@ -100,18 +101,24 @@ async function getDescendantIds(unitId: string): Promise<string[]> {
 
 /**
  * Cập nhật path cho unit và toàn bộ cây con (sau khi move).
+ * Chạy trong transaction (client truyền vào) và duyệt con TUẦN TỰ để tránh fan-out
+ * `Promise.all` không giới hạn làm bùng nổ connection khi cây con lớn.
  */
-async function rebuildPathsForSubtree(unitId: string, newPath: string): Promise<void> {
-  await prisma.unit.update({ where: { id: unitId }, data: { path: newPath } });
+async function rebuildPathsForSubtree(
+  tx: Prisma.TransactionClient,
+  unitId: string,
+  newPath: string
+): Promise<void> {
+  await tx.unit.update({ where: { id: unitId }, data: { path: newPath } });
 
-  const children = await prisma.unit.findMany({
+  const children = await tx.unit.findMany({
     where: { parentId: unitId, active: true },
     select: { id: true, code: true },
   });
 
-  await Promise.all(
-    children.map((child) => rebuildPathsForSubtree(child.id, `${newPath}/${child.code}`))
-  );
+  for (const child of children) {
+    await rebuildPathsForSubtree(tx, child.id, `${newPath}/${child.code}`);
+  }
 }
 
 // ─── public API ─────────────────────────────────────────────────────────────
@@ -265,18 +272,27 @@ export async function updateUnit(
     }
   }
 
-  const unit = await prisma.unit.update({
+  const updateArgs = {
     where: { id },
     data: updateData,
     include: {
       commander: { select: { id: true, name: true, rank: true } },
       parent: { select: { id: true, code: true, name: true } },
     },
-  });
+  };
 
-  // Rebuild paths cho toàn cây con nếu đã move
-  if (isMoving && updateData.path) {
-    await rebuildPathsForSubtree(id, updateData.path);
+  // Khi MOVE: update + rebuild path toàn cây con phải atomic (cùng transaction) để không
+  // để cây ở trạng thái path dở khi lỗi giữa chừng. Update đơn thuần thì không cần transaction.
+  let unit;
+  if (isMoving && typeof updateData.path === 'string') {
+    const newPath = updateData.path;
+    unit = await prisma.$transaction(async (tx) => {
+      const updated = await tx.unit.update(updateArgs);
+      await rebuildPathsForSubtree(tx, id, newPath);
+      return updated;
+    });
+  } else {
+    unit = await prisma.unit.update(updateArgs);
   }
 
   return { success: true, unit, oldData: existing };
@@ -319,7 +335,16 @@ export async function getUnitTree(): Promise<UnitTreeNode[]> {
     where: { active: true },
     include: {
       commander: { select: { id: true, name: true, rank: true } },
-      _count: { select: { users: true, children: true } },
+      _count: {
+        select: {
+          // "Số cán bộ" của đơn vị đếm theo Personnel (M02), loại bản ghi đã xóa mềm.
+          personnelMembers: { where: { deletedAt: null } },
+          // Giữ users để tương thích các consumer cũ.
+          users: true,
+          // Chỉ đếm đơn vị con đang hoạt động.
+          children: { where: { active: true } },
+        },
+      },
     },
     orderBy: [{ level: 'asc' }, { code: 'asc' }],
   });

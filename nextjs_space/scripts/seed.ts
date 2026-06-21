@@ -81,14 +81,8 @@ async function main() {
     }
   ];
 
-  for (const dept of departments) {
-    await prisma.department.upsert({
-      where: { code: dept.code },
-      update: dept,
-      create: dept
-    });
-  }
-  console.log('✓ Departments created');
+  // Department đã gỡ bỏ — cơ cấu tổ chức quản lý ở model Unit (seed qua prisma/seeds/index.ts).
+  void departments;
 
   // 2. Create Demo Users with all roles
   console.log('Creating demo users with full RBAC...');

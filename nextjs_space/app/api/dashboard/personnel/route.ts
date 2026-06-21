@@ -125,9 +125,12 @@ export async function GET(request: NextRequest) {
         }
       });
 
-      // 11. Thống kê đơn vị
-      const totalDepartments = await prisma.department.count();
+      // 11. Thống kê đơn vị (cơ cấu tổ chức ở model Unit; Department đã gỡ bỏ).
+      // totalDepartments = số đơn vị chức năng (Khoa/Phòng/Ban) để giữ ý nghĩa cũ.
       const totalUnits = await prisma.unit.count();
+      const totalDepartments = await prisma.unit.count({
+        where: { type: { in: ['KHOA', 'PHONG', 'BAN'] } },
+      });
 
       // 12. Hoạt động Audit gần đây (không cache riêng — lấy theo batch)
       const recentActivities = await prisma.auditLog.findMany({
