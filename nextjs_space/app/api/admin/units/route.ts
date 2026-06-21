@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { code, name, type, level, parentId, commanderId, description } = body;
+    const { code, name, type, level, parentId, commanderId, description, identifierCode } = body;
 
     // Input validation
     const errors: string[] = [];
@@ -79,6 +79,7 @@ export async function POST(request: NextRequest) {
     if (!type?.trim()) errors.push('Vui lòng chọn Loại đơn vị');
     const levelNum = parseInt(level);
     if (isNaN(levelNum) || levelNum < 1 || levelNum > 5) errors.push('Cấp đơn vị phải từ 1-5');
+    if (identifierCode && identifierCode.trim().length > 30) errors.push('Mã định danh điện tử tối đa 30 ký tự');
 
     if (errors.length > 0) {
       return NextResponse.json({ success: false, error: errors.join('. ') }, { status: 400 });
@@ -92,6 +93,7 @@ export async function POST(request: NextRequest) {
       parentId: parentId || null,
       commanderId: commanderId || null,
       description: description?.trim() || null,
+      identifierCode: identifierCode?.trim() || null,
     });
 
     if (!result.success) {
@@ -104,7 +106,7 @@ export async function POST(request: NextRequest) {
       action: 'CREATE',
       resourceType: 'UNIT',
       resourceId: result.unit.id,
-      newValue: { code, name, type, level: levelNum },
+      newValue: { code, name, type, level: levelNum, identifierCode: identifierCode?.trim() || null },
       result: 'SUCCESS',
       ipAddress: getClientIp(request),
     });
@@ -128,10 +130,14 @@ export async function PUT(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { id, name, type, level, parentId, commanderId, description } = body;
+    const { id, name, type, level, parentId, commanderId, description, identifierCode } = body;
 
     if (!id) {
       return NextResponse.json({ success: false, error: 'Thiếu unit ID' }, { status: 400 });
+    }
+
+    if (identifierCode !== undefined && identifierCode && identifierCode.trim().length > 30) {
+      return NextResponse.json({ success: false, error: 'Mã định danh điện tử tối đa 30 ký tự' }, { status: 400 });
     }
 
     const result = await updateUnit(id, {
@@ -141,6 +147,7 @@ export async function PUT(request: NextRequest) {
       parentId,
       commanderId,
       description,
+      identifierCode,
     });
 
     if (!result.success) {
@@ -154,7 +161,7 @@ export async function PUT(request: NextRequest) {
       resourceType: 'UNIT',
       resourceId: id,
       oldValue: result.oldData,
-      newValue: { name, type, level, parentId },
+      newValue: { name, type, level, parentId, identifierCode },
       result: 'SUCCESS',
       ipAddress: getClientIp(request),
     });

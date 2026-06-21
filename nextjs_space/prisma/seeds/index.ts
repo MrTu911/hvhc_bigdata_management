@@ -49,6 +49,7 @@ import { seedWorkflowTemplates } from './60_workflow_templates'
 import { seedWorkflowInstances } from './61_workflow_instances'
 import { seedAdminDocTemplates } from './70_admin_doc_templates'
 import { seedBackfill } from './90_backfill'
+import { seedUnitIdentifiers } from './91_unit_identifiers'
 // ── CSDL bổ sung (mở rộng độ phủ) ──
 import { seedAdminUnits } from './07_admin_units'
 import { seedSalaryGrades } from './08_salary_grades'
@@ -160,6 +161,7 @@ const ALL_STEPS: SeedStep[] = [
 
   // ══ NHÓM H: Backfill (luôn chạy cuối cùng) ══
   { step: '90', name: 'Backfill (cleanup & fix)',       module: 'CORE',  group: 'backfill', fn: seedBackfill },
+  { step: '91', name: 'Unit Identifiers (Mã định danh QĐ 3843)', module: 'CORE', group: 'backfill', optional: true, fn: seedUnitIdentifiers },
 ]
 
 // ─── Module grouping ─────────────────────────────────────────────────────────

@@ -56,6 +56,7 @@ import { toast } from 'sonner';
 interface Unit {
   id: string;
   code: string;
+  identifierCode?: string | null;
   name: string;
   level: number;
   type: string;
@@ -114,6 +115,7 @@ export default function UnitsManagementPage() {
 
   const [formData, setFormData] = useState({
     code: '',
+    identifierCode: '',
     name: '',
     type: '',
     level: 1,
@@ -372,7 +374,7 @@ export default function UnitsManagementPage() {
   };
 
   const resetForm = () => {
-    setFormData({ code: '', name: '', type: '', level: 1, parentId: '', description: '' });
+    setFormData({ code: '', identifierCode: '', name: '', type: '', level: 1, parentId: '', description: '' });
   };
 
   const openEditDialog = (unit: Unit, e: React.MouseEvent) => {
@@ -380,6 +382,7 @@ export default function UnitsManagementPage() {
     setEditingUnit(unit);
     setFormData({
       code: unit.code,
+      identifierCode: unit.identifierCode || '',
       name: unit.name,
       type: unit.type,
       level: unit.level,
@@ -425,6 +428,11 @@ export default function UnitsManagementPage() {
             <div className="font-semibold text-sm truncate">{unit.name}</div>
             <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5">
               <span className="font-mono bg-muted px-1.5 py-0.5 rounded">{unit.code}</span>
+              {unit.identifierCode && (
+                <span className="font-mono bg-primary/10 text-primary px-1.5 py-0.5 rounded" title="Mã định danh điện tử">
+                  {unit.identifierCode}
+                </span>
+              )}
               <Badge variant="outline" className="text-xs">Cấp {unit.level}</Badge>
               <span className="flex items-center gap-1 bg-green-500/10 text-green-600 dark:text-green-400 px-1.5 py-0.5 rounded">
                 <Users className="w-3 h-3" />
@@ -442,6 +450,7 @@ export default function UnitsManagementPage() {
                 const ts = Date.now().toString(36).toUpperCase().slice(-4);
                 setFormData({
                   code: `${unit.code}_${ts}`,
+                  identifierCode: '',
                   name: '',
                   type: '',
                   level: unit.level + 1,
@@ -510,6 +519,15 @@ export default function UnitsManagementPage() {
             </SelectContent>
           </Select>
         </div>
+      </div>
+      <div>
+        <Label>Mã định danh điện tử</Label>
+        <Input
+          value={formData.identifierCode}
+          onChange={(e) => setFormData({ ...formData, identifierCode: e.target.value })}
+          placeholder="VD: G11.40.001 (theo QĐ 3843/QĐ-HV)"
+          className="font-mono"
+        />
       </div>
       <div>
         <Label>Tên đơn vị *</Label>
@@ -736,6 +754,7 @@ export default function UnitsManagementPage() {
                   <TableHeader>
                     <TableRow className="bg-muted/30">
                       <TableHead>Mã</TableHead>
+                      <TableHead>Mã định danh</TableHead>
                       <TableHead>Tên đơn vị</TableHead>
                       <TableHead>Loại</TableHead>
                       <TableHead>Cấp</TableHead>
@@ -756,6 +775,11 @@ export default function UnitsManagementPage() {
                         >
                           <TableCell className="font-mono text-sm">
                             {'  '.repeat(unit.level - 1)}{unit.code}
+                          </TableCell>
+                          <TableCell className="font-mono text-sm">
+                            {unit.identifierCode
+                              ? <span className="text-primary">{unit.identifierCode}</span>
+                              : <span className="text-muted-foreground/40">—</span>}
                           </TableCell>
                           <TableCell className="font-medium">{unit.name}</TableCell>
                           <TableCell className="text-muted-foreground">{unit.type}</TableCell>

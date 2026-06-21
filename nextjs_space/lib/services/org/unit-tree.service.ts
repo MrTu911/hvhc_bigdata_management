@@ -15,6 +15,8 @@ export interface CreateUnitInput {
   parentId?: string | null;
   commanderId?: string | null;
   description?: string | null;
+  /** Mã định danh điện tử dùng chung (QĐ 3843/QĐ-HV) — khác `code` nội bộ. */
+  identifierCode?: string | null;
 }
 
 export interface UpdateUnitInput {
@@ -24,6 +26,7 @@ export interface UpdateUnitInput {
   parentId?: string | null;
   commanderId?: string | null;
   description?: string | null;
+  identifierCode?: string | null;
 }
 
 export interface UnitTreeNode {
@@ -35,6 +38,7 @@ export interface UnitTreeNode {
   parentId: string | null;
   path: string | null;
   active: boolean;
+  identifierCode: string | null;
   children: UnitTreeNode[];
   _count?: { users: number; children: number };
 }
@@ -113,11 +117,20 @@ export async function createUnit(input: CreateUnitInput): Promise<{
   error?: string;
 }> {
   const { code, name, type, level, parentId, commanderId, description } = input;
+  const identifierCode = input.identifierCode?.trim() || null;
 
   // Code trùng
   const existing = await prisma.unit.findUnique({ where: { code } });
   if (existing) {
     return { success: false, error: `Mã đơn vị "${code}" đã tồn tại` };
+  }
+
+  // Mã định danh điện tử trùng
+  if (identifierCode) {
+    const dup = await prisma.unit.findUnique({ where: { identifierCode } });
+    if (dup) {
+      return { success: false, error: `Mã định danh điện tử "${identifierCode}" đã tồn tại` };
+    }
   }
 
   // Parent tồn tại + cấp hợp lệ
@@ -147,6 +160,7 @@ export async function createUnit(input: CreateUnitInput): Promise<{
       parentId: parentId ?? null,
       commanderId: commanderId ?? null,
       description: description ?? null,
+      identifierCode,
       path: buildPath(parentPath, code),
     },
     include: {
@@ -169,13 +183,25 @@ export async function updateUnit(
   if (!existing) return { success: false, error: 'Đơn vị không tồn tại' };
   if (!existing.active) return { success: false, error: 'Đơn vị đã bị vô hiệu hóa' };
 
-  const { name, type, level, parentId, commanderId, description } = input;
+  const { name, type, level, parentId, commanderId, description, identifierCode } = input;
   const updateData: Record<string, any> = {};
 
   if (name !== undefined) updateData.name = name;
   if (type !== undefined) updateData.type = type;
   if (description !== undefined) updateData.description = description;
   if (commanderId !== undefined) updateData.commanderId = commanderId ?? null;
+
+  // Mã định danh điện tử (chuẩn hóa rỗng → null, kiểm tra trùng nếu đổi giá trị)
+  if (identifierCode !== undefined) {
+    const normalized = identifierCode?.trim() || null;
+    if (normalized) {
+      const dup = await prisma.unit.findUnique({ where: { identifierCode: normalized } });
+      if (dup && dup.id !== id) {
+        return { success: false, error: `Mã định danh điện tử "${normalized}" đã tồn tại` };
+      }
+    }
+    updateData.identifierCode = normalized;
+  }
 
   // Level thay đổi — chỉ cho phép nếu không làm lệch parent constraint
   if (level !== undefined && level !== existing.level) {

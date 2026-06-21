@@ -925,6 +925,9 @@ model Unit {
   id                String              @id @default(cuid())
   name              String
   code              String              @unique
+  // Mã định danh điện tử dùng chung (QĐ 3843/QĐ-HV, theo QĐ 2934/QĐ-BQP) — phục vụ
+  // kết nối, chia sẻ dữ liệu với các bộ, ngành, địa phương. Khác với `code` (mã nội bộ).
+  identifierCode    String?             @unique
   type              String
   level             Int
   parentId          String?
@@ -959,6 +962,7 @@ model Unit {
   dataSources         DataSource[]      // M-KTDL: nguồn dữ liệu do đơn vị quản lý
 
   @@index([code])
+  @@index([identifierCode])
   @@index([type])
   @@index([parentId])
   @@index([commanderId])
