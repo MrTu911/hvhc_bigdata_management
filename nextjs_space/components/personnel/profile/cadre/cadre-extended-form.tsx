@@ -10,6 +10,7 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CadreFieldInput } from './cadre-field-input';
+import { EvidenceButton } from '../evidence/evidence-button';
 import { EXTENDED_FIELD_GROUPS } from '@/lib/constants/cadre-profile-sections';
 
 interface CadreExtendedFormProps {
@@ -17,11 +18,21 @@ interface CadreExtendedFormProps {
   canEdit: boolean;
   /** Override API base URL — default: /api/personnel/[id]/profile-extended */
   apiBase?: string;
+  /** Bật minh chứng theo trường (chỉ ngữ cảnh tự phục vụ — minh chứng là SELF-only). */
+  evidenceEnabled?: boolean;
+  /** Cho upload/xóa minh chứng (tách khỏi khóa khai báo). */
+  evidenceCanEdit?: boolean;
 }
 
 const ALL_FIELDS = EXTENDED_FIELD_GROUPS.flatMap((g) => g.fields);
 
-export function CadreExtendedForm({ personnelId, canEdit, apiBase }: CadreExtendedFormProps) {
+export function CadreExtendedForm({
+  personnelId,
+  canEdit,
+  apiBase,
+  evidenceEnabled = false,
+  evidenceCanEdit = false,
+}: CadreExtendedFormProps) {
   const base = apiBase ?? `/api/personnel/${personnelId}/profile-extended`;
   const [form, setForm] = useState<Record<string, unknown>>({});
   const [loading, setLoading] = useState(true);
@@ -93,9 +104,27 @@ export function CadreExtendedForm({ personnelId, canEdit, apiBase }: CadreExtend
             <CardTitle className="text-base">{group.title}</CardTitle>
           </CardHeader>
           <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {group.fields.map((f) => (
-              <CadreFieldInput key={f.name} field={f} value={form[f.name]} disabled={!canEdit} onChange={setField} />
-            ))}
+            {group.fields.map((f) =>
+              evidenceEnabled ? (
+                <div key={f.name} className="flex items-start gap-1">
+                  <div className="min-w-0 flex-1">
+                    <CadreFieldInput field={f} value={form[f.name]} disabled={!canEdit} onChange={setField} />
+                  </div>
+                  <div className="shrink-0 pt-6">
+                    <EvidenceButton
+                      targetType="PROFILE_FIELD"
+                      targetId={personnelId}
+                      fieldKey={f.name}
+                      sectionSlug={group.title}
+                      canEdit={evidenceCanEdit}
+                      title={f.label}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <CadreFieldInput key={f.name} field={f} value={form[f.name]} disabled={!canEdit} onChange={setField} />
+              ),
+            )}
           </CardContent>
         </Card>
       ))}

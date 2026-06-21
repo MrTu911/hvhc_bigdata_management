@@ -33,6 +33,11 @@ import {
   Camera, FileUser,
 } from 'lucide-react';
 import { CadreProfileTab } from '@/components/personnel/profile/cadre/cadre-profile-tab';
+import { DeclarationBanner, type DeclarationState } from '@/components/personnel/profile/cadre/declaration-banner';
+import { EvidenceButton } from '@/components/personnel/profile/evidence/evidence-button';
+import { EvidenceManager } from '@/components/personnel/profile/evidence/evidence-manager';
+import { usePermissions } from '@/hooks/use-permissions';
+import { PERSONAL } from '@/lib/rbac/function-codes';
 import { format } from 'date-fns';
 import { vi } from 'date-fns/locale';
 
@@ -262,13 +267,26 @@ function EmptyState({ icon: Icon, title, sub }: {
 }
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
+/** Các tab hợp lệ trên trang hồ sơ điện tử — dùng để nhận tab khởi tạo từ ?tab=. */
+const PROFILE_TABS = ['basic', 'work', 'education', 'language', 'techcert', 'awards', 'party', 'rank', 'cadre'] as const;
+type ProfileTab = (typeof PROFILE_TABS)[number];
+
 export default function MyProfilePage() {
   const { status } = useSession();
+  const { hasPermission } = usePermissions();
   const router = useRouter();
+  // Tab đang mở — controlled để hỗ trợ deep-link ?tab= (vd redirect HSCB → ?tab=cadre).
+  const [activeTab, setActiveTab] = useState<ProfileTab>('basic');
+  // Minh chứng tách khỏi khóa khai báo: gắn được bất cứ lúc nào nếu có quyền MANAGE_MY_PROFILE (SELF).
+  const evidenceCanEdit = hasPermission(PERSONAL.MANAGE_PROFILE);
 
   const [loading, setLoading]         = useState(true);
   const [saving, setSaving]           = useState(false);
   const [profile, setProfile]         = useState<ProfileData | null>(null);
+  // Vòng đời khai báo HSCB — chi phối quyền tự ghi trực tiếp 99 trường (đồng bộ với my-cadre-profile).
+  const [declaration, setDeclaration]               = useState<DeclarationState | null>(null);
+  const [declarationLoading, setDeclarationLoading] = useState(true);
+  const [cadreTabKey, setCadreTabKey]               = useState(0);
   const [editMode, setEditMode]       = useState(false);
   const [photoUploading, setPhotoUploading] = useState(false);
   const [photoHover, setPhotoHover]   = useState(false);
@@ -375,9 +393,38 @@ export default function MyProfilePage() {
     finally  { setLoading(false); }
   }, []);
 
+  // ── Load trạng thái khai báo HSCB (SELF) ───────────────────────────────────
+  const loadDeclaration = useCallback(async () => {
+    try {
+      const res = await fetch('/api/profile/declaration');
+      const json = await res.json();
+      if (res.ok && json.success) setDeclaration(json.data);
+    } catch {
+      /* giữ trạng thái cũ */
+    } finally {
+      setDeclarationLoading(false);
+    }
+  }, []);
+
+  // Sau khi xác nhận hoàn tất khai báo → remount tab HSCB để chuyển sang chế độ chỉ đọc.
+  const handleDeclarationConfirmed = useCallback(() => {
+    loadDeclaration();
+    setCadreTabKey((k) => k + 1);
+  }, [loadDeclaration]);
+
+  // Mở đúng tab theo ?tab= (deep-link từ redirect HSCB/menu). Đọc sau mount để tránh hydration mismatch.
+  useEffect(() => {
+    const requested = new URLSearchParams(window.location.search).get('tab');
+    if (requested && (PROFILE_TABS as readonly string[]).includes(requested)) {
+      setActiveTab(requested as ProfileTab);
+      if (requested === 'rank') fetchRankDeclarations();
+    }
+  }, [fetchRankDeclarations]);
+
   useEffect(() => {
     if (status === 'authenticated') {
       fetchProfile();
+      loadDeclaration();
       // Fetch master data in parallel
       fetch('/api/master-data/ethnicities')
         .then(r => r.json()).then(d => { if (d.success) setEthnicities(d.data); })
@@ -782,7 +829,7 @@ export default function MyProfilePage() {
       </div>
 
       {/* ── Tabs ──────────────────────────────────────────────────────────── */}
-      <Tabs defaultValue="basic" onValueChange={v => { if (v === 'rank') fetchRankDeclarations(); }}>
+      <Tabs value={activeTab} onValueChange={v => { setActiveTab(v as ProfileTab); if (v === 'rank') fetchRankDeclarations(); }}>
         <TabsList className="flex flex-wrap h-auto gap-1 p-1 rounded-xl bg-slate-100 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
           {([
             { value: 'basic',     label: 'Cơ bản',      Icon: User },
@@ -1043,6 +1090,26 @@ export default function MyProfilePage() {
               </div>
             </CardContent>
           </Card>
+
+          {/* Minh chứng cho khối thông tin cơ bản (section-level) — ảnh/PDF, không bắt buộc.
+              fieldKey riêng '__basic_section__' để không lẫn với minh chứng field-level của HSCB. */}
+          <Card>
+            <CardHeader className="py-3">
+              <CardTitle className="text-base">Minh chứng thông tin cơ bản</CardTitle>
+              <CardDescription>
+                Đính kèm ảnh/PDF minh chứng cho thông tin cơ bản (CCCD, giấy khai sinh, quyết định…). Không bắt buộc.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <EvidenceManager
+                targetType="PROFILE_FIELD"
+                targetId={profile.id}
+                sectionSlug="basic"
+                fieldKey="__basic_section__"
+                canEdit={evidenceCanEdit}
+              />
+            </CardContent>
+          </Card>
         </TabsContent>
 
         {/* ═══════════════════════════════════════════════════════════════ */}
@@ -1080,13 +1147,24 @@ export default function MyProfilePage() {
                             </p>
                             {w.description && <p className="text-xs mt-1.5 text-muted-foreground/80 line-clamp-2">{w.description}</p>}
                           </div>
-                          <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
-                            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openEditWork(w)}>
-                              <Edit2 className="h-3.5 w-3.5" />
-                            </Button>
-                            <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive hover:text-destructive" onClick={() => setWrkDeleteId(w.id!)}>
-                              <Trash2 className="h-3.5 w-3.5" />
-                            </Button>
+                          <div className="flex items-center gap-1 shrink-0">
+                            {w.id && (
+                              <EvidenceButton
+                                targetType="WORK_EXPERIENCE"
+                                targetId={w.id}
+                                sectionSlug="work"
+                                canEdit={evidenceCanEdit}
+                                title={`${w.position} — ${w.organization}`}
+                              />
+                            )}
+                            <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                              <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openEditWork(w)}>
+                                <Edit2 className="h-3.5 w-3.5" />
+                              </Button>
+                              <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive hover:text-destructive" onClick={() => setWrkDeleteId(w.id!)}>
+                                <Trash2 className="h-3.5 w-3.5" />
+                              </Button>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -1165,13 +1243,24 @@ export default function MyProfilePage() {
                             </div>
                             {e.thesisTitle && <p className="text-xs mt-1.5 italic text-muted-foreground/80">"{e.thesisTitle}"</p>}
                           </div>
-                          <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
-                            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openEditEdu(e)}>
-                              <Edit2 className="h-3.5 w-3.5" />
-                            </Button>
-                            <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive hover:text-destructive" onClick={() => setEduDeleteId(e.id!)}>
-                              <Trash2 className="h-3.5 w-3.5" />
-                            </Button>
+                          <div className="flex items-center gap-1 shrink-0">
+                            {e.id && (
+                              <EvidenceButton
+                                targetType="EDUCATION"
+                                targetId={e.id}
+                                sectionSlug="education"
+                                canEdit={evidenceCanEdit}
+                                title={`${e.level}${e.major ? ' — ' + e.major : ''}`}
+                              />
+                            )}
+                            <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                              <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openEditEdu(e)}>
+                                <Edit2 className="h-3.5 w-3.5" />
+                              </Button>
+                              <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive hover:text-destructive" onClick={() => setEduDeleteId(e.id!)}>
+                                <Trash2 className="h-3.5 w-3.5" />
+                              </Button>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -1272,9 +1361,20 @@ export default function MyProfilePage() {
                             {lc.issuer && <p className="text-xs text-muted-foreground mt-1">{lc.issuer}{lc.issueDate ? ` — ${fmtDate(lc.issueDate)}` : ''}</p>}
                           </div>
                         </div>
-                        <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
-                          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openEditLang(lc)}><Edit2 className="h-3.5 w-3.5" /></Button>
-                          <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive hover:text-destructive" onClick={() => setLangDeleteId(lc.id!)}><Trash2 className="h-3.5 w-3.5" /></Button>
+                        <div className="flex items-center gap-1 shrink-0">
+                          {lc.id && (
+                            <EvidenceButton
+                              targetType="FOREIGN_CERT"
+                              targetId={lc.id}
+                              sectionSlug="language"
+                              canEdit={evidenceCanEdit}
+                              title={`${lc.language}${lc.certType ? ' — ' + lc.certType : ''}`}
+                            />
+                          )}
+                          <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openEditLang(lc)}><Edit2 className="h-3.5 w-3.5" /></Button>
+                            <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive hover:text-destructive" onClick={() => setLangDeleteId(lc.id!)}><Trash2 className="h-3.5 w-3.5" /></Button>
+                          </div>
                         </div>
                       </div>
                       {lc.notes && <p className="text-xs mt-2 text-muted-foreground/70 border-t pt-2">{lc.notes}</p>}
@@ -1359,9 +1459,20 @@ export default function MyProfilePage() {
                             {tc.decisionNumber && <p className="text-xs text-muted-foreground">Số QĐ: {tc.decisionNumber}</p>}
                           </div>
                         </div>
-                        <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
-                          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openEditTech(tc)}><Edit2 className="h-3.5 w-3.5" /></Button>
-                          <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive hover:text-destructive" onClick={() => setTechDeleteId(tc.id!)}><Trash2 className="h-3.5 w-3.5" /></Button>
+                        <div className="flex items-center gap-1 shrink-0">
+                          {tc.id && (
+                            <EvidenceButton
+                              targetType="TECH_CERT"
+                              targetId={tc.id}
+                              sectionSlug="techcert"
+                              canEdit={evidenceCanEdit}
+                              title={tc.certName || tc.certType}
+                            />
+                          )}
+                          <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openEditTech(tc)}><Edit2 className="h-3.5 w-3.5" /></Button>
+                            <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive hover:text-destructive" onClick={() => setTechDeleteId(tc.id!)}><Trash2 className="h-3.5 w-3.5" /></Button>
+                          </div>
                         </div>
                       </div>
                       {tc.notes && <p className="text-xs mt-2 text-muted-foreground/70 border-t pt-2">{tc.notes}</p>}
@@ -1762,19 +1873,19 @@ export default function MyProfilePage() {
         {/* ═══════════════════════════════════════════════════════════════ */}
         {/* TAB: Hồ sơ cán bộ điện tử (99 trường) */}
         {/* ═══════════════════════════════════════════════════════════════ */}
-        <TabsContent value="cadre" className="mt-4">
-          <div className="mb-4 p-3 rounded-xl bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800">
-            <div className="flex items-start gap-2.5">
-              <FileUser className="h-4 w-4 text-blue-600 mt-0.5 shrink-0" />
-              <div className="text-xs text-blue-800 dark:text-blue-200">
-                <strong>Hồ sơ cán bộ điện tử (HSCB)</strong> — Mẫu 99 trường theo quy định.
-                Cập nhật đầy đủ thông tin để hoàn thiện hồ sơ điện tử.
-              </div>
-            </div>
-          </div>
+        <TabsContent value="cadre" className="mt-4 space-y-4">
+          {/* Banner vòng đời khai báo — thống nhất luật với /dashboard/personal/my-cadre-profile */}
+          <DeclarationBanner
+            state={declaration}
+            loading={declarationLoading}
+            onConfirmed={handleDeclarationConfirmed}
+            onRefresh={loadDeclaration}
+          />
+          {/* Đang khai báo (chưa chốt) + có quyền → cho tự ghi trực tiếp; đã chốt → chỉ đọc, đổi qua đề nghị 2 cấp. */}
           <CadreProfileTab
+            key={cadreTabKey}
             personnelId={profile.id}
-            canEdit={true}
+            canEdit={(declaration ? !declaration.declared : false) && hasPermission(PERSONAL.MANAGE_PROFILE)}
             apiBase="/api/profile/cadre-extended"
           />
         </TabsContent>

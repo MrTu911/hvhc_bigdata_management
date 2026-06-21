@@ -328,7 +328,8 @@ export const MENU_CONFIG: MenuGroup[] = [
         },
         {
           name: 'nav.myCadreProfile',
-          href: '/dashboard/personal/my-cadre-profile',
+          // Hợp nhất: trỏ thẳng tab HSCB của trang hồ sơ điện tử canonical (route cũ đã redirect 308).
+          href: '/dashboard/profile?tab=cadre',
           icon: ClipboardList,
           gradient: 'from-blue-600 to-violet-600',
           badge: 'HSCB',

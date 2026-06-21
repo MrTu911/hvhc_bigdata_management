@@ -9,7 +9,7 @@
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { usePermissions } from '@/hooks/use-permissions';
-import { PERSONNEL } from '@/lib/rbac/function-codes';
+import { PERSONNEL, PERSONAL } from '@/lib/rbac/function-codes';
 import { CADRE_LIST_SECTIONS } from '@/lib/constants/cadre-profile-sections';
 import { CadreExtendedForm } from './cadre-extended-form';
 import { CadreSectionCard } from './cadre-section-card';
@@ -30,6 +30,11 @@ export function CadreProfileTab({ personnelId, canEdit: canEditProp, apiBase }: 
   // Tự phục vụ (có apiBase) → route /api/profile/cadre-import; quản lý cán bộ → route theo [id].
   const importBase = apiBase ? '/api/profile/cadre-import' : `/api/personnel/${personnelId}/cadre-import`;
   const showImport = canEdit;
+  // Minh chứng là SELF-only (route /api/profile/evidence) → chỉ bật ở ngữ cảnh tự phục vụ.
+  // Tách khỏi khóa khai báo: gắn minh chứng bất cứ lúc nào nếu có quyền MANAGE_MY_PROFILE.
+  const selfService = !!apiBase;
+  const evidenceEnabled = selfService;
+  const evidenceCanEdit = selfService && hasPermission(PERSONAL.MANAGE_PROFILE);
   // Đổi key để remount form/section sau khi import → tải lại dữ liệu mới.
   const [refreshKey, setRefreshKey] = useState(0);
 
@@ -51,6 +56,8 @@ export function CadreProfileTab({ personnelId, canEdit: canEditProp, apiBase }: 
           personnelId={personnelId}
           canEdit={canEdit}
           apiBase={apiBase}
+          evidenceEnabled={evidenceEnabled}
+          evidenceCanEdit={evidenceCanEdit}
         />
       </TabsContent>
 
@@ -63,6 +70,8 @@ export function CadreProfileTab({ personnelId, canEdit: canEditProp, apiBase }: 
               section={section}
               canEdit={canEdit}
               apiBase={apiBase ? '/api/profile/cadre-sections' : undefined}
+              evidenceEnabled={evidenceEnabled}
+              evidenceCanEdit={evidenceCanEdit}
             />
           ))}
         </div>

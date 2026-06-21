@@ -26,6 +26,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { CadreFieldInput } from './cadre-field-input';
+import { EvidenceButton } from '../evidence/evidence-button';
 import type { CadreField, CadreListSection } from '@/lib/constants/cadre-profile-sections';
 
 type Row = Record<string, unknown> & { id: string };
@@ -48,9 +49,20 @@ interface CadreSectionCardProps {
   canEdit: boolean;
   /** Override API base — e.g. /api/profile/cadre-sections for self-service */
   apiBase?: string;
+  /** Bật cột minh chứng (chỉ ngữ cảnh tự phục vụ — minh chứng là SELF-only). */
+  evidenceEnabled?: boolean;
+  /** Cho upload/xóa minh chứng (tách khỏi khóa khai báo). */
+  evidenceCanEdit?: boolean;
 }
 
-export function CadreSectionCard({ personnelId, section, canEdit, apiBase }: CadreSectionCardProps) {
+export function CadreSectionCard({
+  personnelId,
+  section,
+  canEdit,
+  apiBase,
+  evidenceEnabled = false,
+  evidenceCanEdit = false,
+}: CadreSectionCardProps) {
   const base = apiBase
     ? `${apiBase}/${section.slug}`
     : `/api/personnel/${personnelId}/profile/${section.slug}`;
@@ -60,8 +72,24 @@ export function CadreSectionCard({ personnelId, section, canEdit, apiBase }: Cad
   const [saving, setSaving] = useState(false);
   const [editing, setEditing] = useState<Row | null>(null);
   const [form, setForm] = useState<Record<string, unknown>>({});
+  const [evidenceCounts, setEvidenceCounts] = useState<Record<string, number>>({});
 
   const fieldByName = (name: string) => section.fields.find((f) => f.name === name);
+
+  const loadEvidenceCounts = useCallback(async (ids: string[]) => {
+    if (!evidenceEnabled || ids.length === 0) {
+      setEvidenceCounts({});
+      return;
+    }
+    try {
+      const q = new URLSearchParams({ targetType: 'CADRE_SECTION', ids: ids.join(',') });
+      const res = await fetch(`/api/profile/evidence/counts?${q.toString()}`);
+      const json = await res.json();
+      if (res.ok && json.success) setEvidenceCounts(json.data ?? {});
+    } catch {
+      /* badge minh chứng không quan trọng tới mức chặn UI */
+    }
+  }, [evidenceEnabled]);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -69,13 +97,15 @@ export function CadreSectionCard({ personnelId, section, canEdit, apiBase }: Cad
       const res = await fetch(base);
       const json = await res.json();
       if (!res.ok || !json.success) throw new Error(json.error || 'Lỗi tải dữ liệu');
-      setRows(json.data ?? []);
+      const data: Row[] = json.data ?? [];
+      setRows(data);
+      loadEvidenceCounts(data.map((r) => r.id));
     } catch (e) {
       toast.error(e instanceof Error ? e.message : 'Lỗi tải dữ liệu');
     } finally {
       setLoading(false);
     }
-  }, [base]);
+  }, [base, loadEvidenceCounts]);
 
   useEffect(() => {
     load();
@@ -155,6 +185,7 @@ export function CadreSectionCard({ personnelId, section, canEdit, apiBase }: Cad
                 {section.listColumns.map((c) => (
                   <TableHead key={c}>{fieldByName(c)?.label ?? c}</TableHead>
                 ))}
+                {evidenceEnabled && <TableHead className="w-24 text-center">Minh chứng</TableHead>}
                 {canEdit && <TableHead className="w-20 text-right">Thao tác</TableHead>}
               </TableRow>
             </TableHeader>
@@ -164,6 +195,19 @@ export function CadreSectionCard({ personnelId, section, canEdit, apiBase }: Cad
                   {section.listColumns.map((c) => (
                     <TableCell key={c}>{formatCell(fieldByName(c), row[c])}</TableCell>
                   ))}
+                  {evidenceEnabled && (
+                    <TableCell className="text-center">
+                      <EvidenceButton
+                        targetType="CADRE_SECTION"
+                        targetId={row.id}
+                        sectionSlug={section.slug}
+                        canEdit={evidenceCanEdit}
+                        count={evidenceCounts[row.id]}
+                        title={section.title}
+                        className="mx-auto"
+                      />
+                    </TableCell>
+                  )}
                   {canEdit && (
                     <TableCell className="text-right">
                       <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => openEdit(row)}>

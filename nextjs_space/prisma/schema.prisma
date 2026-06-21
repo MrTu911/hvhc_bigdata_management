@@ -194,6 +194,7 @@ model User {
   partyOrganizationsAsSecretary       PartyOrganization[]        @relation("PartyOrgSecretary")
   personnelAIAnalyses                 PersonnelAIAnalysis[]
   personnelAttachments                PersonnelAttachment[]
+  profileEvidence                     ProfileEvidence[]
   policyRecords                       PolicyRecord[]
   policyRequests                      PolicyRequest[]            @relation("PolicyRequester")
   scientificProfile                   ScientificProfile?
@@ -982,6 +983,50 @@ model PersonnelAttachment {
   @@index([userId])
   @@index([fileType])
   @@map("personnel_attachments")
+}
+
+/// Minh chứng (ảnh/PDF) gắn cho bất kỳ trường/bản ghi nào của hồ sơ điện tử cá nhân.
+/// Polymorphic: một bảng dùng chung cho mọi loại đối tượng để tránh nhân attachmentUrl ra ~30 model.
+///   - List section (career-history, awards...) : targetType=CADRE_SECTION, targetId=recordId, fieldKey=null
+///   - Trường đơn (basic/identity/health...)     : targetType=PROFILE_FIELD, targetId=userId,  fieldKey='dateOfBirth'
+///   - Sub-record (work/education/cert/...)       : targetType tương ứng,    targetId=recordId
+/// Không bắt buộc có minh chứng; cho phép nhiều file/đối tượng. Soft-delete để giữ lịch sử pháp lý.
+model ProfileEvidence {
+  id          String                @id @default(cuid())
+  userId      String                // Chủ hồ sơ (SELF scope) — đồng thời là entity gốc để build object key.
+  targetType  ProfileEvidenceTarget
+  sectionSlug String?               // slug section/tab để nhóm hiển thị (vd 'career-history', 'basic').
+  targetId    String                // recordId của bản ghi, hoặc userId nếu gắn theo trường.
+  fieldKey    String?               // tên trường khi gắn minh chứng theo field (vd 'dateOfBirth').
+  fileName    String
+  objectKey   String                // MinIO object key (ổn định, dùng để tạo presigned URL khi xem).
+  bucketName  String
+  fileUrl     String                // Presigned URL tại thời điểm upload (có thể hết hạn — đọc lại tạo URL mới).
+  mimeType    String?               // Chỉ image/* và application/pdf.
+  fileSize    Int?
+  note        String?
+  uploadedBy  String
+  uploadedAt  DateTime              @default(now())
+  deletedAt   DateTime?             // Soft-delete.
+  deletedBy   String?
+  user        User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, targetType, targetId])
+  @@index([userId, sectionSlug, fieldKey])
+  @@index([targetType, targetId])
+  @@map("profile_evidence")
+}
+
+/// Loại đối tượng mà một minh chứng hồ sơ gắn vào.
+enum ProfileEvidenceTarget {
+  CADRE_SECTION    // bản ghi thuộc list section HSCB 99 trường
+  PROFILE_FIELD    // trường đơn lẻ (tab Cơ bản / single section)
+  WORK_EXPERIENCE
+  EDUCATION
+  FOREIGN_CERT
+  TECH_CERT
+  PUBLICATION
+  RANK_DECL
 }
 
 model TeachingSubject {

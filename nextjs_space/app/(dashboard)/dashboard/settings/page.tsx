@@ -6,12 +6,14 @@
  * Mỗi tab tự quản lý dữ liệu/fetch của mình; page chỉ lo layout + điều hướng tab.
  */
 
+import Link from 'next/link';
 import { useSession } from 'next-auth/react';
-import { Settings, User, Palette, ShieldCheck } from 'lucide-react';
+import { Settings, User, Palette, ShieldCheck, FileUser, ArrowRight } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { ModuleHero } from '@/components/ui/enhanced-data-card';
 import { useLanguage } from '@/components/providers/language-provider';
-import { ProfileSettingsTab } from './_components/profile-settings-tab';
 import { AppearanceSettingsTab } from './_components/appearance-settings-tab';
 import { SecuritySettingsTab } from './_components/security-settings-tab';
 
@@ -51,7 +53,25 @@ export default function SettingsPage() {
           </TabsList>
 
           <TabsContent value="profile" className="mt-4">
-            <ProfileSettingsTab />
+            {/* Đã hợp nhất: thông tin cá nhân được quản lý tập trung tại trang Hồ sơ điện tử
+                (kèm minh chứng + vòng đời khai báo) — tránh hai cửa sửa cùng /api/profile/me. */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-base">
+                  <FileUser className="h-4 w-4 text-blue-600" /> Hồ sơ cá nhân
+                </CardTitle>
+                <CardDescription>
+                  Thông tin cá nhân (kèm minh chứng và khai báo HSCB) được quản lý tập trung tại trang Hồ sơ điện tử.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button asChild>
+                  <Link href="/dashboard/profile">
+                    Mở Hồ sơ điện tử <ArrowRight className="ml-1.5 h-4 w-4" />
+                  </Link>
+                </Button>
+              </CardContent>
+            </Card>
           </TabsContent>
           <TabsContent value="appearance" className="mt-4">
             <AppearanceSettingsTab />

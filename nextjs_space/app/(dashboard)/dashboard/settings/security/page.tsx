@@ -13,6 +13,7 @@ import { Suspense } from 'react';
 import { ShieldCheck, AlertTriangle } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { ChangePasswordCard } from '../_components/change-password-card';
+import { MfaCard } from '../_components/mfa-card';
 import { SessionsCard } from '../_components/sessions-card';
 
 function ForceChangeBanner() {
@@ -36,13 +37,14 @@ export default function SecuritySettingsPage() {
         <h1 className="text-2xl font-bold flex items-center gap-2">
           <ShieldCheck className="h-6 w-6" /> Bảo mật tài khoản
         </h1>
-        <p className="text-muted-foreground mt-1">Quản lý mật khẩu và phiên đăng nhập</p>
+        <p className="text-muted-foreground mt-1">Quản lý mật khẩu, MFA và phiên đăng nhập</p>
       </div>
 
       <Suspense fallback={null}>
         <ForceChangeBanner />
       </Suspense>
       <ChangePasswordCard />
+      <MfaCard />
       <SessionsCard />
     </div>
   );
