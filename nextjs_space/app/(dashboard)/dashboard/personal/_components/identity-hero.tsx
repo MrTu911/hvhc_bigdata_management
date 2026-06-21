@@ -64,14 +64,14 @@ export function IdentityHero({ identity, permissions }: { identity: PersonalIden
       </div>
 
       <div className="relative z-10 flex flex-col gap-5 md:flex-row md:items-center">
-        {/* Avatar 3×4 */}
+        {/* Avatar 4×6 (tỉ lệ 2:3) */}
         <div className="relative shrink-0">
-          <div className="h-[104px] w-[78px] overflow-hidden rounded-lg border-2 border-white/30 bg-white/10 shadow-lg">
+          <div className="h-[162px] w-[108px] overflow-hidden rounded-lg border-2 border-white/30 bg-white/10 shadow-lg">
             {identity.avatar ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={identity.avatar} alt={identity.name || 'Avatar'} className="h-full w-full object-cover" />
             ) : (
-              <div className="flex h-full w-full items-center justify-center bg-white/10 text-3xl font-bold text-white/90">{initials}</div>
+              <div className="flex h-full w-full items-center justify-center bg-white/10 text-5xl font-bold text-white/90">{initials}</div>
             )}
           </div>
           {identity.isPartyMember && (

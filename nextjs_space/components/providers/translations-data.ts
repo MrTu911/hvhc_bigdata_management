@@ -13,7 +13,7 @@ export const translations = {
     'nav.mainDashboard': 'Dashboard Tổng hợp',
     'nav.commandDashboard': 'Dashboard Ban Chỉ huy',
     'nav.autoDashboard': 'Dashboard Tự động',
-    'nav.myDashboard': 'Dashboard Cá nhân',
+    'nav.myDashboard': 'Bảng tin tùy biến',
     'nav.monitoringAlerts': 'Cảnh báo & Giám sát',
     'nav.realtimeMonitor': 'Giám sát Thời gian thực',
     'nav.dashboardManagement': 'Quản lý Widgets',
@@ -48,8 +48,10 @@ export const translations = {
     'nav.scienceTech':              'CSDL Khoa học & Công nghệ',
     'nav.bigdataInfra':             'Khai thác & Hạ tầng Dữ liệu',
     // Cá nhân
-    'nav.personalAccountGroup':     'Hồ sơ & Tài khoản',
+    'nav.personalAccountGroup':     'Tổng quan & Hồ sơ',
     'nav.personalRecordsGroup':     'Hồ sơ cán bộ của tôi',
+    'nav.personalBenefitsGroup':    'Chế độ & Quyền lợi',
+    'nav.personalWorkAccountGroup': 'Công việc & Tài khoản',
     // Nhân sự
     'nav.personnelOverviewGroup':   'Tổng quan & Danh sách',
     'nav.personnelStaffGroup':      'Cán bộ & Quân nhân',
@@ -633,7 +635,7 @@ export const translations = {
     'nav.mainDashboard': 'Main Dashboard',
     'nav.commandDashboard': 'Command Dashboard',
     'nav.autoDashboard': 'Auto Dashboard',
-    'nav.myDashboard': 'My Dashboard',
+    'nav.myDashboard': 'Custom Dashboard',
     'nav.monitoringAlerts': 'Alerts & Monitoring',
     'nav.realtimeMonitor': 'Real-time Monitor',
     'nav.dashboardManagement': 'Widget Manager',
@@ -668,8 +670,10 @@ export const translations = {
     'nav.scienceTech':              'Science & Technology DB',
     'nav.bigdataInfra':             'Big Data & Infrastructure',
     // Personal
-    'nav.personalAccountGroup':     'Profile & Account',
+    'nav.personalAccountGroup':     'Overview & Profile',
     'nav.personalRecordsGroup':     'My Staff Records',
+    'nav.personalBenefitsGroup':    'Benefits & Policies',
+    'nav.personalWorkAccountGroup': 'Work & Account',
     // Personnel
     'nav.personnelOverviewGroup':   'Overview & Directory',
     'nav.personnelStaffGroup':      'Officers & Soldiers',

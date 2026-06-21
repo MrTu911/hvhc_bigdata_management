@@ -713,8 +713,8 @@ export default function MyProfilePage() {
                 onMouseEnter={() => setPhotoHover(true)}
                 onMouseLeave={() => setPhotoHover(false)}
               >
-                {/* 3:4 ratio = 90×120px */}
-                <div className="relative w-[90px] h-[120px] rounded-lg overflow-hidden shadow-lg border-2 border-white dark:border-slate-700 bg-slate-700">
+                {/* 2:3 ratio (ảnh 4×6) = 120×180px */}
+                <div className="relative w-[120px] h-[180px] rounded-lg overflow-hidden shadow-lg border-2 border-white dark:border-slate-700 bg-slate-700">
                   {profile.avatar ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
@@ -724,10 +724,10 @@ export default function MyProfilePage() {
                     />
                   ) : (
                     <div className="w-full h-full flex flex-col items-center justify-center gap-1 bg-gradient-to-b from-slate-600 to-slate-800">
-                      <span className="text-white text-3xl font-bold select-none">
+                      <span className="text-white text-5xl font-bold select-none">
                         {profile.name?.charAt(0)?.toUpperCase() || '?'}
                       </span>
-                      <span className="text-slate-400 text-[10px]">3×4</span>
+                      <span className="text-slate-400 text-[10px]">4×6</span>
                     </div>
                   )}
                   {/* Hover overlay */}
@@ -745,7 +745,7 @@ export default function MyProfilePage() {
                 </div>
                 {/* Upload hint */}
                 <p className="text-[10px] text-center text-muted-foreground mt-1 leading-tight">
-                  Ảnh 3×4<br/>JPG / PNG
+                  Ảnh 4×6<br/>JPG / PNG
                 </p>
               </label>
               {profile.partyJoinDate && (

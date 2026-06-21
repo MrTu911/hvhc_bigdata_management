@@ -15,10 +15,11 @@
  *  1. Tổng quan & Giám sát              nav.overview
  * --- LỚP 2: CÁ NHÂN (gom 1 nhóm duy nhất) ---
  *  2. Không gian Cá nhân                nav.personalSpace
- *       › Hồ sơ & Tài khoản             nav.personalAccountGroup
- *       › Hồ sơ cán bộ của tôi          nav.personalRecordsGroup
+ *       › Tổng quan & Hồ sơ             nav.personalAccountGroup  (Trung tâm CN, Hồ sơ, HSCB, Công tác, Đề nghị)
+ *       › Chế độ & Quyền lợi            nav.personalBenefitsGroup (Chính sách, Bảo hiểm, Khen thưởng)
  *       › Học tập của tôi               nav.myLearning
  *       › Nghiên cứu của tôi            nav.myResearchSpace
+ *       › Công việc & Tài khoản         nav.personalWorkAccountGroup (Việc của tôi, Thông báo, Bảng tin tùy biến, Cài đặt)
  * --- LỚP 3: CÁC CSDL NGHIỆP VỤ (quản lý theo từng CSDL) ---
  *  3. CSDL Cán bộ, Quân nhân            nav.personnelDatabase
  *  4. CSDL Chính trị — Đảng viên        nav.partyDatabase
@@ -37,7 +38,8 @@
  *
  * Ghi chú khử trùng (filterMenu khử trùng theo href, lần xuất hiện ĐẦU TIÊN thắng):
  *  - "Công việc của tôi" (/dashboard/workflow/my-work) đặt CANONICAL ở nhóm Cá nhân.
- *  - "Dashboard Cá nhân", "Cài đặt tài khoản", "Bảo mật" đều gom về nhóm Cá nhân.
+ *  - "Bảo mật" KHÔNG còn mục riêng — đã gộp vào "Cài đặt tài khoản" (tab Bảo mật) để khử trùng.
+ *  - "Bảng tin tùy biến" (/dashboard/my-dashboard, DashboardBuilder) tách bạch với "Trung tâm Cá nhân".
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
@@ -244,7 +246,15 @@ export const MENU_CONFIG: MenuGroup[] = [
   {
     title: 'nav.personalSpace',
     items: [
+      // A. Tổng quan & Hồ sơ — Trung tâm cá nhân là điểm vào chính của không gian cá nhân.
       subSection('nav.personalAccountGroup', UserCog, [
+        {
+          name: 'nav.personalHub',
+          href: '/dashboard/personal',
+          icon: UserCog,
+          gradient: 'from-pink-500 to-rose-600',
+          functions: [PERSONAL.VIEW_DASHBOARD],
+        },
         {
           name: 'nav.myProfile',
           href: '/dashboard/profile',
@@ -254,50 +264,14 @@ export const MENU_CONFIG: MenuGroup[] = [
           functions: [PERSONAL.MANAGE_PROFILE],
         },
         {
-          name: 'nav.myDashboard',
-          href: '/dashboard/my-dashboard',
-          icon: Cpu,
-          gradient: 'from-pink-500 to-rose-600',
-          badge: '🎨',
-          functions: [DASHBOARD.VIEW],
-        },
-        {
-          name: 'nav.myTasks',
-          href: '/dashboard/workflow/my-work',
+          name: 'nav.myCadreProfile',
+          // Hợp nhất: trỏ thẳng tab HSCB của trang hồ sơ điện tử canonical (route cũ đã redirect 308).
+          href: '/dashboard/profile?tab=cadre',
           icon: ClipboardList,
-          gradient: 'from-violet-500 to-purple-600',
-          functions: [PERSONAL.VIEW_TASKS],
+          gradient: 'from-blue-600 to-violet-600',
+          badge: 'HSCB',
+          functions: [PERSONAL.VIEW_CADRE_PROFILE],
         },
-        {
-          name: 'nav.notifications',
-          href: '/dashboard/notifications/history',
-          icon: Bell,
-          gradient: 'from-indigo-500 to-indigo-600',
-          functions: [PERSONAL.VIEW_NOTIFICATIONS],
-        },
-        {
-          name: 'nav.mySecurity',
-          href: '/dashboard/settings/security',
-          icon: ShieldCheck,
-          gradient: 'from-green-500 to-emerald-600',
-          functions: [PERSONAL.MANAGE_SECURITY],
-        },
-        {
-          name: 'nav.accountSettings',
-          href: '/dashboard/settings',
-          icon: Settings,
-          gradient: 'from-blue-600 to-blue-700',
-          functions: [PERSONAL.MANAGE_SECURITY],
-        },
-        {
-          name: 'nav.personalHub',
-          href: '/dashboard/personal',
-          icon: UserCog,
-          gradient: 'from-pink-500 to-rose-600',
-          functions: [PERSONAL.VIEW_DASHBOARD],
-        },
-      ]),
-      subSection('nav.personalRecordsGroup', BookUser, [
         {
           name: 'nav.myCareer',
           href: '/dashboard/personal/my-career',
@@ -305,6 +279,16 @@ export const MENU_CONFIG: MenuGroup[] = [
           gradient: 'from-blue-500 to-indigo-600',
           functions: [PERSONAL.VIEW_CAREER_HISTORY],
         },
+        {
+          name: 'nav.myProfileChanges',
+          href: '/dashboard/personal/my-profile-changes',
+          icon: ClipboardCheck,
+          gradient: 'from-amber-500 to-orange-600',
+          functions: [PROFILE_CHANGE.VIEW_OWN],
+        },
+      ]),
+      // B. Chế độ & Quyền lợi — chính sách, bảo hiểm, khen thưởng của bản thân.
+      subSection('nav.personalBenefitsGroup', Heart, [
         {
           name: 'nav.myPolicy',
           href: '/dashboard/personal/my-policy',
@@ -325,22 +309,6 @@ export const MENU_CONFIG: MenuGroup[] = [
           icon: Award,
           gradient: 'from-yellow-500 to-amber-600',
           functions: [PERSONAL.VIEW_AWARD],
-        },
-        {
-          name: 'nav.myCadreProfile',
-          // Hợp nhất: trỏ thẳng tab HSCB của trang hồ sơ điện tử canonical (route cũ đã redirect 308).
-          href: '/dashboard/profile?tab=cadre',
-          icon: ClipboardList,
-          gradient: 'from-blue-600 to-violet-600',
-          badge: 'HSCB',
-          functions: [PERSONAL.VIEW_CADRE_PROFILE],
-        },
-        {
-          name: 'nav.myProfileChanges',
-          href: '/dashboard/personal/my-profile-changes',
-          icon: ClipboardCheck,
-          gradient: 'from-amber-500 to-orange-600',
-          functions: [PROFILE_CHANGE.VIEW_OWN],
         },
       ]),
       subSection('nav.myLearning', GraduationCap, [
@@ -395,6 +363,40 @@ export const MENU_CONFIG: MenuGroup[] = [
           gradient: 'from-violet-500 to-purple-600',
           badge: '🎓',
           functions: [PERSONAL.MANAGE_SCIENTIFIC_CV, RESEARCH.VIEW, FACULTY.VIEW],
+        },
+      ]),
+      // E. Công việc & Tài khoản — việc cần xử lý, thông báo, bảng tin tùy biến & cài đặt.
+      subSection('nav.personalWorkAccountGroup', Settings, [
+        {
+          name: 'nav.myTasks',
+          href: '/dashboard/workflow/my-work',
+          icon: ClipboardList,
+          gradient: 'from-violet-500 to-purple-600',
+          functions: [PERSONAL.VIEW_TASKS],
+        },
+        {
+          name: 'nav.notifications',
+          href: '/dashboard/notifications/history',
+          icon: Bell,
+          gradient: 'from-indigo-500 to-indigo-600',
+          functions: [PERSONAL.VIEW_NOTIFICATIONS],
+        },
+        {
+          // Bảng tin tùy biến (DashboardBuilder, M11) — khác Trung tâm cá nhân (tổng quan có cấu trúc).
+          name: 'nav.myDashboard',
+          href: '/dashboard/my-dashboard',
+          icon: Cpu,
+          gradient: 'from-pink-500 to-rose-600',
+          badge: '🎨',
+          functions: [DASHBOARD.VIEW],
+        },
+        {
+          // Cài đặt tài khoản gồm tab Bảo mật (đổi mật khẩu/MFA) + Giao diện — gộp 1 cửa duy nhất.
+          name: 'nav.accountSettings',
+          href: '/dashboard/settings',
+          icon: Settings,
+          gradient: 'from-blue-600 to-blue-700',
+          functions: [PERSONAL.MANAGE_SECURITY],
         },
       ]),
     ],
