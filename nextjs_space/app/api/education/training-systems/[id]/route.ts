@@ -32,7 +32,7 @@ export async function GET(
         description: true,
         commander: { select: { id: true, name: true, rank: true, position: true } },
         children: {
-          where: { type: 'TIEUDOAN', active: true },
+          where: { type: 'TIEU_DOAN', active: true },
           select: { id: true, code: true, name: true },
           orderBy: { code: 'asc' },
         },

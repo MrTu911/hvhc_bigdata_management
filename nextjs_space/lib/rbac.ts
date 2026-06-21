@@ -76,8 +76,8 @@ export async function authorize(
       return { authorized: true };
     }
 
-    // CHI_HUY_KHOA_PHONG - Chỉ truy cập đơn vị trực thuộc và cấp dưới
-    if (user.role === 'CHI_HUY_KHOA_PHONG') {
+    // Chỉ huy Khoa/Phòng (gồm cả nhãn gộp cũ) - Chỉ truy cập đơn vị trực thuộc và cấp dưới
+    if (user.role === 'CHI_HUY_KHOA_PHONG' || user.role === 'CHI_HUY_KHOA' || user.role === 'CHI_HUY_PHONG') {
       if (!user.unitId) {
         return { authorized: false, reason: 'User unit not assigned' };
       }
@@ -218,8 +218,8 @@ export async function applyDataFilter(user: User) {
     return {};
   }
 
-  // CHI_HUY_KHOA_PHONG xem đơn vị của mình và cấp dưới
-  if (user.role === 'CHI_HUY_KHOA_PHONG' && user.unitId) {
+  // Chỉ huy Khoa/Phòng (gồm cả nhãn gộp cũ) xem đơn vị của mình và cấp dưới
+  if ((user.role === 'CHI_HUY_KHOA_PHONG' || user.role === 'CHI_HUY_KHOA' || user.role === 'CHI_HUY_PHONG') && user.unitId) {
     const childUnits = await getChildUnits(user.unitId);
     return {
       unitId: {
@@ -303,6 +303,8 @@ export function hasPermission(userRole: string, permission: Permission): boolean
   const rolePermissions: Record<string, string[]> = {
     CHI_HUY_HOC_VIEN: ['DASHBOARD', 'USERS', 'ANALYTICS', 'REPORTS', 'MONITORING'],
     CHI_HUY_KHOA_PHONG: ['DASHBOARD', 'FACULTY', 'STUDENTS', 'ANALYTICS'],
+    CHI_HUY_KHOA: ['DASHBOARD', 'FACULTY', 'STUDENTS', 'ANALYTICS'],
+    CHI_HUY_PHONG: ['DASHBOARD', 'FACULTY', 'STUDENTS', 'ANALYTICS'],
     CHU_NHIEM_BO_MON: ['DASHBOARD', 'FACULTY', 'STUDENTS'],
     GIANG_VIEN: ['DASHBOARD', 'FACULTY', 'MY_STUDENTS'],
     NGHIEN_CUU_VIEN: ['DASHBOARD', 'RESEARCH', 'ANALYTICS'],
@@ -367,6 +369,32 @@ export function canAccessRoute(userRole: string, routePath: string): boolean {
     ],
     // Chỉ huy Khoa/Phòng - quản lý đơn vị trực thuộc
     CHI_HUY_KHOA_PHONG: [
+      '/dashboard/personnel',
+      '/dashboard/faculty',
+      '/dashboard/student',
+      '/dashboard/party',
+      '/dashboard/policy',
+      '/dashboard/insurance',
+      '/dashboard/analytics',
+      '/dashboard/reports',
+      '/dashboard/kpis',
+      '/dashboard/ai-',
+      '/dashboard/research',
+    ],
+    CHI_HUY_KHOA: [
+      '/dashboard/personnel',
+      '/dashboard/faculty',
+      '/dashboard/student',
+      '/dashboard/party',
+      '/dashboard/policy',
+      '/dashboard/insurance',
+      '/dashboard/analytics',
+      '/dashboard/reports',
+      '/dashboard/kpis',
+      '/dashboard/ai-',
+      '/dashboard/research',
+    ],
+    CHI_HUY_PHONG: [
       '/dashboard/personnel',
       '/dashboard/faculty',
       '/dashboard/student',
@@ -450,6 +478,8 @@ export function getDefaultDashboard(userRole: string): string {
     QUAN_TRI_HE_THONG: '/dashboard/admin',
     CHI_HUY_HOC_VIEN: '/dashboard/command',
     CHI_HUY_KHOA_PHONG: '/dashboard/faculty',
+    CHI_HUY_KHOA: '/dashboard/faculty',
+    CHI_HUY_PHONG: '/dashboard/department',
     CHU_NHIEM_BO_MON: '/dashboard/department-head',
     GIANG_VIEN: '/dashboard/instructor',
     NGHIEN_CUU_VIEN: '/dashboard/research',

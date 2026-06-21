@@ -79,7 +79,7 @@ function inferOrgType(unit: UnitInfo): PartyOrganizationType | null {
   if (unit.level === 2 && (unit.type === 'KHOA' || unit.type === 'PHONG')) return 'DANG_UY';
 
   // Cấp Bộ môn/Ban: Chi bộ
-  if (unit.type === 'BOMON' || unit.type === 'BAN') return 'CHI_BO';
+  if (unit.type === 'BO_MON' || unit.type === 'BAN') return 'CHI_BO';
 
   // Các cấp dưới khác (tiểu đoàn, đại đội...) vẫn tổ chức theo chi bộ
   if (unit.level >= 3) return 'CHI_BO';

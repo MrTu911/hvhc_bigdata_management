@@ -152,6 +152,10 @@ export default function UsersPage() {
       GIANG_VIEN: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',
       HOC_VIEN: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400',
       NGHIEN_CUU_VIEN: 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400',
+      CHI_HUY_KHOA: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-400',
+      CHI_HUY_PHONG: 'bg-teal-100 text-teal-800 dark:bg-teal-900/30 dark:text-teal-400',
+      TRO_LY: 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900/30 dark:text-cyan-400',
+      NHAN_VIEN: 'bg-slate-100 text-slate-800 dark:bg-slate-900/30 dark:text-slate-400',
     };
     return colors[role as keyof typeof colors] || 'bg-gray-100 text-gray-800';
   };
@@ -246,12 +250,15 @@ export default function UsersPage() {
                     <SelectItem value="ADMIN">{t('role.ADMIN')}</SelectItem>
                     <SelectItem value="QUAN_TRI_HE_THONG">{t('role.QUAN_TRI_HE_THONG')}</SelectItem>
                     <SelectItem value="CHI_HUY_HOC_VIEN">{t('role.CHI_HUY_HOC_VIEN')}</SelectItem>
-                    <SelectItem value="CHI_HUY_KHOA_PHONG">{t('role.CHI_HUY_KHOA_PHONG')}</SelectItem>
+                    <SelectItem value="CHI_HUY_KHOA">{t('role.CHI_HUY_KHOA')}</SelectItem>
+                    <SelectItem value="CHI_HUY_PHONG">{t('role.CHI_HUY_PHONG')}</SelectItem>
                     <SelectItem value="CHU_NHIEM_BO_MON">{t('role.CHU_NHIEM_BO_MON')}</SelectItem>
                     <SelectItem value="GIANG_VIEN">{t('role.GIANG_VIEN')}</SelectItem>
                     <SelectItem value="NGHIEN_CUU_VIEN">{t('role.NGHIEN_CUU_VIEN')}</SelectItem>
                     <SelectItem value="HOC_VIEN_SINH_VIEN">{t('role.HOC_VIEN_SINH_VIEN')}</SelectItem>
                     <SelectItem value="HOC_VIEN">{t('role.HOC_VIEN')}</SelectItem>
+                    <SelectItem value="TRO_LY">{t('role.TRO_LY')}</SelectItem>
+                    <SelectItem value="NHAN_VIEN">{t('role.NHAN_VIEN')}</SelectItem>
                     <SelectItem value="KY_THUAT_VIEN">{t('role.KY_THUAT_VIEN')}</SelectItem>
                   </SelectContent>
                 </Select>
@@ -419,7 +426,11 @@ export default function UsersPage() {
                     <SelectItem value="GIANG_VIEN">{t('role.GIANG_VIEN')}</SelectItem>
                     <SelectItem value="NGHIEN_CUU_VIEN">{t('role.NGHIEN_CUU_VIEN')}</SelectItem>
                     <SelectItem value="HOC_VIEN">{t('role.HOC_VIEN')}</SelectItem>
+                    <SelectItem value="TRO_LY">{t('role.TRO_LY')}</SelectItem>
+                    <SelectItem value="NHAN_VIEN">{t('role.NHAN_VIEN')}</SelectItem>
                     <SelectItem value="CHI_HUY_HOC_VIEN">{t('role.CHI_HUY_HOC_VIEN')}</SelectItem>
+                    <SelectItem value="CHI_HUY_KHOA">{t('role.CHI_HUY_KHOA')}</SelectItem>
+                    <SelectItem value="CHI_HUY_PHONG">{t('role.CHI_HUY_PHONG')}</SelectItem>
                     <SelectItem value="CHI_HUY_KHOA_PHONG">{t('role.CHI_HUY_KHOA_PHONG')}</SelectItem>
                   </SelectContent>
                 </Select>

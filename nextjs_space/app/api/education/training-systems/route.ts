@@ -24,7 +24,7 @@ export async function GET(req: NextRequest) {
         description: true,
         commander: { select: { id: true, name: true, rank: true } },
         children: {
-          where: { type: 'TIEUDOAN', active: true },
+          where: { type: 'TIEU_DOAN', active: true },
           select: {
             id: true,
             code: true,

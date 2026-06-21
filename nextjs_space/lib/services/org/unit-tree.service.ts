@@ -6,6 +6,11 @@
  */
 
 import prisma from '@/lib/db';
+import { isValidUnitType, UNIT_TYPE_LABEL_VI } from '@/lib/constants/unit-type';
+
+/** Thông báo lỗi khi loại đơn vị không thuộc danh mục chuẩn M19 (MD_UNIT_TYPE). */
+const INVALID_UNIT_TYPE_ERROR = (type: string) =>
+  `Loại đơn vị "${type}" không hợp lệ. Chỉ chấp nhận: ${Object.keys(UNIT_TYPE_LABEL_VI).join(', ')}`;
 
 export interface CreateUnitInput {
   code: string;
@@ -119,6 +124,11 @@ export async function createUnit(input: CreateUnitInput): Promise<{
   const { code, name, type, level, parentId, commanderId, description } = input;
   const identifierCode = input.identifierCode?.trim() || null;
 
+  // Loại đơn vị phải thuộc danh mục chuẩn M19 (MD_UNIT_TYPE)
+  if (!isValidUnitType(type)) {
+    return { success: false, error: INVALID_UNIT_TYPE_ERROR(type) };
+  }
+
   // Code trùng
   const existing = await prisma.unit.findUnique({ where: { code } });
   if (existing) {
@@ -187,7 +197,12 @@ export async function updateUnit(
   const updateData: Record<string, any> = {};
 
   if (name !== undefined) updateData.name = name;
-  if (type !== undefined) updateData.type = type;
+  if (type !== undefined) {
+    if (!isValidUnitType(type)) {
+      return { success: false, error: INVALID_UNIT_TYPE_ERROR(type) };
+    }
+    updateData.type = type;
+  }
   if (description !== undefined) updateData.description = description;
   if (commanderId !== undefined) updateData.commanderId = commanderId ?? null;
 

@@ -34,7 +34,9 @@ export const ADMIN_ROLES: UserRole[] = [
 // Roles có quyền view mặc định theo đơn vị
 export const UNIT_COMMANDER_ROLES: UserRole[] = [
   UserRole.CHI_HUY_HOC_VIEN,
-  UserRole.CHI_HUY_KHOA_PHONG,
+  UserRole.CHI_HUY_KHOA_PHONG, // @deprecated — tách thành Khoa/Phòng
+  UserRole.CHI_HUY_KHOA,
+  UserRole.CHI_HUY_PHONG,
   UserRole.CHU_NHIEM_BO_MON,
 ];
 

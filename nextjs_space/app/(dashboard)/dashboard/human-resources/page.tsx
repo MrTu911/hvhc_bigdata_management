@@ -310,8 +310,12 @@ export default function HumanResourcesPage() {
                 <SelectItem value="all">{language === 'vi' ? 'Tất cả vai trò' : 'All roles'}</SelectItem>
                 <SelectItem value="GIANG_VIEN">{t('role.GIANG_VIEN')}</SelectItem>
                 <SelectItem value="NGHIEN_CUU_VIEN">{t('role.NGHIEN_CUU_VIEN')}</SelectItem>
+                <SelectItem value="TRO_LY">{t('role.TRO_LY')}</SelectItem>
+                <SelectItem value="NHAN_VIEN">{t('role.NHAN_VIEN')}</SelectItem>
                 <SelectItem value="HOC_VIEN">{t('role.HOC_VIEN')}</SelectItem>
                 <SelectItem value="CHI_HUY_HOC_VIEN">{t('role.CHI_HUY_HOC_VIEN')}</SelectItem>
+                <SelectItem value="CHI_HUY_KHOA">{t('role.CHI_HUY_KHOA')}</SelectItem>
+                <SelectItem value="CHI_HUY_PHONG">{t('role.CHI_HUY_PHONG')}</SelectItem>
               </SelectContent>
             </Select>
 

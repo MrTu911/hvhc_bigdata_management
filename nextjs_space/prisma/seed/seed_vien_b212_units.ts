@@ -24,7 +24,7 @@ type SubUnitDef = {
 
 // 4 Ban con thật xuất hiện trong CSDL.B212
 const SUB_UNITS: SubUnitDef[] = [
-  { code: 'B12-CH', name: 'Chỉ huy Viện Nghiên cứu Khoa học Hậu cần Quân sự', type: 'CHIHUY' },
+  { code: 'B12-CH', name: 'Chỉ huy Viện Nghiên cứu Khoa học Hậu cần Quân sự', type: 'CHI_HUY' },
   { code: 'B12-KHTH', name: 'Ban Kế hoạch tổng hợp', type: 'BAN' },
   { code: 'B12-KHHC', name: 'Ban Khoa học hậu cần quân sự', type: 'BAN' },
   { code: 'B12-KHKT', name: 'Ban Khoa học kỹ thuật hậu cần', type: 'BAN' },

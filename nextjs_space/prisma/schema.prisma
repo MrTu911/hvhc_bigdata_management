@@ -5366,7 +5366,9 @@ enum UserRole {
   ADMIN
   QUAN_TRI_HE_THONG
   CHI_HUY_HOC_VIEN
-  CHI_HUY_KHOA_PHONG
+  CHI_HUY_KHOA_PHONG // @deprecated — tách thành CHI_HUY_KHOA / CHI_HUY_PHONG (giữ cho tương thích dữ liệu cũ)
+  CHI_HUY_KHOA
+  CHI_HUY_PHONG
   CHI_HUY_HE
   CHI_HUY_TIEU_DOAN
   CHI_HUY_BAN

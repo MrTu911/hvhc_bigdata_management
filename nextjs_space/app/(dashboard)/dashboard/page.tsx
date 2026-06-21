@@ -60,6 +60,8 @@ const positionDisplayNames: Record<string, string> = {
   'QUAN_TRI_HE_THONG': 'Quản trị Hệ thống',
   'CHI_HUY_HOC_VIEN':  'Chỉ huy Học viện',
   'CHI_HUY_KHOA_PHONG':'Chỉ huy Khoa/Phòng',
+  'CHI_HUY_KHOA':      'Chỉ huy Khoa',
+  'CHI_HUY_PHONG':     'Chỉ huy Phòng',
   'HOC_VIEN_SINH_VIEN':'Học viên/Sinh viên',
   'KY_THUAT_VIEN':     'Kỹ thuật viên',
   'ADMIN':             'Quản trị viên',

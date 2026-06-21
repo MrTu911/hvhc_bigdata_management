@@ -59,41 +59,42 @@ const EMPTY_FORM: UnitForm = {
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const UNIT_TYPES: { value: string; label: string }[] = [
-  { value: 'HVHC',       label: 'Học viện (cấp 1)' },
+  { value: 'HOC_VIEN',   label: 'Học viện (cấp 1)' },
   { value: 'KHOA',       label: 'Khoa' },
   { value: 'PHONG',      label: 'Phòng' },
+  { value: 'HE',         label: 'Hệ' },
+  { value: 'TIEU_DOAN',  label: 'Tiểu đoàn' },
   { value: 'BAN',        label: 'Ban' },
-  { value: 'BOMON',      label: 'Bộ môn' },
-  { value: 'TIEUDOAN',   label: 'Tiểu đoàn' },
-  { value: 'DAIDOI',     label: 'Đại đội' },
-  { value: 'DEPARTMENT', label: 'Khoa/Phòng (DEPARTMENT)' },
-  { value: 'UNIT',       label: 'Đơn vị khác' },
+  { value: 'VIEN',       label: 'Viện' },
+  { value: 'BO_MON',     label: 'Bộ môn' },
+  { value: 'DAI_DOI',    label: 'Đại đội' },
+  { value: 'LOP',        label: 'Lớp' },
 ]
 
 const TYPE_STYLES: Record<string, string> = {
-  HVHC:       'bg-indigo-100 text-indigo-700 border-indigo-200',
+  HOC_VIEN:   'bg-indigo-100 text-indigo-700 border-indigo-200',
   KHOA:       'bg-blue-100 text-blue-700 border-blue-200',
-  DEPARTMENT: 'bg-blue-100 text-blue-700 border-blue-200',
   PHONG:      'bg-teal-100 text-teal-700 border-teal-200',
+  HE:         'bg-cyan-100 text-cyan-700 border-cyan-200',
+  TIEU_DOAN:  'bg-orange-100 text-orange-700 border-orange-200',
   BAN:        'bg-purple-100 text-purple-700 border-purple-200',
-  BOMON:      'bg-amber-100 text-amber-700 border-amber-200',
-  'Bộ môn':   'bg-amber-100 text-amber-700 border-amber-200',
-  TIEUDOAN:   'bg-orange-100 text-orange-700 border-orange-200',
-  DAIDOI:     'bg-rose-100 text-rose-700 border-rose-200',
-  UNIT:       'bg-slate-100 text-slate-600 border-slate-200',
+  VIEN:       'bg-sky-100 text-sky-700 border-sky-200',
+  BO_MON:     'bg-amber-100 text-amber-700 border-amber-200',
+  DAI_DOI:    'bg-rose-100 text-rose-700 border-rose-200',
+  LOP:        'bg-slate-100 text-slate-600 border-slate-200',
 }
 
 const TYPE_LABELS: Record<string, string> = {
-  HVHC:       'Học viện',
+  HOC_VIEN:   'Học viện',
   KHOA:       'Khoa',
-  DEPARTMENT: 'Khoa/Phòng',
   PHONG:      'Phòng',
+  HE:         'Hệ',
+  TIEU_DOAN:  'Tiểu đoàn',
   BAN:        'Ban',
-  BOMON:      'Bộ môn',
-  'Bộ môn':   'Bộ môn',
-  TIEUDOAN:   'Tiểu đoàn',
-  DAIDOI:     'Đại đội',
-  UNIT:       'Đơn vị',
+  VIEN:       'Viện',
+  BO_MON:     'Bộ môn',
+  DAI_DOI:    'Đại đội',
+  LOP:        'Lớp',
 }
 
 const LEVEL_LABEL: Record<number, string> = {
@@ -237,8 +238,8 @@ export default function DepartmentsPage() {
   // KPI
   const total    = units.length
   const active   = units.filter(u => u.active).length
-  const khoa     = units.filter(u => u.active && (u.type === 'KHOA' || u.type === 'DEPARTMENT')).length
-  const bomon    = units.filter(u => u.active && (u.type === 'BOMON' || u.type === 'Bộ môn')).length
+  const khoa     = units.filter(u => u.active && u.type === 'KHOA').length
+  const bomon    = units.filter(u => u.active && u.type === 'BO_MON').length
 
   // parent lookup map
   const unitMap = Object.fromEntries(units.map(u => [u.id, u]))

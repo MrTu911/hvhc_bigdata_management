@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
     if (!auth.allowed) return auth.response!;
 
     const battalions = await prisma.unit.findMany({
-      where: { type: 'TIEUDOAN', active: true },
+      where: { type: 'TIEU_DOAN', active: true },
       orderBy: { code: 'asc' },
       select: {
         id: true,

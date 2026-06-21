@@ -58,7 +58,9 @@ const ADMIN_ROLES: UserRole[] = [
   UserRole.ADMIN,
   UserRole.QUAN_TRI_HE_THONG,
   UserRole.CHI_HUY_HOC_VIEN,
-  UserRole.CHI_HUY_KHOA_PHONG,
+  UserRole.CHI_HUY_KHOA_PHONG, // @deprecated
+  UserRole.CHI_HUY_KHOA,
+  UserRole.CHI_HUY_PHONG,
   UserRole.CHI_HUY_HE,
   UserRole.CHI_HUY_TIEU_DOAN,
   UserRole.TRO_LY,
@@ -72,7 +74,7 @@ const ADMIN_ROLES: UserRole[] = [
  *
  * Ngoài FunctionScope chuẩn, hàm này cũng xét Unit.type của user:
  *   - Unit.type = 'HE'       → filter theo trainingSystemUnitId (CHI_HUY_HE)
- *   - Unit.type = 'TIEUDOAN' → filter theo battalionUnitId (CHI_HUY_TIEU_DOAN)
+ *   - Unit.type = 'TIEU_DOAN' → filter theo battalionUnitId (CHI_HUY_TIEU_DOAN)
  *
  * @param user          AuthUser từ session (chứa id, role, unitId)
  * @param scope         FunctionScope từ RBAC (SELF | UNIT | DEPARTMENT | ACADEMY)
@@ -189,7 +191,7 @@ export async function canActorViewStudent(
  * Kiểm tra Unit.type của user để áp dụng filter đúng cho CHI_HUY_HE / CHI_HUY_TIEU_DOAN.
  *
  * - Unit.type = 'HE'       → filter trainingSystemUnitId = user.unitId
- * - Unit.type = 'TIEUDOAN' → filter battalionUnitId = user.unitId
+ * - Unit.type = 'TIEU_DOAN' → filter battalionUnitId = user.unitId
  * - Các loại Unit khác      → trả null (để caller tiếp tục xử lý scope bình thường)
  */
 async function buildUnitTypeFilter(user: AuthUser): Promise<StudentScopeFilter | null> {
@@ -210,7 +212,7 @@ async function buildUnitTypeFilter(user: AuthUser): Promise<StudentScopeFilter |
     };
   }
 
-  if (unit.type === 'TIEUDOAN') {
+  if (unit.type === 'TIEU_DOAN') {
     return {
       where: { battalionUnitId: unit.id },
       appliedScope: 'UNIT',

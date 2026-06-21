@@ -1,0 +1,5294 @@
+[
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9prp001e8i27h60j1rbc",
+    "functionCode": "SYSTEM.MANAGE_UNITS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9prq001f8i27wasmqvye",
+    "functionCode": "SYSTEM.MANAGE_RBAC",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9prr001g8i27vjkdtvaa",
+    "functionCode": "SYSTEM.VIEW_AUDIT_LOG",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8o7p00028ii0xq8cfjsw",
+    "functionCode": "ANALYZE_AI_TRENDS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nbk002c8igbhd1v47m8",
+    "functionCode": "APPROVE_AWARD",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nbn002f8igbavckx4z4",
+    "functionCode": "APPROVE_DISCIPLINE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8o7u00038ii0sx0u28tk",
+    "functionCode": "APPROVE_EXAM_PLAN",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nag00178igbq13wnscy",
+    "functionCode": "APPROVE_GRADE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8o7x00048ii045kgcksf",
+    "functionCode": "APPROVE_INSURANCE_CLAIM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8o8000058ii0j21htk1n",
+    "functionCode": "APPROVE_LEARNING_MATERIAL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8o8100068ii036s96w73",
+    "functionCode": "APPROVE_PARTY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8n9o000t8igbmg72w5ry",
+    "functionCode": "APPROVE_PERSONNEL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nb900228igba92qdm9x",
+    "functionCode": "APPROVE_POLICY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8o8700078ii0tah6afq7",
+    "functionCode": "APPROVE_PROGRAM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nat001l8igbhx1liipf",
+    "functionCode": "APPROVE_RESEARCH",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nbi002a8igbmuhokrpm",
+    "functionCode": "CREATE_AWARD",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8o8g00098ii0paiabnil",
+    "functionCode": "CREATE_CLASS_SECTION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8n9x00108igbqyx4g5gm",
+    "functionCode": "CREATE_COURSE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8o8k000a8ii0cznjay49",
+    "functionCode": "CREATE_CURRICULUM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nby002o8igbs9rftgxr",
+    "functionCode": "CREATE_DATA",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8o8n000b8ii02vl6xeva",
+    "functionCode": "CREATE_DEPARTMENT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nbm002e8igbgpxahnq1",
+    "functionCode": "CREATE_DISCIPLINE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8o8q000c8ii00kswhf7m",
+    "functionCode": "CREATE_ETL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8o8s000d8ii0b3rnfr2x",
+    "functionCode": "CREATE_EXAM_PLAN",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8o8u000e8ii0kvkrqh0b",
+    "functionCode": "CREATE_EXAM_SESSION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nbr002i8igb8d5u9i0r",
+    "functionCode": "CREATE_FACULTY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8o8z000f8ii0robcnzkw",
+    "functionCode": "CREATE_INSURANCE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8o91000g8ii03tjjh6yj",
+    "functionCode": "CREATE_LAB",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8o92000h8ii0dawze42a",
+    "functionCode": "CREATE_LAB_EQUIPMENT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8o93000i8ii0jcytqmcl",
+    "functionCode": "CREATE_LAB_SESSION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8o94000j8ii0xmwwmp49",
+    "functionCode": "CREATE_LEARNING_MATERIAL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8o95000k8ii00754q7ym",
+    "functionCode": "CREATE_PARTY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8n9k000q8igbltyh6vcu",
+    "functionCode": "CREATE_PERSONNEL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8o98000l8ii0bri33h71",
+    "functionCode": "CREATE_POLICY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nb6001z8igbtbs9kfnj",
+    "functionCode": "CREATE_POLICY_REQUEST",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8o9b000m8ii09d0f738e",
+    "functionCode": "CREATE_PROGRAM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8o9c000n8ii09gsi9r5l",
+    "functionCode": "CREATE_QUESTION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnsee0cx00048ih41ioh12zr",
+    "functionCode": "SYNC_ORCID",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9prr001h8i270bh1m3sd",
+    "functionCode": "SYSTEM.MANAGE_AI_CONFIG",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8o9h000p8ii0a8btjh4o",
+    "functionCode": "CREATE_SCHEDULE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8o9n000q8ii0b1z6mw32",
+    "functionCode": "DELETE_AWARD",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8o9o000r8ii08gk0oqe0",
+    "functionCode": "DELETE_CLASS_SECTION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nab00128igbwhwjexn9",
+    "functionCode": "DELETE_COURSE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8o9s000s8ii05m04z8yh",
+    "functionCode": "DELETE_CURRICULUM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nc0002q8igboni1g73n",
+    "functionCode": "DELETE_DATA",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8o9x000t8ii0t6vcc64a",
+    "functionCode": "DELETE_DEPARTMENT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8o9y000u8ii0996smp27",
+    "functionCode": "DELETE_ETL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oa0000v8ii0wz35hhpz",
+    "functionCode": "DELETE_EXAM_PLAN",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oa1000w8ii0a4bn0eqc",
+    "functionCode": "DELETE_EXAM_SESSION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oa3000x8ii07mfv2e3t",
+    "functionCode": "DELETE_INSURANCE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oa5000y8ii0fgcchs5u",
+    "functionCode": "DELETE_LAB",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oa6000z8ii0gfyzki79",
+    "functionCode": "DELETE_LAB_EQUIPMENT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oa700108ii0zfcupgx5",
+    "functionCode": "DELETE_LAB_SESSION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oaa00118ii0dgn92mcf",
+    "functionCode": "DELETE_LEARNING_MATERIAL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oac00128ii0a1z59jpv",
+    "functionCode": "DELETE_PARTY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oag00138ii0c4l2uv3l",
+    "functionCode": "DELETE_POLICY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oah00148ii0x6l40ylw",
+    "functionCode": "DELETE_PROGRAM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oai00158ii0dgfhb8o6",
+    "functionCode": "DELETE_QUESTION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oak00168ii0s9cfnaye",
+    "functionCode": "DELETE_QUESTION_BANK",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nar001j8igbovb3p5z2",
+    "functionCode": "DELETE_RESEARCH",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ob100178ii086b0zqw1",
+    "functionCode": "DELETE_SCHEDULE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nan001e8igbhl0x6tgt",
+    "functionCode": "DELETE_STUDENT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ob500188ii04vbx5t50",
+    "functionCode": "DOWNLOAD_LEARNING_MATERIAL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ob700198ii0xax253zw",
+    "functionCode": "EVALUATE_RESEARCH",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ob9001a8ii0k6vp8lnf",
+    "functionCode": "EXECUTE_ETL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oba001b8ii03fu2y21r",
+    "functionCode": "EXPORT_AUDIT_LOG",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8obc001c8ii0akvhmoe9",
+    "functionCode": "EXPORT_AUDIT_LOGS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nc2002r8igbms32xjmw",
+    "functionCode": "EXPORT_DATA",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8obf001d8ii0tac3pbor",
+    "functionCode": "EXPORT_DOCUMENTS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nbu002l8igbxlt3l42g",
+    "functionCode": "EXPORT_FACULTY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8obl001e8ii0n2n2akts",
+    "functionCode": "EXPORT_QUESTION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nao001f8igbcq7dip1e",
+    "functionCode": "EXPORT_STUDENT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8obo001f8ii06gcsr05d",
+    "functionCode": "GENERATE_AI_REPORT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8obp001g8ii07p8u51c9",
+    "functionCode": "GENERATE_PDF_DOCUMENTS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nc3002s8igbmnaur93s",
+    "functionCode": "IMPORT_DATA",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8obs001h8ii0747gyhi5",
+    "functionCode": "IMPORT_FACULTY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8n9q000v8igbmztdvn6q",
+    "functionCode": "IMPORT_PERSONNEL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8obw001i8ii0mymjlzjz",
+    "functionCode": "IMPORT_QUESTION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8obx001j8ii0e1alg7zp",
+    "functionCode": "LINK_PERSONNEL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ncd00308igbz5eu9kaf",
+    "functionCode": "MANAGE_AI_CONFIG",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oc0001k8ii0w4z5kg71",
+    "functionCode": "MANAGE_API_GATEWAY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nce00318igbz8rpqe0w",
+    "functionCode": "MANAGE_BACKUP",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oc8001m8ii0s2gthnpz",
+    "functionCode": "MANAGE_ENROLLMENT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oc9001n8ii0o54mh9t9",
+    "functionCode": "MANAGE_EXAM_REG",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ocb001o8ii0jnmpz59m",
+    "functionCode": "MANAGE_FUNCTIONS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8occ001p8ii0a2jq294i",
+    "functionCode": "MANAGE_GOVERNANCE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ocd001q8ii0rd2ux1kj",
+    "functionCode": "MANAGE_INFRASTRUCTURE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ocf001r8ii07tlujqkg",
+    "functionCode": "MANAGE_LAB_MAINTENANCE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8och001s8ii0tu6m7dze",
+    "functionCode": "MANAGE_ML_MODELS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oci001t8ii0el8129p0",
+    "functionCode": "MANAGE_MONITORING_ALERTS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9prs001i8i27een3y1ds",
+    "functionCode": "SYSTEM.VIEW_HEALTH",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ocn001w8ii0jc44i847",
+    "functionCode": "MANAGE_POSITIONS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nc8002w8igburyjuuhn",
+    "functionCode": "MANAGE_RBAC",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ocp001x8ii0up8wmtr9",
+    "functionCode": "MANAGE_SECURITY_POLICY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ocs001y8ii05n0kidn5",
+    "functionCode": "MANAGE_SOD",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oct001z8ii0z95lpsjy",
+    "functionCode": "MANAGE_TERM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ocv00208ii0o9uq6rod",
+    "functionCode": "MANAGE_THEME_BRANDING",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nc7002v8igbx28z38bg",
+    "functionCode": "MANAGE_UNITS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nc5002u8igbzzslal8f",
+    "functionCode": "MANAGE_USERS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ocz00218ii0pxqtt68b",
+    "functionCode": "PREDICT_AI_RISK",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8od000228ii0xel6qdd5",
+    "functionCode": "PUBLISH_EXAM_PLAN",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nc4002t8igb9w9wzf2k",
+    "functionCode": "QUERY_DATA",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8od800238ii0x032xi7l",
+    "functionCode": "REGISTER_EXAM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nbb00238igbpe4hfamh",
+    "functionCode": "REJECT_POLICY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nau001m8igbkpghcczs",
+    "functionCode": "REJECT_RESEARCH",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ode00248ii0u5rexx08",
+    "functionCode": "RESET_USER_PASSWORD",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8odf00258ii0hbhpeuls",
+    "functionCode": "REVIEW_POLICY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8odh00268ii0n7vpdgri",
+    "functionCode": "REVIEW_QUESTION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8odi00278ii0jkm4rhic",
+    "functionCode": "REVIEW_RESEARCH",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8naf00168igbswhbbts5",
+    "functionCode": "SUBMIT_GRADE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8odl00288ii05zvivj9u",
+    "functionCode": "SUBMIT_PERSONNEL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nas001k8igb6n1h23hb",
+    "functionCode": "SUBMIT_RESEARCH",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8odp00298ii0qe6xkcum",
+    "functionCode": "SUMMARIZE_AI",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8odq002a8ii0jer81riv",
+    "functionCode": "SUPERVISE_EXAM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8odr002b8ii0z02mytyy",
+    "functionCode": "TOGGLE_USER_STATUS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8odu002c8ii0xbe0035l",
+    "functionCode": "TRAIN_ML_MODELS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nbj002b8igb4bs49var",
+    "functionCode": "UPDATE_AWARD",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8odx002d8ii07epaivwj",
+    "functionCode": "UPDATE_CLASS_SECTION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oe0002e8ii0bgg0o2bn",
+    "functionCode": "UPDATE_CURRICULUM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nbz002p8igbw0mlrpwt",
+    "functionCode": "UPDATE_DATA",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oe3002f8ii03obbztj5",
+    "functionCode": "UPDATE_DEPARTMENT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ofe002y8ii00mu4h3ix",
+    "functionCode": "VIEW_AI_INSIGHTS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8off002z8ii0dqzf9gtm",
+    "functionCode": "VIEW_AI_MONITOR",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ofg00308ii0ftn4rn9p",
+    "functionCode": "VIEW_AI_PERSONNEL_INSIGHTS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ofi00318ii02jtlyssy",
+    "functionCode": "VIEW_AI_RECOMMENDATIONS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ofk00328ii0o7ev9rkf",
+    "functionCode": "VIEW_AI_STUDENT_INSIGHTS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ofl00338ii0mj38vfqa",
+    "functionCode": "VIEW_ATTENDANCE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nc9002x8igbgtnoa615",
+    "functionCode": "VIEW_AUDIT_LOG",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ofo00348ii0381frmsu",
+    "functionCode": "VIEW_AUDIT_LOGS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ofq00358ii0psvvsvmo",
+    "functionCode": "VIEW_AUDIT_SUSPICIOUS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nbh00298igb557d8hwv",
+    "functionCode": "VIEW_AWARD",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ofu00368ii06nt9b5cc",
+    "functionCode": "VIEW_CLASS_SECTION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ofx00378ii0602t1gr0",
+    "functionCode": "VIEW_CURRICULUM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8og000388ii0byfmwgv8",
+    "functionCode": "VIEW_DASHBOARD_ADMIN",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ncc002z8igb0dft913c",
+    "functionCode": "VIEW_DASHBOARD_COMMAND",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8og300398ii03stj5nf5",
+    "functionCode": "VIEW_DASHBOARD_FACULTY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8og5003a8ii0x2ywmus7",
+    "functionCode": "VIEW_DASHBOARD_STUDENT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nbx002n8igb6srge06i",
+    "functionCode": "VIEW_DATA",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8og8003b8ii0ruud0vjc",
+    "functionCode": "VIEW_DEPARTMENT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nbl002d8igbxi611yhf",
+    "functionCode": "VIEW_DISCIPLINE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ogb003c8ii0fxc58o9y",
+    "functionCode": "VIEW_DOCUMENTS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ogc003d8ii09n45px43",
+    "functionCode": "VIEW_ENROLLMENT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9prt001j8i27e24y73zr",
+    "functionCode": "DASHBOARD.VIEW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oe9002i8ii0i2vtj0rh",
+    "functionCode": "UPDATE_EXAM_SESSION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nbs002j8igbzxsggdba",
+    "functionCode": "UPDATE_FACULTY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nbe00268igbp3e9b4pk",
+    "functionCode": "UPDATE_INSURANCE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oef002j8ii08ttxtx2l",
+    "functionCode": "UPDATE_LAB",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oei002k8ii0fckv3230",
+    "functionCode": "UPDATE_LAB_EQUIPMENT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oem002l8ii0zwh8wp4y",
+    "functionCode": "UPDATE_LAB_SESSION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oeo002m8ii0ssbiewq8",
+    "functionCode": "UPDATE_LEARNING_MATERIAL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oep002n8ii0up9m0pfn",
+    "functionCode": "UPDATE_PARTY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8n9l000r8igbpdoya7e5",
+    "functionCode": "UPDATE_PERSONNEL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oeu002o8ii0ofrd5crp",
+    "functionCode": "UPDATE_POLICY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oev002p8ii0jtkycaks",
+    "functionCode": "UPDATE_PROGRAM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8of0002r8ii0uyb4mjyo",
+    "functionCode": "UPDATE_QUESTION_BANK",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8naq001i8igbobnqrzas",
+    "functionCode": "UPDATE_RESEARCH",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8of3002s8ii03ne7675i",
+    "functionCode": "UPDATE_SCHEDULE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nam001d8igbq09x4ynm",
+    "functionCode": "UPDATE_STUDENT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8of6002t8ii079wqp07a",
+    "functionCode": "UPDATE_THEME",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8of8002u8ii0qzikcef3",
+    "functionCode": "UPLOAD_LEARNING_MATERIAL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8of9002v8ii0bdkhmllx",
+    "functionCode": "USE_AI_CHAT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ofb002w8ii0x8r3kfzh",
+    "functionCode": "VIEW_AI_EARLY_WARNINGS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ofc002x8ii03jgeeqru",
+    "functionCode": "VIEW_AI_FACULTY_INSIGHTS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ohm003z8ii08q0dmo4d",
+    "functionCode": "VIEW_PARTY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8n9i000o8igbk6cbh4it",
+    "functionCode": "VIEW_PERSONNEL_DETAIL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8n9j000p8igbn54xdvoi",
+    "functionCode": "VIEW_PERSONNEL_SENSITIVE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oig00468ii0iy3d7f6g",
+    "functionCode": "VIEW_SYSTEM_STATS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9pru001k8i274sqbew32",
+    "functionCode": "DASHBOARD.VIEW_COMMAND",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ogh003g8ii0ldsr34oi",
+    "functionCode": "VIEW_EXAM_PLAN",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ogk003h8ii0pvd6glqc",
+    "functionCode": "VIEW_EXAM_REG",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ogm003i8ii0ry0raql3",
+    "functionCode": "VIEW_EXAM_SESSION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nbp002g8igbsvhsknml",
+    "functionCode": "VIEW_FACULTY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ogp003j8ii0fc2j2yzc",
+    "functionCode": "VIEW_FACULTY_CLASSES",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nbq002h8igbztr3rrh2",
+    "functionCode": "VIEW_FACULTY_DETAIL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ogt003k8ii03zvba0z6",
+    "functionCode": "VIEW_FACULTY_INSTRUCTORS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ogv003l8ii0y2w1x7na",
+    "functionCode": "VIEW_FACULTY_PERFORMANCE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nbv002m8igb0aqcyj32",
+    "functionCode": "VIEW_FACULTY_RESEARCH",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ogy003m8ii0ft7jicpr",
+    "functionCode": "VIEW_FACULTY_STATS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ogz003n8ii0rfv5n5r6",
+    "functionCode": "VIEW_GOVERNANCE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oh1003p8ii00qenc0oe",
+    "functionCode": "VIEW_GOVERNANCE_LINEAGE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oh4003q8ii0ix04i22b",
+    "functionCode": "VIEW_GOVERNANCE_RETENTION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nad00148igbrpngrtjh",
+    "functionCode": "VIEW_GRADE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oh7003r8ii0xmoxj9s0",
+    "functionCode": "VIEW_INFRASTRUCTURE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nbc00248igbrt34s9ow",
+    "functionCode": "VIEW_INSURANCE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ohb003s8ii0ev8bem7p",
+    "functionCode": "VIEW_LAB",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ohd003t8ii048wojorl",
+    "functionCode": "VIEW_LAB_EQUIPMENT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ohe003u8ii0zlr5beh6",
+    "functionCode": "VIEW_LAB_SESSION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ohg003v8ii03cbbs3v5",
+    "functionCode": "VIEW_LEARNING_MATERIAL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ohi003w8ii03cpkj57j",
+    "functionCode": "VIEW_ML_MODELS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ohj003x8ii0xde8fwye",
+    "functionCode": "VIEW_MONITORING_ALERTS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ohl003y8ii0n9t0ogib",
+    "functionCode": "VIEW_MONITORING_SERVICES",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ohu00408ii0qk4xmj2q",
+    "functionCode": "VIEW_PROGRAM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ohw00418ii0gvxd0g14",
+    "functionCode": "VIEW_QUESTION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ohy00428ii04scadlor",
+    "functionCode": "VIEW_QUESTION_BANK",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oi000438ii04rs35pej",
+    "functionCode": "VIEW_RBAC",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oi300448ii01qp628j4",
+    "functionCode": "VIEW_SCHEDULE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oi500458ii09vr6zzjg",
+    "functionCode": "VIEW_SECURITY_POLICY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8naj001a8igba8g20ayi",
+    "functionCode": "VIEW_STUDENT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nak001b8igbg1mz6qz9",
+    "functionCode": "VIEW_STUDENT_DETAIL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ncf00328igb8zdc5oik",
+    "functionCode": "VIEW_SYSTEM_HEALTH",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oih00478ii027tmp87o",
+    "functionCode": "VIEW_TERM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oij00488ii0ktft746i",
+    "functionCode": "VIEW_THEME",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8n9u000y8igbcrsznbps",
+    "functionCode": "VIEW_TRAINING",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oim00498ii06lfyqo9w",
+    "functionCode": "VIEW_UNITS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oio004a8ii0h5qg4u1t",
+    "functionCode": "VIEW_USERS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmoijb1od00008i6v87aleja2",
+    "functionCode": "INFRA.VIEW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmoijb1og00018i6vntz0fsw1",
+    "functionCode": "INFRA.PIPELINE_VIEW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmoijb1oi00038i6vx68mbkb1",
+    "functionCode": "INFRA.STORAGE_VIEW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmoijb1ok00048i6v075ohzg9",
+    "functionCode": "INFRA.STORAGE_MANAGE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmoijb1om00058i6v02azvdyb",
+    "functionCode": "INFRA.DATA_QUALITY_VIEW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmoijb1on00068i6vzxb1kw0m",
+    "functionCode": "INFRA.DATA_QUALITY_MANAGE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmoijb1oo00078i6vag28g5r2",
+    "functionCode": "INFRA.BACKUP_VIEW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmoijb1op00088i6vjrt9mszq",
+    "functionCode": "INFRA.BACKUP_MANAGE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmoijb1or000a8i6vid8klhyy",
+    "functionCode": "INFRA.RESTORE_MANAGE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmoijb1os000b8i6vsvibcgx8",
+    "functionCode": "INFRA.DR_VIEW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmoijb1ot000c8i6vxx009sqs",
+    "functionCode": "INFRA.DR_MANAGE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmoijb1ou000d8i6vxn0pzpka",
+    "functionCode": "INFRA.ALERT_VIEW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmoijb1ov000e8i6v2wmacp9a",
+    "functionCode": "INFRA.ALERT_MANAGE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmoijb1ow000f8i6vq2ld2nxi",
+    "functionCode": "INFRA.ADMIN",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmotrfl4j00008i5agp2o9v2q",
+    "functionCode": "EXPORT_DATALAKE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9pry001q8i27os1pkdpu",
+    "functionCode": "PERSONNEL.VIEW_SENSITIVE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9psi002c8i272lz0dw3e",
+    "functionCode": "FACULTY.VIEW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9psl002h8i27vt14qzml",
+    "functionCode": "STUDENT.VIEW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9psq002o8i27jfc43py8",
+    "functionCode": "EDUCATION.VIEW_PROGRAM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9psu002u8i27mhh6y5qg",
+    "functionCode": "RESEARCH.VIEW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9psx002z8i27bpzs5c0y",
+    "functionCode": "DATA.VIEW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9psy00308i27fww7ssm3",
+    "functionCode": "DATA.UPLOAD",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9psz00318i27bgnh9o4j",
+    "functionCode": "DATA.QUERY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9psz00328i27wecls4q2",
+    "functionCode": "DATA.EXPORT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nb2001v8igb4n7c98bz",
+    "functionCode": "APPROVE_PARTY_MEMBER",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nb4001x8igbtdq9h4f7",
+    "functionCode": "CREATE_PARTY_ACTIVITY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8naz001s8igbt9ionanl",
+    "functionCode": "CREATE_PARTY_MEMBER",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nav001o8igbb5ltq0hj",
+    "functionCode": "CREATE_PUBLICATION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8o9e000o8ii0cos4jxui",
+    "functionCode": "CREATE_QUESTION_BANK",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nbt002k8igb5aoldg5v",
+    "functionCode": "DELETE_FACULTY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nb1001u8igbkf0hd58h",
+    "functionCode": "DELETE_PARTY_MEMBER",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nai00198igba2hcum1a",
+    "functionCode": "EXPORT_GRADE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nbg00288igb428wdnq9",
+    "functionCode": "EXPORT_INSURANCE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ock001u8ii0jkm7zdzk",
+    "functionCode": "MANAGE_MONITORING_SERVICES",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nac00138igbxvc8m555",
+    "functionCode": "REGISTER_COURSE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nb800218igbnerywvjj",
+    "functionCode": "SUBMIT_POLICY_REQUEST",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oe6002g8ii0c50mosb3",
+    "functionCode": "UPDATE_ETL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nb0001t8igb001yteg3",
+    "functionCode": "UPDATE_PARTY_MEMBER",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nb700208igbbnc0ricl",
+    "functionCode": "UPDATE_POLICY_REQUEST",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8naw001p8igbkv3bown0",
+    "functionCode": "UPDATE_PUBLICATION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oey002q8ii02vrzfj6s",
+    "functionCode": "UPDATE_QUESTION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8n9s000w8igbg48dl8si",
+    "functionCode": "VIEW_CAREER_HISTORY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nca002y8igbu1usr1br",
+    "functionCode": "VIEW_DASHBOARD",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oge003e8ii0s4tksqq1",
+    "functionCode": "VIEW_ETL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oh0003o8ii0tw0gtzpz",
+    "functionCode": "VIEW_GOVERNANCE_COMPLIANCE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nbd00258igbww8ekpgs",
+    "functionCode": "VIEW_INSURANCE_SENSITIVE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nb3001w8igb0bh5lur4",
+    "functionCode": "VIEW_PARTY_ACTIVITY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmvuu2m300018if7qz7nienh",
+    "functionCode": "APPROVE_WORKFLOW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8o8a00088ii0udk8itjl",
+    "functionCode": "ASSIGN_PERSONNEL_TO_UNIT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmvuu2m500028if74dzijduo",
+    "functionCode": "CANCEL_WORKFLOW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmvuu2md00038if7kqd0e74d",
+    "functionCode": "CREATE_DIGITAL_DOCS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nap001h8igbm84jng4t",
+    "functionCode": "CREATE_RESEARCH",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmvuu2n800048if7q1tk2ab4",
+    "functionCode": "DELETE_DIGITAL_DOCS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmvuu2ns00058if7t0mqmsdz",
+    "functionCode": "DOWNLOAD_DIGITAL_DOCS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmvuu2og00068if7uyhv7kr6",
+    "functionCode": "MANAGE_DIGITAL_DOCS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmvuu2oz00078if7ixrxfwki",
+    "functionCode": "MANAGE_WORKFLOW_DEFS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmvuu2p000088if7xnrzific",
+    "functionCode": "MONITOR_WORKFLOW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmvuu2p100098if73w3bp1bo",
+    "functionCode": "OCR_DIGITAL_DOCS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmvuu2pb000a8if70ozxti60",
+    "functionCode": "REJECT_WORKFLOW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmvuu2pg000b8if7h3m1m8rj",
+    "functionCode": "SEARCH_DIGITAL_DOCS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmvuu2pv000c8if7rje6d908",
+    "functionCode": "UPDATE_DIGITAL_DOCS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oe7002h8ii094cx6sjv",
+    "functionCode": "UPDATE_EXAM_PLAN",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmvuu2qq000d8if7vuqy4xxw",
+    "functionCode": "VIEW_ALL_WORKFLOW_INSTANCES",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmvuu2r6000e8if72ti3lr2k",
+    "functionCode": "VIEW_DIGITAL_DOCS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ogg003f8ii03ywqh8q4",
+    "functionCode": "VIEW_ETL_LOGS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmvuu2sp000g8if7dlckqyww",
+    "functionCode": "VIEW_WORKFLOW_DEFS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmvuu2sq000h8if7amdqri3h",
+    "functionCode": "VIEW_WORKFLOW_DETAIL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9psq002p8i27dvnzl6pn",
+    "functionCode": "EDUCATION.CREATE_PROGRAM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9pst002s8i27poakfrw6",
+    "functionCode": "EDUCATION.MANAGE_TERM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9pst002t8i276p8iaok1",
+    "functionCode": "EDUCATION.VIEW_SCHEDULE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9pss002r8i27pc21blft",
+    "functionCode": "EDUCATION.VIEW_TERM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9psj002e8i27brjqfrsd",
+    "functionCode": "FACULTY.CREATE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9psl002g8i27ywzv2g6x",
+    "functionCode": "FACULTY.EXPORT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9psk002f8i27xbpt125r",
+    "functionCode": "FACULTY.UPDATE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9psa00238i27rjx88y87",
+    "functionCode": "INSURANCE.CREATE_CLAIM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9psd00258i27uaxcq8j9",
+    "functionCode": "INSURANCE.EXPORT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8uua00008itbfwoq4wcb",
+    "functionCode": "MANAGE_INSURANCE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9ps6001z8i27z3o16bhw",
+    "functionCode": "PARTY.APPROVE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9ps5001x8i27zumrf3hl",
+    "functionCode": "PARTY.CREATE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9ps900218i27asn1mqmg",
+    "functionCode": "PARTY.MANAGE_ACTIVITY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9ps800208i27wr2wxwok",
+    "functionCode": "PARTY.MANAGE_FEE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9ps6001y8i27xlze7x0x",
+    "functionCode": "PARTY.UPDATE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9psf00288i27mgpopl5x",
+    "functionCode": "POLICY.APPROVE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9pse00278i27r46rrmh1",
+    "functionCode": "POLICY.CREATE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9psx002y8i27cpmlfuky",
+    "functionCode": "RESEARCH.APPROVE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9psv002v8i279rxdlb0z",
+    "functionCode": "RESEARCH.CREATE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9psw002x8i278imvihik",
+    "functionCode": "RESEARCH.DELETE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9psv002w8i27n3si6dsz",
+    "functionCode": "RESEARCH.UPDATE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9psp002n8i2745verywv",
+    "functionCode": "STUDENT.APPROVE_GRADE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9psn002j8i27zjen8i9z",
+    "functionCode": "STUDENT.CREATE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9pso002m8i27ensjyscs",
+    "functionCode": "STUDENT.SUBMIT_GRADE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9psn002k8i27yujloqnq",
+    "functionCode": "STUDENT.UPDATE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9psm002i8i2760dd44a8",
+    "functionCode": "STUDENT.VIEW_DETAIL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9pso002l8i277f1yub6z",
+    "functionCode": "STUDENT.VIEW_GRADE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmn3upbej00008iun04fm139z",
+    "functionCode": "VIEW_TEMPLATES",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmn3upbel00018iunm5uwlylh",
+    "functionCode": "MANAGE_TEMPLATES",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmn3upbem00028iunii3qdfm0",
+    "functionCode": "EXPORT_BATCH",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmn3upben00038iun6afi8h1m",
+    "functionCode": "VIEW_EXPORT_JOBS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmn3upbeo00048iunko6hpd59",
+    "functionCode": "MANAGE_EXPORT_SCHEDULES",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmn3upbep00058iunxhv72cn5",
+    "functionCode": "VIEW_TEMPLATE_ANALYTICS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9psg002a8i277cvhjnyd",
+    "functionCode": "AWARDS.CREATE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmy4oz5g000c8ik3bdy3i69i",
+    "functionCode": "VIEW_EDUCATION_HISTORY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmy4oz5g000d8ik3su4l45x7",
+    "functionCode": "UPDATE_EDUCATION_HISTORY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmy4oz5h000e8ik323k6amin",
+    "functionCode": "VIEW_FAMILY_RELATIONS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmy4oz5i000f8ik3pa7nxj68",
+    "functionCode": "UPDATE_FAMILY_RELATIONS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmy4oz5i000g8ik36c5a2v25",
+    "functionCode": "VIEW_SOLDIER_PROFILE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmy4oz6i001t8ik3ohjaciq1",
+    "functionCode": "DELETE_PUBLICATION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmy4oz6n00208ik38ergyn20",
+    "functionCode": "VIEW_PARTY_EVALUATION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmy4oz6o00218ik35xjckg0w",
+    "functionCode": "CREATE_PARTY_EVALUATION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmy4oz6p00238ik3djld6432",
+    "functionCode": "VIEW_PARTY_ADMISSION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmy4oz6q00248ik3ogdlswth",
+    "functionCode": "SUBMIT_PARTY_ADMISSION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmy4oz6t00278ik3f79x1g0l",
+    "functionCode": "EXPORT_PARTY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmy4oz70002g8ik3hfzbpuve",
+    "functionCode": "EXPORT_POLICY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmy4oz76002n8ik330n3bt29",
+    "functionCode": "IMPORT_INSURANCE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmy4oz7d002w8ik3q6pmstep",
+    "functionCode": "EXPORT_AWARD",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmy4oz7k00338ik3zlaqcam8",
+    "functionCode": "VIEW_STUDENT_GRADE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmy4oz7l00348ik3gmw4eqps",
+    "functionCode": "VIEW_STUDENT_CONDUCT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmy4oz7m00358ik3l6wbm9sk",
+    "functionCode": "MANAGE_STUDENT_CONDUCT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nax001q8igbcr0znosv",
+    "functionCode": "VIEW_PARTY_MEMBER",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nay001r8igb1ivyi5zk",
+    "functionCode": "VIEW_PARTY_SENSITIVE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nao001g8igb5vh3v1wv",
+    "functionCode": "VIEW_RESEARCH",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9psa00228i27l26gq9i5",
+    "functionCode": "INSURANCE.VIEW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8ocl001v8ii0752ixjxb",
+    "functionCode": "MANAGE_PARTY_MEETING",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9prv001l8i27gm22fl27",
+    "functionCode": "DASHBOARD.VIEW_ADMIN",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9prv001m8i27dna02rfo",
+    "functionCode": "DASHBOARD.VIEW_FACULTY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9prx001o8i276ndn5fhn",
+    "functionCode": "PERSONNEL.VIEW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9pry001p8i27oon6pv29",
+    "functionCode": "PERSONNEL.VIEW_DETAIL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9prz001r8i2730bal6ch",
+    "functionCode": "PERSONNEL.CREATE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9ps0001s8i2707qz4wqx",
+    "functionCode": "PERSONNEL.UPDATE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9ps1001t8i27w15n3bb9",
+    "functionCode": "PERSONNEL.DELETE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9ps1001u8i27w0lpmliu",
+    "functionCode": "PERSONNEL.APPROVE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9ps2001v8i27rv2n9bbi",
+    "functionCode": "PERSONNEL.EXPORT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9ps3001w8i27qooacmjc",
+    "functionCode": "PARTY.VIEW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmy4oz5j000h8ik38r7v94xh",
+    "functionCode": "UPDATE_SOLDIER_PROFILE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmotvaf2v00018i3m2sbeg4gg",
+    "functionCode": "VIEW_UNIT_RANK_DECLARATIONS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmotvaf2w00028i3mp5bsv38x",
+    "functionCode": "VIEW_ORGAN_RANK_DECLARATIONS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmotvaf2x00038i3m042s5ws7",
+    "functionCode": "CREATE_SELF_RANK_DECLARATION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmotvaf2y00048i3mkiixomsv",
+    "functionCode": "CREATE_RANK_DECLARATION_BEHALF",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmotvaf2z00058i3mjuvu0y7y",
+    "functionCode": "SUBMIT_RANK_DECLARATION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmotvaf3000068i3meisw4q0d",
+    "functionCode": "APPROVE_RANK_DECLARATION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmotvaf3100078i3mgyj544wa",
+    "functionCode": "REJECT_RANK_DECLARATION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmotvaf3200088i3m16jmf8wv",
+    "functionCode": "REQUEST_RANK_AMENDMENT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmotvaf3300098i3m20pitxkb",
+    "functionCode": "APPROVE_RANK_AMENDMENT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmotvaf34000a8i3mlu94g6c0",
+    "functionCode": "ADMIN_CREATE_PROMOTION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmotvaf35000b8i3mm74sfwkz",
+    "functionCode": "VIEW_PROMOTION_PROPOSALS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmn5ska2t00018ifcuju6ebee",
+    "functionCode": "UPDATE_RESEARCH_SCIENTIST",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmn5ska2u00028ifcsuhjl9ot",
+    "functionCode": "EXPORT_RESEARCH_SCIENTIST",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmn5ska2v00038ifcc2ctc02t",
+    "functionCode": "VIEW_RESEARCH_PUB",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmn5ska2x00058ifcljd2644n",
+    "functionCode": "UPDATE_RESEARCH_PUB",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmn5ska2y00078ifcn9u05bmh",
+    "functionCode": "IMPORT_RESEARCH_PUB",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmn5ska2z00088ifcvojlsd45",
+    "functionCode": "EXPORT_RESEARCH_PUB",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmn6pychd00008io9wj88qasn",
+    "functionCode": "VIEW_AUTH_SESSIONS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmn6pychi00018io9fv5bfz7z",
+    "functionCode": "REVOKE_AUTH_SESSION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnf9kshv00008icn6u7rh03z",
+    "functionCode": "APPROVE_PARTY_ADMISSION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnf9kshw00018icnisnmkmxr",
+    "functionCode": "APPROVE_PARTY_DISCIPLINE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnf9kshx00028icn0s5kplnw",
+    "functionCode": "APPROVE_PARTY_TRANSFER",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnf9ksiy00038icnlvrl3e3v",
+    "functionCode": "CREATE_PARTY_ORG",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmn5ska2w00048ifc3pcfcu8c",
+    "functionCode": "CREATE_RESEARCH_PUB",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8n9m000s8igb3psfsqwl",
+    "functionCode": "DELETE_PERSONNEL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnf9kskn00048icnlr9830bs",
+    "functionCode": "EXPORT_PARTY_REPORT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnf9ksle00058icnzlaga20y",
+    "functionCode": "MANAGE_CONDUCT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnf9kslp00068icn9y7iyz1k",
+    "functionCode": "MANAGE_GRADE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnf9kslt00078icnw5jts63w",
+    "functionCode": "MANAGE_MASTER_DATA",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnf9kslx00088icn4ghtnsl9",
+    "functionCode": "MANAGE_PARTY_ACTIVITY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnf9ksly00098icn883nwuxm",
+    "functionCode": "MANAGE_PARTY_FEE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnf9kslz000a8icnik85xyz9",
+    "functionCode": "MANAGE_PARTY_INSPECTION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnf9ksm2000b8icns7x6q18r",
+    "functionCode": "MANAGE_PARTY_REVIEW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnf9ksmc000c8icnnow0lr5t",
+    "functionCode": "MANAGE_WARNING",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnf9ksnl000d8icnpol3wxzu",
+    "functionCode": "UPDATE_PARTY_MEMBER_SENSITIVE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnf9ksnm000e8icnk756c8xi",
+    "functionCode": "UPDATE_PARTY_ORG",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnf9ksog000f8icndj4023oh",
+    "functionCode": "VIEW_CONDUCT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnf9kspu000g8icnyiyfkpg1",
+    "functionCode": "VIEW_PARTY_DASHBOARD",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnf9kspv000h8icn95cg1b0n",
+    "functionCode": "VIEW_PARTY_DISCIPLINE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnf9kspw000i8icnpqn6jli8",
+    "functionCode": "VIEW_PARTY_FEE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnf9kspx000j8icnq0lhmrg6",
+    "functionCode": "VIEW_PARTY_INSPECTION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnf9kspy000k8icnjec7qu5v",
+    "functionCode": "VIEW_PARTY_MEETING",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnf9ksq1000l8icnd1mdolxy",
+    "functionCode": "VIEW_PARTY_MEMBER_SENSITIVE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnf9ksq3000n8icn8hovhipc",
+    "functionCode": "VIEW_PARTY_REPORT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnf9ksq4000o8icn58i2v69d",
+    "functionCode": "VIEW_PARTY_REVIEW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnf9ksq5000p8icnzhhrhsvb",
+    "functionCode": "VIEW_PARTY_TRANSFER",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmn5ska2p00008ifcgtugqe2y",
+    "functionCode": "VIEW_RESEARCH_SCIENTIST",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnf9ksqp000q8icn9h647r83",
+    "functionCode": "VIEW_STUDENT_PROFILE360",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnf9ksr0000r8icnsmwqrbr8",
+    "functionCode": "VIEW_WARNING",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmotvaf2s00008i3mo495k9uk",
+    "functionCode": "VIEW_OWN_RANK_DECLARATION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmotvaf36000d8i3myl8fnyud",
+    "functionCode": "APPROVE_PROMOTION_PROPOSAL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8n9p000u8igbhe36pkt7",
+    "functionCode": "EXPORT_PERSONNEL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8n9t000x8igb6rvait20",
+    "functionCode": "UPDATE_CAREER_HISTORY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8n9v000z8igbsllyaa25",
+    "functionCode": "VIEW_COURSE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nae00158igbaiw8hkba",
+    "functionCode": "CREATE_GRADE_DRAFT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nb5001y8igbn8od3rt8",
+    "functionCode": "VIEW_POLICY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nah00188igb8d5k9ed8",
+    "functionCode": "REJECT_GRADE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmvuu2so000f8if7509ujzku",
+    "functionCode": "VIEW_WORKFLOW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnsee0d6000c8ih4671q4duj",
+    "functionCode": "DOWNLOAD_LIBRARY_SECRET",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmoijb1oh00028i6vn2ao51rt",
+    "functionCode": "INFRA.PIPELINE_MANAGE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8oc1001l8ii0kzhk4b1d",
+    "functionCode": "MANAGE_ATTENDANCE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmotvaf36000c8i3mi1l4h8mn",
+    "functionCode": "CREATE_PROMOTION_PROPOSAL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnsee0cb00008ih436jn1g00",
+    "functionCode": "VIEW_SCIENCE_CATALOG",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmoijb1oq00098i6vq92h7d78",
+    "functionCode": "INFRA.RESTORE_REQUEST",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9psd00268i27hcz6xhzi",
+    "functionCode": "POLICY.VIEW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9psi002d8i275b8veclz",
+    "functionCode": "FACULTY.VIEW_DETAIL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmni21r5k00068ic5w0frs3b1",
+    "functionCode": "RETRY_EXPORT_JOB",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnl5dlvf00008im3t330lztt",
+    "functionCode": "VIEW_THESIS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8n9f000n8igbuw11fhhr",
+    "functionCode": "VIEW_PERSONNEL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnl5dlvl00028im3mepg27r2",
+    "functionCode": "VIEW_GRADUATION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnl5dlvm00038im3yqxnezwy",
+    "functionCode": "RUN_GRADUATION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnl5dlvq00068im3ublm41oi",
+    "functionCode": "VIEW_REPOSITORY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnog5z0500008i1ucgjcsof5",
+    "functionCode": "WF.INITIATE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnog5z0700018i1uea8eptn5",
+    "functionCode": "WF.ACT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnog5z0800028i1uhk2omq9q",
+    "functionCode": "WF.SIGN",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnog5z0900038i1u4cxl7rxp",
+    "functionCode": "WF.DESIGN",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnog5z0a00048i1u37f3vc4c",
+    "functionCode": "WF.OVERRIDE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnog5z0b00058i1ufd7mv39n",
+    "functionCode": "WF.DASHBOARD",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnog5z0c00068i1ug4xil2yn",
+    "functionCode": "WF.EXPORT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnqq9lwu00008i9vjggmtx2s",
+    "functionCode": "MANAGE_FACULTY_EIS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnqq9lwv00018i9v2qby29ub",
+    "functionCode": "MANAGE_FACULTY_WORKLOAD",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnqq9lxf00028i9vjy7czsjn",
+    "functionCode": "MANAGE_STUDENT_GPA",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnqq9m0k00038i9vi233n9ff",
+    "functionCode": "VIEW_FACULTY_EIS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnqq9m0o00048i9vwsnqnjn6",
+    "functionCode": "VIEW_FACULTY_PROFILE360",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnqq9m0r00058i9vbzklcjzm",
+    "functionCode": "VIEW_FACULTY_WORKLOAD",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnqq9m2400068i9vokfseo0r",
+    "functionCode": "VIEW_STUDENT_DASHBOARD",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnqq9m2600078i9vyrcw2gf9",
+    "functionCode": "VIEW_STUDENT_GPA",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8o7n00018ii0dadd0ruk",
+    "functionCode": "ANALYZE_AI_SENTIMENT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnsee0d8000e8ih43ma7zfak",
+    "functionCode": "APPROVE_BUDGET",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmvuu2lp00008if7tl0nug5m",
+    "functionCode": "APPROVE_DIGITAL_DOCS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnl5dlvn00048im3eqrv5124",
+    "functionCode": "APPROVE_GRADUATION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nbf00278igbc9vv4oht",
+    "functionCode": "APPROVE_INSURANCE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmy4oz6p00228ik34i0kdp74",
+    "functionCode": "APPROVE_PARTY_EVALUATION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnsee0d100078ih4evl4e7r8",
+    "functionCode": "APPROVE_RESEARCH_ACADEMY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnsee0cz00068ih4rklkeq6t",
+    "functionCode": "APPROVE_RESEARCH_DEPT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9psh002b8i27vbjxvcap",
+    "functionCode": "AWARDS.APPROVE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9psg00298i27qtm3sy7g",
+    "functionCode": "AWARDS.VIEW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnsee0cy00058ih4vrgeje6c",
+    "functionCode": "CREATE_RESEARCH_PROJECT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnsee0d200088ih4wdoka2qn",
+    "functionCode": "CREATE_SCIENTIFIC_WORK",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9prw001n8i27uqqxbic2",
+    "functionCode": "DASHBOARD.VIEW_STUDENT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmn5ska2x00068ifcrka4rozp",
+    "functionCode": "DELETE_RESEARCH_PUB",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnsee0d5000b8ih4q4j2oxox",
+    "functionCode": "DOWNLOAD_LIBRARY_NORMAL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9psr002q8i27d7esaihv",
+    "functionCode": "EDUCATION.APPROVE_PROGRAM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnl5dlvp00058im3rzfp8o2g",
+    "functionCode": "EXPORT_GRADUATION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnsee0dg000l8ih4mzibxpwx",
+    "functionCode": "EXPORT_SCIENCE_REPORT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnsee0dc000i8ih4j2l3mzma",
+    "functionCode": "FINALIZE_ACCEPTANCE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnsee0d300098ih45bjl6ooo",
+    "functionCode": "IMPORT_FROM_CROSSREF",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmni21r5n00098ic5kimo8tbz",
+    "functionCode": "IMPORT_TEMPLATES",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9psc00248i27y7zypa7a",
+    "functionCode": "INSURANCE.APPROVE_CLAIM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnsee0da000g8ih4xfqxskv9",
+    "functionCode": "MANAGE_COUNCIL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnsee0d7000d8ih464qsi5dn",
+    "functionCode": "MANAGE_RESEARCH_BUDGET",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnsee0ct00018ih44hfo4txy",
+    "functionCode": "MANAGE_SCIENCE_CATALOG",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnsee0cw00038ih4bmeido0i",
+    "functionCode": "MANAGE_SCIENTIST_PROFILE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnl5dlvk00018im398q7vi3g",
+    "functionCode": "MANAGE_THESIS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmni21r5f00028ic5beb9anla",
+    "functionCode": "PREVIEW_TEMPLATES",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnsee0db000h8ih43fjdwdrm",
+    "functionCode": "SUBMIT_REVIEW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk9prn001d8i27gwsk06br",
+    "functionCode": "SYSTEM.MANAGE_USERS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnsee0d4000a8ih48wlvc50o",
+    "functionCode": "UPLOAD_LIBRARY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnsee0dh000m8ih4k5qpqblm",
+    "functionCode": "USE_AI_SCIENCE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnsee0di000n8ih47395h2xe",
+    "functionCode": "USE_AI_SCIENCE_ADMIN",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnsee0df000k8ih4mcta0iq8",
+    "functionCode": "USE_SCIENCE_SEARCH",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnsee0d9000f8ih4tx9fs0d8",
+    "functionCode": "VIEW_BUDGET_FINANCE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnf9ksq2000m8icno4hmum2z",
+    "functionCode": "VIEW_PARTY_ORG",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nau001n8igbentwdfuo",
+    "functionCode": "VIEW_PUBLICATION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnsee0de000j8ih4e0dedwtc",
+    "functionCode": "VIEW_SCIENCE_DASHBOARD",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnsee0cv00028ih49ejpkmq1",
+    "functionCode": "VIEW_SCIENTIST_PROFILE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmo0tijkk00008itb30135ooj",
+    "functionCode": "VIEW_TRAINING_SYSTEM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmo0tijkq00018itbtd9lk6vg",
+    "functionCode": "MANAGE_TRAINING_SYSTEM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmo0tijkr00028itbnb9ft7dv",
+    "functionCode": "VIEW_BATTALION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmo0tijks00038itb5uiuvoax",
+    "functionCode": "MANAGE_BATTALION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmnsgz6us006x8iwscvjzvbdh",
+    "functionCode": "VIEW_SCIENCE_DATA_QUALITY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmo45qwop000o8iu6qnpcdkvz",
+    "functionCode": "VIEW_SCIENCE_ATTACHMENT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmo45qwoq000p8iu6hy809ndd",
+    "functionCode": "UPLOAD_SCIENCE_ATTACHMENT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmo45qwor000q8iu6icvem3pd",
+    "functionCode": "DELETE_SCIENCE_ATTACHMENT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmo6o2p8q00008ihybvpl0gnr",
+    "functionCode": "MANAGE_MY_PROFILE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmo6o2p99000c8ihyqmjes4fn",
+    "functionCode": "MANAGE_MY_SCIENTIFIC_CV",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmo6o2p8y00048ihy60ddj2eq",
+    "functionCode": "MANAGE_MY_SECURITY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmo6o2p9100068ihyxmf2bcf8",
+    "functionCode": "REQUEST_MY_INFO_UPDATE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmo6o2p9500098ihyigzeom9x",
+    "functionCode": "VIEW_MY_AWARD",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmo6o2p8z00058ihyag30u3vv",
+    "functionCode": "VIEW_MY_CAREER_HISTORY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmo6o2p9c000f8ihysonxgapa",
+    "functionCode": "VIEW_MY_CONDUCT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmo6o2p8v00028ihyz0ea13gt",
+    "functionCode": "VIEW_MY_DASHBOARD",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmo6o2p9b000e8ihy0xbrtfxu",
+    "functionCode": "VIEW_MY_GRADE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmo6o2p9a000d8ihyzkp9pk08",
+    "functionCode": "VIEW_MY_GRADE_SUBMISSIONS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmo6o2p9e000h8ihy7cmsk5um",
+    "functionCode": "VIEW_MY_GRADUATION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmo6o2p9400088ihydw18cznw",
+    "functionCode": "VIEW_MY_INSURANCE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmo6o2p8t00018ihy6oicf1ij",
+    "functionCode": "VIEW_MY_NOTIFICATIONS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmo6o2p9200078ihylxf0fsy8",
+    "functionCode": "VIEW_MY_POLICY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmo6o2p98000b8ihybe8jz95m",
+    "functionCode": "VIEW_MY_PUBLICATIONS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmo6o2p96000a8ihyki45qmgs",
+    "functionCode": "VIEW_MY_RESEARCH",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmo6o2p9d000g8ihyhwbf80l6",
+    "functionCode": "VIEW_MY_SCHEDULE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmo6o2p8w00038ihyi4eya0k3",
+    "functionCode": "VIEW_MY_TASKS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8naa00118igb2mvx5zha",
+    "functionCode": "UPDATE_COURSE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8nal001c8igb692gv6hg",
+    "functionCode": "CREATE_STUDENT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmmuk8o7l00008ii0a38bwnft",
+    "functionCode": "ANALYZE_AI_FEEDBACK",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "90723ad4-63c3-4868-a0f3-692b5847e3cc",
+    "functionCode": "VIEW_MY_CADRE_PROFILE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmqlqqnxf00028inds4omw7jx",
+    "functionCode": "CREATE_PROFILE_CHANGE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmqlqqnxh00048indz7lw2jmn",
+    "functionCode": "VIEW_OWN_PROFILE_CHANGE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmqlqqnxi00058indxtmx7cmj",
+    "functionCode": "VIEW_UNIT_PROFILE_CHANGES",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmqlqqnxe00018indye5joqt5",
+    "functionCode": "APPROVE_UNIT_PROFILE_CHANGE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmqlqqnxg00038indyoak1v7u",
+    "functionCode": "VIEW_ORGAN_PROFILE_CHANGES",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmqlqqnx900008indjox8915e",
+    "functionCode": "APPROVE_ORGAN_PROFILE_CHANGE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmo6y1i4c00018ipcly2vl8oq",
+    "functionCode": "REVIEW_RESEARCH_PUB",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "SYSTEM_ADMIN",
+    "functionId": "cmo6y1i4900008ipcrlm0t4vp",
+    "functionCode": "SUBMIT_MY_PUBLICATION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmoijb1od00008i6v87aleja2",
+    "functionCode": "INFRA.VIEW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmoijb1og00018i6vntz0fsw1",
+    "functionCode": "INFRA.PIPELINE_VIEW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8nbp002g8igbsvhsknml",
+    "functionCode": "VIEW_FACULTY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8nc5002u8igbzzslal8f",
+    "functionCode": "MANAGE_USERS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8nc7002v8igbx28z38bg",
+    "functionCode": "MANAGE_UNITS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ncf00328igb8zdc5oik",
+    "functionCode": "VIEW_SYSTEM_HEALTH",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ncd00308igbz5eu9kaf",
+    "functionCode": "MANAGE_AI_CONFIG",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8nce00318igbz8rpqe0w",
+    "functionCode": "MANAGE_BACKUP",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8nca002y8igbu1usr1br",
+    "functionCode": "VIEW_DASHBOARD",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8nc8002w8igburyjuuhn",
+    "functionCode": "MANAGE_RBAC",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8nc9002x8igbgtnoa615",
+    "functionCode": "VIEW_AUDIT_LOG",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmoijb1oh00028i6vn2ao51rt",
+    "functionCode": "INFRA.PIPELINE_MANAGE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmoijb1oi00038i6vx68mbkb1",
+    "functionCode": "INFRA.STORAGE_VIEW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmoijb1ok00048i6v075ohzg9",
+    "functionCode": "INFRA.STORAGE_MANAGE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmoijb1om00058i6v02azvdyb",
+    "functionCode": "INFRA.DATA_QUALITY_VIEW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmoijb1on00068i6vzxb1kw0m",
+    "functionCode": "INFRA.DATA_QUALITY_MANAGE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmoijb1oo00078i6vag28g5r2",
+    "functionCode": "INFRA.BACKUP_VIEW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmoijb1op00088i6vjrt9mszq",
+    "functionCode": "INFRA.BACKUP_MANAGE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmoijb1oq00098i6vq92h7d78",
+    "functionCode": "INFRA.RESTORE_REQUEST",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmoijb1or000a8i6vid8klhyy",
+    "functionCode": "INFRA.RESTORE_MANAGE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmoijb1os000b8i6vsvibcgx8",
+    "functionCode": "INFRA.DR_VIEW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmoijb1ot000c8i6vxx009sqs",
+    "functionCode": "INFRA.DR_MANAGE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmoijb1ou000d8i6vxn0pzpka",
+    "functionCode": "INFRA.ALERT_VIEW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmoijb1ov000e8i6v2wmacp9a",
+    "functionCode": "INFRA.ALERT_MANAGE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmoijb1ow000f8i6vq2ld2nxi",
+    "functionCode": "INFRA.ADMIN",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8o7p00028ii0xq8cfjsw",
+    "functionCode": "ANALYZE_AI_TRENDS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8of9002v8ii0bdkhmllx",
+    "functionCode": "USE_AI_CHAT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmo6o2p8t00018ihy6oicf1ij",
+    "functionCode": "VIEW_MY_NOTIFICATIONS",
+    "scope": "SELF",
+    "isActive": false
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8obp001g8ii07p8u51c9",
+    "functionCode": "GENERATE_PDF_DOCUMENTS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8nbi002a8igbmuhokrpm",
+    "functionCode": "CREATE_AWARD",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk9psg002a8i277cvhjnyd",
+    "functionCode": "AWARDS.CREATE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8oe7002h8ii094cx6sjv",
+    "functionCode": "UPDATE_EXAM_PLAN",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8oe9002i8ii0i2vtj0rh",
+    "functionCode": "UPDATE_EXAM_SESSION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8od000228ii0xel6qdd5",
+    "functionCode": "PUBLISH_EXAM_PLAN",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ogk003h8ii0pvd6glqc",
+    "functionCode": "VIEW_EXAM_REG",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8oa0000v8ii0wz35hhpz",
+    "functionCode": "DELETE_EXAM_PLAN",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8oa1000w8ii0a4bn0eqc",
+    "functionCode": "DELETE_EXAM_SESSION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmo6o2p8v00028ihyz0ea13gt",
+    "functionCode": "VIEW_MY_DASHBOARD",
+    "scope": "SELF",
+    "isActive": false
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmo6o2p8w00038ihyi4eya0k3",
+    "functionCode": "VIEW_MY_TASKS",
+    "scope": "SELF",
+    "isActive": false
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmo6o2p8y00048ihy60ddj2eq",
+    "functionCode": "MANAGE_MY_SECURITY",
+    "scope": "SELF",
+    "isActive": false
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmo6o2p8z00058ihyag30u3vv",
+    "functionCode": "VIEW_MY_CAREER_HISTORY",
+    "scope": "SELF",
+    "isActive": false
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmo6o2p9100068ihyxmf2bcf8",
+    "functionCode": "REQUEST_MY_INFO_UPDATE",
+    "scope": "SELF",
+    "isActive": false
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmo6o2p9200078ihylxf0fsy8",
+    "functionCode": "VIEW_MY_POLICY",
+    "scope": "SELF",
+    "isActive": false
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmo6o2p9400088ihydw18cznw",
+    "functionCode": "VIEW_MY_INSURANCE",
+    "scope": "SELF",
+    "isActive": false
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmo6o2p9500098ihyigzeom9x",
+    "functionCode": "VIEW_MY_AWARD",
+    "scope": "SELF",
+    "isActive": false
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8o8n000b8ii02vl6xeva",
+    "functionCode": "CREATE_DEPARTMENT",
+    "scope": "SELF",
+    "isActive": false
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8off002z8ii0dqzf9gtm",
+    "functionCode": "VIEW_AI_MONITOR",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8nbj002b8igb4bs49var",
+    "functionCode": "UPDATE_AWARD",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8o7u00038ii0sx0u28tk",
+    "functionCode": "APPROVE_EXAM_PLAN",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8o8u000e8ii0kvkrqh0b",
+    "functionCode": "CREATE_EXAM_SESSION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8nbq002h8igbztr3rrh2",
+    "functionCode": "VIEW_FACULTY_DETAIL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8nbr002i8igb8d5u9i0r",
+    "functionCode": "CREATE_FACULTY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8nbs002j8igbzxsggdba",
+    "functionCode": "UPDATE_FACULTY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8nbu002l8igbxlt3l42g",
+    "functionCode": "EXPORT_FACULTY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8nby002o8igbs9rftgxr",
+    "functionCode": "CREATE_DATA",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8nbz002p8igbw0mlrpwt",
+    "functionCode": "UPDATE_DATA",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8nc0002q8igboni1g73n",
+    "functionCode": "DELETE_DATA",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8nc2002r8igbms32xjmw",
+    "functionCode": "EXPORT_DATA",
+    "scope": "ACADEMY",
+    "isActive": false
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8nc3002s8igbmnaur93s",
+    "functionCode": "IMPORT_DATA",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8o8s000d8ii0b3rnfr2x",
+    "functionCode": "CREATE_EXAM_PLAN",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ocd001q8ii0rd2ux1kj",
+    "functionCode": "MANAGE_INFRASTRUCTURE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ock001u8ii0jkm7zdzk",
+    "functionCode": "MANAGE_MONITORING_SERVICES",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ocn001w8ii0jc44i847",
+    "functionCode": "MANAGE_POSITIONS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8og5003a8ii0x2ywmus7",
+    "functionCode": "VIEW_DASHBOARD_STUDENT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8obx001j8ii0e1alg7zp",
+    "functionCode": "LINK_PERSONNEL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8odr002b8ii0z02mytyy",
+    "functionCode": "TOGGLE_USER_STATUS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ncc002z8igb0dft913c",
+    "functionCode": "VIEW_DASHBOARD_COMMAND",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ofo00348ii0381frmsu",
+    "functionCode": "VIEW_AUDIT_LOGS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8og300398ii03stj5nf5",
+    "functionCode": "VIEW_DASHBOARD_FACULTY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ofq00358ii0psvvsvmo",
+    "functionCode": "VIEW_AUDIT_SUSPICIOUS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ohl003y8ii0n9t0ogib",
+    "functionCode": "VIEW_MONITORING_SERVICES",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk9prn001d8i27gwsk06br",
+    "functionCode": "SYSTEM.MANAGE_USERS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8oim00498ii06lfyqo9w",
+    "functionCode": "VIEW_UNITS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8oi000438ii04rs35pej",
+    "functionCode": "VIEW_RBAC",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk9prp001e8i27h60j1rbc",
+    "functionCode": "SYSTEM.MANAGE_UNITS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk9prr001h8i270bh1m3sd",
+    "functionCode": "SYSTEM.MANAGE_AI_CONFIG",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk9prq001f8i27wasmqvye",
+    "functionCode": "SYSTEM.MANAGE_RBAC",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk9prr001g8i27vjkdtvaa",
+    "functionCode": "SYSTEM.VIEW_AUDIT_LOG",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk9prs001i8i27een3y1ds",
+    "functionCode": "SYSTEM.VIEW_HEALTH",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk9prt001j8i27e24y73zr",
+    "functionCode": "DASHBOARD.VIEW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk9pru001k8i274sqbew32",
+    "functionCode": "DASHBOARD.VIEW_COMMAND",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk9prv001l8i27gm22fl27",
+    "functionCode": "DASHBOARD.VIEW_ADMIN",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk9prv001m8i27dna02rfo",
+    "functionCode": "DASHBOARD.VIEW_FACULTY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk9prw001n8i27uqqxbic2",
+    "functionCode": "DASHBOARD.VIEW_STUDENT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8oio004a8ii0h5qg4u1t",
+    "functionCode": "VIEW_USERS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8o8a00088ii0udk8itjl",
+    "functionCode": "ASSIGN_PERSONNEL_TO_UNIT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8og000388ii0byfmwgv8",
+    "functionCode": "VIEW_DASHBOARD_ADMIN",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ohj003x8ii0xde8fwye",
+    "functionCode": "VIEW_MONITORING_ALERTS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ocs001y8ii05n0kidn5",
+    "functionCode": "MANAGE_SOD",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8oba001b8ii03fu2y21r",
+    "functionCode": "EXPORT_AUDIT_LOG",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8oig00468ii0iy3d7f6g",
+    "functionCode": "VIEW_SYSTEM_STATS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8oci001t8ii0el8129p0",
+    "functionCode": "MANAGE_MONITORING_ALERTS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ocb001o8ii0jnmpz59m",
+    "functionCode": "MANAGE_FUNCTIONS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8oc0001k8ii0w4z5kg71",
+    "functionCode": "MANAGE_API_GATEWAY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8obc001c8ii0akvhmoe9",
+    "functionCode": "EXPORT_AUDIT_LOGS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ode00248ii0u5rexx08",
+    "functionCode": "RESET_USER_PASSWORD",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ocz00218ii0pxqtt68b",
+    "functionCode": "PREDICT_AI_RISK",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8oh7003r8ii0xmoxj9s0",
+    "functionCode": "VIEW_INFRASTRUCTURE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmo6o2p8q00008ihybvpl0gnr",
+    "functionCode": "MANAGE_MY_PROFILE",
+    "scope": "SELF",
+    "isActive": false
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8nbv002m8igb0aqcyj32",
+    "functionCode": "VIEW_FACULTY_RESEARCH",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8nbx002n8igb6srge06i",
+    "functionCode": "VIEW_DATA",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8nc4002t8igb9w9wzf2k",
+    "functionCode": "QUERY_DATA",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8o9x000t8ii0t6vcc64a",
+    "functionCode": "DELETE_DEPARTMENT",
+    "scope": "SELF",
+    "isActive": false
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8oe3002f8ii03obbztj5",
+    "functionCode": "UPDATE_DEPARTMENT",
+    "scope": "SELF",
+    "isActive": false
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8og8003b8ii0ruud0vjc",
+    "functionCode": "VIEW_DEPARTMENT",
+    "scope": "SELF",
+    "isActive": false
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8oc9001n8ii0o54mh9t9",
+    "functionCode": "MANAGE_EXAM_REG",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8odq002a8ii0jer81riv",
+    "functionCode": "SUPERVISE_EXAM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ogm003i8ii0ry0raql3",
+    "functionCode": "VIEW_EXAM_SESSION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ogh003g8ii0ldsr34oi",
+    "functionCode": "VIEW_EXAM_PLAN",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8nbt002k8igb5aoldg5v",
+    "functionCode": "DELETE_FACULTY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ocp001x8ii0up8wmtr9",
+    "functionCode": "MANAGE_SECURITY_POLICY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8oi500458ii09vr6zzjg",
+    "functionCode": "VIEW_SECURITY_POLICY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmn6pychd00008io9wj88qasn",
+    "functionCode": "VIEW_AUTH_SESSIONS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmn6pychi00018io9fv5bfz7z",
+    "functionCode": "REVOKE_AUTH_SESSION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8o7l00008ii0a38bwnft",
+    "functionCode": "ANALYZE_AI_FEEDBACK",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8o7n00018ii0dadd0ruk",
+    "functionCode": "ANALYZE_AI_SENTIMENT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8obo001f8ii06gcsr05d",
+    "functionCode": "GENERATE_AI_REPORT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8odp00298ii0qe6xkcum",
+    "functionCode": "SUMMARIZE_AI",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ofb002w8ii0x8r3kfzh",
+    "functionCode": "VIEW_AI_EARLY_WARNINGS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ofc002x8ii03jgeeqru",
+    "functionCode": "VIEW_AI_FACULTY_INSIGHTS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ofe002y8ii00mu4h3ix",
+    "functionCode": "VIEW_AI_INSIGHTS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ofg00308ii0ftn4rn9p",
+    "functionCode": "VIEW_AI_PERSONNEL_INSIGHTS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ofi00318ii02jtlyssy",
+    "functionCode": "VIEW_AI_RECOMMENDATIONS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ofk00328ii0o7ev9rkf",
+    "functionCode": "VIEW_AI_STUDENT_INSIGHTS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmvuu2pv000c8if7rje6d908",
+    "functionCode": "UPDATE_DIGITAL_DOCS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmvuu2lp00008if7tl0nug5m",
+    "functionCode": "APPROVE_DIGITAL_DOCS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmvuu2og00068if7uyhv7kr6",
+    "functionCode": "MANAGE_DIGITAL_DOCS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmvuu2md00038if7kqd0e74d",
+    "functionCode": "CREATE_DIGITAL_DOCS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmvuu2ns00058if7t0mqmsdz",
+    "functionCode": "DOWNLOAD_DIGITAL_DOCS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmvuu2p100098if73w3bp1bo",
+    "functionCode": "OCR_DIGITAL_DOCS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmvuu2pg000b8if7h3m1m8rj",
+    "functionCode": "SEARCH_DIGITAL_DOCS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmvuu2r6000e8if72ti3lr2k",
+    "functionCode": "VIEW_DIGITAL_DOCS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmvuu2n800048if7q1tk2ab4",
+    "functionCode": "DELETE_DIGITAL_DOCS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8nbk002c8igbhd1v47m8",
+    "functionCode": "APPROVE_AWARD",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8nbn002f8igbavckx4z4",
+    "functionCode": "APPROVE_DISCIPLINE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8nbm002e8igbgpxahnq1",
+    "functionCode": "CREATE_DISCIPLINE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8nbh00298igb557d8hwv",
+    "functionCode": "VIEW_AWARD",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8nbl002d8igbxi611yhf",
+    "functionCode": "VIEW_DISCIPLINE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8o9n000q8ii0b1z6mw32",
+    "functionCode": "DELETE_AWARD",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk9psh002b8i27vbjxvcap",
+    "functionCode": "AWARDS.APPROVE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk9psg00298i27qtm3sy7g",
+    "functionCode": "AWARDS.VIEW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmy4oz7d002w8ik3q6pmstep",
+    "functionCode": "EXPORT_AWARD",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8nbe00268igbp3e9b4pk",
+    "functionCode": "UPDATE_INSURANCE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8o7x00048ii045kgcksf",
+    "functionCode": "APPROVE_INSURANCE_CLAIM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8o8z000f8ii0robcnzkw",
+    "functionCode": "CREATE_INSURANCE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8nbc00248igbrt34s9ow",
+    "functionCode": "VIEW_INSURANCE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8oa3000x8ii07mfv2e3t",
+    "functionCode": "DELETE_INSURANCE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8uua00008itbfwoq4wcb",
+    "functionCode": "MANAGE_INSURANCE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmy4oz76002n8ik330n3bt29",
+    "functionCode": "IMPORT_INSURANCE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8nbf00278igbc9vv4oht",
+    "functionCode": "APPROVE_INSURANCE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk9psc00248i27y7zypa7a",
+    "functionCode": "INSURANCE.APPROVE_CLAIM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk9psa00238i27rjx88y87",
+    "functionCode": "INSURANCE.CREATE_CLAIM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk9psa00228i27l26gq9i5",
+    "functionCode": "INSURANCE.VIEW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8nbd00258igbww8ekpgs",
+    "functionCode": "VIEW_INSURANCE_SENSITIVE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8nbg00288igb428wdnq9",
+    "functionCode": "EXPORT_INSURANCE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk9psd00258i27uaxcq8j9",
+    "functionCode": "INSURANCE.EXPORT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8occ001p8ii0a2jq294i",
+    "functionCode": "MANAGE_GOVERNANCE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ogz003n8ii0rfv5n5r6",
+    "functionCode": "VIEW_GOVERNANCE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8oh0003o8ii0tw0gtzpz",
+    "functionCode": "VIEW_GOVERNANCE_COMPLIANCE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8oh1003p8ii00qenc0oe",
+    "functionCode": "VIEW_GOVERNANCE_LINEAGE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8oh4003q8ii0ix04i22b",
+    "functionCode": "VIEW_GOVERNANCE_RETENTION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmotrfl4j00008i5agp2o9v2q",
+    "functionCode": "EXPORT_DATALAKE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk9psz00318i27bgnh9o4j",
+    "functionCode": "DATA.QUERY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk9psy00308i27fww7ssm3",
+    "functionCode": "DATA.UPLOAD",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk9psx002z8i27bpzs5c0y",
+    "functionCode": "DATA.VIEW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk9psz00328i27wecls4q2",
+    "functionCode": "DATA.EXPORT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ogb003c8ii0fxc58o9y",
+    "functionCode": "VIEW_DOCUMENTS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8obf001d8ii0tac3pbor",
+    "functionCode": "EXPORT_DOCUMENTS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8odx002d8ii07epaivwj",
+    "functionCode": "UPDATE_CLASS_SECTION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8oe0002e8ii0bgg0o2bn",
+    "functionCode": "UPDATE_CURRICULUM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8oev002p8ii0jtkycaks",
+    "functionCode": "UPDATE_PROGRAM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8of3002s8ii03ne7675i",
+    "functionCode": "UPDATE_SCHEDULE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8nam001d8igbq09x4ynm",
+    "functionCode": "UPDATE_STUDENT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmnl5dlvn00048im3eqrv5124",
+    "functionCode": "APPROVE_GRADUATION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8o8700078ii0tah6afq7",
+    "functionCode": "APPROVE_PROGRAM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8oc1001l8ii0kzhk4b1d",
+    "functionCode": "MANAGE_ATTENDANCE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmo0tijks00038itb5uiuvoax",
+    "functionCode": "MANAGE_BATTALION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmnf9ksle00058icnzlaga20y",
+    "functionCode": "MANAGE_CONDUCT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8oc8001m8ii0s2gthnpz",
+    "functionCode": "MANAGE_ENROLLMENT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmnf9kslp00068icn9y7iyz1k",
+    "functionCode": "MANAGE_GRADE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8oct001z8ii0z95lpsjy",
+    "functionCode": "MANAGE_TERM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmnl5dlvk00018im398q7vi3g",
+    "functionCode": "MANAGE_THESIS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmo0tijkq00018itbtd9lk6vg",
+    "functionCode": "MANAGE_TRAINING_SYSTEM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmnf9ksmc000c8icnnow0lr5t",
+    "functionCode": "MANAGE_WARNING",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8o8g00098ii0paiabnil",
+    "functionCode": "CREATE_CLASS_SECTION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8o8k000a8ii0cznjay49",
+    "functionCode": "CREATE_CURRICULUM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8o9b000m8ii09d0f738e",
+    "functionCode": "CREATE_PROGRAM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8o9h000p8ii0a8btjh4o",
+    "functionCode": "CREATE_SCHEDULE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8nal001c8igb692gv6hg",
+    "functionCode": "CREATE_STUDENT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmnl5dlvm00038im3yqxnezwy",
+    "functionCode": "RUN_GRADUATION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ofl00338ii0mj38vfqa",
+    "functionCode": "VIEW_ATTENDANCE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmo0tijkr00028itbnb9ft7dv",
+    "functionCode": "VIEW_BATTALION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ofu00368ii06nt9b5cc",
+    "functionCode": "VIEW_CLASS_SECTION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmnf9ksog000f8icndj4023oh",
+    "functionCode": "VIEW_CONDUCT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ofx00378ii0602t1gr0",
+    "functionCode": "VIEW_CURRICULUM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ogc003d8ii09n45px43",
+    "functionCode": "VIEW_ENROLLMENT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmnl5dlvl00028im3mepg27r2",
+    "functionCode": "VIEW_GRADUATION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ohu00408ii0qk4xmj2q",
+    "functionCode": "VIEW_PROGRAM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmnl5dlvq00068im3ublm41oi",
+    "functionCode": "VIEW_REPOSITORY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8oi300448ii01qp628j4",
+    "functionCode": "VIEW_SCHEDULE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8naj001a8igba8g20ayi",
+    "functionCode": "VIEW_STUDENT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmnf9ksqp000q8icn9h647r83",
+    "functionCode": "VIEW_STUDENT_PROFILE360",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8oih00478ii027tmp87o",
+    "functionCode": "VIEW_TERM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmnl5dlvf00008im3t330lztt",
+    "functionCode": "VIEW_THESIS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmo0tijkk00008itb30135ooj",
+    "functionCode": "VIEW_TRAINING_SYSTEM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmnf9ksr0000r8icnsmwqrbr8",
+    "functionCode": "VIEW_WARNING",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8o9o000r8ii08gk0oqe0",
+    "functionCode": "DELETE_CLASS_SECTION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8o9s000s8ii05m04z8yh",
+    "functionCode": "DELETE_CURRICULUM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8oah00148ii0x6l40ylw",
+    "functionCode": "DELETE_PROGRAM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ob100178ii086b0zqw1",
+    "functionCode": "DELETE_SCHEDULE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmnl5dlvp00058im3rzfp8o2g",
+    "functionCode": "EXPORT_GRADUATION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk9psr002q8i27d7esaihv",
+    "functionCode": "EDUCATION.APPROVE_PROGRAM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk9pst002s8i27poakfrw6",
+    "functionCode": "EDUCATION.MANAGE_TERM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk9psq002p8i27dvnzl6pn",
+    "functionCode": "EDUCATION.CREATE_PROGRAM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk9psq002o8i27jfc43py8",
+    "functionCode": "EDUCATION.VIEW_PROGRAM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk9pss002r8i27pc21blft",
+    "functionCode": "EDUCATION.VIEW_TERM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk9pst002t8i276p8iaok1",
+    "functionCode": "EDUCATION.VIEW_SCHEDULE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8oe6002g8ii0c50mosb3",
+    "functionCode": "UPDATE_ETL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8o8q000c8ii00kswhf7m",
+    "functionCode": "CREATE_ETL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ob9001a8ii0k6vp8lnf",
+    "functionCode": "EXECUTE_ETL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8oge003e8ii0s4tksqq1",
+    "functionCode": "VIEW_ETL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ogg003f8ii03ywqh8q4",
+    "functionCode": "VIEW_ETL_LOGS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8o9y000u8ii0996smp27",
+    "functionCode": "DELETE_ETL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8od800238ii0x032xi7l",
+    "functionCode": "REGISTER_EXAM",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8obs001h8ii0747gyhi5",
+    "functionCode": "IMPORT_FACULTY",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmnqq9lwu00008i9vjggmtx2s",
+    "functionCode": "MANAGE_FACULTY_EIS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmnqq9lwv00018i9v2qby29ub",
+    "functionCode": "MANAGE_FACULTY_WORKLOAD",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ogp003j8ii0fc2j2yzc",
+    "functionCode": "VIEW_FACULTY_CLASSES",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmnqq9m0k00038i9vi233n9ff",
+    "functionCode": "VIEW_FACULTY_EIS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ogt003k8ii03zvba0z6",
+    "functionCode": "VIEW_FACULTY_INSTRUCTORS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ogv003l8ii0y2w1x7na",
+    "functionCode": "VIEW_FACULTY_PERFORMANCE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmnqq9m0o00048i9vwsnqnjn6",
+    "functionCode": "VIEW_FACULTY_PROFILE360",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ogy003m8ii0ft7jicpr",
+    "functionCode": "VIEW_FACULTY_STATS",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmnqq9m0r00058i9vbzklcjzm",
+    "functionCode": "VIEW_FACULTY_WORKLOAD",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk9psk002f8i27xbpt125r",
+    "functionCode": "FACULTY.UPDATE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk9psj002e8i27brjqfrsd",
+    "functionCode": "FACULTY.CREATE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk9psi002d8i275b8veclz",
+    "functionCode": "FACULTY.VIEW_DETAIL",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk9psi002c8i272lz0dw3e",
+    "functionCode": "FACULTY.VIEW",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk9psl002g8i27ywzv2g6x",
+    "functionCode": "FACULTY.EXPORT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8oef002j8ii08ttxtx2l",
+    "functionCode": "UPDATE_LAB",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8oei002k8ii0fckv3230",
+    "functionCode": "UPDATE_LAB_EQUIPMENT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8oem002l8ii0zwh8wp4y",
+    "functionCode": "UPDATE_LAB_SESSION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ocf001r8ii07tlujqkg",
+    "functionCode": "MANAGE_LAB_MAINTENANCE",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8o91000g8ii03tjjh6yj",
+    "functionCode": "CREATE_LAB",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8o92000h8ii0dawze42a",
+    "functionCode": "CREATE_LAB_EQUIPMENT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8o93000i8ii0jcytqmcl",
+    "functionCode": "CREATE_LAB_SESSION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ohb003s8ii0ev8bem7p",
+    "functionCode": "VIEW_LAB",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ohd003t8ii048wojorl",
+    "functionCode": "VIEW_LAB_EQUIPMENT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8ohe003u8ii0zlr5beh6",
+    "functionCode": "VIEW_LAB_SESSION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8oa5000y8ii0fgcchs5u",
+    "functionCode": "DELETE_LAB",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8oa6000z8ii0gfyzki79",
+    "functionCode": "DELETE_LAB_EQUIPMENT",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "cmmuk8oa700108ii0zfcupgx5",
+    "functionCode": "DELETE_LAB_SESSION",
+    "scope": "ACADEMY",
+    "isActive": true
+  },
+  {
+    "positionCode": "QUAN_TRI_HE_THONG",
+    "functionId": "90723ad4-63c3-4868-a0f3-692b5847e3cc",
+    "functionCode": "VIEW_MY_CADRE_PROFILE",
+    "scope": "SELF",
+    "isActive": true
+  }
+]

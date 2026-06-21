@@ -1,0 +1,779 @@
+[
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8naz001s8igbt9ionanl",
+    "functionCode": "CREATE_PARTY_MEMBER",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8n9s000w8igbg48dl8si",
+    "functionCode": "VIEW_CAREER_HISTORY",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "90723ad4-63c3-4868-a0f3-692b5847e3cc",
+    "functionCode": "VIEW_MY_CADRE_PROFILE",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmo6o2p8v00028ihyz0ea13gt",
+    "functionCode": "VIEW_MY_DASHBOARD",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmo6o2p8t00018ihy6oicf1ij",
+    "functionCode": "VIEW_MY_NOTIFICATIONS",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmo6o2p8w00038ihyi4eya0k3",
+    "functionCode": "VIEW_MY_TASKS",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8nb3001w8igb0bh5lur4",
+    "functionCode": "VIEW_PARTY_ACTIVITY",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8nax001q8igbcr0znosv",
+    "functionCode": "VIEW_PARTY_MEMBER",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8nay001r8igb1ivyi5zk",
+    "functionCode": "VIEW_PARTY_SENSITIVE",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmo6o2p9100068ihyxmf2bcf8",
+    "functionCode": "REQUEST_MY_INFO_UPDATE",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8nbh00298igb557d8hwv",
+    "functionCode": "VIEW_AWARD",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8nca002y8igbu1usr1br",
+    "functionCode": "VIEW_DASHBOARD",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmo6o2p9500098ihyigzeom9x",
+    "functionCode": "VIEW_MY_AWARD",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmo6o2p9400088ihydw18cznw",
+    "functionCode": "VIEW_MY_INSURANCE",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmo6o2p9200078ihylxf0fsy8",
+    "functionCode": "VIEW_MY_POLICY",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmo6o2p98000b8ihybe8jz95m",
+    "functionCode": "VIEW_MY_PUBLICATIONS",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmo6o2p96000a8ihyki45qmgs",
+    "functionCode": "VIEW_MY_RESEARCH",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmo6o2p9c000f8ihysonxgapa",
+    "functionCode": "VIEW_MY_CONDUCT",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8oac00128ii0a1z59jpv",
+    "functionCode": "DELETE_PARTY",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8obp001g8ii07p8u51c9",
+    "functionCode": "GENERATE_PDF_DOCUMENTS",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8o9n000q8ii0b1z6mw32",
+    "functionCode": "DELETE_AWARD",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmnf9kslz000a8icnik85xyz9",
+    "functionCode": "MANAGE_PARTY_INSPECTION",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmnf9ksnl000d8icnpol3wxzu",
+    "functionCode": "UPDATE_PARTY_MEMBER_SENSITIVE",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmo6o2p9b000e8ihy0xbrtfxu",
+    "functionCode": "VIEW_MY_GRADE",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmo6o2p9a000d8ihyzkp9pk08",
+    "functionCode": "VIEW_MY_GRADE_SUBMISSIONS",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmo6o2p9e000h8ihy7cmsk5um",
+    "functionCode": "VIEW_MY_GRADUATION",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmo6o2p9d000g8ihyhwbf80l6",
+    "functionCode": "VIEW_MY_SCHEDULE",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmo6o2p8q00008ihybvpl0gnr",
+    "functionCode": "MANAGE_MY_PROFILE",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmo6o2p99000c8ihyqmjes4fn",
+    "functionCode": "MANAGE_MY_SCIENTIFIC_CV",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8ocl001v8ii0752ixjxb",
+    "functionCode": "MANAGE_PARTY_MEETING",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmnf9ksm2000b8icns7x6q18r",
+    "functionCode": "MANAGE_PARTY_REVIEW",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmo6o2p8z00058ihyag30u3vv",
+    "functionCode": "VIEW_MY_CAREER_HISTORY",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmnf9kspu000g8icnyiyfkpg1",
+    "functionCode": "VIEW_PARTY_DASHBOARD",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmnf9kspv000h8icn95cg1b0n",
+    "functionCode": "VIEW_PARTY_DISCIPLINE",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmnf9kspw000i8icnpqn6jli8",
+    "functionCode": "VIEW_PARTY_FEE",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmnf9kspx000j8icnq0lhmrg6",
+    "functionCode": "VIEW_PARTY_INSPECTION",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmo6y1i4900008ipcrlm0t4vp",
+    "functionCode": "SUBMIT_MY_PUBLICATION",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8ohm003z8ii08q0dmo4d",
+    "functionCode": "VIEW_PARTY",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmnf9kspy000k8icnjec7qu5v",
+    "functionCode": "VIEW_PARTY_MEETING",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk9prx001o8i276ndn5fhn",
+    "functionCode": "PERSONNEL.VIEW",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk9pry001p8i27oon6pv29",
+    "functionCode": "PERSONNEL.VIEW_DETAIL",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk9pry001q8i27os1pkdpu",
+    "functionCode": "PERSONNEL.VIEW_SENSITIVE",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk9ps3001w8i27qooacmjc",
+    "functionCode": "PARTY.VIEW",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmy4oz5h000e8ik323k6amin",
+    "functionCode": "VIEW_FAMILY_RELATIONS",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmy4oz5g000d8ik3su4l45x7",
+    "functionCode": "UPDATE_EDUCATION_HISTORY",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmy4oz6n00208ik38ergyn20",
+    "functionCode": "VIEW_PARTY_EVALUATION",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmy4oz6q00248ik3ogdlswth",
+    "functionCode": "SUBMIT_PARTY_ADMISSION",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmy4oz6p00238ik3djld6432",
+    "functionCode": "VIEW_PARTY_ADMISSION",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmnf9ksq2000m8icno4hmum2z",
+    "functionCode": "VIEW_PARTY_ORG",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmnf9ksq3000n8icn8hovhipc",
+    "functionCode": "VIEW_PARTY_REPORT",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmnf9ksq5000p8icnzhhrhsvb",
+    "functionCode": "VIEW_PARTY_TRANSFER",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmy4oz5g000c8ik3bdy3i69i",
+    "functionCode": "VIEW_EDUCATION_HISTORY",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8nbm002e8igbgpxahnq1",
+    "functionCode": "CREATE_DISCIPLINE",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmnf9kskn00048icnlr9830bs",
+    "functionCode": "EXPORT_PARTY_REPORT",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmnf9kslx00088icn4ghtnsl9",
+    "functionCode": "MANAGE_PARTY_ACTIVITY",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8n9f000n8igbuw11fhhr",
+    "functionCode": "VIEW_PERSONNEL",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8nbi002a8igbmuhokrpm",
+    "functionCode": "CREATE_AWARD",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8nbl002d8igbxi611yhf",
+    "functionCode": "VIEW_DISCIPLINE",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8n9i000o8igbk6cbh4it",
+    "functionCode": "VIEW_PERSONNEL_DETAIL",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8n9j000p8igbn54xdvoi",
+    "functionCode": "VIEW_PERSONNEL_SENSITIVE",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmnf9ksq4000o8icn58i2v69d",
+    "functionCode": "VIEW_PARTY_REVIEW",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmqlqqnxf00028inds4omw7jx",
+    "functionCode": "CREATE_PROFILE_CHANGE",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmqlqqnxh00048indz7lw2jmn",
+    "functionCode": "VIEW_OWN_PROFILE_CHANGE",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmo6o2p8y00048ihy60ddj2eq",
+    "functionCode": "MANAGE_MY_SECURITY",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmy4oz5i000g8ik36c5a2v25",
+    "functionCode": "VIEW_SOLDIER_PROFILE",
+    "scope": "UNIT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8nb1001u8igbkf0hd58h",
+    "functionCode": "DELETE_PARTY_MEMBER",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8n9m000s8igb3psfsqwl",
+    "functionCode": "DELETE_PERSONNEL",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8n9p000u8igbhe36pkt7",
+    "functionCode": "EXPORT_PERSONNEL",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8n9t000x8igb6rvait20",
+    "functionCode": "UPDATE_CAREER_HISTORY",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8nb0001t8igb001yteg3",
+    "functionCode": "UPDATE_PARTY_MEMBER",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8nb4001x8igbtdq9h4f7",
+    "functionCode": "CREATE_PARTY_ACTIVITY",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8nb2001v8igb4n7c98bz",
+    "functionCode": "APPROVE_PARTY_MEMBER",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8nbk002c8igbhd1v47m8",
+    "functionCode": "APPROVE_AWARD",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8nbn002f8igbavckx4z4",
+    "functionCode": "APPROVE_DISCIPLINE",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8o8100068ii036s96w73",
+    "functionCode": "APPROVE_PARTY",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8o95000k8ii00754q7ym",
+    "functionCode": "CREATE_PARTY",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8nbj002b8igb4bs49var",
+    "functionCode": "UPDATE_AWARD",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmnf9ksnm000e8icnk756c8xi",
+    "functionCode": "UPDATE_PARTY_ORG",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8oep002n8ii0up9m0pfn",
+    "functionCode": "UPDATE_PARTY",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8ogb003c8ii0fxc58o9y",
+    "functionCode": "VIEW_DOCUMENTS",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8obf001d8ii0tac3pbor",
+    "functionCode": "EXPORT_DOCUMENTS",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk9prz001r8i2730bal6ch",
+    "functionCode": "PERSONNEL.CREATE",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk9ps0001s8i2707qz4wqx",
+    "functionCode": "PERSONNEL.UPDATE",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk9ps1001t8i27w15n3bb9",
+    "functionCode": "PERSONNEL.DELETE",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk9ps1001u8i27w0lpmliu",
+    "functionCode": "PERSONNEL.APPROVE",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk9ps2001v8i27rv2n9bbi",
+    "functionCode": "PERSONNEL.EXPORT",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk9ps5001x8i27zumrf3hl",
+    "functionCode": "PARTY.CREATE",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk9ps6001y8i27xlze7x0x",
+    "functionCode": "PARTY.UPDATE",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk9ps6001z8i27z3o16bhw",
+    "functionCode": "PARTY.APPROVE",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk9ps800208i27wr2wxwok",
+    "functionCode": "PARTY.MANAGE_FEE",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk9ps900218i27asn1mqmg",
+    "functionCode": "PARTY.MANAGE_ACTIVITY",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk9psg00298i27qtm3sy7g",
+    "functionCode": "AWARDS.VIEW",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk9psg002a8i277cvhjnyd",
+    "functionCode": "AWARDS.CREATE",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk9psh002b8i27vbjxvcap",
+    "functionCode": "AWARDS.APPROVE",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmy4oz5i000f8ik3pa7nxj68",
+    "functionCode": "UPDATE_FAMILY_RELATIONS",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmy4oz5j000h8ik38r7v94xh",
+    "functionCode": "UPDATE_SOLDIER_PROFILE",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmy4oz6o00218ik35xjckg0w",
+    "functionCode": "CREATE_PARTY_EVALUATION",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmy4oz6p00228ik34i0kdp74",
+    "functionCode": "APPROVE_PARTY_EVALUATION",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmy4oz6t00278ik3f79x1g0l",
+    "functionCode": "EXPORT_PARTY",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmnf9kshv00008icn6u7rh03z",
+    "functionCode": "APPROVE_PARTY_ADMISSION",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmnf9kshw00018icnisnmkmxr",
+    "functionCode": "APPROVE_PARTY_DISCIPLINE",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmnf9kshx00028icn0s5kplnw",
+    "functionCode": "APPROVE_PARTY_TRANSFER",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmnf9ksiy00038icnlvrl3e3v",
+    "functionCode": "CREATE_PARTY_ORG",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8n9k000q8igbltyh6vcu",
+    "functionCode": "CREATE_PERSONNEL",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmy4oz7d002w8ik3q6pmstep",
+    "functionCode": "EXPORT_AWARD",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8n9q000v8igbmztdvn6q",
+    "functionCode": "IMPORT_PERSONNEL",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmnf9ksly00098icn883nwuxm",
+    "functionCode": "MANAGE_PARTY_FEE",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8odl00288ii05zvivj9u",
+    "functionCode": "SUBMIT_PERSONNEL",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8n9o000t8igbmg72w5ry",
+    "functionCode": "APPROVE_PERSONNEL",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmmuk8n9l000r8igbpdoya7e5",
+    "functionCode": "UPDATE_PERSONNEL",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  },
+  {
+    "positionCode": "B1_PHO_TRUONG_PHONG_BT",
+    "functionId": "cmnf9ksq1000l8icnd1mdolxy",
+    "functionCode": "VIEW_PARTY_MEMBER_SENSITIVE",
+    "scope": "DEPARTMENT",
+    "isActive": false
+  }
+]

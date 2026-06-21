@@ -1,0 +1,512 @@
+[
+  {
+    "id": "cmmuk9r5800fx8i463yjlolyx",
+    "name": "Vũ Văn Tùng",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "unitId": null,
+    "userPositions": [
+      {
+        "id": "up_auto_cmmuk9r5800fx8i463yjlolyx",
+        "positionId": "cmmuk8n8k00038igbe3mivgv4",
+        "unitId": null,
+        "isPrimary": true,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cmmuk9rle01cp8i460ysxaq1y",
+    "name": "Cao Thị Lan Hương",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "unitId": null,
+    "userPositions": [
+      {
+        "id": "up_auto_cmmuk9rle01cp8i460ysxaq1y",
+        "positionId": "cmmuk8n8k00038igbe3mivgv4",
+        "unitId": null,
+        "isPrimary": true,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cmmuk9rn801g38i46p0c3mqbe",
+    "name": "Bùi Văn Hải",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "unitId": null,
+    "userPositions": [
+      {
+        "id": "up_auto_cmmuk9rn801g38i46p0c3mqbe",
+        "positionId": "cmmuk8n8k00038igbe3mivgv4",
+        "unitId": null,
+        "isPrimary": true,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cmmuk9rqr01mn8i46cbv5e2to",
+    "name": "Nguyễn Đức Hiếu",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "unitId": null,
+    "userPositions": [
+      {
+        "id": "up_auto_cmmuk9rqr01mn8i46cbv5e2to",
+        "positionId": "cmmuk8n8k00038igbe3mivgv4",
+        "unitId": null,
+        "isPrimary": true,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cmmuk9qzl006b8i461ftc2jdd",
+    "name": "Đỗ Đức Tùng",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "unitId": null,
+    "userPositions": [
+      {
+        "id": "up_auto_cmmuk9qzl006b8i461ftc2jdd",
+        "positionId": "cmmuk8n8y000c8igb5tv2yssc",
+        "unitId": null,
+        "isPrimary": true,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cmn8hmu8f000d8i5gchccurwc",
+    "name": "Thượng tá Phạm Văn Đạt",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "unitId": null,
+    "userPositions": [
+      {
+        "id": "cmogup3yd001n8i55rz02cfl6",
+        "positionId": "cmmuk8n8k00038igbe3mivgv4",
+        "unitId": null,
+        "isPrimary": true,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cmmuk9rez00zj8i46kwd26srb",
+    "name": "Ngô Khánh Thiện",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "unitId": "cmogwja2300118i9o8j5vjyqq",
+    "userPositions": [
+      {
+        "id": "up_auto_cmmuk9rez00zj8i46kwd26srb",
+        "positionId": "cmmuk8n8k00038igbe3mivgv4",
+        "unitId": null,
+        "isPrimary": true,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cmmuk9qzh00638i46fel7h2uv",
+    "name": "Lê Việt Cường",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "unitId": null,
+    "userPositions": [
+      {
+        "id": "up_auto_cmmuk9qzh00638i46fel7h2uv",
+        "positionId": "cmmuk8n8k00038igbe3mivgv4",
+        "unitId": null,
+        "isPrimary": true,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cmmuk9rm801e58i46f54c05sq",
+    "name": "Nguyễn Thanh Lam",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "unitId": null,
+    "userPositions": [
+      {
+        "id": "up_auto_cmmuk9rm801e58i46f54c05sq",
+        "positionId": "cmmuk8n8k00038igbe3mivgv4",
+        "unitId": null,
+        "isPrimary": true,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cmmuk9r5p00gx8i46jo8bc0vb",
+    "name": "Lê Viết Long",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "unitId": null,
+    "userPositions": [
+      {
+        "id": "up_auto_cmmuk9r5p00gx8i46jo8bc0vb",
+        "positionId": "cmmuk8n8k00038igbe3mivgv4",
+        "unitId": null,
+        "isPrimary": true,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cmn8hmu84000a8i5g0mvfthw0",
+    "name": "Vũ Nhật Văn",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "unitId": null,
+    "userPositions": [
+      {
+        "id": "cmogup3yb001j8i559mz4uoce",
+        "positionId": "cmmuk8n8k00038igbe3mivgv4",
+        "unitId": null,
+        "isPrimary": true,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cmn8hmu8c000c8i5gnslcwz5k",
+    "name": "Trung tá Lê Văn Hùng",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "unitId": null,
+    "userPositions": [
+      {
+        "id": "cmogup3yc001l8i555o0peu37",
+        "positionId": "cmmuk8n8k00038igbe3mivgv4",
+        "unitId": null,
+        "isPrimary": true,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cmmuk9qzq006l8i462v1r218m",
+    "name": "Nguyễn Ngọc Hải",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "unitId": null,
+    "userPositions": [
+      {
+        "id": "up_auto_cmmuk9qzq006l8i462v1r218m",
+        "positionId": "cmmuk8n8y000c8igb5tv2yssc",
+        "unitId": null,
+        "isPrimary": true,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cmmuk9rq501lj8i46z2u3s8x7",
+    "name": "Nguyễn Văn Hưng",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "unitId": null,
+    "userPositions": [
+      {
+        "id": "up_auto_cmmuk9rq501lj8i46z2u3s8x7",
+        "positionId": "cmmuk8n8k00038igbe3mivgv4",
+        "unitId": null,
+        "isPrimary": true,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cmmuk9qxe00258i46fh12h6h5",
+    "name": "Nguyễn Văn Phong",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "unitId": "cmogwja1q00058i9o1s0iugqx",
+    "userPositions": [
+      {
+        "id": "up_auto_cmmuk9qxe00258i46fh12h6h5",
+        "positionId": "cmmuk8n8y000c8igb5tv2yssc",
+        "unitId": null,
+        "isPrimary": true,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cmmuk9rbb00rz8i46nb1cp6kk",
+    "name": "Vũ Ngọc Điệp",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "unitId": null,
+    "userPositions": [
+      {
+        "id": "up_auto_cmmuk9rbb00rz8i46nb1cp6kk",
+        "positionId": "cmmuk8n8k00038igbe3mivgv4",
+        "unitId": null,
+        "isPrimary": true,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cmmuk9rc900tx8i46jtat5leo",
+    "name": "Lê Xuân Đàm",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "unitId": null,
+    "userPositions": [
+      {
+        "id": "up_auto_cmmuk9rc900tx8i46jtat5leo",
+        "positionId": "cmmuk8n8k00038igbe3mivgv4",
+        "unitId": null,
+        "isPrimary": true,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cmmuk9qxl002j8i46p6mbv2js",
+    "name": "Vũ Quang Hòa",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "unitId": "cmogwja1q00058i9o1s0iugqx",
+    "userPositions": [
+      {
+        "id": "up_auto_cmmuk9qxl002j8i46p6mbv2js",
+        "positionId": "cmmuk8n8y000c8igb5tv2yssc",
+        "unitId": null,
+        "isPrimary": true,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cmmuk9qxa001x8i46cw1wsvoy",
+    "name": "Vũ Nhật Văn",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "unitId": "cmogwja1q00058i9o1s0iugqx",
+    "userPositions": [
+      {
+        "id": "up_auto_cmmuk9qxa001x8i46cw1wsvoy",
+        "positionId": "cmmuk8n8k00038igbe3mivgv4",
+        "unitId": null,
+        "isPrimary": true,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cmmuk9rdl00wj8i46imb93ldz",
+    "name": "Nguyễn Anh Tuấn",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "unitId": null,
+    "userPositions": [
+      {
+        "id": "up_auto_cmmuk9rdl00wj8i46imb93ldz",
+        "positionId": "cmmuk8n8k00038igbe3mivgv4",
+        "unitId": null,
+        "isPrimary": true,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cmmuk9r3l00cp8i467a65t1h3",
+    "name": "Nguyễn Thành Trung",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "unitId": null,
+    "userPositions": [
+      {
+        "id": "up_auto_cmmuk9r3l00cp8i467a65t1h3",
+        "positionId": "cmmuk8n8k00038igbe3mivgv4",
+        "unitId": null,
+        "isPrimary": true,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cmmuk9r9100nf8i46j79pinnp",
+    "name": "Nguyễn Công Phúc",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "unitId": null,
+    "userPositions": [
+      {
+        "id": "up_auto_cmmuk9r9100nf8i46j79pinnp",
+        "positionId": "cmmuk8n8k00038igbe3mivgv4",
+        "unitId": null,
+        "isPrimary": true,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cmmuk9r6t00ix8i46rsvl44ug",
+    "name": "Hoàng Thế Hưng",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "unitId": null,
+    "userPositions": [
+      {
+        "id": "up_auto_cmmuk9r6t00ix8i46rsvl44ug",
+        "positionId": "cmmuk8n8k00038igbe3mivgv4",
+        "unitId": null,
+        "isPrimary": true,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cmmuk9r7k00kj8i46aisjdv5a",
+    "name": "Đinh Văn Đông",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "unitId": null,
+    "userPositions": [
+      {
+        "id": "up_auto_cmmuk9r7k00kj8i46aisjdv5a",
+        "positionId": "cmmuk8n8k00038igbe3mivgv4",
+        "unitId": null,
+        "isPrimary": true,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cmmuk9rgs01338i46rr2nt247",
+    "name": "Phạm Ngọc Nhân",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "unitId": null,
+    "userPositions": [
+      {
+        "id": "up_auto_cmmuk9rgs01338i46rr2nt247",
+        "positionId": "cmmuk8n8k00038igbe3mivgv4",
+        "unitId": null,
+        "isPrimary": true,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cmmuk9ri0015r8i46bvr84r2u",
+    "name": "Bùi Nam Hưng",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "unitId": null,
+    "userPositions": [
+      {
+        "id": "up_auto_cmmuk9ri0015r8i46bvr84r2u",
+        "positionId": "cmmuk8n8k00038igbe3mivgv4",
+        "unitId": null,
+        "isPrimary": true,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cmmuk9rjm018z8i4657jbohga",
+    "name": "Lê Khả Hòa",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "unitId": null,
+    "userPositions": [
+      {
+        "id": "up_auto_cmmuk9rjm018z8i4657jbohga",
+        "positionId": "cmmuk8n8k00038igbe3mivgv4",
+        "unitId": null,
+        "isPrimary": true,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cmmuk9rnp01h18i46a41z0z7v",
+    "name": "Nguyễn Hải Định",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "unitId": null,
+    "userPositions": [
+      {
+        "id": "up_auto_cmmuk9rnp01h18i46a41z0z7v",
+        "positionId": "cmmuk8n8k00038igbe3mivgv4",
+        "unitId": null,
+        "isPrimary": true,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cmmuk9rpa01jr8i46s119pw33",
+    "name": "Nguyễn Khắc Cường",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "unitId": null,
+    "userPositions": [
+      {
+        "id": "up_auto_cmmuk9rpa01jr8i46s119pw33",
+        "positionId": "cmmuk8n8k00038igbe3mivgv4",
+        "unitId": null,
+        "isPrimary": true,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cmmuk9rpo01kl8i46ndgyirrv",
+    "name": "Dương Thành Phương",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "unitId": null,
+    "userPositions": [
+      {
+        "id": "up_auto_cmmuk9rpo01kl8i46ndgyirrv",
+        "positionId": "cmmuk8n8k00038igbe3mivgv4",
+        "unitId": null,
+        "isPrimary": true,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cmmuk9rqz01n38i46e29llwit",
+    "name": "Nguyễn Anh Tuấn",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "unitId": null,
+    "userPositions": [
+      {
+        "id": "up_auto_cmmuk9rqz01n38i46e29llwit",
+        "positionId": "cmmuk8n8k00038igbe3mivgv4",
+        "unitId": null,
+        "isPrimary": true,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cmmuk9r7v00l58i466avj28hr",
+    "name": "Vũ Quốc Huy",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "unitId": null,
+    "userPositions": [
+      {
+        "id": "up_auto_cmmuk9r7v00l58i466avj28hr",
+        "positionId": "cmmuk8n8k00038igbe3mivgv4",
+        "unitId": null,
+        "isPrimary": true,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cmmuk9ro501hx8i460v9yb7wu",
+    "name": "Trần Xuân Đoạt",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "unitId": null,
+    "userPositions": [
+      {
+        "id": "up_auto_cmmuk9ro501hx8i460v9yb7wu",
+        "positionId": "cmmuk8n8k00038igbe3mivgv4",
+        "unitId": null,
+        "isPrimary": true,
+        "isActive": true
+      }
+    ]
+  },
+  {
+    "id": "cmmuk9rad00q18i46yjfh3do7",
+    "name": "Trần Thanh Nam",
+    "role": "CHI_HUY_KHOA_PHONG",
+    "unitId": null,
+    "userPositions": [
+      {
+        "id": "up_auto_cmmuk9rad00q18i46yjfh3do7",
+        "positionId": "cmmuk8n8k00038igbe3mivgv4",
+        "unitId": null,
+        "isPrimary": true,
+        "isActive": true
+      }
+    ]
+  }
+]

@@ -1,0 +1,2116 @@
+[
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8nal001c8igb692gv6hg",
+    "functionCode": "CREATE_STUDENT",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8n9p000u8igbhe36pkt7",
+    "functionCode": "EXPORT_PERSONNEL",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmo6o2p8y00048ihy60ddj2eq",
+    "functionCode": "MANAGE_MY_SECURITY",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8n9s000w8igbg48dl8si",
+    "functionCode": "VIEW_CAREER_HISTORY",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmnl5dlvk00018im398q7vi3g",
+    "functionCode": "MANAGE_THESIS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8nah00188igb8d5k9ed8",
+    "functionCode": "REJECT_GRADE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8nai00198igba2hcum1a",
+    "functionCode": "EXPORT_GRADE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8nam001d8igbq09x4ynm",
+    "functionCode": "UPDATE_STUDENT",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8n9v000z8igbsllyaa25",
+    "functionCode": "VIEW_COURSE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "90723ad4-63c3-4868-a0f3-692b5847e3cc",
+    "functionCode": "VIEW_MY_CADRE_PROFILE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmo6o2p8v00028ihyz0ea13gt",
+    "functionCode": "VIEW_MY_DASHBOARD",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmo6o2p8t00018ihy6oicf1ij",
+    "functionCode": "VIEW_MY_NOTIFICATIONS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmo6o2p8w00038ihyi4eya0k3",
+    "functionCode": "VIEW_MY_TASKS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8naj001a8igba8g20ayi",
+    "functionCode": "VIEW_STUDENT",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8nak001b8igbg1mz6qz9",
+    "functionCode": "VIEW_STUDENT_DETAIL",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmnl5dlvf00008im3t330lztt",
+    "functionCode": "VIEW_THESIS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8o7u00038ii0sx0u28tk",
+    "functionCode": "APPROVE_EXAM_PLAN",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8o8000058ii0j21htk1n",
+    "functionCode": "APPROVE_LEARNING_MATERIAL",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8o8g00098ii0paiabnil",
+    "functionCode": "CREATE_CLASS_SECTION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8o8k000a8ii0cznjay49",
+    "functionCode": "CREATE_CURRICULUM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8o8s000d8ii0b3rnfr2x",
+    "functionCode": "CREATE_EXAM_PLAN",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmo6o2p9100068ihyxmf2bcf8",
+    "functionCode": "REQUEST_MY_INFO_UPDATE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmnl5dlvm00038im3yqxnezwy",
+    "functionCode": "RUN_GRADUATION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8nca002y8igbu1usr1br",
+    "functionCode": "VIEW_DASHBOARD",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8nbp002g8igbsvhsknml",
+    "functionCode": "VIEW_FACULTY",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmnl5dlvl00028im3mepg27r2",
+    "functionCode": "VIEW_GRADUATION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmo6o2p9500098ihyigzeom9x",
+    "functionCode": "VIEW_MY_AWARD",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmo6o2p9400088ihydw18cznw",
+    "functionCode": "VIEW_MY_INSURANCE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmo6o2p9200078ihylxf0fsy8",
+    "functionCode": "VIEW_MY_POLICY",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmo6o2p98000b8ihybe8jz95m",
+    "functionCode": "VIEW_MY_PUBLICATIONS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmo6o2p96000a8ihyki45qmgs",
+    "functionCode": "VIEW_MY_RESEARCH",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmnl5dlvq00068im3ublm41oi",
+    "functionCode": "VIEW_REPOSITORY",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8o9e000o8ii0cos4jxui",
+    "functionCode": "CREATE_QUESTION_BANK",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8o9h000p8ii0a8btjh4o",
+    "functionCode": "CREATE_SCHEDULE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8o9s000s8ii05m04z8yh",
+    "functionCode": "DELETE_CURRICULUM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8oa0000v8ii0wz35hhpz",
+    "functionCode": "DELETE_EXAM_PLAN",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8oa1000w8ii0a4bn0eqc",
+    "functionCode": "DELETE_EXAM_SESSION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8oai00158ii0dgfhb8o6",
+    "functionCode": "DELETE_QUESTION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8oak00168ii0s9cfnaye",
+    "functionCode": "DELETE_QUESTION_BANK",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8ob100178ii086b0zqw1",
+    "functionCode": "DELETE_SCHEDULE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8nbu002l8igbxlt3l42g",
+    "functionCode": "EXPORT_FACULTY",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8nao001f8igbcq7dip1e",
+    "functionCode": "EXPORT_STUDENT",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8obp001g8ii07p8u51c9",
+    "functionCode": "GENERATE_PDF_DOCUMENTS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8obw001i8ii0mymjlzjz",
+    "functionCode": "IMPORT_QUESTION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8oc1001l8ii0kzhk4b1d",
+    "functionCode": "MANAGE_ATTENDANCE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8oc8001m8ii0s2gthnpz",
+    "functionCode": "MANAGE_ENROLLMENT",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8oc9001n8ii0o54mh9t9",
+    "functionCode": "MANAGE_EXAM_REG",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmo6o2p9c000f8ihysonxgapa",
+    "functionCode": "VIEW_MY_CONDUCT",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmo6o2p9b000e8ihy0xbrtfxu",
+    "functionCode": "VIEW_MY_GRADE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmo6o2p9a000d8ihyzkp9pk08",
+    "functionCode": "VIEW_MY_GRADE_SUBMISSIONS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmo6o2p9e000h8ihy7cmsk5um",
+    "functionCode": "VIEW_MY_GRADUATION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmo6o2p9d000g8ihyhwbf80l6",
+    "functionCode": "VIEW_MY_SCHEDULE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8o94000j8ii0xmwwmp49",
+    "functionCode": "CREATE_LEARNING_MATERIAL",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8o9o000r8ii08gk0oqe0",
+    "functionCode": "DELETE_CLASS_SECTION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8obl001e8ii0n2n2akts",
+    "functionCode": "EXPORT_QUESTION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmo6o2p8q00008ihybvpl0gnr",
+    "functionCode": "MANAGE_MY_PROFILE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmo6o2p99000c8ihyqmjes4fn",
+    "functionCode": "MANAGE_MY_SCIENTIFIC_CV",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8oct001z8ii0z95lpsjy",
+    "functionCode": "MANAGE_TERM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmnf9ksmc000c8icnnow0lr5t",
+    "functionCode": "MANAGE_WARNING",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8od000228ii0xel6qdd5",
+    "functionCode": "PUBLISH_EXAM_PLAN",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8od800238ii0x032xi7l",
+    "functionCode": "REGISTER_EXAM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8odh00268ii0n7vpdgri",
+    "functionCode": "REVIEW_QUESTION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8naf00168igbswhbbts5",
+    "functionCode": "SUBMIT_GRADE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmnf9ksog000f8icndj4023oh",
+    "functionCode": "VIEW_CONDUCT",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmo6o2p8z00058ihyag30u3vv",
+    "functionCode": "VIEW_MY_CAREER_HISTORY",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8o8u000e8ii0kvkrqh0b",
+    "functionCode": "CREATE_EXAM_SESSION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmo6y1i4900008ipcrlm0t4vp",
+    "functionCode": "SUBMIT_MY_PUBLICATION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8odq002a8ii0jer81riv",
+    "functionCode": "SUPERVISE_EXAM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8oe0002e8ii0bgg0o2bn",
+    "functionCode": "UPDATE_CURRICULUM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8oe7002h8ii094cx6sjv",
+    "functionCode": "UPDATE_EXAM_PLAN",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8oe9002i8ii0i2vtj0rh",
+    "functionCode": "UPDATE_EXAM_SESSION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8oeo002m8ii0ssbiewq8",
+    "functionCode": "UPDATE_LEARNING_MATERIAL",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8oey002q8ii02vrzfj6s",
+    "functionCode": "UPDATE_QUESTION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8of0002r8ii0uyb4mjyo",
+    "functionCode": "UPDATE_QUESTION_BANK",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8of3002s8ii03ne7675i",
+    "functionCode": "UPDATE_SCHEDULE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8of8002u8ii0qzikcef3",
+    "functionCode": "UPLOAD_LEARNING_MATERIAL",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8ofl00338ii0mj38vfqa",
+    "functionCode": "VIEW_ATTENDANCE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8ofu00368ii06nt9b5cc",
+    "functionCode": "VIEW_CLASS_SECTION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8ogb003c8ii0fxc58o9y",
+    "functionCode": "VIEW_DOCUMENTS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8ogc003d8ii09n45px43",
+    "functionCode": "VIEW_ENROLLMENT",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8ogk003h8ii0pvd6glqc",
+    "functionCode": "VIEW_EXAM_REG",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8ogp003j8ii0fc2j2yzc",
+    "functionCode": "VIEW_FACULTY_CLASSES",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8oah00148ii0x6l40ylw",
+    "functionCode": "DELETE_PROGRAM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8obf001d8ii0tac3pbor",
+    "functionCode": "EXPORT_DOCUMENTS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8ogm003i8ii0ry0raql3",
+    "functionCode": "VIEW_EXAM_SESSION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8ogv003l8ii0y2w1x7na",
+    "functionCode": "VIEW_FACULTY_PERFORMANCE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8ohg003v8ii03cbbs3v5",
+    "functionCode": "VIEW_LEARNING_MATERIAL",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8ohw00418ii0gvxd0g14",
+    "functionCode": "VIEW_QUESTION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8oi300448ii01qp628j4",
+    "functionCode": "VIEW_SCHEDULE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8oih00478ii027tmp87o",
+    "functionCode": "VIEW_TERM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk9prx001o8i276ndn5fhn",
+    "functionCode": "PERSONNEL.VIEW",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk9pry001p8i27oon6pv29",
+    "functionCode": "PERSONNEL.VIEW_DETAIL",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk9pry001q8i27os1pkdpu",
+    "functionCode": "PERSONNEL.VIEW_SENSITIVE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk9ps2001v8i27rv2n9bbi",
+    "functionCode": "PERSONNEL.EXPORT",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8o9b000m8ii09d0f738e",
+    "functionCode": "CREATE_PROGRAM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8oaa00118ii0dgn92mcf",
+    "functionCode": "DELETE_LEARNING_MATERIAL",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmnl5dlvp00058im3rzfp8o2g",
+    "functionCode": "EXPORT_GRADUATION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8nac00138igbxvc8m555",
+    "functionCode": "REGISTER_COURSE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk9psi002c8i272lz0dw3e",
+    "functionCode": "FACULTY.VIEW",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk9psi002d8i275b8veclz",
+    "functionCode": "FACULTY.VIEW_DETAIL",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk9psl002g8i27ywzv2g6x",
+    "functionCode": "FACULTY.EXPORT",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk9psl002h8i27vt14qzml",
+    "functionCode": "STUDENT.VIEW",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk9psm002i8i2760dd44a8",
+    "functionCode": "STUDENT.VIEW_DETAIL",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk9psn002j8i27zjen8i9z",
+    "functionCode": "STUDENT.CREATE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk9psn002k8i27yujloqnq",
+    "functionCode": "STUDENT.UPDATE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk9pso002l8i277f1yub6z",
+    "functionCode": "STUDENT.VIEW_GRADE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk9pso002m8i27ensjyscs",
+    "functionCode": "STUDENT.SUBMIT_GRADE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk9psq002o8i27jfc43py8",
+    "functionCode": "EDUCATION.VIEW_PROGRAM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk9psq002p8i27dvnzl6pn",
+    "functionCode": "EDUCATION.CREATE_PROGRAM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk9psr002q8i27d7esaihv",
+    "functionCode": "EDUCATION.APPROVE_PROGRAM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk9pss002r8i27pc21blft",
+    "functionCode": "EDUCATION.VIEW_TERM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk9pst002s8i27poakfrw6",
+    "functionCode": "EDUCATION.MANAGE_TERM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk9pst002t8i276p8iaok1",
+    "functionCode": "EDUCATION.VIEW_SCHEDULE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmy4oz5h000e8ik323k6amin",
+    "functionCode": "VIEW_FAMILY_RELATIONS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmy4oz5i000g8ik36c5a2v25",
+    "functionCode": "VIEW_SOLDIER_PROFILE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk9psp002n8i2745verywv",
+    "functionCode": "STUDENT.APPROVE_GRADE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8o8700078ii0tah6afq7",
+    "functionCode": "APPROVE_PROGRAM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8n9x00108igbqyx4g5gm",
+    "functionCode": "CREATE_COURSE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8ob500188ii04vbx5t50",
+    "functionCode": "DOWNLOAD_LEARNING_MATERIAL",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8odx002d8ii07epaivwj",
+    "functionCode": "UPDATE_CLASS_SECTION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8ogt003k8ii03zvba0z6",
+    "functionCode": "VIEW_FACULTY_INSTRUCTORS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8nad00148igbrpngrtjh",
+    "functionCode": "VIEW_GRADE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8ohy00428ii04scadlor",
+    "functionCode": "VIEW_QUESTION_BANK",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8n9u000y8igbcrsznbps",
+    "functionCode": "VIEW_TRAINING",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8nag00178igbq13wnscy",
+    "functionCode": "APPROVE_GRADE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmy4oz5g000c8ik3bdy3i69i",
+    "functionCode": "VIEW_EDUCATION_HISTORY",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8o9c000n8ii09gsi9r5l",
+    "functionCode": "CREATE_QUESTION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8nan001e8igbhl0x6tgt",
+    "functionCode": "DELETE_STUDENT",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmy4oz7k00338ik3zlaqcam8",
+    "functionCode": "VIEW_STUDENT_GRADE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8naa00118igb2mvx5zha",
+    "functionCode": "UPDATE_COURSE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8n9f000n8igbuw11fhhr",
+    "functionCode": "VIEW_PERSONNEL",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8nab00128igbwhwjexn9",
+    "functionCode": "DELETE_COURSE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmo0tijks00038itb5uiuvoax",
+    "functionCode": "MANAGE_BATTALION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmnf9ksle00058icnzlaga20y",
+    "functionCode": "MANAGE_CONDUCT",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmnf9kslp00068icn9y7iyz1k",
+    "functionCode": "MANAGE_GRADE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmy4oz7m00358ik3l6wbm9sk",
+    "functionCode": "MANAGE_STUDENT_CONDUCT",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmnqq9lxf00028i9vjy7czsjn",
+    "functionCode": "MANAGE_STUDENT_GPA",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmo0tijkq00018itbtd9lk6vg",
+    "functionCode": "MANAGE_TRAINING_SYSTEM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8oev002p8ii0jtkycaks",
+    "functionCode": "UPDATE_PROGRAM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmo0tijkr00028itbnb9ft7dv",
+    "functionCode": "VIEW_BATTALION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8ofx00378ii0602t1gr0",
+    "functionCode": "VIEW_CURRICULUM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8ogh003g8ii0ldsr34oi",
+    "functionCode": "VIEW_EXAM_PLAN",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8nbq002h8igbztr3rrh2",
+    "functionCode": "VIEW_FACULTY_DETAIL",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmnqq9m0k00038i9vi233n9ff",
+    "functionCode": "VIEW_FACULTY_EIS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmnqq9m0o00048i9vwsnqnjn6",
+    "functionCode": "VIEW_FACULTY_PROFILE360",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8nbv002m8igb0aqcyj32",
+    "functionCode": "VIEW_FACULTY_RESEARCH",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8ogy003m8ii0ft7jicpr",
+    "functionCode": "VIEW_FACULTY_STATS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmnqq9m0r00058i9vbzklcjzm",
+    "functionCode": "VIEW_FACULTY_WORKLOAD",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8n9i000o8igbk6cbh4it",
+    "functionCode": "VIEW_PERSONNEL_DETAIL",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8n9j000p8igbn54xdvoi",
+    "functionCode": "VIEW_PERSONNEL_SENSITIVE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8ohu00408ii0qk4xmj2q",
+    "functionCode": "VIEW_PROGRAM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmnqq9m2400068i9vokfseo0r",
+    "functionCode": "VIEW_STUDENT_DASHBOARD",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmnqq9m2600078i9vyrcw2gf9",
+    "functionCode": "VIEW_STUDENT_GPA",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmnf9ksqp000q8icn9h647r83",
+    "functionCode": "VIEW_STUDENT_PROFILE360",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmo0tijkk00008itb30135ooj",
+    "functionCode": "VIEW_TRAINING_SYSTEM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmnf9ksr0000r8icnsmwqrbr8",
+    "functionCode": "VIEW_WARNING",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmnl5dlvn00048im3eqrv5124",
+    "functionCode": "APPROVE_GRADUATION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmuk8nae00158igbaiw8hkba",
+    "functionCode": "CREATE_GRADE_DRAFT",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmmy4oz7l00348ik3gmw4eqps",
+    "functionCode": "VIEW_STUDENT_CONDUCT",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmqlqqnxf00028inds4omw7jx",
+    "functionCode": "CREATE_PROFILE_CHANGE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_GĐ_TTSX",
+    "functionId": "cmqlqqnxh00048indz7lw2jmn",
+    "functionCode": "VIEW_OWN_PROFILE_CHANGE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmo6o2p8y00048ihy60ddj2eq",
+    "functionCode": "MANAGE_MY_SECURITY",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmmuk8n9v000z8igbsllyaa25",
+    "functionCode": "VIEW_COURSE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "90723ad4-63c3-4868-a0f3-692b5847e3cc",
+    "functionCode": "VIEW_MY_CADRE_PROFILE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmo6o2p8v00028ihyz0ea13gt",
+    "functionCode": "VIEW_MY_DASHBOARD",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmo6o2p8t00018ihy6oicf1ij",
+    "functionCode": "VIEW_MY_NOTIFICATIONS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmo6o2p8w00038ihyi4eya0k3",
+    "functionCode": "VIEW_MY_TASKS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmnl5dlvf00008im3t330lztt",
+    "functionCode": "VIEW_THESIS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmo6o2p9100068ihyxmf2bcf8",
+    "functionCode": "REQUEST_MY_INFO_UPDATE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmnl5dlvm00038im3yqxnezwy",
+    "functionCode": "RUN_GRADUATION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmmuk8nca002y8igbu1usr1br",
+    "functionCode": "VIEW_DASHBOARD",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmnl5dlvl00028im3mepg27r2",
+    "functionCode": "VIEW_GRADUATION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmo6o2p9500098ihyigzeom9x",
+    "functionCode": "VIEW_MY_AWARD",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmo6o2p9400088ihydw18cznw",
+    "functionCode": "VIEW_MY_INSURANCE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmo6o2p9200078ihylxf0fsy8",
+    "functionCode": "VIEW_MY_POLICY",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmo6o2p98000b8ihybe8jz95m",
+    "functionCode": "VIEW_MY_PUBLICATIONS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmo6o2p96000a8ihyki45qmgs",
+    "functionCode": "VIEW_MY_RESEARCH",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmnl5dlvq00068im3ublm41oi",
+    "functionCode": "VIEW_REPOSITORY",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmmuk8obp001g8ii07p8u51c9",
+    "functionCode": "GENERATE_PDF_DOCUMENTS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmo6o2p9c000f8ihysonxgapa",
+    "functionCode": "VIEW_MY_CONDUCT",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmo6o2p9b000e8ihy0xbrtfxu",
+    "functionCode": "VIEW_MY_GRADE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmo6o2p9a000d8ihyzkp9pk08",
+    "functionCode": "VIEW_MY_GRADE_SUBMISSIONS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmo6o2p9e000h8ihy7cmsk5um",
+    "functionCode": "VIEW_MY_GRADUATION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmo6o2p9d000g8ihyhwbf80l6",
+    "functionCode": "VIEW_MY_SCHEDULE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmo6o2p8q00008ihybvpl0gnr",
+    "functionCode": "MANAGE_MY_PROFILE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmo6o2p99000c8ihyqmjes4fn",
+    "functionCode": "MANAGE_MY_SCIENTIFIC_CV",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmo6o2p8z00058ihyag30u3vv",
+    "functionCode": "VIEW_MY_CAREER_HISTORY",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmo6y1i4900008ipcrlm0t4vp",
+    "functionCode": "SUBMIT_MY_PUBLICATION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmmuk8ofl00338ii0mj38vfqa",
+    "functionCode": "VIEW_ATTENDANCE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmmuk8ofu00368ii06nt9b5cc",
+    "functionCode": "VIEW_CLASS_SECTION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmmuk8ogb003c8ii0fxc58o9y",
+    "functionCode": "VIEW_DOCUMENTS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmmuk8ogc003d8ii09n45px43",
+    "functionCode": "VIEW_ENROLLMENT",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmmuk8obf001d8ii0tac3pbor",
+    "functionCode": "EXPORT_DOCUMENTS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmmuk8oi300448ii01qp628j4",
+    "functionCode": "VIEW_SCHEDULE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmmuk8oih00478ii027tmp87o",
+    "functionCode": "VIEW_TERM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmmuk8nac00138igbxvc8m555",
+    "functionCode": "REGISTER_COURSE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmmuk9psq002o8i27jfc43py8",
+    "functionCode": "EDUCATION.VIEW_PROGRAM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmmuk9pss002r8i27pc21blft",
+    "functionCode": "EDUCATION.VIEW_TERM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmmuk9pst002t8i276p8iaok1",
+    "functionCode": "EDUCATION.VIEW_SCHEDULE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmmuk8nad00148igbrpngrtjh",
+    "functionCode": "VIEW_GRADE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmmuk8n9u000y8igbcrsznbps",
+    "functionCode": "VIEW_TRAINING",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmo0tijkr00028itbnb9ft7dv",
+    "functionCode": "VIEW_BATTALION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmmuk8ofx00378ii0602t1gr0",
+    "functionCode": "VIEW_CURRICULUM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmmuk8ohu00408ii0qk4xmj2q",
+    "functionCode": "VIEW_PROGRAM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmo0tijkk00008itb30135ooj",
+    "functionCode": "VIEW_TRAINING_SYSTEM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmnf9ksr0000r8icnsmwqrbr8",
+    "functionCode": "VIEW_WARNING",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmqlqqnxf00028inds4omw7jx",
+    "functionCode": "CREATE_PROFILE_CHANGE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_BĐ",
+    "functionId": "cmqlqqnxh00048indz7lw2jmn",
+    "functionCode": "VIEW_OWN_PROFILE_CHANGE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmo6o2p8y00048ihy60ddj2eq",
+    "functionCode": "MANAGE_MY_SECURITY",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmmuk8n9v000z8igbsllyaa25",
+    "functionCode": "VIEW_COURSE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "90723ad4-63c3-4868-a0f3-692b5847e3cc",
+    "functionCode": "VIEW_MY_CADRE_PROFILE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmo6o2p8v00028ihyz0ea13gt",
+    "functionCode": "VIEW_MY_DASHBOARD",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmo6o2p8t00018ihy6oicf1ij",
+    "functionCode": "VIEW_MY_NOTIFICATIONS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmo6o2p8w00038ihyi4eya0k3",
+    "functionCode": "VIEW_MY_TASKS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmnl5dlvf00008im3t330lztt",
+    "functionCode": "VIEW_THESIS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmo6o2p9100068ihyxmf2bcf8",
+    "functionCode": "REQUEST_MY_INFO_UPDATE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmnl5dlvm00038im3yqxnezwy",
+    "functionCode": "RUN_GRADUATION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmmuk8nca002y8igbu1usr1br",
+    "functionCode": "VIEW_DASHBOARD",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmnl5dlvl00028im3mepg27r2",
+    "functionCode": "VIEW_GRADUATION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmo6o2p9500098ihyigzeom9x",
+    "functionCode": "VIEW_MY_AWARD",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmo6o2p9400088ihydw18cznw",
+    "functionCode": "VIEW_MY_INSURANCE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmo6o2p9200078ihylxf0fsy8",
+    "functionCode": "VIEW_MY_POLICY",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmo6o2p98000b8ihybe8jz95m",
+    "functionCode": "VIEW_MY_PUBLICATIONS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmo6o2p96000a8ihyki45qmgs",
+    "functionCode": "VIEW_MY_RESEARCH",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmnl5dlvq00068im3ublm41oi",
+    "functionCode": "VIEW_REPOSITORY",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmmuk8obp001g8ii07p8u51c9",
+    "functionCode": "GENERATE_PDF_DOCUMENTS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmo6o2p9c000f8ihysonxgapa",
+    "functionCode": "VIEW_MY_CONDUCT",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmo6o2p9b000e8ihy0xbrtfxu",
+    "functionCode": "VIEW_MY_GRADE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmo6o2p9a000d8ihyzkp9pk08",
+    "functionCode": "VIEW_MY_GRADE_SUBMISSIONS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmo6o2p9e000h8ihy7cmsk5um",
+    "functionCode": "VIEW_MY_GRADUATION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmo6o2p9d000g8ihyhwbf80l6",
+    "functionCode": "VIEW_MY_SCHEDULE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmo6o2p8q00008ihybvpl0gnr",
+    "functionCode": "MANAGE_MY_PROFILE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmo6o2p99000c8ihyqmjes4fn",
+    "functionCode": "MANAGE_MY_SCIENTIFIC_CV",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmo6o2p8z00058ihyag30u3vv",
+    "functionCode": "VIEW_MY_CAREER_HISTORY",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmo6y1i4900008ipcrlm0t4vp",
+    "functionCode": "SUBMIT_MY_PUBLICATION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmmuk8ofl00338ii0mj38vfqa",
+    "functionCode": "VIEW_ATTENDANCE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmmuk8ofu00368ii06nt9b5cc",
+    "functionCode": "VIEW_CLASS_SECTION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmmuk8ogb003c8ii0fxc58o9y",
+    "functionCode": "VIEW_DOCUMENTS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmmuk8ogc003d8ii09n45px43",
+    "functionCode": "VIEW_ENROLLMENT",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmmuk8obf001d8ii0tac3pbor",
+    "functionCode": "EXPORT_DOCUMENTS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmmuk8oi300448ii01qp628j4",
+    "functionCode": "VIEW_SCHEDULE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmmuk8oih00478ii027tmp87o",
+    "functionCode": "VIEW_TERM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmmuk8nac00138igbxvc8m555",
+    "functionCode": "REGISTER_COURSE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmmuk9psq002o8i27jfc43py8",
+    "functionCode": "EDUCATION.VIEW_PROGRAM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmmuk9pss002r8i27pc21blft",
+    "functionCode": "EDUCATION.VIEW_TERM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmmuk9pst002t8i276p8iaok1",
+    "functionCode": "EDUCATION.VIEW_SCHEDULE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmmuk8nad00148igbrpngrtjh",
+    "functionCode": "VIEW_GRADE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmmuk8n9u000y8igbcrsznbps",
+    "functionCode": "VIEW_TRAINING",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmo0tijkr00028itbnb9ft7dv",
+    "functionCode": "VIEW_BATTALION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmmuk8ofx00378ii0602t1gr0",
+    "functionCode": "VIEW_CURRICULUM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmmuk8ohu00408ii0qk4xmj2q",
+    "functionCode": "VIEW_PROGRAM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmo0tijkk00008itb30135ooj",
+    "functionCode": "VIEW_TRAINING_SYSTEM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmnf9ksr0000r8icnsmwqrbr8",
+    "functionCode": "VIEW_WARNING",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmqlqqnxf00028inds4omw7jx",
+    "functionCode": "CREATE_PROFILE_CHANGE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_KH",
+    "functionId": "cmqlqqnxh00048indz7lw2jmn",
+    "functionCode": "VIEW_OWN_PROFILE_CHANGE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmo6o2p8y00048ihy60ddj2eq",
+    "functionCode": "MANAGE_MY_SECURITY",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmmuk8n9v000z8igbsllyaa25",
+    "functionCode": "VIEW_COURSE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "90723ad4-63c3-4868-a0f3-692b5847e3cc",
+    "functionCode": "VIEW_MY_CADRE_PROFILE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmo6o2p8v00028ihyz0ea13gt",
+    "functionCode": "VIEW_MY_DASHBOARD",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmo6o2p8t00018ihy6oicf1ij",
+    "functionCode": "VIEW_MY_NOTIFICATIONS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmo6o2p8w00038ihyi4eya0k3",
+    "functionCode": "VIEW_MY_TASKS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmnl5dlvf00008im3t330lztt",
+    "functionCode": "VIEW_THESIS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmo6o2p9100068ihyxmf2bcf8",
+    "functionCode": "REQUEST_MY_INFO_UPDATE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmnl5dlvm00038im3yqxnezwy",
+    "functionCode": "RUN_GRADUATION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmmuk8nca002y8igbu1usr1br",
+    "functionCode": "VIEW_DASHBOARD",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmnl5dlvl00028im3mepg27r2",
+    "functionCode": "VIEW_GRADUATION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmo6o2p9500098ihyigzeom9x",
+    "functionCode": "VIEW_MY_AWARD",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmo6o2p9400088ihydw18cznw",
+    "functionCode": "VIEW_MY_INSURANCE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmo6o2p9200078ihylxf0fsy8",
+    "functionCode": "VIEW_MY_POLICY",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmo6o2p98000b8ihybe8jz95m",
+    "functionCode": "VIEW_MY_PUBLICATIONS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmo6o2p96000a8ihyki45qmgs",
+    "functionCode": "VIEW_MY_RESEARCH",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmnl5dlvq00068im3ublm41oi",
+    "functionCode": "VIEW_REPOSITORY",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmmuk8obp001g8ii07p8u51c9",
+    "functionCode": "GENERATE_PDF_DOCUMENTS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmo6o2p9c000f8ihysonxgapa",
+    "functionCode": "VIEW_MY_CONDUCT",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmo6o2p9b000e8ihy0xbrtfxu",
+    "functionCode": "VIEW_MY_GRADE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmo6o2p9a000d8ihyzkp9pk08",
+    "functionCode": "VIEW_MY_GRADE_SUBMISSIONS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmo6o2p9e000h8ihy7cmsk5um",
+    "functionCode": "VIEW_MY_GRADUATION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmo6o2p9d000g8ihyhwbf80l6",
+    "functionCode": "VIEW_MY_SCHEDULE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmo6o2p8q00008ihybvpl0gnr",
+    "functionCode": "MANAGE_MY_PROFILE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmo6o2p99000c8ihyqmjes4fn",
+    "functionCode": "MANAGE_MY_SCIENTIFIC_CV",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmo6o2p8z00058ihyag30u3vv",
+    "functionCode": "VIEW_MY_CAREER_HISTORY",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmo6y1i4900008ipcrlm0t4vp",
+    "functionCode": "SUBMIT_MY_PUBLICATION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmmuk8ofl00338ii0mj38vfqa",
+    "functionCode": "VIEW_ATTENDANCE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmmuk8ofu00368ii06nt9b5cc",
+    "functionCode": "VIEW_CLASS_SECTION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmmuk8ogb003c8ii0fxc58o9y",
+    "functionCode": "VIEW_DOCUMENTS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmmuk8ogc003d8ii09n45px43",
+    "functionCode": "VIEW_ENROLLMENT",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmmuk8obf001d8ii0tac3pbor",
+    "functionCode": "EXPORT_DOCUMENTS",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmmuk8oi300448ii01qp628j4",
+    "functionCode": "VIEW_SCHEDULE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmmuk8oih00478ii027tmp87o",
+    "functionCode": "VIEW_TERM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmmuk8nac00138igbxvc8m555",
+    "functionCode": "REGISTER_COURSE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmmuk9psq002o8i27jfc43py8",
+    "functionCode": "EDUCATION.VIEW_PROGRAM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmmuk9pss002r8i27pc21blft",
+    "functionCode": "EDUCATION.VIEW_TERM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmmuk9pst002t8i276p8iaok1",
+    "functionCode": "EDUCATION.VIEW_SCHEDULE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmmuk8nad00148igbrpngrtjh",
+    "functionCode": "VIEW_GRADE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmmuk8n9u000y8igbcrsznbps",
+    "functionCode": "VIEW_TRAINING",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmo0tijkr00028itbnb9ft7dv",
+    "functionCode": "VIEW_BATTALION",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmmuk8ofx00378ii0602t1gr0",
+    "functionCode": "VIEW_CURRICULUM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmmuk8ohu00408ii0qk4xmj2q",
+    "functionCode": "VIEW_PROGRAM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmo0tijkk00008itb30135ooj",
+    "functionCode": "VIEW_TRAINING_SYSTEM",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmnf9ksr0000r8icnsmwqrbr8",
+    "functionCode": "VIEW_WARNING",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmqlqqnxf00028inds4omw7jx",
+    "functionCode": "CREATE_PROFILE_CHANGE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  },
+  {
+    "positionCode": "B1_TRUONG_BAN_VC",
+    "functionId": "cmqlqqnxh00048indz7lw2jmn",
+    "functionCode": "VIEW_OWN_PROFILE_CHANGE",
+    "scope": "DEPARTMENT",
+    "isActive": true
+  }
+]

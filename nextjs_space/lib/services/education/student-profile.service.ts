@@ -224,7 +224,7 @@ async function buildStudentWhereClause(
       if (!explicitTrainingSystem && !explicitBattalion) {
         where.trainingSystemUnitId = scopeCtx.unitId;
       }
-    } else if (userUnit?.type === 'TIEUDOAN') {
+    } else if (userUnit?.type === 'TIEU_DOAN') {
       // Chỉ thấy học viên thuộc Tiểu đoàn mình
       if (!explicitBattalion) {
         where.battalionUnitId = scopeCtx.unitId;

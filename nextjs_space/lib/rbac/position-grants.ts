@@ -282,6 +282,18 @@ export const POSITIONS: SeedPosition[] = [
     description: 'Quản lý cấp ban',
     level: 73,
   },
+  {
+    code: 'CHI_HUY_DAI_DOI',
+    name: 'Chỉ huy Đại đội',
+    description: 'Quản lý học viên/quân số cấp đại đội (dưới Hệ/Tiểu đoàn)',
+    level: 60,
+  },
+  {
+    code: 'CHI_HUY_LOP',
+    name: 'Chỉ huy Lớp',
+    description: 'Quản lý học viên cấp lớp',
+    level: 58,
+  },
   // ── Cấp Bộ môn ────────────────────────────────────────────
   {
     code: 'CHI_HUY_BO_MON',
@@ -903,12 +915,16 @@ export function grantsForPosition(positionCode: string, functions: SeedFunction[
       scope = 'DEPARTMENT';
       break;
 
-    // ── Cấp Hệ/Tiểu đoàn/Ban (UNIT scope) ──
+    // ── Cấp Hệ/Tiểu đoàn/Ban/Đại đội/Lớp (DEPARTMENT scope) ──
+    // DEPARTMENT = đơn vị + toàn bộ con cháu (subtree). Đơn vị lá tự co về chính nó,
+    // nên Ban-trực-thuộc-Phòng (lá) chỉ thấy chính nó, còn Hệ/Tiểu đoàn thấy Đại đội/Lớp cấp dưới.
     case 'CHI_HUY_HE':
     case 'CHI_HUY_TIEU_DOAN':
     case 'CHI_HUY_BAN':
+    case 'CHI_HUY_DAI_DOI':
+    case 'CHI_HUY_LOP':
       predicate = allowForChiHuyHe;
-      scope = 'UNIT';
+      scope = 'DEPARTMENT';
       break;
 
     // ── Cấp Bộ môn (UNIT scope) ──

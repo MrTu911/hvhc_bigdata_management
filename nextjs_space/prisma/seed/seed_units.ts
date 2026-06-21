@@ -35,7 +35,7 @@ interface BoMonDef {
 const UNITS: UnitDef[] = [
   // ── Level 1: Root ──────────────────────────────────────────
   {
-    code: 'HVHC', name: 'Học viện Hậu cần', type: 'HVHC', level: 1,
+    code: 'HVHC', name: 'Học viện Hậu cần', type: 'HOC_VIEN', level: 1,
     description: 'Học viện Hậu cần – Bộ Quốc phòng',
   },
 
@@ -80,10 +80,10 @@ const UNITS: UnitDef[] = [
   { code: 'HE4', name: 'Hệ Quốc tế',               type: 'HE', level: 2, parentCode: 'HVHC', description: 'Đào tạo học viên quốc tế' },
 
   // ── Level 2: Tiểu đoàn ────────────────────────────────────
-  { code: 'TD1', name: 'Tiểu đoàn 1', type: 'TIEUDOAN', level: 2, parentCode: 'HVHC', description: 'Tiểu đoàn học viên cử nhân 1' },
-  { code: 'TD2', name: 'Tiểu đoàn 2', type: 'TIEUDOAN', level: 2, parentCode: 'HVHC', description: 'Tiểu đoàn học viên cử nhân 2' },
-  { code: 'TD3', name: 'Tiểu đoàn 3', type: 'TIEUDOAN', level: 2, parentCode: 'HVHC', description: 'Tiểu đoàn học viên cử nhân 3' },
-  { code: 'TD4', name: 'Tiểu đoàn 4', type: 'TIEUDOAN', level: 2, parentCode: 'HVHC', description: 'Tiểu đoàn học viên cử nhân 4' },
+  { code: 'TD1', name: 'Tiểu đoàn 1', type: 'TIEU_DOAN', level: 2, parentCode: 'HVHC', description: 'Tiểu đoàn học viên cử nhân 1' },
+  { code: 'TD2', name: 'Tiểu đoàn 2', type: 'TIEU_DOAN', level: 2, parentCode: 'HVHC', description: 'Tiểu đoàn học viên cử nhân 2' },
+  { code: 'TD3', name: 'Tiểu đoàn 3', type: 'TIEU_DOAN', level: 2, parentCode: 'HVHC', description: 'Tiểu đoàn học viên cử nhân 3' },
+  { code: 'TD4', name: 'Tiểu đoàn 4', type: 'TIEU_DOAN', level: 2, parentCode: 'HVHC', description: 'Tiểu đoàn học viên cử nhân 4' },
 
   // ── Level 3: Bộ môn (dưới Khoa) ───────────────────────────
   // Bộ môn thật được nạp từ prisma/seed/data/bo_mon_hvhc.json (sinh từ danh mục
@@ -99,16 +99,16 @@ const UNITS: UnitDef[] = [
   { code: 'LOP_HE4_1', name: 'Lớp Quốc tế K1',          type: 'LOP', level: 3, parentCode: 'HE4' },
 
   // ── Level 3: Đại đội dưới Tiểu đoàn ──────────────────────
-  { code: 'DD_TD1_1', name: 'Đại đội 1 – Tiểu đoàn 1', type: 'DAIDOI', level: 3, parentCode: 'TD1' },
-  { code: 'DD_TD1_2', name: 'Đại đội 2 – Tiểu đoàn 1', type: 'DAIDOI', level: 3, parentCode: 'TD1' },
-  { code: 'DD_TD1_3', name: 'Đại đội 3 – Tiểu đoàn 1', type: 'DAIDOI', level: 3, parentCode: 'TD1' },
-  { code: 'DD_TD2_1', name: 'Đại đội 1 – Tiểu đoàn 2', type: 'DAIDOI', level: 3, parentCode: 'TD2' },
-  { code: 'DD_TD2_2', name: 'Đại đội 2 – Tiểu đoàn 2', type: 'DAIDOI', level: 3, parentCode: 'TD2' },
-  { code: 'DD_TD2_3', name: 'Đại đội 3 – Tiểu đoàn 2', type: 'DAIDOI', level: 3, parentCode: 'TD2' },
-  { code: 'DD_TD3_1', name: 'Đại đội 1 – Tiểu đoàn 3', type: 'DAIDOI', level: 3, parentCode: 'TD3' },
-  { code: 'DD_TD3_2', name: 'Đại đội 2 – Tiểu đoàn 3', type: 'DAIDOI', level: 3, parentCode: 'TD3' },
-  { code: 'DD_TD4_1', name: 'Đại đội 1 – Tiểu đoàn 4', type: 'DAIDOI', level: 3, parentCode: 'TD4' },
-  { code: 'DD_TD4_2', name: 'Đại đội 2 – Tiểu đoàn 4', type: 'DAIDOI', level: 3, parentCode: 'TD4' },
+  { code: 'DD_TD1_1', name: 'Đại đội 1 – Tiểu đoàn 1', type: 'DAI_DOI', level: 3, parentCode: 'TD1' },
+  { code: 'DD_TD1_2', name: 'Đại đội 2 – Tiểu đoàn 1', type: 'DAI_DOI', level: 3, parentCode: 'TD1' },
+  { code: 'DD_TD1_3', name: 'Đại đội 3 – Tiểu đoàn 1', type: 'DAI_DOI', level: 3, parentCode: 'TD1' },
+  { code: 'DD_TD2_1', name: 'Đại đội 1 – Tiểu đoàn 2', type: 'DAI_DOI', level: 3, parentCode: 'TD2' },
+  { code: 'DD_TD2_2', name: 'Đại đội 2 – Tiểu đoàn 2', type: 'DAI_DOI', level: 3, parentCode: 'TD2' },
+  { code: 'DD_TD2_3', name: 'Đại đội 3 – Tiểu đoàn 2', type: 'DAI_DOI', level: 3, parentCode: 'TD2' },
+  { code: 'DD_TD3_1', name: 'Đại đội 1 – Tiểu đoàn 3', type: 'DAI_DOI', level: 3, parentCode: 'TD3' },
+  { code: 'DD_TD3_2', name: 'Đại đội 2 – Tiểu đoàn 3', type: 'DAI_DOI', level: 3, parentCode: 'TD3' },
+  { code: 'DD_TD4_1', name: 'Đại đội 1 – Tiểu đoàn 4', type: 'DAI_DOI', level: 3, parentCode: 'TD4' },
+  { code: 'DD_TD4_2', name: 'Đại đội 2 – Tiểu đoàn 4', type: 'DAI_DOI', level: 3, parentCode: 'TD4' },
 
   // ── Level 4: Lớp dưới Đại đội (cử nhân đại học) ──────────
   { code: 'LOP_TD1_DD1_1', name: 'Lớp CN 1 – Đại đội 1/TD1', type: 'LOP', level: 4, parentCode: 'DD_TD1_1' },
@@ -128,7 +128,7 @@ const BO_MON: BoMonDef[] = JSON.parse(
 const BO_MON_UNITS: UnitDef[] = BO_MON.map((b) => ({
   code: b.code,
   name: b.name,
-  type: 'BOMON',
+  type: 'BO_MON',
   level: 3,
   parentCode: b.parentKhoaCode,
 }));

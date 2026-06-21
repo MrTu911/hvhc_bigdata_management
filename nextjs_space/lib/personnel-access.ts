@@ -27,8 +27,10 @@ const ROLE_SCOPE_MAP: Record<UserRole, AccessScope> = {
   
   // Chỉ huy cấp cao
   CHI_HUY_HOC_VIEN: 'ALL',
-  CHI_HUY_KHOA_PHONG: 'UNIT',
-  
+  CHI_HUY_KHOA_PHONG: 'UNIT', // @deprecated — tách thành CHI_HUY_KHOA / CHI_HUY_PHONG
+  CHI_HUY_KHOA: 'UNIT',       // scope thật (DEPARTMENT/subtree) do Position quyết định; đây chỉ là nhãn coarse
+  CHI_HUY_PHONG: 'UNIT',
+
   // Chỉ huy cấp trung (MỚI)
   CHI_HUY_HE: 'UNIT',
   CHI_HUY_TIEU_DOAN: 'UNIT',
@@ -60,8 +62,10 @@ const ROLE_PERMISSIONS: Record<UserRole, PersonnelPermission[]> = {
   
   // Chỉ huy cấp cao
   CHI_HUY_HOC_VIEN: ['VIEW', 'CREATE', 'UPDATE', 'DELETE', 'EXPORT'],
-  CHI_HUY_KHOA_PHONG: ['VIEW', 'CREATE', 'UPDATE', 'EXPORT'],
-  
+  CHI_HUY_KHOA_PHONG: ['VIEW', 'CREATE', 'UPDATE', 'EXPORT'], // @deprecated
+  CHI_HUY_KHOA: ['VIEW', 'CREATE', 'UPDATE', 'EXPORT'],
+  CHI_HUY_PHONG: ['VIEW', 'CREATE', 'UPDATE', 'EXPORT'],
+
   // Chỉ huy cấp trung (MỚI)
   CHI_HUY_HE: ['VIEW', 'UPDATE', 'EXPORT'],
   CHI_HUY_TIEU_DOAN: ['VIEW', 'UPDATE', 'EXPORT'],

@@ -18,6 +18,8 @@ export type UserRoleType =
   | 'QUAN_TRI_HE_THONG'
   | 'CHI_HUY_HOC_VIEN'
   | 'CHI_HUY_KHOA_PHONG'
+  | 'CHI_HUY_KHOA'
+  | 'CHI_HUY_PHONG'
   | 'CHU_NHIEM_BO_MON'
   | 'GIANG_VIEN'
   | 'NGHIEN_CUU_VIEN'
