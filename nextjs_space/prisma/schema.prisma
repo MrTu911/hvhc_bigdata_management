@@ -2068,6 +2068,164 @@ model SessionAttendance {
   @@map("session_attendances")
 }
 
+// ============================================================
+// M10 – Phase 3: Vật chất huấn luyện (Ban Vật chất) & Bản đồ (Ban Bản đồ)
+// managingUnitId là FK Unit (Ban phụ trách) giữ dạng scalar — không khai báo
+// relation để tránh sửa model Unit; có index phục vụ lọc theo đơn vị quản lý.
+// ============================================================
+
+enum MaterielCategory {
+  WEAPON_MODEL      // mô hình/vũ khí huấn luyện
+  EQUIPMENT         // khí tài, trang bị
+  FIELD_GEAR        // trang bị dã ngoại
+  SIMULATOR         // thiết bị mô phỏng
+  AMMUNITION_MODEL  // mô hình đạn dược huấn luyện
+  CONSUMABLE        // vật tư tiêu hao
+  OTHER
+}
+
+enum MaterielCondition {
+  NEW
+  GOOD
+  USABLE
+  DAMAGED
+  RETIRED
+}
+
+// Dùng chung cho cấp phát vật chất & bản đồ: LOAN = mượn-trả, ALLOCATION = cấp hẳn.
+enum AssetIssueType {
+  LOAN
+  ALLOCATION
+}
+
+enum AssetIssuanceStatus {
+  ISSUED
+  RETURNED
+  OVERDUE
+  LOST
+}
+
+enum MapType {
+  TOPOGRAPHIC      // bản đồ địa hình
+  TACTICAL         // bản đồ tác chiến
+  ADMINISTRATIVE   // bản đồ hành chính
+  OPERATIONAL      // bản đồ tác nghiệp
+  DIGITAL_LAYER    // lớp bản đồ số
+  OTHER
+}
+
+enum MapFormat {
+  PAPER
+  DIGITAL
+}
+
+enum MapSecurityLevel {
+  NORMAL
+  CONFIDENTIAL     // mật
+  SECRET           // tối mật
+  TOP_SECRET       // tuyệt mật
+}
+
+model TrainingMateriel {
+  id                String             @id @default(cuid())
+  code              String             @unique
+  name              String
+  category          MaterielCategory   @default(EQUIPMENT)
+  measureUnit       String?            // đơn vị tính: cái/bộ/khẩu...
+  quantityTotal     Int                @default(0)
+  quantityAvailable Int                @default(0)
+  condition         MaterielCondition  @default(GOOD)
+  storageLocation   String?            // kho/nơi cất giữ
+  managingUnitId    String?            // FK Unit (Ban Vật chất) — scalar
+  description       String?
+  isActive          Boolean            @default(true)
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  issuances         MaterielIssuance[]
+
+  @@index([code])
+  @@index([category])
+  @@index([condition])
+  @@index([managingUnitId])
+  @@map("training_materiels")
+}
+
+model MaterielIssuance {
+  id             String              @id @default(cuid())
+  materielId     String
+  quantity       Int                 @default(1)
+  issueType      AssetIssueType      @default(LOAN)
+  borrowerUnitId String?             // đơn vị mượn/nhận
+  borrowerName   String?             // người mượn/nhận (free text)
+  issuedById     String              // User thực hiện cấp phát
+  purpose        String?
+  issuedAt       DateTime            @default(now())
+  dueDate        DateTime?
+  returnedAt     DateTime?
+  status         AssetIssuanceStatus @default(ISSUED)
+  notes          String?
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+  materiel       TrainingMateriel    @relation(fields: [materielId], references: [id], onDelete: Cascade)
+
+  @@index([materielId])
+  @@index([status])
+  @@index([borrowerUnitId])
+  @@map("materiel_issuances")
+}
+
+model MapAsset {
+  id                String           @id @default(cuid())
+  code              String           @unique
+  name              String
+  mapType           MapType          @default(TOPOGRAPHIC)
+  format            MapFormat        @default(PAPER)
+  scale             String?          // tỉ lệ, vd "1:50000"
+  sheetNumber       String?          // số hiệu mảnh
+  securityLevel     MapSecurityLevel @default(NORMAL)
+  quantityTotal     Int              @default(0)
+  quantityAvailable Int              @default(0)
+  fileUrl           String?          // bản đồ số (MinIO key)
+  storageLocation   String?
+  managingUnitId    String?          // FK Unit (Ban Bản đồ) — scalar
+  description       String?
+  isActive          Boolean          @default(true)
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  loans             MapLoan[]
+
+  @@index([code])
+  @@index([mapType])
+  @@index([format])
+  @@index([securityLevel])
+  @@index([managingUnitId])
+  @@map("map_assets")
+}
+
+model MapLoan {
+  id             String              @id @default(cuid())
+  mapAssetId     String
+  quantity       Int                 @default(1)
+  loanType       AssetIssueType      @default(LOAN)
+  borrowerUnitId String?
+  borrowerName   String?
+  issuedById     String
+  purpose        String?
+  issuedAt       DateTime            @default(now())
+  dueDate        DateTime?
+  returnedAt     DateTime?
+  status         AssetIssuanceStatus @default(ISSUED)
+  notes          String?
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+  mapAsset       MapAsset            @relation(fields: [mapAssetId], references: [id], onDelete: Cascade)
+
+  @@index([mapAssetId])
+  @@index([status])
+  @@index([borrowerUnitId])
+  @@map("map_loans")
+}
+
 model ExternalApiKey {
   id            String           @id @default(cuid())
   name          String

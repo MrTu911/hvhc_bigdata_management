@@ -149,6 +149,8 @@ import {
   QUESTION_BANK,
   LEARNING_MATERIAL,
   LAB,
+  TRAINING_MATERIEL,
+  MAP,
   MONITORING,
   AUDIT,
   SECURITY,
@@ -1078,6 +1080,23 @@ export const MENU_CONFIG: MenuGroup[] = [
           gradient: 'from-amber-500 to-yellow-600',
           badge: '🔬',
           functions: [LAB.VIEW],
+        },
+      ]),
+      // M10 Phase 3 — Ban Vật chất & Ban Bản đồ
+      subSection('nav.educationLogisticsGroup', Archive, [
+        {
+          name: 'nav.educationMateriel',
+          href: '/dashboard/education/training-materiels',
+          icon: Archive,
+          gradient: 'from-stone-500 to-amber-700',
+          functions: [TRAINING_MATERIEL.VIEW],
+        },
+        {
+          name: 'nav.educationMaps',
+          href: '/dashboard/education/maps',
+          icon: Layers,
+          gradient: 'from-emerald-500 to-teal-600',
+          functions: [MAP.VIEW],
         },
       ]),
     ],

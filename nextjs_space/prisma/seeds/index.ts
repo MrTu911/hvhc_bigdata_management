@@ -58,6 +58,7 @@ import { seedPromotionRank } from './14_promotion_rank'
 import { seedCareerHistory } from './15_career_history'
 import { seedCivilStudents } from './55_civil_students'
 import { seedThesis } from './56_thesis'
+import { seedMilitaryCadets } from './57_military_cadets'
 import { seedPromotionInstances } from './62_promotion_instances'
 import { seedScienceRbac } from './71_science_rbac'
 // ── Nhóm Big Data & Hạ tầng (CSDL lõi của dự án) ──
@@ -132,6 +133,7 @@ const ALL_STEPS: SeedStep[] = [
   { step: '54', name: 'Môn học thật (danh mục HVHC)',   module: 'M10',   group: 'demo', fn: seedMonHoc },
   { step: '55', name: 'Civil Students & Admissions',    module: 'M10',   group: 'demo', optional: true, fn: seedCivilStudents },
   { step: '56', name: 'Thesis Projects',                module: 'M10',   group: 'demo', optional: true, fn: seedThesis },
+  { step: '57', name: 'Học viên QS → đại đội/tiểu đoàn', module: 'M10',   group: 'demo', optional: true, fn: seedMilitaryCadets },
 
   // ══ NHÓM G: M13 Workflow ══
   { step: '60', name: 'Workflow Templates',             module: 'M13',   group: 'demo', fn: seedWorkflowTemplates },
@@ -173,7 +175,7 @@ const MODULE_MAP: Record<string, string[]> = {
   M06: ['31'],
   M08: ['32'],
   M09: ['40', '41', '42'],
-  M10: ['50', '51', '52', '53', '54', '55', '56'],
+  M10: ['50', '51', '52', '53', '54', '55', '56', '57'],
   M11: ['85', '86'],
   M12: ['79', '80', '81', '82', '83', '84'],
   M13: ['60', '61', '62'],

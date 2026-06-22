@@ -175,6 +175,27 @@ export const LAB = {
   DELETE_SESSION: 'DELETE_LAB_SESSION',   // Xóa buổi thực hành
 } as const;
 
+// ===== MODULE: TRAINING_MATERIEL (VẬT CHẤT HUẤN LUYỆN — Ban Vật chất) =====
+export const TRAINING_MATERIEL = {
+  VIEW: 'VIEW_TRAINING_MATERIEL',       // Xem kho vật chất huấn luyện
+  CREATE: 'CREATE_TRAINING_MATERIEL',   // Thêm vật chất
+  UPDATE: 'UPDATE_TRAINING_MATERIEL',   // Cập nhật vật chất
+  DELETE: 'DELETE_TRAINING_MATERIEL',   // Xóa/ngừng theo dõi
+  ISSUE: 'ISSUE_TRAINING_MATERIEL',     // Cấp phát/cho mượn
+  RETURN: 'RETURN_TRAINING_MATERIEL',   // Nhận trả/thu hồi
+} as const;
+
+// ===== MODULE: MAP (VẬT CHẤT BẢN ĐỒ — Ban Bản đồ) =====
+export const MAP = {
+  VIEW: 'VIEW_MAP',               // Xem kho bản đồ (giấy + số, trừ mật)
+  CREATE: 'CREATE_MAP',           // Thêm bản đồ
+  UPDATE: 'UPDATE_MAP',           // Cập nhật bản đồ
+  DELETE: 'DELETE_MAP',           // Xóa/ngừng theo dõi
+  ISSUE: 'ISSUE_MAP',             // Cấp phát/cho mượn bản đồ
+  RETURN: 'RETURN_MAP',           // Nhận trả/thu hồi bản đồ
+  VIEW_SECRET: 'VIEW_MAP_SECRET', // Xem bản đồ mật/tối mật (quyền nhạy cảm riêng)
+} as const;
+
 // ===== MODULE: RESEARCH (NGHIÊN CỨU) =====
 export const RESEARCH = {
   VIEW: 'VIEW_RESEARCH',            // Xem đề tài
@@ -676,6 +697,8 @@ export const ALL_FUNCTION_CODES = {
   ...QUESTION_BANK,
   ...LEARNING_MATERIAL,
   ...LAB,
+  ...TRAINING_MATERIEL,
+  ...MAP,
   ...RESEARCH,
   ...PARTY,
   ...POLICY,
@@ -715,6 +738,8 @@ export const FUNCTION_CODES = {
   QUESTION_BANK,
   LEARNING_MATERIAL,
   LAB,
+  TRAINING_MATERIEL,
+  MAP,
   RESEARCH,
   PARTY,
   POLICY,
@@ -758,6 +783,8 @@ export const MODULE_NAMES: Record<string, string> = {
   question_bank: 'Ngân hàng câu hỏi',
   learning_material: 'Học liệu',
   lab: 'Phòng thí nghiệm',
+  training_materiel: 'Vật chất huấn luyện',
+  map: 'Vật chất bản đồ',
   research: 'Nghiên cứu',
   party: 'Đảng viên',
   policy: 'Chính sách',

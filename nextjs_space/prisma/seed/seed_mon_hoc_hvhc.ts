@@ -120,10 +120,12 @@ async function ensureOrgUnits() {
 
   for (const b of boMon) {
     const parentId = codeToId.get(b.parentKhoaCode) ?? null;
+    // type canonical là 'BO_MON' (khớp seed_units.ts). update cả type để chuẩn hóa
+    // các bản ghi cũ lỡ tạo bằng 'BOMON' (mismatch làm buildUnitLookup không khớp).
     await prisma.unit.upsert({
       where: { code: b.code },
-      update: { name: b.name, parentId },
-      create: { code: b.code, name: b.name, type: 'BOMON', level: 3, parentId, active: true },
+      update: { name: b.name, parentId, type: 'BO_MON' },
+      create: { code: b.code, name: b.name, type: 'BO_MON', level: 3, parentId, active: true },
     });
   }
 
@@ -179,7 +181,7 @@ async function buildUnitLookup() {
     codeToId.set(u.code, u.id);
   }
   for (const u of units) {
-    if (u.type === 'BOMON' && u.parentId) {
+    if (u.type === 'BO_MON' && u.parentId) {
       boMonByParentAndName.set(`${u.parentId}||${normalizeName(u.name)}`, u.id);
     }
   }

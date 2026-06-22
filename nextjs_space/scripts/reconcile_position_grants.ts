@@ -83,6 +83,12 @@ type ProfileKey =
   | 'FACULTY'          // Khoa: FACULTY + EDUCATION + RESEARCH
   | 'OFFICE_STAFF'     // Xem + báo cáo + tài liệu: education/training VIEW + docs + LM view
   | 'TRAINING_SUPPORT' // Ban hỗ trợ đào tạo: CRUD tài liệu/vật chất/lịch kế hoạch, KHÔNG điểm/học viên
+  | 'TRAINING_PLANNING'        // Ban Kế hoạch: CTĐT(view) + kế hoạch/khung + lớp học phần + lịch huấn luyện + năm học/kỳ, TOÀN học viện. KHÔNG điểm/tốt nghiệp/rèn luyện/CRUD học viên.
+  | 'TRAINING_PLANNING_ASSIST' // Trợ lý Ban Kế hoạch: như trên nhưng KHÔNG xóa (chuẩn bị dữ liệu)
+  | 'MATERIEL_MANAGER'         // Ban Vật chất: full vật chất huấn luyện + phòng học/thiết bị (LAB) + view CTĐT/lịch
+  | 'MATERIEL_ASSIST'          // Trợ lý Ban Vật chất: như trên nhưng KHÔNG xóa
+  | 'MAP_MANAGER'              // Ban Bản đồ: full bản đồ (kể cả mật) + view CTĐT/lịch
+  | 'MAP_ASSIST'               // Trợ lý Ban Bản đồ: như trên nhưng KHÔNG xóa & KHÔNG xem bản đồ mật
   | 'ASSISTANT'        // Trợ lý: dashboard + docs view + personal
   | 'BASELINE';        // tối thiểu
 
@@ -169,6 +175,76 @@ function getProfilePredicate(profile: ProfileKey): (fn: DbFunction) => boolean {
         if (m === 'PERSONAL') return true;
         return false;
       };
+    case 'TRAINING_PLANNING':
+      // Ban Kế hoạch (Phòng Đào tạo): tổng hợp & quản chương trình môn học, mở năm
+      // học/học kỳ, lập kế hoạch đào tạo, mở lớp học phần, xếp lịch huấn luyện cho
+      // TOÀN học viện. Chỉ XEM hồ sơ học viên/CTĐT để xếp; KHÔNG nhập/duyệt điểm,
+      // KHÔNG xét tốt nghiệp, KHÔNG rèn luyện, KHÔNG CRUD hồ sơ học viên.
+      return (fn) => {
+        const m = fn.module.toUpperCase();
+        if (m === 'EDUCATION') {
+          const planningCodes = new Set([
+            'VIEW_PROGRAM',
+            'VIEW_CURRICULUM', 'CREATE_CURRICULUM', 'UPDATE_CURRICULUM', 'DELETE_CURRICULUM',
+            'VIEW_TERM', 'MANAGE_TERM',
+            'VIEW_CLASS_SECTION', 'CREATE_CLASS_SECTION', 'UPDATE_CLASS_SECTION', 'DELETE_CLASS_SECTION',
+            'VIEW_SCHEDULE', 'CREATE_SCHEDULE', 'UPDATE_SCHEDULE', 'DELETE_SCHEDULE',
+            'VIEW_ENROLLMENT', 'MANAGE_ENROLLMENT',
+            'VIEW_ATTENDANCE',
+            'VIEW_STUDENT',
+            'VIEW_TRAINING_SYSTEM', 'VIEW_BATTALION',
+          ]);
+          return planningCodes.has(fn.code);
+        }
+        if (m === 'TRAINING') return ['VIEW_TRAINING', 'VIEW_COURSE'].includes(fn.code);
+        // Xem giảng viên để phân công giảng dạy khi mở lớp/xếp lịch
+        if (m === 'FACULTY') return ['VIEW_FACULTY', 'VIEW_FACULTY_INSTRUCTORS', 'VIEW_FACULTY_CLASSES', 'VIEW_FACULTY_STATS'].includes(fn.code);
+        if (m === 'LEARNING_MATERIAL') return ['VIEW_LEARNING_MATERIAL', 'DOWNLOAD_LEARNING_MATERIAL'].includes(fn.code);
+        if (m === 'DOCUMENTS') return ['VIEW', 'EXPORT'].includes(fn.actionType);
+        if (m === 'DASHBOARD') return fn.code === 'VIEW_DASHBOARD';
+        if (m === 'PERSONAL') return true;
+        return false;
+      };
+    case 'TRAINING_PLANNING_ASSIST': {
+      // Trợ lý Ban Kế hoạch: cùng phạm vi nhưng KHÔNG được xóa (chuẩn bị/nhập liệu).
+      const base = getProfilePredicate('TRAINING_PLANNING');
+      return (fn) => base(fn) && fn.actionType !== 'DELETE';
+    }
+    case 'MATERIEL_MANAGER':
+      // Ban Vật chất huấn luyện: quản kho vật chất (cấp phát/mượn-trả) + phòng học/
+      // thiết bị (LAB) phục vụ huấn luyện. Chỉ XEM CTĐT/lịch để phối hợp.
+      return (fn) => {
+        const m = fn.module.toUpperCase();
+        if (m === 'TRAINING_MATERIEL') return true;
+        if (m === 'LAB') return true;
+        if (m === 'EDUCATION') return ['VIEW_CLASS_SECTION', 'VIEW_SCHEDULE'].includes(fn.code);
+        if (m === 'LEARNING_MATERIAL') return ['VIEW_LEARNING_MATERIAL', 'DOWNLOAD_LEARNING_MATERIAL'].includes(fn.code);
+        if (m === 'DOCUMENTS') return ['VIEW', 'EXPORT'].includes(fn.actionType);
+        if (m === 'DASHBOARD') return fn.code === 'VIEW_DASHBOARD';
+        if (m === 'PERSONAL') return true;
+        return false;
+      };
+    case 'MATERIEL_ASSIST': {
+      const base = getProfilePredicate('MATERIEL_MANAGER');
+      return (fn) => base(fn) && fn.actionType !== 'DELETE';
+    }
+    case 'MAP_MANAGER':
+      // Ban Bản đồ: quản kho bản đồ giấy + số kể cả MẬT (custodian). Chỉ XEM CTĐT/lịch.
+      return (fn) => {
+        const m = fn.module.toUpperCase();
+        if (m === 'MAP') return true; // gồm cả VIEW_MAP_SECRET (người giữ kho bản đồ mật)
+        if (m === 'EDUCATION') return ['VIEW_CLASS_SECTION', 'VIEW_SCHEDULE'].includes(fn.code);
+        if (m === 'LEARNING_MATERIAL') return ['VIEW_LEARNING_MATERIAL', 'DOWNLOAD_LEARNING_MATERIAL'].includes(fn.code);
+        if (m === 'DOCUMENTS') return ['VIEW', 'EXPORT'].includes(fn.actionType);
+        if (m === 'DASHBOARD') return fn.code === 'VIEW_DASHBOARD';
+        if (m === 'PERSONAL') return true;
+        return false;
+      };
+    case 'MAP_ASSIST': {
+      // Trợ lý Ban Bản đồ: KHÔNG xóa & KHÔNG xem bản đồ mật.
+      const base = getProfilePredicate('MAP_MANAGER');
+      return (fn) => base(fn) && fn.actionType !== 'DELETE' && fn.code !== 'VIEW_MAP_SECRET';
+    }
     case 'ASSISTANT':
       return (fn) => {
         const m = fn.module.toUpperCase();
@@ -195,6 +271,18 @@ function getProfileScope(profile: ProfileKey): FunctionScope {
     case 'OFFICE_STAFF':
     case 'TRAINING_SUPPORT':
       return 'DEPARTMENT';
+    // Ban Kế hoạch xếp lịch huấn luyện cho TOÀN học viện → cần nhìn xuyên đơn vị.
+    // Predicate đã giới hạn chặt ở mảng kế hoạch/lịch + chỉ XEM học viên (không điểm/
+    // nhân sự/duyệt), nên ACADEMY ở đây không lộ dữ liệu nhạy cảm ngoài phạm vi.
+    case 'TRAINING_PLANNING':
+    case 'TRAINING_PLANNING_ASSIST':
+      return 'ACADEMY';
+    // Ban Vật chất/Bản đồ là kho dùng chung cấp học viện → trưởng ban DEPARTMENT.
+    case 'MATERIEL_MANAGER':
+    case 'MAP_MANAGER':
+      return 'DEPARTMENT';
+    case 'MATERIEL_ASSIST':
+    case 'MAP_ASSIST':
     case 'POLITICAL_REPORTER':
     case 'ASSISTANT':
       return 'UNIT';
@@ -219,15 +307,16 @@ const EXPLICIT_PROFILE: Record<string, { profile: ProfileKey; note: string }> = 
   B7_TRUONGPHONG:         { profile: 'TRAINING', note: 'Trưởng phòng Sau đại học' },
   // Người dùng chốt: GĐ TTSX chỉ xem + báo cáo + tài liệu (không CRUD học vụ).
   B1_GĐ_TTSX:             { profile: 'OFFICE_STAFF', note: 'GĐ TT Sản xuất & Thực hành: xem + báo cáo + tài liệu' },
-  // Người dùng chốt: 3 Trưởng ban được CRUD mảng phụ trách (tài liệu/vật chất/lịch),
-  // KHÔNG đụng điểm/học viên.
-  B1_TRUONG_BAN_BĐ:       { profile: 'TRAINING_SUPPORT', note: 'Trưởng ban Bản đồ: CRUD học liệu/tài liệu/lịch' },
-  B1_TRUONG_BAN_KH:       { profile: 'TRAINING_SUPPORT', note: 'Trưởng ban Kế hoạch: CRUD học liệu/tài liệu/lịch' },
-  B1_TRUONG_BAN_VC:       { profile: 'TRAINING_SUPPORT', note: 'Trưởng ban Vật chất huấn luyện: CRUD học liệu/tài liệu/lịch' },
-  B1_TRO_LY_BANDO:        { profile: 'ASSISTANT', note: 'Trợ lý Ban Bản đồ' },
-  B1_TRO_LY_KEHOACH:      { profile: 'ASSISTANT', note: 'Trợ lý Ban Kế hoạch' },
+  // Ban Kế hoạch = lõi nghiệp vụ CTĐT/môn học/lịch huấn luyện toàn học viện → hồ sơ
+  // TRAINING_PLANNING (quản kế hoạch/khung/lớp HP/lịch/năm học, chỉ XEM học viên-CTĐT).
+  B1_TRUONG_BAN_KH:       { profile: 'TRAINING_PLANNING', note: 'Trưởng ban Kế hoạch: CTĐT(view)+kế hoạch+lớp HP+lịch+năm học (ACADEMY)' },
+  B1_TRO_LY_KEHOACH:      { profile: 'TRAINING_PLANNING_ASSIST', note: 'Trợ lý Ban Kế hoạch: như Ban KH nhưng không xóa' },
+  // Vật chất huấn luyện & Bản đồ (Phase 3): domain chuyên biệt đã có model + function code.
+  B1_TRUONG_BAN_VC:       { profile: 'MATERIEL_MANAGER', note: 'Trưởng ban Vật chất huấn luyện: full vật chất + phòng học/thiết bị' },
+  B1_TRO_LY_VCHL:         { profile: 'MATERIEL_ASSIST', note: 'Trợ lý Ban Vật chất: như trưởng ban nhưng không xóa' },
+  B1_TRUONG_BAN_BĐ:       { profile: 'MAP_MANAGER', note: 'Trưởng ban Bản đồ: full kho bản đồ giấy/số kể cả mật' },
+  B1_TRO_LY_BANDO:        { profile: 'MAP_ASSIST', note: 'Trợ lý Ban Bản đồ: không xóa, không xem bản đồ mật' },
   B1_TRO_LY_TTSX:         { profile: 'ASSISTANT', note: 'Trợ lý TT Sản xuất' },
-  B1_TRO_LY_VCHL:         { profile: 'ASSISTANT', note: 'Trợ lý Ban Vật chất' },
 };
 
 // ────────────────────────────────────────────────────────────

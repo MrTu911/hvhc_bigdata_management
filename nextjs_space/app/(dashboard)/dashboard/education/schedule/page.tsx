@@ -30,6 +30,7 @@ import {
   RefreshCw, CalendarPlus, AlertTriangle, CheckCircle2, BookOpen,
   PlayCircle, ChevronLeft, ChevronRight, GraduationCap, X,
 } from 'lucide-react';
+import { ScheduleGeneratorWizard } from '@/components/education/schedule/schedule-generator-wizard';
 
 // ── ProgressBar ───────────────────────────────────────────────────────────────
 // Sets width via DOM ref — avoids JSX style={} attribute flagged by linter.
@@ -483,12 +484,20 @@ export default function SchedulePage() {
           </h1>
           <p className="text-muted-foreground">Quản lý lớp học phần và lịch buổi học theo năm học</p>
         </div>
-        <Button
-          onClick={() => { resetClassForm(); setClassDialogOpen(true); }}
-          disabled={!selectedTerm}
-        >
-          <Plus className="h-4 w-4 mr-2" /> Thêm lớp
-        </Button>
+        <div className="flex items-center gap-2">
+          <ScheduleGeneratorWizard
+            termId={selectedTerm}
+            termName={activeTerm?.name}
+            disabled={!selectedTerm}
+            onCommitted={() => { fetchClassSections(); fetchStats(selectedTerm); }}
+          />
+          <Button
+            onClick={() => { resetClassForm(); setClassDialogOpen(true); }}
+            disabled={!selectedTerm}
+          >
+            <Plus className="h-4 w-4 mr-2" /> Thêm lớp
+          </Button>
+        </div>
       </div>
 
       {/* ── Year / Term Navigation ───────────────────────────────────────── */}
