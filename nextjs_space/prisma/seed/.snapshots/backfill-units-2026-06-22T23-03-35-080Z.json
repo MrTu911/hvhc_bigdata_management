@@ -1,0 +1,946 @@
+{
+  "createdAt": "2026-06-22T23:03:35.080Z",
+  "note": "Mọi bản ghi trước backfill đều có unitId=null → rollback = set unitId về null cho các id dưới đây.",
+  "userAssignments": [
+    {
+      "unitId": "cmogwja1v000h8i9opukw05s8",
+      "userIds": [
+        "cmmuk9r5t00h58i46hnf8gg5w",
+        "cmmuk9r6k00ih8i46n4blr5pg",
+        "cmmuk9r6000hj8i46hc66112t",
+        "cmmuk9r6400hr8i46vkl8l52j",
+        "cmmuk9r6p00ip8i46af25ugzy",
+        "cmmuk9r6a00i38i46dkf7jnon"
+      ]
+    },
+    {
+      "unitId": "cmogwja1q00058i9o1s0iugqx",
+      "userIds": [
+        "cmogwnu1f08488igdo06bk797",
+        "cmn8hmu8f000d8i5gchccurwc"
+      ]
+    },
+    {
+      "unitId": "cmogwja1y000p8i9oumsstlw8",
+      "userIds": [
+        "cmmuk9r8u00n18i46j9wt3igh",
+        "cmmuk9qz200578i46uxhoiim3",
+        "cmmuk9r8h00md8i46mtpr029o",
+        "cmmuk9ro001hn8i46l4sfnrte",
+        "cmmuk9rsa01pv8i46u9zs78ew",
+        "cmmuk9r7600jp8i46okvj1dwe",
+        "cmmuk9r7y00ld8i464zy3v1te",
+        "cmmuk9r8p00mr8i46kxtsabr9",
+        "cmmuk9r8900lz8i46iiyed9sw",
+        "cmmuk9rrx01p38i462jtrcok7",
+        "cmmuk9rs401ph8i46ef5ugxti",
+        "cmmuk9r8300ln8i46w53e9hdf",
+        "cmmuk9rrt01ov8i46rk0krnop",
+        "cmmuk9rsg01q78i46utkfnue2",
+        "cmmuk9r5e00g98i466sjrwhv3"
+      ]
+    },
+    {
+      "unitId": "cmogx8hjp008h8ibzg6j4wd8u",
+      "userIds": [
+        "cmmuk9rvl01vg8i460wk0oml9",
+        "cmmuk9rxk01ys8i46i9yyvemy",
+        "cmmuk9rv001uw8i4626vn99a7",
+        "cmmuk9rvo01vl8i46bqjlrnyx"
+      ]
+    },
+    {
+      "unitId": "cmogwja2z00378i9ois6jj6mc",
+      "userIds": [
+        "cmmuk9rvu01vv8i46z5hge0u4",
+        "cmmuk9rx401y38i4664v4ze4v",
+        "cmmuk9rz6021k8i464t2y9pba",
+        "cmmuk9rz0021a8i46rjoczfof"
+      ]
+    },
+    {
+      "unitId": "cmogwja3000398i9o4z6hv9st",
+      "userIds": [
+        "cmmuk9rwa01wk8i46ytaxgvco",
+        "cmmuk9rvh01vb8i46tudwk19v",
+        "cmmuk9rz3021f8i4625gpnixo"
+      ]
+    },
+    {
+      "unitId": "cmogwja2500178i9oomkstms5",
+      "userIds": [
+        "cmmuk9r4w00f78i46d7crhrsx",
+        "cmmuk9r0a006x8i460n44y00d",
+        "cmmuk9rk0019p8i46y9ob8gz5",
+        "cmmuk9rl701cb8i46qrs9vp5m",
+        "cmmuk9rkh01ar8i462x21ntg0",
+        "cmmuk9rk901ab8i46xrf7d5lp",
+        "cmmuk9r7k00kj8i46aisjdv5a",
+        "cmmuk9rjt019b8i461pcqqpbl",
+        "cmmuk9rkt01bh8i463lvuvuc3",
+        "cmmuk9rk501a18i46o4rtoin8",
+        "cmmuk9rug01tt8i462nu3oxcl",
+        "cmmuk9rko01b58i463v4wp2hz",
+        "cmmuk9rrm01of8i46axvye5ds",
+        "cmmuk9rl001bv8i46e9jab7bq"
+      ]
+    },
+    {
+      "unitId": "cmogwja1z000r8i9oybhgpree",
+      "userIds": [
+        "cmmuk9r9f00o58i46j468isvd",
+        "cmmuk9r4i00ed8i46axc4m9t2",
+        "cmmuk9rsl01qh8i462tvwovj2",
+        "cmmuk9r0y00858i46hsn511fe",
+        "cmmuk9r9v00oz8i468p80nqje",
+        "cmmuk9r9l00of8i46s0b62kb4",
+        "cmmuk9r9r00op8i46pfs93fxg",
+        "cmmuk9roi01ij8i46v5jxn37g",
+        "cmmuk9rsu01qv8i46gz0l8lxa",
+        "cmmuk9r9600np8i46po2xgsr9",
+        "cmmuk9ra100pb8i46834m0ykh"
+      ]
+    },
+    {
+      "unitId": "cmogwja2600198i9od5n6zljc",
+      "userIds": [
+        "cmmuk9qzc005t8i46yaa7tvla",
+        "cmmuk9rox01j58i46smfr68zv",
+        "cmmuk9rm001dv8i46zdx5j708",
+        "cmmuk9r7d00k38i46voyopdvc",
+        "cmmuk9rlu01dl8i463rbt34rl",
+        "cmmuk9rlm01d58i46c2qb50xg",
+        "cmmuk9ruk01u38i468176yvap",
+        "cmmuk9rlh01cv8i46cub03lb7"
+      ]
+    },
+    {
+      "unitId": "cmogwja31003b8i9o5l7bn0lt",
+      "userIds": [
+        "cmmuk9ryh020b8i46qh6911wb",
+        "cmmuk9rwl01x48i46ss7h934k",
+        "cmmuk9ryk020g8i462odlzids"
+      ]
+    },
+    {
+      "unitId": "cmogwja31003d8i9o5jnvi9g9",
+      "userIds": [
+        "cmmuk9rxz01zh8i46668wh1a0",
+        "cmmuk9rxt01z78i46j7ycnbew",
+        "cmmuk9ry201zm8i46ut32ie7w"
+      ]
+    },
+    {
+      "unitId": "cmogwja32003f8i9ob50mnftb",
+      "userIds": [
+        "cmmuk9ryv02108i469g77vi7f",
+        "cmmuk9rx701y88i467clw3o4v",
+        "cmmuk9ryp020q8i462b7r3klb"
+      ]
+    },
+    {
+      "unitId": "cmogwja27001b8i9o2le0xdsd",
+      "userIds": [
+        "cmmuk9r7p00kt8i4650gbroko",
+        "cmmuk9rn201fr8i46uqj2r87i",
+        "cmmuk9r1m009f8i46b4df6kp1",
+        "cmmuk9rmu01ff8i46sxi7rk5n",
+        "cmmuk9rmg01en8i46uog12sy8",
+        "cmmuk9rob01i78i46wgxh5ykd",
+        "cmmuk9rmc01ed8i46zibm4i1k"
+      ]
+    },
+    {
+      "unitId": "cmogwja22000x8i9ovxe31il9",
+      "userIds": [
+        "cmmuk9rd900vt8i46661hx7so",
+        "cmn3upe14071n8iuni2bdv1wb",
+        "cmmuk9rcj00uj8i46jqj45e0x",
+        "cmmuk9qyv004v8i46rffiobtd",
+        "cmmuk9rce00u78i469xbmfg6f",
+        "cmmuk9rcu00uz8i46wzt7yn7q",
+        "cmmuk9rdf00w78i469pmm95i1",
+        "cmmuk9rrq01on8i46126ef6oh",
+        "cmmuk9rd100vd8i46mkzyhwtd"
+      ]
+    },
+    {
+      "unitId": "cmogwja2500158i9oa5m169em",
+      "userIds": [
+        "cmmuk9rij016x8i46j8u6legx",
+        "cmmuk9rio01778i468vr6u4ud",
+        "cmmuk9rnw01hf8i46my4wkwru",
+        "cmmuk9ri601638i4606zfh9xp",
+        "cmmuk9rid016j8i46w7uppwsm",
+        "cmmuk9rj1017z8i46jabdk3ov",
+        "cmmuk9rj7018b8i460l4h7b8l",
+        "cmmuk9r4900dx8i46sx1j5r54",
+        "cmmuk9riu017l8i464pen6elj",
+        "cmmuk9rje018n8i46j4r3eejr",
+        "cmmuk9rr801nn8i467xz2i758"
+      ]
+    },
+    {
+      "unitId": "cmogwja22000z8i9ojki0ye5c",
+      "userIds": [
+        "cmmuk9rtz01sv8i46r8e5ubgp",
+        "cmmuk9rp201jd8i467rrjtmiw",
+        "cmmuk9rtt01sh8i46ovkgv7hj",
+        "cmmuk9r3a00cb8i464m3m6zr0",
+        "cmmuk9rdx00x78i462cnb9ax4",
+        "cmmuk9rei00yh8i46aunuqexs",
+        "cmmuk9reb00y38i46nmm88owf",
+        "cmmuk9rem00yr8i46htqg13cn",
+        "cmmuk9re400xn8i46fcotbi14",
+        "cmmuk9r2700ab8i463qm8shdr",
+        "cmmuk9rdp00wr8i46v7e6f9oa"
+      ]
+    },
+    {
+      "unitId": "cmogwja33003h8i9oink17o7o",
+      "userIds": [
+        "cmmuk9rx101xy8i46grksi6oy",
+        "cmmuk9rw301wa8i46v7irfmce",
+        "cmmuk9ry501zr8i46xyqq35b0"
+      ]
+    },
+    {
+      "unitId": "cmogwja1u000d8i9ofdzcp2vy",
+      "userIds": [
+        "cmmuk9r3w00d78i46ywzv5ac0",
+        "cmmuk9r3r00cz8i465p94txq2",
+        "cmmuk9r4000df8i46e5ot5r05"
+      ]
+    },
+    {
+      "unitId": "cmogwja2300118i9o8j5vjyqq",
+      "userIds": [
+        "cmmuk9rg801218i46kg61ybbl",
+        "cmmuk9r5i00gj8i46izy92lqc",
+        "cmmuk9rnf01gh8i46i3y8ngow",
+        "cmmuk9rfe010f8i468752jqft",
+        "cmmuk9rfn010z8i46hq2d33yi",
+        "cmmuk9rgn012t8i46f7vc3jv3",
+        "cmmuk9rf200zp8i46p93u0ygq",
+        "cmmuk9rfi010n8i46wec334il",
+        "cmmuk9rft011b8i46fybwwgx4",
+        "cmmuk9rgh012h8i46kfr5dbnj",
+        "cmmuk9r7200jh8i4615bevsoa",
+        "cmmuk9rg0011p8i46ijow2v6n",
+        "cmmuk9rf801038i46oabreolm",
+        "cmmuk9ru501t78i46d0yzh7xm"
+      ]
+    },
+    {
+      "unitId": "cmqn823q7000l8insmt6yw3bl",
+      "userIds": [
+        "cmmuk9r2w00bh8i460726rddf"
+      ]
+    },
+    {
+      "unitId": "cmogwja20000t8i9ok7z6a4l8",
+      "userIds": [
+        "cmmuk9py600ae8i27ciojecph",
+        "cmmuk9rao00qn8i46jv7b992f",
+        "cmmuk9r1s009p8i463gqbb9po",
+        "cmmuk9rb500rn8i46tm4fdnav",
+        "cmmuk9raz00rb8i46km3vp2q0",
+        "cmmuk9roq01iv8i46q94x8hs4",
+        "cmmuk9ras00qx8i4683gf2p6t",
+        "cmmuk9rt801rl8i46ewgwy2aa",
+        "cmmuk9rai00qb8i467d2ggke1"
+      ]
+    },
+    {
+      "unitId": "cmogwja1o00018i9oxq2webbu",
+      "userIds": [
+        "cmn8hmu96000l8i5gvu7mhhwg",
+        "cmn3upe1c071t8iunxyqytmvh",
+        "cmn3upe0l071e8iun2dnkvixe"
+      ]
+    },
+    {
+      "unitId": "cmogwja1w000j8i9od4mgejgf",
+      "userIds": [
+        "cmn8hmu8i000e8i5g3xi3tvo9",
+        "cmmuk9r6x00j78i460uv2exuh"
+      ]
+    },
+    {
+      "unitId": "cmogww1rj00788ibzwv3f5uvz",
+      "userIds": [
+        "cmn8hmu8m000f8i5gno9c3oqj"
+      ]
+    },
+    {
+      "unitId": "cmogwja1x000l8i9oxcdxbxna",
+      "userIds": [
+        "cmn8hmu8p000g8i5gx8jet8lq"
+      ]
+    },
+    {
+      "unitId": "cmogwja1y000n8i9oxsnqfzrc",
+      "userIds": [
+        "cmn8hmu9j000p8i5g5nvd2sc0"
+      ]
+    },
+    {
+      "unitId": "cmogwtv6j006w8ibzms86y4ep",
+      "userIds": [
+        "cmn8hmu9q000r8i5gpeqvklbb"
+      ]
+    },
+    {
+      "unitId": "cmogwja1r00078i9onx6u48ae",
+      "userIds": [
+        "cmn8hmu9g000o8i5ge57pw0v5"
+      ]
+    },
+    {
+      "unitId": "cmogwja21000v8i9ovggovtzz",
+      "userIds": [
+        "cmmuk9r1y009z8i46i0q7rgyk",
+        "cmmuk9rnl01gt8i463gi56ab9",
+        "cmmuk9rbs00sx8i46fk97w5lx",
+        "cmmuk9rbh00sb8i46rhokuues",
+        "cmmuk9rby00t98i46dychu9yj",
+        "cmmuk9rc500tn8i46x5az47qs",
+        "cmmuk9rbm00sl8i46mrkc7vyx",
+        "cmmuk9rti01rv8i46h1h3dhvq",
+        "cmmuk9rri01o78i46sijolb4c",
+        "cmmuk9rto01s78i46vw60kdiw"
+      ]
+    },
+    {
+      "unitId": "cmogwja34003j8i9olqbwazvx",
+      "userIds": [
+        "cmmuk9rwq01xe8i460utvvu04",
+        "cmmuk9rw601wf8i465k5vdjw2",
+        "cmmuk9ryn020l8i46c1tny72y"
+      ]
+    },
+    {
+      "unitId": "cmogwja35003l8i9ohjgo13zs",
+      "userIds": [
+        "cmmuk9rxa01yd8i46qxat2yc2",
+        "cmmuk9rxd01yi8i468agutcgr",
+        "cmmuk9ry801zw8i464s539dar"
+      ]
+    },
+    {
+      "unitId": "cmogwwghj007b8ibzqz3q6cc4",
+      "userIds": [
+        "cmmuk9qw300018i46dsj56wjr"
+      ]
+    },
+    {
+      "unitId": "cmogwxjdb007h8ibz2izznsrn",
+      "userIds": [
+        "cmmuk9r1e00918i46gzrk05nx",
+        "cmn8hmu9m000q8i5gydg13nkt",
+        "cmmuk9r1j00998i46qgcruz0g",
+        "cmmuk9r0n007h8i46awe5uew3"
+      ]
+    },
+    {
+      "unitId": "cmogwja2a001j8i9opgwd88jo",
+      "userIds": [
+        "cmmuk9rpg01k38i46uz8zogwi",
+        "cmmuk9rpj01kb8i46e76kzkv7"
+      ]
+    },
+    {
+      "unitId": "cmogwy39t007n8ibzqu4uxziz",
+      "userIds": [
+        "cmmuk9r0g00758i46itl5mk4j",
+        "cmo0srp4q000n8ioc2iw77onq"
+      ]
+    },
+    {
+      "unitId": "cmogwja2c001n8i9ox5u111i3",
+      "userIds": [
+        "cmmuk9rql01m98i46fxgimv8g",
+        "cmmuk9rqd01lv8i46rs97th3t"
+      ]
+    },
+    {
+      "unitId": "cmogwja35003n8i9ozea56wip",
+      "userIds": [
+        "cmmuk9rwn01x98i469evz88du",
+        "cmmuk9rww01xo8i46ad518zp7",
+        "cmmuk9rye02068i46pnms7obs"
+      ]
+    },
+    {
+      "unitId": "cmogwja2400138i9otay1exq5",
+      "userIds": [
+        "cmmuk9rrc01nv8i461v256rpy",
+        "cmmuk9qyp004l8i4699ouzyow",
+        "cmmuk9rha01478i46ia7hzu0d",
+        "cmmuk9rgw013d8i46rncw09xj",
+        "cmmuk9rht015b8i46zyf2wi3h",
+        "cmmuk9rh3013r8i46d1z8s7l8",
+        "cmmuk9rhf014h8i46hmec9apr",
+        "cmmuk9ruu01un8i46615p1hi0",
+        "cmmuk9rho01518i46bmhub6h9"
+      ]
+    },
+    {
+      "unitId": "cmogwja36003p8i9oa5300i9s",
+      "userIds": [
+        "cmmuk9rxw01zc8i46lsgwk293",
+        "cmmuk9rvx01w08i46x2ap9113",
+        "cmmuk9ryb02018i46fkz26ogl"
+      ]
+    },
+    {
+      "unitId": "cmogwja1s00098i9o13lvubgp",
+      "userIds": [
+        "cmmuk9r14008f8i46tnzjqnaj",
+        "cmmuk9r18008n8i467qzv1y1n",
+        "cmn8hmu99000m8i5ggx8913be"
+      ]
+    },
+    {
+      "unitId": "cmogwxul6007k8ibzrs8gp8xw",
+      "userIds": [
+        "cmmuk9r0t007v8i46fhwmfmcz",
+        "cmo0srp2q000l8iocpk5xq11c"
+      ]
+    },
+    {
+      "unitId": "cmqn823qi000r8insg9uuqxte",
+      "userIds": [
+        "cmmuk9rv601v18i46d6bazqsj",
+        "cmmuk9rw001w58i4659dqhr36",
+        "cmmuk9rys020v8i46vwweehwa"
+      ]
+    },
+    {
+      "unitId": "cmogx676w007z8ibza1171fkx",
+      "userIds": [
+        "cmmuk9r2g00ap8i46dfoz1mmm",
+        "cmo0srpca000v8ioch6u9wxnz"
+      ]
+    },
+    {
+      "unitId": "cmogx7fgp008b8ibzfqd200nb",
+      "userIds": [
+        "cmmuk9r2o00b18i46xd173tne",
+        "cmo0srphu00118iocq55zyijd"
+      ]
+    },
+    {
+      "unitId": "cmogx74uc00888ibzkszr5i2k",
+      "userIds": [
+        "cmmuk9r2s00b98i46i3xrfuae",
+        "cmo0srpjn00138ioc1p2kttsc"
+      ]
+    },
+    {
+      "unitId": "cmogx6k7200828ibzun4xg9bj",
+      "userIds": [
+        "cmmuk9r3100br8i4665ghwy5o",
+        "cmo0srpe5000x8iocwlh3yzzx"
+      ]
+    },
+    {
+      "unitId": "cmqn823qc000n8inscz7xgaii",
+      "userIds": [
+        "cmmuk9r3400bz8i46uaxde3j6"
+      ]
+    },
+    {
+      "unitId": "cmqn823ql000t8inss26wpej0",
+      "userIds": [
+        "cmmuk9rwz01xt8i46b29qqjbi",
+        "cmmuk9rwt01xj8i46mxeprzvr",
+        "cmmuk9rz8021p8i46myaktv01"
+      ]
+    },
+    {
+      "unitId": "cmqn823ra001b8inskjynciiq",
+      "userIds": [
+        "cmmuk9rwi01wz8i46yvx0yta4",
+        "cmmuk9rxh01yn8i46ma2fohm3",
+        "cmmuk9rxq01z28i46e4jb8lsv"
+      ]
+    },
+    {
+      "unitId": "cmqn823v4002f8insek9l6e89",
+      "userIds": [
+        "cmmuk9rxn01yx8i46hlp5fdj9",
+        "cmmuk9rvr01vq8i46k2o4ycm7",
+        "cmmuk9rwf01wu8i46e4r5dock"
+      ]
+    },
+    {
+      "unitId": "cmqn823va002h8inswktxln23",
+      "userIds": [
+        "cmmuk9ryx02158i46khixgh6m",
+        "cmmuk9rwc01wp8i46b7v69hpu",
+        "cmmuk9rvd01v68i464lqoaimv"
+      ]
+    },
+    {
+      "unitId": "cmogwwyiu007e8ibzbyjfeuta",
+      "userIds": [
+        "cmn8hmu89000b8i5g1iwywtam"
+      ]
+    },
+    {
+      "unitId": "cmogx5pmi007w8ibz5pkz483m",
+      "userIds": [
+        "cmn8hmu9d000n8i5ginw69a1p"
+      ]
+    },
+    {
+      "unitId": "cmqn823p700078inst954vjgv",
+      "userIds": [
+        "cmmuk9qyi00498i46sau5trix",
+        "cmmuk9qxw00378i465aas04p4"
+      ]
+    },
+    {
+      "unitId": "cmogwyeeq007q8ibzsfzpnklx",
+      "userIds": [
+        "cmo0srp6m000p8iocaveqh9aj"
+      ]
+    },
+    {
+      "unitId": "cmogwyoxg007t8ibzbarclzim",
+      "userIds": [
+        "cmo0srp8g000r8ioc6gs9aj8f"
+      ]
+    },
+    {
+      "unitId": "cmogwja1t000b8i9ogp0354aj",
+      "userIds": [
+        "cmo0srpae000t8iocn5nsyq7h"
+      ]
+    },
+    {
+      "unitId": "cmogx6twt00858ibzxgs10wku",
+      "userIds": [
+        "cmo0srpg0000z8ioc0ms8d7j9"
+      ]
+    },
+    {
+      "unitId": "cmogx82wp008e8ibzmgja3d3m",
+      "userIds": [
+        "cmmuk9q0j00bt8i2734n2y7ku"
+      ]
+    },
+    {
+      "unitId": "cmqn823qy00118insk6yyhrga",
+      "userIds": [
+        "cmmuk9r4d00e38i46p3yytlp6"
+      ]
+    },
+    {
+      "unitId": "cmqn823r000138inshgj54op6",
+      "userIds": [
+        "cmmuk9r4n00en8i46h9rnxdiq"
+      ]
+    },
+    {
+      "unitId": "cmqn823r500178ins5pon8jt4",
+      "userIds": [
+        "cmmuk9r4500dp8i465xpeja9n",
+        "cmmuk9r5200fj8i46186r3jnh"
+      ]
+    },
+    {
+      "unitId": "cmogwja2e001r8i9o3h12gid9",
+      "userIds": [
+        "cmmuk9rr301nb8i46betid45b"
+      ]
+    },
+    {
+      "unitId": "cmogwja2d001p8i9o3z4tc01w",
+      "userIds": [
+        "cmmuk9rqv01mv8i461755wxd9"
+      ]
+    },
+    {
+      "unitId": "cmqn823qv000z8insr1ty2bvq",
+      "userIds": [
+        "cmmuk9r4r00ex8i46mweni76d"
+      ]
+    },
+    {
+      "unitId": "cmogwja2b001l8i9o05cggnb6",
+      "userIds": [
+        "cmmuk9rpu01kx8i46j1o2g03f",
+        "cmmuk9rpy01l58i46m6j1ojfj"
+      ]
+    }
+  ],
+  "personnelAssignments": [
+    {
+      "unitId": "cmogwja1u000d8i9ofdzcp2vy",
+      "personnelIds": [
+        "cmmukp8ae00018i0qtk6tc50q",
+        "cmmukp8g400bf8i0q38qbyo0s"
+      ]
+    },
+    {
+      "unitId": "cmogwja1u000f8i9ordkb2zf3",
+      "personnelIds": [
+        "cmmukp8am00098i0qg01afenm",
+        "cmmukp8g800bl8i0qq1v17njb"
+      ]
+    },
+    {
+      "unitId": "cmogwja1v000h8i9opukw05s8",
+      "personnelIds": [
+        "cmmukp8aq000h8i0qizriupua",
+        "cmmukp8gb00br8i0qgghhitem"
+      ]
+    },
+    {
+      "unitId": "cmqn823ow00038insq77q6ct1",
+      "personnelIds": [
+        "cmmukp8av000p8i0qqd897xj5",
+        "cmmukp8gf00bz8i0qzo38h3u3"
+      ]
+    },
+    {
+      "unitId": "cmqn823p300058insl80v4fuc",
+      "personnelIds": [
+        "cmmukp8ay000v8i0qja0vw28z",
+        "cmmukp8gi00c78i0q9talidad"
+      ]
+    },
+    {
+      "unitId": "cmqn823p700078inst954vjgv",
+      "personnelIds": [
+        "cmmukp8b200138i0qjll2wgwf",
+        "cmmukp8gm00cf8i0q9yqqsvlr"
+      ]
+    },
+    {
+      "unitId": "cmqn823pf000b8instptwt2o7",
+      "personnelIds": [
+        "cmmukp8b500198i0q4n9unv6s",
+        "cmmukp8gp00cl8i0qfyrnqiia"
+      ]
+    },
+    {
+      "unitId": "cmqn823pm000d8inscx6rh9uu",
+      "personnelIds": [
+        "cmmukp8b8001f8i0qekzmdm4u",
+        "cmmukp8gs00cr8i0q6c54yxy6"
+      ]
+    },
+    {
+      "unitId": "cmqn823po000f8insdl2lqdrf",
+      "personnelIds": [
+        "cmmukp8bb001l8i0qed79om1u",
+        "cmmukp8gv00cz8i0qryjjj28o"
+      ]
+    },
+    {
+      "unitId": "cmqn823pr000h8insxfc8b92h",
+      "personnelIds": [
+        "cmmukp8bf001t8i0q2ylw99yd",
+        "cmmukp8h300df8i0q4hvfvo4l"
+      ]
+    },
+    {
+      "unitId": "cmqn823pt000j8insxbfi8nxl",
+      "personnelIds": [
+        "cmmukp8bi001z8i0qp9hyvq2p",
+        "cmmukp8h600dn8i0qhfymsska"
+      ]
+    },
+    {
+      "unitId": "cmqn823q7000l8insmt6yw3bl",
+      "personnelIds": [
+        "cmmukp8bl00258i0qa6zxchxw"
+      ]
+    },
+    {
+      "unitId": "cmqn823qc000n8inscz7xgaii",
+      "personnelIds": [
+        "cmmukp8bp002d8i0q1q7b06h0"
+      ]
+    },
+    {
+      "unitId": "cmqn823qf000p8insdcowys2o",
+      "personnelIds": [
+        "cmmukp8bs002j8i0qt6glf37t"
+      ]
+    },
+    {
+      "unitId": "cmqn823qq000v8insttu2qiqt",
+      "personnelIds": [
+        "cmmukp8bw002r8i0qs9dd0qgv"
+      ]
+    },
+    {
+      "unitId": "cmqn823qt000x8ins3ptj0m7z",
+      "personnelIds": [
+        "cmmukp8bz002z8i0qeezkwet3"
+      ]
+    },
+    {
+      "unitId": "cmqn823qv000z8insr1ty2bvq",
+      "personnelIds": [
+        "cmmukp8c200358i0qb4lvz101"
+      ]
+    },
+    {
+      "unitId": "cmqn823qy00118insk6yyhrga",
+      "personnelIds": [
+        "cmmukp8c5003b8i0q4oe1am1v"
+      ]
+    },
+    {
+      "unitId": "cmqn823r000138inshgj54op6",
+      "personnelIds": [
+        "cmmukp8c8003j8i0qov4rb10k"
+      ]
+    },
+    {
+      "unitId": "cmqn823r300158insnnqosqef",
+      "personnelIds": [
+        "cmmukp8cc003r8i0qhgo0a4xu"
+      ]
+    },
+    {
+      "unitId": "cmqn823r500178ins5pon8jt4",
+      "personnelIds": [
+        "cmmukp8cf003x8i0quvv5nqsh"
+      ]
+    },
+    {
+      "unitId": "cmqn823r800198inswljmji3u",
+      "personnelIds": [
+        "cmmukp8cj00458i0q6n9bg77t"
+      ]
+    },
+    {
+      "unitId": "cmqn823rd001d8ins582jz18z",
+      "personnelIds": [
+        "cmmukp8cm004b8i0qs35au1xx"
+      ]
+    },
+    {
+      "unitId": "cmqn823ri001f8inswxhyz9n8",
+      "personnelIds": [
+        "cmmukp8cr004j8i0qgrd8cqhk"
+      ]
+    },
+    {
+      "unitId": "cmogwja1y000p8i9oumsstlw8",
+      "personnelIds": [
+        "cmmukp8cu004p8i0qvo7u73w5"
+      ]
+    },
+    {
+      "unitId": "cmogwja2500178i9oomkstms5",
+      "personnelIds": [
+        "cmmukp8cy004x8i0qumqxe2qh"
+      ]
+    },
+    {
+      "unitId": "cmogwja2600198i9od5n6zljc",
+      "personnelIds": [
+        "cmmukp8d200538i0qw3c2rgh8"
+      ]
+    },
+    {
+      "unitId": "cmogwja27001b8i9o2le0xdsd",
+      "personnelIds": [
+        "cmmukp8d6005b8i0qrsk3lhma"
+      ]
+    },
+    {
+      "unitId": "cmogwja1z000r8i9oybhgpree",
+      "personnelIds": [
+        "cmmukp8gz00d78i0q6iucg5x4"
+      ]
+    },
+    {
+      "unitId": "cmogwja20000t8i9ok7z6a4l8",
+      "personnelIds": [
+        "cmmukp8d9005h8i0qaqq9ezye"
+      ]
+    },
+    {
+      "unitId": "cmogwja21000v8i9ovggovtzz",
+      "personnelIds": [
+        "cmmukp8dd005n8i0q93wiwckw"
+      ]
+    },
+    {
+      "unitId": "cmogwja22000x8i9ovxe31il9",
+      "personnelIds": [
+        "cmmukp8dh005t8i0qytq7nbu7"
+      ]
+    },
+    {
+      "unitId": "cmogwja22000z8i9ojki0ye5c",
+      "personnelIds": [
+        "cmmukp8dl00618i0q3llvkflt"
+      ]
+    },
+    {
+      "unitId": "cmogwja2300118i9o8j5vjyqq",
+      "personnelIds": [
+        "cmmukp8do00698i0q5bcnh8im"
+      ]
+    },
+    {
+      "unitId": "cmogwja2400138i9otay1exq5",
+      "personnelIds": [
+        "cmmukp8dr006f8i0q5s0nz6jk"
+      ]
+    },
+    {
+      "unitId": "cmogwja2500158i9oa5m169em",
+      "personnelIds": [
+        "cmmukp8du006n8i0q7qhtapy4"
+      ]
+    },
+    {
+      "unitId": "cmogwja1q00058i9o1s0iugqx",
+      "personnelIds": [
+        "cmmukp8dy006v8i0qi12yykvx"
+      ]
+    },
+    {
+      "unitId": "cmogwja1w000j8i9od4mgejgf",
+      "personnelIds": [
+        "cmmukp8e100738i0qd05bk8ye"
+      ]
+    },
+    {
+      "unitId": "cmogww1rj00788ibzwv3f5uvz",
+      "personnelIds": [
+        "cmmukp8e400798i0q6uho81mz"
+      ]
+    },
+    {
+      "unitId": "cmogwja1x000l8i9oxcdxbxna",
+      "personnelIds": [
+        "cmmukp8e7007f8i0q4psryojt"
+      ]
+    },
+    {
+      "unitId": "cmogwja1y000n8i9oxsnqfzrc",
+      "personnelIds": [
+        "cmmukp8eb007l8i0qcxew9870"
+      ]
+    },
+    {
+      "unitId": "cmogwtv6j006w8ibzms86y4ep",
+      "personnelIds": [
+        "cmmukp8ee007r8i0qhh6742ud"
+      ]
+    },
+    {
+      "unitId": "cmogwja1r00078i9onx6u48ae",
+      "personnelIds": [
+        "cmmukp8ei007z8i0q6fafdotb"
+      ]
+    },
+    {
+      "unitId": "cmogwwghj007b8ibzqz3q6cc4",
+      "personnelIds": [
+        "cmmukp8el00858i0qy0gi1wz9"
+      ]
+    },
+    {
+      "unitId": "cmogwwyiu007e8ibzbyjfeuta",
+      "personnelIds": [
+        "cmmukp8eo008d8i0qtlbvu6tu"
+      ]
+    },
+    {
+      "unitId": "cmogwja1s00098i9o13lvubgp",
+      "personnelIds": [
+        "cmmukp8er008l8i0qsf9u0f4r"
+      ]
+    },
+    {
+      "unitId": "cmogx5pmi007w8ibz5pkz483m",
+      "personnelIds": [
+        "cmmukp8ev008t8i0qom46igc7"
+      ]
+    },
+    {
+      "unitId": "cmogwxjdb007h8ibz2izznsrn",
+      "personnelIds": [
+        "cmmukp8ey008z8i0q0zzw5fsu"
+      ]
+    },
+    {
+      "unitId": "cmogwxul6007k8ibzrs8gp8xw",
+      "personnelIds": [
+        "cmmukp8f000958i0qswbriu45"
+      ]
+    },
+    {
+      "unitId": "cmogwy39t007n8ibzqu4uxziz",
+      "personnelIds": [
+        "cmmukp8f4009d8i0qff5o9avp"
+      ]
+    },
+    {
+      "unitId": "cmogwyeeq007q8ibzsfzpnklx",
+      "personnelIds": [
+        "cmmukp8f8009l8i0qgm4bdujc"
+      ]
+    },
+    {
+      "unitId": "cmogwyoxg007t8ibzbarclzim",
+      "personnelIds": [
+        "cmmukp8fc009t8i0qgb4519r1"
+      ]
+    },
+    {
+      "unitId": "cmogwja1t000b8i9ogp0354aj",
+      "personnelIds": [
+        "cmmukp8ff009z8i0qyefyn67j"
+      ]
+    },
+    {
+      "unitId": "cmogx676w007z8ibza1171fkx",
+      "personnelIds": [
+        "cmmukp8fi00a58i0qedw5tq8k"
+      ]
+    },
+    {
+      "unitId": "cmogx6k7200828ibzun4xg9bj",
+      "personnelIds": [
+        "cmmukp8fm00ab8i0qkcfkfut9"
+      ]
+    },
+    {
+      "unitId": "cmogx6twt00858ibzxgs10wku",
+      "personnelIds": [
+        "cmmukp8fq00aj8i0q2hopocfa"
+      ]
+    },
+    {
+      "unitId": "cmogx74uc00888ibzkszr5i2k",
+      "personnelIds": [
+        "cmmukp8fu00ar8i0qg49zdjze"
+      ]
+    },
+    {
+      "unitId": "cmogx7fgp008b8ibzfqd200nb",
+      "personnelIds": [
+        "cmmukp8fx00az8i0qm89246kl"
+      ]
+    },
+    {
+      "unitId": "cmogx82wp008e8ibzmgja3d3m",
+      "personnelIds": [
+        "cmmukp8g100b78i0q1lhb5d4h"
+      ]
+    }
+  ]
+}

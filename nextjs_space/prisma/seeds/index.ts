@@ -48,8 +48,15 @@ import { seedMonHoc } from './54_mon_hoc'
 import { seedWorkflowTemplates } from './60_workflow_templates'
 import { seedWorkflowInstances } from './61_workflow_instances'
 import { seedAdminDocTemplates } from './70_admin_doc_templates'
+import { seedTrainingSystemsExt } from './72_training_systems_ext'
+import { seedPostgradStudents } from './73_postgrad_students'
+import { seedCommandLogisticsStudents } from './74_command_logistics_students'
+import { seedShortCourseB155 } from './75_short_course_b155'
+import { seedCivilStudentsHe3 } from './76_civil_students_he3'
+import { seedInternationalStudents } from './77_international_students'
 import { seedBackfill } from './90_backfill'
 import { seedUnitIdentifiers } from './91_unit_identifiers'
+import { seedAssignUnitsBackfill } from './92_assign_units_backfill'
 // ── CSDL bổ sung (mở rộng độ phủ) ──
 import { seedAdminUnits } from './07_admin_units'
 import { seedSalaryGrades } from './08_salary_grades'
@@ -146,6 +153,14 @@ const ALL_STEPS: SeedStep[] = [
   // ══ NHÓM G3: M20–M26 Science RBAC ══
   { step: '71', name: 'Science RBAC (M20–M26)',         module: 'M20',   group: 'demo', optional: true, fn: seedScienceRbac },
 
+  // ══ NHÓM F2: M10 Đào tạo — mở rộng học viên theo hệ/lớp ══
+  { step: '72', name: 'Đơn vị đào tạo mở rộng (Hệ/Lớp)', module: 'M10',  group: 'demo', optional: true, fn: seedTrainingSystemsExt },
+  { step: '73', name: 'Học viên Sau đại học (Cao học+NCS)', module: 'M10', group: 'demo', optional: true, fn: seedPostgradStudents },
+  { step: '74', name: 'Hệ 2 — Chủ nhiệm hậu cần (dài hạn)', module: 'M10', group: 'demo', optional: true, fn: seedCommandLogisticsStudents },
+  { step: '75', name: 'Lớp ngắn hạn B155 A–F',          module: 'M10',   group: 'demo', optional: true, fn: seedShortCourseB155 },
+  { step: '76', name: 'Hệ 3 — Sinh viên dân sự (4 năm)', module: 'M10',  group: 'demo', optional: true, fn: seedCivilStudentsHe3 },
+  { step: '77', name: 'Hệ 4 — Học viên quốc tế (Lào/CPC)', module: 'M10', group: 'demo', optional: true, fn: seedInternationalStudents },
+
   // ══ NHÓM I: M11/M12 Big Data & Hạ tầng (CSDL lõi) ══
   { step: '79', name: 'ML Models (AI/ML registry)',     module: 'M12',   group: 'bigdata', optional: true, fn: seedMlModels },
   { step: '80', name: 'Big Data Sources (DataSource)',  module: 'M12',   group: 'bigdata', fn: seedBigdataSources },
@@ -164,6 +179,7 @@ const ALL_STEPS: SeedStep[] = [
   // ══ NHÓM H: Backfill (luôn chạy cuối cùng) ══
   { step: '90', name: 'Backfill (cleanup & fix)',       module: 'CORE',  group: 'backfill', fn: seedBackfill },
   { step: '91', name: 'Unit Identifiers (Mã định danh QĐ 3843)', module: 'CORE', group: 'backfill', optional: true, fn: seedUnitIdentifiers },
+  { step: '92', name: 'Gán đơn vị theo vai trò (hồ sơ trống)', module: 'CORE', group: 'backfill', optional: true, fn: seedAssignUnitsBackfill },
 ]
 
 // ─── Module grouping ─────────────────────────────────────────────────────────
@@ -175,7 +191,7 @@ const MODULE_MAP: Record<string, string[]> = {
   M06: ['31'],
   M08: ['32'],
   M09: ['40', '41', '42'],
-  M10: ['50', '51', '52', '53', '54', '55', '56', '57'],
+  M10: ['50', '51', '52', '53', '54', '55', '56', '57', '72', '73', '74', '75', '76', '77'],
   M11: ['85', '86'],
   M12: ['79', '80', '81', '82', '83', '84'],
   M13: ['60', '61', '62'],

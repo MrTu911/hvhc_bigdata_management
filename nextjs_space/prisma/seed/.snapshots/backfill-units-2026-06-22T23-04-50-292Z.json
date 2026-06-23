@@ -1,0 +1,6 @@
+{
+  "createdAt": "2026-06-22T23:04:50.293Z",
+  "note": "Mọi bản ghi trước backfill đều có unitId=null → rollback = set unitId về null cho các id dưới đây.",
+  "userAssignments": [],
+  "personnelAssignments": []
+}
